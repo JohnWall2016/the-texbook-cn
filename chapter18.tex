@@ -1,0 +1,2761 @@
+% -*- coding: utf-8 -*-
+
+\input macros
+
+%\beginchapter Chapter 18. Fine Points of\\Mathematics\\Typing
+\beginchapter Chapter 18. 精致的数学排版
+
+\origpageno=161
+
+%We have discussed most of the facilities needed to construct math
+%formulas, but there are several more things a good mathematical typist
+%will want to watch for. After you have typed a dozen or so formulas using
+%the basic ideas of Chapters 16 and~17, you will find that it's easy to
+%visualize the final appearance of a mathematical expression as you type
+%it.  And once you have gotten to that level, there's only a little bit
+%more to learn before you are producing formulas as beautiful as any the
+%world has ever seen; tastefully applied touches of \TeX nique will add a
+%professional polish that works wonders for the appearance and readability
+%of the books and papers that you type. This chapter talks about such
+%tricks, and it also fills in a few gaps by mentioning some aspects of math
+%that didn't fit comfortably into~Chapters~16~and~17.
+\1我们已经讨论了大多数构造数学公式的工具，
+但是还有几种东西，好的数学排版者非看不可。%
+在用第十六和第十七章的基本方法排版大约一打公式后，
+就会发现当输入数学式子时，就能想像出它的结果来。%
+而且一旦你达到这种水平，离你排版出世界上所见过的最漂亮的公式只差一点了；
+适当地用 \TeX\ 的技巧进行润色会给你排版的书籍和文章在观感和阅读上涂上一层%
+专业的光泽。%
+本章就讨论这些技巧，
+而且还弥补了几个缺陷，它们都是在第十六和第十七章中未完全解决的数学排版问题。
+
+%\subsection Punctuation.  When a formula is followed by a ^{period}, ^{comma},
+%^{semicolon}, ^{colon}, ^{question mark}, ^{exclamation point}, etc., put the
+%^{punctuation} {\sl after\/} the |$|, when the formula is in the text; but
+%put the punctuation {\sl before\/} the |$$| when the formula is displayed.
+%For example,
+%\begintt
+%If $x<0$, we have shown that $$y=f(x).$$
+%\endtt
+%\TeX's spacing rules within paragraphs work best when the
+%^{punctuation marks} are not considered to be part of the formulas.
+\subsection 标点.
+当公式后面跟着一个句点，逗号，分号，冒号，问号，惊叹号%
+等等时，且公式出现在文本中时，把标点放在 |$| {\KT{10}后面}；
+当公式是陈列公式时，把标点放在 |$$| {\KT{10}之前}。%
+例如，
+\begintt
+If $x<0$, we have shown that $$y=f(x).$$
+\endtt
+当标点符号不看作公式的一部分时，段落中 \TeX\ 的间距规则处理得很好。
+
+%Similarly, don't ever type anything like
+%\begintt
+%for $x = a, b$, or $c$.
+%\endtt
+%It should be
+%\begintt
+%for $x = a$, $b$, or $c$.
+%\endtt
+%(Better yet, use a ^{tie}: `|or~$c$|'.) \ The reason is that \TeX\ will
+%typeset expression `|$x|~|=|~|a,|~|b$|' as a single formula, so it will
+%put a ``^{thin space}'' between the comma and the $b$. This space will
+%not be the same as the space that \TeX\ puts after the
+%comma {\sl after\/} the $b$, since spaces between words are always bigger than
+%thin spaces. Such unequal spacing looks bad, but when you type things right
+%the spacing will look good.
+类似地，不要输入象下面这样的方式：
+\begintt
+for $x = a, b$, or $c$.
+\endtt
+应该输入
+\begintt
+for $x = a$, $b$, or $c$.
+\endtt
+(要更好的话，用带子：`|or~$c$|'。)
+原因是， \TeX\ 将把式子`|$x|~|=|~|a,|~|b$|'看作单个公式来排版，
+这样在逗号和 $b$ 之间的是``细间距(thin space)''。%
+这个间距与 \TeX\ 放在 $b$~{\KT{10}后面}的逗号后的间距不一样，
+因为单词间的间距总比细间距要大。%
+如此不等的间距不好看，但是当正确输入时，间距看起来就舒服了。
+
+%Another reason for not typing `|$x| |=| |a,| |b$|' is that it inhibits the
+%possibilities for breaking lines in a paragraph: \TeX\ will never break at
+%the space between the comma and the |b| because breaks after commas in
+%formulas are usually wrong. For example, in the equation
+%`|$x|~|=|~|f(a,|~|b)$|' we certainly don't want to put `$x=f(a,$' on one
+%line and `$b)$' on the next.
+不输入`|$x| |=| |a,| |b$|'的另一个原因是，
+它不允许在段落中被断行：
+ \TeX\ 从不在逗号和 $b$ 之间的间距处断行，
+因为在公式中的逗号后断行一般都是不对的。%
+例如，在方程`|$x|~|=|~|f(a,|~|b)$|'中，我们当然不希望把 `$x=f(a,$' 放在一行，
+而把`$b)$'放在下一行。
+
+%Thus, when typing formulas in the text of a paragraph, keep the math properly
+%segregated: Don't take operators like $-$ and $=$ outside of the |$|'s,
+%and keep commas inside the formula if they are truly part of the formula.
+%But if a comma or period or other punctuation mark belongs linguistically
+%to the sentence rather than to the formula, leave it outside the |$|'s.
+因此，在段落的文本中输入公式时，要准确地插入数学式子：
+不要把象 $-$ 和 $=$ 这样的符号放在 |$| 外面，
+而且如果逗号真是公式的一部分，那么要放在公式中。%
+但是如果逗号或句点或其它标点符号在语句上属于句子而不是公式，
+要把它放在 |$| 外面。
+
+%\exercise Type this: $R(n,t)=O(t^{n/2})$, as $t\to0^+$.
+%\answer |$R(n,t)=O(t^{n/2})$, as $t\to0^+$.| \
+%(N.B.: `|O(|', not `|0('|.)
+\exercise 输入：$R(n,t)=O(t^{n/2})$, as $t\to0^+$。
+\answer |$R(n,t)=O(t^{n/2})$, as $t\to0^+$.|%
+（注意是 `|O(|' 而不是 `|0('|。）
+
+%\danger Some mathematical styles insert a bit of extra space around
+%formulas to separate them from the text. For example, when copy is
+%being produced on an ordinary typewriter that doesn't have italic
+%letters, the best technical typists have traditionally put an extra
+%blank space before and after each formula, because this provides a
+%useful visual distinction. You might find it helpful to think of
+%each |$| as a symbol that has the potential of adding a little space
+%to the printed output; then the rule about excluding sentence
+%punctuation from formulas may be easier to remember.
+\danger \1有些数学文体在公式两边插入一点额外间距从而把它们从文本中分离出来。%
+例如，当用无 italic 字母的普通打字机排版时，高超的排版者一般在每个公式%
+前后都要放一个额外的空格，因为这带来了视觉上的不同。%
+可能把每个 |$| 看作输出时的一个潜在额外间距是有好处的；
+这样，把句子的标点放在公式外面这个规则就好记住了。
+
+%\ddanger \TeX\ does, in fact, insert additional ^{space} before and after each
+%formula; the amount of such space is called ^|\mathsurround|, which is
+%a \<dimen>-valued parameter. For example, if you set |\mathsurround=1pt|,
+%each formula will effectively be 2~points wider ($1\pt$ at each side):
+%$$\baselineskip13pt\halign{\indent\mathsurround=#pt
+%  For $x=a$, $b$, or $c$.\hfil&\quad(#)\hfil\cr
+%1&|\mathsurround=1pt|\cr 0&|\mathsurround=0pt|\cr}$$
+%This extra space will disappear into the left or right margin if the formula
+%occurs at the beginning or end of a line. The value of\/ |\mathsurround| that
+%is in force when \TeX\ reads the closing |$| of a formula is used at both
+%left and right of that formula.  Plain \TeX\ takes |\mathsurround=0pt|, so
+%you won't see any extra space unless you are using some other format, or
+%unless you change |\mathsurround| yourself.
+\ddanger 实际上，\TeX\ 的确在每个公式左右两边插入了额外间距；
+这个间距的量叫做 |\mathsurround|，它是一个值为 \<dimen> 的参数。
+例如，如果你设置 |\mathsurround=1pt|，
+那么每个公式的宽度将增加 2 point（两边各为 $1\pt$）：
+$$\baselineskip13pt\halign{\indent\mathsurround=#pt
+  For $x=a$, $b$, or $c$.\hfil&\quad(#)\hfil\cr
+1&|\mathsurround=1pt|\cr 0&|\mathsurround=0pt|\cr}$$
+如果公式出现在行首或行尾，那么这个额外的间距将融入左页边或右页边。
+当 \TeX\ 读入公式的闭符号 |$| 时，起作用的 |\mathsurround|
+值就插入到此公式的左右两边。Plain \TeX\ 设置 |\mathsurround=0pt|，
+因此如果不使用别的格式，或者自己不改变 |\mathsurround|，就不会看到额外间距。
+
+%\subsection Non-italic letters in formulas. The names of algebraic variables
+%are usually italic or Greek letters, but common mathematical functions
+%like `log' are always set in ^{roman type}. The best way to deal with such
+%constructions is to make use of the following 32~control sequences (all of
+%which are defined in plain \TeX\ format, see Appendix~B):
+%\begintt
+%\arccos  \cos   \csc   \exp   \ker     \limsup  \min  \sinh
+%\arcsin  \cosh  \deg   \gcd   \lg      \ln      \Pr   \sup
+%\arctan  \cot   \det   \hom   \lim     \log     \sec  \tan
+%\arg     \coth  \dim   \inf   \liminf  \max     \sin  \tanh
+%\endtt
+%^^|\arccos| ^^|\cos| ^^|\csc| ^^|\exp| ^^|\ker| ^^|\limsup| ^^|\min|
+%^^|\sinh| ^^|\arcsin| ^^|\cosh| ^^|\deg| ^^|\gcd| ^^|\lg| ^^|\ln| ^^|\Pr|
+%^^|\sup| ^^|\arctan| ^^|\cot| ^^|\det| ^^|\hom| ^^|\lim| ^^|\log| ^^|\sec|
+%^^|\tan| ^^|\arg| ^^|\coth| ^^|\dim| ^^|\inf| ^^|\liminf| ^^|\max|
+%^^|\sin| ^^|\tanh|
+%These control sequences lead to roman type with appropriate
+%spacing:\def\sep{&\hskip-1em}
+%\beginlongmathdemo
+%\it Input\sep\it Output\cr
+%\noalign{\vskip2pt}
+%|$\sin2\theta=2\sin\theta\cos\theta$|\sep\sin2\theta=2\sin\theta\cos\theta\cr
+%|$O(n\log n\log\log n)$|\sep O(n\log n\log\log n)\cr
+%|$\Pr(X>x)=\exp(-x/\mu)$|\sep\Pr(X>x)=\exp(-x/\mu)\cr
+%|$$\max_{1\le n\le m}\log_2P_n$$|\sep
+%  \displaystyle{\max_{1\le n\le m}\log_2P_n}\cr
+%\noalign{\vskip2pt}
+%|$$\lim_{x\to0}{\sin x\over x}=1$$|\sep\displaystyle{\lim_{x\to0}
+%  {\sin x\over x}=1}\cr
+%\endmathdemo
+%^^|\mu|
+%The last two formulas, which are displays, show that some of the special
+%control sequences are treated by \TeX\ as ``large operators'' with limits
+%just like $\sum$: The subscript on |\max| is not treated like the subscript
+%on |\log|. Subscripts and superscripts will become limits
+%when they are attached to |\det|, |\gcd|, |\inf|, |\lim|, |\liminf|,
+%|\limsup|, |\max|, |\min|, |\Pr|, and |\sup|, in display style.
+\subsection 非意大利体字母.
+数学变量的名称一般是 italic 或希腊字母，
+但是普通数学函数如`log'总设定为 roman 字体。%
+处理这个情况的最好方法是使用下列 32 个控制系列(它们都定义在 plain \TeX\ 格式中，
+见附录 B):
+\begintt
+\arccos  \cos   \csc   \exp   \ker     \limsup  \min  \sinh
+\arcsin  \cosh  \deg   \gcd   \lg      \ln      \Pr   \sup
+\arctan  \cot   \det   \hom   \lim     \log     \sec  \tan
+\arg     \coth  \dim   \inf   \liminf  \max     \sin  \tanh
+\endtt
+这些控制系列得到的是 roman 字体以及相应的间距：
+\def\sep{&\hskip-1em}
+\beginlongmathdemo
+{\KT{10}输入}\sep{\hbox{\KT{10}输出}}\cr
+\noalign{\vskip2pt}
+|$\sin2\theta=2\sin\theta\cos\theta$|\sep\sin2\theta=2\sin\theta\cos\theta\cr
+|$O(n\log n\log\log n)$|\sep O(n\log n\log\log n)\cr
+|$\Pr(X>x)=\exp(-x/\mu)$|\sep\Pr(X>x)=\exp(-x/\mu)\cr
+|$$\max_{1\le n\le m}\log_2P_n$$|\sep
+  \displaystyle{\max_{1\le n\le m}\log_2P_n}\cr
+\noalign{\vskip2pt}
+|$$\lim_{x\to0}{\sin x\over x}=1$$|\sep\displaystyle{\lim_{x\to0}
+  {\sin x\over x}=1}\cr
+\endmathdemo
+最后两个公式是陈列公式，它们表明，某些特殊控制系列被 \TeX\ 看作``巨算符'',
+其上下限象 $\sum$ 的一样：
+~|\max| 上的下标处理方式与 |\log| 的下标不同。%
+在陈列样式中，当遇到 |\det|, |\gcd|, |\inf|, |\lim|, |\liminf|,
+|\limsup|, |\max|, |\min|, |\Pr| 和 |\sup| 时，
+上下标将变成上下限。
+
+%\exercise Express the following display in plain \TeX\ language, using
+%`^|\nu|' for `$\nu$':
+%$$p_1(n)=\lim_{m\to\infty}\sum_{\nu=0}^\infty
+%  \bigl(1-\cos^{2m}(\nu!^n\pi/n)\bigr).$$
+%\answer |$$p_1(n)=\lim_{m\to\infty}\sum_{\nu=0}^\infty|\parbreak
+%|  \bigl(1-\cos^{2m}(\nu!^n\pi/n)\bigr).$$|\par
+%\smallskip\noindent $\bigl[$Mathematicians may enjoy
+%interpreting this formula; cf.~G.~H. ^{Hardy},
+%{\sl Messenger of Mathematics\/ \bf35} (1906), 145--146.$\bigr]$
+\exercise \1用 plain \TeX\ 给出下列陈列公式，其中`$\nu$'由`|\nu|'得到：
+$$p_1(n)=\lim_{m\to\infty}\sum_{\nu=0}^\infty
+  \bigl(1-\cos^{2m}(\nu!^n\pi/n)\bigr).$$
+\answer |$$p_1(n)=\lim_{m\to\infty}\sum_{\nu=0}^\infty|\parbreak
+|  \bigl(1-\cos^{2m}(\nu!^n\pi/n)\bigr).$$|\par
+\smallskip\noindent $\bigl[$ 数学家会喜欢这个公式的解释；请参考 G.~H. ^{Hardy},
+{\sl Messenger of Mathematics\/ \bf35} (1906), 145--146.$\bigr]$
+
+%\danger If you need roman type for some mathematical function or operator
+%that isn't included in plain \TeX's list of~32, it is easy to define a
+%new control sequence by mimicking the definitions in Appendix~B\null. Or, if
+%you need roman type just for a ``one shot'' use, it is even easier to
+%get what you want by switching to ^|\rm| type, as follows:
+%\beginlongmathdemo
+%|$\sqrt{{\rm Var}(X)}$|&\sqrt{{\rm Var}(X)}\cr
+%|$x_{\rm max}-x_{\rm min}$|&x_{\rm max}-x_{\rm min}\cr
+%|${\rm LL}(k)\Rightarrow{\rm LR}(k)$|&{\rm LL}(k)\Rightarrow{\rm LR}(k)\cr
+%|$\exp(x+{\rm constant})$|&\exp(x+{\rm constant})\cr
+%|$x^3+{\rm lower\ order\ terms}$|&x^3+{\rm lower\ order\ terms}\cr
+%\endmathdemo
+%Notice the uses of `|\|\]' ^^{control space} in the last case;
+%without them, the result would have been `$x^3+{\rm lower order terms}$',
+%because ordinary blank ^{spaces} are ignored in math mode.
+\danger 如果需要没包括在 plain \TeX\ 的 32 个函数控制系列中的一些数学函数或算符%
+的 roman 字体，可以模仿附录 B 来定义新的控制系列。%
+或者，如果所需的 roman 字体只要用一次，可以如下转换到 |\rm| 字体来得到它：
+\beginlongmathdemo
+|$\sqrt{{\rm Var}(X)}$|&\sqrt{{\rm Var}(X)}\cr
+|$x_{\rm max}-x_{\rm min}$|&x_{\rm max}-x_{\rm min}\cr
+|${\rm LL}(k)\Rightarrow{\rm LR}(k)$|&{\rm LL}(k)\Rightarrow{\rm LR}(k)\cr
+|$\exp(x+{\rm constant})$|&\exp(x+{\rm constant})\cr
+|$x^3+{\rm lower\ order\ terms}$|&x^3+{\rm lower\ order\ terms}\cr
+\endmathdemo
+注意，最后一个例子用到了`|\|\]'；
+如果没有它们，得到的将是 `$x^3+{\rm lower order terms}$'，
+因为在数学模式下将忽略普通空格。
+
+%\danger You can also use ^|\hbox| instead of\/ |\rm| to get roman letters
+%into formulas. For example, four of the last five formulas can be
+%generated by
+%\beginlongmathdemo
+%|$\sqrt{\hbox{Var}(X)}$|&\sqrt{\hbox{Var}(X)}\cr
+%|$\hbox{LL}(k)\Rightarrow\hbox{LR}(k)$|&\hbox{LL}(k)\Rightarrow\hbox{LR}(k)\cr
+%|$\exp(x+\hbox{constant})$|&\exp(x+\hbox{constant})\cr
+%|$x^3+\hbox{lower order terms}$|&x^3+\hbox{lower order terms}\cr
+%\endmathdemo
+%In this case `|\|\]' isn't necessary, because the material in an
+%|\hbox| is processed in horizontal mode, when spaces are significant.
+%But such uses of\/ |\hbox| have two disadvantages: \ (1)~The contents of the
+%box will be typeset in the same size, whether or not the box occurs as a
+%subscript; for example, `|$x_{\hbox{max}}$|' yields `$x_{\hbox{max}}$'.
+%\ (2)~The font that's used inside |\hbox| will be the ``^{current font},''
+%so it might not be roman. For example, if you are typesetting the statement
+%of some theorem that is in slanted type, and if that theorem refers
+%to `|$\sqrt{\hbox{Var}(X)}$|', you will get the unintended result
+%`{\sl$\sqrt{\hbox{Var}(X)}$}'. In order to make sure that an |\hbox| uses
+%roman type, you need to specify |\rm|, e.g., `|$\sqrt{\hbox{\rm Var}(X)}$|';
+%and then the |\hbox| serves no purpose. We will see later, however, that
+%|\hbox| can be very useful in displayed formulas.
+\danger 在公式中，还可以用 |\hbox| 而不是 |\rm| 来得到 roman 字母。%
+例如，最后五个公式中的四个也可以如下得到：
+\beginlongmathdemo
+|$\sqrt{\hbox{Var}(X)}$|&\sqrt{\hbox{Var}(X)}\cr
+|$\hbox{LL}(k)\Rightarrow\hbox{LR}(k)$|&\hbox{LL}(k)\Rightarrow\hbox{LR}(k)\cr
+|$\exp(x+\hbox{constant})$|&\exp(x+\hbox{constant})\cr
+|$x^3+\hbox{lower order terms}$|&x^3+\hbox{lower order terms}\cr
+\endmathdemo
+在这种情况下，就不需要`|\|\]'了，因为在 |\hbox| 中的内容是在水平模式下处理的，
+这时空格是起作用的。%
+但是这样使用 |\hbox| 有两个缺点：
+(1). 盒子中的内容按同一尺寸排版，不管盒子是不是下标；例如，
+`|$x_{\hbox{max}}$|'得到的是`$x_{\hbox{max}}$'。%
+(2). 在盒子中使用的字体是``当前字体'', 因此可能不是 roman 字体。%
+例如，如果正在用 slanted 字体陈述某些定理，并且定理中出现了`|$\sqrt{\hbox{Var}(X)}$|',
+那么就得到不想要的结果`{\sl$\sqrt{\hbox{Var}(X)}$}'。%
+为了确保 |\hbox| 使用的是 roman 字体，就要给出 |\rm|,
+即`|$\sqrt{\hbox{\rm Var}(X)}$|';
+因此 |\hbox| 就没什么用处了。%
+但是外面后面将看到，在陈列公式中 |\hbox| 非常有用。
+
+%\ddangerexercise When the displayed formula
+%`|$$\lim_{n\to\infty}x_n {\rm\ exists} \iff|\break
+%|\limsup_{n\to\infty}x_n = \liminf_{n\to\infty}x_n.$$|' is typeset with
+%the standard macros of plain \TeX, you get
+%$$\lim_{n\to\infty}x_n{\rm\ exists}\iff
+%  \limsup_{n\to\infty}x_n=\liminf_{n\to\infty}x_n.$$
+%But some people prefer a different notation: Explain how you could change
+%the definitions of\/ ^|\limsup| and ^|\liminf| so that the display would be
+%$$
+%\def\limsup{\mathop{\overline{\rm lim}}}
+%\def\liminf{\mathop{\underline{\rm lim}}}
+%\lim_{n\to\infty}x_n{\rm\ exists}\iff
+%  \limsup_{n\to\infty}x_n=\liminf_{n\to\infty}x_n.$$
+%\answer |\def\limsup{\mathop{\overline{\rm lim}}}|\parbreak
+%|\def\liminf{\mathop{\underline{\rm lim}}}|\par
+%\smallskip\noindent
+%[Notice that the limits `$n\to\infty$' appear at different levels, in both
+%of the displays, because `sup' and the underbar descend below the baseline.
+%It is possible to unify the limit positions by using ^{phantoms}, as explained
+%later in this chapter. For example,
+%\begintt
+%\def\limsup{\mathop{\vphantom{\underline{}}\overline{\rm lim}}}
+%\endtt
+%would give lower limits in the same position as |\liminf|.]
+\ddangerexercise 用 plain \TeX\ 标准宏排版下面的陈列公式
+\begintt
+$$\lim_{n\to\infty}x_n {\rm\ exists} \iff
+\limsup_{n\to\infty}x_n = \liminf_{n\to\infty}x_n.$$
+\endtt
+得到的结果为
+$$\lim_{n\to\infty}x_n{\rm\ exists}\iff
+  \limsup_{n\to\infty}x_n=\liminf_{n\to\infty}x_n.$$
+但是有些人喜欢用不同的符号：看看怎样改变 |\limsup| 和 |\liminf| 的定义，
+使得结果为
+$$
+\def\limsup{\mathop{\overline{\rm lim}}}
+\def\liminf{\mathop{\underline{\rm lim}}}
+\lim_{n\to\infty}x_n{\rm\ exists}\iff
+  \limsup_{n\to\infty}x_n=\liminf_{n\to\infty}x_n.$$
+\answer |\def\limsup{\mathop{\overline{\rm lim}}}|\parbreak
+|\def\liminf{\mathop{\underline{\rm lim}}}|\par
+\smallskip\noindent
+[注意在这两个陈列公式中，极限 `$n\to\infty$' 都出现在不同的水平线，
+因为 `sup' 和下划线都下探到基线下边。也可以用^{幻影}统一极限的位置，
+这在本章后面将会解释。例如，
+\begintt
+\def\limsup{\mathop{\vphantom{\underline{}}\overline{\rm lim}}}
+\endtt
+将给出与 |\liminf| 位置相同的较低的极限。]
+
+%\danger The word `mod' is also generally set in roman type, when it occurs
+%in formulas; but this word needs more care, because it is used in two
+%different ways that require two different treatments.
+%Plain \TeX\ provides two different control sequences,
+%^|\bmod| and ^|\pmod|, for the two cases: |\bmod| is to be used when
+%`mod' is a ^{binary operation} (i.e., when it occurs between two quantities,
+%like a plus sign usually does), and |\pmod| is to be used when
+%`mod' occurs parenthetically at the end of a formula. For example,
+%\beginmathdemo
+%|$\gcd(m,n)=\gcd(n,m\bmod n)$|&\gcd(m,n)=\gcd(n,m\bmod n)\cr
+%|$x\equiv y+1\pmod{m^2}$|&x\equiv y+1\pmod{m^2}\cr
+%\endmathdemo
+%The `|b|' in `|\bmod|' stands for ``binary''; the `|p|' in `|\pmod|' stands
+%for ``parenthesized.'' Notice that |\pmod| inserts its own parentheses;
+%the quantity that appears after `mod' in the parentheses should be
+%enclosed in braces, if it isn't a single symbol.
+\danger \1词`mod'一般也在公式中设定为 roman 字体；
+但是这个词需要更加小心，因为它用在两种不同的方面，要求两种不同的对待。%
+Plain \TeX\ 为两种情形提供了两个不同的控制系列，|\bmod| 和 |\pmod|:
+当`mod'是二元运算时用 |\bmod|(即，当它出现在两个量之间，就象加号那样),
+当`mod'出现在公式结尾的圆括号中使用 |\pmod|。%
+例如，
+\beginmathdemo
+|$\gcd(m,n)=\gcd(n,m\bmod n)$|&\gcd(m,n)=\gcd(n,m\bmod n)\cr
+|$x\equiv y+1\pmod{m^2}$|&x\equiv y+1\pmod{m^2}\cr
+\endmathdemo
+`|\bmod|'中的`|b|'表示``binary(二元)'';
+`|\pmod|'中的`|p|'表示``parenthesized(圆括号)''。%
+注意，|\pmod| 自己插入圆括号；
+在圆括号中，出现在`mod'后面的量将括在大括号中，只要它不是单个符号。
+
+%\dangerexercise What did poor B. L. ^{User} get when he typed
+%`|$x\equiv0 (\pmod y^n)$|'\thinspace?
+%\answer $x\equiv0(\pmod y^n)$. He should have typed
+%`|$x\equiv0\pmod{y^n}$|'.
+\dangerexercise 可怜的^{用户笨笨}输入了 `|$x\equiv0 (\pmod y^n)$|'，
+他将得到什么结果？
+\answer $x\equiv0(\pmod y^n)$。他应该输入 `|$x\equiv0\pmod{y^n}$|'。
+
+%\dangerexercise Explain how to produce \lower12pt\null\
+%$\smash{\displaystyle{n\choose k}\equiv{\lfloor n/p\rfloor\choose
+%\lfloor k/p\rfloor}{n\bmod p\choose k\bmod p}\pmod p.}$
+%\answer |$${n\choose k}\equiv{\lfloor n/p\rfloor\choose|\parbreak
+%|  \lfloor k/p\rfloor}{n\bmod p\choose k\bmod p}\pmod p.$$|
+\dangerexercise 看看怎样得到 \lower12pt\null\
+$\smash{\displaystyle{n\choose k}\equiv{\lfloor n/p\rfloor\choose
+\lfloor k/p\rfloor}{n\bmod p\choose k\bmod p}\pmod p.}$
+\answer |$${n\choose k}\equiv{\lfloor n/p\rfloor\choose|\parbreak
+|  \lfloor k/p\rfloor}{n\bmod p\choose k\bmod p}\pmod p.$$|
+
+%\danger The same mechanism that works for roman type in formulas can be used
+%to get other styles of type as well. For example, ^|\bf| yields ^{boldface}:
+%\beginmathdemo
+%|$\bf a+b=\Phi_m$|&\bf a+b=\Phi_m\cr
+%\endmathdemo
+%Notice that whole formula didn't become emboldened in this example; the
+%`$+$' and `$=$' stayed the same. Plain \TeX\ sets things up so
+%that commands like |\rm| and |\bf| will affect only the uppercase letters
+%|A|~to~|Z|, the lowercase letters |a|~to~|z|, the digits |0|~to~|9|,
+%the uppercase Greek letters |\Gamma| to~|\Omega|, and math ^{accents}
+%like ^|\hat| and ^|\tilde|.  Incidentally, no braces were used in this
+%example, because |$|'s have the effect of grouping; |\bf| changes the
+%current font, but the change is local, so it does not affect the font that
+%was current outside the formula.
+\danger 要在公式中得到其它字体也是同样的原理。%
+例如，|\bf| 得到的是加粗字体：
+\beginmathdemo
+|$\bf a+b=\Phi_m$|&\bf a+b=\Phi_m\cr
+\endmathdemo
+注意，本例中的整个公式并未都加粗；
+`$+$' 和 `$=$'保持不变。%
+Plain \TeX\ 设定象 |\rm| 和 |\bf| 这样的命令只对大写字母 |A| 到 |Z|,
+小写字母 |a| 到 |z|, 数字 |0| 到 |9|,大写希腊字母 |\Gamma| 到 |\Omega|,
+和象 |\hat| 和 |\tilde| 这样的数学重音起作用。%
+顺便说一下，在本例中没有使用大括号，因为 |$| 有编组的作用；
+|\bf| 改变了当前字体，但是这个改变是局部的，因此它不影响公式外面的当前字体。
+
+%\ddanger The bold fonts available in plain \TeX\ are ``bold roman,'' rather
+%than ``bold italic,'' because the latter are rarely needed. However, \TeX\
+%could readily be set up to make use of bold math italics, if desired
+%(see Exercise 17.\bmiexno). A more extensive set of math fonts would also
+%include ^{script}, ^{Fraktur}, and ``^{blackboard bold}'' styles; plain
+%\TeX\ doesn't have these, but other formats like \AmSTeX\ do. ^^{AMS-TeX}
+%^^{German black letters}
+\ddanger 在 plain \TeX\ 中可用的 bold 字体是``bold roman'',
+而不是``bold italic'', 因为后者很少用到。%
+但是，如果需要，可以设置 \TeX\ 以使用数学 bold italic 字体(见练习17.20)。%
+数学字体的更大集合还包括手写体，Fraktur 和``blackboard bold''字体；
+~plain \TeX\ 没有这些，但是其它格式如 \AmSTeX 有。
+
+%\danger Besides |\rm| and |\bf|, you can say ^|\cal| in formulas to get
+%uppercase letters in a ``^{calligraphic}'' style. For example, `|$\cal
+%A$|' produces `$\cal A$' and `|$\cal Z$|' produces `$\cal Z$'. But beware:
+%This works only with the letters |A| to |Z|; you'll get weird results if
+%you apply |\cal| to lowercase or Greek letters.
+\danger 除了 |\rm| 和 |\bf|, 在公式中可以输入 |\cal| 以得到花体大写字母。%
+例如，`|$\cal A$|' 得到的是`$\cal A$', `|$\cal Z$|'得到的是`$\cal Z$'。%
+但是要注意：它只有大写字母 |A| 到 |Z|;
+如果把 |\cal| 用到小写或希腊字母上将得到奇怪的结果。
+
+%\danger There's also ^|\mit|, which stands for ``^{math italic}.'' This
+%affects ^{uppercase Greek}, so that you get
+%$\mit(\Gamma,\Delta,\Theta,\Lambda,\Xi,\Pi,\Sigma,\Upsilon,\Phi,\Psi,\Omega)$
+%instead of $(\Gamma,\ldots,\Omega)$.  When~|\mit| is in effect, the
+%ordinary letters |A| to |Z| and |a| to |z| are not changed; they are set
+%in italics as usual, because they ordinarily come from the math italic
+%font. Conversely, uppercase Greek letters and math accents are unaffected
+%by |\rm|, because they ordinarily come from the roman font. Math accents
+%should not be used when the |\mit| family has been selected, because the
+%math italic font contains no accents.
+\danger 还有一种表示``数学 italic''的 |\mit| 字体。%
+它对大写希腊字母有作用，这样得到的是 %
+$\mit(\Gamma,\Delta,\Theta,\Lambda,\Xi,\Pi,\allowbreak\Sigma,\Upsilon,\Phi,\Psi,\Omega)$~%
+而不是 $(\Gamma,\ldots,\Omega)$。%
+当 |\mit| 在起作用时，普通字母 |A| 到 |Z| 和 |a| 到 |z| 不改变；
+它们象通常那样还是 italic 字体，因为它们一般就是来自数学 italic 字体。%
+反过来，大写希腊字母和数学重音不受 |\rm| 的影响，因为它们通常来自 roman 字体。%
+当选择 |\mit| 族时，数学重音不应该使用，因为数学 italic 不包含重音符号。
+
+%\dangerexercise Type the formula $\bf\bar x^{\rm T}Mx={\rm0}\iff x=0$,
+%using as few keystrokes as possible.  ^^{boldface numbers in math}
+%\ (The first `0' is roman, the second is bold. The superscript `T' is roman.)
+%\answer |$\bf\bar x^{\rm T}Mx={\rm0}\iff x=0$|.  \ (If you typed a space between
+%|\rm| and~|0|, you wasted a keystroke; but don't feel guilty about it.)
+\dangerexercise \1利用尽可能少的字输入公式 $\bf\bar x^{\rm T}Mx={\rm0}\iff x=0$。%
+（第一个`0'是罗马体，第二个是粗体。上标`T'是罗马体。）
+\answer |$\bf\bar x^{\rm T}Mx={\rm0}\iff x=0$|。%
+（如果你在 |\rm|和 |0| 之间留下空格，你将浪费一个按键，但你无需感到愧疚。）
+%\dangerexercise Figure out how to typeset
+%`$S\subseteq\mit\Sigma\iff S\in\cal S$'.
+%\answer |$S\subseteq{\mit\Sigma}\iff S\in{\cal S}$|. In this case the
+%braces are redundant and could be eliminated; but you shouldn't try to do
+%{\sl everything\/} with fewest keystrokes, or you'll outsmart yourself
+%some day.
+\dangerexercise 看看怎样输入`$S\subseteq\mit\Sigma\iff S\in\cal S$'。
+\answer |$S\subseteq{\mit\Sigma}\iff S\in{\cal S}$|。
+在这个例子中花括号是多余的，可以去掉；
+但你不应该{\sl 对所有内容}都尝试用更少的按键完成，否则总有一天你将会弄巧成拙。
+
+%\danger Plain \TeX\ also allows you to type ^|\it|, ^|\sl|, or ^|\tt|, if
+%you want text italic, slanted, or typewriter letters to occur in a math
+%formula. However, these fonts are available only in text size, so you
+%should not try to use them in subscripts.
+\danger Plain \TeX\ 还允许在数学公式中使用 italic, slanted 或 typewriter 字母，
+只要输入 |\it|, |\sl| 或 |\tt| 即可。%
+但是这些字体只能用在文本尺寸，因此不要把它们当上标使用。
+
+%\danger If you're paying attention, you probably wonder why both
+%|\mit| and |\it| are provided; the answer is that |\mit| is ``math italic''
+%(which is normally best for formulas), and |\it| is ``^{text italic}'' (which
+%is normally best for running text).
+%\beginmathdemo
+%|$This\ is\ math\ italic.$|&This\ is\ math\ italic.\cr
+%|{\it This is text italic.}|&\hbox{\it This is text italic.}\cr
+%\endmathdemo
+%The math italic letters are a little wider, and the spacing is different;
+%this works better in most formulas, but it fails spectacularly when
+%you try to type certain italic words like `$different$' using math mode
+%(`|$different$|'). A wide `$f$' is usually desirable in formulas, but it
+%is undesirable in text. Therefore wise typists
+%use |\it| in a math formula that is supposed
+%to contain an actual italic word. Such cases almost never occur in
+%classical mathematics, but they are common when ^{computer programs}
+%are being typeset, since programmers often use multi-letter ``^{identifiers}'':
+%\beginmathdemo
+%|$\it last:=first$|&\it last:=first\cr
+%|$\it x\_coord(point\_2)$|&\it x\_coord(point\_2)\cr
+%\endmathdemo
+%The first of these examples shows that \TeX\ recognizes the ^{ligature}
+%`{\it fi\/}' when text italic occurs in a math formula;
+%the other example illustrates the use of short ^{underlines} to break
+%up identifier names. ^^{control-underline}
+%When the author typeset this manual, he used `|$\it SS$|' to refer to
+%style~$\SS$, since `|$SS$|' makes the $S$'s too far apart: $SS$.
+\danger 只要你留心一下，就想知道为什么要提供 |\mit| 和 |\it|;
+原因是 |\mit| 是``数学 italic''(一般用于公式好), 而 |\it| 是%
+``文本 italic''(一般用于文本好)。
+\beginmathdemo
+|$This\ is\ math\ italic.$|&This\ is\ math\ italic.\cr
+|{\it This is text italic.}|&\hbox{\it This is text italic.}\cr
+\endmathdemo
+数学 italic 字母要宽一些，并且间距不同；
+它用于大部分公式很好，但是在数学模式下输入象%
+`$different$'\allowbreak(`|$different$|')这样的单词时却不行。%
+在公式中需要宽的`$f$', 但是在文本中不需要。%
+这样的情况几乎从未出现在经典数学中，但是却常常出现在排版计算机程序上，
+因为程序员常常使用多字母的``标识符(identifier)'':
+\beginmathdemo
+|$\it last:=first$|&\it last:=first\cr
+|$\it x\_coord(point\_2)$|&\it x\_coord(point\_2)\cr
+\endmathdemo
+这些例子的第一个表明，当在数学公式中出现文本 italic 时，
+\TeX\ 找到了连写 `{\it fi\/}'；
+另一个例子表明，所用的短下划线把标识符名字分开了。
+当作者排版本手册时，用 `|$\it SS$|' 来得到字体名称 $\SS$，
+因为 `|$SS$|' 使 $S$ 分得太开了：$SS$。
+
+%\dangerexercise What plain \TeX\ commands will produce the following display?
+%$$\tenmath
+%{\it available}+\sum_{i=1}^n\max\bigl({\it full}(i),{\it reserved}(i)\bigr)
+%  ={\it capacity}.$$
+%\answer |$${\it available}+\sum_{i=1}^n\max\bigl({\it full}(i),|\parbreak
+%        |{\it reserved}(i)\bigr)={\it capacity}.$$|
+%\smallskip\noindent [If\/ |\it| had been used throughout
+%the formula, the subscript~$i$ and superscript~$n$ would have caused error
+%messages saying `^|\scriptfont| |4| |is| |undefined|',
+%since plain \TeX\ makes |\it| available only in text size.]
+\dangerexercise 怎样用 plain \TeX\ 命令得到下列陈列公式？
+$$\tenmath
+{\it available}+\sum_{i=1}^n\max\bigl({\it full}(i),{\it reserved}(i)\bigr)
+  ={\it capacity}.$$
+\answer |$${\it available}+\sum_{i=1}^n\max\bigl({\it full}(i),|\parbreak
+        |{\it reserved}(i)\bigr)={\it capacity}.$$|
+\smallskip\noindent [如果在整个公式中使用 |\it|，
+下标 $i$ 和上标 $n$ 将导致 `^|\scriptfont| |4| |is| |undefined|' 的错误，
+这是因为 plain \TeX\ 的 |\it| 只能用在文本尺寸中。]
+
+%\ddangerexercise How would you go about typesetting the following computer
+%program, using the macros of plain \TeX?
+%$$\vbox{\let\par=\endgraf
+%\obeylines\sfcode`;=3000
+%{\bf for $j:=2$ step $1$ until $n$ do}
+%\quad {\bf begin} ${\it accum}:=A[j]$; $k:=j-1$; $A[0]:=\it accum$;
+%\quad {\bf while $A[k]>\it accum$ do}
+%\qquad {\bf begin} $A[k+1]:=A[k]$; $k:=k-1$;
+%\qquad {\bf end};
+%\quad $A[k+1]:=\it accum$;
+%\quad {\bf end}.
+%}$$
+%\answer |{\obeylines \sfcode`;=3000|^^|\sfcode|\parbreak
+%|{\bf for $j:=2$ step $1$ until $n$ do}|\parbreak
+%|\quad {\bf begin} ${\it accum}:=A[j]$; $k:=j-1$; $A[0]:=\it accum$;|\parbreak
+%|\quad {\bf while $A[k]>\it accum$ do}|\parbreak
+%|\qquad {\bf begin} $A[k+1]:=A[k]$; $k:=k-1$;|\parbreak
+%|\qquad {\bf end};|\parbreak
+%|\quad $A[k+1]:=\it accum$;|\parbreak
+%|\quad {\bf end}.\par}|\par
+%\smallskip\noindent
+%[This is something like the ``poetry'' example in Chapter~14, but much
+%more difficult. Some manuals of style say that ^{punctuation} should inherit
+%the font of the preceding character, so that three kinds of semicolons
+%should be typeset; e.g., these experts recommend `$k:=j-1$; \
+%$A[0]:={}${\it accum;} \ {\bf end;}'. The author heartily disagrees.]
+\ddangerexercise 怎样利用 plain \TeX\ 宏排版下列计算机程序？
+$$\vbox{\let\par=\endgraf
+\obeylines\sfcode`;=3000
+{\bf for $j:=2$ step $1$ until $n$ do}
+\quad {\bf begin} ${\it accum}:=A[j]$; $k:=j-1$; $A[0]:=\it accum$;
+\quad {\bf while $A[k]>\it accum$ do}
+\qquad {\bf begin} $A[k+1]:=A[k]$; $k:=k-1$;
+\qquad {\bf end};
+\quad $A[k+1]:=\it accum$;
+\quad {\bf end}.
+}$$
+\answer |{\obeylines \sfcode`;=3000|^^|\sfcode|\parbreak
+|{\bf for $j:=2$ step $1$ until $n$ do}|\parbreak
+|\quad {\bf begin} ${\it accum}:=A[j]$; $k:=j-1$; $A[0]:=\it accum$;|\parbreak
+|\quad {\bf while $A[k]>\it accum$ do}|\parbreak
+|\qquad {\bf begin} $A[k+1]:=A[k]$; $k:=k-1$;|\parbreak
+|\qquad {\bf end};|\parbreak
+|\quad $A[k+1]:=\it accum$;|\parbreak
+|\quad {\bf end}.\par}|\par
+\smallskip\noindent
+[这有些类似第 14 章排版``诗歌''的例子，但更加困难。
+有些手册说^{标点}应该继承前面字符的字体，即分号应该用三种字体排版；
+比如，这些专家推荐 `$k:=j-1$; \ $A[0]:={}${\it accum;} \ {\bf end;}'。
+作者极为不以为然。]
+
+%\subsection Spacing between formulas. ^{Displays} often contain more than one
+%formula; for example, an equation is frequently accompanied by a ^{side
+%condition}:
+%$$F_n=F_{n-1}+F_{n-2},\qquad n\ge2.$$
+%In such cases you need to tell \TeX\ how much space to put after the comma,
+%because \TeX's normal spacing conventions would bunch things together;
+%without special precautions you would get
+%$$F_n=F_{n-1}+F_{n-2}, n\ge2.$$
+\subsection 公式之间的间距.
+\1陈列公式常常不止一个公式；
+例如，方程经常伴有一个边条件：
+$$F_n=F_{n-1}+F_{n-2},\qquad n\ge2.$$
+在这种情况下，需要告诉 \TeX\ 在逗号后面放多大间距，
+因为用 \TeX\ 正常的间距约定就挤在一起了；
+如果没有特殊措施，得到的将是
+$$F_n=F_{n-1}+F_{n-2}, n\ge2.$$
+
+%The traditional hot-metal technology for printing has led to some ingrained
+%standards for situations like this, based on what printers call a ``^{quad}''
+%of space. Since these standards seem to work well in practice, \TeX\ makes
+%it easy for you to continue the tradition: When you type `^|\quad|' in plain
+%\TeX\ format, you get a printer's quad of space in the horizontal direction.
+%Similarly, `^|\qquad|' gives you a double quad (twice as much); this
+%is the normal spacing for situations like
+%the $F_n$ example above. Thus, the recommended procedure is to type
+%\begintt
+%$$ F_n = F_{n-1} + F_{n-2}, \qquad  n \ge 2. $$
+%\endtt
+%It is perhaps worth reiterating that \TeX\ ignores all the spaces in math
+%mode (except, of course, the space after `|\qquad|', which is needed
+%to distinguish between `|\qquad|~|n|' and `|\qquadn|'); so the same result
+%would be obtained if you were to leave out all but one space:
+%\begintt
+%$$F_n=F_{n-1}+F_{n-2},\qquad n\ge2.$$
+%\endtt
+%Whenever you want spacing that differs from the normal conventions, you must
+%specify it explicitly by using control sequences such as |\quad| and |\qquad|.
+传统的排版技术对处理这种情况有一套成熟的标准，它是基于排版工人称为一个``quad''%
+的间距。%
+因为这些标准看起来在实践中用得很好，所以 \TeX\ 把它这个习惯为你保留下来了：
+当用 plain \TeX\ 格式输入`|\quad|'时，就在水平方向上得到排版工人的一 quad 间距。%
+类似地，`|\qquad|'给出两个 quad(就象两次那样);
+这就是上面 $F_n$ 例子中的正常间距。%
+因此，建议输入
+\begintt
+$$ F_n = F_{n-1} + F_{n-2}, \qquad  n \ge 2. $$
+\endtt
+可能要重申的是， \TeX\ 忽略掉所有数学模式下的空格(当然，除了`|\qquad|'后面的%
+空格，需要用它区分开`|\qquad| |n|'和`|\qquadn|');
+因此，如果把除它以外的所有空格都去掉，也可得到同样的结果：
+\begintt
+$$F_n=F_{n-1}+F_{n-2},\qquad n\ge2.$$
+\endtt
+只要你需要不同于正常约定的间距，就必须用诸如 |\quad| 和 |\qquad| 的控制系列%
+明确给出它。
+
+%\danger A quad used to be a square piece of blank type, $1\em$ wide and $1\em$
+%tall---approximately the size of a capital M, as explained in Chapter~10. This
+%tradition has not been fully retained: The control sequence |\quad| in plain
+%\TeX\ is simply an abbreviation for `|\hskip|~|1|^|em||\relax|', so \TeX's
+%quad has width but no height.
+\danger 过去一 quad 为一个空的方形字，~$1\em$ 宽且 $1\em$ 高——%
+近似为大写字母 M 的尺寸，就象在第十章中讨论的那样。%
+这个传统没有保留下来：
+在 plain \TeX\ 中，控制系列 |\quad| 就是`|\hskip|~|1||em||\relax|',
+因此 \TeX\ 的 |\quad| 只有宽度，没有高度。
+
+%\danger You can use |\quad| in text as well as in formulas; for example,
+%Chapter~14 illustrates how |\quad| applies to poetry. When |\quad| appears
+%in a formula it stands for one~em in the current text font, independent of the
+%current math size or style or family. Thus, for example, |\quad| is just
+%as wide in a subscript as it is on the main line of a formula.
+\danger 也可以象在公式中那样在文本中使用 |\quad|;
+例如，第十四章演示了怎样把 |\quad| 用在诗歌上。%
+当 |\quad| 出现在公式中时，它表示当前文本字体的 1 em,
+与当前数学字体，尺寸和族无关。%
+因此，例如，在下标中的 |\quad| 与公式主体中是一样宽。
+
+%Sometimes a careless author will put two formulas next to each other in
+%the text of a paragraph. For example, you might find a sentence like this:
+%\begindisplay
+%The ^{Fibonacci} numbers satisfy $F_n=F_{n-1}+F_{n-2}$, \ $n\ge2$.
+%\enddisplay
+%Everybody who teaches proper ^{mathematical} ^{style} is agreed that formulas
+%ought to be separated by words, not just by commas; the author of that
+%sentence should at least have said `for $n\ge2$', not simply `$n\ge2$'.
+%But alas, such lapses are commonplace, and many prominent mathematicians
+%are hopelessly addicted to clusters of formulas. If we are not allowed to change
+%their writing style, we can at least insert extra space where they
+%neglected to insert an appropriate word. An additional interword space
+%generally works well in such cases; for example, the sentence above was
+%typeset thus:
+%\begintt
+%... $F_n=F_{n-1}+F_{n-2}$, \ $n\ge2$.}$$
+%\endtt
+%The `|\|\]' ^^{control space} here gives a visual separation that
+%partly compensates for the bad style.
+有时候粗心的作者可能把文本段落中的两个公式紧挨着放置。%
+例如，你可以找到象这样的句子：
+\begindisplay
+The {Fibonacci} numbers satisfy $F_n=F_{n-1}+F_{n-2}$, \ $n\ge2$.
+\enddisplay
+受过正确数学训练的人都知道，公式应当用单词隔开，而不仅仅是逗号；
+此句的作者至少应该用`for $n\ge2$', 而不只是`$n\ge2$'。%
+但是，唉，这样的失误太常见了，并且许多杰出的数学家都无望地陷在公式堆了。%
+\1如果不让我们去改变他们的写作样式，那么至少应该在忽略要插入的相应单词后要%
+插入额外的间距。%
+在这种情况下，额外的词间间距一般效果很好；例如，上面的句子就排版为：
+\begintt
+... $F_n=F_{n-1}+F_{n-2}$, \ $n\ge2$.}$$
+\endtt
+这里的`|\|\]'在视觉上部分弥补了那个不好的样式。
+
+%\exercise Put the following paragraph into \TeX\ form, treating punctuation
+%and spacing carefully; also insert ^{ties} to prevent bad line breaks.
+%\begindisplay\baselineskip13pt
+%\vbox{\raggedright\hsize=310pt\parindent=0pt
+%Let $H$~be a Hilbert space, \
+%$C$~a closed bounded convex subset of~$H$, \
+%$T$~a nonexpansive self map of~$C$.
+%Suppose that as $n\to\infty$, \ $a_{n,k}\to0$ for each~$k$,
+%and $\gamma_n=\sum_{k=0}^\infty(a_{n,k+1}-a_{n,k})^+\to0$.
+%Then for each $x$~in~$C$, \
+%$A_nx=\sum_{k=0}^\infty a_{n,k}T^kx$ converges weakly
+%to a fixed point of~$T$.
+%} % taken from Bull. AMS 82 (1976), p 959; chosen by AMS in '78 for demo
+%\enddisplay
+%\answer |Let $H$~be a Hilbert space, \
+%$C$~a closed bounded convex subset of~$H$, \
+%$T$~a nonexpansive self map of~$C$.
+%Suppose that as $n\to\infty$, \ $a_{n,k}\to0$ for each~$k$,
+%and $\gamma_n=\sum_{k=0}^\infty(a_{n,k+1}-|\allowbreak|a_{n,k})^+\to0$.
+% Then for each $x$~in~$C$,  \
+%$A_nx=\sum_{k=0}^\infty a_{n,k}T^kx$ converges weakly
+%to a fixed point of~$T$.|\par
+%[If any mathematicians are reading this, they might either appreciate
+%or resent the following attempt to edit the given paragraph
+%into a more acceptable style: ``%
+%Let $C$~be a closed, bounded, convex subset of a Hilbert space~$H$,
+%and let $T$~be a nonexpansive self map of~$C$.
+%Suppose that as $n\to\infty$, we have $a_{n,k}\to0$ for each~$k$,
+%and $\gamma_n=\sum_{k=0}^\infty(a_{n,k+1}-a_{n,k})^+\to0$.
+%Then for each $x$~in~$C$, the infinite sum
+%$A_nx=\sum_{k=0}^\infty a_{n,k}T^kx$ converges weakly
+%to a fixed point of~$T$.'']
+\exercise 把下列段落输入为 \TeX\ 格式，注意标点和间距；
+为了防止不好的断行，还要用到^{带子}。
+\begindisplay\baselineskip13pt
+\vbox{\raggedright\hsize=310pt\parindent=0pt
+Let $H$~be a Hilbert space, \
+$C$~a closed bounded convex subset of~$H$, \
+$T$~a nonexpansive self map of~$C$.
+Suppose that as $n\to\infty$, \ $a_{n,k}\to0$ for each~$k$,
+and $\gamma_n=\sum_{k=0}^\infty(a_{n,k+1}-a_{n,k})^+\to0$.
+Then for each $x$~in~$C$, \
+$A_nx=\sum_{k=0}^\infty a_{n,k}T^kx$ converges weakly
+to a fixed point of~$T$.
+} % taken from Bull. AMS 82 (1976), p 959; chosen by AMS in '78 for demo
+\enddisplay
+\answer |Let $H$~be a Hilbert space, \
+$C$~a closed bounded convex subset of~$H$, \
+$T$~a nonexpansive self map of~$C$.
+Suppose that as $n\to\infty$, \ $a_{n,k}\to0$ for each~$k$,
+and $\gamma_n=\sum_{k=0}^\infty(a_{n,k+1}-|\allowbreak|a_{n,k})^+\to0$.
+ Then for each $x$~in~$C$,  \
+$A_nx=\sum_{k=0}^\infty a_{n,k}T^kx$ converges weakly
+to a fixed point of~$T$.|\par
+[这个段落可以修改为下面更容易接受的样子：
+``Let $C$~be a closed, bounded, convex subset of a Hilbert space~$H$,
+and let $T$~be a nonexpansive self map of~$C$.
+Suppose that as $n\to\infty$, we have $a_{n,k}\to0$ for each~$k$,
+and $\gamma_n=\sum_{k=0}^\infty(a_{n,k+1}-a_{n,k})^+\to0$.
+Then for each $x$~in~$C$, the infinite sum
+$A_nx=\sum_{k=0}^\infty a_{n,k}T^kx$ converges weakly
+to a fixed point of~$T$.''%
+如果数学家读到这里，他们可能欣赏也可能反感此改动。]
+
+%\subsection Spacing within formulas. Chapter 16 says that \TeX\ does
+%automatic ^{spacing} of math formulas so that they look right, and this is
+%almost true. But occasionally you must give \TeX\ some help. The number of
+%possible math formulas is vast, and \TeX's spacing rules are rather
+%simple, so it is natural that exceptions should arise.  Of course, it is
+%desirable to have fine units of spacing for this purpose, instead of the
+%big chunks that arise from |\|\], |\quad| and |\qquad|.
+\subsection 公式内部的间距.
+第十六章说过， \TeX\ 自动调整数学公式的间距，使得它们看起来不错，
+而且这一般都可以了。%
+但是有时候你必须帮一下 \TeX。%
+数学公式的可能数目太大，而且 \TeX\ 的间距规则又相当简单，
+因此自然会出现例外。%
+当然，为此希望有间距的精细单位，而不是从 |\|\], |\quad| 和 |\qquad| 得到%
+的大块间距。
+
+%The basic elements of space that \TeX\
+%puts into formulas are called {\sl ^{thin spaces}}, {\sl ^{medium
+%spaces}}, and {\sl ^{thick spaces}}.  In order to get a feeling for these
+%units, let's take a look at the $F_n$ example again: Thick spaces occur
+%just before and after the = sign, and also before and after the $\ge$\thinspace;
+%medium spaces occur just before and after the $+$ sign.  Thin spaces are
+%slightly smaller, but noticeable; it's a thin space that makes the
+%difference between `loglog' and `$\log\log$'. The normal space between
+%words of a paragraph is approximately equal to two thin spaces.
+ \TeX\ 放在公式中的间距基本单元叫做{\KT{10}细间距，中间距}, 和{\KT{10}厚间距}。%
+为了对这些间距有些体会，让我们再讨论 $F_n$ 的例子：
+厚间距只出现在 = 号前后，以及 $\ge$ 前后；
+中间距出现在 $+$ 前后。%
+细间距略小，但是也能看出来；在`loglog'和`$\log\log$'之间的差就是细间距。%
+段落中单词之间的正常间距近似等于两个细间距。
+
+%\TeX\ inserts thin spaces, medium spaces, and thick spaces into formulas
+%automatically, but you can add your own spacing whenever you want to,
+%by using the control sequences ^^|\,|^^|\!|^^|\;|^^|\>|
+%$$\halign{\indent#\hfil&\quad#\hfil\cr
+%|\,|&thin space \ (normally 1/6 of a quad);\cr
+%|\>|&medium space \ (normally 2/9 of a quad);\cr
+%|\;|&thick space \ (normally 5/18 of a quad);\cr
+%|\!|&negative thin space \ (normally $-1/6$ of a quad).\cr}$$
+%In most cases you can rely on \TeX's spacing while you are typing a manuscript,
+%and you'll want to insert or delete space with these four control sequences
+%only in rare circumstances after you see what comes out.
+ \TeX\ 自动把细间距，中间距和厚间距插入到公式中，
+但是只要想添加，你就可以加上自己要的间距，使用的控制系列为
+$$\halign{\indent#\hfil&\quad#\hfil\cr
+|\,|&细间距(正常为 1/6 个 quad);\cr
+|\>|&中间距(正常为 2/9 个 quad);\cr
+|\;|&厚间距(正常为 5/18 个 quad);\cr
+|\!|&负细间距(正常为 $-1/6$ 个 quad)。\cr}$$
+在大多数情况下，在输入文稿时可以依靠 \TeX\ 的间距，
+只有在很少的情况下，你才发现需要用这四个控制系列插入或去掉间距。
+
+%\ddanger We observed a minute ago that |\quad| spacing does not
+%change with the style of formula, nor does it depend on the math font
+%families that are being used. But thin spaces, medium spaces, and thick
+%spaces do get bigger and smaller as the size of type gets bigger and
+%smaller; this is because they are defined in terms of ^\<muglue>, a~special
+%brand of glue intended for math spacing. You specify \<muglue> just
+%as if it were ordinary glue, except that the units are given in terms of
+%`^|mu|' (math units) instead of~|pt| or~|cm| or something else. For
+%example, Appendix~B contains the definitions
+%\begintt
+%\thinmuskip = 3mu
+%\medmuskip = 4mu plus 2mu minus 4mu
+%\thickmuskip = 5mu plus 5mu
+%\endtt
+%^^|\thinmuskip|^^|\medmuskip|^^|\thickmuskip|
+%and this defines the thin, medium, and thick spaces that \TeX\ inserts
+%into formulas. According to these specifications, thin spaces in plain
+%\TeX\ do not stretch or shrink; medium spaces can stretch a little, and
+%they can shrink to zero; thick spaces can stretch a lot, but they never shrink.
+\ddanger 刚才我们看到，~|\quad| 间距不随公式的样式而改变，与所用的字体族也无关。%
+但是细间距，中间距和厚间距的确随公式字体的大小而变大或变小；
+这是因为它们的定义用的是 \<muglue>, 这是用于数学间距的一种特殊粘连。%
+\1你可以把它看成普通的粘连，只是它的单位是`|mu|'(数学单位)而不是 |pt|, |cm|~%
+或其它的。%
+例如，附录 B 包含定义：
+\begintt
+\thinmuskip = 3mu
+\medmuskip = 4mu plus 2mu minus 4mu
+\thickmuskip = 5mu plus 5mu
+\endtt
+它定义了 \TeX\ 要插入公式的细，中和厚间距。%
+按照这些规定，~plain \TeX\ 中的细间距不能伸缩；
+中间距可以伸长一点，当收缩为零；
+厚间距可以伸长很多，但不能收缩。
+
+%\ddanger There are 18 mu to an em, where the em is taken from family~2
+%(the math symbols family). In other words, ^|\textfont|~|2| defines the em
+%value for |mu| in display and text styles; ^|\scriptfont|~|2| defines the
+%em for script size material; and ^|\scriptscriptfont|~|2| defines it for
+%scriptscript size.
+\ddanger 18mu 等于 1em，这个 em 来自第 2 族(数学符号族)。
+换句话说，|\textfont|~|2| 定义了陈列和文本样式中的 |mu| 的 em 值；
+|\scriptfont|~|2| 定义了标号尺寸的 em；
+|\scriptscriptfont|~|2| 定义了小标号尺寸的 em。
+
+%\ddanger You can insert math glue into any formula just by giving
+%the command `^|\mskip|\<muglue>'. For example, `|\mskip 9mu plus 2mu|'
+%inserts one half em of space, in the current size, together with some
+%stretchability. Appendix~B defines `|\,|' to be an abbreviation for
+%`|\mskip\thinmuskip|'.  Similarly, you can use the command `^|\mkern|'
+%when there is no stretching or shrinking; `|\mkern18mu|' gives one em of
+%horizontal space in the current size. \TeX\ insists that |\mskip| and
+%|\mkern| be used only with |mu|; conversely, ^|\hskip| and ^|\kern| (which
+%are also allowed in formulas) must never give units in |mu|.
+\ddanger 你可以把数学粘连插入任何公式，只要用命令`|\mskip|\<muglue>'即可。%
+例如，`|\mskip 9mu plus 2mu|'就插入当前尺寸的半个 em 的间距，以及一些伸长度。%
+附录 B 把`|\,|'定义为`|\mskip|\allowbreak|\thinmuskip|'。%
+类似地，当无伸缩性时，可以使用命令`|\mkern|';
+`|\mkern18mu|'给出当前尺寸的 1 em 的间距。%
+ \TeX\ 坚持 |\mskip| 和 |\mkern| 只用 |mu|;
+而 |\hskip| 和 |\kern|~(它们也允许在公式中使用)只用不是 |mu| 的单位。
+
+%Formulas involving ^{calculus} look best when an extra thin space appears
+%before $dx$ ^^{dx} or~$dy$ or~$d\,$whatever; but \TeX\ doesn't do this
+%automatically. Therefore a well-trained typist will remember to insert
+%`|\,|'  in examples like the following:
+%\beginmathdemo
+%\it Input&\it Output\cr
+%\noalign{\vskip2pt}
+%|$\int_0^\infty f(x)\,dx$|&\int_0^\infty f(x)\,dx\cr
+%|$y\,dx-x\,dy$|&y\,dx-x\,dy\cr
+%|$dx\,dy=r\,dr\,d\theta$|&dx\,dy=r\,dr\,d\theta\cr
+%|$x\,dy/dx$|&x\,dy/dx\cr \endmathdemo Notice that no `|\,|' was desirable
+%after the `|/|' in the last example.  Similarly, there's no need for
+%`|\,|' in cases like
+%\begindisplaymathdemo
+%|$$\int_1^x{dt\over t}$$|&\int_1^x{dt\over t}\cr
+%\endmathdemo
+%since the $dt$ appears all by itself in the numerator of a fraction; this
+%detaches it visually from the rest of the formula.
+在包含微积分的公式中，只要把额外的细间距添加在 $dx$, ~$dy$ 或 $d\,$ 前面，
+效果就很好；
+但是 \TeX\ 不能自动实现它。%
+因此，一个训练有素的排版者会象下面的例子那样插入`|\,|':
+\beginmathdemo
+{\KT{10}输入}&{{\KT{10}输出}}\cr
+\noalign{\vskip2pt}
+|$\int_0^\infty f(x)\,dx$|&\int_0^\infty f(x)\,dx\cr
+|$y\,dx-x\,dy$|&y\,dx-x\,dy\cr
+|$dx\,dy=r\,dr\,d\theta$|&dx\,dy=r\,dr\,d\theta\cr
+|$x\,dy/dx$|&x\,dy/dx\cr \endmathdemo
+注意，在最后一个例子中，`|/|'后面不要加`|\,|'。%
+类似地，如果象
+\begindisplaymathdemo
+|$$\int_1^x{dt\over t}$$|&\int_1^x{\,dt\over t}\cr
+\endmathdemo
+这样，也不需要加`|\,|', 因为 $dt$ 单独出现在分数的分子上；
+加上会把分数与公式的其它部分在视觉上分开。
+
+%\exercise Explain how to handle the display
+%$$\int_0^\infty{t-ib\over t^2+b^2}e^{iat}\,dt=e^{ab}E_1(ab),\qquad a,b>0.$$
+%\answer |$$\int_0^\infty{t-ib\over t^2+b^2}e^{iat}\,dt=|\parbreak
+%        |    e^{ab}E_1(ab),\qquad a,b>0.$$|
+%
+\exercise 看看怎样得到陈列公式
+$$\int_0^\infty{t-ib\over t^2+b^2}e^{iat}\,dt=e^{ab}E_1(ab),\qquad a,b>0.$$
+\answer |$$\int_0^\infty{t-ib\over t^2+b^2}e^{iat}\,dt=|\parbreak
+        |    e^{ab}E_1(ab),\qquad a,b>0.$$|
+
+%\danger When physical ^{units} appear in a formula, they should be set in roman
+%type and separated from the preceding material by a thin space:
+%\beginmathdemo
+%|$55\rm\,mi/hr$|&55\rm\,mi/hr\cr
+%|$g=9.8\rm\,m/sec^2$|&g=9.8\rm\,m/sec^2\cr
+%|$\rm1\,ml=1.000028\,cc$|&\rm1\,ml=1.000028\,cc\cr
+%\endmathdemo
+\danger \1当物理单位出现在公式中时，应该使用 roman 字体，并把它同前面的内容%
+用细间距隔开：
+\beginmathdemo
+|$55\rm\,mi/hr$|&55\rm\,mi/hr\cr
+|$g=9.8\rm\,m/sec^2$|&g=9.8\rm\,m/sec^2\cr
+|$\rm1\,ml=1.000028\,cc$|&\rm1\,ml=1.000028\,cc\cr
+\endmathdemo
+
+%\dangerexercise Typeset the following display, assuming that `^|\hbar|'
+%generates `$\hbar$':
+%$$\hbar=1.0545\times10^{-27}\rm\,erg\,sec.$$
+%\answer |$$\hbar=1.0545\times10^{-27}\rm\,erg\,sec.$$|
+\dangerexercise 排版下列陈列公式，假定`$\hbar$'由`|\hbar|'得到：
+$$\hbar=1.0545\times10^{-27}\rm\,erg\,sec.$$
+\answer |$$\hbar=1.0545\times10^{-27}\rm\,erg\,sec.$$|
+
+%\danger Thin spaces should also be inserted after ^{exclamation points}
+%(which stand for the ``^{factorial}'' operation in a formula), if the next
+%character is a letter or a number or an opening delimiter:
+%\beginmathdemo
+%|$(2n)!/\bigl(n!\,(n+1)!\bigr)$|&(2n)!/\bigl(n!\,(n+1)!\bigr)\cr
+%\noalign{\vskip6pt}
+%|$${52!\over13!\,13!\,26!}$$|&\displaystyle{52!\over13!\,13!\,26!}\cr
+%\endmathdemo
+\danger 如果惊叹号(在公式中它表示阶乘)后面跟的是字母，数字或开分界符，
+那么它后面也要插入细间距：
+\beginmathdemo
+|$(2n)!/\bigl(n!\,(n+1)!\bigr)$|&(2n)!/\bigl(n!\,(n+1)!\bigr)\cr
+\noalign{\vskip6pt}
+|$${52!\over13!\,13!\,26!}$$|&\displaystyle{52!\over13!\,13!\,26!}\cr
+\endmathdemo
+
+%Besides these cases, you will occasionally encounter formulas in which
+%the symbols are bunched up too tightly, or where too much white space
+%appears, because of certain unlucky combinations of shapes. It's usually
+%impossible to anticipate optical glitches like this until you see the first
+%proofs of what you have typed; then you get to use your judgment about how
+%to add finishing touches that provide extra beauty, clarity, and finesse.
+%A tastefully applied `|\,|' or `|\!|'\ will open things up or close things
+%together so that the reader won't be distracted from the mathematical
+%significance of the formula. ^{Square root} signs and ^{multiple integrals} are
+%often candidates for such fine tuning. Here are some examples of situations
+%to look out for:
+%\beginmathdemo
+%|$\sqrt2\,x$|&\sqrt2\,x\cr
+%|$\sqrt{\,\log x}$|&\sqrt{\,\log x}\cr
+%|$O\bigl(1/\sqrt n\,\bigr)$|&O\bigl(1/\sqrt n\,\bigr)\cr
+%|$[\,0,1)$|&[\,0,1)\cr
+%|$\log n\,(\log\log n)^2$|&\log n\,(\log\log n)^2\cr
+%|$x^2\!/2$|&x^2\!/2\cr
+%|$n/\!\log n$|&n/\!\log n\cr
+%|$\Gamma_{\!2}+\Delta^{\!2}$|&\Gamma_{\!2}+\Delta^{\!2}\cr
+%|$R_i{}^j{}_{\!kl}$|&R_i{}^j{}_{\!kl}\cr
+%|$\int_0^x\!\int_0^y dF(u,v)$|&\int_0^x\!\int_0^y dF(u,v)\cr
+%\noalign{\vskip6pt}
+%|$$\int\!\!\!\int_D dx\,dy$$|&\displaystyle{\int\!\!\!\int_D dx\,dy}\cr
+%\endmathdemo
+%^^|\Gamma|^^|\Delta|^^|\intint|
+%In each of these formulas the omission of\/ |\,| or |\!|\ would lead to
+%somewhat less satisfactory results.
+除了这些情形外，可能偶尔会碰见符号太挤的公式，或者由于某些不幸的形状组合%
+导致空白太多。%
+在你看到输入得到的结果前是不可能预先知道这些问题的；
+看到结果后，根据你的判断进行最后的修饰，就得到相当清楚而漂亮的结果了。%
+高超地使用`|\,|'或`|\!|'就可以得到肥瘦相宜的公式，
+读者就不会因公式的数学意思而烦心了。%
+根号和多重积分号都需要精细调节。%
+这里给出一些这些情形的例子：
+\beginmathdemo
+|$\sqrt2\,x$|&\sqrt2\,x\cr
+|$\sqrt{\,\log x}$|&\sqrt{\,\log x}\cr
+|$O\bigl(1/\sqrt n\,\bigr)$|&O\bigl(1/\sqrt n\,\bigr)\cr
+|$[\,0,1)$|&[\,0,1)\cr
+|$\log n\,(\log\log n)^2$|&\log n\,(\log\log n)^2\cr
+|$x^2\!/2$|&x^2\!/2\cr
+|$n/\!\log n$|&n/\!\log n\cr
+|$\Gamma_{\!2}+\Delta^{\!2}$|&\Gamma_{\!2}+\Delta^{\!2}\cr
+|$R_i{}^j{}_{\!kl}$|&R_i{}^j{}_{\!kl}\cr
+|$\int_0^x\!\int_0^y dF(u,v)$|&\int_0^x\!\int_0^y dF(u,v)\cr
+\noalign{\vskip6pt}
+|$$\int\!\!\!\int_D dx\,dy$$|&\displaystyle{\int\!\!\!\int_D dx\,dy}\cr
+\endmathdemo
+在每个公式中，去掉 |\,| 或 |\!| 得到的结果都有些不满意。
+
+%\ddanger Most of these examples where thin-space corrections are desirable
+%arise because of chance coincidences. For example, the superscript in
+%|$x^2/2$| leaves a hole before the slash ($x^2/2$); a negative thin
+%space helps to fill that hole. The positive thin space in |$\sqrt{\,\log x}$|
+%compensates for the fact that `$\log x$' begins with a tall, unslanted
+%letter; and so on. But two of the examples involve corrections that
+%were necessary because \TeX\ doesn't really know a great deal about
+%mathematics: \ (1)~In the formula
+%|$\log n(\log\log n)^2$|, \TeX\ inserts no thin space before the left
+%parenthesis, because there are similar formulas like |$\log n(x)$| where
+%no such space is desired. \ (2)~In the formula |$n/\log n$|, \TeX\
+%automatically inserts an unwanted thin~space before |\log|, since the slash is
+%treated as an ordinary symbol, and since a~thin space is usually desirable
+%between an ordinary symbol and an operator like |\log|.
+\ddanger \1这些需要细间距修正的例子的大多数都是由于凑巧而出现的。
+例如，|$x^2/2$| 中上标在斜线前留下一个洞（$x^2/2$）；负细间距就帮着把它填补了。
+而在 |$\sqrt{\,\log x}$| 中，正的细间距补偿的是 `$\log x$'
+以一个高而直的字母开头这个问题；等等。
+但是有两个包含修正的例子是必需的，因为 \TeX\ 实在照顾不到数学中这么多东西：%
+(1). 在公式 |$\log n(\log\log n)^2$| 中，\TeX\ 不在左圆括号前面插入细间距，
+因为它类似于公式 |$\log n(x)$|，在这里却不需要这样的间距。
+(2). 在公式 |$n/\log n$| 中，\TeX\ 自动在 |\log| 前插入了不想要的细间距，
+因为斜线被看作普通符号，而且在普通符号和像 |\log|
+这样的算符之间一般要有一个细间距。
+
+%\ddanger In fact, \TeX's rules for spacing in formulas are fairly simple.
+%A formula is converted to a math list as described at the end of Chapter~17,
+%and the math list consists chiefly of ``^{atoms}'' of eight basic types:
+%^{Ord}~(^{ordinary}), ^{Op}~(^{large operator}), ^{Bin}~(^{binary operation}),
+%^{Rel}~(^{relation}), ^{Open}~(^{opening}), ^{Close}~(^{closing}),
+%^{Punct}~(punctuation), ^^{punctuation} and ^{Inner}~(a delimited
+%subformula).  Other kinds of atoms, which arise from commands like
+%^|\overline| or ^|\mathaccent| or ^|\vcenter|, etc., are all treated as
+%type~Ord; ^{fractions} are treated as type~Inner. The following table is
+%used to determine the spacing between pairs of adjacent atoms:
+%$$\baselineskip0pt\lineskip0pt
+%\halign to\hsize
+% {\strut\hbox to\parindent{\it#\hfil}& % for the legend "Left atom"
+%  #\hfil\quad& % for the row labels
+%  #\hfil\tabskip 0pt plus 10pt& % for the rule at the left
+%  \hbox to 25pt{\tt\hss#\hss}& % for column 1
+%  \hbox to 25pt{\tt\hss#\hss}& % for column 2
+%  \hbox to 25pt{\tt\hss#\hss}& % for column 3
+%  \hbox to 25pt{\tt\hss#\hss}& % for column 4
+%  \hbox to 25pt{\tt\hss#\hss}& % for column 5
+%  \hbox to 25pt{\tt\hss#\hss}& % for column 6
+%  \hbox to 25pt{\tt\hss#\hss}& % for column 7
+%  \hbox to 25pt{\tt\hss#\hss}& % for column 8
+%  #\hfil\tabskip0pt\cr % for the rule at the right
+%\noalign{\vskip-6pt} % it just happens that there's extra white space
+%&&&&\multispan7\hss\it Right atom\hss\cr
+%\noalign{\vskip3pt}
+%&&&\rm Ord&\rm Op&\rm Bin&\rm Rel&\rm Open&\rm Close&\rm Punct&\rm Inner\cr
+%\noalign{\vskip2pt}
+%\omit&&\multispan{10}\leaders\hrule\hfil\cr
+%\omit\vbox to 2pt{}&&\vrule&&&&&&&&&\vrule\cr
+%&Ord&\vrule&0&1&(2)&(3)&0&0&0&(1)&\vrule\cr
+%&Op&\vrule&1&1&*&(3)&0&0&0&(1)&\vrule\cr
+%&Bin&\vrule&(2)&(2)&*&*&(2)&*&*&(2)&\vrule\cr
+%Left&Rel&\vrule&(3)&(3)&*&0&(3)&0&0&(3)&\vrule\cr
+%atom&Open&\vrule&0&0&*&0&0&0&0&0&\vrule\cr
+%&Close&\vrule&0&1&(2)&(3)&0&0&0&(1)&\vrule\cr
+%&Punct&\vrule&(1)&(1)&*&(1)&(1)&(1)&(1)&(1)&\vrule\cr
+%&Inner&\vrule&(1)&1&(2)&(3)&(1)&0&(1)&(1)&\vrule\cr
+%\omit\vbox to 2pt{}&&\vrule&&&&&&&&&\vrule\cr
+%\omit&&\multispan{10}\leaders\hrule\hfil\cr}$$
+%^^{spacing table} ^^{math spacing table}
+%Here 0, 1, 2, and 3 stand for no space, thin space, medium space, and
+%thick space, respectively; the table entry is parenthesized if the space
+%is to be inserted only in display and text styles, not in script and
+%scriptscript styles. For example, many of the entries in the Rel row
+%and the Rel column are `{\tt(3)}'; this means that thick spaces are normally
+%inserted before and after relational symbols like `=', but not in
+%subscripts. Some of the entries in the table are `{\tt*}'; such cases
+%never arise, because Bin atoms must be preceded and followed by atoms
+%compatible with the nature of binary operations. Appendix~G contains
+%precise details about how math lists are converted to horizontal lists;
+%this conversion is done whenever \TeX\ is about to leave math mode, and the
+%inter-atomic spacing is inserted at that time.
+\ddanger 实际上，公式中 \TeX\ 的间距规则相当简单。%
+公式如第十七章结尾描述的那样转换成数学列，
+而且数学列主要由八种基本``原子''组成：
+Ord(普通), Op(巨算符), Bin(二元运算), Rel(关系符号), Open(开符号),
+Close(闭符号), Punct(标点), 以及 Inner(子公式分界符)。%
+出现于命令，如 |\overline|, |\mathaccent| 或 |\vcenter| 等等中的其它类型的原子%
+都看作 Ord 类型；
+分数看作 Inner 类型。%
+下列表用于确定相邻原子间的间距：
+$$\baselineskip0pt\lineskip0pt
+\halign to\hsize
+ {\strut\hbox to\parindent{\it#\hfil}& % for the legend "Left atom"
+  #\hfil\quad& % for the row labels
+  #\hfil\tabskip 0pt plus 10pt& % for the rule at the left
+  \hbox to 25pt{\tt\hss#\hss}& % for column 1
+  \hbox to 25pt{\tt\hss#\hss}& % for column 2
+  \hbox to 25pt{\tt\hss#\hss}& % for column 3
+  \hbox to 25pt{\tt\hss#\hss}& % for column 4
+  \hbox to 25pt{\tt\hss#\hss}& % for column 5
+  \hbox to 25pt{\tt\hss#\hss}& % for column 6
+  \hbox to 25pt{\tt\hss#\hss}& % for column 7
+  \hbox to 25pt{\tt\hss#\hss}& % for column 8
+  #\hfil\tabskip0pt\cr % for the rule at the right
+\noalign{\vskip-6pt} % it just happens that there's extra white space
+&&&&\multispan7\hss{{\KT{9}右侧原子}}\hss\cr
+\noalign{\vskip3pt}
+&&&\rm Ord&\rm Op&\rm Bin&\rm Rel&\rm Open&\rm Close&\rm Punct&\rm Inner\cr
+\noalign{\vskip2pt}
+\omit&&\multispan{10}\leaders\hrule\hfil\cr
+\omit\vbox to 2pt{}&&\vrule&&&&&&&&&\vrule\cr
+&Ord&\vrule&0&1&(2)&(3)&0&0&0&(1)&\vrule\cr
+&Op&\vrule&1&1&*&(3)&0&0&0&(1)&\vrule\cr
+&Bin&\vrule&(2)&(2)&*&*&(2)&*&*&(2)&\vrule\cr
+{{\KT{9}左侧}}&Rel&\vrule&(3)&(3)&*&0&(3)&0&0&(3)&\vrule\cr
+{{\KT{9}原子}}&Open&\vrule&0&0&*&0&0&0&0&0&\vrule\cr
+&Close&\vrule&0&1&(2)&(3)&0&0&0&(1)&\vrule\cr
+&Punct&\vrule&(1)&(1)&*&(1)&(1)&(1)&(1)&(1)&\vrule\cr
+&Inner&\vrule&(1)&1&(2)&(3)&(1)&0&(1)&(1)&\vrule\cr
+\omit\vbox to 2pt{}&&\vrule&&&&&&&&&\vrule\cr
+\omit&&\multispan{10}\leaders\hrule\hfil\cr}$$
+这里的 0, 1, 2, 3 分别表示没有间距，细间距，中间距，厚间距；
+用圆括号括起来的表格单元表示只在陈列和文本样式中插入，在标号和小标号时不插入。%
+例如，在 Rel 行和列是许多单元都是`{\tt(3)}';
+它表示厚间距正常情况下插入到象`='这样的关系符号前后，但在下标中不插入。%
+表中的有些单元是`{\tt*}'; 这是因为 Bin 原子必须放在与二元算符相适应的原子前后，
+`{\tt*}'表示 Bin 原子从来不会出现在那种情况下。%
+附录 G 讨论了数学列转换为水平列的准确细节；
+只要 \TeX\ 要离开数学模式，这种转换就开始，
+并且原子之间的间距也是那时插入的。
+
+%\ddanger For example, the displayed formula specification
+%\begintt
+%$$x+y=\max\{x,y\}+\min\{x,y\}$$
+%\endtt
+%will be transformed into the sequence of atoms
+%\def\\#1{\vbox to 33pt{\vbox to 22pt{\vfill\hrule
+%      \hbox{\vrule\hskip-.4pt$#1$\hskip-.4pt\vrule}}\hrule\vfill}}%
+%\begindisplay
+%\vbox{\vskip-11pt\hbox{$
+%\\x\;\;\\+\;\;\\y\;\;\\=\;\;\\\max\;\;\\\{\;\;
+%\\x\;\;\\,\;\;\\y\;\;\\\}\;\;\\+\;\;\\\min\;\;\\\{
+%\;\;\\x\;\;\\,\;\;\\y\;\;\\\}$}\vskip-11pt}
+%\enddisplay
+%of respective types Ord, Bin, Ord, Rel, Op, Open, Ord, Punct, Ord, Close,
+%Bin, Op, Open, Ord, Punct, Ord, and Close.
+%Inserting spaces according to the table gives
+%$$\def\0{\thinspace}
+%\def\1{\thinspace{\tt\bslash,}\thinspace}
+%\def\2{\thinspace{\tt\bslash>}\thinspace}
+%\def\3{\thinspace{\tt\bslash;}\thinspace}
+%\halign{\indent\hfil#\cr
+%  Ord\2Bin\2Ord\3Rel\3Op\0Open\0Ord\0Punct\1Ord\0Close\2\qquad\cr
+%                 Bin\2Op\0Open\0Ord\0Punct\1Ord\0Close\cr}$$
+%and the resulting formula is
+%$$\vbox{\vskip-11pt\hbox{$
+%\\x\>\\+\>\\y\;\\=\;\\\max\\\{
+%\\x\\,\,\\y\\\}\>\\+\>\\\min\\\{
+%\\x\\,\,\\y\\\}$}\vskip-11pt}$$
+%i.e.,$$x+y=\max\{x,y\}+\min\{x,y\}\rlap{\quad.}$$
+%This example doesn't involve subscripts or superscripts; but subscripts and
+%superscripts merely get attached to atoms without changing the atomic type.
+\ddanger 例如，陈列公式
+\begintt
+        $$x+y=\max\{x,y\}+\min\{x,y\}$$
+\endtt
+将转换为原子系列
+\def\\#1{\vbox to 33pt{\vbox to 22pt{\vfill\hrule
+      \hbox{\vrule\hskip-.4pt$#1$\hskip-.4pt\vrule}}\hrule\vfill}}%
+\begindisplay
+\vbox{\vskip-11pt\hbox{$
+\\x\;\;\\+\;\;\\y\;\;\\=\;\;\\\max\;\;\\\{\;\;
+\\x\;\;\\,\;\;\\y\;\;\\\}\;\;\\+\;\;\\\min\;\;\\\{
+\;\;\\x\;\;\\,\;\;\\y\;\;\\\}$}\vskip-11pt}
+\enddisplay
+它们分别是类型 Ord, Bin, Ord, Rel, Op, Open, Ord, Punct, Ord, Close,
+Bin, Op, Open, Ord, Punct, Ord 和 Close。
+\1按照上表插入间距将得到
+$$\def\0{\thinspace}
+\def\1{\thinspace{\tt\bslash,}\thinspace}
+\def\2{\thinspace{\tt\bslash>}\thinspace}
+\def\3{\thinspace{\tt\bslash;}\thinspace}
+\halign{\indent\hfil#\cr
+  Ord\2Bin\2Ord\3Rel\3Op\0Open\0Ord\0Punct\1Ord\0Close\2\qquad\cr
+                 Bin\2Op\0Open\0Ord\0Punct\1Ord\0Close\cr}$$
+并且所得到的公式为
+$$\vbox{\vskip-11pt\hbox{$
+\\x\>\\+\>\\y\;\\=\;\\\max\\\{
+\\x\\,\,\\y\\\}\>\\+\>\\\min\\\{
+\\x\\,\,\\y\\\}$}\vskip-11pt}$$
+即，$$x+y=\max\{x,y\}+\min\{x,y\}\rlap{\quad.}$$
+这个例子没有包括上下标；
+但是上下标仅仅是添加原子数而不增加原子的种类。
+
+%\ddangerexercise Use the table to determine what spacing \TeX\
+%will insert between the atoms of the formula `|$f(x,y)<x^2+y^2$|'.
+%\answer There are ten atoms (the first is $f$ and last is $y^2$); their types,
+%and the interatomic spacing, are respectively
+%\begindisplay \def\0{\thinspace}%
+%  \def\1{\thinspace{\tt\bslash,}\thinspace}%
+%  \def\2{\thinspace{\tt\bslash>}\thinspace}%
+%  \def\3{\thinspace{\tt\bslash;}\thinspace}
+%Ord\0Open\0Ord\0Punct\1Ord\0Close\3Rel\3Ord\2Bin\2Ord.
+%\enddisplay
+\ddangerexercise 利用表格了给出 \TeX\ 在公式`|$f(x,y)<x^2+y^2$|'%
+的原子之间中插入什么间距？
+\answer 一共有十个原子（第一个是 $f$ 而最后一个是 $y^2$）；
+原子的类型以及原子之间的间隔分别为
+\begindisplay \def\0{\thinspace}%
+  \def\1{\thinspace{\tt\bslash,}\thinspace}%
+  \def\2{\thinspace{\tt\bslash>}\thinspace}%
+  \def\3{\thinspace{\tt\bslash;}\thinspace}
+Ord\0Open\0Ord\0Punct\1Ord\0Close\3Rel\3Ord\2Bin\2Ord.
+\enddisplay
+
+%\ddanger The plain \TeX\ macros ^|\bigl|, ^|\bigr|, ^|\bigm|, and ^|\big|
+%all produce identical delimiters; the only difference between them is that
+%they may lead to different spacing, because they make the delimiter into
+%different types of atoms: |\bigl| produces an Open atom, |\bigr| a~Close,
+%|\bigm| a~Rel, and |\big| an~Ord. On the other hand, when a subformula
+%appears between ^|\left| and ^|\right|, it is typeset by itself and placed
+%into an Inner atom. Therefore it is possible that a subformula enclosed by
+%|\left| and |\right| will be surrounded by more space than there would be
+%if that subformula were enclosed by |\bigl| and~|\bigr|. For example, Ord
+%followed by Inner (from |\left|) gets a thin space, but Ord followed by
+%Open (from |\bigl|) does not. The rules in Chapter~17 imply that the
+%construction `^|\mathinner||{\bigl({|\<subformula>|}\bigr)}|' within any
+%formula produces a result exactly equivalent to
+%`|\left(|\<subformula>|\right)|', when the \<subformula> doesn't end
+%with Punct, except that the ^{delimiters} are forced to
+%be of the |\big| size regardless of the height and depth of the subformula.
+\ddanger Plain \TeX\ 的宏 |\bigl|、|\bigr|、|\bigm| 和 |\big|
+得到的都是同样的分界符；它们之间的唯一差别就是得到不同的间距，
+因为它们把分界符变成不同类型的原子：
+|\bigl| 得到的是 Open 原子，|\bigr| 是 Close，|\bigm| 是 Rel，
+|\big| 是 Ord。
+另一方面，当子公式出现在 |\left| 和 |\right| 之间时，
+就把它排版出来，看作 Inner 原子。
+因此，由 |\left| 和 |\right| 封装起来的子公式外面的间距可能比由
+|\bigl| 和 |\bigr| 封装起来的多。
+例如，Ord 后面跟 Inner（来自 |\left|）就得到一个细间距，
+但是 Ord 后面跟 Open（来自 |\bigl|）却没有。
+第 17 章的规则意味着，任意公式中构造的
+`|\mathinner||{\bigl({|\<subformula>|}\bigr)}|'
+正好等价于 `|\left(|\<subformula>|\right)|'，只要 \<subformula>
+的结尾不是 Punct，当然要除了那些不管子公式高度和深度只强制使用
+|\big| 分界符的情况。
+
+%\danger \TeX's spacing rules sometimes fail when `\|' and `|\|\|'
+%appear in a formula, because $\vert$ and $\Vert$ are treated as ordinary symbols
+%^^{verticalline}^^|\verticalline|
+%instead of as delimiters. For example, consider the formulas
+%\beginlongmathdemo
+%|$|\||-x|\||=|\||+x|\||$|&\vert-x\vert=\vert+x\vert\cr
+%|$\left|\||-x\right|\||=\left|\||+x\right|\||$|&
+%  \left\vert-x\right\vert=\left\vert+x\right\vert\cr
+%|$\lfloor-x\rfloor=-\lceil+x\rceil$|&\lfloor-x\rfloor=-\lceil+x\rceil\cr
+%\endmathdemo
+%In the first case the spacing is wrong because \TeX\ thinks that the plus
+%sign is computing the sum of `$\vert$' and `$x$'. The use of\/ |\left| and
+%|\right| in the second example puts \TeX\ on the right track.  The third
+%example shows that no such corrections are needed with other delimiters,
+%because \TeX\ knows whether they are openings or closings.
+\danger 当公式中有`\|'和`|\|\|'时， \TeX\ 的间距规则有时候失效，
+因为 $\vert$ 和 $\Vert$ 被看作普通符号而不是分界符。%
+例如，看看公式
+\beginlongmathdemo
+|$|\||-x|\||=|\||+x|\||$|&\vert-x\vert=\vert+x\vert\cr
+|$\left|\||-x\right|\||=\left|\||+x\right|\||$|&
+  \left\vert-x\right\vert=\left\vert+x\right\vert\cr
+|$\lfloor-x\rfloor=-\lceil+x\rceil$|&\lfloor-x\rfloor=-\lceil+x\rceil\cr
+\endmathdemo
+在第一种情况下间距不对，因为 \TeX\ 把它看作`$\vert$'与`$x$'相加了。%
+第二个使用 |\left| 和 |\right| 就对了。%
+第三个表明，对其它分界符毋需这种修正，
+因为 \TeX\ 知道它们是开符号或闭符号。
+
+%\ddangerexercise Some perverse mathematicians use ^{brackets} backwards,
+%to denote ``^{open intervals}.''
+%Explain how to type the following bizarre formula: % from MR53 #3451
+%$\left]-\infty,T\right[\times\left]-\infty,T\right[$.
+%\answer |$\left]-\infty,T\right[\times\left]-\infty,T\right[$|. \ (Or one could
+%say ^|\mathopen| and ^|\mathclose| instead of\/ |\left| and |\right|;
+%then \TeX\ would not choose the size of the delimiters, nor would it consider
+%the subformulas to be of type Inner.) \
+%% that formula was quoted from MR review of paper by Mario Marino
+%% in Ricerche Mat. 24 (1975), no.~1, 152--171
+%Open intervals are more clearly expressed in print
+%by using parentheses instead of reversed brackets; for example,
+%compare `$(-\infty,T)\times(-\infty,T)$' to the given formula.
+\ddangerexercise 有些数学家把方括号反过来使用表示``开区间''。%
+看看怎样输入下列奇怪的公式？
+$\left]-\infty,T\right[\times\left]-\infty,T\right[$.
+\answer |$\left]-\infty,T\right[\times\left]-\infty,T\right[$|。%
+（我们也可用\break ^|\mathopen| 和 ^|\mathclose| 代替 |\left| 和 |\right|；
+这样 \TeX\ 将不会选择定界符的尺寸，也不将该子公式视为 Inner 类型。）
+% that formula was quoted from MR review of paper by Mario Marino
+% in Ricerche Mat. 24 (1975), no.~1, 152--171
+用圆括号而非反向方括号来表示开区间，看起来会更加清楚；
+比如你可以拿这个公式与 `$(-\infty,T)\times(-\infty,T)$' 作对比。
+
+%\ddangerexercise Study Appendix G and determine what spacing will be used
+%in the formula `|$x++1$|'. Which of the plus signs will be regarded
+%as a ^{binary operation}?
+%\answer The first |+| will become a Bin atom, the second an Ord; hence
+%the result is $x$, medium space, $+$, medium space, $+$, no space, 1.
+\ddangerexercise 研究一下附录 G，看看公式`|$x++1$|'所用的间距是什么。%
+哪个加号被看作二元运算符？
+\answer 第一个 |+| 将成为 Bin 原子，而第二个为 Ord 原子；
+因此结果为 $x$、中等间距、$+$、中等间距、$+$、无间距、1。
+
+%\subsection Ellipses\/ {\rm(``three dots'')}. ^^{ellipses}
+%Mathematical copy looks much nicer if you are careful about how groups of
+%^{three dots} are typed in formulas and text. Although it looks fine to
+%type `|...|'\ on a typewriter that has fixed spacing, the result looks too
+%crowded when you're using a printer's fonts:  `|$x...y$|' results in
+%`$x...y$', and such close spacing is undesirable except in subscripts or
+%superscripts.
+\subsection 省略号.
+\1如果你仔细地把三个小圆点组合起来输入公式或文本，数学版面看起来非常好看。%
+虽然在间距固定的打字机上输入`|...|'看起来不错，但是当用打印机字体把它输出时%
+得到的结果看起来太挤：
+`|$x...y$|'得到的是`$x...y$', 除了上下标外不希望得到这样紧的间距。
+
+%An ellipsis can be indicated by two different kinds of dots, one higher
+%than the other; the best mathematical traditions distinguish between
+%these two possibilities. It is generally correct to produce formulas like
+%\begindisplay
+%$\displaystyle x_1+\cdots+x_n\qquad {\rm and}\qquad (x_1,\ldots,x_n),$
+%\enddisplay
+%but wrong to produce formulas like
+%\begindisplay
+%$\displaystyle x_1+\ldots+x_n\qquad {\rm and}\qquad (x_1,\cdots,x_n).$
+%\enddisplay
+%The plain \TeX\ format of Appendix B allows you to solve the ``three dots''
+%problem very simply, and everyone will be envious of the beautiful formulas
+%that you produce. The idea is simply to type ^|\ldots| when you want three
+%low dots~($\,\ldots\,$), and ^|\cdots| when you want three vertically centered
+%dots~($\,\cdots\,$).
+省略号可以用两种不同的小圆点——一种比另外一种高——表示出来；
+在最好的数学传统中，这两种是不同的。%
+得到象下面这样的公式一般都是对的：
+\begindisplay
+$\displaystyle x_1+\cdots+x_n\qquad {\rm and}\qquad (x_1,\ldots,x_n),$
+\enddisplay
+但是得到象下面这样的公式却不对：
+\begindisplay
+$\displaystyle x_1+\ldots+x_n\qquad {\rm and}\qquad (x_1,\cdots,x_n).$
+\enddisplay
+附录 B 的 plain \TeX\ 格式让你能很容易解决这个``三个小圆点''的问题，
+而且每个人都会羡慕你所得到的优美的公式。%
+办法就是，当要三个低小圆点($\,\ldots\,$)时用 |\ldots|,
+用垂直居中的三个小圆点($\,\cdots\,$)时用 |\cdots|。
+
+%In general, it is best to use |\cdots| between $+$ and $-$ and~$\times$
+%signs, and also between $=$~signs or $\le$~signs or $\subset$ signs or other
+%similar relations. Low dots are used between ^{commas}, and when things
+%are juxtaposed with no signs between them at all. For example:
+%\beginmathdemo
+%|$x_1+\cdots+x_n$|&x_1+\cdots+x_n\cr
+%|$x_1=\cdots=x_n=0$|&x_1=\cdots=x_n=0\cr
+%|$A_1\times\cdots\times A_n$|&A_1\times\cdots\times A_n\cr
+%|$f(x_1,\ldots,x_n)$|&f(x_1,\ldots,x_n)\cr
+%|$x_1x_2\ldots x_n$|&x_1x_2\ldots x_n\cr
+%|$(1-x)(1-x^2)\ldots(1-x^n)$|&(1-x)(1-x^2)\ldots(1-x^n)\cr
+%|$n(n-1)\ldots(1)$|&n(n-1)\ldots(1)\cr
+%\endmathdemo
+一般地，最好在 $+$, ~$-$ 和 $\times$ 号之间，
+以及在 $=$, ~$\le$, ~$\subset$ 或其它关系符号之间用 |\cdots|。%
+低的圆点用在逗号之间，以及无正负号的并列的内容之间。%
+例如，
+\beginmathdemo
+|$x_1+\cdots+x_n$|&x_1+\cdots+x_n\cr
+|$x_1=\cdots=x_n=0$|&x_1=\cdots=x_n=0\cr
+|$A_1\times\cdots\times A_n$|&A_1\times\cdots\times A_n\cr
+|$f(x_1,\ldots,x_n)$|&f(x_1,\ldots,x_n)\cr
+|$x_1x_2\ldots x_n$|&x_1x_2\ldots x_n\cr
+|$(1-x)(1-x^2)\ldots(1-x^n)$|&(1-x)(1-x^2)\ldots(1-x^n)\cr
+|$n(n-1)\ldots(1)$|&n(n-1)\ldots(1)\cr
+\endmathdemo
+
+%\exercise Type the formulas `$x_1+x_1x_2+\cdots+x_1x_2\ldots x_n$' and
+%`$(x_1,\ldots,x_n)\cdot(y_1,\ldots,y_n)=x_1y_1+\cdots+x_ny_n$'.
+%\ [{\sl Hint:\/} A single raised dot is called `^|\cdot|'.]
+%\answer |$x_1+x_1x_2+\cdots+x_1x_2\ldots x_n$| \ and\hfil\break
+%|$(x_1,\ldots,x_n)\cdot(y_1,\ldots,y_n)=x_1y_1+\cdots+x_ny_n$|.
+\exercise 输入公式`$x_1+x_1x_2+\cdots+x_1x_2\ldots x_n$'和%
+`$(x_1,\ldots,x_n)\cdot(y_1,\ldots,y_n)=x_1y_1+\cdots+x_ny_n$'。%
+[{\KT{10}提示}：单个升高的圆点称为 `|\cdot|'。]
+\answer |$x_1+x_1x_2+\cdots+x_1x_2\ldots x_n$| 和\hfil\break
+|$(x_1,\ldots,x_n)\cdot(y_1,\ldots,y_n)=x_1y_1+\cdots+x_ny_n$|。
+
+%But there's an important special case in which |\ldots| and |\cdots|
+%don't give the correct spacing, namely when they appear at the very end
+%of a formula, or when they appear just before a closing delimiter like~`|)|'.
+%In such situations an extra ^{thin space} is needed. For example, consider
+%sentences like this:
+%\begindisplay
+%Prove that $(1-x)^{-1}=1+x+x^2+\cdots\,$.\cr
+%Clearly $a_i<b_i$ for $i=1$,~2, $\ldots\,$,~$n$.\cr
+%The coefficients $c_0$,~$c_1$, \dots,~$c_n$ are positive.\cr
+%\enddisplay
+%To get the first sentence, the author typed
+%\begintt
+%Prove that $(1-x)^{-1}=1+x+x^2+\cdots\,$.
+%\endtt
+%Without the `^|\,|' the period would have come too close to the |\cdots|.
+%Similarly, the second sentence was typed thus:
+%\begintt
+%Clearly $a_i<b_i$ for $i=1$,~2, $\ldots\,$,~$n$.
+%\endtt
+%Notice the use of ^{ties}, which prevent bad line breaks as explained in
+%Chapter~14. Such ellipses are extremely common in some forms of mathematical
+%writing, so plain \TeX\ allows you to say just `^|\dots|' as an abbreviation
+%for `|$\ldots\,$|' in the text of a paragraph. The third sentence
+%can therefore be typed
+%\begintt
+%The coefficients $c_0$,~$c_1$, \dots,~$c_n$ are positive.
+%\endtt
+但是，在一种重要的特殊情形下，|\ldots| 和 |\cdots| 没有给出正确的间距，
+即当它们正好出现在公式结尾时，或者当它们正好出现在象`|)|'这样的闭分界符前时。%
+在这种情况下，需要添加额外的细间距。%
+例如，看看下面的句子：
+\begindisplay
+Prove that $(1-x)^{-1}=1+x+x^2+\cdots\,$.\cr
+Clearly $a_i<b_i$ for $i=1$,~2, $\ldots\,$,~$n$.\cr
+The coefficients $c_0$,~$c_1$, \dots,~$c_n$ are positive.\cr
+\enddisplay
+为了得到第一个句子，作者输入的是
+\begintt
+Prove that $(1-x)^{-1}=1+x+x^2+\cdots\,$.
+\endtt
+\1没有`|\,|'时，句点离 |\cdots| 太近。%
+类似地，第二句输入的是
+\begintt
+Clearly $a_i<b_i$ for $i=1$,~2, $\ldots\,$,~$n$.
+\endtt
+注意这里的带子，它防止第十四章讨论的不好的断行。%
+这样的省略号在数学写作的某些格式中极其普遍，
+因此 plain \TeX\ 允许你在段落的文本中只输入`|\dots|', 其定义为`|$\ldots\,$|'。%
+因此第三句可以输入为
+\begintt
+The coefficients $c_0$,~$c_1$, \dots,~$c_n$ are positive.
+\endtt
+
+%\exercise B. C. ^{Dull} tried to take a shortcut by typing the
+%second example this way:
+%\begintt
+%Clearly $a_i<b_i$ for~$i=1, 2, \ldots, n$.
+%\endtt
+%What's so bad about that?
+%\answer The commas belong to the sentence, not to the formula; his
+%decision to put them into math mode meant that \TeX\ didn't put large
+%enough spaces after them. Also, his formula `$i=1, 2, \ldots, n$' allows
+%no breaks between lines, except after the $=$, so he's risking
+%overfull box problems. But suppose the sentence had been more terse:
+%\begindisplay
+%Clearly $a_i<b_i$ \ ($i=1,2,\ldots,n$).
+%\enddisplay
+%Then his idea would be basically correct:
+%\begintt
+%Clearly $a_i<b_i$ \ ($i=1,2,\ldots,n$).
+%\endtt
+\exercise B. C. ^{Dull} 想到输入第二个例子的简单办法：
+\begintt
+Clearly $a_i<b_i$ for~$i=1, 2, \ldots, n$.
+\endtt
+这会出现什么问题？
+\answer 逗号属于该句子，而不属于公式；
+将逗号放入公式中将使得 \TeX\ 不在逗号后留下足够大的空白。
+另外，公式 `$i=1, 2, \ldots, n$' 仅允许在 $=$ 后断行，
+因而将可能导致过满盒子的问题。但如果句子比较简短：
+\begindisplay
+Clearly $a_i<b_i$ \ ($i=1,2,\ldots,n$).
+\enddisplay
+则他的想法基本上是正确的：
+\begintt
+Clearly $a_i<b_i$ \ ($i=1,2,\ldots,n$).
+\endtt
+
+%\exercise How do you think the author typed the ^{footnote} in Chapter 4
+%of this book?
+%\answer $\ldots$ |never\footnote*{Well \dots, hardly ever.} have| $\ldots$
+\exercise 想想看作者怎样输入本书第四章的脚注的？
+\answer $\ldots$ |never\footnote*{Well \dots, hardly ever.} have| $\ldots$
+
+%\subsection Line breaking.  When you have formulas in a paragraph, \TeX\
+%may have to break them between lines.  This is a necessary evil, something
+%like the hyphenation of words; we want to avoid it unless the alternative
+%is worse. ^^{line breaking in math} ^^{breaking formulas between lines}
+\subsection 断行.
+当段落中出现公式时， \TeX\ 可能不得不把它裂分在两行上。%
+这是注定的命运，有点象单词的连字化；
+除了无路可走外，我们要尽量避免出现这种情况。
+
+%A formula will be broken only after a relation symbol like $=$
+%or~$<$ or $\to$, or after a binary operation symbol like $+$ or $-$ or
+%$\times$, where the relation or binary operation is on the ``outer level'' of
+%the formula (i.e., not enclosed in |{...}| and not part of an `|\over|'
+%construction). For example, if you type
+%\begintt
+%$f(x,y) = x^2-y^2 = (x+y)(x-y)$
+%\endtt
+%in mid-paragraph, there's a chance that \TeX\ will break after either of the
+%|=|~signs (it prefers this) or after the~|-| or~|+| or~|-| (in an emergency).
+%But there won't be a break after the comma in any case---commas
+%after which breaks are desirable shouldn't appear between |$|'s.
+公式只能断行于关系符号后面，如 $=$, ~$<$ 或者 $\to$,
+或者二元运算后面，如 $+$, ~$-$ 或者 $\times$,
+其中关系符号或二元运算在公式的``外层''(即没有被封装在 |{...}| 中或者%
+是构造`|\over|'的一部分)。%
+例如，如果在段落中输入
+\begintt
+$f(x,y) = x^2-y^2 = (x+y)(x-y)$,
+\endtt
+ \TeX\ 就可以在 |=| 后面(最好情况)或在 |-|, ~|+| 或 |-| 后面(不得已情况下)。%
+但是在任何情况下都不会在逗号后面断行——%
+在其后可断行的逗号不应该出现在 |$| 之间。
+
+%If you don't want to permit breaking in this example except after the
+%|=|~signs, you could type
+%\begintt
+%$f(x,y) = {x^2-y^2} = {(x+y)(x-y)}$
+%\endtt
+%because these additional braces ``freeze'' the ^{subformulas}, putting them
+%into unbreakable boxes in which the glue has been set to its natural width.
+%But it isn't necessary to bother worrying about such things unless \TeX\
+%actually does break a formula badly, since the chances of this are
+%pretty slim.
+如果除了在 |=| 之后外不在其它地方断行，可以输入
+\begintt
+$f(x,y) = {x^2-y^2} = {(x+y)(x-y)}$
+\endtt
+因为这些额外的大括号把子公式``冻结''住了，把它们放在不可断行的盒子中，
+盒子的宽度为子公式的自然宽度。%
+但是毋需为此这样做，因为出现这种情况的机会很少。
+
+%\danger A ``^{discretionary multiplication sign}'' is allowed in formulas:
+%If you type `|$(x+y)\*(x-y)$|', \TeX\ will treat the ^|\*| something like
+%the way it treats \hbox{|\-|}; namely, a line break will be allowed at
+%that place, with the hyphenation penalty. However, instead of inserting a
+%hyphen, \TeX\ will insert a $\times$ sign in text size.
+\danger 在公式中允许出现``随意乘号'':
+如果输入`|$(x+y)\*(x-y)$|', 那么 \TeX\ 将把 |\*| 看作象 \hbox{|\-|} 一样；
+即，在此处允许断行，其惩罚与连字符一样。%
+但是，插入的不是连字符，而是插入文本尺寸的 $\times$。
+
+%\danger If you do want to permit a break at some point in the outer level
+%of a formula, you can say ^|\allowbreak|. For example, if the formula
+%\begintt
+%$(x_1,\ldots,x_m,\allowbreak y_1,\ldots,y_n)$
+%\endtt
+%appears in the text of a paragraph, \TeX\ will allow it to be broken into the
+%two pieces `$(x_1,\ldots,x_m,$' and `$y_1,\ldots,y_n)$'.
+\danger \1如果的确要允许在外层的某处断行，可以用 |\allowbreak|。%
+例如，公式
+\begintt
+$(x_1,\ldots,x_m,\allowbreak y_1,\ldots,y_n)$
+\endtt
+出现在段落文本中时， \TeX\ 将允许在`$(x_1,\ldots,x_m,$'和`$y_1,\ldots,y_n)$'%
+之间断行。
+
+%\ddanger The penalty for breaking after a Rel atom is called ^|\relpenalty|,
+%and the penalty for breaking after a Bin atom is called ^|\binoppenalty|.
+%Plain \TeX\ sets |\relpenalty=500| and |\binoppenalty=700|. You can change
+%the penalty for breaking in any particular case by typing `^|\penalty|\<number>'
+%immediately after the atom in question; then the number you have specified
+%will be used instead of the ordinary penalty. For example, you can prohibit
+%breaking in the formula `$x=0$' by typing `|$x=\nobreak0$|', since
+%^|\nobreak| is an abbreviation for `|\penalty10000 |'.
+\ddanger Rel 原子后断行的惩罚称为 |\relpenalty|，
+而 Bin 原子后断行的惩罚称为 |\binoppenalty|，
+Plain \TeX\ 设置 |\relpenalty=500| 和 |\binoppenalty=700|。
+在特殊情况下，你可以通过直接在原子后面输入
+`|\penalty|\<number>' 来改变断行的惩罚；
+这样，你给出的数字就代替了通常的惩罚。
+例如，将公式 `$x=0$' 改为 `|$x=\nobreak0$|' 就可以禁止出现断行，
+因为 |\nobreak| 的定义是 `|\penalty10000 |'。
+
+%\ddangerexercise Is there any difference between the results of
+%`|$x=\nobreak0$|' and `|${x=0}$|'?
+%\answer Neither formula will be broken between lines, but the thick spaces
+%in the second formula will be set to their natural width while the thick
+%spaces in the first formula will retain their stretchability.
+\ddangerexercise `|$x=\nobreak0$|' 和 `|${x=0}$|' 得到的结果相同吗？
+\answer 这两个公式都不会被断开，
+但第二个公式的厚间距将被设为它们的自然宽度，
+而第一个公式的厚间距将保留它们的伸展性。
+
+%\ddangerexercise How could you prohibit all breaks in formulas, by making only
+%a few changes to the macros of plain \TeX?
+%\answer Set ^|\relpenalty||=10000| and ^|\binoppenalty||=10000|.
+%And you also need to change the definitions of\/ ^|\bmod| and ^|\pmod|,
+%which insert their own penalties.
+\ddangerexercise 怎样只改动 plain \TeX\ 的宏就可以禁止公式中的所有断行？
+\answer 设定 ^|\relpenalty||=10000| 以及 ^|\binoppenalty||=10000|。
+你还需要修改 ^|\bmod| 和 ^|\pmod| 的定义，因为它们自己插入了惩罚项。
+
+%\subsection Braces. A variety of different notations have sprung up involving
+%the symbols `$\{$' and `$\}$'; plain \TeX\ includes several control
+%sequences that help you cope with formulas involving such things.
+%^^{braces} ^^{leftbrace} ^^{rightbrace}
+\subsection 花括号.
+现在已经出现了各种不同的符号，其中就有符号`$\{$'和`$\}$';
+~plain \TeX\ 中有几个控制系列可以帮你来处理包括这样符号的公式。
+
+%In simple situations, braces are used to indicate a ^{set} of objects;
+%for example, `$\{a,b,c\}$' stands for the set of three objects $a$, $b$,
+%and~$c$. There's nothing special about typesetting such formulas, except
+%that you must remember to use |\{| and |\}| for the braces:
+%^^|\leftbrace| ^^|\rightbrace|
+%\beginmathdemo
+%|$\{a,b,c\}$|&\{a,b,c\}\cr
+%|$\{1,2,\ldots,n\}$|&\{1,2,\ldots,n\}\cr
+%|$\{\rm red,white,blue\}$|&\{\rm red,white,blue\}\cr
+%\endmathdemo
+%A slightly more complex case arises when a set is indicated by giving a
+%generic element followed by a specific condition; for example, `$\{\,x\mid
+%x>5\,\}$' stands for the set of all objects $x$ that are greater than~5.
+%In such situations the control sequence ^|\mid| should be used for the
+%^{vertical bar}, and thin spaces should be inserted inside the braces:
+%\beginmathdemo
+%|$\{\,x\mid x>5\,\}$|&\{\,x\mid x>5\,\}\cr
+%|$\{\,x:x>5\,\}$|&\{\,x:x>5\,\}\cr
+%\endmathdemo
+%(Some authors prefer to use a ^{colon} instead of `$\mid$', as in the second
+%example here.) \ When the delimiters get larger, as in
+%\begindisplay
+%$\displaystyle\bigl\{\,\bigl(x,f(x)\bigr)\bigm\vert x\in D\,\bigr\}$
+%\enddisplay
+%they should be called ^|\bigl|, ^|\bigm|, and~^|\bigr|; for example,
+%the formula just given would be typed
+%\begintt
+%\bigl\{\,\bigl(x,f(x)\bigr)\bigm|char`||x\in D\,\bigr\}
+%\endtt
+%and formulas that involve still larger delimiters would use ^|\Big| or
+%^|\bigg| or~even ^|\Bigg|, as explained in Chapter~17.
+在简单情况下，大括号用来表示对象的集合；
+例如，`$\{a,b,c\}$'表示三个对象 $a$, ~$b$ 和 $c$ 的集合。%
+排版这些公式没什么特别的，只是要记住用 |\{| 和 |\}| 来得到大括号：
+\beginmathdemo
+|$\{a,b,c\}$|&\{a,b,c\}\cr
+|$\{1,2,\ldots,n\}$|&\{1,2,\ldots,n\}\cr
+|$\{\rm red,white,blue\}$|&\{\rm red,white,blue\}\cr
+\endmathdemo
+在稍复杂的情形下，集合用一个符合给定条件的一般元素的集合给出；
+例如，`$\{\,x\mid x>5\,\}$'表示 $x$ 大于 5 的所有对象的集合。%
+在这种情况下，应该用控制系列 |\mid| 得到垂直短线，
+并且细间距应该插入到大括号中间去：
+\beginmathdemo
+|$\{\,x\mid x>5\,\}$|&\{\,x\mid x>5\,\}\cr
+|$\{\,x:x>5\,\}$|&\{\,x:x>5\,\}\cr
+\endmathdemo
+(有些作者喜欢用冒号而不是`$\mid$', 就象第二个例子那样。)
+当分界符变大时，就象在
+\begindisplay
+$\displaystyle\bigl\{\,\bigl(x,f(x)\bigr)\bigm\vert x\in D\,\bigr\}$
+\enddisplay
+应该用 |\bigk|, |\bigm| 和 |\bigr|;
+\1例如，刚刚给出的公式可以输入为
+\begintt
+\bigl\{\,\bigl(x,f(x)\bigr)\bigm|char`||x\in D\,\bigr\}
+\endtt
+而包含更大分界符要用到 |\Big| 或者 |\bigg| 甚至 |\Bigg|,
+就象第十七章讨论的那样。
+
+%\exercise How would you typeset the formula
+%$\bigl\{\,x^3\bigm\vert h(x)\in\{-1,0,+1\}\,\bigr\}$?
+%\answer |$\bigl\{\,x^3\bigm|\||h(x)\in\{-1,0,+1\}\,\bigr\}$|.
+\exercise 怎样排版公式
+$\bigl\{\,x^3\bigm\vert h(x)\in\{-1,0,+1\}\,\bigr\}$？
+\answer |$\bigl\{\,x^3\bigm|\||h(x)\in\{-1,0,+1\}\,\bigr\}$|。
+
+%\dangerexercise Sometimes the condition that defines a set is given as
+%a fairly long English description, not as a formula; for example, consider
+%`$\{\,p\mid p$~and $p+2$ are prime$\,\}$'. An hbox would do the job:
+%\begintt
+%$\{\,p\mid\hbox{$p$ and $p+2$ are prime}\,\}$
+%\endtt
+%but a long formula like this is troublesome in a paragraph, since an hbox
+%cannot be broken between lines, and since the glue inside the |\hbox| does
+%not vary with the interword glue in the line that contains it. Explain how
+%the given formula could be typeset with line breaks allowed. [{\sl Hint:\/}
+%Go back and forth between math ^{mode} and horizontal mode.]
+%\answer |$\{\,p\mid p$~and $p+2$ are prime$\,\}$|, assuming that
+%^|\mathsurround| is zero. The more difficult alternative
+%`|$\{\,p\mid p\ {\rm and}\ p+2\rm\ are\ prime\,\}$|' is not a solution,
+%because line breaks do not occur at |\|\] ^^|\space|
+%(or at glue of any kind) within math formulas. Of course it may be best to
+%display a formula like this, instead of breaking it between lines.
+\dangerexercise 有时候集合的定义条件是相当长的英文文字，而不是公式；
+例如，`$\{\,p\mid p$~and $p+2$ are prime$\,\}$'。用一个 hbox 就可得到它：
+\begintt
+$\{\,p\mid\hbox{$p$ and $p+2$ are prime}\,\}$
+\endtt
+但是像这样长的公式在段落中会出现问题，因为 hbox 在段落中不断行，
+而且 |\hbox| 中的粘连不随外面行中单词间距的改变而改变。
+看看怎样得到允许断行的这样的公式。%
+[{\KT{9}提示}：在数学模式和水平模式之间来回变换。]
+\answer |$\{\,p\mid p$~and $p+2$ are prime$\,\}$|，假定 ^|\mathsurround| 为零。
+更复杂的写法
+`|$\{\,p\mid p\ {\rm and}\ p+2\rm\ are\ prime\,\}$|' 不是正确的答案，
+因为断行不会在数学公式内部的 |\|\] ^^|\space|处（或者任何粘连处）出现，
+当然，最好是将它写成陈列公式，而不是分为两行。
+
+%Displayed formulas often involve another sort of brace, to indicate a choice
+%between various alternatives, as in the construction
+%\begindisplay
+%$\displaystyle\vert x\vert=\cases{x,&if $x\ge0$;\cr -x,&otherwise.\cr}$
+%\enddisplay
+%^^{selection, see cases} ^^{alternatives, see cases} ^^{choices, see cases}
+%You can typeset it with the control sequence ^|\cases|:
+%\begintt
+%$$|char`||x||=\cases{x,&if $x\ge0$;\cr
+%             -x,&otherwise.\cr}$$
+%\endtt
+%Look closely at this example and notice that it uses the character |&|,
+%^^{ampersand} which we said in Chapter~7 was reserved for special purposes.
+%Here for the first time in this manual we have an example of why |&|~is
+%so special: Each of the cases has two parts, and the~|&| separates those
+%parts. To the left of the~|&| is a math formula that is implicitly
+%enclosed in |$...$|; to the right of the~|&| is ordinary text, which is
+%{\sl not\/} implicitly enclosed in |$...$|. For example, the `|-x,|' in
+%the second line will be typeset in math mode, but the `|otherwise|' will
+%be typeset in horizontal mode. Blank spaces after the~|&| are ignored.
+%There can be any number of cases, but there usually are at least two.
+%Each case should be followed by ^|\cr|. Notice that the |\cases| construction
+%typesets its own `$\{$'; there is no corresponding `$\}$'.
+陈列公式常常包含另外一种大括号，来表明不同情形，就象下式一样：
+\begindisplay
+$\displaystyle\vert x\vert=\cases{x,&if $x\ge0$;\cr -x,&otherwise.\cr}$
+\enddisplay
+可以用控制系列 |\cases| 来输入它：
+\begintt
+$$|char`||x||=\cases{x,&if $x\ge0$;\cr
+             -x,&otherwise.\cr}$$
+\endtt
+仔细观察本例就会发现它用到字符 |&|,
+在第七章我们说过，它是作为特殊字符保留下来的。%
+在本手册这里是第一次出现特殊字符 |&| 的例子：
+每种情形分为两个部分，把它们用 |&| 隔开。%
+在 |&| 左边是数学公式，它已经暗中被封装在 |$...$| 中了；
+在 |&| 右边是普通文本，它{\KT{10}没有}放在 |$...$| 中。%
+例如，第二行的`|-x,|'按数学模式排版，
+但是`|otherwise|'按水平模式排版。%
+|&| 后的空格被忽略掉。%
+可以有任意多种情形，
+但是通常至少有两个。%
+每种情形以 |\cr| 结束。%
+注意，|\cases| 构造自己含有`$\{$'; 但是没有相应的`$\}$'。
+
+%\exercise Typeset the display \lower12pt\null\
+%$\smash{\displaystyle
+%f(x)=\cases{1/3&if $0\le x\le1$;\cr 2/3&if $3\le x\le4$;\cr 0&elsewhere.\cr}
+%}$
+%\answer |$$f(x)=\cases{1/3&if $0\le x\le1$;\cr 2/3&if $3\le x\le4$;\cr|\hfil
+%\break|0&elsewhere.\cr}$$|
+\exercise 排版陈列公式 \lower12pt\null\
+$\smash{\displaystyle
+f(x)=\cases{1/3&if $0\le x\le1$;\cr 2/3&if $3\le x\le4$;\cr 0&elsewhere.\cr}
+}$
+\answer |$$f(x)=\cases{1/3&if $0\le x\le1$;\cr 2/3&if $3\le x\le4$;\cr|\hfil
+\break|0&elsewhere.\cr}$$|
+
+%\danger You can insert `^|\noalign||{|$\langle$vertical mode
+%material$\rangle$|}|' just after any \kern-1pt|\cr| within |\cases|, as
+%explained in Chapter~22, because |\cases| is an application of the general
+%alignment constructions considered in that chapter. For example, the
+%command `|\noalign{\vskip2pt}|' can be used to put a little extra space
+%between two of the cases.
+\danger \1你可以在 |\cases| 中的任意 |\cr| 后紧跟着插入`|\noalign{|$\langle$vertical mode
+material$\rangle$|}|',
+就象在第二十二章讨论的那样，因为 |\cases| 是那章中讨论的一般对齐构造的一个应用。%
+例如，命令`|\noalign|\allowbreak|{\vskip2pt}|'可以在两个情形之间插入小的额外间距。
+
+%\danger ^{Horizontal braces} will be set over or under parts of a displayed
+%formula if you use the control sequences ^|\overbrace| or ^|\underbrace|.
+%Such constructions are considered to be large operators like |\sum|, so you
+%can put limits above them or below them by specifying superscripts or
+%subscripts, as in the following examples:
+%\beginlongdisplaymathdemo
+%\noalign{\vskip9pt}
+%|$$\overbrace{x+\cdots+x}^{k\rm\;times}$$|&
+%  \overbrace{x+\cdots+x}^{k\rm\;times}\cr
+%\noalign{\vskip-6pt}
+%|$$\underbrace{x+y+z}_{>\,0}.$$|&
+%  \underbrace{x+y+z}_{>\,0}.\cr
+%\endmathdemo
+\danger 如果用控制系列 |\overbrace| 或 |\underbrace|, 就可以把水平大括号放在%
+部分陈列公式的上面或下面。%
+这样的构造象 |\sum| 这样的巨算符一样，
+因此其上下标要变成上下限，见下面的例子：
+\beginlongdisplaymathdemo
+\noalign{\vskip9pt}
+|$$\overbrace{x+\cdots+x}^{k\rm\;times}$$|&
+  \overbrace{x+\cdots+x}^{k\rm\;times}\cr
+\noalign{\vskip-6pt}
+|$$\underbrace{x+y+z}_{>\,0}.$$|&
+  \underbrace{x+y+z}_{>\,0}.\cr
+\endmathdemo
+
+%\subsection Matrices. Now comes the fun part. Mathematicians in many different
+%disciplines like to construct rectangular arrays of formulas that have been
+%arranged in rows and columns; such an ^{array} is called a {\sl^{matrix}}.
+%Plain \TeX\ provides a ^|\matrix| control sequence that makes it convenient
+%to deal with the most common types of matrices.
+\subsection 矩阵.
+现在渐入佳境了。%
+训练有素的数学家喜欢把公式按行列排列成矩形；
+这样的排列称为{\KT{10}矩阵}。%
+Plain \TeX\ 提供了一个叫 |\matrix| 的控制系列，
+用它很任意处理大多数类型的矩阵。
+
+%For example, suppose that you want to specify the display
+%$$A=\left(\matrix{x-\lambda&1&0\cr
+%                  0&x-\lambda&1\cr
+%                  0&0&x-\lambda\cr}\right).$$
+%All you do is type
+%\begintt
+%$$A=\left(\matrix{x-\lambda&1&0\cr
+%                  0&x-\lambda&1\cr
+%                  0&0&x-\lambda\cr}\right).$$
+%\endtt
+%^^|\lambda|
+%This is very much like the |\cases| construction we looked at earlier;
+%each row of the matrix is followed by~|\cr|, and `|&|'~signs are used
+%between the individual entries of each row. Notice, however, that you are
+%supposed to put your own |\left| and |\right| delimiters around the matrix;
+%this makes |\matrix| different from |\cases|, which inserts a big `$\{$'
+%automatically.  The reason is that |\cases| always involves a left brace,
+%but different delimiters are used in different matrix constructions. On
+%the other hand, parentheses are used more often than other delimiters, so
+%you can write ^|\pmatrix| if you want plain \TeX\ to fill in the
+%parentheses for you; the example above then reduces to
+%\begintt
+%$$A=\pmatrix{x-\lambda&...&x-\lambda\cr}.$$
+%\endtt
+例如，假定要得到陈列公式
+$$A=\left(\matrix{x-\lambda&1&0\cr
+                  0&x-\lambda&1\cr
+                  0&0&x-\lambda\cr}\right).$$
+你需要输入的是
+\begintt
+$$A=\left(\matrix{x-\lambda&1&0\cr
+                  0&x-\lambda&1\cr
+                  0&0&x-\lambda\cr}\right).$$
+\endtt
+它非常类似于我们前面看到的 |\cases| 的构造；
+矩阵的每行以 |\cr| 结尾，并且用符号`|&|'分开同一行中不同的单元。%
+但是要注意，你可以在矩阵的两边放上所需要的 |\left| 和 |\right| 分界符；
+|\matrix| 在这点上与 |\cases| 不同，因为 |\cases| 只自动插入一个大`$\{$'。%
+原因是，~|\cases| 总是只包含一个左大括号，而在不同的矩阵构造中要用不同的分界符。%
+另一方面，最常用的是圆括号，因此要得到圆括号封装的矩阵，可以用 |\pmatrix|;
+这样上面的例子可以简化为
+\begintt
+$$A=\pmatrix{x-\lambda&...&x-\lambda\cr}.$$
+\endtt
+
+%\dangerexercise Typeset the display \ \lower12pt\null
+%$\tenpoint\smash{\displaystyle
+%\left\lgroup\matrix{a&b&c\cr d&e&f\cr}\right\rgroup
+%  \left\lgroup\matrix{u&x\cr v&y\cr w&z\cr}\right\rgroup
+%}$, \
+%using ^|\lgroup| and ^|\rgroup|.
+%\answer |$$\left\lgroup\matrix{a&b&c\cr d&e&f\cr}\right\rgroup|\hfil\break
+%|\left\lgroup\matrix{u&x\cr v&y\cr w&z\cr}\right\rgroup$$|.
+\dangerexercise 用 |\lgroup| 和 |\rgroup| 排版陈列公式
+\lower12pt\null
+$\tenpoint\smash{\displaystyle
+\left\lgroup\matrix{a&b&c\cr d&e&f\cr}\right\rgroup
+  \left\lgroup\matrix{u&x\cr v&y\cr w&z\cr}\right\rgroup
+}$。
+\answer |$$\left\lgroup\matrix{a&b&c\cr d&e&f\cr}\right\rgroup|\hfil\break
+|\left\lgroup\matrix{u&x\cr v&y\cr w&z\cr}\right\rgroup$$|.
+
+%\danger The individual entries of a matrix are normally centered in columns.
+%Each column is made as wide as necessary to accommodate the entries it
+%contains, and there's a ^{quad} of space between columns.
+%If you want to put something ^{flush right} in its column, precede it
+%by ^|\hfill|; if you want to put something ^{flush left} in its column,
+%follow it by~|\hfill|.
+\danger \1矩阵的各单元一般在列中是居中的。%
+每列的宽度要足以容纳下它所包含的单元，
+并且在列之间有一个 quad 的间距。%
+如果要把列中的内容居右，就要在内容前面加上 |\hfill|;
+如果要把列中的内容居左，就在内容后面加上 |\hfill|。
+
+%\danger Each entry of a matrix is treated separately from the others,
+%and it is typeset as a math formula in text style. Thus, for example,
+%if you say |\rm| in one entry, it does not affect the others.
+%Don't try to say `|{\rm x&y}|'.
+\danger 矩阵的每个单元都与其它单元无关，它用文本样式排版成数学公式。%
+因此，例如，如果在一个单元中使用 |\rm|, 那么它不会影响其它单元。%
+不要使用`|{\rm x&y}|'。
+
+%Matrices often appear in the form of generic patterns that use ^{ellipses}
+%(i.e., dots) to indicate rows or columns that are left out. You can typeset
+%such matrices by putting the ellipses into rows and/or columns of their own.
+%Plain \TeX\ provides ^|\vdots| (vertical dots) and ^|\ddots| (diagonal dots)
+%as companions to ^|\ldots| for constructions like this. For example, the
+%^{generic matrix}
+%$$A=\pmatrix{a_{11}&a_{12}&\ldots&a_{1n}\cr
+%             a_{21}&a_{22}&\ldots&a_{2n}\cr
+%             \vdots&\vdots&\ddots&\vdots\cr
+%             a_{m1}&a_{m2}&\ldots&a_{mn}\cr}$$
+%is easily specified:
+%\begintt
+%$$A=\pmatrix{a_{11}&a_{12}&\ldots&a_{1n}\cr
+%             a_{21}&a_{22}&\ldots&a_{2n}\cr
+%             \vdots&\vdots&\ddots&\vdots\cr
+%             a_{m1}&a_{m2}&\ldots&a_{mn}\cr}$$
+%\endtt
+矩阵常常出现通用型的形式，其中用省略号(即三个小圆点)表示未出现的行或列。%
+可以把省略号放在相应的行和/或列了排版这样的矩阵。%
+Plain \TeX\ 提供了 |\vdots|~(垂直省略号)和 |\ddots|~(对角省略号),
+它们与以前给出的 |\ldots| 一起来构造这样的矩阵。%
+例如，一般矩阵
+$$A=\pmatrix{a_{11}&a_{12}&\ldots&a_{1n}\cr
+             a_{21}&a_{22}&\ldots&a_{2n}\cr
+             \vdots&\vdots&\ddots&\vdots\cr
+             a_{m1}&a_{m2}&\ldots&a_{mn}\cr}$$
+由下列方法得到：
+\begintt
+$$A=\pmatrix{a_{11}&a_{12}&\ldots&a_{1n}\cr
+             a_{21}&a_{22}&\ldots&a_{2n}\cr
+             \vdots&\vdots&\ddots&\vdots\cr
+             a_{m1}&a_{m2}&\ldots&a_{mn}\cr}$$
+\endtt
+
+%\medskip
+%\exercise How can you get \TeX\ to produce the ^{column vector} ^^{vector}
+%\lower18pt\null\ $\smash{\displaystyle
+%\pmatrix{y_1\cr \vdots\cr y_k\cr}
+%}$\quad?
+%\answer |\pmatrix{y_1\cr \vdots\cr y_k\cr}|.
+\medskip
+\exercise 如何让 \TeX\ 生成^{列向量}^^{向量}
+\lower18pt\null\ $\smash{\displaystyle
+\pmatrix{y_1\cr \vdots\cr y_k\cr}
+}$ ？
+\answer |\pmatrix{y_1\cr \vdots\cr y_k\cr}|。
+
+%\danger Sometimes a matrix is bordered at the top and left by formulas
+%that give labels to the rows and columns. Plain \TeX\ provides a special
+%macro called ^|\bordermatrix| for this situation. For example, the display
+%$$\tenmath
+%M=\bordermatrix{&C&I&C'\cr C&1&0&0\cr I&b&1-b&0\cr C'&0&a&1-a\cr}$$
+%is obtained when you type
+%\begintt
+%$$M=\bordermatrix{&C&I&C'\cr
+%                C&1&0&0\cr  I&b&1-b&0\cr  C'&0&a&1-a\cr}$$
+%\endtt
+%The first row gives the upper labels, which appear above the big left
+%and right parentheses; the first column gives the left labels, which are
+%typeset flush left, just before the matrix itself. The first column in
+%the first row is normally blank. Notice that |\bordermatrix| inserts
+%its own parentheses, like |\pmatrix| does.
+\danger 有时候矩阵在上边和左边要放行和列的标记。%
+Plain \TeX\ 为此提供了一个特殊的宏，叫做 |\bordermatrix|。%
+例如，陈列公式
+$$\tenmath
+M=\bordermatrix{&C&I&C'\cr C&1&0&0\cr I&b&1-b&0\cr C'&0&a&1-a\cr}$$
+由下列方法得到：
+\begintt
+$$M=\bordermatrix{&C&I&C'\cr
+                C&1&0&0\cr  I&b&1-b&0\cr  C'&0&a&1-a\cr}$$
+\endtt
+第一行给出上标记，它出现在圆括号的上方；
+第一列给出左标记，它居左放置，就在矩阵自身前面。%
+第一行的第一列一般是空的。%
+注意，~|\bordermatrix| 自动插入圆括号，象 |\pmatrix| 一样。
+
+%\danger It's usually inadvisable to put matrices into the text of a paragraph,
+%because they are so big that they are better displayed. But occasionally
+%you may want to specify a small matrix like $1\,1\choose0\,1$, which you can
+%^^|\choose| ^^{matrix, small}
+%typeset for example as `|$1\,1\choose0\,1$|'. Similarly, the small matrix
+%$\bigl({a\atop l}{b\atop m}{c\atop n}\bigr)$ can be typeset as
+%\begintt
+%$\bigl({a\atop l}{b\atop m}{c\atop n}\bigr)$
+%\endtt
+%^^|\atop| The |\matrix| macro does not produce small arrays of this sort.
+\danger \1把矩阵放在段落的文本中一般效果不好，
+因为它们太大而无法很好地显示出来。%
+但是，偶尔可以出现象 $1\,1\choose0\,1$ 这样的小矩阵，它还可以用%
+`|$1\,1\choose0\,1$|'得到。%
+类似地，小矩阵 $\bigl({a\atop l}{b\atop m}{c\atop n}\bigr)$~%
+可用下列方法输入：
+\begintt
+$\bigl({a\atop l}{b\atop m}{c\atop n}\bigr)$
+\endtt
+用宏 |\matrix| 不能得到这种小的排列。
+
+%\subsection Vertical spacing. If you want to tidy up an unusual formula,
+%you know already how to move things farther apart or closer together, by
+%using positive or negative thin spaces. But such spaces affect only the
+%horizontal dimension; what if you want something to be moved higher
+%or lower? That's an advanced topic.
+\subsection 垂直间距.
+如果要整理好一个常见的公式，你已经学会怎样把其内容分开或紧凑一些了，
+只要用正的或负的细间距即可。%
+但是这样的调整只对水平尺寸有作用；
+如果要把某些内容向高或低处移动怎么办呢？
+这可是个高级课题。
+
+%\danger Appendix B provides a few macros that can be used to fool \TeX\
+%into thinking that certain formulas are larger or smaller than they really
+%are; such tricks can be used to move other parts of the formula up or down
+%or left or right. For example, we have already discussed the use of
+%^|\mathstrut| in Chapter~16 and ^|\strut| in Chapter~17; these invisible
+%boxes caused \TeX\ to put square root signs and the denominators of
+%continued fractions into different positions than usual.
+\danger 附录 B 提供了几个宏，用它们可以欺骗 \TeX, 让它认为某些公式比它们%
+实际情况要大或小；
+这样的技巧可以用来把公式的某部分向上下左右移动。%
+例如，我们已经讨论过第十六章中 |\mathstrut| 和第十七章中 |\strut| 的用法；
+这些看不见的盒子使得 \TeX\ 把根号和连分数的分子放在与通常不同的地方上。
+
+%\danger If you say `^|\phantom||{|\<subformula>|}|' in any formula, plain
+%\TeX\ will do its spacing as if you had said simply
+%`|{|\<subformula>|}|', but the subformula itself will be invisible. Thus,
+%for example, `|\phantom{0}2|' takes up just as much space as `|02|' in the
+%current style, but only the~|2| will actually appear on the page. If you
+%want to leave blank space for a ^{new symbol} that has exactly the same
+%size as $\sum$, but if you are forced to put that symbol in by hand for
+%some reason, `|\mathop{\phantom\sum}|' will leave exactly the right amount
+%of blank space.  \ (The `^|\mathop|' here makes this phantom behave like
+%|\sum|, i.e., as a large operator.)
+\danger 如果在任何公式中使用 `|\phantom||{|\<subformula>|}|'，
+\TeX\ 就给出与直接输入 `|{|\<subformula>|}|' 同样多的间距，
+但是公式本身却看不见。因此，
+例如，`|\phantom{0}2|' 在当前字体中得到与 `|02|' 同样多的间距，
+但是只有 |2| 实际上出现在页面上。
+如果要留下一个符号的空白，而且它正好等于 $\sum$ 的尺寸，
+但是你有因为某些原因要手工把那个符号放进去，
+这时 `|\mathop{\phantom\sum}|' 留下的空白正好可以。%
+（这里的 `|\mathop|' 是为了使这个幻影（phantom）的性质像 |\sum| 一样，
+即像一个巨算符。）
+
+%\danger Even more useful than |\phantom| is ^|\vphantom|, which makes
+%an invisible box whose height and depth are the same as those of
+%the corresponding |\phantom|, but
+%the width is zero. Thus, |\vphantom| makes a vertical ^{strut} that can
+%increase a formula's effective height or depth. Plain \TeX\ defines
+%|\mathstrut| to be an abbreviation for `|\vphantom(|'. There's also
+%^|\hphantom|, which has the width of a |\phantom|, but its height
+%and depth are zero.
+\danger 比 |\phantom| 更有用的是 |\vphantom|,
+它得到的看不见的盒子的高度与深度与相应的 |\phantom| 一样，但是其宽度为零。%
+因此，|\vphantom| 生成一个垂直 strut, 它可以增加公式的有效高度和深度。%
+Plain \TeX\ 把 |\mathstrut| 定义为`|\vphantom(|'。%
+还有一个叫 |\hphantom|, 其宽度等于 |\phantom| 的宽度，
+但是高度和深度都是零。
+
+%\danger Plain \TeX\ also provides `^|\smash||{|\<subformula>|}|', a macro
+%that yields the same result as `|{|\<subformula>|}|' but makes the height and
+%depth zero. By using both |\smash| and |\vphantom| you can typeset any
+%subformula and give it any desired nonnegative height and depth. For example,
+%\begintt
+%\mathop{\smash\limsup\vphantom\liminf}
+%\endtt
+%produces a large operator that says `$\limsup$', but its height and depth
+%are those of\/ ^|\liminf| (i.e., the depth is zero). ^^|\limsup|
+\danger Plain \TeX\ 还提供了 `|\smash||{|\<subformula>|}|'，
+这个宏得到与 `|{|\<subformula>|}|' 一样的结果，但是高度和深度都是零。
+利用 |\smash| 和 |\vphantom|，可以排版出任意子公式，
+并且其高度和深度为所要求的值。例如，
+\begintt
+\mathop{\smash\limsup\vphantom\liminf}
+\endtt
+得到一个巨算符，叫做`$\limsup$'，但是其高度和深度是 |\liminf|
+的高度和深度（即深度为零）。
+
+%\def\undertext#1{$\underline{\hbox{#1}}$}
+%\ddangerexercise If you want to underline some text, you could use a macro like
+%\begintt
+%\def\undertext#1{$\underline{\hbox{#1}}$}
+%\endtt
+%to do the job. \undertext{But} \undertext{this} \undertext{doesn't}
+%\undertext{always} \undertext{work} \undertext{right}. Discuss better
+%alternatives. ^^{underlined text}
+%\answer |\def|\stretch|\undertext|\stretch|#1{$\underline|\stretch
+%|{\smash|\stretch|{\hbox|\stretch|{#1}}}$}| will underline the
+%\def\undertext#1{$\underline{\smash{\hbox{#1}}}$}%
+%words and cross \undertext{through} the descenders; or you could insert
+%|\vphantom{y}| before the |\hbox|, thereby lowering all of the underlines
+%to a position below all descenders. Neither of these gives exactly what is
+%wanted. \ (See also ^|\underbar| in Appendix~B\null.) \ Underlining is actually
+%not very common in fine typography, since font changes usually work just
+%as well or better, when you want to emphasize something. If you really want
+%underlined text, it's best to have a special font in which all
+%the letters are underlined.
+\def\undertext#1{$\underline{\hbox{#1}}$}
+\ddangerexercise 如果要给某些文本加下划线，要用的是像
+\begintt
+\def\undertext#1{$\underline{\hbox{#1}}$}
+\endtt
+这样的宏。
+\undertext{But} \undertext{this} \undertext{doesn't}
+\undertext{always} \undertext{work} \undertext{right}。
+给出一个更好的方法。
+\answer |\def|\stretch|\undertext|\stretch|#1{$\underline|\stretch
+|{\smash|\stretch|{\hbox|\stretch|{#1}}}$}|
+\def\undertext#1{$\underline{\smash{\hbox{#1}}}$}%
+将横跨（\undertext{through}）单词降部给它加下划线；
+或者你也可以在 |\hbox| 前面插入 |\vphantom{y}|，以将下划线拉低到所有降部之下。
+这些方法都不能精确给出你所想要的。（还可以参阅附录 B 的 ^|\underbar|。）%
+在精细的排版中下划线实际上不大常见，因为在想强调某些东西时，
+换用字体通常能达到同样或更好的效果。
+如果你真的想要下划线文本，最好是使用一个所有字母都带下划线的特殊字体。
+
+%\ddanger You can also use ^|\raise| and ^|\lower| to adjust the vertical
+%positions of boxes in formulas. For example, the formula
+%`|$2^{\raise1pt\hbox{$\scriptstyle n$}}$|' will have its superscript~$n$
+%one point higher than usual ($2^{\raise1pt\hbox{$\scriptstyle n$}}$ instead of
+%$2^n$). Note that it was necessary to say ^|\scriptstyle| in this example,
+%since the contents of an ^|\hbox| will normally be in text style even when
+%that hbox appears in a superscript, and since |\raise| can be used only in
+%connection with a box.  This method of positioning is not used extremely
+%often, but it is sometimes helpful if the ^|\root| macro doesn't put its
+%argument in a suitable place. For example,
+%\begindisplay
+%|\root\raise|\<dimen>|\hbox{$\scriptscriptstyle|\<argument>|$}\of...|
+%\enddisplay
+%will move the argument up by a given amount.
+\ddanger \1还可以利用 |\raise| 和 |\lower| 来调整公式中盒子的垂直位置。%
+例如，公式`|$2^{\raise1pt\hbox||{$\scriptstyle n$}}$|'得到的上标 $n$ 比通常要高%
+~$1\pt$(是 $2^{\raise1pt\hbox{$\scriptstyle n$}}$ 而不是 $2^n$)。%
+注意，在本例中必须有 |\scriptstyle|,
+因为 |\hbox| 的内容正常情况下是文本样式，即使 hbox 出现在上标的位置，
+而且 |\raise| 只能用在盒子上。%
+这种调整的方法并不经常使用，但是在 |\root| 宏不能把其参量放在适当位置时要用到。%
+例如，
+\begindisplay
+|\root\raise|\<dimen>|\hbox{$\scriptscriptstyle|\<argument>|$}\of...|
+\enddisplay
+将把参量向上移给定的量。
+
+%\ddanger Instead of changing the sizes of subformulas, or using |\raise|,
+%you can also control vertical spacing by changing the parameters
+%that \TeX\ uses when it is converting math lists to horizontal lists.
+%These parameters are described in Appendix~G\null; you need to be careful when
+%changing them, because such changes are ^{global} (i.e., not local to groups).
+%Here is an example of how such a change might be made: Suppose that you
+%are designing a format for ^{chemical typesetting}, and that you expect to be
+%setting a lot of formulas like `$\rm Fe_2^{+2}Cr_2O_4$'. You may not like the
+%fact that the subscript in~$\rm Fe_2^{+2}$ is lower than the subscript
+%in~$\rm Cr_2$; and you don't want to force users to type monstrosities like
+%\begintt
+%$\rm Fe_2^{+2}Cr_2^{\vphantom{+2}}O_4^{\vphantom{+2}}$
+%\endtt
+%just to get the formula
+%$\rm Fe_2^{+2}Cr_2^{\vphantom{+2}}O_4^{\vphantom{+2}}$
+%with all subscripts at the same level. Well, all you need to do is set
+%`^|\fontdimen||16\tensy=2.7pt|' and `|\fontdimen17\tensy=2.7pt|', assuming
+%that ^|\tensy| is your main symbol font (|\textfont2|); this lowers all
+%normal ^{subscripts} to a position $2.7\pt$ below the baseline, which is
+%enough to make room for a possible superscript that contains a plus sign.
+%Similarly, you can adjust the positioning of ^{superscripts} by changing
+%|\fontdimen14\tensy|. There are parameters for the position of the ^{axis line},
+%the positions of ^{numerator} and ^{denominator} in a generalized ^{fraction},
+%the spacing above and below ^{limits}, the default ^{rule thickness}, and so
+%on. Appendix~G gives precise details.
+\ddanger 不用改变子公式的尺寸，也不用 |\raise|,
+还可以通过控制 \TeX\ 从数学列转变到水平列时的参数来控制垂直间距。%
+这些参数在附录 G 中讨论；
+但是在改变它们时要小心，
+因为这样的改变是整体的(即不是组内局部的)。%
+至于这样的改变能做什么，下面是一个例子：
+假定你要设计一个化学排版的格式，
+并且希望排版许多化学式，如`$\rm Fe_2^{+2}Cr_2O_4$'。%
+可能你不希望 $\rm Fe_2^{+2}$ 的下标比 $\rm Cr_2$ 的下标低；
+而且不想让用户输入下面这样的怪东西：
+\begintt
+$\rm Fe_2^{+2}Cr_2^{\vphantom{+2}}O_4^{\vphantom{+2}}$
+\endtt
+才能得到所有下标在同一水平线上的公式
+$\rm Fe_2^{+2}Cr_2^{\vphantom{+2}}O_4^{\vphantom{+2}}$。
+嗯，假定 |\tensy| 是你的主要符号字体（|\textfont2|），你要做的仅是设置
+`|\fontdimen||16\tensy=2.7pt|' 和 `|\fontdimen17\tensy=2.7pt|'；
+它把所有正常的下标降到比基线低 $2.7\pt$，这足以放下包含加号的上标了。
+类似地，可以通过改变 |\fontdimen14\tensy| 来调整上标的位置。
+有几个参数来表示轴线的位置，一般分数中分子和分母的位置，
+上下限下面和上面的间距，默认的标尺厚度，等等。附录 B 给出了详细讨论。
+
+%\subsection Special features for math hackers. \TeX\ has a few more primitive
+%operations for math mode that haven't been mentioned yet. They are
+%occasionally useful if you are designing special formats.
+\subsection 数学高手的秘技.
+ \TeX\ 还有几个数学模式的原始命令没有提到。%
+如果要设计特殊格式，偶尔会用到它们。
+
+%\ddanger If a glue or kern specification is immediately preceded by
+%`^|\nonscript|', \TeX\ will not use that glue or kern in
+%script or scriptscript styles. Thus, for example, the sequence
+%`|\nonscript\;|' produces exactly the amount of space specified by
+%`{\tt(3)}' in the spacing table for mathematics that appeared earlier
+%in this chapter.
+\ddanger 如果在粘连或紧排的描述紧前面有`|\nonscript|',
+那么 \TeX\ 不在标号或小标号样式中使用此粘连或紧排。%
+这样，例如，控制系列`|\nonscript\;|'正好得到本章前面出现的数学间距表给出的`{\tt(3)}'。
+
+%\ddanger Whenever \TeX\ has scanned a |$| and is about to read a math formula
+%that appears in text, it will first read another list of tokens that has
+%been predefined by the command ^|\everymath||={|\<token list>|}|. \ (This is
+%analogous to |\everypar|, which was described in Chapter~14.) \ Similarly,
+%you can say ^|\everydisplay||={|\<token list>|}| to predefine a list of tokens
+%for \TeX\ to read just after it has scanned an opening |$$|, i.e., just
+%before reading a formula that is to be displayed. With |\everymath| and
+%|\everydisplay|, you can set up special conventions that you wish to apply
+%to all formulas.
+\ddanger 只要 \TeX\ 遇见一个 |$| 并且要读入文本中的数学公式，
+它就首先读入另一个记号列表——已经由命令 |\everymath||={|\<token list>|}| 预先%
+定义了。%
+(这类似与第十四章中讨论的 |\everypar|。)
+类似地，|\everydisplay||={|\<token list>|}| 预先定义了 \TeX\ 在遇见开符号 |$$| 后，%
+即在读入陈列公式前要读入的记号列表。%
+利用 |\everymath| 和 |\everydisplay|, 可以设置应用于所有公式的特殊约定。
+
+%\subsection Summary. We have discussed more different kinds of formulas in
+%this chapter than you will usually find in any one book of mathematics.
+%If you have faithfully done the exercises so far, you can face almost
+%any formula with confidence.
+\subsection 总结.
+\1在本章我们讨论的公式种类比任何一本数学书都多。%
+如果你老老实实做了迄今为止的练习，
+那么就可以满怀信心地处理几乎任何公式了。
+
+%\newcount\chalcount \chalcount=0
+%\outer\def\challenge{\d@nger\chall}
+%\outer\def\cchallenge{\dd@nger\chall}
+%\def\chall{\global\advance\chalcount by1
+%  \dexercise \hbox{Challenge number \the\chalcount:\enskip}\ignorespaces}
+\newcount\chalcount \chalcount=0
+\outer\def\challenge{\d@nger\chall}
+\outer\def\cchallenge{\dd@nger\chall}
+\def\chall{\global\advance\chalcount by1
+  \dexercise \hbox{难题 \the\chalcount:\enskip}\ignorespaces}
+
+%\danger But here are a few more exercises, to help you review what you
+%have learned. Each of the following ``challenge formulas'' illustrates one
+%or more of the principles already discussed in this chapter. The author
+%confesses that he is trying to trip you~up on several of these.
+%Nevertheless, if you try each one before looking at the answer, and if
+%you're alert for traps, you should find that these formulas provide a good
+%way to consolidate and complete your knowledge.
+\danger 但是下面还有几个练习，可帮助你复习所学知识。%
+下面每个``难题''都用到本章讨论过的一个或多个原理。%
+作者承认要拌你几个跟头。%
+然而，如果在看答案之前你做出来了，或者你对陷阱有提防了，
+就会发现这些公式对巩固和完善你的知识有很大好处。
+
+%\challenge Explain how to type the phrase `$n^{\rm th}$ root', where
+%`$n^{\rm th}$' is treated as a mathematical formula with a superscript in
+%roman type.
+%\answer |$n^{\rm th}$ root|. \ (Incidentally, it is also acceptable
+%to type `|$n$th|', getting `$n$th', in such situations; the fact that
+%the $n$ is in italics distinguishes it from the suffix. Typed manuscripts
+%generally render this with a hyphen, but `$n$-th' is frowned on nowadays
+%when an italic~$n$ is available.) ^^{nth}
+\challenge 看看怎样输入短语 `$n^{\rm th}$ root'，
+其中`$n^{\rm th}$'是上标为罗马体的数学公式。
+\answer |$n^{\rm th}$ root|。（顺便说一下，对于这种情形，
+键入 `|$n$th|' 所得到的 `$n$th' 也是可以接受的；
+事实是意大利体的 $n$ 能与罗马体的后缀区分开。
+打字机排版的文稿通常在中间加上连字号，
+但现在有了意大利体的 $n$，不建议再用 `$n$-th' 了。）^^{nth}
+
+%\challenge $\qquad\tenmath{\bf S^{\rm-1}TS=dg}(\omega_1,\ldots,\omega_n)
+%=\bf\Lambda$.
+%\answer |${\bf S^{\rm-1}TS=dg}(\omega_1,|\stretch|\ldots,|\stretch|\omega_n)
+%=\bf\Lambda$|.
+%\ $\bigl($Did you notice the difference between ^|\omega| ($\omega$)
+%and~|w| ($w$)?$\bigr)$
+\challenge $\qquad\tenmath{\bf S^{\rm-1}TS=dg}(\omega_1,\ldots,\omega_n)
+=\bf\Lambda$。
+\answer |${\bf S^{\rm-1}TS=dg}(\omega_1,|\stretch|\ldots,|\stretch|\omega_n)
+=\bf\Lambda$|。
+$\bigl($\kern0pt你注意到 ^|\omega|（$\omega$）和 |w|（$w$）的区别了么？$\bigr)$
+
+%\challenge $\qquad\tenmath\Pr(\,m=n\mid m+n=3\,)$.
+%\answer |$\Pr(\,m=n\mid m+n=3\,)$|. \ (Analogous to a set.) ^^|\Pr|
+\challenge $\qquad\tenmath\Pr(\,m=n\mid m+n=3\,)$。
+\answer |$\Pr(\,m=n\mid m+n=3\,)$|。（与集合类似。）^^|\Pr|
+
+%\challenge $\qquad\tenmath\sin18^\circ={1\over4}(\sqrt5-1)$.^^{degrees}
+%\answer |$\sin18^\circ={1\over4}(\sqrt5-1)$|. ^^|\circ|
+\challenge $\qquad\tenmath\sin18^\circ={1\over4}(\sqrt5-1)$。
+\answer |$\sin18^\circ={1\over4}(\sqrt5-1)$|。^^|\circ|
+
+%\challenge $\qquad\tenmath k=1.38065\times10^{-16}\rm\,erg\,K^{-1}$.
+%\answer |$k=1.38065\times10^{-16}\rm\,erg\,K^{-1}$|.
+\challenge $\qquad\tenmath k=1.38\times10^{-16}\rm\,erg/^\circ K$。
+\answer |$k=1.38065\times10^{-16}\rm\,erg\,K^{-1}$|。
+
+%\challenge $\qquad\tenmath \bar\Phi\subset NL_1^*/N=\bar L_1^*
+%  \subseteq\cdots\subseteq NL_n^*/N=\bar L_n^*$.
+%\answer |$\bar\Phi\subset NL_1^*/N=\bar L_1^*|\parbreak
+%        |  \subseteq\cdots\subseteq NL_n^*/N=\bar L_n^*$|.
+\challenge $\qquad\tenmath \bar\Phi\subset NL_1^*/N=\bar L_1^*
+  \subseteq\cdots\subseteq NL_n^*/N=\bar L_n^*$。
+\answer |$\bar\Phi\subset NL_1^*/N=\bar L_1^*|\parbreak
+        |  \subseteq\cdots\subseteq NL_n^*/N=\bar L_n^*$|。
+
+%\challenge $\qquad\tenmath I(\lambda)=\int\!\!\int_Dg(x,y)e^{i\lambda h(x,y)}
+%  \,dx\,dy$. % cf. Math. Comp. 37 (1981), 509
+%\answer |$I(\lambda)=\int\!\!\int_Dg(x,y)e^{i\lambda h(x,y)}\,dx\,dy$|.\hfil
+%\break
+%(Although three |\!|'s work out best between consecutive integral signs in
+%displays, the text style seems to want only two.) ^^{double integral}
+%^^{integral, multiple}
+\challenge $\qquad\tenmath I(\lambda)=\int\!\!\int_Dg(x,y)e^{i\lambda h(x,y)}
+  \,dx\,dy$。% cf. Math. Comp. 37 (1981), 509
+\answer |$I(\lambda)=\int\!\!\int_Dg(x,y)e^{i\lambda h(x,y)}\,dx\,dy$|。\hfil
+\break
+（虽然在陈列样式中连续两个积分号间加上三个 |\!| 更好，
+但在文本样式中只需两个。）^^{double integral}
+^^{integral, multiple}
+
+%\challenge $\qquad\tenmath
+%  \int_0^1\!\cdots\int_0^1f(x_1,\ldots,x_n)\,dx_1\ldots\,dx_n$.
+%\answer |$\int_0^1\!\cdots\int_0^1f(x_1,\ldots,x_n)\,dx_1\ldots\,dx_n$|.
+\challenge $\qquad\tenmath
+  \int_0^1\!\cdots\int_0^1f(x_1,\ldots,x_n)\,dx_1\ldots\,dx_n$。
+\answer |$\int_0^1\!\cdots\int_0^1f(x_1,\ldots,x_n)\,dx_1\ldots\,dx_n$|。
+
+%\challenge Here's a display.
+%$$\tenmath x_{2m}\equiv\cases{Q(X_m^2-P_2W_m^2)-2S^2&($m$ odd)\cr
+%  \noalign{\vskip2pt}
+%  P_2^2(X_m^2-P_2W_m^2)-2S^2&($m$ even)\cr}\pmod N.$$
+%\answer |$$x_{2m}\equiv\cases{Q(X_m^2-P_2W_m^2)-2S^2&($m$ odd)\cr|\parbreak
+%        |       \noalign{\vskip2pt} % spread the lines apart a little|\parbreak
+%        |       P_2^2(X_m^2-P_2W_m^2)-2S^2&($m$ even)\cr}\pmod N.$$|
+\challenge 下面是一个陈列公式。
+$$\tenmath x_{2m}\equiv\cases{Q(X_m^2-P_2W_m^2)-2S^2&($m$ odd)\cr
+  \noalign{\vskip2pt}
+  P_2^2(X_m^2-P_2W_m^2)-2S^2&($m$ even)\cr}\pmod N.$$
+\answer |$$x_{2m}\equiv\cases{Q(X_m^2-P_2W_m^2)-2S^2&($m$ odd)\cr|\parbreak
+        |       \noalign{\vskip2pt} % spread the lines apart a little|\parbreak
+        |       P_2^2(X_m^2-P_2W_m^2)-2S^2&($m$ even)\cr}\pmod N.$$|
+
+%\challenge And another. % ACP Eq. 1.2.9--33
+%$$\tenmath (1+x_1z+x_1^2z^2+\cdots\,)\ldots(1+x_nz+x_n^2z^2+\cdots\,)
+%  ={1\over(1-x_1z)\ldots(1-x_nz)}.$$
+%\answer |$$(1+x_1z+x_1^2z^2+\cdots\,)\ldots(1+x_nz+x_n^2z^2+\cdots\,)|\parbreak
+%        |  ={1\over(1-x_1z)\ldots(1-x_nz)}.$$| \ (Notice the uses of\/ |\,|.)
+\challenge 下面是另一个。 % ACP Eq. 1.2.9--33
+$$\tenmath (1+x_1z+x_1^2z^2+\cdots\,)\ldots(1+x_nz+x_n^2z^2+\cdots\,)
+  ={1\over(1-x_1z)\ldots(1-x_nz)}.$$
+\answer |$$(1+x_1z+x_1^2z^2+\cdots\,)\ldots(1+x_nz+x_n^2z^2+\cdots\,)|\parbreak
+        |  ={1\over(1-x_1z)\ldots(1-x_nz)}.$$|（注意 |\,| 的用处。）
+
+%\challenge And another. % Eq. 1.2.9--9
+%$$\tenmath \prod_{j\ge0}\biggl(\sum_{k\ge0}a_{jk}z^k\biggr)
+%  =\sum_{n\ge0}z^n\,\Biggl(\sum_
+%     {\scriptstyle k_0,k_1,\ldots\ge0\atop
+%      \scriptstyle k_0+k_1+\cdots=n}
+%   a_{0k_0}a_{1k_1}\ldots\,\Biggr).$$
+%\answer |$$\prod_{j\ge0}\biggl(\sum_{k\ge0}a_{jk}z^k\biggr)|\parbreak
+%        |  =\sum_{n\ge0}z^n\,\Biggl(\sum_|\parbreak
+%        |     {\scriptstyle k_0,k_1,\ldots\ge0\atop|\parbreak
+%        |      \scriptstyle k_0+k_1+\cdots=n}|\parbreak
+%        |   a_{0k_0}a_{1k_1}\ldots\,\Biggr).$$|\par
+%\nobreak\smallskip\noindent Some people would prefer to have the latter
+%parentheses larger; but |\left| and |\right| come out a bit too large in this
+%case. It's not difficult to define ^|\bigggl| and ^|\bigggr| macros, analogous
+%to the definitions of\/ |\biggl| and |\biggr| in Appendix~B.
+\challenge 另一个。 % Eq. 1.2.9--9
+$$\tenmath \prod_{j\ge0}\biggl(\sum_{k\ge0}a_{jk}z^k\biggr)
+  =\sum_{n\ge0}z^n\,\Biggl(\sum_
+     {\scriptstyle k_0,k_1,\ldots\ge0\atop
+      \scriptstyle k_0+k_1+\cdots=n}
+   a_{0k_0}a_{1k_1}\ldots\,\Biggr).$$
+\answer |$$\prod_{j\ge0}\biggl(\sum_{k\ge0}a_{jk}z^k\biggr)|\parbreak
+        |  =\sum_{n\ge0}z^n\,\Biggl(\sum_|\parbreak
+        |     {\scriptstyle k_0,k_1,\ldots\ge0\atop|\parbreak
+        |      \scriptstyle k_0+k_1+\cdots=n}|\parbreak
+        |   a_{0k_0}a_{1k_1}\ldots\,\Biggr).$$|\par
+\nobreak\smallskip\noindent 有些人更喜欢让圆括号更大些；
+但对此情形 |\left| 和 |\right| 给出的括号有些太大了。
+类似于附录 B 对 |\biggl| 和 |\biggr| 的定义，
+我们也不难定义 ^|\bigggl| 和 ^|\bigggr| 宏。
+
+%\challenge And, % cf ACP vol1 p64
+%$$\tenmath {(n_1+n_2+\cdots+n_m)!\over n_1!\,n_2!\ldots n_m!}
+%  ={n_1+n_2\choose n_2}{n_1+n_2+n_3\choose n_3}
+%    \ldots{n_1+n_2+\cdots+n_m\choose n_m}.$$
+%\answer |$${(n_1+n_2+\cdots+n_m)!\over n_1!\,n_2!\ldots n_m!}|\parbreak
+%        |  ={n_1+n_2\choose n_2}{n_1+n_2+n_3\choose n_3}|\parbreak
+%        |    \ldots{n_1+n_2+\cdots+n_m\choose n_m}.$$|
+\challenge \1以及，% cf ACP vol1 p64
+$$\tenmath {(n_1+n_2+\cdots+n_m)!\over n_1!\,n_2!\ldots n_m!}
+  ={n_1+n_2\choose n_2}{n_1+n_2+n_3\choose n_3}
+    \ldots{n_1+n_2+\cdots+n_m\choose n_m}.$$
+\answer |$${(n_1+n_2+\cdots+n_m)!\over n_1!\,n_2!\ldots n_m!}|\parbreak
+        |  ={n_1+n_2\choose n_2}{n_1+n_2+n_3\choose n_3}|\parbreak
+        |    \ldots{n_1+n_2+\cdots+n_m\choose n_m}.$$|
+
+%\challenge Yet another display. % found in Chaundy et al
+%$$\tenmath \def\\#1#2{(1-q^{#1_#2+n})} % to save typing
+%\Pi_R{a_1,a_2,\ldots,a_M\atopwithdelims[]b_1,b_2,\ldots,b_N}
+%  =\prod_{n=0}^R{\\a1\\a2\ldots\\aM\over\\b1\\b2\ldots\\bN}.$$
+%\answer |$$\def\\#1#2{(1-q^{#1_#2+n})} % to save typing|\parbreak
+%        |\Pi_R{a_1,a_2,\ldots,a_M\atopwithdelims[]b_1,b_2,\ldots,b_N}|\parbreak
+%        |  =\prod_{n=0}^R{\\a1\\a2\ldots\\aM\over\\b1\\b2\ldots\\bN}.$$|
+%^^|\atopwithdelims|
+\challenge 还有另一个陈列公式。 % found in Chaundy et al
+$$\tenmath \def\\#1#2{(1-q^{#1_#2+n})} % to save typing
+\Pi_R{a_1,a_2,\ldots,a_M\atopwithdelims[]b_1,b_2,\ldots,b_N}
+  =\prod_{n=0}^R{\\a1\\a2\ldots\\aM\over\\b1\\b2\ldots\\bN}.$$
+\answer |$$\def\\#1#2{(1-q^{#1_#2+n})} % to save typing|\parbreak
+        |\Pi_R{a_1,a_2,\ldots,a_M\atopwithdelims[]b_1,b_2,\ldots,b_N}|\parbreak
+        |  =\prod_{n=0}^R{\\a1\\a2\ldots\\aM\over\\b1\\b2\ldots\\bN}.$$|
+^^|\atopwithdelims|
+
+%\challenge And another.
+%$$\tenmath \sum_{p\rm\;prime}f(p)=\int_{t>1}f(t)\,d\pi(t).$$
+%\answer |$$\sum_{p\rm\;prime}f(p)=\int_{t>1}f(t)\,d\pi(t).$$|
+\challenge 另一个。
+$$\tenmath \sum_{p\rm\;prime}f(p)=\int_{t>1}f(t)\,d\pi(t).$$
+\answer |$$\sum_{p\rm\;prime}f(p)=\int_{t>1}f(t)\,d\pi(t).$$|
+
+%\challenge Still another.
+%$$\tenmath \{\underbrace{\overbrace{\mathstrut a,\ldots,a}
+%      ^{k\;a\mathchar`'\rm s},
+%    \overbrace{\mathstrut b,\ldots,b}
+%      ^{l\;b\mathchar`'\rm s}}_{k+l\rm\;elements}\}.$$
+%\answer |$$\{\underbrace{\overbrace{\mathstrut a,\ldots,a}|\parbreak
+%        |      ^{k\;a\mathchar`'\rm s},|\parbreak
+%        |    \overbrace{\mathstrut b,\ldots,b}|\parbreak
+%        |      ^{l\;b\mathchar`'\rm s}}_{k+l\rm\;elements}\}.$$|\par
+%\smallskip\noindent Notice how ^{apostrophes} (instead of primes) were obtained.
+\challenge 又一个。
+$$\tenmath \{\underbrace{\overbrace{\mathstrut a,\ldots,a}
+      ^{k\;a\mathchar`'\rm s},
+    \overbrace{\mathstrut b,\ldots,b}
+      ^{l\;b\mathchar`'\rm s}}_{k+l\rm\;elements}\}.$$
+\answer |$$\{\underbrace{\overbrace{\mathstrut a,\ldots,a}|\parbreak
+        |      ^{k\;a\mathchar`'\rm s},|\parbreak
+        |    \overbrace{\mathstrut b,\ldots,b}|\parbreak
+        |      ^{l\;b\mathchar`'\rm s}}_{k+l\rm\;elements}\}.$$|\par
+\smallskip\noindent 注意^{缩写号}（不是撇号）是如何得到的。
+
+%\challenge Put a ^|\smallskip| between the rows of matrices in the
+%compound matrix ^^{compound matrix}
+%$$\tenmath \pmatrix{\pmatrix{a&b\cr c&d\cr}&
+%             \pmatrix{e&f\cr g&h\cr}\cr
+%           \noalign{\smallskip}
+%           0&\pmatrix{i&j\cr k&l\cr}\cr}.$$
+%\answer |$$\pmatrix{\pmatrix{a&b\cr c&d\cr}&|\parbreak
+%        |             \pmatrix{e&f\cr g&h\cr}\cr|\parbreak
+%        |           \noalign{\smallskip}|\parbreak
+%        |           0&\pmatrix{i&j\cr k&l\cr}\cr}.$$|
+\challenge 在复合矩阵中的子矩阵之间有一个 |\smallskip|。
+$$\tenmath \pmatrix{\pmatrix{a&b\cr c&d\cr}&
+             \pmatrix{e&f\cr g&h\cr}\cr
+           \noalign{\smallskip}
+           0&\pmatrix{i&j\cr k&l\cr}\cr}.$$
+\answer |$$\pmatrix{\pmatrix{a&b\cr c&d\cr}&|\parbreak
+        |             \pmatrix{e&f\cr g&h\cr}\cr|\parbreak
+        |           \noalign{\smallskip}|\parbreak
+        |           0&\pmatrix{i&j\cr k&l\cr}\cr}.$$|
+
+%\challenge Make the columns ^{flush left} here. % cf Polya/Szego VII.43.2
+%$$\tenmath \det\left\vert\,\matrix{
+%  c_0&c_1\hfill&c_2\hfill&\ldots&c_n\hfill\cr
+%  c_1&c_2\hfill&c_3\hfill&\ldots&c_{n+1}\hfill\cr
+%  c_2&c_3\hfill&c_4\hfill&\ldots&c_{n+2}\hfill\cr
+%  \,\vdots\hfill&\,\vdots\hfill&
+%       \,\vdots\hfill&&\,\vdots\hfill\cr
+%  c_n&c_{n+1}\hfill&c_{n+2}\hfill&\ldots&c_{2n}\hfill\cr
+%  }\right\vert>0.$$
+%\answer |$$\det\left|\||\,\matrix{|\parbreak
+%        |  c_0&c_1\hfill&c_2\hfill&\ldots&c_n\hfill\cr|\parbreak
+%        |  c_1&c_2\hfill&c_3\hfill&\ldots&c_{n+1}\hfill\cr|\parbreak
+%        |  c_2&c_3\hfill&c_4\hfill&\ldots&c_{n+2}\hfill\cr|\parbreak
+%        |  \,\vdots\hfill&\,\vdots\hfill&|\parbreak
+%        |       \,\vdots\hfill&&\,\vdots\hfill\cr|\parbreak
+%        |  c_n&c_{n+1}\hfill&c_{n+2}\hfill&\ldots&c_{2n}\hfill\cr|\parbreak
+%        |  }\right|\||>0.$$|
+\challenge 下面要把列居左。
+$$\tenmath \det\left\vert\,\matrix{
+  c_0&c_1\hfill&c_2\hfill&\ldots&c_n\hfill\cr
+  c_1&c_2\hfill&c_3\hfill&\ldots&c_{n+1}\hfill\cr
+  c_2&c_3\hfill&c_4\hfill&\ldots&c_{n+2}\hfill\cr
+  \,\vdots\hfill&\,\vdots\hfill&
+       \,\vdots\hfill&&\,\vdots\hfill\cr
+  c_n&c_{n+1}\hfill&c_{n+2}\hfill&\ldots&c_{2n}\hfill\cr
+  }\right\vert>0.$$
+\answer |$$\det\left|\||\,\matrix{|\parbreak
+        |  c_0&c_1\hfill&c_2\hfill&\ldots&c_n\hfill\cr|\parbreak
+        |  c_1&c_2\hfill&c_3\hfill&\ldots&c_{n+1}\hfill\cr|\parbreak
+        |  c_2&c_3\hfill&c_4\hfill&\ldots&c_{n+2}\hfill\cr|\parbreak
+        |  \,\vdots\hfill&\,\vdots\hfill&|\parbreak
+        |       \,\vdots\hfill&&\,\vdots\hfill\cr|\parbreak
+        |  c_n&c_{n+1}\hfill&c_{n+2}\hfill&\ldots&c_{2n}\hfill\cr|\parbreak
+        |  }\right|\||>0.$$|
+
+%\cchallenge The main problem here is to prime the $\sum$.
+%^^|\sum prime| ^^{=def}
+%$$\tenmath \mathop{{\sum}'}_{x\in A}f(x)\mathrel{\mathop=^{\rm def}}
+%  \sum_{\scriptstyle x\in A\atop\scriptstyle x\ne0}f(x).$$
+%\answer |$$\mathop{{\sum}'}_{x\in A}f(x)\mathrel{\mathop=^{\rm def}}|\parbreak
+%        |  \sum_{\scriptstyle x\in A\atop\scriptstyle x\ne0}f(x).$$|\par
+%\smallskip\noindent
+%This works because |{\sum}| is type Ord (so its superscript is not set
+%above), but ^|\mathop||{{\sum}'}| is type Op (so its subscript is set below).
+%The limits are centered on $\sum'$, however, not on $\sum$. If you don't
+%like that, the remedy is more difficult; one solution is to use
+%|\sumprime_{x\in A}| where ^|\sumprime| is defined as follows:
+%\par\nobreak\medskip
+%|\def\sumprime_#1{\setbox0=\hbox{$\scriptstyle{#1}$}|\parbreak
+%|  \setbox2=\hbox{$\displaystyle{\sum}$}|\parbreak
+%|  \setbox4=\hbox{${}'\mathsurround=0pt$}|\parbreak
+%|  \dimen0=.5\wd0 \advance\dimen0 by-.5\wd2|\parbreak
+%|  \ifdim\dimen0>0pt|\parbreak
+%|    \ifdim\dimen0>\wd4 \kern\wd4 \else\kern\dimen0\fi\fi|\parbreak
+%|  \mathop{{\sum}'}_{\kern-\wd4 #1}}|
+\cchallenge 下面的主要问题是 $\sum$ 上的撇号。
+$$\tenmath \mathop{{\sum}'}_{x\in A}f(x)\mathrel{\mathop=^{\rm def}}
+  \sum_{\scriptstyle x\in A\atop\scriptstyle x\ne0}f(x).$$
+\answer |$$\mathop{{\sum}'}_{x\in A}f(x)\mathrel{\mathop=^{\rm def}}|\parbreak
+        |  \sum_{\scriptstyle x\in A\atop\scriptstyle x\ne0}f(x).$$|\par
+\smallskip\noindent
+这样写法可行是因为 |{\sum}| 是 Ord 类型的（因此它的上标不会放在上边），
+但 ^|\mathop||{{\sum}'}| 是 Op 类型的（因此它的下标放在下边）。
+然而，极限是相对 $\sum'$ 而非相对 $\sum$ 居中的。如果你不喜欢它，
+要纠正过来还是很困难的；其中一种方法是使用 |\sumprime_{x\in A}|，
+其中 ^|\sumprime| 的定义如下：
+\par\nobreak\medskip
+|\def\sumprime_#1{\setbox0=\hbox{$\scriptstyle{#1}$}|\parbreak
+|  \setbox2=\hbox{$\displaystyle{\sum}$}|\parbreak
+|  \setbox4=\hbox{${}'\mathsurround=0pt$}|\parbreak
+|  \dimen0=.5\wd0 \advance\dimen0 by-.5\wd2|\parbreak
+|  \ifdim\dimen0>0pt|\parbreak
+|    \ifdim\dimen0>\wd4 \kern\wd4 \else\kern\dimen0\fi\fi|\parbreak
+|  \mathop{{\sum}'}_{\kern-\wd4 #1}}|
+
+%\cchallenge You may be ready now for this display.
+%$$\tenmath 2\uparrow\uparrow k\mathrel{\mathop=^{\rm def}}
+%  2^{2^{2^{\cdot^{\cdot^{\cdot^2}}}}}
+%    \vbox{\hbox{$\Big\}\scriptstyle k$}\kern0pt}.$$
+%\answer |$$2\uparrow\uparrow k\mathrel{\mathop=^{\rm def}}|\parbreak
+%        |  2^{2^{2^{\cdot^{\cdot^{\cdot^2}}}}}|\parbreak
+%        |    \vbox{\hbox{$\Big\}\scriptstyle k$}\kern0pt}.$$|\par
+\cchallenge \1现在可以输入这个陈列公式了。
+$$\tenmath 2\uparrow\uparrow k\mathrel{\mathop=^{\rm def}}
+  2^{2^{2^{\cdot^{\cdot^{\cdot^2}}}}}
+    \vbox{\hbox{$\Big\}\scriptstyle k$}\kern0pt}.$$
+\answer |$$2\uparrow\uparrow k\mathrel{\mathop=^{\rm def}}|\parbreak
+        |  2^{2^{2^{\cdot^{\cdot^{\cdot^2}}}}}|\parbreak
+        |    \vbox{\hbox{$\Big\}\scriptstyle k$}\kern0pt}.$$|\par
+
+%\cchallenge And finally, when you have polished off all the other examples,
+%here's the ultimate test. Explain how to obtain the ^{commutative diagram}
+%% from Invent. Math. 70 (1982), 34 % with "typo" corrected 99.12.03
+%$$\tenmath\def\normalbaselines{\baselineskip20pt\lineskip1pt\lineskiplimit0pt }
+%\def\mapright#1{\smash{
+%    \mathop{\longrightarrow}\limits^{#1}}}
+%\def\mapdown#1{\Big\downarrow
+%  \rlap{$\vcenter{\hbox{$\scriptstyle#1$}}$}}
+%\matrix{\noalign{\vskip6pt}&&&&&&0\cr
+%  &&&&&&\mapdown{}\cr
+%  0&\mapright{}&{\cal O}_C&\mapright\iota&
+%    \cal E&\mapright\rho&\cal L&\mapright{}&0\cr
+%  &&\Big\Vert&&\mapdown\phi&&\mapdown\psi\cr
+%  0&\mapright{}&{\cal O}_C&\mapright\pi&
+%    \pi_*{\cal O}_D&\mapright\delta&
+%    R^1f_*{\cal O}_V(-D)&\mapright{}&0\cr
+%  &&&&&&\mapdown{\theta_i\otimes\gamma^{-1}}\cr
+%  &&&&&&\hidewidth R^1f_*\bigl({\cal O}
+%    _V(-iM)\bigr)\otimes\gamma^{-1}\hidewidth\cr
+%  &&&&&&\mapdown{}\cr
+%  &&&&&&0\cr\noalign{\vskip6pt}}$$
+%using ^|\matrix|. \ (Many of the entries are blank.)
+%\answer If you have to do a lot of commutative diagrams, you will want to
+%define some macros like those in the first few lines of this solution.
+%The ^|\matrix| macro resets the baselines to ^|\normalbaselines|, because
+%other commands like |\openup| might have changed them, so
+%we redefine |\normalbaselines| in this solution. Some of the things
+%shown here haven't been explained yet, but Chapter~22 will reveal all.
+%\smallskip
+%|$$\def\normalbaselines{\baselineskip20pt|\parbreak
+%|  \lineskip3pt \lineskiplimit3pt }|\parbreak
+%|\def\mapright#1{\smash{|\parbreak
+%|    \mathop{\longrightarrow}\limits^{#1}}}|\parbreak
+%|\def\mapdown#1{\Big\downarrow|\parbreak
+%|  \rlap{$\vcenter{\hbox{$\scriptstyle#1$}}$}}|\parbreak
+%|\matrix{&&&&&&0\cr|\parbreak
+%|  &&&&&&\mapdown{}\cr|\parbreak
+%|  0&\mapright{}&{\cal O}_C&\mapright\iota&|\parbreak
+%|    \cal E&\mapright\rho&\cal L&\mapright{}&0\cr|\parbreak
+%|  &&\Big\Vert&&\mapdown\phi&&\mapdown\psi\cr|\parbreak
+%|  0&\mapright{}&{\cal O}_C&\mapright\pi&|\parbreak
+%|    \pi_*{\cal O}_D&\mapright\delta&|\parbreak
+%|    R^1f_*{\cal O}_V(-D)&\mapright{}&0\cr|\parbreak
+%|  &&&&&&\mapdown{\theta_i\otimes\gamma^{-1}}\cr|\parbreak
+%|  &&&&&&\hidewidth R^1f_*\bigl({\cal O}|\parbreak
+%|    _V(-iM)\bigr)\otimes\gamma^{-1}|^|\hidewidth||\cr|\parbreak
+%|  &&&&&&\mapdown{}\cr|\parbreak
+%|  &&&&&&0\cr}$$|
+\cchallenge 最后，在你干掉所有其它练习后，这里有个终极测试。
+看看怎样用 ^|\matrix| 得到^{交换图}（许多单元都是空的）：
+$$\tenmath\def\normalbaselines{\baselineskip20pt\lineskip1pt\lineskiplimit0pt }
+\def\mapright#1{\smash{
+    \mathop{\longrightarrow}\limits^{#1}}}
+\def\mapdown#1{\Big\downarrow
+  \rlap{$\vcenter{\hbox{$\scriptstyle#1$}}$}}
+\matrix{\noalign{\vskip6pt}&&&&&&0\cr
+  &&&&&&\mapdown{}\cr
+  0&\mapright{}&{\cal O}_C&\mapright\iota&
+    \cal E&\mapright\rho&\cal L&\mapright{}&0\cr
+  &&\Big\Vert&&\mapdown\phi&&\mapdown\psi\cr
+  0&\mapright{}&{\cal O}_C&\mapright{}&
+    \pi_*{\cal O}_D&\mapright\delta&
+    R^1f_*{\cal O}_V(-D)&\mapright{}&0\cr
+  &&&&&&\mapdown{\theta_i\otimes\gamma^{-1}}\cr
+  &&&&&&\hidewidth R^1f_*\bigl({\cal O}
+    _V(-iM)\bigr)\otimes\gamma^{-1}\hidewidth\cr
+  &&&&&&\mapdown{}\cr
+  &&&&&&0\cr\noalign{\vskip6pt}}$$
+\answer 如果你有大量的交换图要写，
+你也会想定义一些类似于这个解法前几行的宏。
+^|\matrix| 宏重置基线为 ^|\normalbaselines|，
+因为有些命令比如 |\openup| 可能修改了它，
+所以在这个解法中我们重新定义了 |\normalbaselines|。
+这里展示的有些东西还没有解释到，第 22 章将说明它们。
+\smallskip
+|$$\def\normalbaselines{\baselineskip20pt|\parbreak
+|  \lineskip3pt \lineskiplimit3pt }|\parbreak
+|\def\mapright#1{\smash{|\parbreak
+|    \mathop{\longrightarrow}\limits^{#1}}}|\parbreak
+|\def\mapdown#1{\Big\downarrow|\parbreak
+|  \rlap{$\vcenter{\hbox{$\scriptstyle#1$}}$}}|\parbreak
+|\matrix{&&&&&&0\cr|\parbreak
+|  &&&&&&\mapdown{}\cr|\parbreak
+|  0&\mapright{}&{\cal O}_C&\mapright\iota&|\parbreak
+|    \cal E&\mapright\rho&\cal L&\mapright{}&0\cr|\parbreak
+|  &&\Big\Vert&&\mapdown\phi&&\mapdown\psi\cr|\parbreak
+|  0&\mapright{}&{\cal O}_C&\mapright\pi&|\parbreak
+|    \pi_*{\cal O}_D&\mapright\delta&|\parbreak
+|    R^1f_*{\cal O}_V(-D)&\mapright{}&0\cr|\parbreak
+|  &&&&&&\mapdown{\theta_i\otimes\gamma^{-1}}\cr|\parbreak
+|  &&&&&&\hidewidth R^1f_*\bigl({\cal O}|\parbreak
+|    _V(-iM)\bigr)\otimes\gamma^{-1}|^|\hidewidth||\cr|\parbreak
+|  &&&&&&\mapdown{}\cr|\parbreak
+|  &&&&&&0\cr}$$|
+
+%\subsection Words of advice. The number of different notations is
+%enormous and still growing, so you will probably continue to find
+%new challenges as you continue to type mathematical papers. It's a
+%good idea to keep a personal notebook in which you record all of
+%the non-obvious formulas that you have handled successfully,
+%showing both the final output and what you typed to get it.
+%Then you'll be able to refer back to those solutions when you
+%discover that you need to do something similar, a few months later.
+\subsection 忠告.
+名称很多而且仍然在增加，
+因此当你不断排版数学文章时，可能会不断遇到新的难题。%
+做个人笔记可能是个好办法，把你处理过的不一目了然的公式都记录下来，
+并把所输入的和输出结果都写出来。%
+这样，当一段时间以后遇见同样的问题将可以回头来找解决方法了。
+
+%If you're a mathematician who types your own papers, you have now learned
+%^^{author, typesetting by}
+%how to get enormously complex formulas into print, and you can do so
+%without going through an intermediary who may somehow distort their
+%meaning. But please, don't get too carried away by your newfound talent;
+%the fact that you are able to typeset your formulas with \TeX\ doesn't
+%necessarily mean that you have found the best notation for communicating
+%with the readers of your work.  Some notations will be unfortunate even
+%when they are beautifully formatted.
+如果你是给自己排版的数学家，
+那么将已经知道怎样把大量复杂的公式排版出来，
+并且不会需要可能曲解你的意思的中间人。%
+但是，别过分陶醉于这个新本领；
+能用 \TeX\ 排版出公式并不意味着你找到了与读者交流的最好的渠道。%
+有些记号即使在格式很漂亮时也不太合适。
+
+\endchapter
+
+Mathematicians are like Frenchmen:\/
+% Die Mathematiker sind eine Art Franzosen:
+whenever you say something to them, they translate it into their own language,
+% redet man zu ihnen, so u"bersetzen sie es in ihre Sprache,
+and at once it is something entirely different.
+% und dann ist es alsobald ganz etwas Anders.
+\author ^{GOETHE}, {\sl Maxims and Reflexions\/} (1829)
+% see Schriften der Goethe-Gesellschaft, vol 21, pp 266 and 389
+
+\bigskip
+
+The best notation is no notation;
+whenever it is possible to avoid the use of a complicated alphabetic apparatus,
+avoid it.
+A good attitude to the preparation of written mathematical exposition
+is to pretend that it is spoken.
+Pretend that you are explaining the subject to a friend
+on a long walk in the woods, with no paper available;
+fall back on symbolism only when it is really necessary.
+\author PAUL ^{HALMOS}, {\sl How to Write Mathematics\/} (1970)
+  % in {\sl L'Enseignement Math\'ematique\/}
+  % vol 16, 123--152; section 15; reprinted in AMS pub "How to Write Math"
+
+\vfill\eject\byebye

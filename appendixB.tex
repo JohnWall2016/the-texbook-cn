@@ -1,0 +1,1696 @@
+% -*- coding: utf-8 -*-
+
+\input macros
+
+%\beginchapter Appendix B. Basic\\Control\\Sequences
+\beginchapter Appendix B. 基本控制系列
+
+%Let's begin this appendix with a chart that summarizes plain \TeX's
+%^^{summary of plain TeX} ^^|\+| ^^{tabbing} ^^{accents}
+%conventions.
+在这个附录开头，我们用一个图表总结 plain \TeX\ 的惯用法。
+^^{summary of plain TeX} ^^|\+| ^^{tabbing} ^^{accents}
+
+\def\sep{\medskip\hrule width\hsize\medskip}
+\medskip\smallskip
+\hrule height .61803pt
+\kern 1pt
+\hrule
+\medskip
+\line{\strut Characters that are reserved for special purposes:\hfil
+  |\|\hfil|{|\hfil|}|\hfil|$|\hfil|&|\hfil|#|\hfil|%|\hfil|^|\hfil|_|\hfil|~|}
+\sep
+\halign to\hsize{\strut\hfil#\hfil\tabskip\z@ plus10pt&
+\hfil#\hfil&\hfil#\hfil&
+\hfil#\hfil\tabskip\z@skip\cr
+|\rm roman,|&|{\sl slanted},|&|{\bf boldface},|&|{\it italic\/} type|\cr
+roman,&{\sl slanted},&{\bf boldface},&{\it italic\/} type\cr}
+\sep
+\halign to\hsize{\strut\hfil#\hfil\tabskip\z@ plus10pt&
+\hfil#\hfil&\hfil#\hfil&\hfil#\hfil&\hfil#\hfil&\hfil#\hfil&
+\hfil#\hfil&\hfil#\hfil&\hfil#\hfil&\hfil#\hfil&\hfil#\hfil&
+\hfil#\hfil&\hfil#\hfil&\hfil#\hfil&\hfil#\hfil&\hfil#\hfil&
+\hfil#\hfil&\hfil#\hfil&
+\hfil#\hfil\tabskip\z@skip\cr
+|``|&|''|&|--|&|---|&|?||`|&|!||`|&|\$|&|\#|&|\&|&|\%|&
+  |\ae|&|\AE|&|\oe|&|\OE|&|\aa|&|\AA|&|\ss|&|\o|&|\O|\cr
+``&''&--&---&?`&!`&\$&\#&\&&\%&\ae&\AE&\oe&\OE&\aa&\AA&\ss&\o&\O\cr}
+\sep
+\halign to\hsize{\strut\hfil#\hfil\tabskip\z@ plus10pt&
+\hfil#\hfil&\hfil#\hfil&\hfil#\hfil&\hfil#\hfil&\hfil#\hfil&
+\hfil#\hfil&\hfil#\hfil&\hfil#\hfil&\hfil#\hfil&\hfil#\hfil&
+\hfil#\hfil&\hfil#\hfil&
+\hfil#\hfil\tabskip\z@skip\cr
+|\`a|&|\'e|&|\^o|&|\"u|&|\=y|&|\~n|&|\.p|&|\u\i|&
+  |\v s|&|\H\j|&|\t\i u|&|\b k|&|\c c|&|\d h|\cr
+\`a&\'e&\^o&\"u&\=y&\~n&\.p&\u\i&\v s&\H\j&\t\i u&\b k&\c c&\d h\cr}
+\sep
+\halign to\hsize{\strut\hfil#\hfil\tabskip\z@ plus10pt&
+\hfil#\hfil&\hfil#\hfil&\hfil#\hfil&\hfil#\hfil&\hfil#\hfil&
+\hfil#\hfil&\hfil#\hfil&\hfil#\hfil&\hfil#\hfil&
+\hfil#\hfil\tabskip\z@skip\cr
+|\l|&|\L|&|\dag|&|\ddag|&|\S|&|\P|&|{\it\$|&
+  |\&}|&|\copyright|&|\TeX|&|\dots|\cr
+\l&\L&\dag&\ddag&\S&\P&\phantom{\tt////}\it\$&
+  \it\&\phantom{\tt/}&\copyright&\TeX&\dots\cr}
+\sep
+\line{\strut Line break controls:\hfil
+  |\break|\hfil|\nobreak|\hfil|\allowbreak|\hfil|\hbox{unbreakable}|}
+\line{\strut|dis\-cre\-tion\-ary hy\-phens|\hfil|virgule\slash breakpoint|}
+\sep
+\settabs 2\columns
+\+\strut Breakable horizontal spaces:& Unbreakable horizontal spaces:\cr
+\+|\|\] \ normal interword space& |~| \ normal interword space\cr
+\+|\enskip| \ this\enskip much& |\enspace     | \ this\enspace much\cr
+\+|\quad  | \ this\quad much&   |\thinspace   | \ this\thinspace much\cr
+\+|\qquad | \ this\qquad much&  |\negthinspace| \ this\negthinspace much\cr
+\+\strut|\hskip| \<arbitrary dimen>& |\kern| \<arbitrary dimen>\cr
+\sep
+\smallskip
+\+\strut Vertical spaces:\hfill
+  |\smallskip| $\vcenter{\hrule width2em\smallskip\hrule}$\hfill&
+  |\medskip| $\vcenter{\hrule width3em\medskip\hrule}$\hfill
+  |\bigskip| $\vcenter{\hrule width4em\bigskip\hrule}$&\cr
+\smallskip
+\sep
+\line{\strut Page break controls:\hfil|\eject|\hfil|\supereject|\hfil
+  |\nobreak|\hfil|\goodbreak|\hfil|\filbreak|}
+\+\strut Vertical spaces and good breakpoints:&
+  |\smallbreak|\hfill|\medbreak|\hfill|\bigbreak|&\cr
+\sep
+\settabs 4 \columns
+\hbox{\strut|\settabs 4 \columns|}
+\hbox{|\+Here's an example&of\hfill some &tabbing:&\hrulefill&\cr|}
+\+Here's an example&of\hfill some &tabbing:&\hrulefill&\cr
+\+\hfill|\hrulefill |&\hrulefill&\hfill|\dotfill |&\dotfill&\cr
+\+\hfill|\leftarrowfill |&\leftarrowfill&
+  \hfill|\rightarrowfill |&\rightarrowfill&\cr
+\+\hfill|\upbracefill |&\upbracefill&
+  \hfill|\downbracefill |&\downbracefill&\cr
+\smallskip
+\line{\strut More general alignments use |\halign|, |\valign|, |\omit|,
+  |\span|, and |\multispan|.}
+\sep
+\line{\strut Examples of the principal conventions for text layout
+  appear on the next page.}
+\sep\unskip
+\kern 1pt
+\hrule height .61803pt
+\eject
+\begingroup\parindent\z@ \obeylines \baselineskip12pt plus 1pt
+|% This test file generates the output shown on the opposite page.|
+|% It's a bit complex because it tries to illustrate lots of stuff.|
+|% TeX ignores commentary (like this) that follows a `%' sign.|
+| |
+|% First the standard output style is changed slightly:|
+^|\hsize||=29pc % The lines in this book are 29 picas wide.|
+^|\vsize||=42pc % The page body is 42 picas (not counting footlines).|
+^|\footline||={\tenrm Footline\quad\dotfill\quad Page \folio}|
+^|\pageno||=1009 % This is the starting page number (don't ask why).|
+|% See Chapter 23 for the way to make other page format changes via|
+|% \hoffset, \voffset, \nopagenumbers, \headline, or \raggedbottom.|
+| |
+^|\topglue|| 1in % This makes an inch of blank space (1in=2.54cm).|
+^|\centerline||{\bf A Bold, Centered Title}|
+^|\smallskip|| % This puts a little extra space after the title line.|
+^|\rightline||{\it avec un sous-titre \`a la fran\c caise}|
+|% Now we use \beginsection to introduce part 1 of the document.|
+^|\beginsection|| 1. Plain \TeX nology % The next line must be blank!|
+| |^^{blank line}
+|The first paragraph of a new section is not indented.|
+^|\TeX||\ recognizes the end of a paragraph when it comes to a blank|
+|line in your manuscript file. % or to a `\par': see below.|^^|\par|
+| |^^|\footnote|^^|\tt|^^|\char|
+|Subsequent paragraphs {\it are\/} indented.\footnote*{The amount|
+|    of indentation can be changed by changing a parameter called|
+|{\tt\char`\\parindent}. Turn the page for a summary of \TeX's most|
+|important parameters.} (See?) The computer breaks a paragraph's|
+|text into lines in an interesting way---see reference~[1]---and h%|
+|     yphenates words automatically     when necessary.|^^{percent}
+| |
+^|\midinsert|| % This begins inserted material, e.g., a figure.|
+|\narrower\narrower % This brings the margins in (see Chapter 14).|
+^|\noindent|| |^|\llap||{``}If there hadn't been room for this material on|
+|the present page, it would have been inserted on the next one.''|
+|\endinsert % This ends the insertion and the effect of \narrower.|
+| |
+^|\proclaim|| Theorem T. The typesetting of $math$ is discussed in|
+|Chapters 16--19, and math symbols are summarized in Appendix~F.|
+| |
+|\beginsection 2. Bibliography\par % `\par' acts like a blank line.|
+^|\frenchspacing|| % (Chapter 12 recommends this for bibliographies.)|
+^|\item||{[1]} D.~E. Knuth and M.~F. Plass, ``Breaking paragraphs|^^{Plass}
+|into lines,'' {\sl Softw. pract. exp. \bf11} (1981), 1119--1184.|^^{Knuth}
+^|\bye|| % This is the way the file ends, not with a \bang but a \bye.|
+\eject\endgroup
+{\parindent 20pt
+\topglue 1in % This makes an inch of blank space (1in=2.54cm).
+\centerline{\bf A Bold, Centered Title}
+\smallskip % This puts a little extra space between lines here.
+\rightline{\it avec un sous-titre \`a la fran\c caise}
+% Now we use \beginsection to introduce part 1 of the document.
+\beginsection 1. Plain \TeX nology % The next line must be blank!
+
+The first paragraph of a new section is not indented.
+\TeX\ recognizes the end of a paragraph when it comes to a blank
+line in your manuscript file. % or to a `\par': see below.
+
+Subsequent paragraphs {\it are\/} indented.*{\spacefactor=3000}
+(See?) The computer breaks a paragraph's
+text into lines in an interesting way---see reference~[1]---and h%
+     yphenates words automatically     when necessary.
+
+\midinsert % This begins inserted material, e.g., a figure.
+\narrower\narrower % This brings the margins in (see Chapter 14).
+\noindent \llap{``}If there hadn't been room for this material on
+the present page, it would have been inserted on the next one.''
+\endinsert % This ends the insertion and the effect of \narrower.
+
+\proclaim Theorem T. The typesetting of $math$ is discussed in
+Chapters 16--19, and math symbols are summarized in Appendix~F.
+
+\beginsection 2. Bibliography\par% `\par' is just like blank line.
+\frenchspacing % (Chapter 12 recommends this for bibliographies.)
+\item{[1]} D.~E. Knuth and M.~F. Plass, ``Breaking paragraphs
+into lines,'' {\sl Softw. pract. exp. \bf11} (1981), 1119--1184.
+\vfill
+\hrule width 2in \kern 2.6pt
+\textindent{*}\strut
+The amount of indentation can be changed by changing a parameter called
+{\tt\char`\\parindent}. Turn the page for a summary of \TeX's most
+important parameters.\par
+\baselineskip 24pt
+\line{Footline\quad\dotfill\quad Page 1009}
+\eject}
+
+The preceding example illustrates most of the basic things
+that you can do directly with plain \TeX, but it does not provide an
+exhaustive list. Thus, it uses |\centerline| and |\rightline|,
+but not |\leftline| or |\line|; it uses |\midinsert|, but not
+|\topinsert| or |\pageinsert|; it uses |\smallskip|, but not
+|\medskip| or |\bigskip|; it uses |\llap| but not |\rlap|, |\item|
+but not |\itemitem|, |\topglue| but not |\hglue|. It does not
+illustrate |\raggedright| setting of paragraphs; it does not use
+^|\obeylines| or ^|\obeyspaces| to shut off \TeX's automatic
+formatting. ^^{as is, see obeylines, obeyspaces}
+All such control sequences are explained later in this appendix, and
+further information can be found by looking them up in the index.
+The main purpose of the example is to serve as a reminder of the
+repertoire of possibilities.
+
+Most of the control sequences used in the example are defined by
+macros of plain \TeX\ format, but three of them are ^{primitive}, i.e.,
+built~in: `|\par|' (end of paragraph), `|\noindent|' (beginning of
+non-indented paragraph), and `|\/|' (italic correction). The example
+also assigns values to two of \TeX's primitive parameters, namely
+|\hsize| and |\vsize|. \TeX\ has scores of parameters, all of which
+are listed in Chapter~24, but only a few of them are of special
+concern to the majority of \TeX\ users. Here are examples of how
+you might want to give new values to the most important ^{parameters}
+other than |\hsize| and |\vsize|:
+\par\begingroup\nobreak\medskip\parindent\z@ \obeylines
+^|\tolerance||=500|\quad(\TeX\ will tolerate lines whose badness is %
+  rated 500 or less.)
+^|\looseness||=1|\quad(The next paragraph will be one line longer than %
+  usual.)
+^|\parindent||=4mm|\quad(Paragraphs will be indented by four millimeters.)
+^|\hoffset||=1.5in|\quad(All output will be shifted right by one and a %
+  half inches.)
+^|\voffset||=24pt|\quad(All output will be shifted down by 24 points.)
+^|\baselineskip||=11pt plus.1pt|\quad(Baselines will be $11\pt$ apart, %
+  or a bit more.)
+^|\parskip||=3pt plus1pt minus.5pt|\quad(Extra space will %
+  precede each paragraph.)
+\endgroup\medbreak\noindent
+Plain \TeX\ uses |\parindent| also to control the amount of
+indentation provided by ^|\item|, ^|\itemitem|, and ^|\narrower|.
+
+\danger The remainder of this appendix is devoted to the details of the
+plain \TeX\ format, which is a set of macros that come with normal
+implementations of \TeX. These macros serve three basic purposes:
+\ (1)~They make \TeX\ usable, because \TeX's primitive capabilities
+operate at a very low level. A~``virgin'' \TeX\ system that has no
+macros is like a newborn baby that has an immense amount to learn about
+the real world; but it is capable of learning fast. \ (2)~The plain
+\TeX\ macros provide a basis for more elaborate and powerful formats
+tailored to individual tastes and applications. You can do a lot with
+plain \TeX, but pretty soon you'll want to do even more. \ (3)~The macros
+also serve to illustrate how additional formats can be designed.
+
+\ninepoint
+Somewhere in your computer system you should be able to find a file
+called ^|plain.tex| that contains exactly what has been preloaded into
+the running \TeX\ system that you use. Our purpose in the rest of this
+appendix will be to discuss the contents of |plain.tex|. However, we
+will not include a verbatim description, because some parts of that file
+are too boring, and because the actual macros have been ``^{optimized}''
+^^{efficiency}
+with respect to memory space and running time. Unoptimized versions of the
+macros are easier for humans to understand, so we shall deal with those;
+|plain.tex| contains equivalent constructions that work better on a machine.
+
+So here's the plan for the rest of Appendix~B\null: We shall go through
+the contents of |plain.tex|, interspersing an edited transcription of
+that file with comments about noteworthy details. When we come to
+macros whose usage has not yet been explained---for example, somehow
+|\vglue| and |\beginsection| never made it into Chapters 1 through~27---we
+shall consider them from a user's viewpoint; but most of the time we shall
+be addressing the issues from the standpoint of a macro designer.
+
+%\subsection The code tables. A format's first duty is to establish
+%^|\catcode| values. This is necessary because, for example, a |\def|
+%command can't be used until there are characters like |{| and~|}| of
+%categories 1 and~2. The ^|INITEX| program (which reads |plain.tex|
+%so that \TeX\ can be initialized) begins without knowing any grouping
+%characters; hence |plain.tex| starts out as follows:
+\subsection 编码表. A format's first duty is to establish
+^|\catcode| values. This is necessary because, for example, a |\def|
+command can't be used until there are characters like |{| and~|}| of
+categories 1 and~2. The ^|INITEX| program (which reads |plain.tex|
+so that \TeX\ can be initialized) begins without knowing any grouping
+characters; hence |plain.tex| starts out as follows:
+\beginlines
+|% This is the plain TeX format that's described in The TeXbook.|
+|% N.B.: A version number is defined at the very end of this file;|
+|%       please change that number whenever the file is modified!|
+|% And don't modify the file under any circumstances.|
+\smallbreak
+|\catcode`\{=1 % left brace is begin-group character|
+|\catcode`\}=2 % right brace is end-group character|
+|\catcode`\$=3 % dollar sign is math shift|
+|\catcode`\&=4 % ampersand is alignment tab|
+|\catcode`\#=6 % hash mark is macro parameter character|
+|\catcode`\^=7 \catcode`\^^K=7 % circumflex and uparrow for superscripts|
+|\catcode`\_=8 \catcode`\^^A=8 % underline and downarrow for subscripts|
+|\catcode`\^^I=10 % ASCII tab is treated as a blank space|
+|\chardef\active=13 \catcode`\~=\active % tilde is active|
+|\catcode`\^^L=\active \outer\def^^L{\par} % ASCII form-feed is \outer\par|
+\smallskip
+|\message{Preloading the plain format: codes,}|
+\endlines
+These instructions set up the nonstandard characters
+|^^K| and |^^A| for ^{superscripts} and ^{subscripts}, in addition to~|^|
+and~|_|, so that people with extended character sets can use
+{\tentex\char'13} and {\tentex\char1} as recommended in Appendix~C\null.
+^^{uparrow char} ^^{downarrow char}
+Furthermore |^^I| (^{ASCII} ^\<tab>) is given category~10 (space);
+and |^^L| (ASCII
+\<formfeed>) becomes an active character that will detect runaways on
+files that have been divided into ``^{file pages}'' by ^\<formfeed>
+characters. The control sequence ^|\active| is defined to yield the
+constant~13; this is the one category code that seems to deserve a
+symbolic name, in view of its frequent use in constructing
+special-purpose macros.
+
+When |INITEX| begins, category 12 (other) has been assigned to all~256
+possible characters, except that the 52~letters |A...Z| and |a...z| are
+category~11 (letter), and a few other assignments equivalent to the
+following have been made:
+\begintt
+\catcode `\\ =0   \catcode`\  =10   \catcode `\% =14
+\catcode`\^^@=9   \catcode`\^^M=5   \catcode`\^^?=15
+\endtt
+Thus `|\|' is already an escape character, ^^{backslash}
+`\]' is a space, ^^\<space>
+and `|%|' is available for comments on the first line of the file;
+ASCII ^\<null> is ignored, ASCII ^\<return> is an end-of-line character,
+and ASCII ^\<delete> is invalid.
+
+The ^|\message| command shown above prints a progress report on the terminal
+when |plain.tex| is being input by |INITEX|. Later on comes
+`|\message{registers,}|' and several other messages, but we won't mention
+them specifically. The terminal will eventually display something like
+this when initialization is complete:
+\begintt
+** plain
+(plain.tex Preloading the plain format: codes, registers,
+parameters, fonts, more fonts, macros, math definitions,
+output routines, hyphenation (hyphen.tex))
+* \dump
+Beginning to dump on file plain.fmt
+\endtt
+followed by a variety of statistics about what fonts were loaded, etc.
+If you want to make a new format |super.tex| that adds more features
+to |plain.tex|, it's best not to make a new file containing all the
+plain stuff, or even to |\input plain|; just type `|&plain super|' in
+response to |INITEX|'s ^|**| prompt, ^^{ampersand} ^^|fmt|
+to input |plain.fmt| at high speed.
+
+After the opening |\message|, |plain.tex| goes on to define a control
+sequence ^|\dospecials| that lists all the characters whose catcodes should
+probably be changed to~12 (other) when copying things verbatim:
+\beginlines
+|\def\dospecials{\do\ \do\\\do\{\do\}\do\$\do\&%|
+|  \do\#\do\^\do\^^K\do\_\do\^^A\do\%\do\~}|
+\endlines
+(Appendix E illustrates how to use |\dospecials|.) \ The ASCII codes for
+\<null>, \<tab>, \<linefeed>, \<formfeed>, \<return>, and \<delete>
+have not been included in the list.
+
+At this point |plain.tex| completes its initialization of category codes
+by setting |\catcode`\@=11|, thereby making the character `|@|' behave
+temporarily like a letter. The command |\catcode`\@=12| will appear later,
+hence ^{at-sign characters} will act just like ordinary punctuation
+marks when \TeX\ is running. The idea is to make it easy for plain \TeX\
+to have ^{private control sequences} that cannot be redefined by ordinary
+users; all such control sequences will have at least one `|@|' in
+their names.
+
+The next job is to set up the ^|\mathcode| table:
+\beginlines
+|\mathcode`\^^@="2201 \mathcode`\^^A="3223 \mathcode`\^^B="010B|
+|\mathcode`\^^C="010C \mathcode`\^^D="225E \mathcode`\^^E="023A|
+|\mathcode`\^^F="3232 \mathcode`\^^G="0119 \mathcode`\^^H="0115|
+|\mathcode`\^^I="010D \mathcode`\^^J="010E \mathcode`\^^K="3222|
+|\mathcode`\^^L="2206 \mathcode`\^^M="2208 \mathcode`\^^N="0231|
+|\mathcode`\^^O="0140 \mathcode`\^^P="321A \mathcode`\^^Q="321B|
+|\mathcode`\^^R="225C \mathcode`\^^S="225B \mathcode`\^^T="0238|
+|\mathcode`\^^U="0239 \mathcode`\^^V="220A \mathcode`\^^W="3224|
+|\mathcode`\^^X="3220 \mathcode`\^^Y="3221 \mathcode`\^^Z="8000|
+|\mathcode`\^^[="2205 \mathcode`\^^\="3214 \mathcode`\^^]="3215|
+|\mathcode`\^^^="3211 \mathcode`\^^_="225F \mathcode`\^^?="1273|
+|\mathcode`\ ="8000   \mathcode`\!="5021   \mathcode`\'="8000|
+|\mathcode`\(="4028   \mathcode`\)="5029   \mathcode`\*="2203|
+|\mathcode`\+="202B   \mathcode`\,="613B   \mathcode`\-="2200|
+|\mathcode`\.="013A   \mathcode`\/="013D   \mathcode`\:="303A|
+|\mathcode`\;="603B   \mathcode`\<="313C   \mathcode`\=="303D|
+|\mathcode`\>="313E   \mathcode`\?="503F   \mathcode`\[="405B|
+|\mathcode`\\="026E   \mathcode`\]="505D   \mathcode`\_="8000|
+|\mathcode`\{="4266   \mathcode`\|\||="026A   \mathcode`\}="5267|
+\endlines
+A mathcode is relevant only when the corresponding category code is
+11 or~12; therefore many of these codes will rarely be looked at. For
+example, the math code for |^^M| specifies the character |\oplus|,
+but it's hard to imagine a user who would want |^^M| (ASCII ^\<return>)
+to produce an~$\oplus$ sign in the middle of a math formula, since plain
+\TeX\ appends |^^M| to the end of every line of input. The math codes
+have been set up here, however, to be entirely consistent with the
+extended character set presented in Appendix~C and the Computer Modern
+fonts described in Appendix~F\null. |INITEX| has done the rest of the
+work, as far as mathcodes are concerned: It has set |\mathcode|$\,x=
+x+\hex{7000}$ for each of the ten digits $x={}$|`0| to |`9|;
+|\mathcode|$\,x=x+\hex{7100}$ for each of the 52~letters; and
+|\mathcode|$\,x=x$ for all other values of~$x$.
+
+There's no need to change the ^|\uccode| and ^|\lccode| tables. |INITEX|
+has made |\uccode`X=`X|, |\uccode`x=`X|, |\lccode`X=`x|, |\lccode`x=`x|,
+and it has made similar assignments for all other letters. The codes are
+zero for all nonletters. These tables are used by \TeX's ^|\uppercase|
+and |\lowercase| operations, and the hyphenation algorithm also looks
+at |\lccode| (see Appendix~H\null). Changes should be made only in format
+packages that set \TeX\ up for languages with more than~26 letters
+(see Chapter~8).
+
+Next comes the ^|\sfcode| table, which |INITEX| has initialized entirely
+to 1000, except that |\sfcode`X=999| for each of the 26 uppercase letters.
+Some characters are made ``transparent'' by setting
+\beginlines
+|\sfcode`\)=0 \sfcode`\'=0 \sfcode`\]=0 % won't change the space factor|
+\endlines
+and the |\nonfrenchspacing| macro will be used later to change the sfcodes
+of special punctuation marks. \ (Chapter~12 explains what an |\sfcode| does.)
+
+The last code table is called ^|\delcode|, and again it's necessary to
+change only a few values. |INITEX| has made all delimiter codes equal to
+$-1$, which means that no characters are recognized as delimiters in
+formulas. But there's an exception: The value |\delcode`\.=0| has been
+prespecified, so that `|.|' ^^{period} stands for a ``^{null delimiter}.''
+\ (See Chapter~17.) \ Plain format sets up the following nine values,
+based on the delimiters available in Computer Modern:
+\beginlines
+|\delcode`\(="028300    \delcode`\/="02F30E    \delcode`\)="029301|
+|\delcode`\[="05B302    \delcode`\|\||="26A30C    \delcode`\]="05D303|
+|\delcode`\<="26830A    \delcode`\\="26E30F    \delcode`\>="26930B|
+\endlines
+It's important to note that |\delcode`\{| and |\delcode`\}| have been left
+equal to~$-1$. If those codes were set to certain values, a user would
+^^{left brace} ^^{right brace} be able to type, e.g.,
+`|\big{|' to get a big left brace; but it would be a big mistake.
+The reason is that ^{braces} are used for grouping, when supplying
+arguments to macros; all sorts of strange things can happen if you try
+to use them both as math delimiters and group delimiters.
+
+At this point the |plain.tex| file contains several definitions
+\beginlines
+|\chardef\@ne=1 \chardef\tw@=2 \chardef\thr@@=3 \chardef\sixt@@n=16|
+|\chardef\@cclv=255 \mathchardef\@cclvi=256|
+|\mathchardef\@m=1000 \mathchardef\@M=10000 \mathchardef\@MM=20000|
+\endlines
+which allow ``private'' control sequences ^|\@ne|, |\tw@|, etc.,
+to be used as abbreviations for commonly used constants 1,~2,~\dots; this
+convention makes \TeX\ run a little faster, ^^{optimization} ^^{efficiency}
+and it means that the macros will consume slightly less memory space.
+The usage of these abbreviations will not, however, be shown below
+unless necessary; we shall pretend that `|1|\]' appears instead of\/ |\@ne|,
+`|10000|\]' instead of\/ |\@M|, and so on, since that makes the programs
+more readable. \ (Notice that the long form of\/ |\@ne| is `|1|\]' including
+a space, because \TeX\ looks for and removes a space following a constant.)
+
+%\subsection Allocation of registers. The second major part of the
+%|plain.tex| file provides a foundation on which systems of independently
+%developed macros can coexist peacefully without interfering in their
+%usage of ^{registers}. The idea is that macro writers should abide by the
+%^^{macro conventions}
+%following ground rules: (1)~Registers numbered 0~to~9 are always free for
+%temporary ``^{scratch}'' use, but their values are always assumed to be
+%clobbered whenever any other macro might get into control.  \ (This applies
+%to registers like |\dimen0|, |\toks0|, |\skip1|, |\box3|, etc.; but \TeX\
+%has already reserved |\count0| through |\count9| for page number
+%identification.) \ (2)~The registers |\count255|, |\dimen255|, and
+%|\skip255| are freely available in the same way.
+%\ (3)~All assignments to the scratch registers whose numbers are
+%1,~3, 5, 7, and~9 should be ^|\global|; all assignments to the
+%other scratch registers (0,~2, 4, 6, 8,~255) should be non-|\global|.
+%\ (This prevents the phenomenon of ``^{save stack buildup}'' discussed
+%in Chapter~27.)
+%\ (4)~Furthermore, it's possible to
+%use any register in a group, if you ensure that \TeX's grouping
+%mechanism will restore the register when you're done with the group, and
+%if you are certain that other macros will not make global assignments
+%to that register when you need it. \ (5)~But when a register is used
+%by several macros, or over long spans of time, it should be allocated
+%by |\newcount|, |\newdimen|, |\newbox|, etc. \ (6)~Similar remarks
+%apply to ^{input/output streams} used by ^|\read| and ^|\write|, to math
+%^{families} used by ^|\fam|, to sets of hyphenation rules used by
+%^|\language|, and to insertions (which require
+%^|\box|, ^|\count|, ^|\dimen|, and ^|\skip| registers all having the
+%same number).
+\subsection 分配寄存器. The second major part of the
+|plain.tex| file provides a foundation on which systems of independently
+developed macros can coexist peacefully without interfering in their
+usage of ^{registers}. The idea is that macro writers should abide by the
+^^{macro conventions}
+following ground rules: (1)~Registers numbered 0~to~9 are always free for
+temporary ``^{scratch}'' use, but their values are always assumed to be
+clobbered whenever any other macro might get into control.  \ (This applies
+to registers like |\dimen0|, |\toks0|, |\skip1|, |\box3|, etc.; but \TeX\
+has already reserved |\count0| through |\count9| for page number
+identification.) \ (2)~The registers |\count255|, |\dimen255|, and
+|\skip255| are freely available in the same way.
+\ (3)~All assignments to the scratch registers whose numbers are
+1,~3, 5, 7, and~9 should be ^|\global|; all assignments to the
+other scratch registers (0,~2, 4, 6, 8,~255) should be non-|\global|.
+\ (This prevents the phenomenon of ``^{save stack buildup}'' discussed
+in Chapter~27.)
+\ (4)~Furthermore, it's possible to
+use any register in a group, if you ensure that \TeX's grouping
+mechanism will restore the register when you're done with the group, and
+if you are certain that other macros will not make global assignments
+to that register when you need it. \ (5)~But when a register is used
+by several macros, or over long spans of time, it should be allocated
+by |\newcount|, |\newdimen|, |\newbox|, etc. \ (6)~Similar remarks
+apply to ^{input/output streams} used by ^|\read| and ^|\write|, to math
+^{families} used by ^|\fam|, to sets of hyphenation rules used by
+^|\language|, and to insertions (which require
+^|\box|, ^|\count|, ^|\dimen|, and ^|\skip| registers all having the
+same number).
+
+Some handy abbreviations are introduced at this point so that the macros
+below will have easy access to scratch registers:
+\beginlines
+|\countdef\count@=255  \toksdef\toks@=0       \skipdef\skip@=0|
+|\dimendef\dimen@=0    \dimendef\dimen@i=1    \dimendef\dimen@ii=2|
+\endlines
+
+Here now are the macros that provide allocation for quantities of more
+permanent value. These macros use registers
+|\count10| through |\count20| to hold the numbers that were allocated
+most recently; for example, if\/ |\newdimen| has just reserved |\dimen15|,
+the value of\/ |\count11| will be~15. However, the rest of the world
+is not supposed to ``know'' that |\count11| has anything to do with
+|\dimen| registers. There's a special counter called ^|\allocationnumber|
+that will be equal to the most recently allocated number, after every
+|\newcount|, |\newdimen|, \dots, |\newinsert| operation; macro packages
+are supposed to refer to |\allocationnumber| if they want to find out what
+number was allocated. The inside story of how allocation is actually performed
+should be irrelevant when the allocation macros are used at a higher level;
+you mustn't assume that |plain.tex| really does allocation in any
+particular way.
+\beginlines
+|\count10=22 % this counter allocates \count registers 23, 24, 25, ...|
+|\count11=9  % this counter allocates \dimen registers 10, 11, 12, ...|
+|\count12=9  % this counter allocates \skip registers 10, 11, 12, ...|
+|\count13=9  % this counter allocates \muskip registers 10, 11, 12, ...|
+|\count14=9  % this counter allocates \box registers 10, 11, 12, ...|
+|\count15=9  % this counter allocates \toks registers 10, 11, 12, ...|
+|\count16=-1 % this counter allocates input streams 0, 1, 2, ...|
+|\count17=-1 % this counter allocates output streams 0, 1, 2, ...|
+|\count18=3  % this counter allocates math families 4, 5, 6, ...|
+|\count19=0  % this counter allocates language codes 1, 2, 3, ...|
+|\count20=255 % this counter allocates insertions 254, 253, 252, ...|
+|\countdef\insc@unt=20 % nickname for the insertion counter|
+|\countdef\allocationnumber=21 % the most recent allocation|
+|\countdef|^|\m@ne||=22 \m@ne=-1 % a handy constant|
+|\def|^|\wlog||{\immediate\write-1} % this will write on log file (only)|
+\smallbreak
+|\outer\def|^|\newcount||{\alloc@0\count\countdef\insc@unt}|
+|\outer\def|^|\newdimen||{\alloc@1\dimen\dimendef\insc@unt}|
+|\outer\def|^|\newskip||{\alloc@2\skip\skipdef\insc@unt}|
+|\outer\def|^|\newmuskip||{\alloc@3\muskip\muskipdef\@cclvi}|
+|\outer\def|^|\newbox||{\alloc@4\box\chardef\insc@unt}|
+|\let\newtoks=\relax % this allows plain.tex to be read in twice|
+|\outer\def\newhelp#1#2{\newtoks#1#1=\expandafter{\csname#2\endcsname}}|
+|\outer\def|^|\newtoks||{\alloc@5\toks\toksdef\@cclvi}|
+|\outer\def|^|\newread||{\alloc@6\read\chardef\sixt@@n}|
+|\outer\def|^|\newwrite||{\alloc@7\write\chardef\sixt@@n}|
+|\outer\def|^|\newfam||{\alloc@8\fam\chardef\sixt@@n}|
+|\outer\def|^|\newlanguage||{\alloc@9\language\chardef\@cclvi}|
+\smallbreak
+|\def\alloc@#1#2#3#4#5{\global\advance\count1#1 by 1|\parbreak%
+|  \ch@ck#1#4#2% make sure there's still room|\parbreak%
+|  \allocationnumber=\count1#1   \global#3#5=\allocationnumber|\parbreak%
+|  \wlog{\string#5=\string#2\the\allocationnumber}}|
+\smallbreak
+|\outer\def|^|\newinsert||#1{\global\advance\insc@unt by-1|\parbreak%
+|  \ch@ck0\insc@unt\count \ch@ck1\insc@unt\dimen|\parbreak%
+|  \ch@ck2\insc@unt\skip  \ch@ck4\insc@unt\box|\parbreak%
+|  \allocationnumber=\insc@unt|\parbreak%
+|  \global\chardef#1=\allocationnumber|\parbreak%
+|  \wlog{\string#1=\string\insert\the\allocationnumber}}|
+\smallbreak
+|\def\ch@ck#1#2#3{\ifnum\count1#1<#2%|\parbreak%
+|  \else\errmessage{No room for a new #3}\fi}|^^|No room|
+\endlines
+The `|\alloc@|' macro does most of the work of allocation. It puts
+a message like `|\maxdimen=\dimen10|' into the log file after
+|\newdimen| has allocated a place for the |\dimen| register that
+will be called |\maxdimen|; such information might be useful when
+difficult macros are being ^{debugged}.
+
+A ^|\newhelp| macro has been provided to aid in creating home-made help
+texts: You can say, e.g., |\newhelp\helpout{This is a help message.}|, and
+then give the command `^|\errhelp||=\helpout|' just before issuing an
+^|\errmessage|. This method of creating help texts makes efficient
+use of \TeX's ^{memory}, because it puts the text into a control sequence
+name where it doesn't take up space that is needed for tokens.
+
+The |plain| file now goes ahead and allocates registers for important constants:
+\beginlines
+|\newdimen\maxdimen \maxdimen=16383.99999pt|
+|\newskip\hideskip \hideskip=-1000pt plus1fill|
+|\newskip\centering \centering=0pt plus 1000pt minus 1000pt|
+|\newdimen\p@ \p@=1pt % this saves macro space and time|
+|\newdimen\z@ \z@=0pt| % likewise
+|\newskip\z@skip \z@skip=0pt plus0pt minus0pt|
+|\newbox\voidb@x % permanently void box register|
+\endlines
+The control sequence ^|\maxdimen| stands for the largest permissible
+\<dimen>. Alignment macros that appear below will make use of special glue
+values called ^|\hideskip| and ^|\centering|.  {\sl N.B.: These three constants
+must not be changed under any circumstances\/}; you should either ignore
+them completely or just use them and enjoy them.
+In fact, the next four constant registers (^|\p@|, ^|\z@|, ^|\z@skip|,
+and ^|\voidb@x|) have been given private names so that they are untouchable.
+The control sequence |\p@| is used several dozen times as an abbreviation
+for `|pt |', and |\z@| is used quite often to stand for either `|0pt |' or
+`|0 |'; the use of such abbreviations saves almost 10\% of the space
+needed to store the tokens in plain \TeX's macros.  But we shall stick to
+^^{optimization}
+the unabbreviated forms below, so that the macros are more readable.
+
+A different sort of allocation comes next:
+^^|\string|^^|\escapechar|^^|\uppercase|^^|\iftrue|^^|\iffalse|
+\beginlines
+|\outer\def\newif#1{\count@=\escapechar \escapechar=-1|\parbreak%
+|  |^|\expandafter||\expandafter\expandafter|\parbreak%
+|   |^|\edef||\@if#1{true}{\let|^|\noexpand||#1=\noexpand\iftrue}%|\parbreak%
+|  \expandafter\expandafter\expandafter|\parbreak%
+|   \edef\@if#1{false}{\let\noexpand#1=\noexpand\iffalse}%|\parbreak%
+|  \@if#1{false}\escapechar=\count@} % the condition starts out false|\parbreak%
+|\def\@if#1#2{|^|\csname||\expandafter\if@\string#1#2\endcsname}|\parbreak%
+|{\uccode`1=`i \uccode`2=`f \uppercase{\gdef\if@12{}}} % `if' is required|
+\endlines
+For example, the command |\newif\ifalpha| creates a trio of control
+sequences called |\alphatrue|, |\alphafalse|, and |\ifalpha|
+(see Chapter~20).
+
+%\subsection Parameters. |INITEX| sets almost all of the numeric registers
+%and parameters equal to zero; it makes all of the token registers and parameters
+%empty; and it makes all of the box registers void. But there are a few
+%^^{parameters, default values} ^^{default values of parameters}
+%exceptions: ^|\mag| is set initially to~1000, ^|\tolerance| to~10000,
+%^|\maxdeadcycles| to~25, ^|\hangafter| to~1, ^|\escapechar| to~|`\\|, and
+%^|\endlinechar| to~|`\^^M|.  Plain \TeX\ assigns new parameter values as
+%follows:
+\subsection 参数. |INITEX| sets almost all of the numeric registers
+and parameters equal to zero; it makes all of the token registers and parameters
+empty; and it makes all of the box registers void. But there are a few
+^^{parameters, default values} ^^{default values of parameters}
+exceptions: ^|\mag| is set initially to~1000, ^|\tolerance| to~10000,
+^|\maxdeadcycles| to~25, ^|\hangafter| to~1, ^|\escapechar| to~|`\\|, and
+^|\endlinechar| to~|`\^^M|.  Plain \TeX\ assigns new parameter values as
+follows:
+\beginlines
+^|\pretolerance||=100 |^|\tolerance||=200  |^|\hbadness||=1000 |%
+  ^|\vbadness||=1000|
+^|\linepenalty||=10 |^|\hyphenpenalty||=50 |^|\exhyphenpenalty||=50|
+^|\binoppenalty||=700 |^|\relpenalty||=500|
+^|\clubpenalty||=150 |^|\widowpenalty||=150 |^|\displaywidowpenalty||=50|
+^|\brokenpenalty||=100 |^|\predisplaypenalty||=10000|
+^|\doublehyphendemerits||=10000 |^|\finalhyphendemerits||=5000 |%
+  ^|\adjdemerits||=10000|
+^|\tracinglostchars||=1 |^|\uchyph||=1 |^|\delimiterfactor||=901|
+^|\defaulthyphenchar||=`\- |^|\defaultskewchar||=-1 |%
+  ^|\newlinechar||=-1|
+^|\showboxbreadth||=5 |^|\showboxdepth||=3 |^|\errorcontextlines||=5|
+\smallbreak
+^|\hfuzz||=0.1pt |^|\vfuzz||=0.1pt |^|\overfullrule||=5pt|
+^|\hsize||=6.5in |^|\vsize||=8.9in |^|\parindent||=20pt|
+^|\maxdepth||=4pt |^|\splitmaxdepth||=\maxdimen |^|\boxmaxdepth||=\maxdimen|
+^|\delimitershortfall||=5pt |^|\nulldelimiterspace||=1.2pt |%
+  ^|\scriptspace||=0.5pt|
+\smallbreak
+^|\parskip||=0pt plus 1pt|
+^|\abovedisplayskip||=12pt plus 3pt minus 9pt|
+^|\abovedisplayshortskip||=0pt plus 3pt|
+^|\belowdisplayskip||=12pt plus 3pt minus 9pt|
+^|\belowdisplayshortskip||=7pt plus 3pt minus 4pt|
+^|\topskip||=10pt |^|\splittopskip||=10pt|
+^|\parfillskip||=0pt plus 1fil|
+\smallbreak
+^|\thinmuskip||=3mu|
+^|\medmuskip||=4mu plus 2mu minus 4mu|
+^|\thickmuskip||=5mu plus 5mu|
+\endlines
+
+(Some parameters are set by \TeX\ itself as it runs, so it is inappropriate
+to initialize them: ^|\time|, ^|\day|, ^|\month|, and ^|\year| are established
+at the beginning of a job; ^|\outputpenalty| is given a value when an
+|\output| routine is invoked; ^|\predisplaysize|, ^|\displaywidth|,
+and ^|\displayindent| get values just before a display is processed;
+and the values ^|\looseness||=0|, ^|\hangindent||=0pt|, ^|\hangafter||=1|,
+^|\parshape||=0| are assigned at the end of a paragraph and when \TeX\ enters
+internal vertical mode.)
+
+The parameters ^|\baselineskip|, ^|\lineskip|, and ^|\lineskiplimit| have not
+been initialized here, but a macro called ^|\normalbaselines| is defined below;
+this macro sets |\baselineskip=\normalbaselineskip|,
+|\lineskip=\normallineskip|, and |\lineskiplimit=\normallineskiplimit|.
+An indirect approach like this has been used so that several different
+type sizes may be handled, as illustrated in Appendix~E\null.  Plain \TeX\
+deals exclusively with $10\pt$ type, but it supports extension to other styles.
+
+Some ``^{pseudo parameters}'' come next. These quantities behave just like
+internal parameters of \TeX, and users are free to change them in the same
+way, but they are part of the plain \TeX\ format
+rather than primitives of the language. ^^{parameters, pseudo}
+\beginlines
+|\newskip|^|\smallskipamount|| % the amount of a \smallskip|
+|  \smallskipamount=3pt plus1pt minus1pt|
+|\newskip|^|\medskipamount|| % the amount of a \medskip|
+|  \medskipamount=6pt plus2pt minus2pt|
+|\newskip|^|\bigskipamount|| % the amount of a \bigskip|
+|  \bigskipamount=12pt plus4pt minus4pt|
+|\newskip|^|\normalbaselineskip|| % normal value of \baselineskip|
+|  \normalbaselineskip=12pt|
+|\newskip|^|\normallineskip|| % normal value of \lineskip|
+|  \normallineskip=1pt|
+|\newdimen|^|\normallineskiplimit|| % normal value of \lineskiplimit|
+|  \normallineskiplimit=0pt|
+|\newdimen|^|\jot|| % unit of measure for opening up displays|
+|  \jot=3pt|
+|\newcount|^|\interdisplaylinepenalty|| % interline penalty in \displaylines|
+|  \interdisplaylinepenalty=100|
+|\newcount|^|\interfootnotelinepenalty|| % interline penalty in footnotes|
+|  \interfootnotelinepenalty=100|
+\endlines
+
+%\subsection Font information. Now |plain.tex| brings in the data that \TeX\
+%needs to know about how to typeset lots of characters in lots of different
+%fonts. First the ^|\magstep| macros are defined, to support font scaling:
+\subsection 字体信息. Now |plain.tex| brings in the data that \TeX\
+needs to know about how to typeset lots of characters in lots of different
+fonts. First the ^|\magstep| macros are defined, to support font scaling:
+\beginlines
+|\def|^|\magstephalf||{1095 }|
+|\def\magstep#1{\ifcase#1 1000\or|
+|  1200\or 1440\or 1728\or 2074\or 2488\fi\relax}|
+\weakendlines
+(Incidentally, |\magstep| doesn't use ^|\multiply| to compute values,
+since it is supposed to expand to a ^\<number> enroute to \TeX's
+``stomach''; ^^{anatomy} |\multiply| wouldn't work, because
+it is an assignment command, performed only in the stomach.)
+
+One of the main things that distinguishes one format from another
+is the fact that each format gives \TeX\ the necessary knowledge about
+a certain family of typefaces. In this case the ^{Computer Modern} types
+described in Appendix~F are taken as a basis, although there is a provision
+for incorporating other styles.
+\beginlines
+|\font|^|\tenrm||=cmr10        \font\preloaded=cmr9     \font\preloaded=cmr8|
+\nobreak
+|\font\sevenrm=cmr7       \font\preloaded=cmr6     \font\fiverm=cmr5|
+\smallskip
+|\font\teni=cmmi10        \font\preloaded=cmmi9    \font\preloaded=cmmi8|
+\nobreak
+|\font\seveni=cmmi7       \font\preloaded=cmmi6    \font\fivei=cmmi5|
+\smallbreak
+|\font\tensy=cmsy10       \font\preloaded=cmsy9    \font\preloaded=cmsy8|
+\nobreak
+|\font\sevensy=cmsy7      \font\preloaded=cmsy6    \font\fivesy=cmsy5|
+\nobreak\smallskip
+|\font\tenex=cmex10|
+\smallbreak
+|\font\tenbf=cmbx10       \font\preloaded=cmbx9    \font\preloaded=cmbx8|
+\nobreak
+|\font\sevenbf=cmbx7      \font\preloaded=cmbx6    \font\fivebf=cmbx5|
+\smallskip
+|\font\tensl=cmsl10       \font\preloaded=cmsl9    \font\preloaded=cmsl8|
+\nobreak
+|\font\tentt=cmtt10       \font\preloaded=cmtt9    \font\preloaded=cmtt8|
+\nobreak
+|\font\tenit=cmti10       \font\preloaded=cmti9    \font\preloaded=cmti8|
+\nobreak
+|\font\preloaded=cmss10   \font\preloaded=cmssq8|
+\nobreak
+|\font\preloaded=cmssi10  \font\preloaded=cmssqi8|
+\smallskip
+|\font\preloaded=cmr7 scaled \magstep4 % for titles|
+\nobreak
+|\font\preloaded=cmtt10 scaled \magstep2|
+\nobreak
+|\font\preloaded=cmssbx10 scaled \magstep2|
+\smallskip
+|% Additional \preloaded fonts can be specified here.|
+|% (And those that were \preloaded above can be eliminated.)|
+|\let\preloaded=\undefined % preloaded fonts must be declared anew later.|
+\endlines
+Notice that most of the fonts have been called ^|\preloaded|; but the
+control sequence |\preloaded| is made undefined at the very end, so those
+fonts cannot be used directly. There are two reasons for this strange
+approach: First, it is desirable to keep the total number of fonts
+of plain \TeX\ relatively small, because plain \TeX\ is a sort of
+standard format; it shouldn't cost much for someone to acquire all the
+fonts of plain \TeX\ in addition to those he really wants. Second, it
+is desirable on many computer systems to preload the information for
+most of the fonts that people will actually be using, since this saves
+a lot of machine time. The |\preloaded| font
+information goes into \TeX's memory, where it will come alive instantly
+if the user defines the corresponding |\font| again. For example, the
+book format in Appendix~E says `|\font\ninerm=cmr9|'; after that
+assignment has been obeyed, the control sequence |\ninerm| will
+identify the |cmr9| font, whose information does not have to be loaded again.
+
+The exact number and nature of fonts that are preloaded is unimportant;
+the only important thing needed for standardization between machines
+is that sixteen basic fonts (|cmr10|, |cmr7|, \dots,~|cmti10|) should
+actually be loaded. The |plain.tex| files used on different machines
+can be expected to differ widely with respect to preloaded fonts,
+since the choice of how many fonts to preload and the selection of the
+most important fonts depends on local conditions.
+For example, at the author's university it is useful to preload a
+font that contains the Stanford seal, but that particular font is not
+very popular at Berkeley.
+
+Most of these fonts have the default values of\/ ^|\hyphenchar| and
+^|\skewchar|, namely |`-| and |-1|; but the math italic and math symbol fonts
+have special |\skewchar| values, which are defined next:
+\beginlines
+|\skewchar\teni='177 \skewchar\seveni='177 \skewchar\fivei='177|
+|\skewchar\tensy='60 \skewchar\sevensy='60 \skewchar\fivesy='60|
+\endlines
+
+Once the fonts are loaded, they are also grouped into families for
+use in math setting, and shorthand names like ^|\rm| and~^|\it| are defined:
+\beginlines
+|\textfont0=\tenrm \scriptfont0=\sevenrm |^|\scriptscriptfont||0=\fiverm|
+\nobreak
+|\def\rm{\fam0 \tenrm}|
+^|\textfont||1=\teni  |^|\scriptfont||1=\seveni  \scriptscriptfont1=\fivei|
+\nobreak
+|\def|^|\mit||{\fam1 } \def|^|\oldstyle||{\fam1 \teni}|
+|\textfont2=\tensy \scriptfont2=\sevensy \scriptscriptfont2=\fivesy|
+\nobreak
+|\def|^|\cal||{\fam2 }|
+|\textfont3=\tenex \scriptfont3=\tenex   \scriptscriptfont3=\tenex|
+\smallbreak
+|\newfam\itfam \def\it{\fam\itfam\tenit} \textfont\itfam=\tenit|
+|\newfam\slfam \def|^|\sl||{\fam\slfam\tensl} \textfont\slfam=\tensl|
+|\newfam\bffam \def|^|\bf||{\fam\bffam\tenbf} \textfont\bffam=\tenbf|
+\nobreak
+|  \scriptfont\bffam=\sevenbf   \scriptscriptfont\bffam=\fivebf|
+^|\newfam||\ttfam \def|^|\tt||{\fam\ttfam\tentt} \textfont\ttfam=\tentt|
+\endlines
+
+%\subsection Macros for text. The fifth part of |plain.tex| introduces
+%macros that do basic formatting unrelated to mathematics. First come
+%some macros that were promised above:
+\subsection 用于文本的宏. The fifth part of |plain.tex| introduces
+macros that do basic formatting unrelated to mathematics. First come
+some macros that were promised above:
+\beginlines
+|\def|^|\frenchspacing||{\sfcode`\.=1000 \sfcode`\?=1000 \sfcode`\!=1000|
+\nobreak
+|  \sfcode`\:=1000 \sfcode`\;=1000 |^|\sfcode||`\,=1000 }|
+|\def|^|\nonfrenchspacing||{\sfcode`\.=3000 \sfcode`\?=3000 \sfcode`\!=3000|
+\nobreak
+|  \sfcode`\:=2000 \sfcode`\;=1500 \sfcode`\,=1250 }|
+|\def|^|\normalbaselines||{\lineskip=\normallineskip|
+\nobreak
+|  \baselineskip=\normalbaselineskip \lineskiplimit=\normallineskiplimit}|
+\endlines
+
+The next macros are simple but vital. ^^{control tab}^^{control return}
+^^{control space} First |\|\<tab> and |\|\<return> are defined so that they
+expand to |\|\<space>; this helps to prevent confusion, since all three
+cases look identical when displayed on most computer terminals.
+Then the macros ^|\lq|, ^|\rq|, ^|\lbrack|, and ^|\rbrack| are defined,
+for people who have difficulty typing quotation marks and/or brackets. The
+control sequences ^|\endgraf|
+and ^|\endline| are made equivalent to \TeX's primitive ^|\par| and~^|\cr|
+operations, since it is often useful to redefine the meanings of\/ |\par|
+and~|\cr| themselves. Then come the definitions of\/ ^|\space| (a blank space),
+^|\empty| (a~list of no tokens), and ^|\null| (an~empty hbox). Finally,
+^|\bgroup| and ^|\egroup| are made to provide ``implicit'' grouping characters
+that turn out to be especially useful in macro definitions. \ (See Chapters
+24--26 and Appendix~D for information about ^{implicit characters}.)
+\beginlines
+|\def\^^I{\ } \def\^^M{\ }|
+|\def\lq{`} \def\rq{'} \def\lbrack{[} \def\rbrack{]}|
+|\let\endgraf=\par \let\endline=\cr|
+|\def\space{ } \def\empty{} \def\null{\hbox{}}|
+|\let\bgroup={ \let\egroup=}|
+\endlines
+
+Something a bit tricky comes up now in the definitions of\/ ^|\obeyspaces|
+and ^|\obeylines|, since \TeX\ is only ``half obedient'' while these
+definitions are half finished:
+\beginlines
+|\def\obeyspaces{\catcode`\ =\active}|
+|{\obeyspaces\global\let =\space}|
+|{\catcode`\^^M=\active % these lines must end with `%'|
+\nobreak
+|  \gdef\obeylines{\catcode`\^^M=\active \let^^M=\par}%|
+\nobreak
+|  \global\let^^M=\par} % this is in case ^^M appears in a \write|
+\endlines
+The |\obeylines| macro says `|\let^^M=\par|' instead of `|\def^^M{\par}|'
+because the |\let| technique allows constructions such as
+`|\let\par=\cr| |\obeylines| ^|\halign||{...}|' in which ^|\cr|'s need
+not be given within the alignment.
+
+The ^|\loop||...|^|\repeat| macro provides for iterative operations
+as illustrated at the end of Chapter~20. In this macro and several others,
+the control sequence `^|\next|' is given a temporary value that is not
+going to be needed later; thus, |\next| acts like a ``^{scratch control
+sequence}.''
+\beginlines
+|\def\loop#1\repeat{\def\body{#1}\iterate}|
+|\def\iterate{\body \let\next=\iterate \else\let\next=\relax\fi \next}|
+|\let\repeat=\fi % this makes \loop...\if...\repeat skippable|
+\endlines
+
+Spacing is the next concern. The macros ^|\enskip|, ^|\quad|, and ^|\qquad|
+provide spaces that are legitimate breakpoints within a paragraph;
+^|\enspace|, ^|\thinspace|, and ^|\negthinspace| produce space that cannot
+cause a break (although the space will disappear if it occurs just
+next to certain kinds of breaks). All six of these spaces are relative
+to the current font. You can get horizontal space that
+never disappears by saying `^|\hglue|\<glue>'; this space is able to
+stretch or shrink. Similarly, there's a vertical analog,
+`^|\vglue|\<glue>'.
+The ^|\nointerlineskip| macro suppresses interline glue that would
+ordinarily be inserted before the next box in vertical mode; this is a
+``one shot'' macro, but ^|\offinterlineskip| is more drastic---it sets
+things up so that future ^{interline glue} will be present, but zero.
+There also are macros for potentially breakable vertical spaces:
+^|\smallskip|, ^|\medskip|, and ^|\bigskip|.^^|\topglue|
+\beginlines
+|\def\enskip{\hskip.5em\relax}    \def\enspace{\kern.5em }|
+|\def\quad{\hskip1em\relax}       \def\qquad{\hskip2em\relax}|
+|\def\thinspace{\kern .16667em }  \def\negthinspace{\kern-.16667em }|
+\smallbreak
+|\def\hglue{|^|\afterassignment||\hgl@\skip@=}|
+|\def\hgl@{\leavevmode \count@=\spacefactor \vrule width0pt|
+|  \nobreak\hskip\skip@ \spacefactor=\count@}|
+|\def\vglue{\afterassignment\vgl@\skip@=}|
+|\def\vgl@{\par \dimen@=\prevdepth \hrule height0pt|
+|  \nobreak\vskip\skip@ \prevdepth=\dimen@}|
+|\def\topglue{\nointerlineskip \vglue-\topskip \vglue} % for top of page|
+\smallbreak
+|\def\nointerlineskip{\prevdepth=-1000pt }|
+|\def\offinterlineskip{\baselineskip=-1000pt|
+|  \lineskip=0pt \lineskiplimit=\maxdimen}|
+\smallbreak
+|\def\smallskip{\vskip\smallskipamount}|
+|\def\medskip{\vskip\medskipamount}|
+|\def\bigskip{\vskip\bigskipamount}|
+\endlines
+
+Speaking of breakpoints, the following macros introduce ^{penalty} markers
+that make breaking less, or more, desirable. The ^|\break|, ^|\nobreak|,
+and ^|\allowbreak| macros are intended for use in any mode; the |~|~(tie)
+and ^|\slash| (hyphen-like~`/') macros are intended for horizontal mode.
+The others are intended only for vertical mode, i.e., between paragraphs,
+so they begin with |\par|.
+\beginlines
+|\def\break{\penalty-10000 } \def\nobreak{\penalty10000 }|
+|\def\allowbreak{\penalty0 }|
+|\def~{\penalty10000\ }|
+|\def\slash{/\penalty\exhyphenpenalty}|
+\smallbreak
+|\def|^|\filbreak||{\par\vfil\penalty-200\vfilneg}|
+|\def|^|\goodbreak||{\par\penalty-500 }|
+|\def|^|\eject||{\par\penalty-10000 }|
+|\def|^|\supereject||{\par\penalty-20000 }|
+\smallbreak
+|\def|^|\removelastskip||{\ifdim\lastskip=0pt \else\vskip-\lastskip\fi}|
+|\def|^|\smallbreak||{\par \ifdim\lastskip<\smallskipamount|\parbreak%
+|  \removelastskip \penalty-50 \smallskip \fi}|
+|\def|^|\medbreak||{\par \ifdim\lastskip<\medskipamount|\parbreak%
+|  \removelastskip \penalty-100 \medskip \fi}|
+|\def|^|\bigbreak||{\par \ifdim\lastskip<\bigskipamount|\parbreak%
+|  \removelastskip \penalty-200 \bigskip \fi}|
+\endlines
+
+Boxes are next: ^|\line|, ^|\leftline|, ^|\rightline|, and ^|\centerline|
+produce boxes of the full line width, while ^|\llap| and ^|\rlap| make
+boxes whose effective width is zero. The ^|\underbar| macro puts its
+argument into an hbox with a straight line at a fixed distance under it.
+\beginlines
+|\def\line{\hbox to\hsize}|
+|\def\leftline#1{\line{#1\hss}} \def\rightline#1{\line{\hss#1}}|
+|\def\centerline#1{\line{\hss#1\hss}}|
+\smallskip
+|\def\llap#1{\hbox to 0pt{\hss#1}} \def\rlap#1{\hbox to 0pt{#1\hss}}|
+\smallskip
+|\def\m@th{\mathsurround=0pt }|
+|\def\underbar#1{$\setbox0=\hbox{#1} \dp0=0pt|\parbreak%
+|  \m@th \underline{\box0}$}|
+\endlines
+(Notice that |\underbar| uses math mode to do its job, although the
+operation is essentially non-mathematical in nature. A few of the other
+macros below use math mode in similar ways; thus, \TeX's mathematical
+abilities prove to be useful even when no mathematical typesetting
+is actually being done. A special control sequence ^|\m@th| is
+used to ``turn off'' ^|\mathsurround| when such constructions are
+being performed.)
+
+\smallbreak
+A ^|\strut| is implemented here as a rule of width zero, since this
+takes minimum space and time in applications where numerous struts are
+present.
+\beginlines
+|\newbox\strutbox|
+|\setbox\strutbox=\hbox{\vrule height8.5pt depth3.5pt width0pt}|
+|\def\strut{\relax\ifmmode\copy\strutbox\else\unhcopy\strutbox\fi}|
+\weakendlines
+The `^|\relax|' in this macro and in others below is necessary in case
+|\strut| appears first in an alignment entry, because \TeX\ is in a
+somewhat unpredictable mode at such times (see Chapter~22).
+
+The ^|\ialign| macro provides for ^{alignments} when it is necessary to
+be sure that ^|\tabskip| is initially zero. The ^|\hidewidth| macro can be
+used essentially as |\hfill| in alignment entries that are permitted to
+``stick out'' of their column. There's also ^|\multispan|, which permits
+alignment entries to span one or more columns.
+\beginlines
+|\def\ialign{\everycr={}\tabskip=0pt \halign} % initialized \halign|
+|\def\hidewidth{\hskip\hideskip}|
+\smallbreak
+|\newcount\mscount|
+|\def\multispan#1{\omit \mscount=#1 \loop\ifnum\mscount>1 \sp@n\repeat}|
+|\def\sp@n{\span\omit \advance\mscount by -1 }|
+\endlines
+
+Now we get to the ``^{tabbing}'' macros, which are more complicated than
+anything else in plain \TeX. They keep track of the tab positions by
+maintaining boxes full of empty boxes having the specified widths.
+\ (The best way to understand these macros is probably to watch
+them in action on simple examples, using |\tracingall|.)
+\beginlines
+|\newif\ifus@ \newif\if@cr|
+|\newbox\tabs \newbox\tabsyet \newbox\tabsdone|
+\smallbreak
+|\def|^|\cleartabs||{\global\setbox\tabsyet=\null \setbox\tabs=\null}|
+|\def|^|\settabs||{\setbox\tabs=\null \futurelet\next\sett@b}|
+|\let\+=\relax % in case this file is being read in twice|
+|\def\sett@b{\ifx\next\+ \let\next=\relax % turn off \outerness|\parbreak%
+|    \def\next{\afterassignment\s@tt@b\let\next}%|\parbreak%
+|  \else\let\next=\s@tcols\fi\next}|
+|\def\s@tt@b{\let\next=\relax \us@false\m@ketabbox}|
+|\outer\def|^|\+||{\tabalign} \def\tabalign{\us@true \m@ketabbox}|
+|\def\s@tcols#1\columns{\count@=#1 \dimen@=\hsize|\parbreak%
+|  \loop \ifnum\count@>0 \@nother \repeat}|
+|\def\@nother{\dimen@ii=\dimen@ \divide\dimen@ii by\count@|\parbreak%
+|  \setbox\tabs=\hbox{\hbox to\dimen@ii{}\unhbox\tabs}%|\parbreak%
+|  \advance\dimen@ by-\dimen@ii \advance\count@ by -1 }|
+\smallbreak
+|\def\m@ketabbox{\begingroup|\parbreak%
+|  \global\setbox\tabsyet=\copy\tabs \global\setbox\tabsdone=\null|\parbreak%
+|  \def\cr{\@crtrue\crcr\egroup\egroup|\parbreak%
+|    \ifus@ \unvbox0 |^|\lastbox||\fi \endgroup|\parbreak%
+|    \setbox\tabs=\hbox{\unhbox\tabsyet|^|\unhbox||\tabsdone}}%|\parbreak%
+|  \setbox0=\vbox\bgroup\@crfalse \ialign\bgroup&\t@bbox##\t@bb@x\crcr}|
+\smallbreak
+|\def\t@bbox{\setbox0=\hbox\bgroup}|
+|\def\t@bb@x{\if@cr\egroup % now \box0 holds the column|\parbreak%
+|  \else\hss\egroup \global\setbox\tabsyet=\hbox{\unhbox\tabsyet|\parbreak%
+|      \global\setbox1=\lastbox}% now \box1 holds its size|\parbreak%
+|    \ifvoid1 \global\setbox1=\hbox to\wd0{}%|\parbreak%
+|    \else\setbox0=\hbox to\wd1{\unhbox0}\fi|\parbreak%
+|    \global\setbox\tabsdone=\hbox{\box1\unhbox\tabsdone}\fi|\parbreak%
+|  \box0}|
+\endlines
+The macro |\+| has been declared `^|\outer|' here, so that \TeX\ will
+be better able to detect runaway arguments and definitions (see Chapter~20).
+A non-|\outer| version, called ^|\tabalign|, has also been provided
+in case it is necessary to use |\+| in some ``inner'' place.
+You can use |\tabalign| just like |\+|, except after ^|\settabs|.
+
+\textindent{$\bullet$} Paragraph shapes of a limited but important kind
+are provided by ^|\item|, ^|\itemitem|, and ^|\narrower|. There are also
+two macros that haven't been mentioned before: \ (1)~^|\hang| causes
+hanging indentation by the normal amount of\/ ^|\parindent|, after the
+first line; thus, the entire paragraph will be indented by the same
+amount (unless it began with ^|\noindent|). \ (2)~^|\textindent||{stuff}|
+is like ^|\indent|, but it puts the `|stuff|' into the indentation, flush
+right except for an en~space; it also removes spaces that might follow
+the right brace in `|{stuff}|'. For example, the present paragraph
+was typeset by the commands `|\textindent{$\bullet$} Paragraph shapes
+...|'; the opening `P' occurs at the normal position for a paragraph's
+first letter. ^^|\bullet| ^^|\ignorespaces|
+\beginlines
+|\def\hang{\hangindent\parindent}|
+|\def\item{\par\hang\textindent}|
+|\def\itemitem{\par\indent \hangindent2\parindent \textindent}|
+|\def\textindent#1{\indent\llap{#1\enspace}\ignorespaces}|
+|\def\narrower{\advance\leftskip by\parindent|\parbreak%
+|  \advance\rightskip by\parindent}|
+\endlines
+
+The ^|\beginsection| macro is intended to mark the beginning of a
+new major subdivision in a document; to use it, you say
+`|\beginsection|\<section title>' followed by a blank line (or~|\par|).
+The macro first emits glue and penalties, designed to start a new page
+if the present page is nearly full; then it makes a ^|\bigskip| and
+puts the section title flush left on a line by itself, in boldface type.
+The section title is also displayed on the terminal.
+After a ^|\smallskip|, with page break prohibited, a ^|\noindent|
+command is given; this suppresses indentation in the next paragraph,
+i.e., in the first paragraph of the new section.
+\ (However, the next ``paragraph'' will be empty if vertical mode
+material immediately follows the |\beginsection| command.) ^^|\message|
+\beginlines
+|\outer\def\beginsection#1\par{\vskip0pt plus.3\vsize\penalty-250|\parbreak%
+|  \vskip0pt plus-.3\vsize\bigskip\vskip\parskip|\parbreak%
+|  \message{#1}\leftline{\bf#1}\nobreak\smallskip\noindent}|
+\endlines
+
+Special statements in a mathematical paper are often called ^{theorems},
+lemmas, definitions, axioms, postulates, remarks, corollaries, algorithms,
+facts, conjectures, or some such things, and they generally are
+given special typographic treatment. The ^|\proclaim| macro, which
+was illustrated earlier in this appendix and also in Chapter~20,
+puts the title of the proclamation in boldface, then sets the rest
+of the paragraph in slanted type. The paragraph is followed by
+something similar to ^|\medbreak|, except that the amount of penalty
+is different so that page breaks are discouraged:
+\beginlines
+|\outer\def\proclaim #1. #2\par{\medbreak|\parbreak%
+|  \noindent{\bf#1.\enspace}{\sl#2\par}%|\parbreak%
+|  \ifdim\lastskip<\medskipamount \removelastskip\penalty55\medskip\fi}|
+\endlines
+
+^{Ragged-right setting} is initiated by restricting the spaces between
+words to have a fixed width, and by putting variable space at the right
+of each line. You should not call ^|\raggedright| until your text font
+has already been specified; it is assumed that the ragged-right material
+will not be in a variety of different sizes. \ (If this assumption is
+not valid, a different approach should be used: ^|\fontdimen| parameters
+3 and~4 of the fonts you will be using should be set to zero, by saying,
+e.g., `|\fontdimen3\tenrm=0pt|'. These parameters specify the stretchability
+and shrinkability of ^{interword spaces}.) \ ^^|\spaceskip| ^^|xspaceskip|
+A special macro ^|\ttraggedright| should be used for ragged-right setting
+in ^{typewriter type}, since the spaces between words are generally
+bigger in that style. \ (Spaces are already unstretchable and
+unshrinkable in font~|cmtt|.)
+\beginlines
+|\def\raggedright{\rightskip=0pt plus2em|\parbreak%
+|  \spaceskip=.3333em \xspaceskip=.5em\relax}|
+|\def\ttraggedright{\tt\rightskip=0pt plus2em\relax}|
+\endlines
+
+Now we come to special symbols and accents, which depend primarily on
+the characters available in the Computer Modern fonts. Different
+constructions will be necessary if other styles of type are used.
+When a symbol is built up by forming a box, the ^|\leavevmode| macro
+is called first; this starts a new paragraph, if \TeX\ is in vertical
+mode, but does nothing if \TeX\ is in horizontal mode or math mode.
+\beginlines
+|\chardef\%=`\% \chardef\&=`\& \chardef\#=`\# \chardef\$=`\$|%
+  ^^{control percent}^^{control ampersand}^^{control hash}^^{control dollar}
+|\chardef|^|\ss||="19|
+|\chardef|^|\ae||="1A \chardef|^|\oe||="1B \chardef|^|\o||="1C|
+|\chardef|^|\AE||="1D \chardef|^|\OE||="1E \chardef|^|\O||="1F|
+|\chardef|^|\i||="10 \chardef|^|\j||="11 % dotless letters|
+|\def|^|\aa||{\accent'27a} \def|^|\l||{\char'40l}|
+\smallbreak
+|\def\leavevmode{\unhbox\voidb@x} % begins a paragraph, if necessary|
+|\def\_{\leavevmode \kern.06em \vbox{\hrule width0.3em}}|^^{control underline}
+|\def|^|\L||{\leavevmode\setbox0=\hbox{L}\hbox to\wd0{\hss\char'40L}}|
+|\def|^|\AA||{\leavevmode\setbox0=\hbox{h}\dimen@=\ht0 |%
+  |\advance\dimen@ by-1ex|\parbreak%
+|  \rlap{\raise.67\dimen@\hbox{\char'27}}A}|
+\smallbreak
+|\def|^|\mathhexbox||#1#2#3{\leavevmode|\parbreak%
+|  \hbox{$\m@th \mathchar"#1#2#3$}}|
+|\def|^|\dag||{\mathhexbox279}  \def|^|\ddag||{\mathhexbox27A}|
+|\def|^|\S||{\mathhexbox278} \def|^|\P||{\mathhexbox27B}|
+\smallbreak
+|\def|^|\oalign||#1{\leavevmode\vtop{\baselineskip0pt \lineskip.25ex|\parbreak%
+|  \ialign{##\crcr#1\crcr}}} % put characters over each other|
+|\def|^|\ooalign||{\lineskiplimit-\maxdimen \oalign}|
+|\def|^|\d||#1{\oalign{#1\crcr\hidewidth.\hidewidth}}|
+|\def|^|\b||#1{\oalign{#1\crcr\hidewidth|\parbreak%
+|    \vbox to.2ex{\hbox{\char'26}\vss}\hidewidth}}|
+|\def|^|\c||#1{\setbox0=\hbox{#1}\ifdim\ht0=1ex \accent'30 #1%|\parbreak%
+|  \else{\ooalign{\hidewidth\char'30\hidewidth\crcr\unhbox0}}\fi}|
+|\def|^|\copyright||{{\ooalign|\parbreak%
+|    {\hfil\raise.07ex\hbox{c}\hfil\crcr\mathhexbox20D}}}|
+\smallbreak
+|\def|^|\dots||{\relax\ifmmode\ldots\else$\m@th \ldots\,$\fi}|
+|\def|^|\TeX||{T\kern-.1667em \lower.5ex\hbox{E}\kern-.125em X}|
+\smallbreak
+|\def|^|\`||#1{{\accent"12 #1}} \def|^|\'||#1{{\accent"13 #1}}|
+|\def|^|\v||#1{{\accent"14 #1}} \def|^|\u||#1{{\accent"15 #1}}|
+^^{esc hat}|\def|^|\=||#1{{\accent"16 #1}} \def\^#1{{\accent"5E #1}}|
+|\def|^|\.||#1{{\accent"5F #1}} \def|^|\H||#1{{\accent"7D #1}}|
+^^{esc tilde}|\def\~||#1{{\accent"7E #1}} \def|^|\"||#1{{\accent"7F #1}}|
+|\def|^|\t||#1{{\edef\next{\the\font}\the\textfont1\accent"7F\next#1}}|
+\endlines
+
+At this point three alternative control-symbol ^{accents} are defined,
+suitable for keyboards with extended character sets (cf.~Appendix~C):
+\beginlines
+|\let\^^_=\v       \let\^^S=\u       \let\^^D=\^|
+\endlines
+
+Various ways to fill space with ^{leaders} are provided next.
+\beginlines
+|\def|^|\hrulefill||{\leaders\hrule\hfill}|
+|\def|^|\dotfill||{\cleaders\hbox{$\m@th \mkern1.5mu . \mkern1.5mu$}\hfill}|
+|\def|^|\rightarrowfill||{$\m@th \mathord- \mkern-6mu|\parbreak%
+|  \cleaders\hbox{$\mkern-2mu \mathord- \mkern-2mu$}\hfill|\parbreak%
+|  \mkern-6mu \mathord\rightarrow$}|
+|\def|^|\leftarrowfill|%
+  |{$\m@th \mathord\leftarrow \mkern-6mu|\parbreak%
+|  \cleaders\hbox{$\mkern-2mu \mathord- \mkern-2mu$}\hfill|\parbreak%
+|  \mkern-6mu \mathord-$}|
+\smallbreak
+|\mathchardef\braceld="37A \mathchardef\bracerd="37B|
+|\mathchardef\bracelu="37C \mathchardef\braceru="37D|
+|\def\upbracefill{$\m@th|\parbreak%
+|  \bracelu\leaders\vrule\hfill\bracerd|\parbreak%
+|  \braceld\leaders\vrule\hfill\braceru$}|
+|\def\downbracefill{$\m@th|\parbreak%
+|  \braceld\leaders\vrule\hfill\braceru|\parbreak%
+|  \bracelu\leaders\vrule\hfill\bracerd$}|
+\endlines
+The ^|\upbracefill| and ^|\downbracefill| macros have restricted usage:
+they must appear {\sl all by themselves\/} in an hbox or an alignment entry,
+except for horizontal spacing.
+
+\smallbreak
+Finally, the fifth section of |plain.tex| closes by defining ^|\bye|:
+\beginlines
+^|\outer||\def\bye{\par\vfill\supereject\end} % the recommended way to stop|
+\endlines
+
+%\subsection Macros for math.  The sixth section of |plain.tex| is the
+%longest; but it will suffice to give only excerpts here, because most
+%of it is simply a tedious listing of special symbols together with their
+%font locations, and the same information appears in Appendix~F.
+\subsection 用于数学的宏.  The sixth section of |plain.tex| is the
+longest; but it will suffice to give only excerpts here, because most
+of it is simply a tedious listing of special symbols together with their
+font locations, and the same information appears in Appendix~F.
+
+Some rudimentary things come first: The control sequences ^|\sp| and ^|\sb|
+are provided for people who can't easily type |^| and |_|; there are
+four control symbols that provide spacing corrections; a ``^{discretionary
+times sign}'' ^|\*| is defined; and then there's an interesting set of
+macros that convert |f'''| into |f^{\prime\prime\prime}|:
+\beginlines
+|\let\sp=^ \let\sb=_        {\catcode`\_=\active \global\let_=\_}|\parbreak%
+|\def|^|\,||{\mskip\thinmuskip}  \def|^|\!||{\mskip-\thinmuskip}|\parbreak%
+|\def|^|\>||{\mskip\medmuskip}   \def|^|\;||{\mskip\thickmuskip}|
+|\def\*{\discretionary{\thinspace\the\textfont2\char2}{}{}}|
+|{\catcode`\^^Z=\active \gdef^^Z{\not=}} % ^^Z is like \ne in math|
+\smallbreak
+|{\catcode`\'=\active \gdef'{^\bgroup\prim@s}}|\parbreak%
+|\def\prim@s{\prime\futurelet\next\pr@m@s}|\parbreak%
+|\def\pr@m@s{\ifx'\next\let\nxt\pr@@@s|%
+  | \else\ifx^\next\let\nxt\pr@@@t|\parbreak%
+|  \else\let\nxt\egroup\fi\fi \nxt}|\parbreak%
+|\def\pr@@@s#1{\prim@s} \def\pr@@@t#1#2{#2\egroup}|
+\endlines
+
+The next job is to define ^{Greek letters} and other symbols of type ^{Ord}.
+Uppercase Greek letters are assigned hexadecimal codes of the form \hex{7xxx},
+so that they will change families when ^|\fam| changes.
+Three dots `$\,\cdots\,$' are used here and below to indicate that
+additional symbols, having similar definitions, are listed in Appendix~F.
+\beginlines
+|\mathchardef|^|\alpha||="010B|\qquad$\cdots$\qquad|\mathchardef\omega="0121|
+|\mathchardef|^|\Gamma||="7000|\qquad$\cdots$\qquad|\mathchardef\Omega="700A|
+|\mathchardef|^|\aleph||="0240|\qquad$\cdots$\qquad%
+  |\mathchardef\spadesuit="027F|
+|\def|^|\hbar||{{\mathchar'26\mkern-9muh}}|
+|\def|^|\surd||{{\mathchar"1270}}|
+|\def|^|\angle||{{\vbox{\ialign{$\m@th\scriptstyle##$\crcr|\parbreak%
+|      \not\mathrel{\mkern14mu}\crcr \noalign{\nointerlineskip}|\parbreak%
+|      \mkern2.5mu\leaders\hrule height.34pt\hfill\mkern2.5mu\crcr}}}}|
+\endlines
+
+Large operators are assigned hexadecimal codes of the form \hex{1xxx}:
+\beginlines
+|\mathchardef\smallint="1273|
+|\mathchardef|^|\sum||="1350|\qquad$\cdots$\qquad|\mathchardef\biguplus="1355|
+|\mathchardef\intop="1352  \def|^|\int||{\intop\nolimits}|
+|\mathchardef\ointop="1348 \def\oint{\ointop\nolimits}|
+\endlines
+Integral signs get special treatment so that their limits won't be set
+above and below.
+
+\smallskip
+Binary operations are next; nothing exciting here.
+\beginlines
+|\mathchardef\pm="2206|\qquad$\cdots$\qquad|\mathchardef\amalg="2271|
+\endlines
+
+Relations are also fairly straightforward, except for the ones that are
+constructed from other characters. The ^|\mapstochar| is a character
+`$\mapstochar\mskip5mu$' of width zero that is quite useless by itself,
+but it combines with right arrows to make ^|\mapsto| `$\mapsto$' and
+^|\longmapsto| `$\longmapsto$'. Similarly, ^|\not| is a relation character of
+width zero that puts a slash over the character that follows.  When two
+relations are adjacent in a math formula, \TeX\ puts no space between them.
+\beginlines
+|\mathchardef\leq="3214|\qquad$\cdots$\qquad|\mathchardef\perp="323F|
+|\def|^|\joinrel||{\mathrel{\mkern-3mu}}|
+|\def|^|\relbar||{\mathrel{\smash-}} \def|^|\Relbar||{\mathrel=}|
+|\def|^|\longrightarrow||{\relbar\joinrel\rightarrow}|\parbreak%
+|\def|^|\Longrightarrow||{\Relbar\joinrel\Rightarrow}|
+|\def|^|\longleftarrow||{\leftarrow\joinrel\relbar}|\parbreak%
+|\def|^|\Longleftarrow||{\Leftarrow\joinrel\Relbar}|
+|\def|^|\longleftrightarrow||{\leftarrow\joinrel\rightarrow}|\parbreak%
+|\def|^|\Longleftrightarrow||{\Leftarrow\joinrel\Rightarrow}|
+|\mathchardef\mapstochar="322F \def\mapsto{\mapstochar\rightarrow}|\parbreak%
+|\def\longmapsto{\mapstochar\longrightarrow}|
+|\mathchardef\lhook="312C \def|^|\hookrightarrow||{\lhook\joinrel\rightarrow}|
+|\mathchardef\rhook="312D \def|^|\hookleftarrow||{\leftarrow\joinrel\rhook}|
+\smallbreak
+|\def|^|\neq||{\not=}   \def|^|\models||{\mathrel|\||\joinrel=}|
+|\def|^|\bowtie||{\mathrel\triangleright\joinrel\mathrel\triangleleft}|
+\weakendlines
+
+After defining characters ^|\ldotp| and ^|\cdotp| that act as math
+punctuation, it is easy to define ^|\ldots| and ^|\cdots| macros that
+\vadjust{\penalty-50} % fairly good breakpoint (on July 27, 1983)
+give the proper spacing in most circumstances. Vertical and diagonal
+dots (^|\vdots| and ^|\ddots|) are also provided here:
+\beginlines
+|\mathchardef\ldotp="613A\mathchardef\cdotp="6201\mathchardef\colon="603A|
+|\def\ldots{\mathinner{\ldotp\ldotp\ldotp}}|
+|\def\cdots{\mathinner{\cdotp\cdotp\cdotp}}|
+|\def\vdots{\vbox{\baselineskip=4pt \lineskiplimit=0pt|
+|    \kern6pt \hbox{.}\hbox{.}\hbox{.}}}|
+|\def\ddots{\mathinner{\mkern1mu\raise7pt\vbox{\kern7pt\hbox{.}}\mkern2mu|
+|    \raise4pt\hbox{.}\mkern2mu\raise1pt\hbox{.}\mkern1mu}}|
+\endlines
+
+Most of the math accents are handled entirely by the ^|\mathaccent|
+primitive, but a few of the variable-width ones are constructed the
+hard way:
+\beginlines
+|\def\acute{\mathaccent"7013 }|\qquad$\cdots$\qquad%
+  |\def\ddot{\mathaccent"707F }|
+|\def|^|\widetilde||{\mathaccent"0365 } \def|^|\widehat||{\mathaccent"0362 }|
+|\def|^|\overrightarrow||#1{\vbox{\ialign{##\crcr|\parbreak%
+|     \rightarrowfill\crcr\noalign{\kern-1pt\nointerlineskip}|\parbreak%
+|     $\hfil\displaystyle{#1}\hfil$\crcr}}}|
+|\def|^|\overleftarrow||#1{\vbox{\ialign{##\crcr|\parbreak%
+|     \leftarrowfill\crcr\noalign{\kern-1pt\nointerlineskip}|\parbreak%
+|     $\hfil\displaystyle{#1}\hfil$\crcr}}}|
+|\def|^|\overbrace|%
+  |#1{\mathop{\vbox{\ialign{##\crcr\noalign{\kern3pt}|\parbreak%
+|     \downbracefill\crcr\noalign{\kern3pt\nointerlineskip}|\parbreak%
+|     $\hfil\displaystyle{#1}\hfil$\crcr}}}|^|\limits||}|
+|\def|^|\underbrace||#1{\mathop{\vtop{\ialign{##\crcr|\parbreak%
+|     $\hfil\displaystyle{#1}\hfil$\crcr|%
+  |\noalign{\kern3pt\nointerlineskip}|\parbreak%
+|     \upbracefill\crcr\noalign{\kern3pt}}}}\limits}|
+|\def|^|\skew||#1#2#3{{#2{#3\mkern#1mu}\mkern-#1mu}{}}|
+\endlines
+
+Now we come to 24 delimiters that can change their size: ^^|\delimiter|
+\beginlines
+|\def\langle{\delimiter"426830A }      \def\rangle{\delimiter"526930B }|
+|\def\lbrace{\delimiter"4266308 }      \def\rbrace{\delimiter"5267309 }|
+|\def\lceil{\delimiter"4264306 }       \def\rceil{\delimiter"5265307 }|
+|\def\lfloor{\delimiter"4262304 }      \def\rfloor{\delimiter"5263305 }|
+|\def\lgroup{\delimiter"400033A }      \def\rgroup{\delimiter"500033B }|
+|\def\lmoustache{\delimiter"4000340 }  \def\rmoustache{\delimiter"5000341 }|%
+  \kern-2pt
+|\def\uparrow{\delimiter"3222378 }     \def\Uparrow{\delimiter"322A37E }|
+|\def\downarrow{\delimiter"3223379 }   \def\Downarrow{\delimiter"322B37F }|
+|\def\updownarrow{\delimiter"326C33F } \def\arrowvert{\delimiter"033C000 }|
+|\def\Updownarrow{\delimiter"326D377 } \def\Arrowvert{\delimiter"033D000 }  |
+|\def\vert{\delimiter"026A30C }        \def\Vert{\delimiter"026B30D }     |
+|\def\backslash{\delimiter"026E30F }   \def\bracevert{\delimiter"033E000 }|
+\endlines
+
+The `^|\big||...|^|\Bigg|' macros produce specific sizes: ^^|\Big|^^|\bigg|
+\beginlines
+|\def\bigl{\mathopen\big} \def\bigm{\mathrel\big} \def\bigr{\mathclose\big}|
+|\def\Bigl{\mathopen\Big} \def\Bigm{\mathrel\Big} \def\Bigr{\mathclose\Big}|
+|\def\biggl{\mathopen\bigg}            \def\Biggl{\mathopen\Bigg}|
+|\def\biggm{\mathrel\bigg}             \def\Biggm{\mathrel\Bigg}|
+|\def\biggr{\mathclose\bigg}           \def\Biggr{\mathclose\Bigg}|
+|\def\big#1{{\hbox{$\left#1\vbox to 8.5pt{}\right.\n@space$}}}|
+|\def\Big#1{{\hbox{$\left#1\vbox to 11.5pt{}\right.\n@space$}}}|
+|\def\bigg#1{{\hbox{$\left#1\vbox to 14.5pt{}\right.\n@space$}}}|
+|\def\Bigg#1{{\hbox{$\left#1\vbox to 17.5pt{}\right.\n@space$}}}|
+|\def\n@space{\nulldelimiterspace=0pt \m@th}|
+\endlines
+
+There are a few other simple abbreviations related to delimiters:
+\beginlines
+|\def|^|\choose||{\atopwithdelims()}|
+|\def|^|\brack||{\atopwithdelims[]}|
+|\def|^|\brace||{\atopwithdelims\{\}}|
+|\def|^|\sqrt||{\radical"270370 }|
+\endlines
+
+And now we come to something more interesting. The ^|\mathpalette| operation
+constructs a formula in all four styles; it is applied here in the
+implementation of\/ ^|\phantom|, ^|\smash|, ^|\root|, and other
+operations.
+\beginlines
+|\def\mathpalette#1#2{\mathchoice{#1\displaystyle{#2}}|\parbreak%
+|  {#1\textstyle{#2}}{#1\scriptstyle{#2}}{#1\scriptscriptstyle{#2}}}|
+\smallbreak
+|\newbox\rootbox|
+|\def\root#1\of{\setbox\rootbox=|\parbreak%
+|  \hbox{$\m@th \scriptscriptstyle{#1}$}|\parbreak%
+|  \mathpalette\r@@t}|
+|\def\r@@t#1#2{\setbox0=\hbox{$\m@th #1\sqrt{#2}$}|\parbreak%
+|  \dimen@=\ht0 \advance\dimen@ by-\dp0|\parbreak%
+|  \mkern5mu \raise.6\dimen@\copy\rootbox \mkern-10mu \box0}|
+\smallbreak
+|\newif\ifv@ \newif\ifh@|
+|\def|^|\vphantom||{\v@true\h@false\ph@nt}|
+|\def|^|\hphantom||{\v@false\h@true\ph@nt}|
+|\def\phantom{\v@true\h@true\ph@nt}|
+|\def\ph@nt{\ifmmode\def\next{\mathpalette\mathph@nt}%|\parbreak%
+|  \else\let\next=\makeph@nt\fi \next}|
+|\def\makeph@nt#1{\setbox0=\hbox{#1}\finph@nt}|
+|\def\mathph@nt#1#2{\setbox0=\hbox{$\m@th#1{#2}$}\finph@nt}|
+|\def\finph@nt{\setbox2=\null \ifv@ \ht2=\ht0 \dp2=\dp0 \fi|\parbreak%
+|  \ifh@ \wd2=\wd0 \fi \box2 }|
+|\def\mathstrut{\vphantom(}|
+\smallbreak
+|\def\smash{\relax % \relax, in case this comes first in \halign|\parbreak%
+|  \ifmmode\def\next{\mathpalette\mathsm@sh}\else\let\next\makesm@sh|\parbreak%
+|  \fi \next}|
+|\def\makesm@sh#1{\setbox0=\hbox{#1}\finsm@sh}|
+|\def\mathsm@sh#1#2{\setbox0=\hbox{$\m@th#1{#2}$}\finsm@sh}|
+|\def\finsm@sh{\ht0=0pt \dp0=0pt \box0 }|
+\smallbreak
+|\def|^|\cong||{\mathrel{\mathpalette\@vereq\sim}} % \sim over =|\parbreak%
+|\def\@vereq#1#2{\lower.5pt\vbox{\baselineskip0pt \lineskip-.5pt|\parbreak%
+|    \ialign{$\m@th#1\hfil##\hfil$\crcr#2\crcr=\crcr}}}|
+|\def|^|\notin||{\mathrel{\mathpalette\c@ncel\in}}|\parbreak%
+|\def\c@ncel#1#2{\ooalign{$\hfil#1\mkern1mu/\hfil$\crcr$#1#2$}}|\parbreak%
+|\def|^|\rightleftharpoons||{\mathrel{\mathpalette\rlh@{}}}|\parbreak%
+|\def\rlh@#1{\vcenter{\hbox{\ooalign{\raise2pt|\parbreak%
+|          \hbox{$#1\rightharpoonup$}\crcr $#1\leftharpoondown$}}}}|
+|\def|^|\buildrel||#1\over#2{\mathrel{\mathop{\kern0pt #2}\limits^{#1}}}|
+|\def|^|\doteq||{\buildrel\textstyle.\over=}|
+\endlines
+These definitions illustrate how other built-up
+symbol combinations could be defined to work in all four styles.
+
+Alternate names are defined now:
+\beginlines
+|\let|^|\ne||=\neq        \let|^|\le||=\leq         \let|^|\ge||=\geq|
+^^{esc vert}^^{esc lbrace}^^{esc rbrace}%
+|\let\{=\lbrace      \let\|\||=\Vert         \let\}=\rbrace|
+|\let|^|\to||=\rightarrow \let|^|\gets||=\leftarrow \let|^|\owns||=\ni|
+|\let|^|\land||=\wedge    \let|^|\lor||=\vee        \let|^|\lnot||=\neg|
+|\def|^|\iff||{\;\Longleftrightarrow\;}|
+\endlines
+
+The 32 common functions whose names generally appear in roman letters are listed
+in Chapter~18. Only a few of the definitions need to be shown here:
+^^|\arccos| ^^|\cos| ^^|\csc| ^^|\exp| ^^|\ker| ^^|\limsup| ^^|\min|
+^^|\sinh| ^^|\arcsin| ^^|\cosh| ^^|\deg| ^^|\gcd| ^^|\lg| ^^|\ln| ^^|\Pr|
+^^|\sup| ^^|\arctan| ^^|\cot| ^^|\det| ^^|\hom| ^^|\lim| ^^|\log| ^^|\sec|
+^^|\tan| ^^|\arg| ^^|\coth| ^^|\dim| ^^|\inf| ^^|\liminf| ^^|\max|
+^^|\sin| ^^|\tanh|
+\beginlines
+|\def\arccos{|^|\mathop||{\rm arccos}|^|\nolimits||}|
+  \hskip100pt$\cdots$\qquad|\def\tanh{|^|\mathop||{\rm tanh}|^|\nolimits||}|
+|\def\det{\mathop{\rm det}}|\qquad$\cdots$\qquad|\def\sup{\mathop{\rm sup}}|
+|\def\liminf{\mathop{\rm lim\,inf}} \def\limsup{\mathop{\rm lim\,sup}}|
+\smallskip
+|\def|^|\bmod||{\mskip-\medmuskip \mkern5mu|\parbreak%
+|  |^|\mathbin||{\rm mod} \penalty900 \mkern5mu \mskip-\medmuskip}|
+|\def|^|\pmod||#1{\allowbreak \mkern18mu ({\rm mod}\,\,#1)}|
+\endlines
+
+The definition of\/ ^|\matrix| goes to some pains to ensure that two
+$n$-rowed matrices will have the same height and the same depth, unless
+at least one of their rows is unusually big. The definition of
+^|\bordermatrix| is even more complicated, but it seems to work
+reasonably well; it uses a constant ^|\p@renwd| that represents the
+width of a big extensible left parenthesis.
+\beginlines
+|\def\matrix#1{\null\,|^|\vcenter||{\normalbaselines\m@th|\parbreak%
+|    \ialign{\hfil$##$\hfil&&\quad\hfil$##$\hfil\crcr|\parbreak%
+|      \mathstrut\crcr\noalign{\kern-\baselineskip}|\parbreak%
+|      #1\crcr\mathstrut\crcr\noalign{\kern-\baselineskip}}}\,}|
+\smallbreak
+|\newdimen\p@renwd \setbox0=\hbox{\tenex B} \p@renwd=\wd0|
+|\def\bordermatrix#1{\begingroup \m@th|\parbreak%
+|  \setbox0=\vbox{\def\cr|%
+  |{\crcr\noalign{\kern2pt\global\let\cr=\endline}}|\parbreak%
+|      \ialign{$##$\hfil\kern2pt\kern\p@renwd|%
+  |&\thinspace\hfil$##$\hfil|\parbreak%
+|        &&\quad\hfil$##$\hfil\crcr|\parbreak%
+|        \omit\strut\hfil\crcr\noalign{\kern-\baselineskip}|\parbreak%
+|        #1\crcr\omit\strut\cr}}|\parbreak%
+|  \setbox2=\vbox{\unvcopy0 \global\setbox1=\lastbox}|\parbreak%
+|  \setbox2=\hbox{\unhbox1 \unskip \global\setbox1=\lastbox}|\parbreak%
+|  \setbox2=\hbox{$\kern\wd1\kern-\p@renwd \left( \kern-\wd1|\parbreak%
+|    \global\setbox1=\vbox{\box1\kern2pt}|\parbreak%
+|    \vcenter{\kern-\ht1 \unvbox0 \kern-\baselineskip} \,\right)$}|\parbreak%
+|  \null\;\vbox{\kern\ht1\box2}\endgroup}|
+\endlines
+
+The next macros are much simpler:
+\beginlines
+|\def|^|\cases||#1{\left\{\,\vcenter{\normalbaselines\m@th|\parbreak%
+|    \ialign{$##\hfil$&\quad##\hfil\crcr#1\crcr}}\right.}|
+|\def|^|\pmatrix||#1{\left( \matrix{#1} \right)}|
+\endlines
+
+Finally there are macros for displayed equations:
+\beginlines
+|\def|^|\openup||{\afterassignment\@penup\dimen@=}|\parbreak%
+|\def\@penup{\advance\lineskip\dimen@|\parbreak%
+|  \advance\baselineskip\dimen@ \advance\lineskiplimit\dimen@}|
+|\def|^|\eqalign||#1{\null\,\vcenter{\openup1\jot \m@th|\parbreak%
+|  \ialign{\strut\hfil$\displaystyle{##}$&$\displaystyle{{}##}$\hfil|\parbreak%
+|      \crcr#1\crcr}}\,}|
+\smallbreak
+|\newif\ifdt@p|
+|\def\displ@y{\global\dt@ptrue \openup1\jot \m@th|\parbreak%
+|  |^|\everycr||{\noalign{\ifdt@p \global\dt@pfalse|\parbreak%
+|      \vskip-\lineskiplimit \vskip\normallineskiplimit|\parbreak%
+|      \else \penalty|^|\interdisplaylinepenalty|| \fi}}}|
+|\def\@lign{\tabskip=0pt\everycr={}} % restore inside \displ@y|
+|\def|^|\displaylines||#1{\displ@y|\parbreak%
+|  \halign{\hbox to\displaywidth{|%
+ |$\hfil\@lign\displaystyle##\hfil$}\crcr|\parbreak%
+|    #1\crcr}}|
+\smallbreak
+|\def|^|\eqalignno||#1{\displ@y \tabskip=|^|\centering|\parbreak%
+|  \halign to\displaywidth{\hfil$\@lign\displaystyle{##}$\tabskip=0pt|\parbreak%
+|    &$\@lign\displaystyle{{}##}$\hfil\tabskip=\centering|\parbreak%
+|    &\llap{$\@lign##$}\tabskip=0pt\crcr|\parbreak%
+|    #1\crcr}}|
+|\def|^|\leqalignno||#1{\displ@y \tabskip=\centering|\parbreak%
+|  \halign to\displaywidth{\hfil$\@lign\displaystyle{##}$\tabskip=0pt|\parbreak%
+|    &$\@lign\displaystyle{{}##}$\hfil\tabskip=\centering|\parbreak%
+|    &\kern-\displaywidth\rlap{$\@lign##$}\tabskip=\displaywidth\crcr|\parbreak%
+|    #1\crcr}}|
+\endlines
+The value of\/ |\lineskiplimit| is assumed to be |\normallineskiplimit|
+plus the accumulated amount of ``opening up.'' Thus, the |\vskip|
+instructions in |\displ@y| will compensate for the fact that the
+first baseline of an alignment is separated by an opened-up baselineskip
+from the last line preceding the display.
+
+%\subsection Macros for output. The |plain.tex| file also contains the output
+%routine described in Chapters 15 and~23. First there are simple
+%facilities related to page numbers, headings, and footings:
+\subsection 用于输出的宏. The |plain.tex| file also contains the output
+routine described in Chapters 15 and~23. First there are simple
+facilities related to page numbers, headings, and footings:
+\beginlines
+|\countdef|^|\pageno||=0 \pageno=1 % first page is number 1|
+|\newtoks|^|\headline|| \headline={\hfil} % headline is normally blank|
+|\newtoks|^|\footline|| \footline={\hss\tenrm\folio\hss}|\parbreak%
+|  % footline is normally a centered page number in font \tenrm|
+|\def|^|\folio||{\ifnum\pageno<0 \romannumeral-\pageno \else\number\pageno \fi}|
+|\def|^|\nopagenumbers||{\footline={\hfil}} % blank out the footline|
+|\def|^|\advancepageno||{\ifnum\pageno<0 \global\advance\pageno by -1|\parbreak%
+|  \else\global\advance\pageno by 1 \fi} % increase |\||pageno|\|
+\smallbreak
+|\newif\ifr@ggedbottom|
+|\def|^|\raggedbottom||{\topskip10pt plus60pt \r@ggedbottomtrue}|
+|\def|^|\normalbottom||{\topskip10pt \r@ggedbottomfalse} % undoes \raggedbottom|
+\endlines
+
+The ^|\footnote| macro has a few subtle features that can best be appreciated
+by someone who reads Chapter~15 very carefully. It also uses some
+^|\bgroup| and ^|\futurelet| and ^|\aftergroup| trickery, so that the footnote
+text does not need to be a ^{parameter} to |\vfootnote|:
+\beginlines
+^|\newinsert||\footins|
+|\def\footnote#1{\let\@sf=\empty|%
+ | % parameter #2 (the text) is read later|\parbreak%
+|  \ifhmode\edef\@sf{\spacefactor=\the\spacefactor}\/\fi|\parbreak%
+|  #1\@sf\vfootnote{#1}}|
+|\def|^|\vfootnote||#1{\insert\footins\bgroup|\parbreak%
+|  \interlinepenalty=\interfootnotelinepenalty|\parbreak%
+|  \splittopskip=\ht\strutbox % top baseline for broken footnotes|\parbreak%
+|  \splitmaxdepth=\dp\strutbox \floatingpenalty=20000|\parbreak%
+|  \leftskip=0pt \rightskip=0pt \spaceskip=0pt \xspaceskip=0pt|\parbreak%
+|  \textindent{#1}\footstrut\futurelet\next\fo@t}|
+|\def\fo@t{\ifcat\bgroup\noexpand\next \let\next\f@@t|\parbreak%
+|  \else\let\next\f@t\fi \next}|
+|\def\f@@t{\bgroup\aftergroup\@foot\let\next}|
+|\def\f@t#1{#1\@foot}|
+|\def\@foot{\strut\egroup}|
+|\def\footstrut{\vbox to\splittopskip{}}|
+|\skip\footins=\bigskipamount % space added when footnote is present|
+|\count\footins=1000 % footnote magnification factor (1 to 1)|
+|\dimen\footins=8in % maximum footnotes per page|
+\endlines
+
+^{Floating insertions} are handled by doing an ^|\insert| whose
+vertical list consists of a penalty item followed by a single box:
+\beginlines
+|\newinsert\topins \newif\ifp@ge \newif\if@mid|
+|\def|^|\topinsert||{\@midfalse\p@gefalse\@ins}|
+|\def|^|\midinsert||{\@midtrue\@ins}|
+|\def|^|\pageinsert||{\@midfalse\p@getrue\@ins}|
+|\skip\topins=0pt % no space added when a topinsert is present|
+|\count\topins=1000 % magnification factor (1 to 1)|
+|\dimen\topins=\maxdimen % no limit per page|
+|\def\@ins{\par\begingroup\setbox0=\vbox\bgroup} % start a \vbox|
+|\def\endinsert{\egroup % finish the \vbox|\parbreak%
+|  \if@mid \dimen@=\ht0 \advance\dimen@ by\dp\z@ |%
+ |\advance\dimen@ by12\p@|\parbreak%
+|    \advance\dimen@ by\pagetotal \advance\dimen@ by-\pageshrink|\parbreak%
+|    \ifdim\dimen@>\pagegoal \@midfalse\p@gefalse\fi\fi|\parbreak%
+|  \if@mid \bigskip \box0 \bigbreak|\parbreak%
+|  \else\insert\topins{\penalty100 % floating insertion|\parbreak%
+|    |^|\splittopskip||=0pt |^|\splitmaxdepth||=\maxdimen |%
+  ^|\floatingpenalty||=0|\parbreak%
+|    \ifp@ge \dimen@=\dp0|\parbreak%
+|     \vbox to\vsize{\unvbox0 \kern-\dimen@} % depth is zero|\parbreak%
+|    \else \box0 \nobreak\bigskip\fi}\fi\endgroup}|
+\endlines
+
+Most of the ^|\output| routine appears in Chapter 23; it is given here
+in full:
+\beginlines
+|\output={\plainoutput}|
+|\def|^|\plainoutput|%
+  |{\shipout\vbox{\makeheadline\pagebody\makefootline}%|\parbreak%
+|  \advancepageno|\parbreak%
+|  \ifnum\outputpenalty>-20000 \else\dosupereject\fi}|
+|\def|^|\pagebody||{\vbox to\vsize{\boxmaxdepth=\maxdepth \pagecontents}}|
+|\def|^|\makeheadline||{\vbox to 0pt{\vskip-22.5pt|\parbreak%
+|    \line{\vbox to8.5pt{}\the\headline}\vss}\nointerlineskip}|
+|\def|^|\makefootline||{\baselineskip=24pt \line{\the\footline}}|
+|\def|^|\dosupereject|%
+  |{\ifnum\insertpenalties>0 % something is being held over|\parbreak%
+|  \line{}\kern-\topskip\nobreak\vfill\supereject\fi}|
+\smallbreak
+|\def|^|\pagecontents||{\ifvoid\topins\else\unvbox\topins\fi|\parbreak%
+|  \dimen@=\dp255 \unvbox255|\parbreak%
+|  \ifvoid\footins\else % footnote info is present|\parbreak%
+|    \vskip\skip\footins \footnoterule \unvbox\footins\fi|\parbreak%
+|  \ifr@ggedbottom \kern-\dimen@ \vfil \fi}|
+|\def|^|\footnoterule||{\kern-3pt|\parbreak%
+|  \hrule width 2truein \kern 2.6pt} % the \hrule is .4pt high|
+\endlines
+
+%\subsection Hyphenation and everything else.  The last part of |plain.tex|
+%reads the hyphenation patterns and exceptions found on file ^|hyphen.tex|
+%(see Appendix~H\null); then it defines a few miscellaneous macros, sets
+%up ^|\rm| type, and that's all!
+\subsection 连字及其他.  The last part of |plain.tex|
+reads the hyphenation patterns and exceptions found on file ^|hyphen.tex|
+(see Appendix~H\null); then it defines a few miscellaneous macros, sets
+up ^|\rm| type, and that's all!
+\beginlines
+^|\lefthyphenmin||=2 |^|\righthyphenmin||=3 % disallow x- or -xx breaks|
+|\input hyphen % the hyphenation patterns and exceptions|
+\nobreak\smallskip
+|\def|^|\magnification||{|^|\afterassignment||\m@g\count@}|
+|\def\m@g{\mag=\count@|\parbreak%
+|  \hsize6.5truein\vsize8.9truein\dimen\footins8truein}|
+\smallbreak
+|\def|^|\tracingall|%
+  |{\tracingonline=1 \tracingcommands=2 \tracingstats=2|\parbreak%
+|  \tracingpages=1 \tracingoutput=1 \tracinglostchars=1 |\parbreak%
+|  \tracingmacros=2 \tracingparagraphs=1 \tracingrestores=1 |\parbreak%
+|  \showboxbreadth=\maxdimen \showboxdepth=\maxdimen \errorstopmode}|
+\smallbreak
+|\def|^|\showhyphens|%
+  |#1{\setbox0=\vbox{\parfillskip0pt \hsize=\maxdimen \tenrm|\parbreak%
+|  \pretolerance=-1 \tolerance=-1 \hbadness=0 \showboxdepth=0 \ #1}}|
+\smallbreak
+|\normalbaselines\rm % select roman font|
+|\nonfrenchspacing % punctuation affects the spacing|
+|\catcode`@=12 % at signs are no longer letters|
+\nobreak\smallskip
+|\def|^|\fmtname||{plain}\def\fmtversion{3.0} % identifies the current format|
+\endlines
+The format name and version number are recorded in control sequences,
+in order to help the people who might have to explain why something
+doesn't work. Macro files like |plain.tex| should not be changed in any way,
+except with respect to preloaded fonts, unless the changes are authorized
+by the author of the macros.
+
+\endchapter
+
+The purpose of a programming system is to make a computer easy to use.
+To do this, it furnishes languages and various facilities
+that are in fact programs invoked and controlled by language features.
+But these facilities are bought at a price:
+the external description of a programming system is ten to twenty times
+as large as the external description of the computer system itself.
+The user finds it far easier to specify any particular function,
+but there are far more to choose from,
+and far more options and formats to remember.
+\author FREDERICK P. ^{BROOKS}, JR., {\sl The Mythical Man Month\/} (1975)
+  % p 43
+
+\bigskip
+
+When someone says, ``I want a programming language
+in which I need only say what I wish done,''
+give him a lollipop.
+\author ALAN ^{PERLIS}, {\sl Epigrams on Programming\/} (1982)
+  % SIGPLAN Notices 17,9 (September 82), 7--13.
+  % There are many more, like "Editing is a rewording activity."
+
+%\eject
+\eject\byebye

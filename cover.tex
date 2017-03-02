@@ -1,0 +1,39 @@
+% -*- coding: utf-8 -*-
+
+\input macros
+
+\font\auth=cmssdc10 scaled\magstep4 % used only on the title page
+\font\elevenbf=cmbx10 scaled\magstephalf % ditto
+\font\elevenit=cmti10 scaled\magstephalf % ditto
+\font\elevenrm=cmr10 scaled\magstephalf % ditto
+\hbox{ }
+\special{pdf: bgcolor [ 0.79 0.60 0.31]}
+\vskip 1pc
+\special{pdf: bc [ 0.27 0.53 0.79 ]}
+\line{\hfill\YY{70}特\lower15pt\vbox{\hbox{\YY{50}科}\hbox{\YY{50}可}}爱\hskip15pt\hbox{\YY{50}原本}\hfill}%
+%\line{\hfill\auth (The T\kern-10pt\lower13pt\hbox{E}\kern-5pt Xbook)\hfill}
+\vskip 1pc
+\special{pdf: ec}
+\line{\hfill\hbox to 190pt{\YY{20}著者\auth : D. \kern-1pt E. \kern-1pt KNUTH\hfil}\hfill}
+\bigskip
+\line{\hfill\hbox to 190pt{\YY{20}翻译\auth : xianxian \& zoho\hfil}\hfill}
+\vskip 3pc
+\def\leftheadline{}
+\def\rightheadline{}
+%\special{pdf: bc [ 0.79 0.12 0.52 ]}
+\special{pdf:image width 348pt height 0in depth 348pt (artwork/ctan_lion.png)}
+%\special{pdf: ec}
+\vfill
+\eject
+\def\leftheadline{\hbox to \pagewidth{%
+    \vbox to 10pt{}% strut to position the baseline
+    {\tenbf\folio}\hfil% folio to left of text
+    \rhead% running head flush left
+    }}
+\def\rightheadline{\hbox to \pagewidth{%
+    \vbox to 10pt{}% strut to position the baseline
+    \rhead% running head flush right
+    \hfil{\tenbf\folio}% folio to right of text
+    }}
+
+\byebye

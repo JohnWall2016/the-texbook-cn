@@ -1,0 +1,318 @@
+% -*- coding: utf-8 -*-
+
+\input macros
+
+%\beginchapter Chapter 2. Book Printing\\versus\\Ordinary Typing
+\beginchapter Chapter 2. 书籍排版与普通排版
+
+\origpageno=3
+
+%When you first started using a computer terminal, you probably had to adjust
+%to the difference between the digit `1' and the lowercase letter `l'.
+%When you take the next step to the level of typography that is common in
+%book publishing, a few more adjustments of the same kind need to be made;
+%your eyes and your fingers need to learn to make a few more distinctions.
+\1当你第一次使用计算机终端时，可能不得不校准数字``1''和小写``l''的差别。%
+当你进行到一般书籍出版的排印步骤时，还要做出几个同样的校准；%
+你的眼睛和手指需要知道这几个差别。
+
+%In the first place, there are two kinds of ^{quotation marks} in books, but
+%only one kind on the typewriter. Even your computer terminal, which has
+%more characters than an ordinary typewriter, probably has only a
+%non-oriented double-quote mark (|"|), because the standard ^{ASCII} code
+%for computers was not invented with book publishing in mind. However, your
+%terminal probably does have two flavors of single-quote marks, namely |`|
+%and |'|; the second of these is useful also as an ^{apostrophe}.
+%American keyboards usually contain a left-quote character that shows up
+%as something like {\tt\char'22}, and an apostrophe or right-quote that
+%looks like {\tt\char'15} or {\tt\char'23}.
+首先，在书中有两种^{引号}，但是在打字机上只有一种。
+即使在比普通打字机的字符更多的计算机键盘上，也可能只有一种无方向的双引号（|"|），
+因为计算机的标准 ^{ASCII} 码不是专门为书籍出版而发明的。
+但是，你的计算机可能确实有两种不同的单引号，即 |`| 和 |'| ；
+第二个也用作缩写号【译注：比如 |don't| 】。
+美国键盘包含一个看起来象 {\tt\char'22} 的左引号，
+和一个看起来象 {\tt\char'15} 或 {\tt\char'23} 的缩写号或右引号。
+
+%To produce double-quote marks with \TeX, you simply type two single-quote marks
+%of the appropriate kind. For example, to get the phrase
+%\begindisplay
+%``I understand.''
+%\enddisplay
+%(including the quotation marks) you should type
+%\begintt
+%``I understand.''
+%\endtt
+%to your computer.
+为了用 \TeX\ 得到双引号，可直接键入两个相应类型的单引号。%
+比如，为了得到习惯用语
+\begindisplay
+``I understand.''
+\enddisplay
+(包括双引号), 应该在计算机中键入
+\begintt
+``I understand.''
+\endtt
+
+%A typewriter-like style of type will be used throughout this manual to indicate
+%\TeX\ constructions that you might type on your terminal, so that the
+%symbols actually typed are readily distinguishable from the output \TeX\ would
+%produce and from the comments in the manual itself. Here are the symbols to be
+%used in the examples:
+%\begintt
+%ABCDEFGHIJKLMNOPQRSTUVWXYZ
+%abcdefghijklmnopqrstuvwxyz
+%0123456789"#$%&@*+-=,.:;?!
+%()<>[]{}`'\||/_^~
+%\endtt
+%If your computer terminal doesn't happen to have all of these, don't
+%despair; \TeX\ can make~do with the ones you have. An additional symbol
+%\begindisplay
+%\]
+%\enddisplay
+%is used to stand for a {\sl ^{blank space}}, in case it is important
+%to emphasize that a blank space is being typed; thus, what you {\sl
+%really\/} type in the example above is
+%\begintt
+%``I|]understand.''
+%\endtt
+%Without such a symbol you would have
+%difficulty seeing the invisible parts of certain constructions. But we
+%won't be using `\]' very often, because spaces are usually visible enough.
+类似打字机风格将在本手册通篇使用，以显示可在你的终端上键入的 \TeX\ 的用词，%
+使得实际键入的符号容易从 \TeX\ 产生的输出和手册自身的注解区分开。%
+下面是在例子中要用到的符号：
+\begintt
+ABCDEFGHIJKLMNOPQRSTUVWXYZ
+abcdefghijklmnopqrstuvwxyz
+0123456789"#$%&@*+-=,.:;?!
+()<>[]{}`'\||/_^~
+\endtt
+如果你的计算机终端凑巧不能包含所有这些字符，别失望；%
+\TeX\ 可设法应付它。%
+另外一个符号
+\begindisplay
+\]
+\enddisplay
+用来表示一个 {\sl {blank space}}~(空格)——如果要重点强调所键入的空格；%
+因此，你{\KT{10}真正}要在上面的例子中键入的是
+\begintt
+``I|]understand.''
+\endtt
+如果没有这样的符号，就很难知道某些用词的看不见的部分。%
+但是我们不会太频繁使用``\]'', 因为空格一般足以被看见。
+
+%Book printing differs significantly from ordinary typing with respect to
+%^{dashes}, ^{hyphens}, and ^{minus signs}. In good math books,
+%these symbols are all different; in fact there usually are at least four
+%different symbols:
+%\begindisplay
+%a hyphen (-);\cr
+%an en-dash (--);\cr
+%an em-dash (---);\cr
+%a minus sign ($-$).\cr
+%\enddisplay
+%Hyphens are used for compound words like `daughter-in-law' and `X-rated'.
+%^{En-dash}es are used for number ranges like `pages 13--34', and also in
+%contexts like `exercise 1.2.6--52'. ^{Em-dash}es are used for punctuation in
+%sentences---they are what we often call simply dashes. And minus signs are
+%used in formulas. A conscientious user of \TeX\ will be careful to distinguish
+%these four usages, and here is how to do it:
+%\begindisplay
+%for a hyphen, type a hyphen (|-|);\cr
+%for an en-dash, type two hyphens (|--|);\cr
+%for an em-dash, type three hyphens (|---|);\cr
+%for a minus sign, type a hyphen in mathematics mode (|$-$|).\cr
+%\enddisplay
+%(Mathematics mode occurs between dollar signs; it is discussed later, so you
+%needn't worry about it now.)
+\1书籍排版和普通排版在横线号、连字符和减号方面明显不同。
+在优秀的数学书籍中，这些符号都是不同的；实际上，一般至少有四种不同的符号：
+\begindisplay
+连字符 (-);\cr
+连接号 (--);\cr
+破折号 (---);\cr
+减号 ($-$).\cr
+\enddisplay
+连字符用在像 ``daughter-in-law'' 和 ``X-rated'' 这样的复合单词中。
+连接号用在像 ``pages 13--34'' 以及像本书中 ``exercise 1.2.6--52''
+这样的数字区间方面。
+破折号用作句子中的标点——就是我们通常所称的简单横线号。
+而减号用在公式中。
+原则性强的 \TeX\ 用户要仔细区分这四种用法，说明如下：
+\begindisplay
+对连字符，键入一个连字符 (|-|)；\cr
+对连接号，键入两个连字符 (|--|)；\cr
+对破折号，键入三个连字符 (|---|)；\cr
+对减号，把连字符放在数学模式中 (|$-$|)。\cr
+\enddisplay
+（数学模式出现在美元符号之间；这将在后面讨论，因此你现在不必考虑它。）
+
+%\exercise Explain how to type the following sentence to \TeX: Alice said,
+%``I always use an en-dash instead of a hyphen when specifying page numbers
+%like `480--491' in a ^{bibliography}.''
+%\answer |Alice said, ``I always use an en-dash instead of a hyphen when|\break
+%|specifying page numbers like `480--491' in a bibliography.''| \
+%(The wrong answer to this question ends with |'480-49l' in a bibliography."|)
+\exercise 看看怎样在 \TeX\ 中键入下列句子：
+Alice said,
+``I always use an en-dash instead of a hyphen when specifying page numbers
+like `480--491' in a bibliography.''
+\answer |Alice said, ``I always use an en-dash instead of a hyphen when|\break
+|specifying page numbers like `480--491' in a bibliography.''|%
+（这个问题的容易犯错误的是在结尾处键入了 |'480-49l' in a bibliography."|）
+
+%\exercise What do you think happens when you type four hyphens in a row?
+%\answer You get em-dash and hyphen (----), which looks awful.
+\exercise 当你在一行中连续键入四个连字符时，会得到什么结果？
+\answer 你会得到一个破折号和一个连字符(----)，看起来很丑吧。
+\smallskip
+
+%If you look closely at most well-printed books, you will find that certain
+%combinations of letters are treated as a unit. For example, this is true
+%of the `f' and the `i' of `find'. Such combinations are called {\sl
+%^{ligatures}}, and professional typesetters have traditionally been
+%trained to watch for letter combinations such as |ff|, |fi|, |fl|, |ffi|, and
+%|ffl|. \ (The reason is that words like `f{}ind' don't look very good in
+%most styles of type unless a ligature is substituted for the letters that
+%clash. It's somewhat surprising how often the traditional ligatures appear
+%in English; other combinations are important in other languages.)
+如果你仔细查看大多数排版精良的书籍，就会发现某些字母组合会当成一个字母来处理。
+例如，``find'' 中的 ``f' 和 ``i'' 就是这样。
+这样的组合称为{\sl 连写}（ligature），而专业排版工通常会经过培训以留意诸如
+|ff|、|fi|、|fl|、|ffi| 和 |ffl| 的字母组合。（原因是像 ``f{}ind''
+这样的单词在大多数排版风格上不太好看，除非用连写代替这些冲突的字母。
+有点令人惊讶的是，传统的连写在英语中经常出现；其他组合在其他语言中很重要。
+
+%\exercise Think of an English word that contains two ligatures.
+%\answer fluffier firefly fisticuffs, flagstaff fireproofing,
+%chiffchaff and riffraff.
+\exercise 给出一个包含两个连写的英语单词。
+\answer fluffier firefly fisticuffs，flagstaff fireproofing，
+chiffchaff and riffraff。
+\smallskip
+
+%The good news is that you do
+%{\sl not\/} have to concern yourself with ligatures: \TeX\ is perfectly
+%capable of handling such things by itself, using the
+%same mechanism that converts `|--|' into `--'. In fact, \TeX\ will also look
+%for combinations of adjacent letters (like `|A|' next to `|V|'\thinspace)
+%that ought to be moved closer together for better appearance; this is
+%called {\sl ^{kerning}}.
+还好，你{\KT{10}不必}管这些连写：\TeX\ 完全有能力自己解决这些问题，
+方法同把 ``|--|'' 转换成 ``--'' 一样。实际上，为了得到更好的观感，
+\TeX\ 还把应当更接近的相邻字母（象紧跟 ``|V|'' 的 ``|A|''）看作组合；
+这称为{\KT{10}字距调整}。
+
+%\medbreak
+%To summarize this chapter: When using \TeX\ for straight copy, you type
+%the copy as on an ordinary typewriter, except that you need to be careful
+%about quotation marks, the number 1, and various kinds of hyphens/dashes.
+%\TeX\ will automatically take care of other niceties like ligatures and
+%kerning.
+\medbreak
+\1总结：当用 \TeX\ 直接排版时，就像在普通打字机上键入书稿一样，
+但是需要注意引号，数字 1 和各种连字符/破折号。
+其它诸如连写和字距调整这样的精细调整由 \TeX\ 自动完成。
+
+%\danger (Are you sure you should be reading this paragraph? The
+%``^{dangerous bend}'' sign here is meant to warn you about material that
+%ought to be skipped on first reading. And maybe also on second reading.
+%The reader-beware paragraphs sometimes refer to concepts that aren't
+%explained until later chapters.)
+\danger (你准备好看本段了吗？%
+这里的``危险''标志就是提醒你，这些材料应当在首次阅读时跳过\hbox{去。}%
+可能已经是第二遍了吧。%
+提醒读者的这些段落有时用到了后面章节中的概念。)
+
+%\danger If your keyboard does not contain a left-quote symbol, you can
+%type ^|\lq|, followed by a space if the next character is a letter, or
+%followed by a |\| if the next character is a space. Similarly, ^|\rq|
+%yields a right-quote character. Is that clear?
+%\begintt
+%\lq\lq|]I|]understand.\rq\rq\|]
+%\endtt
+\danger 如果你的键盘没有左引号符号，那么你可以键入 |\lq|, 如果下一个字符是字母，%
+就应该紧接一个空格，如果下一个字符是空格，就应该紧接一个 |\|。%
+类似地，|\rq| 得到一个右引号字符。清楚了吗？
+\begintt
+\lq\lq|]I|]understand.\rq\rq\|]
+\endtt
+
+%\danger In case you need to type ^{quotes within quotes}, for example a
+%single quote followed by a double quote, you can't simply type
+%\thinspace|'''|\thinspace\ because \TeX\ will interpret this as '''
+%(namely, double quote followed by single quote).  If you have already read
+%Chapter~5, you might expect that the solution will be to use
+%grouping---namely, to type something like \thinspace|{'}''|. But it turns
+%out that this doesn't produce the desired result, because there is usually
+%less space following a single right quote than there is following a double
+%right quote: What you get is {'}'', which is indeed a single quote
+%followed by a double quote (if you look at it closely enough), but it
+%looks almost like three equally spaced single quotes.  On the other hand,
+%you certainly won't want to type \thinspace|'|\]|''|, because that space
+%is much too large---it's just as large as the space between words---and
+%\TeX\ might even start a new line at such a space when making up a
+%paragraph! The solution is to type \thinspace|'\thinspace''|, which
+%produces '\thinspace'' as desired.^^|\thinspace|
+\danger 如果你想键入引号中的引号，比如右单引号后跟一个右双引号，
+那么你不能直接键入 |'''|, 因为 \TeX\ 将把它看成 '''(即右双引号后面跟右单引号)。%
+如果你已经看过第5章，可能认为解决之道是采用编组——即键入所谓的 |{'}''|。%
+但是，却得不到想看到的结果，因为单右引号后面的间距比双右引号后面的要小：
+得到的是 {'}'', 这的确是一个单引号后面跟一个双引号(如果你仔细观察的话),
+但是看起来却几乎是三个一样的单引号。%
+另一方面，当然也不要键入 |'|\]|''|, 否则间距太大——就象单词之间的空格那么大，
+并且当 \TeX\ 在生成段落时会在这样的空格处断行!
+解决的方法是键入 |'\thinspace''|, 就得到所要的 '\thinspace'' 了。
+
+%\dangerexercise OK, now you know how to produce ''' and '\thinspace'';
+%how do you get ``\thinspace` and `{}``\thinspace?
+%\answer |``\thinspace`|; and either |`{}``| or |{`}``| or something similar.
+%Reason: There's usually less space {\sl preceding\/} a single left quote than
+%there is preceding a double left quote. \ (Left and right are opposites.)
+\dangerexercise 好了，现在你知道怎样得到 ''' 和 '\thinspace'' 了；
+那么你怎样得到 ``\thinspace` 和 `{}``\thinspace 呢？
+\answer |``\thinspace`|，以及 |`{}``| 或 |{`}``| 或其他类似写法。
+原因是：通常在左单引号{\sl 之前}的空白比在左双引号之前的要小。%
+（左引号和和右引号的情形相反。）
+
+%\dangerexercise Why do you think the author introduced the control
+%sequence |\thinspace| to solve the adjacent-quotes problem, instead of
+%recommending the trickier construction |'$|^|\,||$''| (which also works)?
+%\answer Eliminating ^|\thinspace| would mean that a user need not learn
+%the term; but it is not advisable to minimize terminology by ``overloading''
+%math mode with tricky constructions. For example, a user who wishes to
+%take advantage of \TeX's ^|\mathsurround| feature would be thwarted by
+%non-mathematical uses of dollar signs. \ (Incidentally, neither |\thinspace|
+%nor ^|\,| are built into \TeX; both are defined in terms of more
+%primitive features, in Appendix~B.)
+\dangerexercise 想一下作者为什么用控制系列|\thinspace|来解决相邻引号问题而%
+不是用更巧妙的 |'$|^|\,||$''|~(它也可以胜任)?
+\answer 剔除 ^|\thinspace| 意味着用户无需学习该术语；
+但是为让术语最少而过多使用数学模式的巧妙构造是不可取的。
+举个例子，当用户希望使用 \TeX\ 的 ^|\mathsurround| 特性时，
+在非数学情形中使用的 |$| 将给他造成障碍。%
+（顺带说一下，|\thinspace| 和 ^|\,| 都不是 \TeX\ 内置的，
+这两者都是用更原始的特性定义的，见附录 B 。）
+
+\endchapter
+
+In modern Wit all printed Trash, is
+Set off with num'rous\/ {\rm Breaks}\raise.5ex\vbox{\hrule width 2em}%
+  and\/ {\rm Dashes}\raise.5ex\vbox{\hrule width 1em}
+% no period after the em-dash: stet!
+% Sir Walter Scott ruined this quote in his edition of Swift!
+\author JONATHAN ^{SWIFT}, {\sl On Poetry: A Rapsody\/} (1733) % lines 93--94
+% Rapsody: stet!
+
+\bigskip
+
+Some compositors still object to work
+in offices where type-composing machines are introduced.
+\author WILLIAM STANLEY ^{JEVONS}, {\sl Political Economy\/} (1878) % sec 55
+% "They are all afraid that if the work is done too easily and rapidly,
+% they will not be wanted to do it."
+% Jevons goes on to say that justifying and page makeup can't be done
+% profitably by machines, so the employees needn't fear losing their jobs.
+
+\vfill\eject\byebye

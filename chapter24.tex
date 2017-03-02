@@ -1,0 +1,1945 @@
+% -*- coding: utf-8 -*-
+
+\input macros
+
+%\beginchapter Chapter 24. Summary of\\Vertical\\Mode
+\beginchapter Chapter 24. 垂直模式总结
+
+\origpageno=267
+
+%^^{vertical mode}
+%The whole \TeX\ language has been presented in the previous chapters;
+%we have finally reached the end of our journey into previously
+%uncharted territory. Hurray! Victory! Now it is time to take a more
+%systematic look at what we have encountered: to consider the facts in an
+%orderly manner, rather than to mix them up with informal examples and
+%applications as we have been doing. A child learns to speak a language
+%before learning formal rules of grammar, but the rules of grammar come
+%in handy later on when the child reaches adulthood. The purpose of
+%this chapter---and of the two chapters that follow---is to present a
+%precise and concise summary of the language that \TeX\ understands, so
+%that mature users will be able to communicate as effectively as possible
+%with the machine.
+\1前面的章节讨论了所有的 \TeX\ 语言；
+我们已经最后结束了这个以前未知领域的学习。%
+万岁! 胜利了!
+现在该系统地总结一下我们所学习的知识：
+用条理化的方式来讨论这些结果，而不是用一些非正式的例子的应用——%
+就象我们已经学习的那样。%
+小孩子在知道正式的语法规则前就已经会说话了，
+但是当长大后，语法规则就能派上用场了。%
+本章——以及后面两章——的目的是简明扼要地总结 \TeX\ 的语法，
+这样熟练的用户就能尽可能高效地掌握它了。
+
+%We will be concerned in these chapters solely with \TeX's {\sl^{primitive}\/}
+%operations, rather than with the higher-level features of plain \TeX\ format
+%that most people deal with. Therefore novice users should put off reading
+%Chapters 24--26 until they feel a need to know what goes on inside the
+%computer. Appendix~B contains a summary of plain \TeX, together with a
+%ready-reference guide to the things that most people want to know about
+%\TeX\ usage. The best way to get an overview of \TeX\ from a high level
+%is to turn to the opening pages of Appendix~B.
+在这些章中我们只涉及 \TeX\ 的{\KT{10}原始}命令，
+而不是大多数人所使用的 plain \TeX\ 格式的高级命令。%
+因此，初学者应该跳过第 24--26 章，感到需要时再进行学习。%
+附录 B 是 plain \TeX\ 的汇总，以及希望知晓 \TeX\ 用法的大多数人需要的一个参考指南。%
+从高级方面了解 \TeX\ 的最好方法是转到附录 B 的开始。
+
+%\medskip\ninepoint
+%Our purpose here, however, is to survey the low-level parts of \TeX\ on
+%which higher-level superstructures have been built, in order to provide
+%a detailed reference for people who do need to know the details.
+%The remainder of this chapter is set in small type, like that of the
+%present paragraph, since it is analogous to material that is marked
+%``doubly dangerous'' in other chapters. Instead of using dangerous bend
+%signs repeatedly, let us simply agree that Chapters 24--26 are dangerous
+%by definition.
+\medskip\ninepoint
+但是，我们下面的目的是概括 \TeX\ 的低级命令——更高级的宏结构就是建立在它上面的，
+这是为的确需要知道这些详细知识的人提供一个参考。%
+本章剩下的内容用小字排版，意思与前面的一样，因为它的内容与其它章标记双``危险''%
+标志的差不多。%
+我们不再重复地使用``危险''标识，而直接把第 24--26 章都定义为``危险''的。
+
+%\medbreak
+%\TeX\ actually has a few features that didn't seem to be worth mentioning
+%in previous chapters, so they will be introduced here as part of our
+%complete survey. If there is any disagreement between something that was
+%said previously and something that will be said below, the facts in the
+%present chapter and its successors should be regarded as better
+%approximations to the ^{truth}.
+\medbreak
+实际上 \TeX\ 有几个特性看起来不值得在前面的章节提及，
+因此这里为了完整而介绍一下它们。%
+如果前面讨论的与下面要讲述的有些出入，那么本章以及后面的章节就更正确一些。
+
+%\medbreak
+%We shall study \TeX's digestive processes, i.e., what \TeX\ does with
+%the lists of tokens that arrive in its ``stomach.'' Chapter~7 has
+%described the process by which input files are converted to lists of
+%tokens in \TeX's ``mouth,'' and Chapter~20 explained how expandable tokens
+%^^{anatomy of TeX}
+%are converted to unexpandable ones in \TeX's ``gullet'' by a process
+%similar to regurgitation. When unexpandable tokens finally reach \TeX's
+%gastro-intestinal tract, the real activity of typesetting begins, and
+%that is what we are going to survey in these summary chapters.
+\medbreak
+我们将讨论 \TeX\ 的消化过程，即 \TeX\ 是怎样处理已经到达它的``胃''中的记号列。%
+第七章讲述了输入文件怎样在 \TeX\ 的``嘴''中变成记号列，
+还有第二十章讨论了 \TeX\ 的可展开的记号怎样通过类似于反刍的过程在 \TeX\ 的%
+``食道''中转变为不可展开的记号。%
+当不可展开的记号最好到达胃肠后，就开始真正进行排版了，
+我们在这些汇总章节中总结的就是它们。
+
+%Each token that arrives in \TeX's tummy is considered to be a {\sl^{command}\/}
+%that the computer will obey.  For example, the letter `{\tt L}' is a command
+%to typeset an `L' in the current font; `|\par|' tells \TeX\ to
+%finish a paragraph.  \TeX\ is always in one of six modes, as
+%described in Chapter~13, and a command sometimes means different things
+%in different modes. The present chapter is about vertical mode (and
+%internal vertical mode, which is almost the same): We shall
+%discuss \TeX's response to every primitive command, when that command occurs
+%in vertical mode. Chapters 25 and~26 characterize horizontal mode and math mode
+%in a similar way, but those chapters are shorter than this one because
+%many commands have the same behavior in all modes; the rules for such
+%commands will not be repeated thrice, they will appear only once.
+每个到达 \TeX\ 胃中的记号都被看作计算机要遵守或执行的一个{\KT{9}命令}。%
+例如，字母`{\tt L}'是用当前字体排版一个`L'的命令；
+`|\par|'告诉 \TeX\ 此段落结束。%
+ \TeX\ 总是处在第十三章讨论的六种模式之一，
+并且在不同模式下一个命令的意思有时候也不同。%
+本章讨论的是垂直模式(和内部垂直模式——它们几乎是一样的):
+我们将讲述的是，当每个原始命令出现在垂直模式中时， \TeX\ 会做出什么反应。%
+第二十五和二十六章用类似的方法讨论了水平模式和数学模式，
+但是那些章比本章要短，因为很多命令在所有模式下的意思是一样的；
+对这些命令毋需重复三次，一次即可。
+
+%Some commands have ^{arguments}. In other words, one or more of the tokens
+%that follow a command might be used to modify that command's behavior,
+%and those tokens are not considered to be commands themselves. For example,
+%when \TeX\ processes the sequence of tokens that corresponds to
+%`|\dimen2=2.5pt|', it considers only the first token `|\dimen|' to be a
+%command; the next tokens are swept up as part of the operation, because \TeX\
+%needs to know what |\dimen| register is to be set equal to what \<dimen> value.
+\1有些命令有参量。%
+换句话说，命令后面的一个或多个记号可能会改变命令的意思，
+并且那些记号并不被看作命令本身。%
+例如，当 \TeX\ 执行对应于`|\dimen2=2.5pt|'的记号序列时，
+它只把第一个记号`|\dimen|'看作命令；
+下一个记号作为运算部分而执行，因为 \TeX\ 要知道 |\dimen| 寄存器所设定的%
+~\<dimen> 值是多少。
+
+%We shall define \TeX's parts of speech by using a modified form of the
+%grammatical notation that was introduced about 1960 by John ^{Backus} and
+%Peter ^{Naur} for the definition of computer languages. Quantities in
+%^{angle brackets} will either be explained in words or they will be defined
+%by {\sl^{syntax rules}\/} that show exactly how they are formed from other
+%quantities. For example,
+%\beginsyntax
+%<unit of measure>\is<optional spaces><internal unit>
+%  \alt<optional {\tt true}><physical unit>
+%\endsyntax
+%defines a \<unit of measure> to be either an occurrence of
+%\<optional spaces> followed by an \<internal unit>, or \<optional {\tt true}>
+%followed by \<physical unit>. The symbol `\is' in a syntax rule
+%means ``is defined to be,'' and `\alt' means ``or.''
+我们将用 1960 年 John ^{Backus} 和 Peter ^{Naur} 为计算机语言定义而引入%
+的语法符号的变形来定义 \TeX\ 的语言。%
+在角括号中的量被看作文字，或者它们由{\KT{9}语法规则}来定义出来，
+这些语法规则给出了这个量由其它量构成的方法。%
+例如，
+\beginsyntax
+<unit of measure>\is<optional spaces><internal unit>
+  \alt<optional {\tt true}><physical unit>
+\endsyntax
+把 \<unit of measure> 定义为 \<optional spaces> 后面跟一个 \<internal unit>,
+或者定义为 \<optional {\tt true}> 后面跟 \<physical unit>。%
+语法规则中的符号`\is'的意思是``的定义为'', `\alt'的意思是``或者''。
+
+%Sometimes a syntax rule is ^{recursive}, in the sense that the right-hand
+%side of the definition involves the quantity being defined. For example,
+%the rule
+%\beginsyntax
+%<optional spaces>\is<empty>\alt<space token><optional spaces>
+%\endsyntax
+%defines the grammatical quantity called \<optional spaces> to be either
+%\<empty>, or a \<space token> followed by \<optional spaces>. The quantity
+%^\<empty> stands for ``nothing,'' i.e., for no tokens at all; hence the
+%syntax rule just given is a formalized way of saying that \<optional
+%spaces> stands for a sequence of zero or more spaces.
+有时候语法规则是^{递归的}，此时右边的定义中包括了要被定义的量。例如，
+\beginsyntax
+<optional spaces>\is<empty>\alt<space token><optional spaces>
+\endsyntax
+这个规则把与语法量 \<optional spaces> 定义为要么是 \<empty>，
+要么是 \<space token> 后面跟 \<optional spaces>。
+\<empty> 表示``什么也没有''，即根本没有任何记号；
+因此，刚刚给出的语法规则的意思是，\<optional spaces> 表示零个或多个空格。
+
+%The alternatives on the right-hand side of a syntax rule need not consist
+%entirely of quantities in angle brackets. Explicit tokens can be used
+%as well. For example, the rule
+%\beginsyntax
+%<plus or minus>\is|+|$_{12}$\alt|-|$_{12}$
+%\endsyntax
+%says that \<plus or minus> stands for a ^{character token} that is either
+%a plus sign or a~minus sign, with category code~12.
+另外，在语法规则右边的角括号中，不必全是量。%
+也可以用显示记号。例如，
+\beginsyntax
+<plus or minus>\is|+|$_{12}$\alt|-|$_{12}$
+\endsyntax
+这个规则的意思是，\<plus or minus> 表示类代码为 12 的字符记号，加号或减号。
+
+%We shall use a special convention for ^{keywords}, since the actual syntax
+%of a keyword is somewhat technical. Letters in typewriter type like
+%`\[pt]' will stand for
+%\begindisplay
+%\<optional spaces>\<p or P>\<t or T>,
+%\enddisplay
+%where \<p or P> denotes any non-active character token for either |p| or~|P|
+%(independent of the category code), and where \<t or T> is similar.
+对关键词使用特殊的约定，因为关键词的实际语法有点专用。%
+字体为 typewriter 的字母，象`\[pt]'这样，意思是
+\begindisplay
+\<optional spaces>\<p or P>\<t or T>,
+\enddisplay
+其中，\<p or P> 表示 |p| 或者 |P| 的任一非活动符记号(与类代码无关),
+\<t or T> 类似。
+
+%When a control sequence like `|\dimen|' is used in the syntax rules below,
+%it stands for any token whose current meaning is the same as the meaning
+%that |\dimen| had when \TeX\ started up. Other tokens can be given this
+%same meaning, using |\let| or |\futurelet|, and the meaning of the
+%control sequence |\dimen| itself may be redefined by the user, but
+%the syntax rules take no note of this; they just use `|\dimen|'
+%as a way of referring to a particular primitive command of \TeX. \ (This
+%notation is to be distinguished from `\cstok{dimen}', which stands
+%for the control sequence token whose actual name is |dimen|; see
+%Chapter~7.) ^^{boxed words}
+象`|\dimen|'这样的控制系列用在下面的语法规则中时，
+它表示当前意思与运行 \TeX\ 时 |\dimen| 相同的任何记号。%
+用 |\let| 或 |\futurelet| 也可赋予其它记号与这一样的意思，
+并且控制系列 |\dimen| 自己的意思也可以被用户重新定义，
+但是语法规则不去注意这些；
+它只把`|\dimen|'用作表示 \TeX\ 的特殊原始命令的一种方法。%
+(这个表示与`\cstok{dimen}'不同，后者表示实际名称为 |dimen| 的控制系列的记号；
+见第七章。)
+
+%Control sequences sometimes masquerade as characters, if their meaning has
+%been assigned by |\let| or |\futurelet|. For example, Appendix~B says
+%\begintt
+%\let\bgroup={   \let\egroup=}
+%\endtt
+%and these commands make ^|\bgroup| and ^|\egroup| act somewhat like left
+%and right ^{curly} ^{braces}.  Such control sequences are called ``^{implicit
+%characters}''; they are interpreted in the same way as characters, when
+%\TeX\ acts on them as commands, but not always when they appear in
+%arguments to commands.  For example, the command `|\let\plus=+|' does not
+%make |\plus| an acceptable substitute for the character token `|+|$_{12}$'
+%in the syntax rule for \<plus or minus> given above, nor does the command
+%`|\let\p=p|' make |\p| acceptable as part of the keyword \[pt]. When
+%\TeX's syntax allows both explicit and implicit characters, the rules
+%below will be careful to say so, explicitly.
+\1控制系列有时候乔装成字符，只要它们的意思是由 |\let| 或 |\futurelet| 给定的。
+例如，附录 B 声明了
+\begintt
+\let\bgroup={   \let\egroup=}
+\endtt
+并且这些命令把 |\bgroup| 和 |\egroup| 变得象左右大括号的作用一样。%
+这样的控制系列称为``隐字符'';
+当 \TeX\ 把它们当做命令使用时，按照与字符同样的方法来解释，
+但是当作为命令的参量出现时却不总是这样。%
+例如，在上面给出的语法规则 \<plus or minus> 中，命令`|\let\plus=+|'不会%
+用 |\plus| 完全代替字符记号`|+|$_{12}$';
+命令 `|\let\p=p|' 也不会用 |\p| 完全来代替关键词 \[pt] 的相应部分的。%
+当 \TeX\ 语法中显式和隐式字符都可以时，下面的规则明确而仔细地给出了判断。
+
+%The quantity ^\<space token>, which was used in the syntax of \<optional
+%spaces> above, stands for an explicit or implicit space. In other words,
+%it denotes either a character token of category~10, or a control sequence
+%or active character whose current meaning has been made equal to such a
+%token by |\let| or |\futurelet|.
+在上面 \<optional spaces> 的语法中使用的量 \<space token> 表示一个显式或隐式空格。%
+换句话说，它或者表示类代码为 10 的一个字符记号，
+或者表示当前意思由 |\let| 或 |\futurelet| 设置为等于这样的记号的一个控制系列%
+或活动符。
+
+%It will be convenient to use the symbols `|{|', `|}|', and `|$|' to stand
+%for any explicit or implicit character tokens of the respective categories
+%1, 2, and~3, whether or not the actual character codes are braces or dollar
+%signs. Thus, for example, plain~\TeX's |\bgroup| is an example of a `|{|',
+%and so are the tokens `|{|$_1$' and `|(|$_1$'; but `|{|$_{12}$' is not.
+为了方便，用符号`|{|', `|}|'和`|$|'来表示类代码分别为 1, 2 和 3 的任何显式和隐式%
+字符记号，而不管实际字符代码是大括号或美元符号。%
+这样，例如，~plain \TeX\ 的 |\bgroup| 是一个`|{|'的例子，
+并且因此记号是`|{|$_1$'和`|(|$_1$'; 但不是`|{|$_{12}$'。
+
+%The last few paragraphs can be summarized by saying that the alternatives
+%on the right-hand sides of \TeX's formal syntax rules are made from one
+%or more of the following things: (1)~syntactic quantities like
+% \<optional spaces>; (2)~explicit character tokens like |+|$_{12}$;
+%(3)~keywords like \[pt]; (4)~control sequence names like |\dimen|;
+%or (5)~the special symbols |{|, |}|, |$|.
+这最后几段可以总结为， \TeX\ 的正式语法规则右边的另一种方法由下列一项或多项%
+组成：
+(1). 象 \<optional spaces> 这样的符合语法的量；
+(2). 象 |+|$_{12}$ 这样的显式字符记号；
+(3). 象 \[pt] 这样的关键词；
+(4). 象 |\dimen| 这样的控制系列名称；
+或者，(5). 象 |{|, |}|, |$| 这样的特殊符号。
+
+%\medbreak
+%Let us begin our study of \TeX's syntax by discussing the precise meanings
+%of quantities like \<number>, \<dimen>, and \<glue> that occur frequently
+%as arguments to commands. The most important of these is \<number>,
+%which specifies an integer value. Here's exactly what a \<number> is:
+%\beginsyntax
+%<number>\is<optional signs><unsigned number>
+%<optional signs>\is<optional spaces>
+%  \alt<optional signs><plus or minus><optional spaces>
+%<unsigned number>\is<normal integer>\alt<coerced integer>
+%<normal integer>\is<internal integer>
+%  \alt<integer constant><one optional space>
+%  \alt|'|$_{12}$<octal constant><one optional space>
+%  \alt|"|$_{12}$<hexadecimal constant><one optional space>
+%  \alt|`|$_{12}$<character token><one optional space>
+%<integer constant>\is<digit>\alt<digit><integer constant>
+%<octal constant>\is<octal digit>\alt<octal digit><octal constant>
+%<hexadecimal constant>\is<hex digit>\alt<hex digit><hexadecimal constant>
+%<octal digit>\is|0|$_{12}$\alt|1|$_{12}$\alt|2|$_{12}$\alt|3|$_{12}$\alt%
+%    |4|$_{12}$\alt|5|$_{12}$\alt|6|$_{12}$\alt|7|$_{12}$
+%<digit>\is<octal digit>\alt|8|$_{12}$\alt|9|$_{12}$
+%<hex digit>\is<digit>\alt|A|$_{11}$\alt|B|$_{11}$\alt|C|$_{11}$\alt%
+%    |D|$_{11}$\alt|E|$_{11}$\alt|F|$_{11}$
+%  \alt|A|$_{12}$\alt|B|$_{12}$\alt|C|$_{12}$\alt%
+%    |D|$_{12}$\alt|E|$_{12}$\alt|F|$_{12}$
+%<one optional space>\is<space token>\alt<empty>
+%<coerced integer>\is<internal dimen>\alt<internal glue>
+%\endsyntax
+%The value of a \<number> is the value of the corresponding \<unsigned number>,
+%times~$-1$ for every minus sign in the \<optional signs>.
+%An ^{alphabetic constant} denotes the character code in a
+%^\<character token>; \TeX\ does not expand this token, which should either
+%be a (character~code, category~code) pair, or an active character, or
+%a control sequence whose name consists of a single character.
+%\ (See Chapter~20 for a complete list of all situations in which \TeX\ does
+%not expand tokens.) \ An \<integer constant> must not be immediately followed by
+%a \<digit>; in other words, if several digits appear consecutively, they
+%are all considered to be part of the same \<integer constant>. A similar
+%remark applies to the quantities \<octal constant> and \<hexadecimal constant>.
+%The quantity ^\<one optional space> is \<empty> only if it has to be;
+%i.e., \TeX\ looks for \<one optional space> by reading a token and backing
+%up if a \<space token> wasn't there.
+\medbreak
+在讨论 \TeX\ 的语法的开头，我们首先讨论作为命令的参量而经常出现的量%
+——象 \<number>, \<dimen> 和 \<glue>——的确切含义。%
+最重要的是 \<number>, 它给出了一个整数值。下面是 \<number> 的确切意思：
+\beginsyntax
+<number>\is<optional signs><unsigned number>
+<optional signs>\is<optional spaces>
+  \alt<optional signs><plus or minus><optional spaces>
+<unsigned number>\is<normal integer>\alt<coerced integer>
+<normal integer>\is<internal integer>
+  \alt<integer constant><one optional space>
+  \alt|'|$_{12}$<octal constant><one optional space>
+  \alt|"|$_{12}$<hexadecimal constant><one optional space>
+  \alt|`|$_{12}$<character token><one optional space>
+<integer constant>\is<digit>\alt<digit><integer constant>
+<octal constant>\is<octal digit>\alt<octal digit><octal constant>
+<hexadecimal constant>\is<hex digit>\alt<hex digit><hexadecimal constant>
+<octal digit>\is|0|$_{12}$\alt|1|$_{12}$\alt|2|$_{12}$\alt|3|$_{12}$\alt%
+    |4|$_{12}$\alt|5|$_{12}$\alt|6|$_{12}$\alt|7|$_{12}$
+<digit>\is<octal digit>\alt|8|$_{12}$\alt|9|$_{12}$
+<hex digit>\is<digit>\alt|A|$_{11}$\alt|B|$_{11}$\alt|C|$_{11}$\alt%
+    |D|$_{11}$\alt|E|$_{11}$\alt|F|$_{11}$
+  \alt|A|$_{12}$\alt|B|$_{12}$\alt|C|$_{12}$\alt%
+    |D|$_{12}$\alt|E|$_{12}$\alt|F|$_{12}$
+<one optional space>\is<space token>\alt<empty>
+<coerced integer>\is<internal dimen>\alt<internal glue>
+\endsyntax
+\1\<number> 的值是相应的 \<unsigned number> 的值，对 \<optional sign>~%
+中每个负号乘以 $-1$。%
+字母常数表示在 \<character token> 中的字符代码；
+ \TeX\ 不会展开这个记号，此记号应该是一个(字符代码，类代码)对，
+或者是活动符，或者是由单个字符组成的控制系列。%
+(至于 \TeX\ 不展开的所有记号，第二十章中有所有情形的完整列表。)%
+\<integer constant> 后面不能紧接着一个 \<digit>;
+换句话说，如果几个数字连续着出现，就把它们都看作同一个 \<integer constant>~%
+的各个部分。%
+对 \<octal constant> 和 \<hexadecimal constant> 这样的量也是类似的。%
+只有当 \<one optional space> 必须存在时，它从是 \<empty>,
+即，如果那里没有一个 \<space token>,  \TeX\ %
+为寻找 \<one optional space> 要读入一个记号并且导致阻塞。
+
+%\ddangerexercise Can you think of a reason why you might want `|A|$_{12}$'
+%to be a \<hex digit> even though the letter {\tt A} has category~11? \
+%(Don't worry if your answer is ``no.''\thinspace)
+%\answer If\/ |\cs| has been defined by ^|\chardef| or ^|\mathchardef|, \TeX\
+%uses ^{hexadecimal notation} when it expands ^|\meaning||\cs|, and it
+%assigns category~12 to each digit of the expansion. You might have an
+%application in which you want the last part of the expansion to be treated
+%as a \<number>. \ (This is admittedly an obscure reason.)
+\ddangerexercise 你知道为什么你可能想让 `|A|$_{12}$' 作为一个 \<hex digit>，
+尽管字母 {\tt A} 的类别码为 11 么？（如果你不知道，也没关系。）
+\answer 如果 |\cs| 是用 ^|\chardef| 或 ^|\mathchardef| 定义的，
+\TeX\ 在展开 ^|\meaning||\cs| 时将用^{十六进制表示}，
+而且它将给展开中的每位数字附加类别码 12。
+也许在某次应用中，你需要让宏展开的最后一部分被视为 \<number>。%
+（无可否认，这是一个莫名其妙的原因。）
+
+%The definition of \<number> is now complete except for the three quantities
+%called \<internal integer>, \<internal dimen>, and \<internal glue>, which
+%will be explained later; they represent things like parameters and registers.
+%For example, |\count1| and |\tolerance| and |\hyphenchar\tenrm| are
+%internal integers; |\dimen10| and |\hsize| and |\fontdimen6\tenrm| are
+%internal dimensions; |\skip100| and |\baselineskip| and |\lastskip| are
+%internal glue values. An internal dimension can be ``coerced'' to be an
+%integer by assuming units of scaled points. For example, if\/ |\hsize=100pt|
+%^^{coerce <dimen> to <number>}
+%^^{coerce <glue> to <dimen>}
+%and if\/ |\hsize| is used in the context of a \<number>, it denotes the
+%integer value 6553600. Similarly, an internal glue value can be coerced to
+%be an integer by first coercing it to be a dimension (omitting the
+%stretchability and shrinkability), then coercing that dimension.
+现在，\<number> 的定义除了三个量 \<internal integer>、\<internal dimen> 和
+\<internal glue> 外就已经都讨论过了，这三个量在后面讨论；
+它们表示的是象参数和寄存器这样的对象。例如，|\count1|、|\tolerance| 和
+|\hyphenchar\tenrm| 是内部整数；|\dimen10|、|\hsize| 和 |\fontdimen6\tenrm|
+是内部尺寸；|\skip100|、|\baselineskip| 和 |\lastskip| 是内部粘连值。
+内部尺寸可以被强制转换为整数，转换时假定以 |sp| 为单位。
+例如，如果 |\hsize=100pt| 并且 |\hsize| 在需要 \<number> 的地方出现，
+那么它就表示整数值 6553600。类似地，如果把内部粘连值限制为一个尺寸（忽略伸缩性），
+那么它也可以变成整数，从而表示此尺寸。
+
+%\smallskip
+%Let's turn now to the syntax for \<dimen>, and for \<mudimen> its cousin:
+%\beginsyntax
+%<dimen>\is<optional signs><unsigned dimen>
+%<unsigned dimen>\is<normal dimen>\alt<coerced dimen>
+%<coerced dimen>\is<internal glue>
+%<normal dimen>\is<internal dimen>\alt<factor><unit of measure>
+%<factor>\is<normal integer>\alt<decimal constant>
+%<decimal constant>\is|.|$_{12}$\alt|,|$_{12}$
+%  \alt<digit><decimal constant>
+%  \alt<decimal constant><digit>
+%<unit of measure>\is<optional spaces><internal unit>
+%  \alt<optional {\tt true}><physical unit><one optional space>
+%<internal unit>\is[em]<one optional space>\alt[ex]<one optional space>
+%  \alt<internal integer>\alt<internal dimen>\alt<internal glue>
+%<optional {\tt true}>\is[true]\alt<empty>
+%<physical unit>\is[pt]\alt[pc]\alt[in]\alt[bp]\alt[cm]\alt[mm]\alt[dd]\alt%
+%    [cc]\alt[sp]\vadjust{\vskip 3pt minus 2pt}
+%<mudimen>\is<optional signs><unsigned mudimen>
+%<unsigned mudimen>\is<normal mudimen>\alt<coerced mudimen>
+%<coerced mudimen>\is<internal muglue>
+%<normal mudimen>\is<factor><mu unit>
+%<mu unit>\is<optional spaces><internal muglue>\alt[mu]<one optional space>
+%\endsyntax
+%When `|true|' is present, the factor is multiplied by~1000 and divided by
+%the ^|\mag| parameter. Physical units are defined in Chapter~10; |mu| is
+%explained in Chapter~18.
+\smallskip
+现在我们转而讨论 \<dimen> 及其伴生的 \<mudimen> 的语法：
+\beginsyntax
+<dimen>\is<optional signs><unsigned dimen>
+<unsigned dimen>\is<normal dimen>\alt<coerced dimen>
+<coerced dimen>\is<internal glue>
+<normal dimen>\is<internal dimen>\alt<factor><unit of measure>
+<factor>\is<normal integer>\alt<decimal constant>
+<decimal constant>\is|.|$_{12}$\alt|,|$_{12}$
+  \alt<digit><decimal constant>
+  \alt<decimal constant><digit>
+<unit of measure>\is<optional spaces><internal unit>
+  \alt<optional {\tt true}><physical unit><one optional space>
+<internal unit>\is[em]<one optional space>\alt[ex]<one optional space>
+  \alt<internal integer>\alt<internal dimen>\alt<internal glue>
+<optional {\tt true}>\is[true]\alt<empty>
+<physical unit>\is[pt]\alt[pc]\alt[in]\alt[bp]\alt[cm]\alt[mm]\alt[dd]\alt%
+    [cc]\alt[sp]\vadjust{\vskip 3pt minus 2pt}
+<mudimen>\is<optional signs><unsigned mudimen>
+<unsigned mudimen>\is<normal mudimen>\alt<coerced mudimen>
+<coerced mudimen>\is<internal muglue>
+<normal mudimen>\is<factor><mu unit>
+<mu unit>\is<optional spaces><internal muglue>\alt[mu]<one optional space>
+\endsyntax
+当`|true|'出现时，因子要乘以 1000 并且除以参数 |\mag|。%
+物理单位在第十章中定义；
+|mu| 在第十八章中讨论过。
+
+%\goodbreak
+%Encouraged by our success in mastering the precise syntax of the quantities
+%\<number>, \<dimen>, and \<mudimen>, let's tackle \<glue> and \<muglue>:
+%\beginsyntax
+%<glue>\is<optional signs><internal glue>
+%  \alt<dimen><stretch><shrink>
+%<stretch>\is[plus]<dimen>\alt[plus]<fil dimen>\alt<optional spaces>
+%<shrink>\is[minus]<dimen>\alt[minus]<fil dimen>\alt<optional spaces>
+%<fil dimen>\is<optional signs><factor><fil unit><optional spaces>
+%<fil unit>\is[fil]\alt<fil unit>[l]
+%<muglue>\is<optional signs><internal muglue>
+%  \alt<mudimen><mustretch><mushrink>
+%<mustretch>\is[plus]<mudimen>\alt[plus]<fil dimen>\alt<optional spaces>
+%<mushrink>\is[minus]<mudimen>\alt[minus]<fil dimen>\alt<optional spaces>
+%\endsyntax
+\goodbreak
+\1在掌握了量 \<number>, \<dimen> 和 \<mudimen> 的准确语法的基础上，
+我们来讨论 \<glue> 和 \<muglue>:
+\beginsyntax
+<glue>\is<optional signs><internal glue>
+  \alt<dimen><stretch><shrink>
+<stretch>\is[plus]<dimen>\alt[plus]<fil dimen>\alt<optional spaces>
+<shrink>\is[minus]<dimen>\alt[minus]<fil dimen>\alt<optional spaces>
+<fil dimen>\is<optional signs><factor><fil unit><optional spaces>
+<fil unit>\is[fil]\alt<fil unit>[l]
+<muglue>\is<optional signs><internal muglue>
+  \alt<mudimen><mustretch><mushrink>
+<mustretch>\is[plus]<mudimen>\alt[plus]<fil dimen>\alt<optional spaces>
+<mushrink>\is[minus]<mudimen>\alt[minus]<fil dimen>\alt<optional spaces>
+\endsyntax
+
+%\TeX\ makes a large number of internal quantities accessible so that a
+%format designer can influence \TeX's behavior. Here is a list of all
+%these quantities, except for the parameters (which will be listed later).
+%\beginsyntax
+%<internal integer>\is<integer parameter>\alt<special integer>\alt^|\lastpenalty|
+%  \alt<countdef token>\alt^|\count|<8-bit number>\alt<codename><8-bit number>
+%  \alt<chardef token>\alt<mathchardef token>\alt^|\parshape|\alt^|\inputlineno|
+%  \alt^|\hyphenchar|<font>\alt^|\skewchar|<font>\alt^|\badness|
+%<special integer>\is^|\spacefactor|\alt^|\prevgraf|
+%  \alt^|\deadcycles|\alt^|\insertpenalties|
+%<codename>\is^|\catcode|\alt^|\mathcode|
+%  \alt^|\lccode|\alt^|\uccode|\alt^|\sfcode|\alt^|\delcode|
+%<font>\is<fontdef token>\alt^|\font|\alt<family member>
+%<family member>\is<font range><4-bit number>
+%<font range>\is^|\textfont|\alt^|\scriptfont|\alt^|\scriptscriptfont|
+%<internal dimen>\is<dimen parameter>\alt<special dimen>\alt^|\lastkern|
+%  \alt<dimendef token>\alt^|\dimen|<8-bit number>
+%  \alt<box dimension><8-bit number>\alt^|\fontdimen|<number><font>
+%<special dimen>\is^|\prevdepth|\alt^|\pagegoal|\alt^|\pagetotal|
+%  \alt^|\pagestretch|\alt^|\pagefilstretch|\alt^|\pagefillstretch|
+%  \alt^|\pagefilllstretch|\alt^|\pageshrink|\alt^|\pagedepth|
+%<box dimension>\is^|\ht|\alt^|\wd|\alt^|\dp|
+%<internal glue>\is<glue parameter>\alt^|\lastskip|
+%  \alt<skipdef token>\alt^|\skip|<8-bit number>
+%<internal muglue>\is<muglue parameter>\alt^|\lastskip|
+%  \alt<muskipdef token>\alt^|\muskip|<8-bit number>
+%\endsyntax
+%A ^\<countdef token> is a control sequence token in which the control
+%sequence's current meaning has been defined by ^|\countdef|; the other
+%quantities ^\<dimendef token>, etc.,
+%^^\<skipdef token>^^\<muskipdef token>^^\<chardef token>^^\<mathchardef token>
+%^^\<toksdef token> are defined similarly. A \<fontdef
+%token> refers to a definition by ^|\font|, or it can be the predefined font
+%identifier called ^|\nullfont|.  When a \<countdef token> is used as an
+%internal integer, it denotes the value of the corresponding ^|\count|
+%register, and similar statements hold for \<dimendef token>, \<skipdef
+%token>, \<muskipdef token>. When a \<chardef token> or \<mathchardef
+%token> is used as an internal integer, it denotes the value in the
+%^|\chardef| or ^|\mathchardef| itself. An ^\<8-bit number> is a \<number>
+%whose value is between 0~and $2^8-1=255$; a ^\<4-bit number> is similar.
+%^^\<15-bit number> ^^\<27-bit number>
+ \TeX\ 有大量可设置的内部量，这样格式设计者就可以控制 \TeX\ 的性质了。%
+下面是所有这些量，只是没有参数(它在后面列出来)。
+\beginsyntax
+<internal integer>\is<integer parameter>\alt<special integer>\alt^|\lastpenalty|
+  \alt<countdef token>\alt^|\count|<8-bit number>\alt<codename><8-bit number>
+  \alt<chardef token>\alt<mathchardef token>\alt^|\parshape|\alt^|\inputlineno|
+  \alt^|\hyphenchar|<font>\alt^|\skewchar|<font>\alt^|\badness|
+<special integer>\is^|\spacefactor|\alt^|\prevgraf|
+  \alt^|\deadcycles|\alt^|\insertpenalties|
+<codename>\is^|\catcode|\alt^|\mathcode|
+  \alt^|\lccode|\alt^|\uccode|\alt^|\sfcode|\alt^|\delcode|
+<font>\is<fontdef token>\alt^|\font|\alt<family member>
+<family member>\is<font range><4-bit number>
+<font range>\is^|\textfont|\alt^|\scriptfont|\alt^|\scriptscriptfont|
+<internal dimen>\is<dimen parameter>\alt<special dimen>\alt^|\lastkern|
+  \alt<dimendef token>\alt^|\dimen|<8-bit number>
+  \alt<box dimension><8-bit number>\alt^|\fontdimen|<number><font>
+<special dimen>\is^|\prevdepth|\alt^|\pagegoal|\alt^|\pagetotal|
+  \alt^|\pagestretch|\alt^|\pagefilstretch|\alt^|\pagefillstretch|
+  \alt^|\pagefilllstretch|\alt^|\pageshrink|\alt^|\pagedepth|
+<box dimension>\is^|\ht|\alt^|\wd|\alt^|\dp|
+<internal glue>\is<glue parameter>\alt^|\lastskip|
+  \alt<skipdef token>\alt^|\skip|<8-bit number>
+<internal muglue>\is<muglue parameter>\alt^|\lastskip|
+  \alt<muskipdef token>\alt^|\muskip|<8-bit number>
+\endsyntax
+\<countdef token> 是一个控制系列记号，
+其中控制系列的当前意思由 |\countdef| 来定义；
+其它的 \<dimendef token> 等量也是类似定义的。%
+\<fontdef token> 指的是由 |\font| 来定义，或者它是叫做 |\nullfont| 的预定义字体%
+标识符。%
+当 \<countdef token> 作为内部整数使用时，它表示的是相应 |\count| 寄存器的值，
+并且对 \<dimendef token>, \<skipdef token> 和 \<muskipdef token> 也是类似的。%
+当 \<chardef token> 和 \<mathchardef token> 作为整数使用时，
+它表示在 |\chardef| 和 |\mathchardef| 本身中的值。%
+\<8-bit number> 是取值在 0 和 $2^8-1=255$ 之间的 \<number>;
+\<4-bit number> 也是类似的。
+
+%\TeX\ allows |\spacefactor| to be an internal integer only in horizontal
+%modes; |\prevdepth| can be an internal dimension only in vertical modes;
+%|\lastskip| can be \<internal muglue> only in math mode when the current
+%math list ends with a muglue item; and |\lastskip| cannot be \<internal
+%glue> in such a case. When |\parshape| is used as an internal integer, it
+%denotes only the number of controlled lines, not their sizes or
+%indentations.  The seven special dimensions |\pagetotal|, |\pagestretch|,
+%and so on are all zero when the current page contains no boxes, and
+%|\pagegoal| is |\maxdimen| at such times (see Chapter~15).
+\1只有在水平模式下， \TeX\ 从允许 |\spacefactor| 是内部整数；
+只有在垂直模式下，|\prevdepth| 可以取为内部尺寸；
+只有当前数学列以数学粘连下面结尾时的数学模式下，|\lastskip| 可以是%
+~\<internal muglue>;
+在这样的情况下，|\lastskip| 不能是 \<internal glue>。%
+当 |\parskip| 作为内部整数出现时，它只表示所控制的行数，
+而不是它们的尺寸和缩进。%
+当当前页面不包含盒子时，有七个特殊尺寸 |\pagetotal|, |\pagestretch| 等等都%
+是零，并且此时 |\pagegoal| 为 |\maxdimen|~(见第十五章)。
+
+%\smallskip
+%From the syntax rules just given, it's possible to deduce exactly what
+%happens to ^{spaces} when they are in the vicinity of numerical quantities:
+%\TeX\ allows a \<number> or \<dimen> to be preceded by arbitrarily many
+%spaces, and to be followed by at most one space; however, there is no
+%optional space after a \<number> or \<dimen> that ends with an unexpandable
+%control sequence. For example, if \TeX\ sees `|\space\space24\space\space|' when
+%it is looking for a \<number>, it gobbles up the first three spaces, but
+%the fourth one survives; similarly, one space remains when `|24pt\space\space|'
+%and `|\dimen24\space\space|' and `|\pagegoal\space|' are treated as
+%\<dimen> values.
+\smallskip
+由刚才给出的语法规则，是可以准确知道在哪些数字量之间要有空格：
+\TeX\ 允许 \<number> 或 \<dimen> 前面有任意多个空格，而后面至多跟一个空格；
+但是，以不可展开的控制系列为结尾的 \<number> 或 \<dimen> 后面没有可选的空格。
+例如，如果 \TeX\ 在寻找一个 \<number> 时遇见了 `|\space\space24\space||\space|，
+那么它会扔掉前三个空格而保留下第四个；
+类似地，当 `|24pt\space\space|'、`|\dimen24\space|\allowbreak|\space|' 和
+`|\pagegoal\space|' 被看作 \<dimen> 的值时，只保留一个空格。
+
+%\ddangerexercise Is `|24\space\space pt|' a legal \<dimen>?
+%\answer Yes; any number of spaces can precede any keyword.
+\ddangerexercise `|24\space\space pt|' 是一个合理的 \<dimen> 么？
+\answer 是的；在关键词之前可以有任意多个空格。
+
+%\ddangerexercise Is there any difference between `|+\baselineskip|',
+%`|- -\baselineskip|', and `|1\baselineskip|', when \TeX\ reads
+%them as \<glue>?
+%\answer The first two have the same meaning; but the third coerces
+%|\baselineskip| to a \<dimen> by suppressing the stretchability
+%and shrinkability that might be present.
+\ddangerexercise 当 \TeX\ 把 `|+\baselineskip|'、`|- -\baselineskip|'
+和 `|1\baselineskip|' 看作 \<glue> 时，它们之间有区别么？
+\answer 前面两个的含义是一样的；但第三个将把 |\baselineskip| 强制转换为
+\<dimen>，这样将丢掉可能存在的可伸展量和可收缩量。
+
+%\ddangerexercise What \<glue> results from |"DD DDPLUS2,5 \spacefactor\space|,
+%assuming the conventions of plain \TeX, when |\spacefactor| equals 1000?
+%\answer The natural width is $221\rm\,dd$ (which \TeX\ rounds to
+%$15497423\rm\,sp$ and displays as |236.47191pt|).
+%The stretchability is $2500\rm\,sp$, since an
+%internal integer is coerced to a dimension when it appears as an
+%^^{coerce <number> to <dimen>}
+%\<internal unit>. The shrinkability is zero. Notice that the final |\space|
+%is swallowed up as part of the optional ^{spaces} of the \<shrink> part
+%in the syntax for \<glue>. \ (If |PLUS| had been |MINUS|, the final |\space|
+%would {\sl not\/} have been part of this \<glue>!)
+\ddangerexercise 依照 plain \TeX\ 的约定，当 |\spacefactor| 等于 1000 时，
+|"DD DDPLUS2,5 \spacefactor\space| 得到的 \<glue> 是什么？
+\answer 自然宽度等于 $221\rm\,dd$（\TeX\ 将它舍入为 $15497423\rm\,sp$，
+并显示为 |236.47191pt|）。\allowbreak 【译注：注意 |"DD| 是十六进制数，
+转换为十进制等于 221。】它的可伸展量等于 $2500\rm\,sp$，
+因为内部整数作为 \<internal unit> 时将被转换为尺寸。
+^^{coerce <number> to <dimen>}
+而它的可收缩量等于零。注意最后的 |\space| 被作为
+\<glue> 的 \<shrink> 部分的可选^{空格}吸收掉。%
+（如果 |PLUS| 被改为 |MINUS|，最后的 |\space|
+将{\sl 不会\/}成为 \<glue> 的一部分！）
+
+%Let's turn now to \TeX's ^{parameters}, which the previous chapters have
+%introduced one at a time; it will be convenient to assemble them
+%all together. An ^\<integer parameter> is one of the following tokens:
+%\begindisplay\belowdisplayskip=3pt plus 6pt \abovedisplayskip=3pt plus 1pt%
+%\openup.15pt
+%^|\pretolerance|\quad(badness tolerance before hyphenation)\cr
+%^|\tolerance|\quad(badness tolerance after hyphenation)\cr
+%^|\hbadness|\quad(badness above which bad hboxes will be shown)\cr
+%^|\vbadness|\quad(badness above which bad vboxes will be shown)\cr
+%^|\linepenalty|\quad(amount added to badness of every line in a paragraph)\cr
+%^|\hyphenpenalty|\quad(penalty for line break after discretionary hyphen)\cr
+%^|\exhyphenpenalty|\quad(penalty for line break after explicit hyphen)\cr
+%^|\binoppenalty|\quad(penalty for line break after binary operation)\cr
+%^|\relpenalty|\quad(penalty for line break after math relation)\cr
+%^|\clubpenalty|\quad(penalty for creating a club line at bottom of page)\cr
+%^|\widowpenalty|\quad(penalty for creating a widow line at top of page)\cr
+%^|\displaywidowpenalty|\quad(ditto, before a display)\cr
+%^|\brokenpenalty|\quad(penalty for page break after a hyphenated line)\cr
+%^|\predisplaypenalty|\quad(penalty for page break just before a display)\cr
+%^|\postdisplaypenalty|\quad(penalty for page break just after a display)\cr
+%^|\interlinepenalty|\quad(additional penalty for page break between lines)\cr
+%^|\floatingpenalty|\quad(penalty for insertions that are split)\cr
+%\noalign{\goodbreak}
+%^|\outputpenalty|\quad(penalty at the current page break)\cr
+%^|\doublehyphendemerits|\quad(demerits for consecutive broken lines)\cr
+%^|\finalhyphendemerits|\quad(demerits for a penultimate broken line)\cr
+%^|\adjdemerits|\quad(demerits for adjacent incompatible lines)\cr
+%^|\looseness|\quad(change to the number of lines in a paragraph)\cr
+%^|\pausing|\quad(positive if pausing after each line is read from a file)\cr
+%^|\holdinginserts|\quad(positive if insertions remain dormant in output box)\cr
+%^|\tracingonline|\quad(positive if showing diagnostic info on the terminal)\cr
+%^|\tracingmacros|\quad(positive if showing macros as they are expanded)\cr
+%^|\tracingstats|\quad(positive if showing statistics about memory usage)\cr
+%^|\tracingparagraphs|\quad(positive if showing line-break calculations)\cr
+%^|\tracingpages|\quad(positive if showing page-break calculations)\cr
+%^|\tracingoutput|\quad(positive if showing boxes that are shipped out)\cr
+%^|\tracinglostchars|\quad(positive if showing characters not in the font)\cr
+%^|\tracingcommands|\quad(positive if showing commands
+%   before they are executed)\cr
+%^|\tracingrestores|\quad(positive if showing deassignments when groups end)\cr
+%^|\language|\quad(the current set of hyphenation rules)\cr
+%^|\uchyph|\quad(positive if hyphenating words beginning with capital letters)\cr
+%^|\lefthyphenmin|\quad(smallest fragment at beginning of hyphenated word)\cr
+%^|\righthyphenmin|\quad(smallest fragment at end of hyphenated word)\cr
+%^|\globaldefs|\quad(nonzero if overriding |\global| specifications)\cr
+%^|\defaulthyphenchar|\quad(^|\hyphenchar| value when a font is loaded)\cr
+%^|\defaultskewchar|\quad(^|\skewchar| value when a font is loaded)\cr
+%^|\escapechar|\quad(escape character in the output of
+%   control sequence tokens)\cr
+%^|\endlinechar|\quad(character placed at the right end of an input line)\cr
+%^|\newlinechar|\quad(character that starts a new output line)\cr
+%^|\maxdeadcycles|\quad(upper bound on |\deadcycles|)\cr
+%^|\hangafter|\quad(hanging indentation changes after this many lines)\cr
+%^|\fam|\quad(the current family number)\cr
+%^|\mag|\quad(magnification ratio, times 1000)\cr
+%^|\delimiterfactor|\quad(ratio for variable delimiters, times 1000)\cr
+%^|\time|\quad(current time of day in minutes since midnight)\cr
+%^|\day|\quad(current day of the month)\cr
+%^|\month|\quad(current month of the year)\cr
+%^|\year|\quad(current year of our Lord)\cr
+%^|\showboxbreadth|\quad(maximum items per level when boxes are shown)\cr
+%^|\showboxdepth|\quad(maximum level when boxes are shown)\cr
+%^|\errorcontextlines|\quad(maximum extra context shown when errors occur)\cr
+%\enddisplay
+%The first few of these parameters have values in units of ``badness'' and
+%``penalties'' that affect line breaking and page breaking. Then come
+%demerit-oriented parameters; demerits are essentially given in units of
+%``badness squared,'' so those parameters tend to have larger values.
+%By contrast, the next few parameters (|\looseness|, |\pausing|, etc.)\
+%generally have quite small values (either $-1$ or 0 or 1 or~2).
+%Miscellaneous parameters complete the set. \TeX\ computes the date and time
+%when it begins a job, if the operating system provides such information; but
+%afterwards the clock does not keep ticking: The user can change |\time|
+%just like any ordinary parameter.  Chapter~10 points out that |\mag| must
+%not be changed after \TeX\ is committed to a particular magnification.
+现在我们转而讨论 \TeX\ 的参数，在前一章的某个地方已经见过一些；
+把它们都集中在一起讨论很方便。%
+\<integer parameter> 是下列某个记号：
+\begindisplay\belowdisplayskip=3pt plus 6pt \abovedisplayskip=3pt plus 1pt%
+\openup.15pt
+^|\pretolerance|\quad(badness tolerance before hyphenation)\cr
+^|\tolerance|\quad(badness tolerance after hyphenation)\cr
+^|\hbadness|\quad(badness above which bad hboxes will be shown)\cr
+^|\vbadness|\quad(badness above which bad vboxes will be shown)\cr
+^|\linepenalty|\quad(amount added to badness of every line in a paragraph)\cr
+^|\hyphenpenalty|\quad(penalty for line break after discretionary hyphen)\cr
+^|\exhyphenpenalty|\quad(penalty for line break after explicit hyphen)\cr
+^|\binoppenalty|\quad(penalty for line break after binary operation)\cr
+^|\relpenalty|\quad(penalty for line break after math relation)\cr
+^|\clubpenalty|\quad(penalty for creating a club line at bottom of page)\cr
+^|\widowpenalty|\quad(penalty for creating a widow line at top of page)\cr
+^|\displaywidowpenalty|\quad(ditto, before a display)\cr
+^|\brokenpenalty|\quad(penalty for page break after a hyphenated line)\cr
+^|\predisplaypenalty|\quad(penalty for page break just before a display)\cr
+^|\postdisplaypenalty|\quad(penalty for page break just after a display)\cr
+^|\interlinepenalty|\quad(additional penalty for page break between lines)\cr
+^|\floatingpenalty|\quad(penalty for insertions that are split)\cr
+\noalign{\goodbreak}
+^|\outputpenalty|\quad(\1penalty at the current page break)\cr
+^|\doublehyphendemerits|\quad(demerits for consecutive broken lines)\cr
+^|\finalhyphendemerits|\quad(demerits for a penultimate broken line)\cr
+^|\adjdemerits|\quad(demerits for adjacent incompatible lines)\cr
+^|\looseness|\quad(change to the number of lines in a paragraph)\cr
+^|\pausing|\quad(positive if pausing after each line is read from a file)\cr
+^|\holdinginserts|\quad(positive if insertions remain dormant in output box)\cr
+^|\tracingonline|\quad(positive if showing diagnostic info on the terminal)\cr
+^|\tracingmacros|\quad(positive if showing macros as they are expanded)\cr
+^|\tracingstats|\quad(positive if showing statistics about memory usage)\cr
+^|\tracingparagraphs|\quad(positive if showing line-break calculations)\cr
+^|\tracingpages|\quad(positive if showing page-break calculations)\cr
+^|\tracingoutput|\quad(positive if showing boxes that are shipped out)\cr
+^|\tracinglostchars|\quad(positive if showing characters not in the font)\cr
+^|\tracingcommands|\quad(positive if showing commands
+   before they are executed)\cr
+^|\tracingrestores|\quad(positive if showing deassignments when groups end)\cr
+^|\language|\quad(the current set of hyphenation rules)\cr
+^|\uchyph|\quad(positive if hyphenating words beginning with capital letters)\cr
+^|\lefthyphenmin|\quad(smallest fragment at beginning of hyphenated word)\cr
+^|\righthyphenmin|\quad(smallest fragment at end of hyphenated word)\cr
+^|\globaldefs|\quad(nonzero if overriding |\global| specifications)\cr
+^|\defaulthyphenchar|\quad(^|\hyphenchar| value when a font is loaded)\cr
+^|\defaultskewchar|\quad(^|\skewchar| value when a font is loaded)\cr
+^|\escapechar|\quad(escape character in the output of
+   control sequence tokens)\cr
+^|\endlinechar|\quad(character placed at the right end of an input line)\cr
+^|\newlinechar|\quad(character that starts a new output line)\cr
+^|\maxdeadcycles|\quad(upper bound on |\deadcycles|)\cr
+^|\hangafter|\quad(hanging indentation changes after this many lines)\cr
+^|\fam|\quad(the current family number)\cr
+^|\mag|\quad(magnification ratio, times 1000)\cr
+^|\delimiterfactor|\quad(ratio for variable delimiters, times 1000)\cr
+^|\time|\quad(current time of day in minutes since midnight)\cr
+^|\day|\quad(current day of the month)\cr
+^|\month|\quad(current month of the year)\cr
+^|\year|\quad(current year of our Lord)\cr
+^|\showboxbreadth|\quad(maximum items per level when boxes are shown)\cr
+^|\showboxdepth|\quad(maximum level when boxes are shown)\cr
+^|\errorcontextlines|\quad(maximum extra context shown when errors occur)\cr
+\enddisplay
+这些参数的前几个值的单位是控制断行和分页的``丑度''和``惩罚''。%
+接着是表示惩罚的参数；惩罚的单位实际上是``丑度''的平方，
+因此这些参数的值相当要大一些。%
+相反，再接下来的几个参数 (|\looseness|, |\pausing|, 等等)一般是非常小的值%
+($-1$, 0, 1 或 2)。%
+剩下的是几个杂项参数。%
+ \TeX\ 在运行时要调用日期和时间，只有在操作系统提供这些信息时才这样；
+但是它不会持续记录这些：
+用户可以象任意普通参数那样改变 |\time|。%
+第十章指出，在 \TeX\ 已经指定一个特殊的放大率后，|\mag| 就不能再改变了。
+
+%\goodbreak\noindent
+%A ^\<dimen parameter> is one of the following:
+%\begindisplay\openup.15pt
+%^|\hfuzz|\quad(maximum overrun before overfull hbox messages occur)\cr
+%^|\vfuzz|\quad(maximum overrun before overfull vbox messages occur)\cr
+%^|\overfullrule|\quad(width of rules appended to overfull boxes)\cr
+%^|\emergencystretch|\quad(reduces badnesses on final pass of line-breaking)\cr
+%^|\hsize|\quad(line width in horizontal mode)\cr
+%^|\vsize|\quad(page height in vertical mode)\cr
+%^|\maxdepth|\quad(maximum depth of boxes on main pages)\cr
+%^|\splitmaxdepth|\quad(maximum depth of boxes on split pages)\cr
+%^|\boxmaxdepth|\quad(maximum depth of boxes on explicit pages)\cr
+%^|\lineskiplimit|\quad(threshold where |\baselineskip| changes
+%   to |\lineskip|)\cr
+%^|\delimitershortfall|\quad(maximum space not covered by a delimiter)\cr
+%^|\nulldelimiterspace|\quad(width of a null delimiter)\cr
+%^|\scriptspace|\quad(extra space after subscript or superscript)\cr
+%^|\mathsurround|\quad(kerning before and after math in text)\cr
+%^|\predisplaysize|\quad(length of text preceding a display)\cr
+%^|\displaywidth|\quad(length of line for displayed equation)\cr
+%^|\displayindent|\quad(indentation of line for displayed equation)\cr
+%^|\parindent|\quad(width of\/ |\indent|)\cr
+%^|\hangindent|\quad(amount of hanging indentation)\cr
+%^|\hoffset|\quad(horizontal offset in |\shipout|)\cr
+%^|\voffset|\quad(vertical offset in |\shipout|)\cr
+%\enddisplay
+%And the possibilities for ^\<glue parameter> are:
+%\begindisplay\openup.15pt
+%^|\baselineskip|\quad(desired glue between baselines)\cr
+%^|\lineskip|\quad(interline glue if\/ |\baselineskip| isn't feasible)\cr
+%^|\parskip|\quad(extra glue just above paragraphs)\cr
+%^|\abovedisplayskip|\quad(extra glue just above displays)\cr
+%^|\abovedisplayshortskip|\quad(ditto, following short lines)\cr
+%^|\belowdisplayskip|\quad(extra glue just below displays)\cr
+%^|\belowdisplayshortskip|\quad(ditto, following short lines)\cr
+%^|\leftskip|\quad(glue at left of justified lines)\cr
+%^|\rightskip|\quad(glue at right of justified lines)\cr
+%^|\topskip|\quad(glue at top of main pages)\cr
+%^|\splittopskip|\quad(glue at top of split pages)\cr
+%^|\tabskip|\quad(glue between aligned entries)\cr
+%^|\spaceskip|\quad(glue between words, if nonzero)\cr
+%^|\xspaceskip|\quad(glue between sentences, if nonzero)\cr
+%^|\parfillskip|\quad(additional |\rightskip| at end of paragraphs)\cr
+%\enddisplay
+%Finally, there are three permissible ^\<muglue parameter> tokens:
+%\begindisplay\openup.15pt
+%^|\thinmuskip|\quad(thin space in math formulas)\cr
+%^|\medmuskip|\quad(medium space in math formulas)\cr
+%^|\thickmuskip|\quad(thick space in math formulas)\cr
+%\enddisplay
+%All of these quantities are explained in more detail somewhere else in
+%this book, and you can use Appendix~I to find out where.
+\goodbreak\noindent
+\1\<dimen parameter> 是下列某个：
+\begindisplay\openup.15pt
+^|\hfuzz|\quad(maximum overrun before overfull hbox messages occur)\cr
+^|\vfuzz|\quad(maximum overrun before overfull vbox messages occur)\cr
+^|\overfullrule|\quad(width of rules appended to overfull boxes)\cr
+^|\emergencystretch|\quad(reduces badnesses on final pass of line-breaking)\cr
+^|\hsize|\quad(line width in horizontal mode)\cr
+^|\vsize|\quad(page height in vertical mode)\cr
+^|\maxdepth|\quad(maximum depth of boxes on main pages)\cr
+^|\splitmaxdepth|\quad(maximum depth of boxes on split pages)\cr
+^|\boxmaxdepth|\quad(maximum depth of boxes on explicit pages)\cr
+^|\lineskiplimit|\quad(threshold where |\baselineskip| changes
+   to |\lineskip|)\cr
+^|\delimitershortfall|\quad(maximum space not covered by a delimiter)\cr
+^|\nulldelimiterspace|\quad(width of a null delimiter)\cr
+^|\scriptspace|\quad(extra space after subscript or superscript)\cr
+^|\mathsurround|\quad(kerning before and after math in text)\cr
+^|\predisplaysize|\quad(length of text preceding a display)\cr
+^|\displaywidth|\quad(length of line for displayed equation)\cr
+^|\displayindent|\quad(indentation of line for displayed equation)\cr
+^|\parindent|\quad(width of\/ |\indent|)\cr
+^|\hangindent|\quad(amount of hanging indentation)\cr
+^|\hoffset|\quad(horizontal offset in |\shipout|)\cr
+^|\voffset|\quad(vertical offset in |\shipout|)\cr
+\enddisplay
+\<glue parameter> 可能是：
+\begindisplay\openup.15pt
+^|\baselineskip|\quad(desired glue between baselines)\cr
+^|\lineskip|\quad(interline glue if\/ |\baselineskip| isn't feasible)\cr
+^|\parskip|\quad(extra glue just above paragraphs)\cr
+^|\abovedisplayskip|\quad(extra glue just above displays)\cr
+^|\abovedisplayshortskip|\quad(ditto, following short lines)\cr
+^|\belowdisplayskip|\quad(extra glue just below displays)\cr
+^|\belowdisplayshortskip|\quad(ditto, following short lines)\cr
+^|\leftskip|\quad(glue at left of justified lines)\cr
+^|\rightskip|\quad(glue at right of justified lines)\cr
+^|\topskip|\quad(glue at top of main pages)\cr
+^|\splittopskip|\quad(glue at top of split pages)\cr
+^|\tabskip|\quad(glue between aligned entries)\cr
+^|\spaceskip|\quad(glue between words, if nonzero)\cr
+^|\xspaceskip|\quad(glue between sentences, if nonzero)\cr
+^|\parfillskip|\quad(additional |\rightskip| at end of paragraphs)\cr
+\enddisplay
+最后，有三个可用的 \<muglue parameter> 记号：
+\begindisplay\openup.15pt
+^|\thinmuskip|\quad(thin space in math formulas)\cr
+^|\medmuskip|\quad(medium space in math formulas)\cr
+^|\thickmuskip|\quad(thick space in math formulas)\cr
+\enddisplay
+所有这些量都已经在本书的某些地方讨论过了，
+你可以从附录 I 查找其出处。
+
+%\TeX\ also has parameters that are token lists. Such parameters do not
+%enter into the definitions of \<number> and such things, but we might as
+%well list them now so that our tabulation of parameters is complete.
+%A ^\<token parameter> is any of:
+%\begindisplay\openup.15pt
+%^|\output|\quad(the user's output routine)\cr
+%^|\everypar|\quad(tokens to insert when a paragraph begins)\cr
+%^|\everymath|\quad(tokens to insert when math in text begins)\cr
+%^|\everydisplay|\quad(tokens to insert when display math begins)\cr
+%^|\everyhbox|\quad(tokens to insert when an hbox begins)\cr
+%^|\everyvbox|\quad(tokens to insert when a vbox begins)\cr
+%^|\everyjob|\quad(tokens to insert when the job begins)\cr
+%^|\everycr|\quad(tokens
+%   to insert after every ^|\cr| or nonredundant ^|\crcr|)\cr
+%^|\errhelp|\quad(tokens that supplement an |\errmessage|)\cr
+%\enddisplay
+%That makes a total of 103 parameters of all five kinds.
+\1\TeX\ 还有记号列参数。%
+这样的参数不能出现在 \<number> 等的定义中，
+但是为了参数表的完整，我们也把它们列出来。%
+\<token parameter> 是任意的：
+\begindisplay\openup.15pt
+^|\output|\quad(the user's output routine)\cr
+^|\everypar|\quad(tokens to insert when a paragraph begins)\cr
+^|\everymath|\quad(tokens to insert when math in text begins)\cr
+^|\everydisplay|\quad(tokens to insert when display math begins)\cr
+^|\everyhbox|\quad(tokens to insert when an hbox begins)\cr
+^|\everyvbox|\quad(tokens to insert when a vbox begins)\cr
+^|\everyjob|\quad(tokens to insert when the job begins)\cr
+^|\everycr|\quad(tokens
+   to insert after every ^|\cr| or nonredundant ^|\crcr|)\cr
+^|\errhelp|\quad(tokens that supplement an |\errmessage|)\cr
+\enddisplay
+所有这五类共有 103 个参数。
+
+%\ddangerexercise Explain how |\everyjob| can be non-null when a job begins.
+%\answer If it was non-null when a ^|\dump| operation occurred. Here's
+%^^|\jobname|
+%a nontrivial example, which sets up ^|\batchmode| and puts ^|\end| at the
+%end of the input file:
+%\begintt
+%\everyjob={\batchmode\input\jobname\end}
+%\endtt
+\ddangerexercise 当任务运行时，看看 |\everyjob| 怎样才是非空的。
+\answer 当 ^|\dump| 操作出现时它是非空的。
+^^|\jobname|
+这里有个非平凡的例子，它设置 ^|\batchmode| 并将 ^|\end| 放在输入文件之后：
+\begintt
+\everyjob={\batchmode\input\jobname\end}
+\endtt
+
+%It's time now to return to our original goal, namely to study the commands
+%that are obeyed by \TeX's digestive organs. Many commands are
+%carried out in the same way regardless of the current mode. The most
+%important commands of this type are called {\sl^{assignments}}, since
+%they assign new values to the meaning of control sequences or to \TeX's
+%internal quantities. For example, `|\def\a{a}|' and `|\parshape=1 5pt 100pt|'
+%and `|\advance\count20 by-1|' and `|\font\ff = cmff at 20pt|' are all
+%assignments, and they all have the same effect in all modes.
+%Assignment commands often include an~^|=|~sign, ^^{equals sign}
+%but in all cases this sign is optional; you can leave it out if you
+%don't mind the fact that the resulting \TeX\ code might not look quite
+%like an assignment.
+%\beginsyntax
+%<assignment>\is<non-macro assignment>\alt<macro assignment>
+%<non-macro assignment>\is<simple assignment>
+%  \alt^|\global|<non-macro assignment>
+%<macro assignment>\is<definition>\alt<prefix><macro assignment>
+%<prefix>\is|\global|\alt^|\long|\alt^|\outer|
+%<equals>\is<optional spaces>\alt<optional spaces>\thinspace|=|$_{12}$
+%\endsyntax
+%This syntax shows that every assignment can be prefixed by |\global|, but
+%only macro-definition assignments are allowed to be prefixed by |\long|
+%or |\outer|. Incidentally, if the |\globaldefs| parameter is positive at the
+%time of the assignment, a prefix of\/ |\global| is automatically implied;
+%but if\/ ^|\globaldefs| is negative at the time of the assignment, a prefix
+%of\/ |\global| is ignored. If\/ |\globaldefs| is zero (which it usually~is),
+%the appearance or nonappearance of\/ |\global| determines whether or not
+%a global assignment is made.
+%\beginsyntax
+%<definition>\is<def><control sequence><definition text>
+%<def>\is^|\def|\alt^|\gdef|\alt^|\edef|\alt^|\xdef|
+%<definition text>\is<parameter text><left brace><balanced text><right brace>
+%\endsyntax
+%Here ^\<control sequence> denotes a token that is either a control sequence
+%or an active character; ^\<left brace> and ^\<right brace> are explicit
+%character tokens whose category codes are respectively of types 1 and~2.
+%The ^\<parameter text> contains no \<left brace> or \<right brace> tokens,
+%and it obeys the rules of Chapter~20. All occurrences of \<left brace>
+%and \<right brace> tokens within the ^\<balanced text> must be properly nested
+%like \hbox{parentheses}. A |\gdef| command is equivalent to |\global\def|,
+%and |\xdef| is equivalent to |\global\edef|. \TeX\ reads the
+%\<control sequence> and \<parameter text> tokens and the opening \<left brace>
+%without expanding them; it expands the \<balanced text>\allowbreak\<right
+%brace> tokens only in the case of\/ |\edef| and |\xdef|.
+现在要回到我们最初的任务了，即讨论 \TeX\ 的消化过程所遇见的命令。
+很多命令在所有模式下都是一样的。大多数这种重要的命令都称为{\KT{9}赋值}，
+因为它们都赋予控制系列新的意思，或者赋予 \TeX\ 内部量新的值。
+例如，`|\def\a{a}|'、`|\parshape=1 5pt 100pt|'、`|\advance\count20 by-1|'
+和 `|\font\ff = cmff at 20pt|' 都是赋值，并且在所有模式下其结果都相同。
+赋值命令通常包含一个等号 |=|，但是在所有情况下这个等号是可有可无的；
+如果你不在乎所得到的 \TeX\ 代码看起来不像一个赋值，就可以扔掉这个等号。
+\beginsyntax
+<assignment>\is<non-macro assignment>\alt<macro assignment>
+<non-macro assignment>\is<simple assignment>
+  \alt^|\global|<non-macro assignment>
+<macro assignment>\is<definition>\alt<prefix><macro assignment>
+<prefix>\is|\global|\alt^|\long|\alt^|\outer|
+<equals>\is<optional spaces>\alt<optional spaces>\thinspace|=|$_{12}$
+\endsyntax
+这个语法表明，每个赋值前面可以有 |\global|，
+但是只有在宏定义的赋值前允许有 |\long| 或 |\outer|。
+顺便说一下，如果在赋值时参数 |\globaldefs| 是正值，
+那么就意味着要自动加上前缀 |\global|；
+但是如果在赋值时 |\globaldefs| 是负值，就忽略掉前缀 |\global|。
+如果 |\globaldefs| 是零（一般是这样的），
+就按照是否是全局赋值来确定 |\global| 出现与否。
+\beginsyntax
+<definition>\is<def><control sequence><definition text>
+<def>\is^|\def|\alt^|\gdef|\alt^|\edef|\alt^|\xdef|
+<definition text>\is<parameter text><left brace><balanced text><right brace>
+\endsyntax
+这里的 ^\<control sequence> 表示一个控制系列记号或者是一个活动符记号；
+\<left brace> 和 \<right brace> 是类别码分别为 1 和 2 的显式字符记号。
+\<parameter text> 不包括记号 \<left brace> 或 \<right brace>，
+并且遵守第二十章的规则。所有出现在 \<balanced text> 中的 \<left brace>
+和 \<right brace> 记号必须像括号那样正确嵌套。
+\1命令 |\gdef| 等价于 |\global\def|，|\xdef| 等价于 |\global\edef|。
+\TeX\ 读入 \<control sequence> 和 \<parameter text> 记号以及开符号
+\<left brace> 而不展开它们；只有在 |\edef| 和 |\xdef| 的情况下，
+它才展开记号 \<balanced text>\<right brace>。
+
+%Several commands that we will study below have a syntax somewhat like
+%that of a definition, but the \<parameter text> is replaced by an
+%arbitrary sequence of spaces and `|\relax|' commands, and the
+%\<left brace> token can be implicit:
+%\beginsyntax
+%<filler>\is<optional spaces>\alt<filler>^|\relax|<optional spaces>
+%<general text>\is<filler>|{|<balanced text><right brace>
+%\endsyntax
+%The main purpose of a \<general text> is to specify the \<balanced text>
+%inside.
+我们下面要讨论的几个命令的语法有点象宏定义，
+但是 \<parameter text> 被任意个空格或`|\relax|'所代替，
+并且记号 \<left brace> 可以是隐含的：
+\beginsyntax
+<filler>\is<optional spaces>\alt<filler>^|\relax|<optional spaces>
+<general text>\is<filler>|{|<balanced text><right brace>
+\endsyntax
+\<general text> 的主要用处是给出其中的 \<balanced text>。
+
+%Many different kinds of assignments are possible, but they fall into
+%comparatively few patterns, as indicated by the following syntax rules:
+%\beginsyntax
+%<simple assignment>\is<variable assignment>\alt<arithmetic>
+%  \alt<code assignment>\alt<let assignment>\alt<shorthand definition>
+%  \alt<fontdef token>\alt<family assignment>\alt<shape assignment>
+%  \alt^|\read|<number>[to]<optional spaces><control sequence>
+%  \alt^|\setbox|<8-bit number><equals><filler><box>
+%  \alt^|\font|<control sequence><equals><file name><at clause>
+%  \alt<global assignment>
+%<variable assignment>\is<integer variable><equals><number>
+%  \alt<dimen variable><equals><dimen>
+%  \alt<glue variable><equals><glue>
+%  \alt<muglue variable><equals><muglue>
+%  \alt<token variable><equals><general text>
+%  \alt<token variable><equals><filler><token variable>
+%<arithmetic>\is^|\advance|<integer variable><optional {\tt by}><number>
+%  \alt|\advance|<dimen variable><optional {\tt by}><dimen>
+%  \alt|\advance|<glue variable><optional {\tt by}><glue>
+%  \alt|\advance|<muglue variable><optional {\tt by}><muglue>
+%  \alt^|\multiply|<numeric variable><optional {\tt by}><number>
+%  \alt^|\divide|<numeric variable><optional {\tt by}><number>
+%<optional {\tt by}>\is[by]\alt\<optional spaces>
+%<integer variable>\is<integer parameter>\alt<countdef token>
+%  \alt^|\count|<8-bit number>
+%<dimen variable>\is<dimen parameter>\alt<dimendef token>
+%  \alt^|\dimen|<8-bit number>
+%<glue variable>\is<glue parameter>\alt<skipdef token>
+%  \alt^|\skip|<8-bit number>
+%<muglue variable>\is<muglue parameter>\alt<muskipdef token>
+%  \alt^|\muskip|<8-bit number>
+%<token variable>\is<token parameter>\alt<toksdef token>
+%  \alt^|\toks|<8-bit number>
+%<numeric variable>\is<integer variable>\alt<dimen variable>
+%  \alt<glue variable>\alt<muglue variable>% I want to force a page break here!
+%\endgraf\penalty-500\syntaxrule% this defeats the \beginsyntax trickery
+%<at clause>\is[at]<dimen>\alt[scaled]<number>\alt<optional spaces>
+%<code assignment>\is<codename><8-bit number><equals><number>
+%<let assignment>\is^|\futurelet|<control sequence><token><token>
+%  \alt^|\let|<control sequence><equals><one optional space><token>
+%<shorthand definition>\is^|\chardef|<control sequence><equals><8-bit number>
+%  \alt^|\mathchardef|<control sequence><equals><15-bit number>
+%  \alt<registerdef><control sequence><equals><8-bit number>
+%<registerdef>\is^|\countdef|\alt^|\dimendef|\alt^|\skipdef|\alt%
+%    ^|\muskipdef|\alt^|\toksdef|
+%<family assignment>\is<family member><equals><font>
+%<shape assignment>\is^|\parshape|<equals><number><shape dimensions>
+%\endsyntax
+%The \<number> at the end of a \<code assignment> must not be negative, except in
+%the case that a |\delcode| is being assigned. Furthermore, that \<number> should
+%be at most 15~for |\catcode|, 32768~for |\mathcode|, 255~for |\lccode| or
+%|\uccode|, 32767~for |\sfcode|, and $2^{24}-1$~for |\delcode|. In a
+%\<shape assignment> for which the \<number> is $n$, the ^\<shape dimensions>
+%are \<empty> if $n\le0$, otherwise they consist of $2n$ consecutive
+%occurrences of \<dimen>. \TeX\ does not expand tokens when it scans the
+%arguments of\/ |\let| and |\futurelet|.
+可能有很多种不同的赋值，但是它们几乎都属于几个模式，
+就像下面的语法规则表明的那样：
+\beginsyntax
+<simple assignment>\is<variable assignment>\alt<arithmetic>
+  \alt<code assignment>\alt<let assignment>\alt<shorthand definition>
+  \alt<fontdef token>\alt<family assignment>\alt<shape assignment>
+  \alt^|\read|<number>[to]<optional spaces><control sequence>
+  \alt^|\setbox|<8-bit number><equals><filler><box>
+  \alt^|\font|<control sequence><equals><file name><at clause>
+  \alt<global assignment>
+<variable assignment>\is<integer variable><equals><number>
+  \alt<dimen variable><equals><dimen>
+  \alt<glue variable><equals><glue>
+  \alt<muglue variable><equals><muglue>
+  \alt<token variable><equals><general text>
+  \alt<token variable><equals><filler><token variable>
+<arithmetic>\is^|\advance|<integer variable><optional {\tt by}><number>
+  \alt|\advance|<dimen variable><optional {\tt by}><dimen>
+  \alt|\advance|<glue variable><optional {\tt by}><glue>
+  \alt|\advance|<muglue variable><optional {\tt by}><muglue>
+  \alt^|\multiply|<numeric variable><optional {\tt by}><number>
+  \alt^|\divide|<numeric variable><optional {\tt by}><number>
+<optional {\tt by}>\is[by]\alt\<optional spaces>
+<integer variable>\is<integer parameter>\alt<countdef token>
+  \alt^|\count|<8-bit number>
+<dimen variable>\is<dimen parameter>\alt<dimendef token>
+  \alt^|\dimen|<8-bit number>
+<glue variable>\is<glue parameter>\alt<skipdef token>
+  \alt^|\skip|<8-bit number>
+<muglue variable>\is<muglue parameter>\alt<muskipdef token>
+  \alt^|\muskip|<8-bit number>
+<token variable>\is<token parameter>\alt<toksdef token>
+  \alt^|\toks|<8-bit number>
+<numeric variable>\is<integer variable>\alt<dimen variable>
+  \alt<glue variable>\alt<muglue variable>% I want to force a page break here!
+\endgraf\penalty-500\syntaxrule% this defeats the \beginsyntax trickery
+<code assignment>\is<code name><8-bit number><equals><number>
+<let assignment>\is^|\futurelet|<control sequence><token><token>
+  \alt^|\let|<control sequence><equals><one optional space><token>
+<shorthand definition>\is^|\chardef|<control sequence><equals><8-bit number>
+  \alt^|\mathchardef|<control sequence><equals><15-bit number>
+  \alt<registerdef><control sequence><equals><8-bit number>
+<registerdef>\is^|\countdef|\alt^|\dimendef|\alt^|\skipdef|\alt%
+    ^|\muskipdef|\alt^|\toksdef|
+<family assignment>\is<family member><equals><font>
+<shape assignment>\is^|\parshape|<equals><number><shape dimensions>
+\endsyntax
+\1在 \<code assignment> 结尾处的 \<number> 必须是非负的，
+除非要赋值的是 |\delcode|。
+还有，对 |\catcode| 此数至多为 15，对 |\mathcode| 至多为 32768，
+对 |\lccode| 或 |\uccode| 至多为 255，对 |\sfcode| 至多为 32767，
+对 |\delcode| 至多为 $2^{24}-1$。
+在 \<number> 为 $n$ 的 \<shape assignment> 中，
+如果 $n\le0$，那么 \<shape assignment> 为 \<empty>，
+否则它们由 $2n$ 个连续出现的 \<dimen> 组成。
+当 \TeX\ 遇见 |\let| 和 |\futurelet| 的参量时，不会把记号展开。
+
+%\ddangerexercise We discussed the distinction between explicit and ^{implicit
+%character tokens} earlier in this chapter. Explain how you can make the
+%control sequence |\cs| into an implicit space, using (a)~|\futurelet|,
+%(b)~|\let|.
+%\answer (a) |\def\\#1\\{}\futurelet\cs\\|\]|\\|. (b) |\def\\{\let\cs= }\\|\].
+%\ (There are many other solutions.)
+\ddangerexercise 在本章的前面部分，我们讨论了显式和隐式字符记号的区别。
+看看怎样将控制系列 |\cs| 作为隐式空格：(a) 利用 |\futurelet|；(b) 利用 |\let|。
+\answer (a) |\def\\#1\\{}\futurelet\cs\\|\]|\\|\thinspace 。
+(b) |\def\\{\let\cs= }\\|\]。（还有很多其他解法。）
+
+%All of the assignments mentioned so far will obey \TeX's grouping structure;
+%i.e., the changed quantities will be restored to their former values
+%when the current group ends, unless the change was global. The remaining
+%assignments are different, since they affect \TeX's global font tables
+%or hyphenation tables, or they affect certain control variables of such
+%^^{global parameters}
+%an intimate nature that grouping would be inappropriate. In all of the
+%following cases, the presence or absence of\/ |\global| as a prefix has no
+%effect.
+%\beginsyntax
+%<global assignment>\is<font assignment>
+%  \alt<hyphenation assignment>
+%  \alt<box size assignment>
+%  \alt<interaction mode assignment>
+%  \alt<intimate assignment>
+%<font assignment>\is^|\fontdimen|<number><font><equals><dimen>
+%  \alt^|\hyphenchar|<font><equals><number>
+%  \alt^|\skewchar|<font><equals><number>
+%<hyphenation assignment>\is^|\hyphenation|<general text>
+%  \alt^|\patterns|<general text>
+%<box size assignment>\is<box dimension><8-bit number><equals><dimen>
+%<interaction mode assignment>\is^|\errorstopmode|\alt^|\scrollmode|
+%  \alt^|\nonstopmode|\alt^|\batchmode|
+%<intimate assignment>\is<special integer><equals><number>
+%  \alt<special dimen><equals><dimen>
+%\endsyntax
+%When a |\fontdimen| value is assigned, the \<number> must be positive and
+%not greater than the number of parameters in the font's metric information
+%file, unless that font information has just been loaded into \TeX's
+%memory; in the latter case, you are allowed to increase the number of
+%parameters (see Appendix~F\null).  The \<special integer> and \<special
+%dimen> quantities were listed above when we discussed internal integers
+%and dimensions. When |\prevgraf| is set to a \<number>, the number must
+%not be negative.
+到现在讨论的所有赋值都遵守 \TeX\ 的编组结构；
+即在当前编组结束时，被修改的量都要恢复其以前的值，除非修改是全局的。
+其余的赋值是不同的，因为它们控制的是 \TeX\ 的全局字体表或连字表，
+或者它们控制的是某些无法编组的内部性质的变量。
+在下列所有情况下，|\global| 是否作为前缀出现都没有效果。
+\beginsyntax
+<global assignment>\is<font assignment>
+  \alt<hyphenation assignment>
+  \alt<box size assignment>
+  \alt<interaction mode assignment>
+  \alt<intimate assignment>
+<font assignment>\is^|\fontdimen|<number><font><equals><dimen>
+  \alt^|\hyphenchar|<font><equals><number>
+  \alt^|\skewchar|<font><equals><number>
+<at clause>\is[at]<dimen>\alt[scaled]<number>\alt<optional spaces>
+<hyphenation assignment>\is^|\hyphenation|<general text>
+  \alt^|\patterns|<general text>
+<box size assignment>\is<box dimension><8-bit number><equals><dimen>
+<interaction mode assignment>\is^|\errorstopmode|\alt^|\scrollmode|
+  \alt^|\nonstopmode|\alt^|\batchmode|
+<intimate assignment>\is<special integer><equals><number>
+  \alt<special dimen><equals><dimen>
+\endsyntax
+当给 |\fontdimen| 赋值时，\<number> 必须是正值，
+并且不大于字体度量文件中参数的数值，除非此字体的信息刚刚载入 \TeX\ 的内存；
+在后一种情况下，允许增大参数的数值（见附录 F）。
+\1当讨论内部整数或尺寸时，上面的量 \<special integer> 和 \<special dimen> 要列出。
+当 |\prevgraf| 被设定为一个 \<number> 时，此数必须是非负的。
+
+%The syntax for ^\<file name> is not standard in \TeX, because different
+%operating systems have different conventions. You should ask your local
+%system wizards for details on just how they have decided to implement file
+%names. However, the following principles should hold universally:
+%A~\<file name> should consist of \<optional spaces> followed by explicit
+%character tokens (after expansion). A sequence of six or fewer ordinary
+%letters and/or digits followed by a space should be a file name that works
+%in essentially the same way on all installations of\/ \TeX\null.  Uppercase
+%letters are not considered equivalent to their lowercase counterparts in
+%file names; for example, if you refer to fonts |cmr10| and |CMR10|, \TeX\
+%will not notice any similarity between them, although it might input the
+%same font metric file for both fonts.
+\<file name> 的语法在 \TeX\ 中没有标准，
+因为不同的操作系统有不同的约定。%
+你应该向本地系统的高手请教，看看怎样给出执行文件的名称。%
+但是，下面的原理是普遍成立的：
+(在展开后)\<file name> 由 \<optional spaces> 后面跟显式字符记号而组成。%
+在所有的 \TeX\ 所在系统中，六个以下普通字母和/或数字加一个空格而得到的文件名%
+应该基本上都是一样的。%
+在文件名中，大写字母与相应的小写字母可能不等价；
+例如，如果你用到字体 |\cmr10| 和 |CMR10|,
+ \TeX\ 不会认为它们是类似的，虽然这两种字体所用的字体度量文件可能是同一个。
+
+%\TeX\ takes precautions so that constructions like `|\chardef\cs=10\cs|' and
+%`|\font\cs=name\cs|' won't expand the second |\cs| until
+%the assignments are done.
+对于像 `|\chardef\cs=10\cs|' 和 `|\font\cs=name\cs|' 这样的结构。
+\TeX\ 有预防措施，直到赋值结束后，它才展开第二个 |\cs|。
+
+%Our discussion of assignments is complete except that the |\setbox|
+%assignment involves a quantity called \<box> that has not yet been
+%defined. Here is its syntax:
+%\beginsyntax
+%<box>\is^|\box|<8-bit number>\alt^|\copy|<8-bit number>
+%  \alt^|\lastbox|\alt^|\vsplit|<8-bit number>[to]<dimen>
+%  \alt^|\hbox|<box specification>|{|<horizontal mode material>|}|
+%  \alt^|\vbox|<box specification>|{|<vertical mode material>|}|
+%  \alt^|\vtop|<box specification>|{|<vertical mode material>|}|
+%<box specification>\is[to]<dimen><filler>
+%  \alt[spread]<dimen><filler>\alt<filler>
+%\endsyntax
+%The |\lastbox| operation is not permitted in math modes, nor is it allowed
+%in vertical mode when the main vertical list has been entirely contributed
+%to the current page. But it is allowed in horizontal modes and in
+%internal vertical mode; in such modes it refers to (and removes) the
+%last item of the current list, provided that the last item is an hbox or~vbox.
+我们关于赋值的讨论只剩下 |\setbox| 了，它包括一个叫做 \<box> 的量，
+而我们还未定义它。其语法如下：
+\beginsyntax
+<box>\is^|\box|<8-bit number>\alt^|\copy|<8-bit number>
+  \alt^|\lastbox|\alt^|\vsplit|<8-bit number>[to]<dimen>
+  \alt^|\hbox|<box specification>|{|<horizontal mode material>|}|
+  \alt^|\vbox|<box specification>|{|<vertical mode material>|}|
+  \alt^|\vtop|<box specification>|{|<vertical mode material>|}|
+<box specification>\is[to]<dimen><filler>
+  \alt[spread]<dimen><filler>\alt<filler>
+\endsyntax
+对象 |\lastbox| 不允许出现在数学模式中，
+当主垂直列完全送到当前页面时，也不允许出现在垂直模式中。%
+但是它可以出现在水平模式和内部垂直模式中；
+在这样的模式下，如果最后的项目是一个 hbox 或 vbox,
+那么它指向(并且去掉)当前列的最后的项目。
+
+%The three last alternatives for a \<box> present us with a new situation:
+%The ^\<horizontal mode material> in an |\hbox| and the
+%^\<vertical mode material> in a |\vbox| can't simply be swallowed up
+%in one command like an \<8-bit number> or a \<dimen>; thousands of
+%commands may have to be executed before that box is constructed and
+%before the |\setbox| command can be completed.
+\<box> 的最后三个选项给我们给出展示了一种新情况：
+在一个 |\hbox| 中的 \<horizontal mode material> 和在一个 \<vbox>
+中的 \<vertical mode material> 不能在像 \<8-bit number> 或 \<dimen>
+那样的一个命令中直接消化掉；在该盒子构建好以及 |\setbox| 完成之前，
+也许有数千个命令已经被执行了。
+
+%Here's what really happens: A command like
+%\begindisplay
+%|\setbox|\<number>|=\hbox to|\<dimen>|{|\<horizontal mode material>|}|
+%\enddisplay
+%causes \TeX\ to evaluate the \<number> and the \<dimen>, and to put those
+%values on a ``stack'' for safe keeping. Then \TeX\ reads the `|{|' (which
+%stands for an explicit or implicit begin-group character, as explained
+%earlier), and this initiates a new level of grouping. At this point
+%\TeX\ enters restricted horizontal mode and proceeds to execute commands
+%in that mode. An arbitrarily complex box can now be constructed;
+%the fact that this box is eventually destined for a |\setbox| command
+%has no effect on \TeX's behavior while the box is being built. Eventually,
+%when the matching `|}|' appears, \TeX\ restores values that were
+%changed by assignments in the group just ended; then it packages the hbox
+%(using the size that was saved on the stack), and completes the
+%|\setbox| command, returning to the mode it was in at the time of
+%the |\setbox|.
+下面是实际发生的情况：对于像
+\begindisplay
+|\setbox|\<number>|=\hbox to|\<dimen>|{|\<horizontal mode material>|}|
+\enddisplay
+这样一个命令，\TeX\ 要计算 \<number> 和 \<dimen>，
+并且为了安全把这些值放在一个``堆栈''上。接着 \TeX\ 读入
+`|{|'（它表示前面讨论的显式或隐式组开始符号），并且开始另一层编组。
+这时，\TeX\ 进入受限水平模式并且在此模式下执行命令。
+现在，可以构造任意复杂的盒子；当构造盒子时，
+此盒子最终指定给一个 |\setbox| 命令的事实，并不会影响 \TeX\ 构建盒子的工作。
+最后，当相匹配的 `|}|' 出现时，\TeX\ 就把刚刚结束的编组中由赋值改变的值复原；
+接着把 hbox 打包（使用存放在堆栈中的尺寸），并且完成命令 |\setbox|，
+回到 |\setbox| 时所处的模式。
+
+%\smallbreak
+%Let us now consider other commands that, like assignments, are
+%obeyed in basically the same way regardless of \TeX's current mode.
+\smallbreak
+\1现在我们要讨论其它命令，它们像赋值这样，在任何模式下都得到基本相同的结果。
+
+%\def\\{\smallbreak\textindent{$\bull$}}
+%\\^|\relax|.\enskip
+%This is an easy one: \TeX\ does nothing.
+\def\\{\smallbreak\textindent{$\bull$}}
+\\^|\relax|.\enskip
+这个很简单： \TeX\ 什么也不做。
+
+%\\|}|.\enskip
+%This one is harder, because it depends on the current group. \TeX\ should
+%now be working on a group that began with |{|; and it knows why it
+%started that group. So it does the appropriate finishing actions, undoes
+%the effects of non-global assignments, and leaves the group.
+%At this point \TeX\ might leave its current mode and return to a mode that
+%was previously in effect.
+\\|}|.\enskip
+这个有点难，因为它依赖于当前编组。\TeX\ 现在应该处于以 |{| 开始的一个编组中；
+并且它知道此编组开始的原因。因此它作出相应的结束操作，取消非全局赋值的影响，
+并且离开这个编组。这时，\TeX\ 可能离开当前模式，并且返回前一个起作用的模式。
+
+%\\^|\begingroup|.\enskip
+%When \TeX\ sees this command, it enters a group that must be terminated
+%by |\endgroup|, not by |}|. The mode doesn't change.
+\\^|\begingroup|.\enskip
+当 \TeX\ 遇见这个命令时，就进入一个编组，这个编组必须以 |\endgroup| 结束，
+而不是以 |}|。模式不会改变。
+
+%\\^|\endgroup|.\enskip
+%\TeX\ should currently be processing a group that began with |\begingroup|.
+%Quantities that were changed by non-global assignments in that group
+%are restored to their former values. \TeX\ leaves the group,
+%but stays in the same mode.
+\\^|\endgroup|.\enskip
+\TeX\ 目前应该正在处理以 |\begingroup| 开始的一个编组。
+在此编组内部的非全局赋值所修改的量将恢复为其原来的值。
+\TeX\ 离开这个编组，但保持模式不变。
+
+%\\^|\show|\stretch\<token>,
+%\stretch\stretch\stretch^|\showbox|\stretch\<8-bit number>,
+%\stretch\stretch\stretch^|\showlists|,
+%\stretch\stretch\stretch^|\showthe|$\langle$internal quantity$\rangle$.\enskip
+%These commands are intended to help you figure out what \TeX\ thinks it
+%is doing. The tokens following |\showthe| should be anything that can
+%follow |\the|, as explained in Chapter~20.
+\\^|\show|\stretch\<token>,
+\stretch\stretch\stretch^|\showbox|\stretch\<8-bit number>,
+\stretch\stretch\stretch^|\showlists|,
+\stretch\stretch\stretch^|\showthe|$\langle$internal quantity$\rangle$.\enskip
+这些命令帮助你了解 \TeX\ 正在干什么。%
+跟在 |\showthe| 后面的记号是可以跟在 |\the| 后面的任何对象，
+见第二十章的讨论。
+
+%\ddangerexercise Review the rules for what can follow |\the| in
+%Chapter~20, and construct a formal syntax that defines ^\<internal
+%quantity> in a way that fits with the other syntax rules we have been
+%discussing.
+%\answer \<internal quantity>\is\<internal integer>\alt
+%\<internal dimen>\parbreak\qquad\alt\<internal glue>\alt\<internal muglue>\alt
+%\<internal nonnumeric>\parbreak \<internal nonnumeric>\is\<token
+%variable>\alt \<font>
+\ddangerexercise 复习一下第 20 章中可以跟在 |\the| 后面的这些规则，
+并且用一种与已讨论过的其它语法规则类似的方法，
+构造出定义 \<internal quantity> 的正式语法。
+\answer \<internal quantity>\is\<internal integer>\alt
+\<internal dimen>\parbreak\qquad\alt\<internal glue>\alt\<internal muglue>\alt
+\<internal nonnumeric>\parbreak \<internal nonnumeric>\is\<token
+variable>\alt \<font>
+
+%\\^|\shipout|\<box>.\enskip
+%After the \<box> is formed---possibly by constructing it explicitly and
+%changing modes during the construction, as explained for |\hbox| earlier---its
+%contents are sent to the ^|dvi|~file (see Chapter~23).
+\\^|\shipout|\<box>.\enskip
+在 \<box> 生成后——可能是显式地构造出它并且在构造时要改变模式，
+就象前面 |\hbox| 的讨论那样——其内容要送到 |\dvi| 文件(见第二十三章)。
+
+%\\^|\ignorespaces|\stretch$\langle$optional spaces$\rangle$.
+%\TeX\ reads (and expands) tokens, doing nothing until reaching one that is
+%not a \<space token>.
+\\^|\ignorespaces|\stretch$\langle$optional spaces$\rangle$.
+ \TeX\ 一直读入到遇见一个 \<space token> 后，就读入(并且展开)记号，
+
+%\\^|\afterassignment|\<token>.\enskip
+%The \<token> is saved in a special place; it will be inserted
+%back into the input just after the next assignment command has been
+%performed. An assignment need not follow immediately; if another
+%|\afterassignment| is performed before the next assignment, the second one
+%overrides the first. If the next assignment is a ^|\setbox|, and if the
+%assigned \<box> is |\hbox| or |\vbox| or |\vtop|, the \<token> will be
+%inserted just after the |{| in the box construction, not after the |}|;
+%it will also come just before any tokens inserted by ^|\everyhbox| or
+%^|\everyvbox|.
+\\^|\afterassignment|\<token>.\enskip
+这个 \<token> 被保存在一个特殊的地方；在下一个赋值命令刚执行完毕后，
+再把它插回到输入中。赋值不必紧跟在在后面；
+如果在下一个赋值前另一个 |\afterassignment| 被执行了，
+那么第二个 \<token> 就替换了第一个。
+如果下一个赋值是一个 |\setbox|，并且被赋值的 \<box> 是 |\hbox|、|\vbox|
+或 |\vtop|，那么在盒子的构造中，\<token> 就被插入到 |{| 之后，而不是 |}| 之后；
+它还出现在由 |\everyhbox| 或 |\everyvbox| 所插入任意记号的最前面。
+
+%\\^|\aftergroup|\<token>.\enskip
+%The \<token> is saved on \TeX's stack; it will be inserted back into the
+%input just after the current group has been completed and its local
+%assignments have been undone. If several |\aftergroup| commands occur
+%in the same group, the corresponding commands will be scanned in the
+%same order; for example, `|{\aftergroup\a\aftergroup\b}|' yields `|\a\b|'.
+\\^|\aftergroup|\<token>.\enskip
+这个 \<token> 被保存在 \TeX\ 的堆栈上；
+在当前编组结束，以及其中的局部赋值都被撤消以后，它将被插回到输入中。
+如果在同一编组中出现几个 |\aftergroup| 命令，
+那么相应的命令将按照同样的次序被读入；
+例如，`|{\aftergroup\a\aftergroup\b}|' 得到的是 `|\a\b|'。
+
+%\\^|\uppercase|\<general text>, ^|\lowercase|\<general text>.\enskip
+%The \<balanced text> in the general text is converted to uppercase form
+%or to lowercase form using the |\uccode| or |\lccode| table,
+%as explained in Chapter~7; no expansion is done. Then \TeX\ will
+%read that \<balanced text> again.
+\\^|\uppercase|\<general text>, ^|\lowercase|\<general text>.\enskip
+如同第 7 章所述，利用 |\uccode| 或 |\lccode| 表，将一般文本中的
+\<balanced text> 转换为大写或小写形式；不进行展开。
+然后，\TeX\ 会再次读入此 \<balanced text>。
+
+%\\^|\message|\<general text>, ^|\errmessage|\<general text>.\enskip
+%The balanced text (with expansion) is written on the user's terminal,
+%using the format of error messages in the case of\/ |\errmessage|.
+%In the latter case the ^|\errhelp| tokens will be shown if they are nonempty
+%and if the user asks for help.
+\\^|\message|\<general text>, ^|\errmessage|\<general text>.\enskip
+所得到的文本(转换后)被输出到用户的终端，如果是 |\errmessage| 就使用错误信息的%
+格式。%
+\1在后一种情况下，记号 |\errhelp| 在非空并且用户要求的情况下会显示出来。
+
+%\\^|\openin|\stretch$\langle$4-bit number$\rangle$\stretch\<equals>\stretch
+%\<filename>, \ ^|\closein|\stretch$\langle$4-bit number$\rangle$.
+%These commands open or close the specified input stream, for use in
+%|\read| assignments as explained in Chapter~20.
+\\^|\openin|\stretch$\langle$4-bit number$\rangle$\stretch\<equals>\stretch
+\<filename>, \ ^|\closein|\stretch$\langle$4-bit number$\rangle$.
+这些命令打开或关闭所给定的输入流，这些输入流为第 20 章中讨论的 |\read|
+赋值所使用。
+
+%\\|\immediate\openout|\<4-bit number>\<equals>\<filename>\kern-.4pt,
+%|\immediate\closeout|\allowbreak\<4-bit number>.\enskip ^^|\immediate|
+%The specified output stream is opened or closed, for use in |\write|
+%commands, as explained in Chapter~21.
+\\|\immediate\openout|\<4-bit number>\<equals>\<filename>\kern-.4pt,
+|\immediate\closeout|\allowbreak\<4-bit number>.\enskip
+给定的输出流被打开或关闭，为命令 |\write| 所用，见第二十一章的讨论。
+
+%\\|\immediate\write|\<number>\<general text>.\enskip
+%The balanced text is written on the file that corresponds to the
+%specified stream number, provided that such a file is open. Otherwise it
+%is written on the user's terminal and on the log file. \ (See Chapter~21;
+%the terminal is omitted if the \<number> is negative.)
+\\|\immediate\write|\<number>\<general text>.\enskip
+所得到的文本被写入到对应于给定流编号的文件中，如果这样一个文件是打开的话。%
+否则，就写入到用户终端和 log 文件中。%
+(见第二十一章；如果 \<number> 是负的，就不输出到终端。)
+
+%\medbreak
+%That completes the list of mode-independent commands, i.e., the commands
+%that do not directly affect the lists that \TeX\ is building.  When \TeX\
+%is in vertical mode or internal vertical mode, it is constructing a
+%vertical list; when \TeX\ is in horizontal mode or restricted horizontal
+%mode, it is constructing a horizontal list; when \TeX\ is in math mode
+%or display math mode, it is constructing---guess what---a math list. In
+%each of these cases we can speak of the ``current list''; and there are
+%some commands that operate in essentially the same way, regardless of the
+%mode, except that they deal with different sorts of lists:
+\medbreak
+上面就是不依赖于模式的所有命令的列表，
+即，不直接影响 \TeX\ 所构建的列的命令。%
+当 \TeX\ 处在垂直模式或内部垂直模式中时，它就在构建一个垂直列；
+当 \TeX\ 处在水平模式或受限水平模式中时，它就在构建一个水平列；
+当 \TeX\ 处在数学模式或陈列数学模式下时，可以猜出，它在构建一个数学列。%
+对每个情况下，我们都可以讨论``当前列'';
+并且有一些命令在所有模式下结果是相同的，除非它们处理的是不同种类的列：
+
+%\\^|\openout|\<4-bit number>\<equals>\<filename>,
+%^|\closeout|\<4-bit number>,
+%^|\write|\allowbreak\<number>\<general text>.\enskip
+%These commands are recorded into a ``whatsit'' item, which is appended to
+%the current list. The command will be performed later, during any
+%|\shipout| that applies to this list, unless the list is part of
+%a box inside ^{leaders}.
+\\^|\openout|\<4-bit number>\<equals>\<filename>,
+^|\closeout|\<4-bit number>,
+^|\write|\allowbreak\<number>\<general text>.\enskip
+这些命令记录了追加到当前列的一个``无名''项目。
+此命令在 |\shipout| 应用到这个列期间后才执行，
+除非此列是指引线中盒子的内容。
+
+%\\^|\special|\<general text>.\enskip
+%The balanced text is expanded and put into a ``whatsit'' item, which is
+%appended to the current list. The text will eventually appear in the
+%^|dvi|~file as an instruction to subsequent software (see Chapter~21).
+\\^|\special|\<general text>.\enskip
+所得到的文本被展开并且放在一个``无名''项目中，它要追加到当前列。%
+此文本最后作为后续软件的指令而出现在 |dvi| 文件中(见第二十一章)。
+
+%\\^|\penalty|\<number>.\enskip
+%A penalty item carrying the specified number is appended to the current list.
+%In vertical mode, \TeX\ also exercises the page builder (see~below).
+\\^|\penalty|\<number>.\enskip
+给定数值的惩罚项目要追加到当前列。在垂直模式下， \TeX\ 还要进行页面构建(见下面)。
+
+%\\^|\kern|\<dimen>, ^|\mkern|\<mudimen>.\enskip
+%A kern item carrying the specified dimension is appended to the current list.
+%In vertical modes this denotes a vertical space; otherwise it denotes a
+%horizontal space. An |\mkern| is allowed only in math modes.
+\\^|\kern|\<dimen>, ^|\mkern|\<mudimen>.\enskip
+给定尺寸的紧排项目要追加到当前列。%
+在垂直模式下，它表示垂直空白；否则它表示的是水平空白。%
+|\mkern| 只允许出现在数学模式中。
+
+%\\^|\unpenalty|, ^|\unkern|, ^|\unskip|.\enskip
+%If the last item on the current list is respectively of type penalty,
+%kern, or glue (possibly including ^{leaders}), that item is removed from
+%the list. However, like |\lastbox|, these commands are not permitted in
+%vertical mode if the main vertical list-so-far has been entirely contributed
+%to the current page, since \TeX\ never removes items from the current page.
+\\^|\unpenalty|, ^|\unkern|, ^|\unskip|.\enskip
+如果当前列上的最后一个项目的类型分别是惩罚、紧排或者粘连（可能含有指引线），
+那么此项目将从当前列中删除。但是，如果此时的主垂直列已经完全送到当前页面，
+那么像 |\lastbox| 这些命令不允许出现在垂直模式中，
+因为 \TeX\ 从不从当前页面删除项目。
+
+%\\^|\mark|\<general text>.\enskip
+%The balanced text is expanded and put into a mark item, which is appended to
+%the current list. The text may eventually become the replacement text
+%for ^|\topmark|, ^|\firstmark|, ^|\botmark|, ^|\splitfirstmark|, and/or
+%^|\splitbotmark|, if this mark item ever gets into a vertical list. \ (Mark
+%items can appear in horizontal lists and math lists, but they have no
+%effect until they ``migrate'' out of their list. The ^{migration process}
+%is discussed below and in Chapter~25.)
+\\^|\mark|\<general text>.\enskip
+所得到的文本被展开，并且放到一个标记项目中，此项目要追加到当前列。
+如果这个标记项目曾经进入过垂直列，那么此文本最后会变成 ^|\topmark|、
+^|\firstmark|、^|\botmark|、|\splitfirstmark| 和/或 |\splitbotmark|
+的替换文本。（标记项目可以出现在水平列和数学列，
+但是直到它们从这些列中``转移''出来才能派上用场。
+这个转移过程将在下面和第 25 章讨论。）
+
+%\\^|\insert|\<8-bit number>\<filler>|{|\<vertical mode material>|}|;
+%the \<8-bit number> must not be~255. \ The `|{|' causes \TeX\ to enter
+%internal vertical mode and a new level of grouping. When the matching~`|}|'
+%is sensed, the vertical list is put into an insertion item that is
+%appended to the current list using the values of\/ ^|\splittopskip|,
+%^|\splitmaxdepth|, and ^|\floatingpenalty| that were current in the group
+%just ended. \ (See Chapter~15.) \ This insertion item leads ultimately to
+%a page insertion only if it appears in \TeX's main vertical list, so it
+%will have to ``^{migrate}'' there if it starts out in a horizontal list or
+%a math list.  \TeX\ also exercises the page builder (see below), after an
+%|\insert| has been appended in vertical~mode.
+\\^|\insert|\<8-bit number>\<filler>|{|\<vertical mode material>|}|；
+此 \<8-bit number>\break 不能是 255。
+这个 `|{|' 使得 \TeX\ 进入内部垂直模式和一个新层次的编组。
+\1当遇到相匹配的 `|}|' 时，此垂直列被放在一个插入项目中，并且利用组刚刚结束时的
+|\splittopskip|, ^|\splitmaxdepth| 和 |\floatingpenalty| 的当前值追加到当前列。%
+（见第~15~章。）%
+只有在这个插入项目出现在 \TeX\ 的主垂直列中时，它才最终变成页面插入对象，
+因此如果它原来在垂直列或数学列中，就必须``转移''出来。
+在把一个 |\insert| 追加到垂直模式中后，\TeX\ 还要进行页面构建（见下面）。
+
+%\\^|\vadjust|\<filler>|{|\<vertical mode material>|}|.\enskip
+%This is similar to |\insert|; the constructed vertical list goes into an
+%adjustment item that is appended to the current list. However,
+%|\vadjust| is not allowed in vertical modes. When an adjustment item
+%migrates from a horizontal list to a vertical list, the vertical list
+%inside the adjustment item is ``unwrapped'' and put directly into
+%the enclosing list.
+\\^|\vadjust|\<filler>|{|\<vertical mode material>|}|.\enskip
+它类似于 |\insert|; 所构造的垂直列放在当前的调整项目中，并且追加到当前列。%
+但是，|\vadjust| 不允许出现在垂直模式中。%
+当一个调整项目从水平列转移到垂直列时，在调整项目中的垂直列被``打开'',
+并且直接放在此封装列中。
+
+%\medbreak
+%\centerline{$*\qquad*\qquad*$}
+%\medskip\noindent
+%Almost everything we have discussed so far in this chapter could equally
+%well have appeared in a chapter entitled ``Summary of Horizontal Mode''
+%or a chapter entitled ``Summary of Math Mode,'' because \TeX\ treats
+%all of the commands considered so far in essentially the same way
+%regardless of the current mode. Chapters 25 and~26 are going to be
+%a lot shorter than the present one, since it will be unnecessary
+%to repeat all of the mode-independent rules.
+\medbreak
+\centerline{$*\qquad*\qquad*$}
+\medskip\noindent
+在本章，到现在为止讨论的几乎所有对象都同样出现在``水平模式汇总''和%
+``数学模式汇总''这每一章中，
+因为这些命令在所有模式下的结果都是一样的。%
+第二十五和二十六章比本章短很多，因为它不必重复这些与模式无关的对象。
+
+%But now we come to commands that are mode-dependent;
+%we shall conclude this chapter by discussing what \TeX\ does with the
+%remaining commands, when in vertical mode or internal vertical mode.
+但是现在无名要讨论与模式有关的命令；
+在本章最后，我们讨论在垂直模式和内部垂直模式中其余的命令。
+
+%One of the things characteristic of vertical mode is the page-building
+%operation described in Chapter~15. \TeX\ periodically takes material
+%that has been put on the main vertical list and moves it from the
+%``contribution list'' to the ``current page.'' At such times the output
+%routine might be invoked. We shall say that \TeX\ {\sl exercises
+%the ^{page builder}\/} whenever it tries to empty the current
+%contribution list. The concept of contribution list exists only in
+%the outermost vertical mode, so nothing happens when \TeX\ exercises
+%the page builder in internal vertical mode.
+垂直模式的一个特有的东西就是在第十五章中讨论的页面构建。%
+ \TeX\ 定期从主垂直列中取出内容，并且把它从``备选列''送到``当前页面''。%
+此时可能要调用输出例行程序。%
+只要 \TeX\ 正在从当前备选列中送出内容，我们就称它在{\KT{9}进行页面构建}。%
+备选列这个名称只在最外层垂直列中出现，因此当在内部垂直模式下进行页面构建时%
+什么也不做。
+
+%Another thing characteristic of vertical modes is the ^{interline glue}
+%that is inserted before boxes, based on the values of\/ |\prevdepth|
+%and ^|\baselineskip| and ^|\lineskip| and ^|\lineskiplimit| as explained
+%in Chapter~12. If a command changes ^|\prevdepth|, that fact is
+%specifically mentioned below. The |\prevdepth| is initially set to
+%$-1000\pt$, a special value that inhibits interline glue, whenever \TeX\
+%begins to form a vertical list, except in the case of\/ |\halign| and
+%|\noalign| when the interline glue conventions of the outer list continue
+%inside the inner one.
+另一个垂直模式所特有的东西是行间粘连，它插入到盒子前面，使用的是第十二章中%
+讨论的 |\prevdepth|, |\baselineskip|, |\lineskip| 和 |\lineskiplimit| 的值。%
+如果用一个命令把 |\prevdepth| 改变了，那么就出现了下面特别描述的结果。%
+只要 \TeX\ 开始构建一个垂直列，~|\prevdepth| 就最先设置为 $-1000\pt$,
+这是来自于行间粘连的一个特殊值；但是外层列的行间粘连设置延续到内层时%
+~|\halign| 和 |\noalign| 的情况除外。
+
+%\\^|\vskip|\<glue>, ^|\vfil|, ^|\vfill|, ^|\vss|, ^|\vfilneg|.\enskip
+%A glue item is appended to the current vertical list.
+\\^|\vskip|\<glue>, ^|\vfil|, ^|\vfill|, ^|\vss|, ^|\vfilneg|.\enskip
+把一个粘连项目追加到当前垂直列。
+
+%\\\<leaders>\<box or rule>\<vertical skip>.\enskip
+%Here ^\<vertical skip> refers to one of the five glue-appending commands
+%just mentioned. The formal syntax for \<leaders> and for \<box or rule> is
+%\beginsyntax
+%<leaders>\is|\leaders|\alt|\cleaders|\alt|\xleaders|
+%<box or rule>\is<box>\alt<vertical rule>\alt<horizontal rule>
+%<vertical rule>\is|\vrule|<rule specification>
+%<horizontal rule>\is|\hrule|<rule specification>
+%<rule specification>\is<optional spaces>\alt<rule dimension><rule specification>
+%<rule dimension>\is[width]<dimen>\alt[height]<dimen>\alt[depth]<dimen>
+%\endsyntax
+%A glue item that produces ^{leaders} is appended to the current list.
+\\\<leaders>\<box or rule>\<vertical skip>.\enskip
+在这里，\<vertical skip> 指的是刚刚提到的五个追加粘连的命令。%
+\<leaders> 和 \<box or rule> 的正式语法为：
+\beginsyntax
+<leaders>\is|\leaders|\alt|\cleaders|\alt|\xleaders|
+<box or rule>\is<box>\alt<vertical rule>\alt<horizontal rule>
+<vertical rule>\is|\vrule|<rule specification>
+<horizontal rule>\is|\hrule|<rule specification>
+<rule specification>\is<optional spaces>\alt<rule dimension><rule specification>
+<rule dimension>\is[width]<dimen>\alt[height]<dimen>\alt[depth]<dimen>
+\endsyntax
+\1生成指引线的粘连项目被追加到当前列。
+
+%\\^\<space token>.\enskip
+%Spaces have no effect in vertical modes.
+\\^\<space token>.\enskip
+空格在垂直列中不起作用。
+
+%\\^\<box>.\enskip
+%The box is constructed, and if the result is void nothing happens.
+%Otherwise the current vertical list receives (1)~interline glue, followed by
+%(2)~the new box, followed by (3)~vertical material that ^{migrates} out of the
+%new box (if the \<box> was an ^|\hbox| command). Then ^|\prevdepth| is
+%set to the new box's depth, and \TeX\ exercises the page builder.
+\\^\<box>.\enskip
+构造这个盒子，并且如果所得到的是空的话就什么也没有得到。%
+否则，当前垂直列就得到了 (1). 行间粘连，后面跟着 (2). 这个新盒子，
+后面再跟着 (3). 从新盒子转移出来的垂直内容(当这个 \<box> 是一个 |\hbox| 命令时)。%
+接着，~|\prevdepth| 被设定为这个新盒子的深度，并且 \TeX\ 进行页面构建。
+
+%\\^|\moveleft|\<dimen>\<box>, ^|\moveright|\<dimen>\<box>.\enskip
+%This acts exactly like an unadorned \<box> command, except that the new box
+%being appended to the vertical list is also shifted left or right by the
+%specified amount.
+\\^|\moveleft|\<dimen>\<box>, ^|\moveright|\<dimen>\<box>.\enskip
+它就象一个普通 \<box> 命令一样，
+但是追加到垂直列的这个新盒子还要向左或向右平移给定的距离。
+
+%\\^|\unvbox|\<8-bit number>, ^|\unvcopy|\<8-bit number>.\enskip
+%If the specified box register is void, nothing happens. Otherwise that
+%register must contain a vbox. The vertical list inside that box is
+%appended to the current vertical list, without changing it in any way.
+%The value of\/ |\prevdepth| is not affected. The box register becomes void
+%after |\unvbox|, but it remains unchanged by |\unvcopy|.
+\\^|\unvbox|\<8-bit number>, ^|\unvcopy|\<8-bit number>.\enskip
+如果所给定的盒子寄存器是置空的，那么就什么也不做。%
+否则，寄存器必须包含一个 vbox。%
+在此盒子中的垂直列不做任何改变地追加到当前列。%
+|\prevdepth| 的值也不受影响。%
+在 |\unvbox| 后此盒子寄存器变成置空的，但是在 |\unvcopy| 后它保持不变。
+
+%\\\<horizontal rule>.\enskip
+%The specified ^{rule} is appended to the current list. Then |\prevdepth|
+%is set to $-1000\pt$; this will prohibit interline glue when the next box
+%is appended to the list.
+\\\<horizontal rule>.\enskip
+这个给定的标尺被追加到当前列。%
+接着把 |\prevdepth| 设定为 $-1000\pt$;
+当下一个盒子追加到本列时不能有行间粘连。
+
+%\\^|\halign|\<box specification>|{|\<alignment material>|}|.\enskip
+%The ^\<alignment material> consists of a preamble followed by zero or more
+%lines to be aligned; see Chapter~22. \TeX\ enters a new level of grouping,
+%represented by the `|{|' and `|}|', within which changes to ^|\tabskip|
+%will be confined.  The alignment material can also contain optional
+%occurrences of `^|\noalign|\<filler>|{|\<vertical mode material>|}|'
+%between lines; this adds another level of grouping.  \TeX\ operates in
+%internal vertical mode while it works on the material in |\noalign| groups
+%and when it appends lines of the alignment; the resulting internal
+%vertical list will be appended to the enclosing vertical list after the
+%alignment is completed, and the page builder will be exercised. The value
+%of\/ |\prevdepth| at the time of the |\halign| is used at the beginning of
+%the internal vertical list, and the final value of\/ |\prevdepth| is carried
+%to the enclosing vertical list when the alignment is completed, so that the
+%interline glue is calculated properly at the beginning and end of the
+%alignment.  \TeX\ also enters an additional level of grouping when it
+%works on each individual entry of the alignment, during which time it acts
+%in restricted horizontal mode; the individual entries will be hboxed as
+%part of the final alignment, and their vertical material will ^{migrate}
+%to the enclosing vertical list.  The commands |\noalign|, ^|\omit|,
+%^|\span|, ^|\cr|, ^|\crcr|, and |&| (where |&| denotes an explicit or
+%implicit character of category~4) are intercepted by the alignment
+%process, en route to \TeX's stomach, so they will not appear as commands in
+%the stomach unless \TeX\ has lost track of what alignment they belong to.
+\\^|\halign|\<box specification>|{|\<alignment material>|}|.\enskip
+这个 \<alignment material> 由导言和其后的零个或多个对齐的行组成；见第二十二章。%
+ \TeX\ 进入一个由`|{|'和`|}|'表示的新层次的编组，
+在其中对 |\tabskip| 的修改会受到限制。%
+对齐的内容还可以出现行间的`^|\noalign|\<filler>|{|\<vertical mode material>|}|';
+它会增加另一个层次的编组。%
+当 \TeX\ 处理 |\noalign| 组中的内容和追加对齐的行时， \TeX\ 处在内部垂直模式中；
+在对齐内容结束后，所得到的内部垂直列将追加到封装的垂直列，并且进行页面构建。%
+在 |\halign| 时，|\prevdepth| 的值在内部垂直列的开头要用到，
+当本对齐结束时，|\prevdepth| 最后的值会送到封装的垂直列，
+这样在对齐开头和结尾处就正确计算出了行间粘连。%
+当 \TeX\ 处理对齐的各个单元时还要进入另一个层次的编组，
+这时它处在受限水平模式中；
+作为最后对齐的一部分，各个单元都放在 hbox 中，并且其垂直内容将转移到封装的%
+垂直列。%
+命令 |\noalign|, ^|\omit|, ^|\span|, ^|\cr|, ^|\crcr| 和 |&|~(其中 |&|~%
+表示类代码为 4 的显式或隐式字符)在去 \TeX\ 的胃的过程中被对齐过程所截获，
+这样它们就不作为命令而出现在胃中，除非 \TeX\ 不知道它们属于哪个对齐。
+
+%\\^|\indent|.\enskip
+%The ^|\parskip| glue is appended to the current list, unless \TeX\ is
+%in internal vertical mode and the current list is empty.
+%Then \TeX\ enters unrestricted horizontal mode, starting the horizontal
+%list with an empty hbox whose width is ^|\parindent|. The ^|\everypar|
+%tokens are inserted into \TeX's input. The page builder is~exercised.
+%When the paragraph is eventually completed, horizontal mode will come to
+%an end as described in Chapter~25.
+\\^|\indent|.\enskip
+这个 |\parskip| 粘连要追加到对齐列，除非 \TeX\ 处在内部垂直模式，
+并且当前列是空的。%
+接着 \TeX\ 进入非受限的水平模式，以宽度为 |\parindent| 的一个空 hbox~%
+开始这个水平列。%
+记号 |\everypar| 被插入到 \TeX\ 的输入中。%
+页面开始构建。%
+当本段落最后结束时，水平模式将出现如第二十五章讨论的结尾。
+
+%\\^|\noindent|.\enskip
+%This is exactly like |\indent|, except that \TeX\ starts out in horizontal
+%mode with an empty list instead of with an indentation.
+\\^|\noindent|.\enskip
+\1它与 |\indent| 一样，只是 \TeX\ 以一个空列开始而不是以缩进开始。
+
+%\\^|\par|.\enskip
+%The primitive |\par| command has no effect when \TeX\ is in vertical mode,
+%except that the page builder is exercised in case something is present
+%on the contribution list, and the paragraph shape parameters are cleared.
+\\^|\par|.\enskip
+当 \TeX\ 处在垂直模式中时，原始命令 |\par| 不起作用，
+但是如果在备选列中出现了一些内容，并且段落的形状是知道的，那么要进行页面构建。
+
+%\\|{|.\enskip
+%A character token of category 1, or a control sequence like~|\bgroup|
+%that has been |\let| equal to such a character token, causes \TeX\ to
+%start a new level of ^{grouping}. When such a group ends---with `|}|'---\TeX\
+%will undo the effects of non-global assignments without leaving whatever
+%mode it is in at that time.
+\\|{|.\enskip
+它是类别码为 1 的字符记号，或者是像 |\bgroup| 这样用 |\let| 让它
+等于这类字符记号的控制系列，它使得 \TeX\ 开始一个新层次的编组。
+当这样的编组以 `|}|' 结束时，\TeX\ 将撤消所有非全局赋值，并且保持此时的模式不变。
+
+%\\Some commands are incompatible with vertical mode because they are
+%intrinsically horizontal. When the following commands appear in
+%vertical modes they cause \TeX\ to begin a ^{new paragraph}:
+%\beginsyntax
+%<horizontal command>\is<letter>\alt<otherchar>\alt^|\char|\alt<chardef token>
+%  \alt^|\noboundary|\alt^|\unhbox|\alt^|\unhcopy|\alt^|\valign|\alt^|\vrule|
+%  \alt^|\hskip|\alt^|\hfil|\alt^|\hfill|\alt^|\hss|\alt^|\hfilneg|
+%  \alt^|\accent|\alt^|\discretionary|\alt^|\-|\alt^|\|\]\alt|$|
+%\endsyntax
+%Here \<letter> and \<otherchar> stand for explicit or implicit character
+%tokens of categories 11 and~12. If any of these tokens occurs as a
+%command in vertical mode or internal vertical mode, \TeX\ automatically
+%performs an |\indent| command as explained above. This leads into
+%horizontal mode with the |\everypar| tokens in the input, after
+%which \TeX\ will see the \<horizontal command> again.
+\\某些命令与垂直模式不相容，因为它们在本质上是水平模式的。%
+当下列命令出现在垂直模式中时，会使得 \TeX\ 开始一个新段落：
+\beginsyntax
+<horizontal command>\is<letter>\alt<otherchar>\alt^|\char|\alt<chardef token>
+  \alt^|\noboundary|\alt^|\unhbox|\alt^|\unhcopy|\alt^|\valign|\alt^|\vrule|
+  \alt^|\hskip|\alt^|\hfil|\alt^|\hfill|\alt^|\hss|\alt^|\hfilneg|
+  \alt^|\accent|\alt^|\discretionary|\alt^|\-|\alt^|\|\]\alt|$|
+\endsyntax
+这里的 \<letter> 和 \<otherchar> 表示类代码为 11 和 12 的显式或隐式字符记号。%
+如果这些命令的任一个在垂直模式或内部垂直模式下作为命令而出现，
+那么 \TeX\ 自动执行象上面讨论的一样的 |\indent| 命令。%
+这就进入水平模式，在输入中有记号 |\everypar|, 其后 \TeX\ 将再次遇见%
+~\<horizontal command>。
+
+%\\^|\end|.\enskip
+%This command is not allowed in internal vertical mode. In regular vertical
+%mode it terminates \TeX\ if the main vertical list is empty and
+%^|\deadcycles=0|. Otherwise \TeX\ backs up the |\end| command so that it can
+%be read again; then it exercises the page builder, after appending a
+%box/glue/penalty combination that will force the output routine to act.
+%\ (See the end of Chapter~23.)
+\\^|\end|.\enskip
+此命令不允许出现在内部垂直模式中。%
+在正常的垂直模式下，如果垂直列是空的并且 |\deadcycles=0|, 它将终止 \TeX。%
+否则， \TeX\ 将把命令 |\end| 备份下来，这样它可以再次读入；
+接着，在添加了输出例行程序的 盒子/粘连/惩罚 组合后，它进行页面构建。%
+(见第二十三章结尾。)
+
+%\\^|\dump|.\enskip
+%(Allowed only in ^|INITEX|, not in production versions of \TeX.) \
+%This command is treated exactly like |\end|, but it must not appear
+%inside a group. It outputs a format file that can be loaded into \TeX's
+%memory at comparatively high speed to restore the current status.
+\\^|\dump|.\enskip
+(只允许出现在 |INITEX| 中，而不允许在 \TeX\ 的用户版中。)
+这个命令就象 |\end| 一样，但是它不能出现在组中。%
+它输出一个格式文件，此文件可以相当高速地载入到 \TeX\ 的内存中以恢复当前状态。
+
+%\\None of the above: If any other primitive command of \TeX\ occurs
+%in vertical mode, an error message will be given, and \TeX\ will try
+%to recover in a reasonable way. For example, if a superscript or
+%subscript symbol appears, or if any other inherently mathematical
+%command is given, \TeX\ will try to insert a `|$|' (which will start a
+%paragraph and enter math mode). On the other hand if a totally
+%misplaced token like ^|\endcsname| or |\omit| or |\eqno| or |#| appears
+%in vertical mode, \TeX\ will simply ignore~it, after reporting
+%the error. You might enjoy trying to type some really stupid input,
+%just to see what happens. \ (Say `|\tracingall|' first, as explained
+%in Chapter~27, in order to get maximum information.)
+\\除了上面的以外：如果 \TeX\ 任何其它原始命令出现在垂直模式中，
+那么就给出一个错误信息，
+并且 \TeX\ 将试着合理地修复它。%
+例如，如果出现了上标或下标返回，或者其它特有的数学命令出现了，
+那么 \TeX\ 就试着插入`|$|'(它将开始一个新段落并且进入数学模式)。%
+另一方面，如果象 |\endcsname|, |\omit|, |\eqno| 或 |#| 这些完全不该出现的记号出现%
+在垂直模式中， \TeX\ 就在给出错误后直接忽略掉它们。%
+你可以试着输入一些完全愚蠢的内容，看看会出现什么结果。%
+(象第二十七章那样，首先声明`|\tracingall|'以得到最多的信息。)
+
+\endchapter
+
+The first and most striking feature is the Verticality of composition,
+as opposed to the Horizontality of all anterior structural modes.
+\author COCKBURN ^{MUIR}, {\sl Pagan or Christian?\/} (1860) % p61
+
+\bigskip
+
+Sometimes when I have finished a book I give a summary of the whole of it.
+\author ROBERT WILLIAM ^{DALE}, {\sl Nine Lectures on Preaching} (1878)
+ % viii.231
+
+\vfill\eject\byebye

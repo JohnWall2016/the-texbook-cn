@@ -1,0 +1,132 @@
+% -*- coding: utf-8 -*-
+
+\input macros
+
+\special{pdf: bgcolor 1.0}
+%\titlepage
+%\pageno=-1983
+%\line{\cmman The\hfill T\kern-10pt\lower13pt\hbox{E}\kern-5pt Xbook}
+%\vfill
+%\iffalse
+%\rightline{The fine print in the upper right-hand}
+%\rightline{corner of each page is a draft of intended}
+%\rightline{index entries; it won't appear in the real book.}
+%\rightline{Some index entries will be in |typewriter type|}
+%\rightline{and/or preceded by {\tt\char`\\} or enclosed in \<$\ldots$>, etc;}
+%\rightline{such typographic distinctions aren't shown here.}
+%\rightline{An index entry often extends for several pages;}
+%\rightline{the actual scope will be determined later.}
+%\rightline{Please note things that should be indexed but aren't.}
+%\fi
+%\eject
+% title
+\font\auth=cmssdc10 scaled\magstep4 % used only on the title page
+\font\elevenbf=cmbx10 scaled\magstephalf % ditto
+\font\elevenit=cmti10 scaled\magstephalf % ditto
+\font\elevenrm=cmr10 scaled\magstephalf % ditto
+\pageno=-1 % the front matter is numbered with roman numerals
+%\titlepage
+\null\bigskip
+\line{\cmman The\hfill T\kern-10pt\lower13pt\hbox{E}\kern-5pt Xbook}
+^^{Knuth, Donald Ervin}
+^^{Bibby, Duane Robert}
+\vskip 1pc
+\baselineskip 13pt \elevenbf
+\halign to\hsize{#\hfil\tabskip 0pt plus 1fil&#\hfil\tabskip0pt\cr
+\kern5.5mm\auth DONALD \kern-1pt E. \kern-1pt KNUTH&
+  \elevenit Stanford University\cr
+\special{pdf:image width 170pt height 0in depth 410pt (artwork/cover.png)}\cr
+\noalign{\vskip 12pc}
+&\elevenit I\kern.7ptllustrations by\cr
+&DU\kern-1ptANE BIBBY\cr
+\noalign{\vfill}
+&\setbox0=\hbox{\manual77}%
+\setbox2=\hbox to\wd0{\hss\manual6\hss}%
+\raise2.3mm\box2\kern-\wd0\box0\cr % A-W logo
+&ADDISON\kern.1em--WESLEY\cr
+&PUBLISHING COMP\kern-.13emANY\kern-1.5mm\cr
+\noalign{\vskip.5pc \global\elevenrm}
+&Reading, Massachusetts\cr
+&Menlo Park, California\cr
+&New York\cr
+&Don Mills, Ontario\cr
+&Wokingham, England\cr
+&Amsterdam\enspace$\cdot$\enspace Bonn\cr
+&Sydney\enspace$\cdot$\enspace Singapore\enspace$\cdot$\enspace Tokyo\cr
+&Madrid\enspace$\cdot$\enspace San Juan\cr}
+\eject
+% copyright
+%\titlepage
+\eightpoint
+\vbox to 8pc{}
+\noindent\strut
+This manual describes \TeX\ Version 3.0. Some
+of the advanced features mentioned here are absent from earlier versions.
+\medskip
+\noindent
+The quotation on page \sesame\ is copyright $\copyright$ 1970 by Sesame
+Street, Inc., and used by permission of the Children's Television Workshop.
+\medskip
+\noindent
+\TeX\ is a trademark of the American Mathematical Society.
+\medskip
+\noindent
+{\manual opqrstuq} is a trademark of Addison\kern.1em--Wesley
+ Publishing Company.
+\bigskip\medskip
+\noindent
+{\bf Library of Congress cataloging in publication data}
+\medskip
+{\tt\halign{#\hfil\cr
+Knuth, Donald Ervin, 1938-\cr
+\ \ \  The TeXbook.\cr
+\noalign{\medskip}
+\ \ \  (Computers \& Typesetting ; A)\cr
+\ \ \  Includes index.\cr
+\ \ \  1.~TeX (Computer system).\ \ 2.~Computerized\cr
+typesetting.\ \ 3.~Mathematics printing.\ \ I.~Title.\cr
+II.\ Series:\ \ Knuth, Donald Ervin, 1938-\ \ \ \ .\cr
+Computers \& typesetting ; A.\cr
+Z253.4.T47K58\ \ 1986\ \ \ \ \ \ \ \ \ 686.2\char13 2544\ \ \ \ \ \ 85-30845\cr
+ISBN 0-201-13447-0\cr
+ISBN 0-201-13448-9 (soft)\cr}}
+\vfill
+\noindent
+%{\sl \kern-1pt First hardcover edition, January 1986}
+{\sl \kern-1pt Twentieth printing, revised, May 1991} % paperback
+%{\sl \kern-1pt Eleventh printing, revised, May 1991} % hardcover
+\smallskip
+\noindent
+Copyright $\copyright$ 1984, 1986 by the American Mathematical Society
+\smallskip
+\noindent
+This book is published jointly by the American Mathematical Society
+and Addison\kern.1em--Wesley Publishing Company.
+All rights reserved. No part of this publication may be reproduced, stored in
+a retrieval system, or transmitted, in any form or by any means,
+electronic, mechanical, photocopying, recording, or otherwise, without
+the prior written permission of the publishers. Printed in the United
+States of America. % Published simultaneously in Canada.
+\medskip
+\noindent
+ISBN 0-201-13448-9\par % paperback
+%ISBN 0-201-13447-0\par % hardcover
+\noindent
+TUVWXYZ--DO--97654321 % paperback
+%KLMNOPQ--DO--97654321 % hardcover
+\eject
+% dedication
+\titlepage
+\vbox to 8pc{}
+\rightline{\strut\eightssi To Jill:}
+\vskip2pt
+\rightline{\eightssi For your books and brochures}
+\vfill
+\eject
+% blank page
+\titlepage
+\null\vfill
+\eject
+
+\byebye
+

@@ -1,0 +1,447 @@
+% -*- coding: utf-8 -*-
+
+\input macros
+
+%\beginchapter Appendix H. Hyphenation
+\beginchapter Appendix H. 连字算法
+
+It's better to break a word with a hyphen than to stretch interword spaces
+too much. Therefore \TeX\ tries to divide words into syllables when
+there's no good alternative available.
+
+But computers are notoriously bad at ^{hyphenation}. When the type\-setting of
+newspapers began to be fully automated, ^{jokes} about ``the-rapists who
+pre-ached on wee-knights'' soon began to circulate.
+
+It's not hard to understand why machines have behaved poorly at this task,
+because hyphenation is quite a difficult problem. For example, the word
+`record' is supposed to be broken as `rec-ord' when it is a noun, but
+`re-cord' when it is a verb. The word `hyphenation' itself is somewhat
+exceptional; if `hy-phen-a-tion' is compared to similar words like
+`con-cat-e-na-tion', it's not immediately clear why the `n' should
+be attached to the `e' in one case but not the other. Examples like
+`dem-on-stra-tion' vs.~`de-mon-stra-tive' show that the alteration of
+two letters can actually affect hyphens that are nine positions away.
+
+A good solution to the problem was discovered by Frank M. ^{Liang} during
+1980--1982, and \TeX\ incorporates the new method. Liang's algorithm
+works quickly and finds nearly all of the legitimate places to insert
+hyphens; yet it makes few if any errors, and it takes up comparatively
+little space in the computer. Moreover, the method is flexible enough
+to be adapted to any language, and it can also be used to hyphenate
+words in two languages simultaneously. Liang's Ph.D. thesis,
+published by Stanford University's Department of Computer Science in~1983,
+explains how to take a dictionary of hyphenated words and teach it to \TeX;
+i.e., it explains how to compute tables by which \TeX\ will be able to
+reconstruct most of the hyphens in the given dictionary, without error.
+
+\def\\#1{$_{\kern\scriptspace#1}$}
+\TeX\ hyphenates a given word by first looking for it in an ``^{exception
+dictionary},'' which specifies the hyphen positions for words that deserve
+special treatment. If the word isn't there, \TeX\ looks for {\sl^{patterns}\/}
+in the word, and this is the key idea underlying Liang's method. Here's how
+it works, using the word `hyphenation' as an example, when \TeX\ is
+operating with the English-oriented patterns of plain \TeX\ format:
+The given word is first extended by special markers at either end; in this
+case we obtain
+\begintt
+.hyphenation.
+\endtt
+if `|.|' denotes the special marker. The extended word has subwords
+\begintt
+. h y p h e n a t i o n .
+\endtt
+of length one,
+\begintt
+.h hy yp ph he en na at ti io on n.
+\endtt
+of length two,
+\begintt
+.hy hyp yph phe hen ena nat ati tio ion on.
+\endtt
+of length three,
+and so on. Each subword of length $k$ is a pattern that defines $k+1$ small
+integer values relating to the desirability of hyphens in the positions
+between and adjacent to its letters. We can show these values by attaching
+them as subscripts; for example,
+`{\tt\\0h\\0e\\2n\\0}' means that the values corresponding to the
+subword `|hen|' are 0,~0, 2, and~0, where the~2 relates to hyphens
+between the `|e|' and the `|n|'. The interletter values are entirely zero
+for all subwords except those that match an entry in \TeX's current
+``^{pattern dictionary}''; and in this case, only the subwords
+\begindisplay
+\tt\\0h\\0y$_3$p\\0h\\0 \\0h\\0e\\2n\\0 \\0h\\0e\\0n\\0a\\4\cr
+\qquad\tt\\0h\\0e\\0n\\5a\\0t\\0 \\1n\\0a\\0 \\0n\\2a\\0t\\0
+  \\1t\\0i\\0o\\0 \\2i\\0o\\0 \\0o\\2n\\0\cr
+\enddisplay
+occur as special patterns. \TeX\ now computes the maximum interletter
+value that occurs at each subword touching each interletter position.
+For example, between `|e|' and `|n|' there are four relevant values
+in this case (2~from {\tt\\0h\\0e\\2n\\0},
+0~from {\tt\\0h\\0e\\0n\\0a\\4},
+0~from {\tt\\0h\\0e\\0n\\5a\\0t\\0},
+and 1~from {\tt\\1n\\0a\\0}); the maximum of these is~2.
+The result of all the maximizations is
+\begindisplay
+\tt.\\0h\\0y$_3$p\\0h\\0e\\2n\\5a\\4t\\2i\\0o\\2n\\0.
+\enddisplay
+Now comes the final step: A hyphen is considered to be acceptable
+between two letters if the associated interletter value is {\sl odd}.
+Thus, two potential breakpoints have been found: `|hy-phen-ation|'.
+Similarly, the word `|concatenation|' contains the patterns
+\begindisplay
+\tt\\0o\\2n\\0
+\\0o\\0n\\1c\\0
+\\1c\\0a\\0
+\\1n\\0a\\0
+\\0n\\2a\\0t\\0
+\\1t\\0i\\0o\\0
+\\2i\\0o\\0
+\\0o\\2n\\0
+\enddisplay
+and this yields `{\tt\\0c\\0o\\2n\\1c\\0a\\0t\\0e\\1n\\2a\\1t\\2i\\0o\\2n\\0}',
+i.e., `|con-cate-na-tion|'.
+
+Let's try a 34-letter word:
+`|supercalifragilisticexpialidocious|' matches the plain \TeX\ patterns
+\begindisplay
+\tt u\\1pe r\\1c \\1ca al\\1i ag\\1i gil\\4 il\\1i il\\4ist is\\1ti st\\2i\cr
+\qquad\tt s\\1tic
+  \\1exp x\\3p pi\\3a \\2i\\1a i\\2al \\2id \\1do \\1ci \\2io \\2us\cr
+\enddisplay
+(where subscripts that aren't shown are zero), and this yields
+$$\centerline{%
+\tt.\\0s\\0u\\1p\\0e\\0r\\1c\\0a\\0l\\1i\\0f\\0r\\0a\\0g\\1i\\0l\\4i%
+\\0s\\1t\\2i\\0c\\1e\\0x\\3p\\2i\\3a\\0l\\2i\\1d\\0o\\1c\\2i\\0o\\2u\\0s\\0.}$$
+The \stretch resulting \stretch hyphens \stretch
+`|su-|\stretch|per-|\stretch|cal-|\stretch|ifrag-|\stretch|ilis-|\stretch
+|tic-|\stretch|ex-|\stretch|pi-|\stretch|ali-|\stretch|do-|\stretch|cious|'
+agree with Random House's {\sl Unabridged Dictionary\/} (which also
+shows a few more: `|su-per-cal-i-frag-i-lis-tic-ex-pi-al-i-do-cious|').
+
+Plain \TeX\ loads exactly 4447 patterns into \TeX's memory, beginning with
+`{\tt\\0.\\0a\\0c\\0h\\4}' and ending with `{\tt\\4z\\1z\\2}' and
+`{\tt\\0z\\4z\\0y$_0$}'. The interletter values in these patterns are all
+between 0 and~5; a large odd value like the 5 in `{\tt\\0h\\5e\\0l\\0o\\0}'
+forces desirable hyphen points in words like `|bach-e-lor|' and
+`|ech-e-lon|', while a large even value like the 4 in `{\tt\\0h\\0a\\0c\\0h\\4}'
+suppresses undesirable hyphens in words like `|tooth-aches|'. Liang
+derived these patterns by preparing a special version of {\sl Webster's
+Pocket Dictionary\/} (Merriam, 1966) that contains about 50,000 words including
+derived forms. Then he checked a preliminary set of patterns obtained from
+this data against an up-to-date hyphenation dictionary of about
+115,000 words obtained from a publisher; errors found in this run
+led to the addition of about 1000 words like |camp-fire|,
+|Af-ghan-i-stan|, and |bio-rhythm| to the pocket dictionary list. He
+weighted a few thousand common words more heavily so that they would be more
+likely to be hyphenated; as a result, the patterns of plain \TeX\ guarantee
+complete hyphenation of the 700 or so most common words of English,
+as well as common technical words like |al-go-rithm|. These patterns
+find 89.3\% of the hyphens in Liang's dictionary as a whole, and
+they insert no hyphens that are not present.
+
+Patterns derived from the common words of a language tend to work well
+on uncommon or newly coined words that are not in the original dictionary.
+For example, Liang's patterns find a correct subset of the hyphens in the
+word that all of today's unabridged dictionaries agree is the longest
+in English, namely
+\begintt
+pneu-monoul-tra-mi-cro-scop-ic-sil-i-co-vol-canoco-nio-sis.
+\endtt
+They even do fairly well on words from other languages that aren't
+too distant from English; for example, the pseudo-^{German} utterances
+of Mark ^{Twain}'s {\sl Connecticut Yankee\/} come out with only six or
+seven bad hyphens:
+\begintt
+Con-stanti-nop-o-li-tanis-cher-
+  dudel-sack-spfeifen-mach-ers-ge-sellschafft;
+Ni-hilis-ten-dy-na-mitthe-
+  aterkaestchensspren-gungsat-ten-taetsver-suchun-gen;
+Transvaal-trup-pen-tropen-trans-port-
+  tram-pelth-iertreib-er-trau-ungsthrae-nen-tra-goedie;
+Mekka-musel-man-nen-massen-menchen-
+  mo-er-der-mohren-mut-ter-mar-mor-mon-u-menten-machen.
+\endtt
+But when plain \TeX\ is tried on the name of a famous ^{Welsh} city,
+^^{Llanfair P. G.}
+\begintt
+Llan-fair-p-wll-gwyn-gyll-gogerych-
+  wyrn-drob-wl-l-l-lan-tysil-i-o-gogogoch,
+\endtt
+linguistic differences became quite evident, since the correct hyphens are
+\begintt
+Llan-fair-pwll-gwyn-gyll-go-ger-y-
+  chwyrn-dro-bwll-llan-ty-sil-i-o-go-go-goch.
+\endtt
+Appropriate pattern values for other languages can be derived by applying
+Liang's method to suitable dictionaries of hyphen points.
+
+^{Dictionaries} of English do not always agree on where syllable boundaries
+occur. For example, the {\sl American Heritage Dictionary\/} says
+`|in-de-pend-ent|' while {\sl Webster's\/} says `|in-de-pen-dent|'.
+Plain \TeX\ generally follows Webster except in a few cases where other
+authorities seem preferable.
+
+\begingroup
+\hyphenpenalty=-1000 \pretolerance=-1 \tolerance=1000
+\doublehyphendemerits=-100000 \finalhyphendemerits=-100000
+[From here to the end of this appendix, \TeX\ will be typesetting with
+\begindisplay
+^|\hyphenpenalty||=-1000   |^|\pretolerance||=-1   |^|\tolerance||=1000|\cr
+^|\doublehyphendemerits||=-100000  |^|\finalhyphendemerits||=-100000|\cr
+\enddisplay
+so that hyphens will be inserted much more often than usual.]
+
+\looseness-1
+The fact that plain \TeX\ finds only 90\% of the permissible hyphen points
+in a large dictionary is, of course, no cause for alarm. When word
+frequency is taken into account, the probability rises to well over 95\%.
+Since \TeX's line-breaking algorithm often succeeds in finding a way to
+break a paragraph without needing hyphens at all, and since there's a good
+chance of finding a different hyphen point near to one that is missed by
+\TeX's patterns, it is clear that manual intervention to correct or insert
+hyphenations in \TeX\ output is rarely needed, and that such refinements
+take a negligible amount of time compared to the normal work of
+keyboarding and proofreading.
+
+But you can always insert words into \TeX's ^{exception dictionary}, if
+you find that the patterns aren't quite right for your application.
+For example, this book was typeset with three exceptional words added:
+The format in Appendix~E includes the command
+\begintt
+\hyphenation{man-u-script man-u-scripts ap-pen-dix}
+\endtt
+which tells \TeX\ how to hyphenate the words `manuscript', `manuscripts',
+and `appendix'. Notice that both singular and plural forms of
+`manuscript' were entered, since the exception dictionary affects
+hyphenation only when a word agrees completely with an exceptional
+entry. \ (Precise rules for the ^|\hyphenation| command are
+discussed below.)
+
+If you want to see all of the hyphens that plain \TeX\ will find in some
+random text, you can say `^|\showhyphens||{|\<random text>|}|' and the
+results will appear on your terminal (and in the log file). For example,
+\begintt
+*\showhyphens{random manuscript manuscripts appendix}
+|smallskip
+Underfull \hbox (badness 10000) detected at line 0
+[] \tenrm ran-dom manuscript manuscripts ap-pendix
+\endtt
+shows the hyphen positions that would have been found in this book
+without the addition of any ^|\hyphenation| exceptions. Somehow the word
+`manuscript' slips through all of the ordinary patterns; the author added it
+as an exception for this particular job because he used it 80~times (not
+counting its appearances in this appendix).
+
+The |\showhyphens| macro creates an hbox that is intentionally
+^{underfull}, so you should ignore the warning about `|badness 10000|';
+this spurious message comes out because \TeX\ displays hyphens in compact
+form only when it is displaying the contents of anomalous
+hboxes. \ (\TeX\ wizards may enjoy studying the way |\showhyphens|
+is defined in Appendix~B.)
+
+\danger If you want to add one or more words to the exception dictionary,
+just say ^|\hyphenation||{|\<words>|}| where \<words> consists of one
+or more \<word> items separated by spaces. A \<word> must consist entirely
+of letters and hyphens; more precisely, a ``hyphen'' in this context is
+the token |-|\\{12}. A ``letter'' in this context is a character token whose
+category code is 11 or~12, or a control sequence defined by ^|\chardef|,
+or ^|\char|\<8-bit number>, such that the corresponding character has a nonzero
+^|\lccode|. \TeX\ uses the |\lccode| to convert each letter to ``^{lowercase}''
+form; a word-to-be-hyphenated will match an entry in the exception
+dictionary if and only if both words have the same lowercase form after
+conversion to lowercase.
+
+\danger \TeX\ will henceforth insert discretionary hyphens in the specified
+positions, whenever it attempts to hyphenate a word that matches an entry
+in the exception dictionary, except that hyphens are never inserted after the
+very first letter or before the last or second-last letter of a word.
+You must insert your own discretionary hyphens if you want to allow them
+in such positions. A |\hyphenation| entry might contain no hyphens at all;
+then \TeX\ will insert no hyphens in the word.
+
+\danger The exception dictionary is global; i.e., exceptions do not disappear
+at the end of a ^{group}. If you specify |\hyphenation| of the same word more
+than once, its most recently specified hyphen positions are used.
+
+\ddanger The exception dictionary is dynamic, but the pattern dictionary
+is static: To change \TeX's current set of hyphenation patterns, you
+must give an entirely new set, and \TeX\ will spend a little time putting them
+into a form that makes the hyphenation algorithm efficient. The
+command format is ^|\patterns||{|\<patterns>|}|, where \<patterns> is a
+sequence of \<pattern> items separated by spaces. This command
+is available only in ^|INITEX|, not in production versions of \TeX, since
+the process of pattern compression requires extra memory that can be put
+to better use in a production system. |INITEX| massages the patterns and
+outputs a format file that production versions can load at high speed.
+
+\ddanger A \<pattern> in the |\patterns| list has a more restricted form
+than a \<word> in the |\hyphenation| list, since patterns are supposed to
+be prepared by experts who are paid well for their expertise. Each
+\<pattern> consists of one or more occurrences of \<value>\<letter>,
+followed by \<value>. Here \<value> is either a digit (|0|\\{12} to |9|\\{12})
+or empty; an empty \<value> stands for zero. For example, the pattern
+`{\tt\\0a\\1b\\0}' can be represented as |0a1b0| or |a1b0| or |0a1b| or
+simply |a1b|. A \<letter> is a character token of category 11 or~12 whose
+|\lccode| is nonzero. If you want to use a ^{digit} as a \<letter>, you
+must precede it by a nonempty \<value>; for example, if for some reason you
+want the pattern `{\tt\\1a\\01\\2}' you can obtain it by typing
+`|1a012|', assuming that |\lccode`1| is nonzero. Exception: The character
+`|.|'~is treated as if it were a \<letter> of code~0
+when it appears in a pattern. Code~0 (which obviously cannot match a nonzero
+|\lccode|) is used by \TeX\ to represent the
+left or right edge of a word when it is being hyphenated.
+
+\ddanger Plain \TeX\ inputs a file called |hyphen.tex| that sets up the
+pattern dictionary and the initial exception dictionary. The file has the
+form
+\begindisplay
+|\patterns{.ach4 .ad4der .af1t .al3t|\quad$\cdots$\quad|zte4 4z1z2 z4zy}|\cr
+|\hyphenation{as-so-ciate as-so-ciates dec-li-na-tion oblig-a-tory|\cr
+|  phil-an-thropic present presents project projects reci-procity|\cr
+|  re-cog-ni-zance ref-or-ma-tion ret-ri-bu-tion ta-ble}|\cr
+\enddisplay
+The first thirteen exceptions keep \TeX\ from inserting incorrect
+hyphens; for example, `|pro-ject|' and `|pre-sent|' are words like
+`|re-cord|', that cannot be hyphenated without knowing the context.
+The other exception, `|ta-ble|', is included just to meet the claim
+that plain \TeX\ fully hyphenates the 700 or so most common words
+of English.
+
+\looseness-1
+\ddanger But how does \TeX\ decide what sequences of letters are ``words''
+that should be hyphenated? Let's recall that \TeX\ is working on a
+horizontal list that contains boxes, glue, rules, ^{ligatures}, ^{kerns},
+discretionaries, marks, whatsits, etc., in addition to simple characters;
+somehow it has to pick out things to hyphenate when it is unable to
+find suitable breakpoints without hyphenation. The presence of
+punctuation marks before and/or after a word should not make a word
+unrecognizable or unhyphenatable; neither should the presence of
+ligatures and kerns within a word. On the other hand, it is desirable to
+do hyphenation quickly, not spending too much time trying to handle
+unusual situations that might be hyphenatable but hard to recognize
+\hbox{mechanically}.
+
+\ddanger \TeX\ looks for potentially hyphenatable words by searching
+ahead from each glue item that is not in a math formula. The search
+bypasses characters whose |\lccode| is zero, or ligatures that begin
+with such characters; it also bypasses whatsits and {\sl^{implicit kern}\/}
+items, i.e., kerns that were inserted by \TeX\ itself because of information
+stored with the font. If the search
+finds a character with nonzero |\lccode|, or if it finds a ligature
+that begins with such a character, that character is called the
+{\sl starting letter}. But if any other type of item occurs before a suitable
+starting letter is found, hyphenation is abandoned (until after the next
+glue item). Thus, a box or rule or mark, or a kern that was explicitly
+inserted by ^|\kern| or~|\/|, must not intervene between glue and a
+hyphenatable word. If the starting letter is not lowercase (i.e.,
+if it doesn't equal its own |\lccode|), hyphenation is abandoned unless
+^|\uchyph| is positive.
+
+\ddanger If a suitable starting letter is found, let it be in font~$f$.
+Hyphenation is abandoned unless the ^|\hyphenchar| of~$f$ is between
+0 and~255, and unless a character of that number exists in the font.
+If this test is passed, \TeX\ continues to scan forward
+until coming to something that's not one of the following three
+``admissible items'': (1)~a character in font~$f$ whose |\lccode|
+is nonzero; (2)~a ligature formed entirely from characters of type~(1);
+(3)~an implicit kern. The first inadmissible item terminates this part of
+the process; the trial word consists of all the letters found in admissible
+items. Notice that all of these letters are in font~$f$.
+
+\ddanger If a trial word $l_1\ldots l_n$ has been found by this process,
+hyphenation will still be abandoned unless $n\ge\lambda+\rho$, where
+$\lambda=\max(1,\hbox{|\lefthyphenmin|})$ and
+$\rho=\max(1,\hbox{|\righthyphenmin|})$.
+^^|\lefthyphenmin| ^^|\righthyphenmin|
+\ (Plain \TeX\ takes $\lambda=2$ and $\rho=3$.) \ Furthermore, the items
+immediately following the trial word must consist of zero or more
+characters, ligatures, and implicit kerns, followed immediately by
+either glue or an explicit kern or a penalty item or a whatsit or an
+item of vertical mode material from ^|\mark|, ^|\insert|, or ^|\vadjust|.
+Thus, a box or rule or math formula or discretionary following too closely
+upon the trial word will inhibit hyphenation. (Since \TeX\ inserts
+empty discretionaries after ^{explicit hyphens}, these rules imply that
+already-hyphenated compound words will not be further hyphenated by
+the algorithm.)
+
+\ddanger Trial words $l_1\ldots l_n$ that pass all these tests are submitted
+to the hyphenation algorithm described earlier. Hyphens are not inserted
+before $l_\lambda$ or after $l_{n+1-\rho}$.
+If other hyphenation points are found,
+one or more discretionary items are inserted in the word; ligatures
+and implicit kerns are reconstituted at the same time.
+
+\ddanger Since ligatures and kerns are treated in quite a general manner,
+it's possible that one hyphenation point might preclude another because the
+ligatures that occur with hyphenation might overlap the ligatures
+that occur without hyphenation. This anomaly probably won't occur in real-life
+situations; therefore \TeX's interesting approach to the problem will
+not be discussed here.
+
+\ddanger According to the rules above, there's an important distinction
+between implicit and explicit kerns, because \TeX\ recomputes implicit
+kerns when it finds at least one hyphen point in a word. You can
+see the difference between these two types of kerns when \TeX\ displays
+lists of items in its ^{internal format}, if you look closely:
+`|\kern2.0|' denotes an implicit kern of $2\pt$, and `|\kern 2.0|'
+denotes an explicit kern of the same magnitude. The ^{italic correction}
+command~|\/| inserts an explicit kern.
+
+\ddanger The control sequence ^|\-| is equivalent to
+|\discretionary{\char|$\,h$|}{}{}|, where $h$ is the
+^|\hyphenchar| of the current font, provided that $h$ lies
+between 0 and~255. Otherwise |\-| is equivalent to
+|\discretionary{}{}{}|.
+
+\ddanger \looseness=-1
+So far we have assumed that \TeX\ knows only one style of
+hyphenation at a time; but in fact \TeX\ can remember up to 256
+distinct sets of rules, if you have enough memory in your computer. An
+integer parameter called ^|\language| selects the rules actually used;
+every ^|\hyphenation| and ^|\patterns| specification appends new rules
+to those previously given for the current value of\/ |\language|.
+\ (If\/ |\language| is negative or greater than 255, \TeX\ acts as if
+|\language|$\null=0$.) \ All |\patterns| for all languages must be
+given before a paragraph is typeset, if |INITEX| is used for
+typesetting.
+
+\ddanger \TeX\ is able to work with several languages in the same
+paragraph, because it operates as follows. At the beginning of a
+paragraph the ``current language'' is defined to be~0. Whenever a
+character is added to the current paragraph (i.e., in unrestricted
+horizontal mode), the current language is compared to |\language|; if
+they differ, the current language is reset and a whatsit node
+specifying the new current language is inserted before the character.
+Thus, if you say `|\def\french{\language1...}|' and `|mix| |{\french
+franc/ais}| |with| |English|', \TeX\ will put whatsits before the |f|
+and the~|w|; hence it will use language~1 rules when hyphenating
+|franc/ais|, after which it will revert to language~0. You can insert
+the whatsit yourself (even in restricted horizontal mode) by saying
+^|\setlanguage|\<number>; this changes the current language but it
+does not change |\language|. Each whatsit records the current
+|\lefthyphenmin| and |\righthyphenmin|.
+^^{French}
+
+\endgroup
+\endchapter
+
+If all problems of hyphenation have not been solved,
+at least some progress has been made since that night,
+when according to legend, an RCA Marketing Manager received
+a phone call from a disturbed customer. His 301 had just hyphenated ``God.''
+\author PAUL E. ^{JUSTUS}, {\sl There's More to Typesetting Than %
+  Setting Type\/} (1972)
+% in {\sl IEEE Transactions on Professional Commun. vol PC-15, pp. 13-15
+
+\bigskip
+
+The committee skeptically re-
+commended more study for a bill
+to require warning labels on rec-
+ords with subliminal messages re-
+corded backward.
+\author THE PENINSULA ^{TIMES TRIBUNE} (April 28, 1982)
+
+%\eject
+\eject\byebye

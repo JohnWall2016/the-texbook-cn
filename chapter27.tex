@@ -1,0 +1,994 @@
+% -*- coding: utf-8 -*-
+
+\input macros
+
+%\beginchapter Chapter 27. Recovery from\\Errors
+\beginchapter Chapter 27. 错误修复
+
+\origpageno=295
+
+%OK, everything you need to know about \TeX\ has been explained---unless you
+%happen to be fallible. If you don't plan to make any errors, don't bother to
+%read this chapter. Otherwise you might find it helpful to make use of some
+%of the ways that \TeX\ tries to pinpoint bugs in your manuscript.
+\1好了，所有你应该知道的 \TeX\ 的东西都讨论完了——只要你不爱出错。%
+如果你预计不出错，那么不用费心来看本章。%
+否则，看看 \TeX\ 怎样定位你的文稿中的破绽会很有帮助。
+
+%In the trial runs you did when reading Chapter 6, you learned the general
+%form of ^{error messages}, and you also learned the various ways in which
+%you can respond to \TeX's complaints. With practice, you will be able to
+%correct most errors ``online,'' as soon as \TeX\ has detected them, by
+%inserting and deleting a few things. The right way to go about this is to
+%be in a mellow mood when you approach \TeX, and to regard the error
+%messages that you get as amusing puzzles---``Why did the machine do
+%that?''---rather than as personal insults.
+在第六章中的实战中，你已经知道了错误信息的一般形式，
+并且学会了对付 \TeX\ 找到的毛病的几种方法。%
+在实践中，你可以``实时''修正大多数错误，只要 \TeX\ 检测到它们，就可以插入或%
+删除一些东西。%
+对待它的正确方法是在你处理 \TeX\ 时要老练，并且把错误信息看作有趣的难题——%
+``为什么计算机会这样？''——而不是觉得有失体面。
+
+%\TeX\ knows how to issue more than a hundred different sorts of error messages,
+%and you probably never will encounter all of them, because some types of
+%mistakes are very hard to make. We discussed the ``undefined control sequence''
+%error in Chapter~6; let's take a look at a few of the others now.
+ \TeX\ 能给出一百多种的错误信息，
+可能你从不会遇见所有的这些，以外有些错误很难出现。%
+在第六章我们讨论了错误``undefined control sequence'';
+现在我们再看看其它几个。
+
+%If you misspell the name of some unit of measure---for example, if you
+%type `|\hsize=4im|' instead of `|\hsize=4in|'---you'll get an error
+%message that looks something like this:
+%\begintt
+%! Illegal unit of measure (pt inserted).
+%<to be read again>
+%                   i
+%<to be read again>
+%                   m
+%<*> \hsize=4im
+%               \input story
+%?
+%\endtt
+%^^|Illegal unit|
+%\TeX\ needs to see a legal unit before it can proceed; so in this case it has
+%implicitly inserted `|pt|' at the current place in the input, and it has
+%set |\hsize=4pt|.
+如果你拼错了某些测量单位——例如，如果你输入的是`|\hsize=4im|'而%
+不是`|\hsize=4in|'——就得到象下面这样的错误信息：
+\begintt
+! Illegal unit of measure (pt inserted).
+<to be read again>
+                   i
+<to be read again>
+                   m
+<*> \hsize=4im
+               \input story
+?
+\endtt
+在 \TeX\ 处理之前要读入应该合法的单位；
+因此在这种情况下它就在输入的当前位置处暗中插入了`|pt|',
+并且设置 |\hsize=4pt|。
+
+%What's the best way to ^{recover} from such an error? Well, you should
+%always type `|H|' or `|h|' to see the help message, if you aren't sure
+%what the error message means. Then you can look at the lines of context
+%and see that \TeX\ will read `|i|' and then `|m|' and then `~|\input|
+%|story|~' if you simply hit \<return> and carry on. Unfortunately, this
+%easy solution isn't very good, because the `|i|' and~`|m|' will be typeset
+%as part of the text of a new paragraph.  A much more graceful recovery is
+%possible in this case, by first typing~`|2|'.  This tells \TeX\ to discard
+%the next two tokens that it reads; and after \TeX\ has done so, it will
+%stop again in order to give you a chance to look over the new situation.
+%Here is what you will see:
+%\begintt
+%<recently read> m
+%|indent
+%<*> \hsize=4im
+%               \input story
+%?
+%\endtt
+%Good; the `|i|' and `|m|' are read and gone. But if you hit \<return> now,
+%\TeX\ will `|\input story|' and try to typeset the |story.tex| file with
+%|\hsize=4pt|; that won't be an especially exciting experiment, because it
+%will simply produce dozens of overfull boxes, one for every syllable
+%of the story. Once again there's a better way: You can insert the command
+%that you had originally intended, by typing
+%\begintt
+%I\hsize=4in
+%\endtt
+%now. This instructs \TeX\ to change |\hsize| to the correct value, after
+%which it will |\input story| and you'll be on your way.
+修复这种错误的最好方法是什么呢？
+嗯，如果你不明白错误信息的意思，总可以键入`|H|'或`|h|'来查看帮助信息。%
+接着你可以查看前后的行，并且看看是否你直接键入 \<return>~ \TeX\ 就依次读入`|i|'%
+ `|m|'以及`|\input| |story|'并且进行下去。%
+不幸的是，这种简单的方法并不很好，因为`|i|' 和 `|m|'将作为新段落的一部分%
+进行排版。%
+这种情况下最佳的修复方案应该是首先键入`|2|'。%
+这就告诉 \TeX\ 把接下来要读入的两个字符扔掉；
+并且在 \TeX\ 这样做完后，它就再次停下来让你查看新的状态。%
+你将看到的如下：
+\begintt
+<recently read> m
+|indent
+<*> \hsize=4im
+               \input story
+?
+\endtt
+\1不错；`|i|' 和 `|m|' 已经被读入并且扔掉了。
+但是如果你现在键入 \<return>，\TeX\ 就将 `|\input story|' 并且按照
+|\hsize=4pt| 来排版 |story.tex|；那就没什么特别之处了，
+因为它直接得到了几打溢出的盒子，每个都是 story 的一个音节。
+还有更好的方法：你可以插入你所要的命令，即现在键入
+\begintt
+I\hsize=4in
+\endtt
+就让 \TeX\ 把 |\hsize| 改为正确值，然后 |\input story|，这就走上正路了。
+
+%\exercise Ben ^{User} typed `|8|', not `|2|', in response to the
+%error message just considered; his idea was to delete `|i|', `|m|',
+%`|\input|', and the five letters of `|story|'. But \TeX's response was
+%\begintt
+%<*> \hsize=4im \input stor
+%                          y
+%\endtt
+%Explain what happened.
+%\answer He forgot to count the space; \TeX\ deleted `|i|', `|m|',
+%`\]', `|\input|', and four letters. (But all is not lost; he can
+%type `|1|' or `|2|', then \<return>, and after being prompted by `|*|' he
+%can enter a new line of input.)
+\exercise 用户笨笨在回应刚才出现的错误信息时键入了 `|8|' 而不是 `|2|'；
+他要删除 `|i|'、`|m|'、`|\input|' 以及 `|story|' 的五个字符。
+但是 \TeX\ 的回应为
+\begintt
+<*> \hsize=4im \input stor
+                          y
+\endtt
+看看出现了什么问题。
+\answer 他忘记算上空格；\TeX\ 删除了 `|i|'、`|m|'、`\]'、`|\input|'
+以及四个字母。（但没关系；他可以将输入 `|1|' 或 `|2|' 以及 \<return>，
+然后在提示符 `|*|' 后他可以输入新的一行。）
+
+%\TeX\ usually tries to recover from errors either by ignoring a command
+%that it doesn't understand, or by inserting something that will keep it
+%happy. For example, we saw in Chapter~6 that \TeX\ ignores an
+%undefined control sequence; and we just observed that \TeX\ inserts
+%`|pt|' when it needs a physical unit of measure.
+%Here's another example where \TeX\ puts something in:
+%\begintt
+%! Missing $ inserted.
+%<inserted text>
+%                $
+%<to be read again>
+%                   ^
+%l.11 the fact that 32768=2^
+%                           {15} wasn't interesting
+%? H
+%I've inserted a begin-math/end-math symbol since I think
+%you left one out. Proceed, with fingers crossed.
+%\endtt
+%^^{help message} ^^|Missing|
+%(The user has forgotten to enclose a formula in |$| signs, and \TeX\
+%has tried to recover by inserting one.) \ In this case the \<inserted text>
+%is explicitly shown, and it has not yet been read; by contrast, our
+%previous example illustrated a case where \TeX\ had already internalized
+%the `|pt|' that it had inserted. Thus the user has a chance here to
+%remove the inserted~`|$|' before \TeX\ really sees it.
+ \TeX\ 通常修复错误的方式是忽略掉它不认识的命令，或者插入某些东西来去掉错误。%
+例如，在第六章我们看到 \TeX\ 忽略掉一个没有定义的控制系列；
+还有，我们刚刚看到，当 \TeX\ 需要一个测量的物理单位时，就插入`|pt|'。%
+在下面的例子中， \TeX\ 将插入某些东西：
+\begintt
+! Missing $ inserted.
+<inserted text>
+                $
+<to be read again>
+                   ^
+l.11 the fact that 32768=2^
+                           {15} wasn't interesting
+? H
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+\endtt
+（用户落掉了封装公式的符号 |$|，\TeX\ 就通过插入它来修复。）
+在这种情况下，\<inserted text> 明确给出了，并且还没有读入；
+相反，在前一个例子中 \TeX\ 已经内在地插入了 `|pt|'。
+因此，在 \TeX\ 实际读入 `|$|' 前用户可以有机会去掉这个插入的 `|$|'。
+
+%What should be done? The error in this example occurred before \TeX\ noticed
+%anything wrong; the characters `32768=2' have already been typeset in
+%horizontal mode. There's no way to go back and cancel the past, so
+%the lack of proper spacing around the `=' cannot be fixed. Our goal of
+%error recovery in this case is therefore not to produce perfect
+%output; we want rather to proceed in some way so that \TeX\ will pass by
+%the present error and detect subsequent ones. If we were simply to hit
+%\<return> now, our aim would not be achieved, because \TeX\ would
+%typeset the ensuing text as a math formula: `$^{15} wasn't interesting
+%\ldots$'\thinspace; another error would be detected when the paragraph is
+%found to end before any closing~`|$|' has appeared. On the other hand,
+%there's a more elaborate way to recover, namely to type~`|6|' and then
+%`|I$^{15}$|'; this deletes `|$^{15}|' and inserts a
+%correct partial formula. But that's more complicated than necessary.
+%The best solution in this case is to type just~`|2|' and then go on;
+%\TeX\ will typeset the incorrect equation `32768=215', but the important
+%thing is that you will be able to check out the rest of the document as if
+%this error hadn't occurred.
+应该怎样做呢？
+本例的错误出现在 \TeX\ 发现错误信息之前；
+字符串`32768=2'已经在水平模式下排版完毕。%
+无法回去取消过去的结果，因此在`='两边落掉的间距就无法弥补了。%
+因此现在我们修复错误的目的不是得到完美的输出结果；
+我们更希望用某种方式继续进行，而 \TeX\ 将越过现在的错误并且去检测下一个错误。%
+\1如果我们现在直接键入 \<return>, 目的就会落空，因为 \TeX\ 将把随后的文本%
+按照数学公式排版：`$^{15} wasn't interesting \ldots$'\thinspace;
+当在闭符号`|$|'出现前段落就结束时就又出现一个错误。%
+另一方面，有一种更精巧的修复方法，即键入`|6|'并且接着键入`|I$^{15}$|';
+这就删除了`|$^{15}|'并且插入一个正确的公式部分。%
+但是它比必需的要更复杂。%
+这种情况下最好的解决方法是只键入`|2|', 并且接下来继续则可；
+ \TeX\ 将排版出一个不正确的方程`32768=215',
+但是重要的是你能验证一下文档其余的部分，就好像没出现过这个错误一样。
+
+%\dangerexercise Here's a case in which a backslash was inadvertently omitted:
+%\begintt
+%! Missing control sequence inserted.
+%<inserted text>
+%                \inaccessible
+%<to be read again>
+%                   m
+%l.10 \def m
+%           acro{replacement}
+%\endtt
+%% The help message issued by TeX refers to "exercise 27.2 in The TeXbook"!
+%\TeX\ needs to see a control sequence after `|\def|', so it has inserted one
+%that will allow the processing to continue. \ (This control sequence is
+%shown as `^|\inaccessible|', but it has no relation to any control
+%sequence that you can actually specify in an error-free manuscript.) \
+%If you simply hit \<return> at this point, \TeX\ will define the
+%inaccessible control sequence, but that won't do you much good;
+%later references to |\macro| will be undefined. Explain how to
+%recover from this error so that the effect will be the same as if
+%line~10 of the input file had said `|\def\macro{replacement}|'.
+%\answer First delete the unwanted tokens, then insert what you want:
+%Type `|6|' and then `|I\macro|'. \ (Incidentally, there's a sneaky
+%way to get at the |\inaccessible| control sequence by typing
+%\begintt
+%I\garbage{}\let\accessible=
+%\endtt
+%in response to an error message like this. The author ^^{Knuth} designed
+%\TeX\ in such a way that you can't destroy anything by playing such
+%nasty tricks.)
+\dangerexercise 下面这种情况下，无意中落掉一个反斜线：
+\begintt
+! Missing control sequence inserted.
+<inserted text>
+                \inaccessible
+<to be read again>
+                   m
+l.10 \def m
+           acro{replacement}
+\endtt
+% The help message issued by TeX refers to "exercise 27.2 in The TeXbook"!
+在 `|\def|' 后面 \TeX\ 要读入一个控制系列，因此它插入了一个命令以继续处理。%
+（这个控制系列显示的是 `^|\inaccessible|'，
+但它与你在正确文稿中实际给出的任何控制系列都没有关系。）
+如果此时你直接键入 \<return>，那么 \TeX\ 将定义一个不能使用的控制系列，
+但是这没什么好处；随后要用到的 |\macro| 就没有定义了。
+看看怎样修复这个错误才能使得第 10 行的结果为 `|\def\macro{replacement}|'。
+\answer 首先删除不需要的记号，然后插入你所需要的：
+先输入 `|6|' 然后输入 `|I\macro|'。\allowbreak （顺便说一下，有一种鬼祟做法%
+可以得到 |\inaccessible| 控制系列，即在回应这种错误信息时输入
+\begintt
+I\garbage{}\let\accessible=
+\endtt
+作者^^{Knuth}在设计 \TeX\ 时已确保使用这些诡计也不能摧毁任何东西。）
+
+%\dangerexercise When you use the `|I|' option to respond to an error message,
+%the rules of Chapter~8 imply that \TeX\ removes all spaces from the
+%right-hand end of the line. Explain how you can use the `|I|'~option
+%to insert a ^{space}, in spite of this fact.
+%\answer `|I|\]|%|' does the trick, if |%| is a ^{comment character}.
+\dangerexercise 当你用选项 `|I|' 回应错误信息时，
+第 8 章的规则意味着 \TeX\ 将从行的右端去掉所有空格。
+看看怎样才能绕过这个规则而用选项 `|I|' 插入一个空格？
+\answer `|I|\]|%|' 就可完成此任务，假定 |%| 是一个^{注释符}。
+
+%Some of the toughest errors to deal with are those in which you make a
+%mistake on line~20 (say), but \TeX\ cannot tell that anything is amiss
+%until it reaches line~25 or so. For example, if you forget a `|}|' that
+%completes the argument to some macro, \TeX\ won't notice any problem
+%until reaching the end of the next paragraph. In such cases you probably
+%have lost the whole paragraph; but \TeX\ will usually be able to get
+%straightened out in time to do the subsequent paragraphs as if
+%nothing had happened. A ``^{runaway argument}'' will be displayed,
+%and by looking at the beginning of that text you should be able to
+%figure out where the missing `|}|' belongs.
+要对付的某些最难的错误是这样的，错误出现在(比如说)第 20 行，但是 \TeX\ 直到%
+第 25 行左右才告诉你出了问题。%
+例如，如果你落掉了`|}|', 而它表示某些宏的参量的结束，
+那么直到下一个段落的结束 \TeX\ 才会发现这个问题。%
+在这种情况下，你可能已经无法挽回这个段落了；
+但是 \TeX\ 一般可以及时纠正来处理随后的段落，就象什么也没有发生一样。%
+将会出现一个``失控参量'', 并且通过查看此文本的开头可以找到所落掉的`|}|'在哪里。
+
+%It's wise to remember that the first error in your document may well spawn
+%spurious ``errors'' later on, because anomalous commands can inflict
+%serious injury on \TeX's ability to cope with the subsequent material.
+%But most of the time you will find that a single run through the
+%machine will locate all of the places in which your input conflicts
+%with \TeX's rules.
+聪明点就知道，文档中的第一个错误可能会造成后面大量虚假的``错误'',
+因为有毛病的命令会使得 \TeX\ 处理随后命令的能力遭到极大损害。%
+但是大多数情况下你会发现依次运行就可以找到你的输入与 \TeX\ 规则冲突的所有地方。
+
+%When your error is due to misunderstanding rather than mistyping,
+%the situation is even more serious: \TeX's error messages will probably
+%not be very helpful, even if you ask \TeX\ for help.
+%If you have unknowingly redefined an important control sequence---for
+%example, if you have said `|\def\box{...}|'---all sorts of strange
+%disasters might occur. Computers
+%aren't clairvoyant, and \TeX\ can only explain what looks wrong from
+%its own viewpoint; such an explanation is bound to be mysterious
+%unless you can understand the machine's attitude. The solution
+%to this problem is, of course, to seek human counsel and advice;
+%or, as a last resort, to read the instructions in Chapters 2, 3, \dots, 26.
+\1当错误来自理解偏差而不是笔误时，问题就更严重了：
+ \TeX\ 的帮助信息可能没有太多的用处，即使能给出一些。%
+如果你无意中重新定义了一个重要的控制系列——例如，
+如果你声明`|\def\box{...}|'——那么可能出现各种奇怪的错误。%
+计算机没这个能力，并且 \TeX\ 只按照它自己的方法来处理；
+如果你不了解机器的逻辑，那么这样的解释就觉得难以理解。%
+当然，解决之道是请教别人；
+或者使用杀手锏——看看第 2, 3, $\ldots$, 26 章中的指令。
+
+%\newcount\serialnumber
+%\def\firstnumber{\serialnumber=0 }
+%\def\nextnumber{\advance \serialnumber by 1
+%  \number\serialnumber)\nobreak\hskip.2em }
+%\dangerexercise J. H. ^{Quick} (a student) once defined the following
+%set of macros:
+%\begintt
+%\newcount\serialnumber
+%\def\firstnumber{\serialnumber=0 }
+%\def\nextnumber{\advance \serialnumber by 1
+%  \number\serialnumber)\nobreak\hskip.2em }
+%\endtt
+%Thus he could type, for example,
+%\begintt
+%\firstnumber
+%\nextnumber xx, \nextnumber yy, and \nextnumber zz
+%\endtt
+%and \TeX\ would typeset
+%\firstnumber
+%`\nextnumber xx, \nextnumber yy, and \nextnumber zz'.
+%Well, this worked fine, and he showed the macros to his buddies.
+%But several months later he received a frantic phone call; one of his
+%friends had just encountered a really ^{weird error} message:
+%\begintt
+%! Missing number, treated as zero.
+%<to be read again>
+%                   c
+%l.107 \nextnumber minusc
+%                        ule chances of error
+%?
+%\endtt
+%Explain what happened, and advise Quick what to do.
+%\answer The `^|minus|' of `|minuscule|' was treated as part of
+%the |\hskip| command in |\nextnumber|. Quick should put `|\relax|'
+%at the end of his macro. \ (The ^{keywords} ^|l|, ^|plus|, |minus|,
+%^|width|, ^|depth|, or ^|height| might just happen to occur in text
+%when \TeX\ is reading a glue specification or a rule specification;
+%designers of general-purpose macros should guard against this.
+%If you get a `^|Missing number|' error and you can't guess
+%why \TeX\ is looking for a number, plant the instruction
+%`|\tracingcommands=1|' shortly before the error point; your log file
+%will show what command \TeX\ is working~on.)
+\newcount\serialnumber
+\def\firstnumber{\serialnumber=0 }
+\def\nextnumber{\advance \serialnumber by 1
+  \number\serialnumber)\nobreak\hskip.2em }
+\dangerexercise J. H. ^{Quick}（一个学生）曾经定义了下列一组宏：
+\begintt
+\newcount\serialnumber
+\def\firstnumber{\serialnumber=0 }
+\def\nextnumber{\advance \serialnumber by 1
+  \number\serialnumber)\nobreak\hskip.2em }
+\endtt
+这样它就可以这样输入——例如
+\begintt
+\firstnumber
+\nextnumber xx, \nextnumber yy, and \nextnumber zz
+\endtt
+并且 \TeX\ 应该排版出下列结果：
+\firstnumber
+`\nextnumber xx, \nextnumber yy, and \nextnumber zz'。%
+好，这不错，他把这些宏教给几个同伴。但是几个月后，他接到一个紧急电话；
+他的一个朋友遇到一个非常奇怪的错误信息：
+\begintt
+! Missing number, treated as zero.
+<to be read again>
+                   c
+l.107 \nextnumber minusc
+                        ule chances of error
+?
+\endtt
+看看出现了什么问题，并且给 Quick 一个建议。
+\answer \TeX\ 将 `|minuscule|' 的 `^|minus|' 视为 |\nextnumber| 中的
+|\hskip| 命令的一部分。Quick 应当在这个宏的末尾加上 `|\relax|'。%
+（当 \TeX\ 在读取粘连表达式或标尺表达式时，^{关键词} ^|l|、^|plus|、
+|minus|、^|width|、^|depth| 或 ^|height| 可能会出现在文本中；
+通用宏的设计者应当防备这种情形。如果你得到一个 `^|Missing number|' 错误，
+而猜不到为何 \TeX\ 在寻找一个整数，你可以在出错点前面不远处加上
+`|\tracingcommands=1|'；这样日志文件中将显示 \TeX\ 正在处理的命令。）
+
+%Sooner or later---hopefully sooner---you'll get \TeX\ to process your
+%whole file without stopping once to complain. But maybe the output
+%still won't be right; the mere fact that \TeX\ didn't stop doesn't mean
+%that you can avoid proofreading. At this stage it's usually easy to
+%see how to fix typographic errors by correcting the input. Errors of
+%layout can be overcome by using methods we have discussed before:
+%Overfull boxes can be cured as described in Chapter~6; bad breaks can
+%be avoided by using ties or |\hbox| commands as discussed in Chapter~14;
+%math formulas can be improved by applying the principles of
+%Chapters 16--19.
+早晚——希望是早——你用 \TeX\ 处理整个文件会顺利完成。%
+但是可能输出结果还不对； \TeX\ 不停顿并不意味着你可以不用校对。%
+此时，更容易通过改正输入来去掉笔误。%
+版面错误可以通过前面讨论的方法来对付：
+溢出的盒子可以用第六章的方法来解决；
+断点不好可以通过带子命令或 |\hbox| 命令来避免，就象第十四章讨论的那样；
+数学公式可以用第十六至十九章的原则来改进。
+
+%But your output may contain seemingly inexplicable errors. For example,
+%if you have specified a font at some magnification that is not supported
+%by your printing software, \TeX\ will not know that there is any
+%problem, but the program that converts your |dvi| file to hardcopy
+%might not tell you that it has substituted an ``approximate'' font
+%for the real one; the resultant spacing may look quite horrible.
+但是输出结果可能包含一些看起来比较费解的错误。%
+例如，如果你使用了打印设备不支持的某些放大率的字体，
+那么 \TeX\ 不知道有什么问题，但是把 |dvi| 文件转换为输出结果的程序可能%
+没有告诉你它用一种``近似''字体代替了你实际需要的字体；
+这样就出现了非常难看的多余间距。
+
+%If you can't find out what went wrong, try the old trick of simplifying
+%your program: Remove all the things that do work, until you obtain
+%the shortest possible input file that fails in the same way as the
+%original. The shorter the file, the easier it will be for you or somebody
+%else to pinpoint the problem.
+\1如果无法找到错误的地方，就试着简化你的程序：
+去掉所有正常的部分，直到得到出现同样问题的最短输入文件。%
+文件越短，越容易找到错误。
+
+%Perhaps you'll wonder why \TeX\ didn't put a blank space in some
+%position where you think you typed a space. Remember that \TeX\ ignores
+%^{spaces} that follow control words, when it reads your file.
+%\ (\TeX\ also ignores a space after a \<number> or a \<unit of
+%measure> that appears as an argument to a primitive command; but if
+%you are using properly designed macros, such rules will not concern
+%you, because you will probably not be using primitive commands~directly.)
+可能你感到纳闷，为什么 \TeX\ 在你要输入空格的某些地方没有放置空格。%
+记住，在读入文件时， \TeX\ 要忽略掉控制单词后面的空格。%
+~(\TeX\ 还忽略掉作为原始命令的参量而出现的 \<number> 或 \<unit of measure>~%
+后面的空格；
+但是如果你使用的是设计正确的宏，那么这些规则与你无关，
+因为你可能不会直接用到原始命令。)
+
+%\ddanger On the other hand, if you are designing macros, the task of
+%troubleshooting can be a lot more complicated. For example, you may
+%discover that \TeX\ has emitted three blank spaces when it processed some
+%long sequence of complicated code, consisting of several dozen commands.
+%How can you find out where those spaces crept in? The answer is to set
+%`^|\tracingcommands||=1|', as mentioned in Chapter~13. This tells \TeX\ to
+%put an entry in your log file whenever it begins to execute a primitive
+%command; you'll be able to see when the command is `|blank| |space|'.
+\ddanger 另一方面，如果你在设计宏，那么处理问题的任务就更复杂了。%
+例如，你可能发现，当 \TeX\ 处理由几打命令组成的某些复杂的长系列代码时，
+可能出现了三个空格。%
+怎样你才能找到这些空格的来源呢？
+这就要用第十三章中提到的`^|\tracingcommands||=1|'。%
+这使得 \TeX\ 只要执行一个原始命令，就在 log 文件中放一条记录；
+这样你就能看到什么时候命令是`|blank| |space|'了。
+
+%\danger Most implementations of \TeX\ allow you to ^{interrupt} the program
+%in some way. This makes it possible to diagnose the causes of ^{infinite
+%loops}. \TeX\ switches to ^|\errorstopmode| when interrupted; hence
+%you have a chance to insert commands into the input: You can abort the
+%run, or you can ^|\show| or change the current contents of control sequences,
+%registers, etc. You can also get a feeling for where \TeX\ is spending most
+%of its time, if you happen to be using an inefficient macro, since random
+%interrupts will tend to occur in whatever place \TeX\ visits most often.
+\danger 大多数 \TeX\ 的执行都允许用某些方式来中断程序。%
+这就使它可以诊断出死循环的根源。%
+当中断时， \TeX\ 转到 |\errorstopmode|;
+因此，你就有机会把命令插入到输入中：
+可以结束运行，也可以 |\show| 或改变控制系列，寄存器等的当前定义。%
+如果你凑巧使用了一个效率低下的宏，你还可以觉察出 \TeX\ 把大多数时间都花%
+在了什么地方了，因为随机出现的中断倾向于出现在 \TeX\ 最频繁读入的地方。
+
+%\danger Sometimes an error is so bad that \TeX\ is forced to quit
+%prematurely. For example, if you are running in ^|\batchmode| or
+%^|\nonstopmode|, \TeX\ makes an ``^{emergency stop}'' if it needs
+%input from the terminal; this happens when a necessary file cannot
+%be opened, or when no ^|\end| command was found in the input
+%document. Here are some of the messages you might get just before
+%\TeX\ gives up the ghost: \enddanger
+\danger 有时候错误太糟糕使得 \TeX\ 被迫过早退出。%
+例如，如果在 |\batchmode| 或 |\nonstopmode| 运行，那么如果 \TeX\ 需要从终端%
+得到输入时就``紧急中止''了；
+当必须打开的文件被打开时，或者在输入文档中找不到命令 |\end| 时，
+就出现这种情况。%
+下面就是 \TeX\ 在中止运行时你可能得到的信息：\enddanger
+
+%{\ninepoint
+%\def\fatal#1. {\medbreak{\tt#1.}\par\nobreak\smallskip\noindent\ignorespaces}
+%\fatal
+%Fatal format file error; I'm stymied.
+%^^|Fatal format file error|
+%This means that the preloaded format you have specified cannot be used,
+%because it was prepared for a different version of \TeX.
+%\fatal
+%That makes 100 errors; please try again.
+%\TeX\ has scrolled past 100 errors since the last paragraph ended, so
+%it's probably in an~endless ^{loop}. ^^{infinite loop}
+%\fatal
+%Interwoven alignment preambles are not allowed.
+%^^|Interwoven alignment preambles|
+%If you have been so devious as to get this message, you will understand
+%it, and you will deserve no sympathy.
+%\fatal
+%I can't go on meeting you like this.
+%^^|I can't go on|
+%A previous error has gotten \TeX\ out of whack. Fix it and try again.
+%\fatal
+%This can't happen.
+%^^|This can't happen|
+%Something is wrong with the \TeX\ you are using. Complain fiercely.
+%\goodbreak}
+{\ninepoint
+\def\fatal#1. {\medbreak{\tt#1.}\par\nobreak\smallskip\noindent\ignorespaces}
+\fatal
+Fatal format file error; I'm stymied.
+这表示你要预载入的格式不能使用，因为它是为 \TeX\ 的另一个版本所制作的。
+\fatal
+That makes 100 errors; please try again.
+自上一段结束起， \TeX\ 已经发现了 100 个错误，
+因此它可能是个死循环。
+\fatal
+Interwoven alignment preambles are not allowed.
+如果你错到这种情况，就应该去学习了，不值得同情。
+\fatal
+I can't go on meeting you like this.
+前面的错误使得 \TeX\ 无法正常运行。改正它并且再试运行一次。
+\fatal
+This can't happen.
+正在使用的对 \TeX\ 而言是错误的。问题太大。
+\goodbreak}
+
+%\danger There's also a dreadful message that \TeX\ issues only with
+%great reluctance. But it can happen:
+%\begintt
+%TeX capacity exceeded, sorry.
+%\endtt
+%^^|TeX capacity exceeded|
+%This, alas, means that you have tried to stretch \TeX\ too far. The
+%message will tell you what part of \TeX's memory has become overloaded;
+%one of the following fourteen things will be mentioned:
+%\begindisplay
+%|number of strings|\qquad(names of control sequences and files)\cr
+%|pool size|\qquad(the characters in such names)\cr
+%|main memory size|\qquad(boxes, glue, breakpoints, token lists,
+%        characters, etc.)\cr
+%|hash size|\qquad(control sequence names)\cr
+%|font memory|\qquad(font metric data)\cr
+%|exception dictionary|\qquad(hyphenation exceptions)\cr
+%|input stack size|\qquad(simultaneous input sources)\cr
+%|semantic nest size|\qquad(unfinished lists being constructed)\cr
+%|parameter stack size|\qquad(macro parameters)\cr
+%|buffer size|\qquad(characters in lines being read from files)\cr
+%|save size|\qquad(values to restore at group ends)\cr
+%|text input levels|\qquad(|\input| files and error insertions)\cr
+%|grouping levels|\qquad(unfinished groups)\cr
+%|pattern memory|\qquad(hyphenation pattern data)\cr
+%\enddisplay
+%The current amount of memory available will also be shown.
+\danger \1还有一个可怕的信息 \TeX\ 极不情愿给出。但是也会出现：
+\begintt
+TeX capacity exceeded, sorry.
+\endtt
+唉，这意味着你所展开的 \TeX\ 太长。%
+这个信息将告诉你 \TeX\ 的哪部分内存溢出了；
+下面十四种情况之一会出现：
+\begindisplay
+|number of strings|\qquad(文件或控制系列的名称)\cr
+|pool size|\qquad(在这样的名称中的字符)\cr
+|main memory size|\qquad(盒子，粘连，断点，记号列，字符等。)\cr
+|hash size|\qquad(控制系列的命名)\cr
+|font memory|\qquad(字体度量数据)\cr
+|exception dictionary|\qquad(额外的连字)\cr
+|input stack size|\qquad(同时输入的资源)\cr
+|semantic nest size|\qquad(要构造的未完成的列)\cr
+|parameter stack size|\qquad(宏参数)\cr
+|buffer size|\qquad(在要读入文件中行中的字符)\cr
+|save size|\qquad(在组结束时要复原的值)\cr
+|text input levels|\qquad(|\input| 文件和错误的插入对象)\cr
+|grouping levels|\qquad(未完成的组)\cr
+|pattern memory|\qquad(连字式样的数据)\cr
+\enddisplay
+当前可用的内存量也显示出来。
+
+%\danger If you have a job that doesn't overflow \TeX's capacity, yet
+%you want to see just how closely you have approached the limits,
+%just set ^|\tracingstats| to a positive value before the end of your
+%job. The log file will then conclude with a report on your actual
+%usage of the first eleven things named above (i.e., the number of strings,
+%\dots, the save size), in that order. ^^{stack positions}
+%Furthermore, if you set |\tracingstats| equal to 2~or~more, \TeX\
+%will show its current memory usage whenever it
+%does a ^|\shipout| command. Such statistics are broken into two
+%parts; `|490&5950|' means, for example, that 490 words are being used
+%for ``large'' things like boxes, glue, and
+%breakpoints, while 5950 words are being used for ``small'' things like
+%tokens and characters.
+\danger 如果有一个未溢出 \TeX\ 容量的任务，但是你只想看看离限制有多远，
+那么就在任务结束前把 |\tracingstats| 设置为一个正值。%
+这样在 log 文件中就对上述给出的前十一项(即，number of strings,
+$\ldots$, save size)按相应顺序给出实际使用的一个报告。%
+还有，如果把 |\tracingstats| 设置为大于等于 2, 那么 \TeX\ 只要执行%
+一次命令 |\shipout| 就显示一次当前内存。%
+这样的统计包括分为两部分；例如，`|490&5950|'表示对象盒子，粘连和断点这样%
+的``大''对象用到 490 个单词，
+而对象记号和字符这样的``小''对象用到 5950 个单词。
+
+%\danger What can be done if \TeX's capacity is exceeded? All of the
+%above-listed components of the capacity can be increased, provided
+%that your computer is large enough; in fact, the space necessary to
+%increase one component can usually be obtained by decreasing some
+%other component, without increasing the total size of \TeX\null.
+%If you have an especially important application, you may be able
+%to convince your local system people to provide you with a special
+%\TeX\ whose capacities have been hand-tailored to your needs.
+%But before taking such a drastic step, be sure that you are using
+%\TeX\ properly. If you have specified a gigantic paragraph or
+%a gigantic alignment that spans more than one page, you should
+%change your approach, because \TeX\ has to read all the way to the
+%end before it can complete the line-breaking or the alignment
+%calculations; this consumes huge amounts of memory space. If you have
+%built up an enormous macro library, you should remember that \TeX\
+%has to remember all of the replacement texts that you define; therefore
+%if memory space is in short supply, you should load only the macros
+%that you need. \ (See Appendices B and~D\null, for ideas on how to make
+%macros more compact.)
+\danger 如果超出了 \TeX\ 的容量怎么办？
+如果你的计算机容量足够大，那么上面列出的所有容量分量都可用增加；
+实际上，在不增加 \TeX\ 的总容量情况下，要给一个分量增加所必需的空间一般%
+要减小其它某些分量。%
+如果你特别重要的用处，可以请求你的本地系统给你一个可手工设置容量的特殊 \TeX。%
+但是在进行这样的步骤前，首先你必须能正确使用 \TeX。%
+如果你要排版超过一页的一个巨大段落或者对齐格式，那么可能要改变你的方法，
+因为在 \TeX\ 完成断行或对齐计算前要把它们都读入；
+这要消耗大量的内存容量。%
+如果你已经建立了一个大的宏库，那么就应该记住， \TeX\ 必须记住你所定义的%
+所有的替换文本；
+因此如果内存空间较小，就只载入所用的宏。%
+(至于怎样使宏更紧凑，见附录 B 和 D。)
+
+%\danger Some erroneous \TeX\ programs will overflow any finite
+%memory capacity. For example, after `|\def\recurse{(\recurse)}|', the
+%^^{recursion} use of\/ |\recurse| will immediately bomb out:
+%\begintt
+%! TeX capacity exceeded, sorry [input stack size=80].
+%\recurse ->(\recurse
+%                     )
+%\recurse ->(\recurse
+%                     )
+%...
+%\endtt
+%The same sort of error will obviously occur no matter how much you increase
+%\TeX's input stack size.
+\danger \1有些错误的 \TeX\ 程序将导致，无论内存容量多大都会溢出。例如，
+在这个定义 `|\def\recurse{(\recurse)}|' 之后，使用 |\recurse| 就立即溢出：
+\begintt
+! TeX capacity exceeded, sorry [input stack size=80].
+\recurse ->(\recurse
+                     )
+\recurse ->(\recurse
+                     )
+...
+\endtt
+不管你怎样增加 \TeX\ 的输入堆栈的容量，同样的错误总会出现。
+
+%\ddanger The special case of ``^|save size|'' capacity exceeded is one
+%of the most troublesome errors to correct, especially if you run into
+%the error only on long jobs. \TeX\ generally uses up two words of save
+%size whenever it performs a non-global assignment to some quantity
+%whose previous value was not assigned at the same level of ^{grouping}.
+%When macros are written properly, there will rarely be a need for
+%more than 100 or~so things on the ``^{save stack}''; but it's possible to
+%make save stack usage grow without limit if you make both local and
+%^{global assignments} to the same variable. You can figure out what \TeX\
+%puts on the save stack by setting ^|\tracingrestores||=1|; then your
+%log file will record information about whatever is removed from the
+%stack at the end of a group. For example, let |\a| stand for the
+%command `|\advance\day|~|by|~|1|'; let |\g| stand for
+%`|\global\advance\day|~|by|~|1|'; and consider the following commands:
+%\begintt
+%\day=1 {\a\g\a\g\a}
+%\endtt
+%The first |\a| sets |\day=2| and remembers the old value |\day=1| by putting
+%it on the save stack. The first |\g| sets |\day=3|, globally; nothing needs
+%to go on the save stack at the time of a global assignment. The next |\a|
+%sets |\day=4| and remembers the old value |\day=3| on the save stack.
+%Then |\g| sets |\day=5|; then |\a| sets |\day=6| and remembers |\day=5|.
+%^^{right brace}
+%Finally the `|}|' causes \TeX\ to go back through the save stack; if
+%|\tracingrestores=1| at this point, the log file will get the following
+%data:
+%\begintt
+%{restoring \day=5}
+%{retaining \day=5}
+%{retaining \day=5}
+%\endtt
+%Explanation: The |\day| parameter is first restored to its global value~5.
+%Since this value is global, it will be retained, so the other saved values
+%(|\day=3| and |\day=1|) are essentially ignored. Moral: If you find \TeX\
+%retaining a lot of values, you have a set of macros that could cause
+%the save stack to overflow in large enough jobs. To prevent this, it's
+%usually wise to be consistent in your assignments to each variable that
+%you use; the assignments should either be global always or local always.
+\ddanger 这种``^|save size|''容量溢出的特殊情况是一个最难对付的错误，
+特别是你只在大任务中出现这种错误。只要 \TeX\ 所执行的某个量的非全局赋值，
+而这个量的上一个值不是在同一层次的编组中指定的，那么就要用两个字来保存大小。
+当宏编写正确时，在``保存堆栈''上极少情况下才能用到 100 个以上的位置；
+但如果同一个变量既有局部赋值又有全局赋值，可能导致保存所用的堆栈无限制地增长。
+通过设置 |\tracingrestores||=1| 可以查看 \TeX\ 在保存堆栈上放了什么；
+这样日志文件就记录下了在组结束时从堆栈中所移除内容的信息。
+例如，设 |\a| 表示命令 `|\advance\day|~|by|~|1|'；
+|\g| 表示 `|\global\advance\day|~|by|~|1|'；看看下列命令：
+\begintt
+\day=1 {\a\g\a\g\a}
+\endtt
+第一个 |\a| 设置 |\day=2| 并且把原来的值 |\day=1| 放在保存堆栈中从而保留它。
+第一个 |\g| 全局地设置 |\day=3|；
+在全局赋值时，堆栈上不需要什么变动。
+下一个 |\a| 设置 |\day=4| 并且把原来的值 |\day=3| 放在保存堆栈中以保留。
+接着，|\g| 设置 |\day=5|；接着 |\a| 设置 |\day=6| 并且保留住 |\day=5|。
+最后，`|}|' 使得 \TeX\ 回退这整个保存堆栈；
+如果在此处声明 |\tracingrestores=1|，那么日志文件中就得到下列数据：
+\begintt
+{restoring \day=5}
+{retaining \day=5}
+{retaining \day=5}
+\endtt
+注解：参数 |\day| 首先恢复其全局值 5。因为此值是全局的，所以要保留下来，
+因此其它两个被保存的值（|\day=3| 和 |\day=1|）就被忽略了。
+教训：如果你发现 \TeX\ 保留了很多值，那么就有那么一组宏，
+在大文件中会导致保存堆栈溢出。
+为了防止这种情况，最好保持对每个变量的赋值要前后一致；
+赋值应该总是全局的，或者总是局部的。
+
+%\ddanger \TeX\ provides several other kinds of tracing in addition to
+%|\tracingstats| and |\tracingrestores|: We have already discussed
+%|\tracingcommands| in Chapters 13 and~20, |\tracingparagraphs| in
+%Chapter~14, |\tracingpages| in Chapter~15, and |\tracingmacros| in
+%Chapter~20. There is also ^|\tracinglostchars|, which (if positive)
+%causes \TeX\ to record each time a character has been dropped because
+%it does not appear in the current font; and ^|\tracingoutput|, which
+%(if positive) causes \TeX\ to display in symbolic form the contents
+%of every box that is being shipped out to the ^|dvi|~file. ^^|\shipout|
+%The latter allows you to see if things have been typeset properly, if
+%you're trying to decide whether some anomaly was caused by \TeX\ or
+%by some other software that acts on \TeX's output.
+\ddanger 除了 |\tracingstats| 和 |\tracingrestores| 以外，\TeX\
+还有几种跟踪命令：我们已经讨论过的有第 13 和 20 章中的 |\tracingcommands|，
+第 14 章中的 |\tracingparagraphs|，第 15 章中的 |\tracingpages|，
+及第 20 章中的 |\tracingmacros|。还有 |\tracinglostchars|，在其为正值时，
+如果因为当前字体中不存在某个字符而漏掉了字符，\TeX\ 就给出一个记录；
+以及 |\tracingoutput|，在其为正值时，\TeX\ 就以符号的形式把要输送到 |dvi|
+文件中的某个盒子的内容显示出来。\1在你无法确定某个异常出在 \TeX\ 方面
+还是出在处理 \TeX\ 输出的软件方面时，用后一个命令可以看看排版是否正确。
+
+%\danger When \TeX\ displays a box as part of diagnostic output, the amount
+%of data is controlled by two parameters called ^|\showboxbreadth| and
+%^|\showboxdepth|. The first of these, which plain \TeX\ sets equal to~5,
+%tells the maximum number of items shown per level; the second, which plain
+%\TeX\ sets to~3, tells the deepest level. For example, a small box
+%whose full contents are ^^{internal box format} ^^{symbolic box format}
+%\begintt
+%\hbox(4.30554+1.94444)x21.0, glue set 0.5
+%.\hbox(4.30554+1.94444)x5.0
+%..\tenrm g
+%.\glue 5.0 plus 2.0
+%.\tenrm || (ligature ---)
+%\endtt
+%will be abbreviated as follows when |\showboxbreadth=1| and |\showboxdepth=1|:
+%^^{ligature} ^^{em-dash}
+%\begintt
+%\hbox(4.30554+1.94444)x21.0, glue set 0.5
+%.\hbox(4.30554+1.94444)x5.0 []
+%.etc.
+%\endtt
+%And if you set |\showboxdepth=0|, you get only the top level:
+%\begintt
+%\hbox(4.30554+1.94444)x21.0, glue set 0.5 []
+%\endtt
+%(Notice how `^|[]|' and `^|etc.|'~indicate that the data has been
+%truncated.)
+\danger 当 \TeX\ 把一个盒子作为诊断输出的一部分而显示出来时，
+可以用两个参数来控制信息量，它们是 |\showboxbreadth| 和 |\showboxdepth|。%
+Plain \TeX\ 把第一个设置为 5, 显示的是每个层次的项目的最大数目；
+第二个设置为 3, 显示的是深度最大的层次。%
+例如，当 |\showboxbreadth=1| 和 |\showboxdepth=1| 时，所有内容如下的一个小盒子
+\begintt
+\hbox(4.30554+1.94444)x21.0, glue set 0.5
+.\hbox(4.30554+1.94444)x5.0
+..\tenrm g
+.\glue 5.0 plus 2.0
+.\tenrm || (ligature ---)
+\endtt
+将简化为
+\begintt
+\hbox(4.30554+1.94444)x21.0, glue set 0.5
+.\hbox(4.30554+1.94444)x5.0 []
+.etc.
+\endtt
+如果设置 |\showboxdepth=0| 就只得到最顶层的信息：
+\begintt
+\hbox(4.30554+1.94444)x21.0, glue set 0.5 []
+\endtt
+(注意，`^|[]|'和`^|etc.|表明数据被截去了。)
+
+%\danger A nonempty hbox is considered ``^{overfull}'' if its ^{glue}
+%cannot shrink to achieve the specified size, provided that ^|\hbadness| is
+%less than~100 or that the excess width (after shrinking by the maximum
+%amount) is more than ^|\hfuzz|. It is ``^{tight}'' if its glue shrinks and
+%the ^{badness} exceeds |\hbadness|; it is ``^{loose}'' if its glue
+%stretches and the badness exceeds |\hbadness| but is not greater than~100;
+%it is ``^{underfull}'' if its glue stretches and the badness is greater
+%than |\hbadness| and greater than~100. Similar remarks apply to nonempty
+%vboxes. \TeX\ prints a warning message and displays the offending box,
+%whenever such anomalies are discovered. Empty boxes are never considered
+%to be anomalous.
+\danger 如果一个非空 hbox 的粘连不能再收缩到所要求的尺寸，
+并且其 |\hbadness| 小于 100 或者(在最大收缩后)其超出的宽度%
+大于 |\hfuzz|, 它就被看作是``溢出''的。%
+如果粘连是收缩并且其丑度超过了 |\hbadness|, 它就是``太紧''的；
+如果粘连是伸长并且其丑度超过了 |\hbadness| 而不超过 100, 就是``松散''的；
+如果粘连是伸长并且其丑度超过了 |\hbadness| 且超过 100, 就是``空荡''的。%
+类似讨论对非空 vbox 也适用。%
+只要出现这样的问题， \TeX\ 就给出警告信息并且显示出有毛病的盒子。
+空盒子从不认为有这种问题。
+
+%\ddanger When an ^{alignment} is ``overfull'' or ``tight'' or ``loose'' or
+%``underfull,'' you don't get a warning message for every aligned line;
+%you get only one message, and \TeX\ displays a {\sl^{prototype row}\/}
+%(or, with ^|\valign|, a {\sl prototype column\/}).
+%For example, suppose you say `|\tabskip=0pt plus10pt
+%\halign to200pt{&#\hfil\cr...\cr}|', ^^|\halign| and suppose that the aligned
+%material turns out to make two columns of widths $50\pt$ and $60\pt$,
+%respectively. Then you get the following message:
+%\begintt
+%Underfull \hbox (badness 2698) in alignment at lines 11--18
+% [] []
+%\hbox(0.0+0.0)x200.0, glue set 3.0
+%.\glue(\tabskip) 0.0 plus 10.0
+%.\unsetbox(0.0+0.0)x50.0
+%.\glue(\tabskip) 0.0 plus 10.0
+%.\unsetbox(0.0+0.0)x60.0
+%.\glue(\tabskip) 0.0 plus 10.0
+%\endtt
+%The ``unset boxes'' in a prototype row show the individual column widths.
+%In this case the ^{tabskip glue} has to stretch 3.0 times its stretchability,
+%in order to reach the $200\pt$ goal, so the box is underfull. \ (According
+%to the formula in Chapter~14, the badness of this situation is~2700; \TeX\
+%actually uses a similar but more efficient formula, so it computes a
+%badness of~2698.) \ Every line of the alignment will be underfull, but
+%only the prototype row will be displayed in a warning message.
+%``^{Overfull rules}'' are never appended to the lines of overfull alignments.
+\ddanger 当对齐阵列是``过满的''、``紧密的''、``松散的''或``空荡的''时，
+不会为每个要对齐的行给出警告信息，只能得到一个，并且 \TeX\
+显示出一个{\KT{9}模板行}（在 |\valign| 中为一个{\KT{9}模板栏}）。
+例如，假定输入的是 `|\tabskip=0pt plus10pt \halign to200pt{&#\hfil\cr...\cr}|'，
+并且假定要对齐的内容把两个栏宽度分别变成 $50\pt$ 和 $60\pt$。那么就得到下列信息：
+\begintt
+Underfull \hbox (badness 2698) in alignment at lines 11--18
+ [] []
+\hbox(0.0+0.0)x200.0, glue set 3.0
+.\glue(\tabskip) 0.0 plus 10.0
+.\unsetbox(0.0+0.0)x50.0
+.\glue(\tabskip) 0.0 plus 10.0
+.\unsetbox(0.0+0.0)x60.0
+.\glue(\tabskip) 0.0 plus 10.0
+\endtt
+\1在模板行中的``unset box''显示的是各个栏的宽度。%
+在本例中，为了伸长到所要求的 $200\pt$, 制表粘连的伸长量为其伸长值的三倍，
+因此此盒子是空荡的。%
+(按照第十四章的公式，此情形下的丑度为 2700;
+ \TeX\ 实际用的是一个类似且更高效的公式，因此计算出的丑度为 2698。)
+对齐的每个行都是空荡的，但是只有模板行在警告信息中给出了。%
+对溢出对齐的行不再添加``溢出的线''。
+
+%\ddanger The |\tracing...|\ commands put all of their output into your log
+%file, unless the ^|\tracingonline| parameter is positive; in the latter
+%case, all diagnostic information goes to the terminal as well as to the
+%log file.  Plain \TeX\ has a ^|\tracingall| macro that turns on the
+%maximum amount of tracing of all kinds. It not only sets~up
+%|\tracingcommands|, |\tracingrestores|, |\tracingparagraphs|, and so on,
+%it also sets |\tracingonline=1|, and it sets ^|\showboxbreadth| and
+%^|\showboxdepth| to extremely high values, so that the entire contents of
+%all boxes will be displayed.
+\ddanger 如果参数 |\tracingonline| 不是正值，那么 |\tracing...|%
+命令的所有输出都放在日志文件中；如果是正值，
+所有诊断信息都同时放在终端和日志文件中。
+Plain \TeX\ 有一个宏 |\tracingall|，它把各种诊断信息全部给出。
+它不但设置了 |\tracingcommands|、|\tracingrestores|、|\tracingparagraphs| 等，
+还设置 |\tracingonline=1|，并且设置 |\showboxbreadth| 和 |\showboxdepth|
+很大的值，这样就能把所有盒子的全部内容都显示出来。
+
+%\ddanger Some production versions of \TeX\ have been streamlined for
+%speed. These implementations don't look at the values of the parameters
+%|\tracingparagraphs|, |\tracingpages|, |\tracingstats|, and
+%|\tracingrestores|, because \TeX\ runs faster when it doesn't have
+%to maintain statistics or keep tabs on whether tracing is required.
+%If you want all of \TeX's diagnostic tools, you should be sure to
+%use the right version.
+\ddanger 某些 \TeX\ 版本在速度上有所改进。%
+这些运行看不到参数 |\tracingparagraphs|, |\tracingpages|, |\tracingstats| 和 %
+|\tracingrestores| 的值，因为当 \TeX\ 不必进行统计或者不理会诊断时运行得更快。%
+如果要使用所有的诊断工具，就要用选对版本。
+
+%\ddanger If you set ^|\pausing||=1|, \TeX\ will give you a chance to edit
+%each line of input as it is read from the file. In this way you can
+%make temporary patches (e.g., you can insert |\show...|\ commands)
+%while you're troubleshooting, without changing the actual contents
+%of the file, and you can keep \TeX\ running at human speed.
+\ddanger 如果设置 |\pausing||=1|, 那么 \TeX\ 将在读入文件时允许你编辑每一行。%
+用这种方法，当你要处理问题时，就可以临时补救一下(比如插入命令 |\show...|)%
+而不改变文件的实际内容，并且可以让 \TeX\ 按照人为的速度来运行。
+
+%Final hint: When working on a long manuscript, it's best to prepare
+%only a few pages at a time. Set up a ``^{galley}'' file and a ``^{book}''
+%file, and enter your text on the galley file. \ (Put control
+%information that sets up your basic format at the beginning of this
+%file; an example of |galley.tex| appears in Appendix~E\null.) \
+%After the galleys come out looking right, you can append them to the
+%book file; then you can run the book file through \TeX\ occasionally,
+%in order to see how the pages really fit together. For example,
+%when the author prepared this manual, he did one chapter at a time,
+%and the longer chapters were split into subchapters.
+最后的提示：
+当要制作一个大文稿时，最好每次只处理几页。%
+设置一个临时文件和一个总文件，并且把文本放在分文件中。%
+(把控制基本格式的控制信息放在此文件的开头；在附录 E 中有一个例子 |galley.tex|。)
+在临时文件正确后，再把它添加到总文件中；
+这样你只需要偶尔编译总文件看看页面的合并情况。%
+例如，当作者写此手册时，每次处理一章，
+并且把长的章分为几个片段。
+
+%\ddangerexercise Final exercise: Find all of the ^{lies} in this
+%manual, and all of the ^{jokes}.
+%\answer If this exercise isn't just a joke, the title of this
+%appendix is a lie.
+\ddangerexercise 最后的练习：找出本手册中所有的谎话和玩笑。
+\answer 如果这个练习不是一个玩笑，那么这个附录的标题就是一句谎话。
+
+%\line{Final exhortation: G{\sc O} {\sc FORTH} now and create
+%{\sl masterpieces of the publishing art!\/}}
+\line{\HT{10}最后的倡议：出发，去创造出版业之杰作吧！}
+
+\endchapter
+
+Who can understand his errors?
+\author ^^{Biblical}{\sl Psalm 19\thinspace:\thinspace12\/} (c.~1000 B.C.)
+
+\bigskip
+
+It is one thing, to shew a Man that he is in an Error,
+and another, to put him in possession of Truth.
+\author JOHN ^{LOCKE}, {\sl An Essay Concerning Humane Understanding\/} (1690)
+  % bk 4 ch 7 sec 11
+
+\vfill\eject\byebye

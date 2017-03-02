@@ -1,0 +1,2403 @@
+% -*- coding: utf-8 -*-
+
+\input macros
+
+%\beginchapter Chapter 17. More about Math
+\beginchapter Chapter 17. 数学排版进阶
+
+\origpageno=139
+
+%Another thing mathematicians like to do is make fractions---and they
+%like to build symbols up on top of each other in a variety of different ways:
+%\begindisplay
+%$\displaystyle
+%{1\over2}\qquad{\rm and}\qquad{n+1\over3}\qquad{\rm and}\qquad
+%{n+1\choose3}\qquad{\rm and}\qquad\sum_{n=1}^3 Z_n^2\,.$
+%\enddisplay
+%You can get these four formulas as displayed equations by typing
+%`|$$1\over2$$|' and
+%`|$$n+1\over3$$|' and
+%`|$$n+1\choose3$$|' and
+%`|$$\sum_{n=1}^3 Z_n^2$$|';
+%we shall study the simple rules for such constructions in this chapter.
+%^^|\sum|^^|\choose|
+\1数学家爱做的另一件事就是构造分数——并且喜欢把用各种各样的方法%
+把符号放在其它符号上面：
+\begindisplay
+$\displaystyle
+{1\over2}\qquad{\hbox{\ST{10}和}}\qquad{n+1\over3}\qquad{\hbox{\ST{10}和}}\qquad
+{n+1\choose3}\qquad{\hbox{\ST{10}和}}\qquad\sum_{n=1}^3 Z_n^2\,.$
+\enddisplay
+要把它们变成陈列方程，你可以输入 `|$$1\over2$$|' 和 `|$$n+1\over3$$|'
+和 `|$$n+1\choose3$$|' 和 `|$$\sum_{n=1}^3 Z_n^2$$|'；
+本章我们将讨论这些构造的简单规则。
+
+%First let's look at ^{fractions}, which use the `^|\over|' notation. The
+%control sequence |\over| applies to everything in the formula unless you
+%use braces to enclose it in a specific subformula; in the latter
+%^^{stacked fractions, see over}
+%case, |\over| applies to everything in that subformula.
+%\begindisplaymathdemo
+%\it Input&\it Output\cr
+%\noalign{\vskip-3pt}
+%|$$x+y^2\over k+1$$|&x+y^2\over k+1\cr
+%\noalign{\vskip2pt}
+%|$${x+y^2\over k}+1$$|&{x+y^2\over k}+1\cr
+%\noalign{\vskip-1pt}
+%|$$x+{y^2\over k}+1$$|&x+{y^2\over k}+1\cr
+%\noalign{\vskip-1pt}
+%|$$x+{y^2\over k+1}$$|&x+{y^2\over k+1}\cr
+%\noalign{\vskip-3pt}
+%|$$x+y^{2\over k+1}$$|&x+y^{2\over k+1}\cr
+%\endmathdemo
+%You aren't allowed to use |\over| twice in the same subformula; instead of
+%typing something like
+%`|a \over b \over 2|', you must specify what goes over what:
+%\begindisplaymathdemo
+%\noalign{\vskip3pt}
+%|$${a\over b}\over 2$$|&{a\over b}\over 2\cr
+%|$$a\over{b\over 2}$$|&a\over{b\over 2}\cr
+%\endmathdemo
+%Unfortunately, both of these alternatives look pretty awful. Mathematicians
+%tend to ``overuse'' |\over| when they first begin to typeset their own work
+%on a system like \TeX. A good typist or copy editor will convert fractions
+%to a ``^{slashed form},'' whenever a built-up construction would be too
+%small or too crowded. For example, the last two cases should be treated
+%as follows:
+%\begindisplaymathdemo
+%\noalign{\vskip3pt}
+%|$$a/b \over 2$$|&a/b \over 2\cr
+%|$$a \over b/2$$|&a \over b/2\cr
+%\endmathdemo
+%Conversion to slashed form takes a little bit of mathematical knowhow, since
+%^{parentheses} sometimes need to be inserted in order to preserve the meaning
+%of the formula. Besides substituting `|/|' for~`|\over|', the two parts
+%of the fraction should be put in parentheses unless they are single
+%symbols; for example, $a\over b$~becomes simply~$a/b$, but
+%$a+1\over b$ becomes $(a+1)/b$, and $a+1\over b+1$ becomes
+%${(a+1)/(b+1)}$. Furthermore, the entire fraction should generally
+%be enclosed in parentheses if it appears next to something else;
+%for example, ${a\over b}x$ becomes $(a/b)x$. If you are a typist without
+%mathematical training, it's best to ask the author of the manuscript
+%for help, in doubtful cases; you might also tactfully suggest that
+%unsightly fractions be avoided altogether in future manuscripts.
+首先我们讨论分数，它用到命令`|\over|'。%
+控制系列 |\over| 要作用到公式中的所有内容，除非你把它用大括号封装在一个规定%
+的子公式中；
+在后一种情况下，|\over| 只作用于那个子公式的所有内容。
+\begindisplaymathdemo
+{\KT{10}输入}&{\hbox{\KT{10}输出}}\cr
+\noalign{\vskip-3pt}
+|$$x+y^2\over k+1$$|&x+y^2\over k+1\cr
+\noalign{\vskip2pt}
+|$${x+y^2\over k}+1$$|&{x+y^2\over k}+1\cr
+\noalign{\vskip-1pt}
+|$$x+{y^2\over k}+1$$|&x+{y^2\over k}+1\cr
+\noalign{\vskip-1pt}
+|$$x+{y^2\over k+1}$$|&x+{y^2\over k+1}\cr
+\noalign{\vskip-3pt}
+|$$x+y^{2\over k+1}$$|&x+y^{2\over k+1}\cr
+\endmathdemo
+不允许在同一子公式中使用两次 |\over|;
+不能输入象`|a \over b \over 2|'这样的内容，必须给出 over 作用的范围：
+\begindisplaymathdemo
+\noalign{\vskip3pt}
+|$${a\over b}\over 2$$|&{a\over b}\over 2\cr
+|$$a\over{b\over 2}$$|&a\over{b\over 2}\cr
+\endmathdemo
+不幸的是，这两种方法看起来都很别扭。%
+在数学家开始用 \TeX\ 排版时，总爱``过度使用''~|over|。%
+只要当所构建的东西太小或太拥挤时，好的排版者或编辑就把分数变成``除式''。%
+例如，最后两种情况可以写作：
+\begindisplaymathdemo
+\noalign{\vskip3pt}
+|$$a/b \over 2$$|&a/b \over 2\cr
+|$$a \over b/2$$|&a \over b/2\cr
+\endmathdemo
+转换到除式需要一点数学常识，
+因为为了不改变公式的意思，有时候要插入圆括号。%
+\1除了用`|/|'代替`|\over|'外，分数的分子和分母应该放在括号中，除非它们是单个字符；
+例如，~$a\over b$ 就直接变成 $a/b$,
+但是 $a+1\over b$ 要变成 $(a+1)/b$, $a+1\over b+1$ 要变成 ${(a+1)/(b+1)}$。%
+还有，如果分数的前面有东西，那么整个分数应放在括号中；
+例如，${a\over b}x$ 变成 $(a/b)x$。%
+作为没有数学常识的排版者，在不清楚时应该询问作者；
+也可以巧妙地建议在以后的文稿中尽量不出现不好看的分数。
+
+%\exercise What's a better way to render the formula $x+y^{2\over k+1}$?
+%\answer $x+y^{2/(k+1)}$\quad(|$x+y^{2/(k+1)}$|).
+\exercise 怎样更好地排版出公式$x+y^{2\over k+1}$?
+\answer $x+y^{2/(k+1)}$（|$x+y^{2/(k+1)}$|）。
+
+%\exercise Convert `${a+1\over b+1}x$' to slashed form.
+%\answer $((a+1)/(b+1))x$\quad(|$((a+1)/(b+1))x$|).
+\exercise 把`${a+1\over b+1}x$'转换为除式。
+\answer $((a+1)/(b+1))x$（|$((a+1)/(b+1))x$|）。
+
+%\exercise What surprise did B. L. ^{User} get when he typed `|$$x = (y^2\over
+%k+1)$$|'\thinspace?
+%\answer He got the displayed formula$$x=(y^2\over k+1)$$ because he forgot
+%that an unconfined |\over| applies to everything.  \ (He should probably
+%have typed `|$$x=\left(y^2\over k+1\right)$$|', using ideas that will be
+%presented later in this chapter; this not only makes the parentheses
+%larger, it keeps the `$x=$' out of the fraction, because |\left| and
+%|\right| introduce subformulas.)
+\exercise 当^{用户笨笨}输入`|$$x = (y^2\over k+1)$$|'时，他将得到什么？
+\answer 因为忘记了无约束的 |\over| 将应用到整个公式，
+他将得到陈列公式 $$x=(y^2\over k+1)$$
+（利用本章后面将介绍的思想，
+他也许应该键入 `|$$x=\left(y^2\over k+1\right)$$|'；这不仅让圆括号变大，
+而且也让 `$x=$' 离开该分式，因为 |\left| 和 |\right| 引入一个子公式。）
+
+%\def\cents{\hbox{\rm\rlap/c}}
+%\exercise How can you make `$7{1\over2}\cents$'? \ (Assume that
+%the control sequence |\cents| yields~`$\cents$'.)^^{money}^^{cents}
+%\answer `|$7{1\over2}\cents$|' or `|7$1\over2$\cents|'. \ (Incidentally,
+%the definition used here was |\def\cents{\hbox{\rm\rlap/c}}|.)
+%^^|\rlap|^^|\cents|
+\def\cents{\hbox{\rm\rlap/c}}
+\exercise 怎样得到`$7{1\over2}\cents$'？%
+（假定控制系列 |\cents| 得到的就是`$\cents$'。）
+\answer `|$7{1\over2}\cents$|' 或 `|7$1\over2$\cents|'。%
+（顺便说一下，这里用到的定义是 |\def\cents{\hbox{\rm\rlap/c}}|。）
+^^|\rlap|^^|\cents|
+
+%The examples above show that letters and other symbols sometimes get
+%smaller when they appear in fractions, just as they get smaller when they
+%are used as exponents. It's about time that we studied \TeX's method for
+%choosing the sizes of things. \TeX\ actually has eight different
+%^{styles} in which it can treat formulas, namely
+%$$\halign{\indent#\hfil\quad&#\hfil\cr
+%display style&(for formulas displayed on lines by themselves)\cr
+%text style&(for formulas embedded in the text)\cr
+%script style&(for formulas used as superscripts or subscripts)\cr
+%scriptscript style&(for second-order superscripts or subscripts)\cr}$$
+%^^{display style}^^{text style}^^{script style}^^{scriptscript style}
+%and four other ``^{cramped}'' styles that are almost the same except that
+%exponents aren't raised quite so much. For brevity we shall refer to the
+%eight styles as
+%\begindisplay
+%$\displaystyle D,\ D',\ T,\ T',\ S,\ S',\ \SS,\ \SS',$
+%\enddisplay
+%where $D$ is display style, $D'$ is cramped display style, $T$~is text style,
+%etc. \TeX\ also uses three different ^{sizes of type for mathematics};
+%they are called ^{text size}, ^{script size}, and ^{scriptscript size}.
+上面的例子表明，当字母和其它符号出现在分数中时，有时候会变得更小，
+就象把它们放在指数上那么小。%
+现在我们应该讨论一下 \TeX\ 怎样来选择符号的大小。%
+当处理公式时， \TeX\ 实际上有八种不同的样式，即，
+$$\halign{\indent#\hfil\quad&#\hfil\cr
+陈列样式&(用在行中单独的陈列公式中)\cr
+文本样式&(用在嵌入文本的公式中)\cr
+标号样式&(用于公式的上下标)\cr
+小标号样式&(用于公式的二阶上下标)\cr}$$
+以及四种其它的``近似''样式，它们与上面四种几乎一样，只是指数升高得不那么多。%
+为了简化，我们用
+\begindisplay
+$\displaystyle D,\ D',\ T,\ T',\ S,\ S',\ \SS,\ \SS',$
+\enddisplay
+来表示这八种样式，
+其中 $D$ 是陈列样式，~$D'$ 是近似的陈列样式，
+~$T$ 是文本样式等等。%
+ \TeX\ 还使用数学字体的三种不同大小，分别叫做文本尺寸，标号尺寸，小标号尺寸。
+
+%The normal way to typeset a formula with \TeX\ is to enclose it in dollar
+%signs |$|$\,\ldots\,$|$|; this yields the formula in text style
+%(style~$T$). Or you can enclose it in double dollar signs |$$|$\,\ldots\,$|$$|;
+%this displays the formula in display style (style~$D$). The subformulas of
+%a formula might, of course, be in different styles. Once you know
+%the style, you can determine the size of type that \TeX\ will use:
+%$$\everycr{\noalign{\penalty10000}}
+%\halign{\indent#\hfil\qquad&#\hfil&\quad#\llap(like this)\hfil\cr
+%If a letter is in style&then it will be set in\cr
+%\noalign{\vskip 2pt}
+%$D,D',T,T'$&text size&\cr
+%$S,S'$&script size&\sevenrm\cr
+%$\SS,\SS'$&scriptscript size&\fiverm\cr}$$
+%There is no ``$\it SSS$'' style or ``scriptscriptscript'' size; such tiny
+%symbols would be even less readable than the scriptscript ones. Therefore
+%\TeX\ stays with scriptscript size as the minimum:
+%$$\halign{\indent\hbox to 1.3in{#\hfil}&\hbox to 1.2in{#\hfil}&#\hfil\cr
+%In a formula&the superscript&and the subscript\cr
+%of style&style is&style is\cr
+%\noalign{\vskip 2pt}
+%$D,T$&$S$&$S'$\cr
+%$D',T'$&$S'$&$S'$\cr
+%$S,\SS$&$\SS$&$\SS'$\cr
+%$S',\SS'$&$\SS'$&$\SS'$\cr}$$
+%For example, if |x^{a_b}| is to be typeset in style $D$, then |a_b| will
+%be set in style~$S$, and {\tt b}~in style~$\SS'$; the result is
+%`$\displaystyle x^{a_b}$'.
+用 \TeX\ 排版公式的正常方法是把它封装在符号 |$|$\,\ldots\,$|$| 中；
+这样得到的是文本样式（样式 $T$）。或者封装在符号 |$$|$\,\ldots\,$|$$| 中，
+这样得到的是陈列样式（样式 $D$)。当然公式的子公式使用的可能是不同的样式。
+一旦知道了样式，就可以确定 \TeX\ 要用的字体的大小：
+$$\everycr{\noalign{\penalty10000}}
+\halign{\indent#\hfil\qquad&#\hfil&\quad#\llap(like this)\hfil\cr
+如果字母的样式是&那么设定的大小为\cr
+\noalign{\vskip 2pt}
+$D,D',T,T'$&文本尺寸&\cr
+$S,S'$&标号尺寸&\sevenrm\cr
+$\SS,\SS'$&小标号尺寸&\fiverm\cr}$$
+\1没有 ``$\it SSS$'' 样式或者``小小标号''尺寸；
+这样小的符号比小标号样式更难看清。因此 \TeX\ 把小标号尺寸作为最小的：
+$$\halign{\indent\hbox to 1.3in{#\hfil}&\hbox to 1.2in{#\hfil}&#\hfil\cr
+公式的样式&上标的样式&下标的样式\cr
+\noalign{\vskip 2pt}
+$D,T$&$S$&$S'$\cr
+$D',T'$&$S'$&$S'$\cr
+$S,\SS$&$\SS$&$\SS'$\cr
+$S',\SS'$&$\SS'$&$\SS'$\cr}$$
+例如，如果 |x^{a_b}| 用样式 $D$ 排版，那么 |a_b| 就用样式 $S$，
+而 {\tt b} 就用样式 $\SS'$；结果为：
+`$\displaystyle x^{a_b}$'。
+
+%So far we haven't seen any difference between styles $D$ and $T$. Actually
+%there is a slight difference in the positioning of exponents, although
+%script size is used in each case: You get
+%$\displaystyle x^2$~in $D$~style and $x^2$~in $T$~style and \vbox to 0pt{
+%\vss\hbox{$\displaystyle{\atop x^2}$}\kern0pt}~in $D'$ or $T'$~style---do
+%you see the difference? But there is a big distinction between $D$ style and
+%$T$ style when it comes to fractions:
+%$$\halign{\indent\hbox to 1.3in{#\hfil}&\hbox to 1.2in{#\hfil}&#\hfil\cr
+%In a formula&the style of the&and the style of the\cr
+%$\alpha$|\over|$\,\beta$ of style&numerator $\alpha$ is&denominator
+%$\beta$ is\cr
+%\noalign{\vskip 2pt}
+%$D$&$T$&$T'$\cr
+%$D'$&$T'$&$T'$\cr
+%$T$&$S$&$S'$\cr
+%$T'$&$S'$&$S'$\cr
+%$S,\SS$&$\SS$&$\SS'$\cr
+%$S',\SS'$&$\SS'$&$\SS'$\cr}$$
+%^^{numerator}^^{denominator}
+%Thus if you type `|$1\over2$|' (in a text) you get $1\over2$, namely style
+%$S$ over style~$S'$; but if you type
+%`|$$1\over2$$|' you get $$1\over2$$ (a displayed formula), which is style
+%$T$ over style $T'$.
+现在我们还没发现样式 $D$ 和样式 $T$ 之间的区别。
+实际上，虽然两种情况下指数都用标号尺寸，但是其位置有点不同：
+看看样式 $D$ 中的 $\displaystyle x^2$ 和 $T$ 中的 $x^2$ 以及
+$D'$ 或 $T'$ 中的 \vbox to 0pt{
+\vss\hbox{$\displaystyle{\atop x^2}$}\kern0pt} 就明白了。
+但是当处理分数时，样式 $D$ 和样式 $T$ 之间有一个明显的差别：
+$$\halign{\indent\hbox to 1.8in{#\hfil}&\hbox to 1.2in{#\hfil}&#\hfil\cr
+公式 $\alpha$|\over|$\,\beta$ 的样式&分子的样式&分母的样式\cr
+\noalign{\vskip 2pt}
+$D$&$T$&$T'$\cr
+$D'$&$T'$&$T'$\cr
+$T$&$S$&$S'$\cr
+$T'$&$S'$&$S'$\cr
+$S,\SS$&$\SS$&$\SS'$\cr
+$S',\SS'$&$\SS'$&$\SS'$\cr}$$
+因此，如果在文本中输入 `|$1\over2$|' 那么得到的是 $1\over2$，
+即样式 $S$ 在样式 $S'$ 之上；但是如果输入 `|$$1\over2$$|' 就得到陈列公式
+$$1\over2$$
+其中样式 $T$ 在样式 $T'$ 之上。
+
+%\danger While we're at it, we might as well finish the style rules:
+%^|\underline| does not change the style. ^{Math accents}, and the operations
+%^|\sqrt| and ^|\overline|, change uncramped styles to their cramped
+%counterparts; for example, $D$ changes to $D'$, but $D'$ stays as it was.
+\danger 在这里我们最好还是给出全部的样式规则：
+|\underline| 不改变样式。数学重音和 |\sqrt| 运算与 |\overline|
+把非近似的样式变成相应的近似样式；例如，$D$ 变成 $D'$，但是 $D'$ 保持不变。
+
+%\dangerexercise State the style and size of each part of the formula
+%$\displaystyle \sqrt{p_2^{e'}}$, assuming that the formula itself is in
+%style~$D$.
+%\answer Style $D'$ is used for the subformula $p_2^{e'}$, hence style~$S'$
+%is used for the superscript~$e'$ and the subscript~2, and style~$\SS'$
+%is used for the supersuperscript prime. The square root sign and the $p$
+%appear in text size; the 2 and the~$e$ appear in script size; and the
+%$\prime$ is in scriptscript size.
+\dangerexercise 假定公式 $\displaystyle \sqrt{p_2^{e'}}$ 的样式是 $D$，
+给出其每一部分的样式和大小。
+\answer 子公式 $p_2^{e'}$ 的样式为 $D'$，从而上标 $e'$ 和下标 2 的样式为 $S'$，
+而上上标撇号的样式为 $\SS'$。平方根符号和 $p$ 以文本尺寸出现，
+2 和 $e$ 以标号尺寸出现，而 $\prime$ 以小标号尺寸出现。
+
+%Suppose you don't like the style that \TeX\ selects by its automatic style
+%rules.  Then you can specify the style you want by typing ^|\displaystyle|
+%or ^|\textstyle| or ^|\scriptstyle| or ^|\scriptscriptstyle|; the style
+%that you select will apply until the end of the formula or subformula, or
+%until you select another style.  For example,
+%`|$$n+\scriptstyle n+\scriptscriptstyle n.$$|' produces the display
+%$$n+\scriptstyle n+\scriptscriptstyle n.$$
+%This is a rather silly example, but it does show
+%that the plus signs get smaller too, as the style changes. \TeX\ puts no
+%space around + signs in script styles.
+如果不喜欢 \TeX\ 自动选择的样式，那么可规定你所要的样式，只要输入
+|\displaystyle|、|\textstyle|、|\scriptstyle| 或者 |\scriptscriptstyle|；
+所选定的样式将应用到公式或子公式结束，或者直到你给出另一种样式。
+\1例如，`|$$n+\scriptstyle n+\scriptscriptstyle n.$$|' 得到陈列公式
+$$n+\scriptstyle n+\scriptscriptstyle n.$$
+这个例子比较蠢，但是可以看到，随着样式的改变，加号也变得更小了。
+在标号样式中，\TeX\ 不在 + 号两边添加间距。
+
+%Here's a more useful example of style changes: Sometimes you need to
+%typeset a ``^{continued fraction}'' made up of many other fractions,
+%all of which are supposed to be in display style:
+%$$a_0+{1\over\displaystyle a_1+
+%          {\strut 1\over\displaystyle a_2+
+%            {\strut 1\over\displaystyle a_3+
+%              {\strut 1\over a_4}}}}$$
+%In order to get this effect, the idea is to type
+%\begintt
+%$$a_0+{1\over\displaystyle a_1+
+%        {\strut 1\over\displaystyle a_2+
+%          {\strut 1\over\displaystyle a_3+
+%            {\strut 1\over a_4}}}}$$
+%\endtt
+%(The control sequence ^|\strut| has been used to make the denominators
+%taller; this is a refinement that will be discussed in
+%Chapter~18. Our concern now is with the style commands.) \
+%Without the appearances of\/ |\strut| and |\displaystyle| in this formula,
+%the result would be completely different:
+%$$a_0+{1\over a_1+{1\over
+%      a_2+{1\over a_3+{1\over a_4}}}}$$
+下面是利用样式变化的一个更好的例子：
+有时候需要输入``连分数'', 由许多其它分数组成，
+所有的都被假定用陈列样式：
+$$a_0+{1\over\displaystyle a_1+
+          {\strut 1\over\displaystyle a_2+
+            {\strut 1\over\displaystyle a_3+
+              {\strut 1\over a_4}}}}$$
+为了得到这种效果，要输入的是：
+\begintt
+$$a_0+{1\over\displaystyle a_1+
+        {\strut 1\over\displaystyle a_2+
+          {\strut 1\over\displaystyle a_3+
+            {\strut 1\over a_4}}}}$$
+\endtt
+控制系列 |\strut| 被用来使分母更高；这是第十八章要讨论的微调。%
+我们现在关心的是样式命令。)
+如果在此公式中不出现 |\strut| 和 |\displaystyle|, 那么结果将完全不同：
+$$a_0+{1\over a_1+{1\over
+      a_2+{1\over a_3+{1\over a_4}}}}$$
+
+%\danger These examples show that the numerator and denominator of a fraction
+%are generally centered with respect to each other. If you prefer to have
+%the numerator or denominator appear ^{flush left}, put `^|\hfill|' after
+%it; or if you prefer ^{flush right}, put `|\hfill|' at the left. For
+%example, if the first three appearances of `|1\over|' in the previous
+%example are replaced by `|1\hfill\over|', you get the display
+%$$a_0+{1\hfill\over\displaystyle a_1+
+%          {\strut1\hfill\over\displaystyle a_2+
+%            {\strut1\hfill\over\displaystyle a_3+
+%              {\strut1\over a_4}}}}$$
+%(a format for continued fractions that many authors prefer). This works
+%because |\hfill| stretches at a faster rate than the glue that is
+%actually used internally by \TeX\ when it centers the numerators
+%and denominators.
+\danger 这些例子表明，分数中的分子和分母一般都相对居中。%
+如果要分子或分母左对齐，就在其后加上`|\hfill|';
+如果要右对齐，就在左边加上`|\hfill|'。%
+例如，如果前一个例子中前三个`|1\over|'用`|1\hfill\over|'代替，
+得到的陈列公式为：
+$$a_0+{1\hfill\over\displaystyle a_1+
+          {\strut1\hfill\over\displaystyle a_2+
+            {\strut1\hfill\over\displaystyle a_3+
+              {\strut1\over a_4}}}}$$
+(这种连分数的格式可能是许多作者想要的)。
+之所以能这样的原因是，|\hfill| 的伸长能力比分子和分母居中时在内部实际%
+所使用的粘连更大。
+
+%\TeX\ has another operation `^|\atop|', which is like |\over| except that
+%it leaves out the fraction line:
+%\begindisplaymathdemo
+%|$$x\atop y+2$$|&x\atop y+2\cr
+%\endmathdemo
+%The plain \TeX\ format in Appendix B also defines `^|\choose|', which is
+%like |\atop| but it encloses the result in parentheses:
+%\begindisplaymathdemo
+%|$$n\choose k$$|&n\choose k\cr
+%\endmathdemo
+%It is called |\choose| because it's
+%a common notation for the so-called ^{binomial coefficient}
+%that tells how many ways there are to choose $k$~things out of $n$~things.
+\1\TeX\ 有另外一个命令`|\atop|', 它象 |\over|, 但是没有分数中的横线：
+\begindisplaymathdemo
+|$$x\atop y+2$$|&x\atop y+2\cr
+\endmathdemo
+在附录 B 的 plain \TeX\ 格式中还定义了`|\choose|',
+它象 |\atop|, 但是把结果封装在括号中了：
+\begindisplaymathdemo
+|$$n\choose k$$|&n\choose k\cr
+\endmathdemo
+之所以叫做 |\choose| 是因为它就是所谓二项式系数的通用符号，
+给出了从 $n$ 个中间取 $k$ 个有多少种方法。
+
+%You can't mix |\over| and |\atop| and |\choose| with each other.
+%For example, `|$$n \choose k \over 2$$|' is illegal; you must use
+%grouping, to get either `|$${n\choose k}\over2$$|' or
+%`|$$n\choose{k\over2}$$|', i.e.,
+%\begindisplay
+%$\displaystyle{{n\choose k}\over2}\qquad{\rm or}\qquad {n\choose{k\over2}}.$
+%\enddisplay
+%The latter formula, incidentally, would look better as
+%`|$$n\choose k/2$$|' or `|$$n\choose{1\over2}k$$|', yielding
+%\begindisplay
+%$\displaystyle{n\choose k/2}\qquad{\rm or}\qquad{n\choose{1\over2}k}.$
+%\enddisplay
+不要把 |\over| 和 |\atop| 和 |\choose| 混合使用。%
+例如，`|$$n \choose k \over 2$$|'是不对的；
+你必须使用编组，输入`|$${n\choose k}\over2$$|'或者`|$$n\choose{k\over2}$$|',
+即，
+\begindisplay
+$\displaystyle{{n\choose k}\over2}\qquad{\hbox{\ST{10}或}}\qquad {n\choose{k\over2}}.$
+\enddisplay
+顺便说一下，要让后一个公式看来更美观，你可以写成 `|$$n\choose k/2$$|' 或
+`|$$n\choose{1\over2}k$$|'，此时结果是
+\begindisplay
+$\displaystyle{n\choose k/2}\qquad{\rm or}\qquad{n\choose{1\over2}k}.$
+\enddisplay
+
+%\medskip
+%\exercise As alternatives to $\displaystyle{{n\choose k}\over2}$,
+%discuss how you could obtain the two displays
+%\begindisplay\abovedisplayskip=0pt\belowdisplayskip=0pt
+%$\displaystyle
+%{1\over2}{n\choose k}
+%\qquad{\rm and}\qquad
+%{\displaystyle{n\choose k}\over2}.$
+%\enddisplay
+%\answer |$${1\over2}{n\choose k}$$|;
+%|$$\displaystyle{n\choose k}\over2$$|.
+%All of these braces are necessary.
+\medskip
+\exercise 作为 $\displaystyle{{n\choose k}\over2}$ 的另外写法，
+看看怎样才能得到两个陈列公式
+\begindisplay\abovedisplayskip=0pt\belowdisplayskip=0pt
+$\displaystyle
+{1\over2}{n\choose k}
+\qquad\hbox{和}\qquad
+{\displaystyle{n\choose k}\over2}.$
+\enddisplay
+\answer |$${1\over2}{n\choose k}$$|；
+|$$\displaystyle{n\choose k}\over2$$|。
+所有这些花括号都是必需的。
+
+%\bigbreak
+%\exercise Explain how to specify the displayed formula
+%$${p \choose 2}x^2 y^{p-2} - {1 \over 1-x}{1 \over 1-x^2}.$$
+%\answer |$${p \choose 2} x^2 y^{p-2} - {1 \over 1-x}{1 \over 1-x^2}.$$|
+\bigbreak
+\exercise 看看怎样得到陈列公式
+$${p \choose 2}x^2 y^{p-2} - {1 \over 1-x}{1 \over 1-x^2}.$$
+\answer |$${p \choose 2} x^2 y^{p-2} - {1 \over 1-x}{1 \over 1-x^2}.$$|
+
+%\danger \TeX\ has a generalized version of\/ |\over| and |\atop| in which you
+%specify the exact thickness of the line rule by typing
+%`^|\above|\<dimen>'. For example,
+%\begintt
+%$$\displaystyle{a\over b}\above1pt\displaystyle{c\over d}$$
+%\endtt
+%will produce a ^{compound fraction} with a heavier ($1\pt$ thick) rule as
+%its main bar:
+%$${\displaystyle{a\over b}\above 1pt\displaystyle{c\over d}}.$$
+%This sort of thing occurs primarily in textbooks on elementary mathematics.
+\danger  \TeX\ 还有一个比的 |\over| 和 |\atop| 更灵活命令，
+用它可以准确地给出横线的粗细，只要输入`|\above|\<dimen>'即可。%
+例如，
+\begintt
+$$\displaystyle{a\over b}\above1pt\displaystyle{c\over d}$$
+\endtt
+将得到一个复合分数，其主横线更粗($1\pt$):
+$${\displaystyle{a\over b}\above 1pt\displaystyle{c\over d}}.$$
+这种东西主要出现在初等数学的教科书中。
+
+%\goodbreak
+%Mathematicians often use the sign $\sum$ to stand for ``^{summation}''
+%and the sign $\int$ to stand for ``^{integration}.'' If you're a typist but not
+%a mathematician, all you need to remember is that ^|\sum| stands for
+%$\sum$ and ^|\int| for $\int$; these abbreviations appear in Appendix~F
+%together with all the other symbols, in case you forget. Symbols like
+%$\sum$ and $\int$ (and a few others like $\bigcup$ and $\prod$ and $\oint$
+%and~$\bigotimes$, all listed in Appendix~F) are called {\sl ^{large operators}},
+%^^{collective signs, see large operators} ^^{sigma signs, see sum}
+%and you type them just as you type ordinary symbols or letters. The
+%difference is that \TeX\ will choose a {\sl larger\/} large operator in
+%display style than it will in text style. For example,
+%$$\halign{\indent#\hfil\qquad yields\qquad&$#\hfil$\qquad&#\hfil\cr
+%|$\sum x_n$|&\sum x_n&($T$ style)\cr
+%\noalign{\vskip3pt}
+%|$$\sum x_n$$|&\displaystyle\sum x_n&($D$ style).\cr}$$
+\goodbreak
+\1数学家通常用符号 $\sum$ 来表示``求和'',
+用符号 $\int$ 表示``积分''。%
+如果你只是一个排版者而不是数学家，就只需要记住 |\sum| 表示 $\sum$ 和%
+~|\int| 表示 $\int$; 如果你忘记了，这些简写与其它所有符号都在附录 F 中。%
+象 $\sum$ 和 $\int$ 这样的符号(以及列在附录 F 中的象 $\bigcup$, $\prod$,
+$\oint$ 和 $\bigotimes$ 这样的其它符号)称为{\KT{10}巨算符},
+在输入时象输入普通符号或字母一样。%
+差别在于， \TeX\ 在陈列样式中选择的巨算符比文本样式中要{\KT{10}更大}。%
+例如，
+$$\halign{\indent#\hfil\qquad 得到的是\qquad&$#\hfil$\qquad&#\hfil\cr
+|$\sum x_n$|&\sum x_n&（样式 $T$）\cr
+\noalign{\vskip3pt}
+|$$\sum x_n$$|&\displaystyle\sum x_n&（样式 $D$）。\cr}$$
+
+%A displayed |\sum| usually occurs with ``^{limits},'' i.e., with
+%subformulas that are to appear above and below it. You type limits just
+%as if they were superscripts and subscripts; for example, if you want
+%$$\sum_{n=1}^m$$
+%you type either `|$$\sum_{n=1}^m$$|' or `|$$\sum^m_{n=1}$$|'.  According
+%to the normal conventions of mathematical typesetting, \TeX\ will change
+%this to `$\sum_{n=1}^m$' (i.e., without limits) if it occurs in text
+%style rather than in display style.
+陈列公式的 |\sum| 通常伴有``上下限'', 即在它上面和下面有子公式。%
+输入上下限就象输入上下标一样；
+例如，如果要得到
+$$\sum_{n=1}^m$$
+可以输入`|$$\sum_{n=1}^m$$|'或`|$$\sum^m_{n=1}$$|'。%
+按照数学排版的正常约定，
+如果出现在文本样式而不是陈列样式中， \TeX\ 就把它变成`$\sum_{n=1}^m$'%
+(即没有上下限了)。
+
+%Integrations are slightly different from summations, in that the superscripts
+%and subscripts are not set as limits even in display style:
+%$$\halign{\indent\hbox to2.3in{#\hfil}\hbox to.6in{yields\hfil}&
+%  $#\hfil$\qquad&#\hfil\cr
+%|$\int_{-\infty}^{+\infty}$|&\int_{-\infty}^{+\infty}&($T$ style)\cr
+%\noalign{\vskip3pt}
+%|$$\int_{-\infty}^{+\infty}$$|&\displaystyle\int_{-\infty}^{+\infty}&
+%  ($D$ style).\cr}$$
+积分与求和略有不同，即使在陈列样式中，上下标也不变成上下限：
+$$\halign{\indent\hbox to2.3in{#\hfil}\hbox to.6in{得到的是\hfil}&
+  $#\hfil$\qquad&#\hfil\cr
+|$\int_{-\infty}^{+\infty}$|&\int_{-\infty}^{+\infty}&（样式 $T$）\cr
+\noalign{\vskip3pt}
+|$$\int_{-\infty}^{+\infty}$$|&\displaystyle\int_{-\infty}^{+\infty}&
+  （样式 $D$）。\cr}$$
+
+%\danger Some printers prefer to set limits above and below $\int$ signs;
+%this takes more space on the page, but it
+%gives a better appearance if the subformulas are complex, because it
+%keeps them out of the way of the rest of the formula. Similarly, limits
+%are occasionally desirable in text style or script style; but some
+%printers prefer not to set limits on displayed $\sum$ signs. You can change
+%\TeX's convention by simply typing `^|\limits|' or `^|\nolimits|' immediately
+%after the large operator.
+%For example,
+%$$\halign{\indent\hbox to2.3in{#\hfil}\hbox to.6in{yields\hfil}&
+%  $\displaystyle{#}$\hfil\cr
+%|$$\int\limits_0^{\pi\over2}$$|&\int\limits_0^{\pi\over2}\cr
+%\noalign{\vskip 4pt}
+%|$$\sum\nolimits_{n=1}^m$$|&\sum\nolimits_{n=1}^m\cr}$$
+\danger 有些排版者希望在 $\int$ 上有上下限；
+这要占用更多的页面，但是如果子公式很复杂时，这样做效果很好，
+因为它把上下限从公式的其它内容区分开了。%
+类似地，有时候希望在文本样式或标号样式中使用上下限；
+但是某些用户不要在陈列公式的 $\sum$ 上出现上下限。%
+直接在巨算符后面输入`|\limits|'或`|\nolimits|', 就可以改变 \TeX\ 的约定。
+例如：
+$$\halign{\indent\hbox to2.3in{#\hfil}\hbox to.6in{得到的是\hfil}&
+  $\displaystyle{#}$\hfil\cr
+|$$\int\limits_0^{\pi\over2}$$|&\int\limits_0^{\pi\over2}\cr
+\noalign{\vskip 4pt}
+|$$\sum\nolimits_{n=1}^m$$|&\sum\nolimits_{n=1}^m\cr}$$
+
+%\ddanger If you say `|\nolimits\limits|' (presumably because some macro
+%like |\int| specifies |\nolimits|, but you do want them), the last word
+%takes precedence.  There's also a command `^|\displaylimits|' that can be
+%used to restore \TeX's normal conventions; i.e., the limits will be
+%displayed only in styles $D$ and $D'$.
+\ddanger 如果输入的是`|\nolimits\limits|'(大概是象 |\int| 这样的某些宏已经%
+给出了 |\nolimits|, 但是你又想要上下限),
+那么最后一个优先。%
+还有一个命令`|\displaylimits|', 用它来恢复 \TeX\ 的正常约定；
+即上下限只在样式 $D$ 和 $D'$ 中出现。
+
+%\danger Sometimes you need to put two or more rows of limits under a large
+%operator; you can do this with `^|\atop|'. For example, if you want
+%the displayed formula
+%$$\sum_{\scriptstyle0\le i\le m\atop\scriptstyle0<j<n}P(i,j)$$
+%the correct way to type it is
+%\begintt
+%$$\sum_{\scriptstyle0\le i\le m\atop\scriptstyle0<j<n}P(i,j)$$
+%\endtt
+%(perhaps with a few more spaces to make it look nicer in the manuscript
+%file). The instruction `^|\scriptstyle|' was necessary here,
+%twice---otherwise the lines `$0\le i\le m$' and `$0<j<n$' would have been in
+%scriptscript size, which is too small. This is another instance of a rare
+%case where \TeX's automatic style rules need to be overruled.
+\danger \1有时候可能要在巨算符下面放两行或多行极限；
+可以用`|\atop|'来实现。%
+例如，如果要得到陈列公式
+$$\sum_{\scriptstyle0\le i\le m\atop\scriptstyle0<j<n}P(i,j)$$
+应该输入
+\begintt
+$$\sum_{\scriptstyle0\le i\le m\atop\scriptstyle0<j<n}P(i,j)$$
+\endtt
+(在文稿中可以用几个间距把它调整得更好看)。
+命令`|\scriptstyle|'必须在这里出现两次——否则`$0\le i\le m$'和%
+`$0<j<n$'就使用小标号尺寸，那太小了。%
+这是另一个 \TeX\ 的自动规则应该改变的少见的例子。
+
+%\exercise How would you type the displayed formula $\displaystyle
+%\sum_{i=1}^p\sum_{j=1}^q\sum_{k=1}^ra_{ij}b_{jk}c_{ki}$\enspace?
+%\answer |$$\sum_{i=1}^p\sum_{j=1}^q\sum_{k=1}^ra_{ij}b_{jk}c_{ki}$$|.
+\exercise 怎样输入陈列公式
+~$\displaystyle
+\sum_{i=1}^p\sum_{j=1}^q\sum_{k=1}^ra_{ij}b_{jk}c_{ki}$\enspace ？
+\answer |$$\sum_{i=1}^p\sum_{j=1}^q\sum_{k=1}^ra_{ij}b_{jk}c_{ki}$$|。
+
+%\dangerexercise And how would you handle $\displaystyle
+%\sum_{{\scriptstyle1\le i\le p\atop\scriptstyle1\le j\le q}
+%    \atop\scriptstyle1\le k\le r}a_{ij}b_{jk}c_{ki}$\enspace?
+%\answer |$$\sum_{{\scriptstyle 1\le i\le p \atop \scriptstyle 1\le j\le q}
+%    \atop \scriptstyle 1\le k\le r} a_{ij} b_{jk} c_{ki}$$|.
+\dangerexercise 怎样得到 $\displaystyle
+\sum_{{\scriptstyle1\le i\le p\atop\scriptstyle1\le j\le q}
+    \atop\scriptstyle1\le k\le r}a_{ij}b_{jk}c_{ki}$\enspace ？
+\answer |$$\sum_{{\scriptstyle 1\le i\le p \atop \scriptstyle 1\le j\le q}
+    \atop \scriptstyle 1\le k\le r} a_{ij} b_{jk} c_{ki}$$|。
+
+%Since mathematical formulas can get horribly large, \TeX\ has to have some
+%way to make ever-larger symbols. For example, if you type
+%\begintt
+%$$\sqrt{1+\sqrt{1+\sqrt{1+
+%            \sqrt{1+\sqrt{1+\sqrt{1+\sqrt{1+x}}}}}}}$$
+%\endtt
+%the result shows a variety of available ^{square-root signs}:
+%\begindisplay
+%$\displaystyle\sqrt{1+\sqrt{1+\sqrt{1+
+%            \sqrt{1+\sqrt{1+\sqrt{1+\sqrt{1+x}}}}}}}$
+%\enddisplay
+%The three largest signs here are all essentially the same, except for a
+%vertical segment `\vbox{\hbox{\tenex\char'165}\vss}' that gets repeated as
+%often as necessary to reach the desired size; but the smaller signs are
+%distinct characters found in \TeX's math fonts.
+因为数学公式可以大得惊人，所以 \TeX\ 必须可以生成不断增大的符号。%
+例如，如果输入
+\begintt
+$$\sqrt{1+\sqrt{1+\sqrt{1+
+            \sqrt{1+\sqrt{1+\sqrt{1+\sqrt{1+x}}}}}}}$$
+\endtt
+就在结果中出现了各种用到的根号：
+\begindisplay
+$\displaystyle\sqrt{1+\sqrt{1+\sqrt{1+
+            \sqrt{1+\sqrt{1+\sqrt{1+\sqrt{1+x}}}}}}}$
+\enddisplay
+在这里，最大的三个符号基本上是一样的，除了垂直线段%
+`\vbox{\hbox{\tenex\char'165}\vss}'必要地重复到所要求的尺寸外；
+但是更小的符号是 \TeX\ 的数学字体中的不同字符。
+
+%A similar thing happens with parentheses and other so-called
+%``^{delimiter}'' symbols.  For example, here are some of the different sizes of
+%^^{fences, see delimiters}
+%^{parentheses} and ^{braces} that plain \TeX\ might use in formulas:
+%\begindisplay
+%$\displaystyle
+%\left(\vbox to 27pt{}\left(\vbox to 24pt{}\left(\vbox to 21pt{}
+%\Biggl(\biggl(\Bigl(\bigl(({\scriptstyle({\scriptscriptstyle(\hskip3pt
+%)})})\bigr)\Bigr)\biggr)\Biggr)\right)\right)\right)
+%\left\{\vbox to 27pt{}\left\{\vbox to 24pt{}\left\{\vbox to 21pt{}
+%\Biggl\{\biggl\{\Bigl\{\bigl\{\{{\scriptstyle\{{\scriptscriptstyle\{\hskip3pt
+%\}}\}}\}\bigr\}\Bigr\}\biggr\}\Biggr\}\right\}\right\}\right\}$
+%\enddisplay
+%The three largest pairs in each case are made with repeatable extensions,
+%so they can become as large as necessary.
+%^^{pieces of symbols}
+类似情况还出现在括号和其它所谓是``分界符''上。%
+例如，下面是 plain \TeX\ 在公式中使用的各种尺寸的圆括号和大括号：
+\begindisplay
+$\displaystyle
+\left(\vbox to 27pt{}\left(\vbox to 24pt{}\left(\vbox to 21pt{}
+\Biggl(\biggl(\Bigl(\bigl(({\scriptstyle({\scriptscriptstyle(\hskip3pt
+)})})\bigr)\Bigr)\biggr)\Biggr)\right)\right)\right)
+\left\{\vbox to 27pt{}\left\{\vbox to 24pt{}\left\{\vbox to 21pt{}
+\Biggl\{\biggl\{\Bigl\{\bigl\{\{{\scriptstyle\{{\scriptscriptstyle\{\hskip3pt
+\}}\}}\}\bigr\}\Bigr\}\biggr\}\Biggr\}\right\}\right\}\right\}$
+\enddisplay
+在每种情况下，最大的三对都是通过重复扩展而得到的，
+所以它们可以变得如所需要的那样大。
+
+%Delimiters are important to mathematicians, because they provide good
+%visual clues to the underlying structure of complex expressions; they delimit
+%the boundaries of individual subformulas. Here is a list of the 22~basic
+%delimiters provided by plain \TeX:
+%\begindisplay
+%\it Input&\it Delimiter\cr
+%\noalign{\vskip2pt}
+%|(|&left parenthesis: $($\cr
+%|)|&right parenthesis: $)$\cr
+%|[| or ^|\lbrack|&left bracket: $[$\cr
+%|]| or ^|\rbrack|&right bracket: $]$\cr
+%|\{| or ^|\lbrace|&left curly brace: $\{$\cr
+%|\}| or ^|\rbrace|&right curly brace: $\}$\cr
+%^|\lfloor|&left floor bracket: $\lfloor$\cr
+%^|\rfloor|&right floor bracket: $\rfloor$\cr
+%^|\lceil|&left ceiling bracket: $\lceil$\cr
+%^|\rceil|&right ceiling bracket: $\rceil$\cr
+%^|\langle|&left angle bracket: $\langle$\cr
+%^|\rangle|&right angle bracket: $\rangle$\cr
+%|/|&slash: $/$\cr
+%^|\backslash|&reverse slash: $\backslash$\cr
+%\| or ^|\vert|&vertical bar: $\vert$\cr
+%|\|\| or ^|\Vert|&double vertical bar: $\Vert$\cr
+%^|\uparrow|&upward arrow: $\uparrow$\cr
+%^|\Uparrow|&double upward arrow: $\Uparrow$\cr
+%^|\downarrow|&downward arrow: $\downarrow$\cr
+%^|\Downarrow|&double downward arrow: $\Downarrow$\cr
+%^|\updownarrow|&up-and-down arrow: $\updownarrow$\cr
+%^|\Updownarrow|&double up-and-down arrow: $\Updownarrow$\cr
+%\enddisplay
+%^^{bent bars, see langle, rangle} ^^{curly braces, see lbrace, rbrace}
+%^^{leftbracket}^^{rightbracket}^^{leftbrace}^^{rightbrace}^^{/}
+%In some cases, there are two ways to get the same delimiter; for example,
+%you can specify a left bracket by typing either `|[|' or `|\lbrack|'. The
+%latter alternative has been provided because the symbol `|[|' is not
+%readily available on all computer keyboards. Remember, however,
+%that you should never try to specify a left brace or right brace simply by
+%typing `|{|' or `|}|'; the |{| and |}| symbols are reserved for grouping.
+%The right way is to type `|\{|' or `|\}|' or `|\lbrace|' or `|\rbrace|'.
+\1对数学家而言，分界符很重要，因为它们从外观上把复杂的公式的内在结构给理顺了；
+它们把各个不同的子公式分开。%
+下面给出 plain \TeX\ 的 22 个基本分界符：
+\begindisplay
+{\KT{10}输入}&{\hbox{\KT{10}分界符}}\cr
+\noalign{\vskip2pt}
+|(|&left parenthesis: $($\cr
+|)|&right parenthesis: $)$\cr
+|[| or |\lbrack|&left bracket: $[$\cr
+|]| or |\rbrack|&right bracket: $]$\cr
+|\{| or |\lbrace|&left curly brace: $\{$\cr
+|\}| or |\rbrace|&right curly brace: $\}$\cr
+|\lfloor|&left floor bracket: $\lfloor$\cr
+|\rfloor|&right floor bracket: $\rfloor$\cr
+|\lceil|&left ceiling bracket: $\lceil$\cr
+|\rceil|&right ceiling bracket: $\rceil$\cr
+|\langle|&left angle bracket: $\langle$\cr
+|\rangle|&right angle bracket: $\rangle$\cr
+|/|&slash: $/$\cr
+|\backslash|&reverse slash: $\backslash$\cr
+\| or |\vert|&vertical bar: $\vert$\cr
+|\|\| or |\Vert|&double vertical bar: $\Vert$\cr
+|\uparrow|&upward arrow: $\uparrow$\cr
+|\Uparrow|&double upward arrow: $\Uparrow$\cr
+|\downarrow|&downward arrow: $\downarrow$\cr
+|\Downarrow|&double downward arrow: $\Downarrow$\cr
+|\updownarrow|&up-and-down arrow: $\updownarrow$\cr
+|\Updownarrow|&double up-and-down arrow: $\Updownarrow$\cr
+\enddisplay
+在某些情况下，可以通过两种方法得到同一个分界符；
+例如，可以通过`|[|'或`|\lbrack|'得到左方括号。%
+给出后一种方法是因为不是在所有的键盘上，符号`|[|'都那样好用。%
+但是要记住，不要直接输入`|{|'或`|}|'来得到左或右大括号；
+符号 |{| 和 |}| 已经保留给编组使用了。%
+正确的方法是输入`|\{|'或`|\}|'或`|\lbrace|'或`|\rbrace|'。
+
+%In order to get a slightly larger version of any of these symbols, just
+%precede them by `^|\bigl|' (for opening delimiters) or `^|\bigr|' (for
+%closing ones). This makes it easier to read formulas that contain
+%delimiters inside delimiters:
+%\beginlongmathdemo
+%\it Input&\it Output\cr
+%\noalign{\vskip2pt}
+%|$\bigl(x-s(x)\bigr)\bigl(y-s(y)\bigr)$|&
+%  \bigl(x-s(x)\bigr)\bigl(y-s(y)\bigr)\cr
+%|$\bigl[x-s[x]\bigr]\bigl[y-s[y]\bigr]$|&
+%  \bigl[x-s[x]\bigr]\bigl[y-s[y]\bigr]\cr
+%|$\bigl|\|| |\||x|\||-|\||y|\|| \bigr|\||$|&
+%  \bigl\vert\vert x\vert-\vert y\vert\bigr\vert\cr
+%|$\bigl\lfloor\sqrt A\bigr\rfloor$|&
+%  \bigl\lfloor\sqrt A\bigr\rfloor\cr
+%\endmathdemo
+%The |\big| delimiters are just enough bigger than ordinary ones so that
+%the difference can be perceived, yet small enough to be used in the text
+%of a paragraph. Here are all~22 of them, in the ordinary size and in
+%the |\big| size:
+%\begindisplay
+%$(\,)\,[\,]\,\{\,\}\,\lfloor\,\rfloor\,\lceil\,\rceil\,\langle\,\rangle
+%  \,/\,\backslash\,\vert\,\Vert\,\uparrow\,\Uparrow\,\downarrow\,\Downarrow
+%  \,\updownarrow\,\Updownarrow$\cr
+%\noalign{\smallskip}
+%$\bigl(\,\bigr)\,\bigl[\,\bigr]\,\bigl\{\,\bigr\}\,\bigl\lfloor
+%  \,\bigr\rfloor\,\bigl\lceil\,\bigr\rceil\,\bigl\langle\,\bigr\rangle
+%  \,\big/\,\big\backslash\,\big\vert\,\big\Vert\,\bigm\uparrow\,\bigm\Uparrow
+%  \,\bigm\downarrow\,\bigm\Downarrow\,\bigm\updownarrow\,\bigm\Updownarrow$\cr
+%\enddisplay
+%You can also type ^|\Bigl| and ^|\Bigr| to get larger symbols suitable for
+%displays:
+%\begindisplay
+%$\Bigl(\,\Bigr)\,\Bigl[\,\Bigr]\,\Bigl\{\,\Bigr\}\,\Bigl\lfloor
+%  \,\Bigr\rfloor\,\Bigl\lceil\,\Bigr\rceil\,\Bigl\langle\,\Bigr\rangle
+%  \,\Big/\,\Big\backslash\,\Big\vert\,\Big\Vert\,\Bigm\uparrow\,\Bigm\Uparrow
+%  \,\Bigm\downarrow\,\Bigm\Downarrow\,\Bigm\updownarrow\,\Bigm\Updownarrow$
+%\enddisplay
+%These are 50\% taller than their |\big| counterparts. Displayed formulas
+%most often use delimiters that are even taller (twice the size of\/ |\big|);
+%such delimiters are constructed by ^|\biggl| and ^|\biggr|, and they
+%look like this:
+%\begindisplay
+%$\biggl(\,\biggr)\,\biggl[\,\biggr]\,\biggl\{\,\biggr\}\,\biggl\lfloor
+%  \,\biggr\rfloor\,\biggl\lceil\,\biggr\rceil\,\biggl\langle\,\biggr\rangle
+%  \,\bigg/\,\bigg\backslash\,\bigg\vert\,\bigg\Vert\,\biggm\uparrow
+%  \,\biggm\Uparrow\,\biggm\downarrow\,\biggm\Downarrow\,\biggm\updownarrow
+%  \,\biggm\Updownarrow$
+%\enddisplay
+%Finally, there are ^|\Biggl| and ^|\Biggr| versions, 2.5 times as tall
+%as the |\bigl| and |\bigr| delimiters:
+%\begindisplay
+%$\Biggl(\,\Biggr)\,\Biggl[\,\Biggr]\,\Biggl\{\,\Biggr\}\,\Biggl\lfloor
+%  \,\Biggr\rfloor\,\Biggl\lceil\,\Biggr\rceil\,\Biggl\langle\,\Biggr\rangle
+%  \,\Bigg/\,\Bigg\backslash\,\Bigg\vert\,\Bigg\Vert\,\Biggm\uparrow
+%  \,\Biggm\Uparrow\,\Biggm\downarrow\,\Biggm\Downarrow\,\Biggm\updownarrow
+%  \,\Biggm\Updownarrow$
+%\enddisplay
+要得到略大的任何这些符号，只需要在它们前面加上`|\bigl|'(对开分界符)或%
+`|\bigr|'(对闭分界符)。%
+这使得包含多层分界符的公式容易阅读：
+\beginlongmathdemo
+{\KT{10}输入}&{\hbox{\KT{10}输出}}\cr
+\noalign{\vskip2pt}
+|$\bigl(x-s(x)\bigr)\bigl(y-s(y)\bigr)$|&
+  \bigl(x-s(x)\bigr)\bigl(y-s(y)\bigr)\cr
+|$\bigl[x-s[x]\bigr]\bigl[y-s[y]\bigr]$|&
+  \bigl[x-s[x]\bigr]\bigl[y-s[y]\bigr]\cr
+|$\bigl|\|| |\||x|\||+|\||y|\|| \bigr|\||$|&
+  \bigl\vert\vert x\vert+\vert y\vert\bigr\vert\cr
+|$\bigl\lfloor\sqrt A\bigr\rfloor$|&
+  \bigl\lfloor\sqrt A\bigr\rfloor\cr
+\endmathdemo
+\1|\big| 分界符只比普通的要大得足以感觉到不同，
+但是还是足够小得可在段落的文本中使用。%
+这里是它们 22 个的全部，为普通尺寸和 |\big| 尺寸：
+\begindisplay
+$(\,)\,[\,]\,\{\,\}\,\lfloor\,\rfloor\,\lceil\,\rceil\,\langle\,\rangle
+  \,/\,\backslash\,\vert\,\Vert\,\uparrow\,\Uparrow\,\downarrow\,\Downarrow
+  \,\updownarrow\,\Updownarrow$\cr
+\noalign{\smallskip}
+$\bigl(\,\bigr)\,\bigl[\,\bigr]\,\bigl\{\,\bigr\}\,\bigl\lfloor
+  \,\bigr\rfloor\,\bigl\lceil\,\bigr\rceil\,\bigl\langle\,\bigr\rangle
+  \,\big/\,\big\backslash\,\big\vert\,\big\Vert\,\bigm\uparrow\,\bigm\Uparrow
+  \,\bigm\downarrow\,\bigm\Downarrow\,\bigm\updownarrow\,\bigm\Updownarrow$\cr
+\enddisplay
+还可以通过 |\Bigl| 和 |\Bigr| 来得到陈列公式中的适当大小的符号：
+\begindisplay
+$\Bigl(\,\Bigr)\,\Bigl[\,\Bigr]\,\Bigl\{\,\Bigr\}\,\Bigl\lfloor
+  \,\Bigr\rfloor\,\Bigl\lceil\,\Bigr\rceil\,\Bigl\langle\,\Bigr\rangle
+  \,\Big/\,\Big\backslash\,\Big\vert\,\Big\Vert\,\Bigm\uparrow\,\Bigm\Uparrow
+  \,\Bigm\downarrow\,\Bigm\Downarrow\,\Bigm\updownarrow\,\Bigm\Updownarrow$
+\enddisplay
+它们比 |\big| 符号大50\%。%
+陈列公式中最经常使用的分界符甚至更高(|\big| 尺寸的两倍);
+这样的分界符由 |\biggl| 和 |\biggr| 构造，它们看起来象：
+\begindisplay
+$\biggl(\,\biggr)\,\biggl[\,\biggr]\,\biggl\{\,\biggr\}\,\biggl\lfloor
+  \,\biggr\rfloor\,\biggl\lceil\,\biggr\rceil\,\biggl\langle\,\biggr\rangle
+  \,\bigg/\,\bigg\backslash\,\bigg\vert\,\bigg\Vert\,\biggm\uparrow
+  \,\biggm\Uparrow\,\biggm\downarrow\,\biggm\Downarrow\,\biggm\updownarrow
+  \,\biggm\Updownarrow$
+\enddisplay
+最后，~|\Biggl| 和 |\Biggr| 的分界符是 |\bigl| 和 |\bigr| 的 2.5 倍：
+\begindisplay
+$\Biggl(\,\Biggr)\,\Biggl[\,\Biggr]\,\Biggl\{\,\Biggr\}\,\Biggl\lfloor
+  \,\Biggr\rfloor\,\Biggl\lceil\,\Biggr\rceil\,\Biggl\langle\,\Biggr\rangle
+  \,\Bigg/\,\Bigg\backslash\,\Bigg\vert\,\Bigg\Vert\,\Biggm\uparrow
+  \,\Biggm\Uparrow\,\Biggm\downarrow\,\Biggm\Downarrow\,\Biggm\updownarrow
+  \,\Biggm\Updownarrow$
+\enddisplay
+
+%\medskip
+%\exercise Guess how to type the formula $\displaystyle
+%\biggl({\partial^2\over\partial x^2}+{\partial^2\over\partial y^2}
+%  \biggr)\bigl\vert\varphi(x+iy)\bigr\vert^2=0$, in display style,
+%using |\bigg| delimiters for the large parentheses. \ (The symbols $\partial$
+%and $\varphi$ that appear here are called ^|\partial| and ^|\varphi|.)
+%\answer |$\displaystyle\biggl({\partial^2\over\partial x^2}+|\hfil\break
+%|{\partial^2\over\partial y^2}\biggr)\bigl|\||\varphi(x+iy)\bigr|\||^2=0$|.
+\medskip
+\exercise 看看怎样用陈列样式输入公式 $\displaystyle
+\biggl({\partial^2\over\partial x^2}+{\partial^2\over\partial y^2}
+  \biggr)\bigl\vert\varphi(x+iy)\bigr\vert^2=0$，
+使用 |\bigg| 分界符来得到大的括号。%
+（符号 $\partial$ 和 $\varphi$ 分别叫做 |\partial| 和 |\varphi|。）
+\answer |$\displaystyle\biggl({\partial^2\over\partial x^2}+|\hfil\break
+|{\partial^2\over\partial y^2}\biggr)\bigl|\||\varphi(x+iy)\bigr|\||^2=0$|。
+
+%\dangerexercise In practice, |\big| and |\bigg| delimiters are used much
+%more often than |\Big| and |\Bigg| ones. Why do you think this is true?
+%\answer Formulas that are more than one line tall are usually two lines tall,
+%not 1$1\over2$ or 2$1\over2$ lines tall.
+\dangerexercise 在实际使用中，|\big| 和 |\bigg| 分界符比 |\Big| 和 |\Bigg|
+分界符更常用。想想为什么？
+\answer 多于一行的公式通常为两行高，而非 1$1\over2$ 或 2$1\over2$ 行高。
+
+%\danger A |\bigl| or |\Bigl| or |\biggl| or |\Biggl| delimiter is an
+%^{opening}, like a left parenthesis;
+%a |\bigr| or |\Bigr| or |\biggr| or |\Biggr| delimiter is a
+%^{closing}, like a right parenthesis. Plain \TeX\ also provides
+%^|\bigm| and ^|\Bigm| and ^|\biggm| and ^|\Biggm| delimiters, for use
+%in the middle of formulas; such a delimiter plays the r\^ole of a ^{relation},
+%like an equals sign, so \TeX\ puts a bit of space on either side of it.
+%\beginlongmathdemo
+%|$\bigl(x\in A(n)\bigm|\||x\in B(n)\bigr)$|&
+%  \tenmath\bigl(x\in A(n)\bigm\vert x\in B(n)\bigr)\cr
+%\noalign{\vskip2pt}
+%|$\bigcup_n X_n\bigm\|\||\bigcap_n Y_n$|&
+%  \tenmath\bigcup_n X_n\bigm\Vert\bigcap_n Y_n\cr
+%\endmathdemo
+%^^|\bigcup|^^|\bigcap|^^|\verticalline|^^|\in|
+%You can also say just ^|\big| or ^|\Big| or ^|\bigg| or ^|\Bigg|; this produces
+%a delimiter that acts as an ordinary variable. It is used primarily with
+%slashes and backslashes, as in the following example.
+%\beginlongmathdemo
+%\noalign{\vskip-2pt}
+%|$${a+1\over b}\bigg/{c+1\over d}$$|&
+%  \tenmath\displaystyle{a+1\over b}\bigg/{c+1\over d}\cr
+%\endmathdemo
+\danger |\bigl|, |\Bigl|, |\biggl| 或 |\Biggl| 分界符是开符号，象左圆括号一样；
+|\bigr|, |\Bigr|, |\biggr| 或 |\Biggr| 分界符是闭符号，象右圆括号一样。%
+Plain \TeX\ 还给出了|\bigm|, |\Bigm|, |\biggm| 和 |\Biggm| 分界符，
+它们用在公式中央；这样的分界符起着表示关系的作用，就象等号一样，
+所以 \TeX\ 在它两边都添加一点间距。
+\beginlongmathdemo
+|$\bigl(x\in A(n)\bigm|\||x\in B(n)\bigr)$|&
+  \tenmath\bigl(x\in A(n)\bigm\vert x\in B(n)\bigr)\cr
+\noalign{\vskip2pt}
+|$\bigcup_n X_n\bigm\|\||\bigcap_n Y_n$|&
+  \tenmath\bigcup_n X_n\bigm\Vert\bigcap_n Y_n\cr
+\endmathdemo
+也可以只用 |\big|, |\Big|, |\bigg| 或 |\Bigg|;
+它得到的分界符就一个普通变量一样。%
+它主要用于斜线和反斜线，就象下面的例子一样。
+\beginlongmathdemo
+\noalign{\vskip-2pt}
+|$${a+1\over b}\bigg/{c+1\over d}$$|&
+  \tenmath\displaystyle{a+1\over b}\bigg/{c+1\over d}\cr
+\endmathdemo
+
+%\dangerexercise What's the professional way to type
+%$\tenmath\bigl(x+f(x)\bigr)\big/\bigl(x-f(x)\bigr)$? \ (Look closely.)
+%\answer |$\bigl(x+f(x)\bigr) \big/ \bigl(x-f(x)\bigr)$|. \ Notice especially
+%the `|\big/|'; an ordinary ^{slash} would look too small between the
+%|\big| parentheses.
+\dangerexercise 用专业的方法输入
+$\tenmath\bigl(x+f(x)\bigr)\big/\bigl(x-f(x)\bigr)$？（看仔细点。）
+\answer |$\bigl(x+f(x)\bigr) \big/ \bigl(x-f(x)\bigr)$|。
+特别注意 `|\big/|'；普通的^{斜线}放在 |\big| 括号之间看起来太小。
+
+%\TeX\ has a built-in mechanism that figures out how tall a pair of delimiters
+%needs to be, in order to enclose a given subformula; so you can use this
+%method, instead of deciding whether a delimiter should be |\big| or
+%|\bigg| or whatever. All you do is say
+%\begindisplay
+%^|\left|\<delim$_1$>\<subformula>^|\right|\<delim$_2$>
+%\enddisplay
+%and \TeX\ will typeset the subformula, putting the specified delimiters at
+%the left and the right. The size of the delimiters will be just big enough
+%to cover the subformula. For example, in the display
+%\beginlongdisplaymathdemo
+%|$$1+\left(1\over1-x^2\right)^3$$|&1+\left(1\over1-x^2\right)^3\cr
+%\endmathdemo
+%\TeX\ has chosen |\biggl(| and |\biggr)|, because smaller delimiters
+%would be too small for this particular fraction. A simple formula like
+%`|$\left(x\right)$|' yields just `$\left(x\right)$'; thus, |\left| and
+%|\right| sometimes choose delimiters that are smaller than |\bigl| and |\bigr|.
+\1\TeX\ 有一个内置的机制，能确定要封装住给定公式所需要的这对分界符的高度；
+因此，你可以使用这种方法，而不在 |\big|, |\bigg| 或其它中筛选。%
+所要做的只是
+\begindisplay
+|\left|\<delim$_1$>\<subformula>|\right|\<delim$_2$>
+\enddisplay
+ \TeX\ 将排版此子公式，把规定的分界符放在左右两边。%
+分界符的大小正好可以框住子公式。%
+例如，在陈列公式
+\beginlongdisplaymathdemo
+|$$1+\left(1\over1-x^2\right)^3$$|&1+\left(1\over1-x^2\right)^3\cr
+\endmathdemo
+中， \TeX\ 选择了 |\biggl(| 和 |\biggr)|, 因为再小的话就框不住这个特殊的分数了。%
+象`|$\left(x|\allowbreak|\right)$|'得到的就是`$\left(x\right)$'这样的简单公式，
+因此，|\left| 和 |\right| 有时候选择的分界符比 |\bigl| 和 |\bigr| 更小。
+
+%Whenever you use |\left| and |\right| they must pair up with each other,
+%just as braces do in groups. You can't have |\left| in one formula
+%and |\right| in another, nor are you allowed to type things like
+%`|\left(...{...\right)...}|' or
+%`|\left(...\begingroup...\right)...\endgroup|'.
+%This restriction makes sense, because \TeX\ needs to typeset the
+%subformula that appears between |\left| and |\right| before it can decide
+%how big to make the delimiters.  But it is worth explicit mention here,
+%because you do {\sl not\/} have to match ^{parentheses} and ^{brackets}, etc.,
+%^^{crotchets, see brackets}
+%when you are not using |\left| and |\right|: \TeX\ will not complain if
+%you input a formula like `|$[0,1)$|' or even `|$)($|' or just `|$)$|'.\
+%(And it's a good thing \TeX\ doesn't, for such unbalanced formulas occur
+%surprisingly often in mathematics papers.) \ Even when you do use |\left|
+%and |\right|, \TeX\ doesn't look closely at the particular delimiters that
+%you happen to choose; thus, you can type strange things like `|\left)|'
+%and/or `|\right(|' if you know what you're doing. Or even if you don't.
+只要用到 |\left| 和 |\right|，它们就必须成对的出现，就像编组中的花括号一样。
+你不可以在一个公式中使用 |\left|，却在另一个公式中使用 |\right|；
+也不可以像 `|\left(...{...\right)...}|' 或者
+`|\left(...\begingroup...|\allowbreak|\right)...\endgroup|' 这样输入。
+这个限制的意义在于，在 \TeX\ 决定使用多大的分界符前，
+需要把 |\left| 和 |\right| 之间的子公式排版完毕。
+但是这里值得提醒的是，因为当你不使用 |\left| 和 |\right| 时，
+{\sl 不必}配对圆括号和方括号等等这些：
+如果输入像 `|$[0,1)$|'、`|$)($|' 或者 `|$)$|' 这样的公式，
+\TeX\ 不会认为是错误的。（\TeX\ 这样做是对的，
+因为这样不配对的公式太经常出现在数学文章中了。）%
+甚至当使用 |\left| 和 |\right| 时，\TeX\ 也不要求配对的是以前出现的那个分界符；
+因此，只要你知道在做什么（甚至不知道也没关系），就可以输入像 `|\left)|'
+和/或 `|\right(|' 这样奇怪的配对。
+
+%The |\over| operation in the example displayed above does not involve the
+%`|1+|' at the beginning of the formula; this happens because |\left| and
+%|\right| have the function of ^{grouping}, in addition to their function
+%of delimiter-making.  Any definitions that you happen to make between
+%|\left| and |\right| will be local, as if braces had appeared around the
+%enclosed subformula.
+在上面的例子中，|\over| 没有作用在公式开头的`|1+|'上；
+这是因为 |\left| 和 |\right| 有编组的功能，而不仅仅是选择分界符大小。%
+出现在 |\left| 和 |\right| 之间的任何定义都是局部的，就象大括号出现在%
+要封装的子公式外面一样。
+
+%\exercise Use |\left| and |\right| to typeset the following display
+%(with ^|\phi| for $\phi$):
+%$$\pi(n)=\sum_{k=2}^n\left\lfloor\phi(k)\over k-1\right\rfloor.$$
+%\answer |$$\pi(n)=\sum_{k=2}^n\left\lfloor\phi(k)\over k-1\right\rfloor.$$|
+\exercise 利用 |\left| 和 |\right| 输入下列陈列公式（用 |\phi| 得到 $\phi$）：
+$$\pi(n)=\sum_{k=2}^n\left\lfloor\phi(k)\over k-1\right\rfloor.$$
+\answer |$$\pi(n)=\sum_{k=2}^n\left\lfloor\phi(k)\over k-1\right\rfloor.$$|
+
+%At this point you are probably wondering why you should bother learning about
+%|\bigl| and |\bigr| and their relatives, when |\left| and |\right| are there
+%to calculate sizes for you automatically. Well, it's true that |\left|
+%and |\right| are quite handy, but there are at least three situations in which
+%you will want to use your own wisdom when selecting the proper delimiter size:
+%\ (1)~Sometimes |\left| and |\right| choose a smaller delimiter than you want.
+%For example, we used |\bigl| and |\bigr| to produce $\bigl\vert\vert x\vert-
+%\vert y\vert\bigr\vert$ in one of the previous illustrations; |\left| and
+%|\right| don't make things any bigger than necessary, so
+%`|$\left|\||\left|\||x\right|\||-\left|\||y\right|\||\right|\||$|'
+%yields only
+%`$\left\vert \left\vert x\right\vert -\left\vert y\right\vert \right\vert$'.
+%\ (2)~Sometimes |\left| and |\right| choose a larger delimiter than you want.
+%This happens most frequently when they enclose a large operator in a display;
+%for example, compare the following two formulas:
+%\beginlongdisplaymathdemo
+%\noalign{\vskip 6pt}
+%|$$\left( \sum_{k=1}^n A_k \right)$$|&\left( \sum_{k=1}^n A_k \right)\cr
+%\noalign{\vskip 3pt}
+%|$$\biggl( \sum_{k=1}^n A_k \biggr)$$|&\biggl( \sum_{k=1}^n A_k \biggr)\cr
+%\endmathdemo
+%The rules of\/ |\left| and |\right| cause them to enclose the ^|\sum| together
+%with its ^{limits}, but in special cases like this it looks better to let
+%the limits hang out a~bit; |\bigg| delimiters are better here.
+%\ (3)~Sometimes you need to break a huge displayed
+%formula into two or more separate lines, and you want to make sure that
+%its opening and closing delimiters have the same size; but you can't use
+%|\left| on the first line and |\right| on the last, since |\left| and
+%|\right| must occur in pairs. The solution is to use |\Biggl| (say) on
+%the first line and |\Biggr| on the last.
+这时，你可能想知道，既然 |\left| 和 |\right| 会自动算出大小，
+为什么还要花精力学习 |\bigl| 和 |\bigr| 这些东西呢？
+嗯，|\left| 和 |\right| 的确很方便，但是至少在三种情况下你要%
+凭自己的才智来得到正确的分界符尺寸：
+\1(1). 有时候 |\left| 和 |\right| 选择的比所要的小。%
+例如，在前面的一个示例中，我们用 |\bigl| 和 |\bigr| 得到了$\bigl\vert\vert x\vert+
+\vert y\vert\bigr\vert$;
+|\left| 和 |\right| 不能把分界符变得比所要求的更大，因此%
+`|$\left|\||\left|\||x\right|\||+\left|\||y\right|\||\right|\||$|'
+得到的只是%
+`$\left\vert \left\vert x\right\vert +\left\vert y\right\vert \right\vert$'。%
+(2). 有时候 |\left| 和 |\right| 选择的比所要的大。%
+当在陈列公式中把一个巨算符封装起来时常常会出现这种情况；
+例如，比较下列两个公式：
+\beginlongdisplaymathdemo
+\noalign{\vskip 6pt}
+|$$\left( \sum_{k=1}^n A_k \right)$$|&\left( \sum_{k=1}^n A_k \right)\cr
+\noalign{\vskip 3pt}
+|$$\biggl( \sum_{k=1}^n A_k \biggr)$$|&\biggl( \sum_{k=1}^n A_k \biggr)\cr
+\endmathdemo
+|\left| 和 |\right| 的规则使得它们要把 |\sum| 以及上下限都封装起来，
+但是在这样的特殊情况下，最好让上下限露出一点；
+|\bigg| 分界符更好一些。%
+(3). 有时候需要把一个大的陈列公式分在两个或多个行，
+并且知道开和闭分界符大小相同；
+而你不能在第一行用 |\left| 并且在最后一行用 |\right|,
+因为 |\left| 和 |\right| 必须配对出现。%
+解决方法就是(比如说)在第一行用 |\Biggl| 并且在最后一行用 |\Biggr|。
+
+%\danger Of course, one of the advantages of\/ |\left| and |\right| is that
+%they can make arbitrarily large delimiters---much bigger than |\biggggg|!
+%The slashes and angle brackets do have a maximum size, however; if you
+%ask for really big versions of those symbols you will get the largest
+%ones available.
+\danger 当然，|\left| 和 |\right| 的一个优点就是可以得到任意大的分界符%
+——比 |\biggggg| 还要大很多!
+但是斜线和角括号却有最大尺寸；
+如果要使用这些符号的大尺寸，得到的是可用的最大尺寸。
+
+%\exercise Prove that you have mastered delimiters: Coerce \TeX\ into
+%producing the formula
+%$$\pi(n)=\sum_{m=2}^n\left\lfloor\biggl(\sum_{k=1}^{m-1}\bigl\lfloor
+%  (m/k)\big/\lceil m/k\rceil\bigr\rfloor\biggr)^{-1}\right\rfloor.$$
+%\answer |$$\pi(n)=\sum_{m=2}^n\left\lfloor\biggl(\sum_{k=1}^{m-1}\bigl|
+%\hfil\break
+%|\lfloor(m/k)\big/\lceil m/k\rceil\bigr\rfloor\biggr)^{-1}\right\rfloor.$$|
+\exercise 看看你掌握了分界符了么：强制 \TeX\ 生成下列公式
+$$\pi(n)=\sum_{m=2}^n\left\lfloor\biggl(\sum_{k=1}^{m-1}\bigl\lfloor
+  (m/k)\big/\lceil m/k\rceil\bigr\rfloor\biggr)^{-1}\right\rfloor.$$
+\answer |$$\pi(n)=\sum_{m=2}^n\left\lfloor\biggl(\sum_{k=1}^{m-1}\bigl|
+\hfil\break
+|\lfloor(m/k)\big/\lceil m/k\rceil\bigr\rfloor\biggr)^{-1}\right\rfloor.$$|
+
+%\danger If you type `|.|'\ after |\left| or |\right|, instead of
+%specifying one of the basic delimiters, you get a so-called ^{null
+%delimiter} (which is blank). Why on earth would anybody want that, you may
+%ask. Well, you sometimes need to produce formulas that contain only one
+%large delimiter. For example, the display
+%$$\vert x\vert=\cases{x,&if $x\ge0$\cr
+%  -x,&if $x<0$\cr}$$
+%has a `$\{$' but no `$\}$'. It can be produced by a construction of the form
+%\begindisplay
+%|$$|\||x|\||=\left\{ ... \right.$$|
+%\enddisplay
+%Chapter 18 explains how to fill in the `\hbox{|...|}' to finish this
+%construction; let's just notice for now that the `|\right.|'\ makes it
+%possible to have an invisible right delimiter to go with the visible
+%left brace.
+\danger 如果在 |\left| 和 |\right| 后面跟的是`|.|', 而不是所规定的基本分界符，
+就得到所谓的空分界符(它是一个空白)。%
+可能你想知道要这个有什么用。%
+嗯，有时候你要得到一个只包含一个巨分界符的公式。%
+例如，陈列公式
+$$\vert x\vert=\cases{x,&if $x\ge0$\cr
+  -x,&if $x<0$\cr}$$
+有`$\{$'而没有`$\}$'。%
+可以通过下列方法得到它：
+\begindisplay
+|$$|\||x|\||=\left\{ ... \right.$$|
+\enddisplay
+第十八章讨论了`\hbox{|...|}'所代表的内容；
+现在我们只需知道`|\right.|'在可见的左大括号后面产生一个不可见的右分界符。
+
+%\ddanger A null delimiter isn't completely void; it is an empty box
+%whose width is a \TeX\ parameter called ^|\nulldelimiterspace|.
+%We will see later that null delimiters are inserted next to fractions.
+%Plain \TeX\ sets |\nulldelimiterspace=1.2pt|.
+\ddanger \1空分界符不是完全置空的；
+它是一个空盒子，其宽度为 \TeX\ 中一个叫 |\nulldelimiterspace| 的参数。
+后面我们将看到，空分界符被插入到分数后面。
+Plain \TeX\ 设置 |\nulldelimiterspace|\allowbreak|=1.2pt|。
+
+%You can type `|<|' or `|>|' as convenient abbreviations for ^|\langle| and
+%^|\rangle|, when \TeX\ is looking for a delimiter. For example,
+%`|\bigl<|' is equivalent to `|\bigl\langle|', and `|\right>|' is
+%equivalent to `|\right\rangle|'. Of course `|<|' and `|>|' ordinarily
+%produce the ^{less-than} and ^{greater-than} relations `${<}\,{>}$', which
+%are quite different from ^{angle brackets} `$\langle\,\rangle$'.
+在 \TeX\ 需要分界符时，你可以用 `|<|' 或 `|>|' 来代替 |\langle| 和 |\rangle|，
+例如，`|\bigl<|' 等价于 `|\bigl\langle|'，`|\right>|' 等价于 `|\right\rangle|'。
+当然，`|<|' 和 `|>|' 一般得到的是小于和大于关系符号，
+它们与角括号 `$\langle\,\rangle$' 差别很大。
+
+%\danger Plain \TeX\ also makes available a few more delimiters, which were
+%not listed in the basic set of~22 because they are sort of special.
+%The control sequences ^|\arrowvert|, ^|\Arrowvert|, and ^|\bracevert| produce
+%delimiters made from the repeatable parts of the vertical arrows, double
+%vertical arrows, and large braces, respectively, without the arrowheads
+%or the curly parts of the braces. They produce results similar to
+%^|\vert| or ^|\Vert|, but they are surrounded by more white space and
+%they have a different weight. You can also use ^|\lgroup| and ^|\rgroup|,
+%which are constructed from braces without the middle parts; and
+%^|\lmoustache| and ^|\rmoustache|, ^^{moustaches}
+%which give you the top and bottom halves of large braces. For example,
+%here are the |\Big| and |\bigg| versions of\/ |\vert|, |\Vert|, and
+%these seven special delimiters:
+%$$\halign{\indent$#\hfil$\cr
+%\ldots\Big\vert\ldots\Big\Vert
+%\ldots\Big\arrowvert\ldots\Big\Arrowvert\ldots\Big\bracevert
+%\ldots\Big\lgroup\ldots\Big\rgroup\ldots\Big\lmoustache\ldots\Big\rmoustache
+%\ldots\,;\cr
+%\noalign{\smallskip}
+%\ldots\bigg\vert\ldots\bigg\Vert
+%\ldots\bigg\arrowvert\ldots\bigg\Arrowvert\ldots\bigg\bracevert
+%\ldots\bigg\lgroup\ldots\bigg\rgroup\ldots\bigg\lmoustache\ldots\bigg\rmoustache
+%\ldots\,.\cr}$$
+%Notice that |\lgroup| and |\rgroup| are rather like bold parentheses, with
+%sharper bends at the corners; this makes them attractive for certain large
+%displays. But you cannot use them exactly like parentheses, because
+%they are available only in large sizes (|\Big|~or~more).
+\danger Plain \TeX\ 还有几个分界符，它们不在 22 个的基本集合中，
+因为它们是特殊类型的。%
+控制系列 |\arrowvert|, |\Arrowvert| 和 |\bracevert| 是通过分别重复垂直箭头，
+垂直双箭头和巨括号的垂直部分而得到的。%
+它们生成的结果类似于 |\vert| 或 |\Vert|, 但是它们两边要添加间距，
+并且其厚度也不同。%
+你也可以用 |\lgroup| 和 |\rgroup| 来得到没有中间部分的括号；
+并且 |\lmoustache| 和 |\rmoustache| 将给出巨括号的顶部和底部字符。%
+例如，下面是 |\vert|, |\Vert| 以及七个特殊分界符的的 |\Big| 和 |\bigg| 尺寸：
+$$\halign{\indent$#\hfil$\cr
+\ldots\Big\vert\ldots\Big\Vert
+\ldots\Big\arrowvert\ldots\Big\Arrowvert\ldots\Big\bracevert
+\ldots\Big\lgroup\ldots\Big\rgroup\ldots\Big\lmoustache\ldots\Big\rmoustache
+\ldots\,;\cr
+\noalign{\smallskip}
+\ldots\bigg\vert\ldots\bigg\Vert
+\ldots\bigg\arrowvert\ldots\bigg\Arrowvert\ldots\bigg\bracevert
+\ldots\bigg\lgroup\ldots\bigg\rgroup\ldots\bigg\lmoustache\ldots\bigg\rmoustache
+\ldots\,.\cr}$$
+注意，|\lgroup| 和 |\rgroup| 非常类似与加粗的圆括号，只是角上弯得更厉害；
+这在大的陈列公式中使用很好。%
+但是不能把它们象圆括号那样使用，
+因为它们只能用在大尺寸(|\Big| 或更大)。
+
+%\ddanger Question: What happens if a ^{subscript} or ^{superscript}
+%follows a large delimiter? Answer:~That's a good question. After a |\left|
+%delimiter, it is the first subscript or superscript of the enclosed
+%subformula, so it is effectively preceded by |{}|. After a |\right|
+%delimiter, it is a subscript or superscript of the entire |\left...\right|
+%subformula. And after a |\bigl| or |\bigr| or |\bigm| or |\big| delimiter,
+%it applies only to that particular delimiter. Thus, `|\bigl(_2|' works
+%quite differently from `|\left(_2|'.
+\ddanger 问题：如果巨分界符后面跟一个上下标时会出现什么情况？
+回答：问得好。%
+在 |\left| 分界符后面，它就是所封装子公式中的第一个上下标，因此在它前面的是%
+~|{}|。在 |\right| 分界符后面，它就是整个 |\left...\right| 子公式的上下标。%
+在 |\bigl|, |\bigr|, |\bigm| 或 |\big| 分界符后面，它只是那个分界符的上下标。%
+因此，`|\bigl(_2|'与`|\left(_2|'得到的结果不同。
+
+%\danger If you look closely at the examples of math typesetting in this
+%chapter, you will notice that large parentheses and brackets are
+%symmetric with respect to an invisible horizontal line that runs a little
+%bit above the ^{baseline}; when a delimiter gets larger, its height and
+%depth both grow by the same amount. This horizontal line is called the
+%{\sl^{axis}\/} of the formula; for example, a formula in the text of the
+%present paragraph would have an axis at this level: $\hskip 2em\over$. The
+%bar line in every fraction is centered on the axis, regardless of the size
+%of the numerator or denominator.
+\danger 如果你仔细观察本章的数学排版，就会注意到巨圆括号和大括号关于基线%
+附近一条看不见的水平线对称；
+当分界符变大时，高度和深度增加同样的量。%
+这个水平线称为公式的{\KT{10}轴};
+例如，当前段落的文本中公式的轴为 $\hskip 2em\over$。%
+在每个分数中的横线都在轴上，不管分子或分母的大小。
+
+%\danger Sometimes it is necessary to create a special box that should be
+%centered vertically with respect to the axis. \ (For example, the
+%`$\vert x\vert=\bigl\{\,\ldots$' example above was done with such a box.) \
+%\TeX\ provides a simple way to do this: You just say
+%\begindisplay
+%|\vcenter{|\<vertical mode material>|}|
+%\enddisplay
+%and the vertical mode material will be packed into a box just as if
+%^|\vcenter| had been ^|\vbox|. Then the box will be raised or lowered until
+%its top edge is as far above the axis as the bottom edge is below.
+\danger 有时候必须生成一个关于轴垂直居中的特殊的盒子。%
+(例如，上面的`$\vert x\vert=\bigl\{\,\ldots$'就用了这样的盒子。)
+ \TeX\ 提供了实现它的简单方法：
+只要输入
+\begindisplay
+|\vcenter{|\<vertical mode material>|}|
+\enddisplay
+\1垂直模式的内容就放在一个盒子中，就象 |\vcenter| 是一个 |\vbox| 一样。%
+接着盒子被升降到顶边和底边距轴一样的地方。
+
+%\ddanger The concept of ``axis'' is meaningful for \TeX\ only in math
+%formulas, not in ordinary text; therefore \TeX\ allows you to use
+%|\vcenter| only in math mode. If you really need to center something
+%vertically in horizontal mode, the solution is to say `|$\vcenter{...}$|'.
+% \ (Incidentally, the constructions `|\vcenter| |to|\<dimen>'
+%and `|\vcenter| |spread|\<dimen>' are legal too, in math mode;
+%vertical glue is always set by the rules for |\vbox| in
+%Chapter~12. But |\vcenter| by itself is usually sufficient.)
+\ddanger ``轴''的概念只对数学公式有意义，对普通文本没意义；
+因此， \TeX\ 只允许在数学模式下使用 |\vcenter|。%
+如果的确需要在水平模式下垂直居中某些内容，只能用`|$\vcenter{...}$|'。%
+(顺便说一下，命令`|\vcenter| |to|\<dimen>'和`|\vcenter| |spread|\<dimen>'%
+在数学模式下也是可以的；
+垂直粘连总可以通过第十二章的规则来设置。%
+但是一般直接用 |\vcenter| 就可以了。)
+
+%\danger Any box can be put into a formula by simply saying ^|\hbox| or
+%|\vbox| or ^|\vtop| or ^|\box| or ^|\copy| in the normal way, even when
+%you are in math mode.  Furthermore you can use ^|\raise| or ^|\lower|, as
+%if you were in horizontal mode, and you can insert vertical rules with
+%^|\vrule|.  Such constructions, like |\vcenter|, produce boxes that can be
+%used like ordinary symbols in math formulas.
+\danger 通过直接按照正常方法输入 |\hbox|, |\vbox|, |\vtop|, |\box| 或 |\copy|~%
+就可以把任何盒子放在公式中，即使是在数学模式下。%
+还有，可以象在水平模式下那样使用 |\raise| 或 |\lower|,
+并且可以用 |\vrule| 插入垂直标尺。%
+象 |\vcenter| 这样得到的盒子在数学公式中象普通符号那样使用。
+
+%\ddanger Sometimes you need to make up your own symbols, when you run across
+%something unusual that doesn't occur in the fonts. If the new symbol
+%occurs only in one place, you can use |\hbox| or |\vcenter| or something
+%to insert exactly what you want; but if you are defining a macro for
+%general use, you may want to use different constructions in different
+%styles. \TeX\ has a special feature called ^|\mathchoice| that comes
+%to the rescue in such situations: You write
+%\begindisplay
+%|\mathchoice{|\<math>|}{|\<math>|}{|\<math>|}{|\<math>|}|
+%\enddisplay
+%where each \<math> specifies a subformula. \TeX\ will choose the first
+%subformula in style $D$ or~$D'$, the second in style $T$ or~$T'$, the
+%third in style $S$ or~$S'$, the fourth in style $\SS$ or $\SS'$.
+%\ (\TeX\ actually typesets all four subformulas, before it chooses the
+%final one, because the actual style is not always known at the time a
+%|\mathchoice| is encountered; for example, when you type `|\over|' you often
+%change the style of everything that has occurred earlier in the formula.
+%Therefore |\mathchoice| is somewhat expensive in terms of time and space,
+%and you should use it only when you're willing to pay the price.)
+\ddanger 当遇到字体中没有的不常用的符号时，有时候需要制作你自己的符号。%
+如果新符号只在一个地方使用，就可以用 |\hbox| 或 |\vcenter| 或其它东西插入%
+你想要的；
+但是如果要定义一个普遍使用的宏，那么可能要在不同样式中使用不同的命令。%
+ \TeX\ 提供了一种这种情况下使用的特殊命令，叫做 |\mathchoice|:
+给出
+\begindisplay
+|\mathchoice{|\<math>|}{|\<math>|}{|\<math>|}{|\<math>|}|
+\enddisplay
+其中每一个 \<math> 规定了一个子公式。%
+在样式 $D$ 或 $D'$ 中 \TeX\ 选择第一个子公式，
+在 $T$ 或 $T'$ 中选第二个，在 $S$ 或 $S'$ 中选第三个，在 $SS$ 或 $SS'$ 中选第四个。%
+(实际上，在 \TeX\ 选定最后一个之前，它把所有四个子公式都排版了，
+因为在读入 |\mathchoice| 时一般还不知道实际要用的样式；
+例如，当使用`|\over|'时，你通常改变了公式前半部分出现的所有东西的样式。
+因此，|\mathchoice| 要花费很多时间和空间，因此只有在舍得的时候再使用它。)
+
+%\ddangerexercise Guess what output is produced by the following commands:
+%\begintt
+%\def\puzzle{{\mathchoice{D}{T}{S}{SS}}}
+%$$\puzzle{\puzzle\over\puzzle^{\puzzle^\puzzle}}$$
+%\endtt
+%\answer A displayed formula equivalent to |$${D}{{T}\over{T}^{{S}^{SS}}}$$|.
+\ddangerexercise 看看下列命令输出结果是什么：
+\begintt
+\def\puzzle{{\mathchoice{D}{T}{S}{SS}}}
+$$\puzzle{\puzzle\over\puzzle^{\puzzle^\puzzle}}$$
+\endtt
+\answer 一个等价于 |$${D}{{T}\over{T}^{{S}^{SS}}}$$| 的陈列公式。
+
+%\ddangerexercise Devise a `^|\square|' macro that produces a
+%\def\sqr#1#2{{\vcenter{\vbox{\hrule height.#2pt
+%      \hbox{\vrule width.#2pt height#1pt \kern#1pt \vrule}
+%      \hrule height.#2pt}}}}%
+%`$\,\sqr34\,$' for use in math formulas. The box should be symmetrical
+%with respect to the axis, and its inside dimensions should be $3\pt$ in
+%display and text styles, $2.1\pt$ in script styles, and $1.5\pt$ in
+%scriptscript styles. The rules should be $0.4\pt$ thick in
+%display and text styles, $0.3\pt$ thick otherwise.
+%\answer |\def\sqr#1#2{{\vcenter{\vbox{\hrule height.#2pt|\parbreak
+%        |        \hbox{\vrule width.#2pt height#1pt \kern#1pt|\parbreak
+%        |           \vrule width.#2pt}|\parbreak
+%        |        \hrule height.#2pt}}}}|\parbreak
+%        |\def\square{\mathchoice\sqr34\sqr34\sqr{2.1}3\sqr{1.5}3}|
+\ddangerexercise 设计一个叫`|\square|'的宏，以得到数学公式中使用的%
+\def\sqr#1#2{{\vcenter{\vbox{\hrule height.#2pt
+      \hbox{\vrule width.#2pt height#1pt \kern#1pt \vrule}
+      \hrule height.#2pt}}}}%
+盒子关于轴是对称的，并且其内部尺寸在陈列样式和文本样式中为 $3\pt$,
+在标号样式中为 $2.1\pt$, 在小标号样式中为 $1.5\pt$。%
+在陈列样式和文本样式中为 $0.4\pt$ 厚，其它为 $0.3\pt$ 厚。
+\answer |\def\sqr#1#2{{\vcenter{\vbox{\hrule height.#2pt|\parbreak
+        |        \hbox{\vrule width.#2pt height#1pt \kern#1pt|\parbreak
+        |           \vrule width.#2pt}|\parbreak
+        |        \hrule height.#2pt}}}}|\parbreak
+        |\def\square{\mathchoice\sqr34\sqr34\sqr{2.1}3\sqr{1.5}3}|
+
+%\ddanger Plain \TeX\ has a macro called ^|\mathpalette| that is useful
+%for |\mathchoice| constructions; `|\mathpalette\a{xyz}|' expands to
+%the four-pronged array of choices
+%`|\mathchoice|\stretch|{\a|\stretch|\displaystyle|\stretch|{xyz}}|\stretch
+%|...|\stretch|{\a|\stretch|\scriptscriptstyle|\stretch|{xyz}}|\stretch'.
+%Thus the first argument to |\mathpalette| is a control sequence whose
+%first argument is a style selection. Appendix~B contains several examples
+%that show how |\mathpalette| can be applied. \ (See in particular the
+%definitions of\/ |\phantom|, |\root|, and |\smash|; the ^{congruence sign}
+%^|\cong| ($\cong$) is also constructed from $=$ and $\sim$ using
+%|\mathpalette|.)
+%^^{constructing new math symbols}
+%^^{math symbols, construction of}
+\ddanger Plain \TeX\ 有一个名为 |\mathpalette| 的宏，
+它使得 |\mathchoice| 构造更加容易使用；`|\mathpalette\a{xyz}|' 展开了四个分支
+\begintt
+\mathchoice{\a\displaystyle{xyz}}...{\a\scriptscriptstyle{xyz}}.
+\endtt
+因此，|\mathpalette| 的第一个参量是一个控制系列，而这个控制系列的第一个
+参量是样式选择。附录 B 包含了几个展示 |\mathpalette| 的应用的例子。%
+（特别是 |\phantom|、|\root| 和 |\smash| 的定义；全等符号 |\cong|（$\cong$）%
+也是通过 |\mathpalette| 从 $=$ 和 $\sim$ 得到的。
+
+%\ddanger At the beginning of this chapter we discussed the commands
+%|\over|, |\atop|, |\choose|, and |\above|. These are special cases of
+%\TeX's ``^{generalized fraction}'' feature, which includes also the
+%three primitives
+%\begindisplay
+%|\overwithdelims|\<delim$_1$>\<delim$_2$>\cr
+%|\atopwithdelims|\<delim$_1$>\<delim$_2$>\cr
+%|\abovewithdelims|\<delim$_1$>\<delim$_2$>\<dimen>\cr
+%\enddisplay
+%The third of these is the most general, as it encompasses all of the other
+%generalized fractions:  ^|\overwithdelims| uses a ^{fraction} bar whose
+%thickness is the default for the current size, and ^|\atopwithdelims| uses
+%an invisible fraction bar whose thickness is zero, while
+%^|\abovewithdelims| uses a bar whose thickness is specified explicitly.
+%\TeX\ places the immediately preceding subformula (the ^{numerator}) over
+%the immediately following subformula (the ^{denominator}), separated by a
+%bar line of the desired thickness; then it puts \<delim$_1$> at the left
+%and \<delim$_2$> at the right. For example, `^|\choose|' is equivalent to
+%`|\atopwithdelims()|'. If you define |\legendre| to be
+%`|\overwithdelims()|', you can typeset the ^{Legendre symbol}
+%\def\legendre{\overwithdelims()}%
+%`$a\legendre b$' by saying `|{a\legendre b}|'. The size of the surrounding
+%delimiters depends only on the style, not on the size of the fractions;
+%larger delimiters are used in styles $D$ and~$D'$ (see Appendix~G\null). The
+%simple commands ^|\over|, ^|\atop|, and ^|\above| are equivalent to the
+%corresponding `|withdelims|' commands when the delimiters are null; for
+%example, `|\over|' is an abbreviation for `|\overwithdelims..|'.
+\ddanger \1在本章开头，我们讨论了命令 |\over|, |\atop|, |\choose| 和 |\above|。%
+它们是 \TeX\ 的广义分数特性的特殊情形，
+这个广义分数还包括三个原始控制系列：
+\begindisplay
+|\overwithdelims|\<delim$_1$>\<delim$_2$>\cr
+|\atopwithdelims|\<delim$_1$>\<delim$_2$>\cr
+|\abovewithdelims|\<delim$_1$>\<delim$_2$>\<dimen>\cr
+\enddisplay
+其中的第三个更广义，因为它包含了所有其它的广义分数：
+|\overwithdelims| 使用了厚度为当前尺寸的分数横线，
+|\atopwithdelims| 使用了厚度为零的看不见的分数横线，
+而 |\abovewithdelims| 使用的是厚度为任意给定的分数横线。%
+ \TeX\ 直接把前面的子公式(分子)放在后面的子公式(分母)上面，
+中间是所要求厚度的横线；
+接着把 \<delim$_1$> 放在左边，把 \<delim$_2$> 放在右边。%
+例如，`|\choose|'等价于`|\atopwithdelims()|'。%
+如果要定义 |\legendre| 为`|\overwithdelims()|', 那么可以通过输入%
+\def\legendre{\overwithdelims()}%
+`|{a\legendre b}|'来排版出 Legendre 符号`$a\legendre b$'。%
+两边的分界符大小与样式有关，与分数的大小无关；
+在样式 $D$ 和 $D'$ 中用大的分界符(见附录 G)。%
+简单命令 |\over|, |\atop| 和 |\above| 等价于空分界符时`|withdelims|'的相应命令；
+例如，`|\over|'就等价于`|\overwithdelims..|'。
+
+%\def\euler{\atopwithdelims<>}
+%\ddangerexercise Define a control sequence |\euler| so that the
+%^{Eulerian number} $n\euler k$ will be produced when you type `|{n\euler k}|'
+%in a formula.
+%\answer|\def\euler{\atopwithdelims<>}|.
+\def\euler{\atopwithdelims<>}
+\ddangerexercise 定义一个控制系列 |\euler|，
+使得在公式中输入`|{n\euler k}|'时得到 Euler 数 $n\euler k$。
+\answer|\def\euler{\atopwithdelims<>}|。
+
+%\ddanger Appendix G explains exactly how \TeX\ computes the desired size
+%of delimiters for |\left| and~|\right|. The general idea is that delimiters
+%are vertically centered with respect to the ^{axis}; hence, if we want
+%to cover a subformula between |\left| and |\right| that extends $y_1$~units
+%above the axis and $y_2$~units below, we need to make a delimiter whose
+%height plus depth is at least $y$~units, where $y=2\max(y_1,y_2)$.
+%It is usually best not to cover the formula completely, however,
+%but just to come close; so \TeX\ allows you to specify
+%two parameters, the ^|\delimiterfactor|~$f$ (an~integer) and the
+%^|\delimitershortfall|~$\delta$ (a~dimension). The minimum delimiter size
+%is taken to be at least $y\cdot f/1000$, and at least $y-\delta$. Appendix~B
+%sets $f=901$ and $\delta=5\pt$. Thus, if $y=30\pt$, the plain \TeX\ format
+%causes the delimiter to be more than $27\pt$ tall; if $y=100\pt$, the
+%corresponding delimiter will be at least $95\pt$ tall.
+\ddanger 附录 G 讨论了怎样精确算出 |\left| 和 |\right| 分界符所要的尺寸。%
+一般思路是，分界符关于轴垂直居中；
+因此如果要框住 |\left| 和 |\right| 之间的子公式，并且设轴上面的高度为 $y_1$,
+轴下面的高度为 $y_2$, 那么我们要制作的分界符的高度加深度必须至少%
+为 $y=2\max(y_1,y_2)$。%
+但是一般最好不完全框住公式，而是仅仅基本上框住就可以了；
+因此 \TeX\ 允许给出两个参数，|\delimiterfactor|~$f$(一个整数)和%
+~|\delimitershortfall|~$\delta$~(一个尺寸)。%
+分界符的最小尺寸至少取为 $y\cdot f/1000$, 并且至少为 $y-\delta$。%
+附录 B 设置 $f=901$ 和 $\delta=5\pt$。%
+因此，如果 $y=30\pt$, 那么 plain \TeX\ 公式就把分界符的高度变成 $27\pt$;
+如果 $y=100\pt$, 相应的分界符的高度至少为 $95\pt$。
+
+%\danger So far we have been discussing the rules for typing math formulas,
+%but we haven't said much about how \TeX\ actually goes about converting
+%its input into lists of boxes and glue. Almost all of the control
+%sequences that have been mentioned in Chapters 16 and~17 are ``high level''
+%features of the plain \TeX\ format; they are not built into \TeX\ itself.
+%Appendix~B defines those control sequences in terms of more primitive
+%commands that \TeX\ actually deals with. For example, `|\choose|' is
+%an abbreviation for `|\atopwithdelims()|'; Appendix~B not only introduces
+%|\choose|, it also tells \TeX\ where to find the delimiters |(| and~|)|
+%in various sizes. The plain \TeX\ format defines all of the special
+%characters like |\alpha| and~|\mapsto|, all of the special accents like
+%|\tilde| and~|\widehat|, all of the large operators like |\sum| and~|\int|,
+%and all of the delimiters like |\lfloor| and~|\vert|. Any of these things
+%can be redefined, in order to adapt \TeX\ to other mathematical styles
+%and/or to other fonts.
+\danger 现在我们已经讨论了排版数学公式的规则，
+但是关于 \TeX\ 怎样把输入内容变成盒子和粘连列还没有讲述。%
+在第十六和十七章提到的几乎所有控制系列都是 plain \TeX\ 格式的``高级''命令；
+它们不是 \TeX\ 自己内建的。%
+附录 B 用 \TeX\ 实际使用的原始命令定义了这些控制系列。%
+例如，`|\choose|'的定义为`|\atopwithdelims()|';
+附录 B 不仅定义了 |\choose|, 它还告诉 \TeX\ 怎样得到各种大小的分界符\hbox{~|(| 和 |)|。}%
+Plain \TeX\ 格式定义了所有象 |\alpha| 和 |\mapsto| 这样的特殊字符，
+所有象 |\tilde| 和 |\widehat| 这样的特殊重音，所有象 |\sum| 和 |\int| 这样%
+的巨算符，所有象 |\lfloor| 和 |\vert| 这样的分界符。
+这些东西的任一个都可重新定义，使得 \TeX\ 能够使用其他数学样式和/或其他字体。
+
+%\danger The remainder of this chapter discusses the low-level commands
+%that \TeX\ actually obeys behind the scenes.  Every paragraph on the next
+%few pages is marked with double dangerous bends, so you should skip to
+%Chapter~18 unless you are a glutton for \TeX nicalities.
+\danger \1本章剩下的内容要讨论 \TeX\ 在幕后实际使用的低级命令。%
+在下几页的每段前都有两个``危险''标识，
+因此除非特别着迷，你可以跳过第十八章了。
+
+%\ninepoint
+%\ddanger All characters that are typeset in math mode belong to one of
+%sixteen {\sl^{families} of fonts}, numbered internally from 0 to~15. Each
+%of these families consists of three fonts: one for text size, one for
+%script size, and one for scriptscript size. The commands ^|\textfont|,
+%^|\scriptfont|, and ^|\scriptscriptfont| are used to specify the members
+%of each family.  For example, ^{family~0} in the plain \TeX\ format is
+%used for roman letters, and Appendix~B contains the instructions
+%\begintt
+%\textfont0=\tenrm
+%\scriptfont0=\sevenrm
+%\scriptscriptfont0=\fiverm
+%\endtt
+%to set up this family: The 10-point roman font (^|\tenrm|) is used for
+%normal symbols, 7-point roman (^|\sevenrm|) is used for subscripts, and
+%5-point roman (^|\fiverm|) is used for sub-subscripts. Since there are up to
+%256~characters per font, and 3~fonts per family, and 16~families, \TeX\ can
+%access up to 12,288 characters in any one formula (4096 in~each of
+%the three sizes). Imagine that.
+\ninepoint
+\ddanger 在数学模式下排版的所有字符都属于 16 个{\KT{9}字体族}中的一个，
+在内部用从 0 到 15 来编号。%
+这些族中的每个都包含三种字体：
+一个用于文本尺寸，一个用于标号尺寸，一个用于小标号尺寸。%
+命令 |\textfont|, |\scriptfont| 和 |\scriptscriptfont| 对应于每族的成员。%
+例如，~plain \TeX\ 格式中的第 0 族被用于罗马体字母，
+并且附录 B 用下列指令
+\begintt
+\textfont0=\tenrm
+\scriptfont0=\sevenrm
+\scriptscriptfont0=\fiverm
+\endtt
+来设定此族：
+10-point 罗马字体 (|\tenrm|) 用于正常符号，
+7-point 罗马字体 (|\sevenrm|) 用于上下标，
+5-point 罗马字体 (|\fiverm|) 用于小上下标。%
+因为每种字体有 256 个字符，每族有 3 种字体，总共有 16 族，
+那么在任一公式中， \TeX\ 都可直接得到 12,228 个字符(每种尺寸为 4096 个)。%
+想像一下有多少。
+
+%\ddanger A definition like |\textfont|\<family number>|=|\<font identifier>
+%is local to the group that contains it, so you can easily change family
+%membership from one set of conventions to another and back again. Furthermore
+%you can put any font into any family; for example, the command
+%\begintt
+%\scriptscriptfont0=\scriptfont0
+%\endtt
+%makes sub-subscripts in family~0 the same size as the subscripts currently
+%are. \TeX\ doesn't check to see if the families are sensibly organized; it
+%just follows instructions. \ (However, fonts cannot be used in families
+%2 and~3 unless they contain a certain number of special parameters, as we
+%shall see later.) \ Incidentally, \TeX\ uses ^|\nullfont|, which contains
+%no characters, for each family member that has not been defined.
+\ddanger 象 |\textfont|\<family number>|=|\<font identifier> 这样的定义%
+对包含它的编组而言是局部的，因此可以很容易在族成员之间从一组设定改为另一组%
+并且再改回来。%
+还有，可以把任何字体放在任何族中；例如，命令
+\begintt
+\scriptscriptfont0=\scriptfont0
+\endtt
+把第 0 族小标号尺寸变得同当前的标号尺寸一样大。%
+ \TeX\ 不其检验族是否建立起来了；
+它只遵循指令。%
+(但是，我们后面将看到，字体不能用在第 2 和 3 族，除非它们包含一定数量的参数。)
+顺便说一下，对没有定义的每族成员， \TeX\ 都用不包含字符的 |\nullfont| 代替。
+
+%\ddanger During the time that a math formula is being read,
+%\TeX\ remembers each symbol as being ``character position so-and-so in
+%family number such-and-such,'' but it does not take note of what fonts
+%are actually in the families until reaching the end of the formula.
+%Thus, if you have loaded a font called |\Helvetica| that contains Swiss-style
+%numerals, and if you say something like
+%\begintt
+%$\textfont0=\tenrm 9 \textfont0=\Helvetica 9$
+%\endtt
+%you will get two 9's in font |\Helvetica|, assuming that \TeX\ has been
+%set up to take 9's from family~0. The reason is that |\textfont0|
+%is~|\Helvetica| at the end of the formula, and that's when it counts. On
+%the other hand, if you say
+%\begintt
+%$\textfont0=\tenrm 9 \hbox{$9\textfont0=\Helvetica$}$
+%\endtt
+%the first 9 will be from |\tenrm| and the second from |\Helvetica|, because
+%the formula in the hbox will be typeset before it is incorporated into
+%the surrounding formula.
+\ddanger 在数学公式正在读入期间， \TeX\ 把每个符号记作``在某某族中的某某字符位置'',
+但是直到公式结尾，它才去注意族中实际是什么字体。%
+因此，如果你已经把叫做 |\Helvetica|~(它包含瑞士数字)的字体载入，
+并且给出象
+\begintt
+$\textfont0=\tenrm 9 \textfont0=\Helvetica 9$
+\endtt
+这样的指令，那么就得到字体 |\Helvetica| 中的两个 9,
+如果 \TeX\ 设定得要从第 0 族得到 9 的话。%
+原因是在公式结尾处 |\textfont0| 是 |\Helvetica|,
+并且那是它正在起作用的时候。%
+另一方面，如果使用
+\begintt
+$\textfont0=\tenrm 9 \hbox{$9\textfont0=\Helvetica$}$
+\endtt
+那么第一个 9 是 |\tenrm| 而第二个是 |\Helvetica|,
+因为 hbox 中的公式在合并到外面公式前就已经排版好了。
+
+%\ddangerexercise If you say `|${\textfont0=\Helvetica 9}$|', what
+%font will be used for the~9?
+%\answer The |\textfont0| that was current at the beginning of the formula
+%will be used, because this redefinition is local to the braces. \
+%(It would be a different story if `^|\global||\textfont|' had appeared instead;
+%that would have changed the meaning of\/ |\textfont0| at all levels.)
+\ddangerexercise 如果输入`|${\textfont0=\Helvetica 9}$|'，
+那么 9 所用的字体是什么？
+\answer 因为花括号内的重定义是局部的，
+所用的字体将是在公式开始时的当前 |\textfont0|。%
+（如果写成 `^|\global||\textfont|' 结果就会不一样；
+这将在各个层级都改变 |\textfont0| 的含义。）
+
+%\ddanger Every ^{math character} is given an identifying code
+%number between 0 and~4095, obtained by adding 256~times the family number
+%to the position number. This is easily expressed in ^{hexadecimal
+%notation}, using one hexadecimal digit for the family and two for the
+%character; for example, \hex{24A} stands for character~\hex{4A} in
+%family~2. Each character is also assigned to one of eight classes,
+%^^{classes of math characters, table} ^^{math codes} ^^{table of ...}
+%numbered 0 to~7, as follows:
+%$$\halign{\indent#\hfil&\quad#\hfil&\quad#\hfil&
+%\hskip4em#\hfil&\quad#\hfil&\quad#\hfil\cr
+%\it \kern-2pt Class&\it Meaning&\kern-2pt\it Example&
+%\it \kern-2pt Class&\it Meaning&\kern-2pt\it Example\cr
+%\noalign{\vskip2pt}
+%0&Ordinary&|/|&
+%4&Opening&|(|\cr
+%1&Large operator&|\sum|&
+%5&Closing&|)|\cr
+%2&Binary operation&|+|&
+%6&Punctuation&|,|\cr
+%3&Relation&|=|&
+%7&Variable family&|x|\cr
+%}$$
+%^^{large operator}^^{binary operation}^^{relation}^^{opening}^^{closing}
+%^^{punctuation}^^{variable family}
+%Classes 0 to 6 tell what ``part of speech'' the character belongs to, in
+%math-printing language; class~7 is a special case discussed below. The class
+%number is multiplied by 4096 and added to the character number, and this
+%is the same as making it the leading digit of a four-digit hexadecimal
+%number. For example, Appendix~B defines |\sum| to be the math character
+%\hex{1350}, meaning that it is a large operator (class~1) found in position
+%\hex{50} of family~3.
+\ddanger \1每个数学字符被指定一个识别码数字，在 0 和 4095 之间，
+它等于 256 乘以族数再加上位置数。%
+这很容易用十六进制表示，一位十六进制数为族数，两位为字符位置；
+例如，\hex{24A} 表示第 2 族的 \hex{4A} 字符。%
+每个字符还可以指定到 8 类中的一类，
+编号从 1 到 7, 如下：
+$$\halign{\indent#\hfil&\quad#\hfil&\quad#\hfil&
+\hskip2em#\hfil&\quad#\hfil&\quad#\hfil\cr
+\it \kern-2pt {\KT{9}类}&\it {\KT{9}意思}&\kern-2pt\it {\KT{9}例子}&
+\it \kern-2pt {\KT{9}类}&\it {\KT{9}意思}&\kern-2pt\it {\KT{9}例子}\cr
+\noalign{\vskip2pt}
+0&Ordinary(普通符号)&|/|&
+4&Opening(开符号)&|(|\cr
+1&Large operator(巨符号)&|\sum|&
+5&Closing(闭符号)&|)|\cr
+2&Binary operation(二元运算)&|+|&
+6&Punctuation(标点)&|,|\cr
+3&Relation(关系符号)&|=|&
+7&Variable family(变量族)&|x|\cr
+}$$
+第 0 到 6 类是数学排版中字符属于哪个``讨论过的部分'';
+第 7 类是下面要讨论的特殊情形。%
+这些类数乘以 4096 再加到字符代码上，而且这个类数就是就是四位十六进制数%
+的第一位数。%
+例如，附录 B 把 |\sum| 定义为数学字符 \hex{1350}, 意思是它是巨算符(第 1 类),
+在第 3 类的位置 \hex{50} 上。
+
+%\ddangerexercise The ^|\oplus| and ^|\bullet| symbols ($\oplus$ and $\bullet$)
+%are binary operations that appear in positions 8 and~15 (decimal)
+%of family~2, when the fonts of plain~\TeX\ are being used. Guess
+%what their math character codes are. \ (This is too easy.)
+%\answer \hex{2208} and \hex{220F}.
+\ddangerexercise 符号 |\oplus| 和 |\bullet|（$\oplus$ 和 $\bullet$）是二元运算符；
+在 plain \TeX\ 的字体中，它们出现在第 2 族位置 8 和 15（十进制数）上。
+其数学字符代码是什么？（这太简单了。）
+\answer \hex{2208} 和 \hex{220F}。
+
+%\ddanger Class 7 is a special case that allows math symbols to change families.
+%It behaves exactly like class~0, except that the specified family is
+%replaced by the current value of an integer parameter called ^|\fam|,
+%provided that |\fam| is a legal family number (i.e., if it lies between
+%0 and~15). \TeX\ automatically sets |\fam=-1| whenever math mode is entered;
+%therefore class~7 and class~0 are equivalent unless |\fam| has been
+%given a new value. Plain \TeX\ changes |\fam| to~0 when the user
+%types `^|\rm|'; this makes it convenient to get roman letters in formulas,
+%as we will see in Chapter~18, since letters belong to class~7. \ (The
+%control sequence |\rm| is an abbreviation for `|\fam=0 \tenrm|'; thus,
+%|\rm| causes
+%|\fam| to become zero, and it makes |\tenrm| the ``^{current font}.''
+%In horizontal mode, the |\fam| value is irrelevant and the current font
+%governs the typesetting of letters; but in math mode, the current font is
+%irrelevant and the |\fam| value governs the letters. The current font
+%affects math mode only if\/ |\|\] is used ^^{control space} or if
+%dimensions are given in ^|ex| or ^|em| units;
+%it also has an effect if an |\hbox| appears inside a formula, since
+%the contents of an hbox are typeset in horizontal mode.)
+\ddanger 第 7 类是一种特殊情形，它允许数学符号改变族数。%
+它的性质象第 0 类，但是给出的族数被叫做 |\fam| 的整数参数的当前值所代替，
+只要 |\fam| 是一个合理的族数(即处在 0 和 15 之间)。%
+只要进入了数学模式， \TeX\ 就自动设置 |\fam=-1|;
+因此，如果 |\fam| 没有得到新的值，那么第 7 类与第 0 类就是等价的。%
+当用户输入`|\rm|'时，~plain \TeX\ 就把 |\fam| 变为零；
+这样就很容易得到 roman 字母，就象我们在第十八章将看到的那样，
+因为字母属于第 7 类。%
+控制系列 |\rm| 的定义为`|\fam=0 \tenrm|';
+因此，|\rm| 使 |\fam| 变成零，并且它把``当前字体''变成 |\tenrm|。%
+在水平模式下，|\fam| 的值无关紧要，并且当前字体决定字母的排版；
+但是在数学模式下，当前字体是无关紧要的，|\fam| 的值决定字母的排版。%
+只有当用到 |\|\] 或要用 |ex| 或 |\em| 的方式给出尺寸时，
+才在数学模式下用到当前字体；
+如果 hbox 出现在公式中，当前字体也起作用，因为 hbox 的内容要在水平模式下排版。
+
+%\ddanger The interpretation of characters in math mode is defined by a
+%table of~256 ``mathcode'' values; these table entries can be changed
+%by the ^|\mathcode| command, just as the category codes are changed
+%by ^|\catcode| (see Chapter~7). Each mathcode specifies class, family, and
+%character position, as described above. For example, Appendix~B contains
+%the commands
+%\begintt
+%\mathcode`<="313C
+%\mathcode`*="2203
+%\endtt
+%which cause \TeX\ to treat the character `|<|' in math mode as a relation
+%^^{less than} (class~3) found in position \hex{3C} of family~1, and to treat an
+%^{asterisk} `|*|' as a binary operation found in position~3 of family~2.
+%The initial value of\/ |\mathcode`b| is \hex{7162}; thus, |b|~is character
+%\hex{62} in ^{family~1} (italics), and its family will vary with |\fam|.
+%\ (|INITEX| starts out with |\mathcode|$\,x=x$ for all characters~$x$
+%that are neither
+%letters nor digits. The ten digits have |\mathcode|$\,x=x+\hbox{\hex{7000}}$;
+%the 52 letters have |\mathcode|$\,x=x+\hbox{\hex{7100}}$.) \
+%\TeX\ looks at the mathcode only when it is typesetting a character whose
+%catcode is 11~(letter) or 12~(other), or when it encounters a character that
+%is given explicitly as ^|\char|\<number>.
+\ddanger 数学模式下字符的含义由 256 个``mathcode''的值这个表来定义；
+这些表的单元可以用命令 |\mathcode| 来改变，就象类代码可以用 |\catcode| 改变%
+一样(见第七章)。%
+每个 mathcode 规定了类，族和字符位置，就象上面讲述的那样。%
+例如，附录 B 中含有命令
+\begintt
+\mathcode`<="313C
+\mathcode`*="2203
+\endtt
+它告诉 \TeX\ , 在数学模式下，把字符`|<|'看作关系符号(第 3 类),
+在第 1 族的位置 \hex{3C} 上，
+把星号`|*|'看作二元运算，在第 2 族的位置 3 上。%
+|\mathcode`b| 的初始值为 \hex{7162};
+因此 |b| 是第 1 族(italic)的字符 \hex{62}, 并且其族要随着 |\fam| 变化。%
+(\1对不是字母和数字的所有字符，|INITEX| 开始设置为 |\mathcode|$\,x=x$。%
+10 个数字为 |\mathcode|$\,x=x+\hbox{\hex{7000}}$;
+52 个字母为 |\mathcode|$\,x=x+\hbox{\hex{7100}}$。)
+只有当 \TeX\ 排版类代码为 11~(字母)或 12~(其它)的字符时，
+或者当读入的字符由 |\char|\<number> 给出时，
+它才用到 mathcode。
+
+%\ddanger A |\mathcode| can also have the special value \hex{8000}, which
+%causes the character to behave as if it has catcode~13 (active). Appendix~B
+%uses this feature to make |'| ^^{apostrophe} expand to |^{|^|\prime||}| in a
+%slightly tricky way. The mathcode of |'| does not ^^{active math character}
+%interfere with the use of |'| in ^{octal} constants.
+\ddanger |\mathcode| 也可以有一个特殊值 \hex{8000},
+它使得字符的性质同类代码 13~(活动符)一样。%
+附录 B 中利用这个性质略施小计，把 |'| 定义为 |{||\prime||}|。%
+|'| 的 mathcode 不影响用八进制常数来使用 |'|。
+
+%\ddanger The mathcode table allows you to refer indirectly to any character in
+%any family, with the touch of a single key. You can also specify a math
+%character code directly, by typing ^|\mathchar|, which is analogous to
+%^|\char|. For example, the command `|\mathchar"1ABC|' specifies a
+%character of class~1, family~10 (\hex A), and position \hex{BC}. A~hundred
+%or so definitions like
+%\begintt
+%\def\sum{\mathchar"1350 }
+%\endtt
+%would therefore suffice to define the special symbols of plain \TeX\null. But
+%there is a better way: \TeX\ has a primitive command ^|\mathchardef|,
+%which relates to |\mathchar| just as ^|\chardef| does to |\char|.
+%Appendix~B has a hundred or so definitions like
+%\begintt
+%\mathchardef\sum="1350
+%\endtt
+%to define the special symbols. A |\mathchar| must be between 0 and 32767
+%(\hex{7FFF}).
+\ddanger mathcode 允许你把单个键间接地指向任何族中任何字符。%
+你还可以通过输入 |\mathchar| 直接给出数学字符，它类似于 |\char|。%
+例如，命令`|\mathchar"1ABC|'给出了第 1 类，第 10 (\hex A) 族，位置 \hex{BC} 上%
+的字符。%
+因此象
+\begintt
+\def\sum{\mathchar"1350 }
+\endtt
+这样大概 100 个命令足以定义完 plain \TeX\ 中的特殊符号了。%
+但是，有一个更好的方法： \TeX\ 有一个原始命令 |\mathchardef|,
+它与 |\mathchar| 的关系就象 |\chardef| 与 |\char| 的一样。%
+附录 B 给出了象
+\begintt
+\mathchardef\sum="1350
+\endtt
+这样的 100 个左右的定义来定义特殊符号。%
+|\mathchar| 必须在 0 和 32767 (\hex{7FFF}) 之间。
+
+%\ddanger A character of class~1, i.e., a ^{large operator} like |\sum|, will
+%be vertically centered with respect to the axis when it is typeset. Thus,
+%the large operators can be used with different sizes of type. This vertical
+%adjustment is not made for symbols of the other classes.
+\ddanger 当排版第 1 类字符，即象 |\sum| 这样的巨算符时，
+它应该关于轴垂直居中。%
+因此，巨算符可以使用不同的字体尺寸。%
+这个垂直调整对其它类的符号是没有的。
+
+%\ddanger \TeX\ associates classes with subformulas as well as with individual
+%characters. Thus, for example, you can treat a complex construction as if
+%it were a binary operation or a relation, etc., if you want to. The
+%commands ^|\mathord|, ^|\mathop|, ^|\mathbin|, ^|\mathrel|, ^|\mathopen|,
+%^|\mathclose|, and ^|\mathpunct| are used for this purpose; each of them
+%is followed either by a single character or by a subformula in braces.
+%For example, |\mathopen\mathchar"1234| is equivalent to |\mathchar"4234|,
+%because |\mathopen| forces class~4 (opening). In the formula
+%`|$G\mathbin:H$|', the ^{colon} is~treated as a binary operation.
+%And Appendix~B constructs large opening symbols by
+%defining ^|\bigl||#1| to be an abbreviation for
+%\begintt
+%\mathopen{\hbox{$\left#1 ...\right.$}}
+%\endtt
+%There's also an eighth classification, ^|\mathinner|, which is not
+%normally used for individual symbols; fractions and ^|\left||...|^|\right|
+%constructions are treated as ``inner'' subformulas, which means that
+%they will be surrounded by additional space in certain circumstances.
+%All other subformulas are generally treated as ordinary symbols,
+%whether they are formed by |\overline| or |\hbox| or |\vcenter| or
+%by simply being enclosed in braces. Thus, |\mathord| isn't really
+%a necessary part of the \TeX\ language; instead of typing
+%`|$1\mathord,234$|' you can get the same effect from `|$1{,}234$|'.
+\ddanger  \TeX\ 把类型与子公式以及单个字符联系起来。%
+因此，例如，如果需要的话，可以把一个复杂的式子看作二元运算或关系符号等等。%
+为此要用到命令 |\mathord|, |\mathop|, |\mathbin|, |\mathrel|, |\mathopen|,
+|\mathclose| 和 |\mathpunct|;
+它们的每个后面都可以跟单个字符或者放在大括号中的子公式。%
+例如，|\mathopen\mathchar"1234| 等价于 |\mathchar"4234|,
+因为 |\mathopen| 把类强制变成第 4 类(开符号)。%
+在公式`|$G\mathbin:H$|'中，冒号被看作二元运算。%
+通过把 |\bigl||#1| 定义为
+\begintt
+\mathopen{\hbox{$\left#1 ...\right.$}}
+\endtt
+附录 B 构造了大量开符号。%
+还有第 8 类，|\mathinner|, 它一般不用在单个符号上；
+分数或 |\left||...||\right| 式子被看作``内部''子公式时，
+就意味着在某些时候它们外面要有额外的间距。%
+所有其它子公式一般被看作普通符号，不管它们是由 |\overline|,
+|\hbox| 或 |\vcenter| 生成的，或者是封装在大括号中的。%
+因此，|\mathord| 其实在 \TeX\ 语言中是不必要的；
+不用输入`|$1\mathord,234$|', 照样可以用`|$1{,}234$|'得到同样的效果。
+
+%\ddangerexercise Commands like |\mathchardef\alpha="010B| are used in
+%Appendix~B to define the lowercase ^{Greek} letters. Suppose that you want
+%to extend plain \TeX\ by putting ^{boldface math italic} letters
+%in family~9, analogous to the normal math italic letters in family~1.
+%\ (Such fonts aren't available in stripped down versions of \TeX, but
+%let's assume that they exist.) \ Assume that the control sequence
+%|\bmit| has been defined as an abbreviation for `|\fam=9|'; hence
+%`|{\bmit b}|' will give a boldface math italic~|b|. What change to the
+%definition of\/ |\alpha| will make |{\bmit\alpha}| produce a boldface~alpha?
+%\checkequals\bmiexno\exno
+%\answer |\mathchardef\alpha="710B|. Incidentally, |{\rm\alpha}| will
+%then give a spurious result, because character position \hex{0B} of
+%roman fonts does not contain an alpha; you should warn
+%your users about what characters they are allowed to type under the
+%influence of special conventions like ^|\rm|.
+\ddangerexercise \1像 |\mathchardef\alpha="010B| 这样的命令在附录 B
+中用来定义小写^{希腊字母}。假定你要扩展 plain \TeX\ ，
+把加粗的数学意大利字母放在第 9 族，就像常用的数学意大利字母放在第 1 族一样。%
+（这样的字体在最简版 \TeX\ 中不能用，但是我们假定它存在。）%
+假设控制系列 |\bmit| 已经定义为 `|\fam=9|'；
+因此 `|{\bmit b}|' 将给出加粗的数学意大利字母 |b|。
+怎样改变定义使得 |{\bmit\alpha}| 得到的是加粗的 alpha？
+\checkequals\bmiexno\exno
+\answer |\mathchardef\alpha="710B|。顺便说一下，
+这样 |{\rm\alpha}| 将给出错误的结果，因为罗马字体的 \hex{0B} 位置不是 alpha 字符；
+你应当警告用户在使用 ^|\rm| 时允许使用哪些字符。
+
+%\ddanger ^{Delimiters} are specified in a similar but more complicated
+%way. Each character has not only a~|\catcode| and a~|\mathcode| but also
+%a~^|\delcode|, which is either negative (for characters that should not
+%act as delimiters) or less than \hex{1000000}. In other words,
+%nonnegative delcodes consist of six hexadecimal digits. The first three
+%digits specify a ``small'' variant of the delimiter, and the last three
+%specify a ``large'' variant. For example, the command
+%\begintt
+%\delcode`x="123456
+%\endtt
+%means that if the letter |x| is used as a delimiter, its small variant
+%is found in position \hex{23} of family~1, and its large variant is found
+%in position \hex{56} of family~4. If the small or large variant is
+%given as |000|, however (position~0 of ^{family~0}), that variant is ignored.
+%\TeX\ looks at the delcode when a character follows ^|\left| or ^|\right|,
+%or when a character follows one of the ^|withdelims| commands; a
+%negative delcode leads to an error message, but otherwise \TeX\ finds
+%a suitable delimiter by first trying the small variant and then
+%the large. \ (Appendix~G discusses this process in more detail.) \
+%For example, Appendix~B contains the commands
+%\begintt
+%\delcode`(="028300  \delcode`.=0
+%\endtt
+%which specify that the small variant of a left parenthesis is found in
+%position \hex{28} of family~0, and that the large variant is in position~0
+%of family~3; also, a period has no variants, hence `|\left.|'\ will produce
+%a ^{null delimiter}. There actually are several different left parenthesis
+%symbols in family~3; the smallest is in position~0, and the others are
+%linked together by information that comes with the font. All delcodes
+%are~$-1$ until they are changed by a |\delcode| command.
+\ddanger 分界符由一种类似但更复杂的方法给出。%
+每个字符不但有一个 |\catcode| 和一个 |\mathcode|,
+还有一个 |\delcode|, 它或者是负值(对不作为分界符使用的字符),
+或者小于 \hex{1000000}。%
+换句话说，非负的 delcode 由 6 位十六进制数组成。%
+前三个规定了分界符的``小''组分，后三个规定了``大''组分。%
+例如，命令
+\begintt
+\delcode`x="123456
+\endtt
+意思是，如果字母 |x| 被作为分界符使用，它的小组分在第 1 族的位置 \hex{23} 上，
+大组分在第 4 族的位置 \hex{56} 上。%
+但是如果大组分或小组分为 |000|~(第 0 族的位置 0 上),
+此组分将忽略掉。%
+当组分跟在 |\left| 或 |\right| 后面，或者在某个 |withdelims| 命令后时，
+ \TeX\ 才用到 delcode;
+负的 delcode 会产生一个错误信息，
+但是其它时候 \TeX\ 通过先找小组分再找大组分而得到一个适当的分界符。%
+(附录 G 讨论了这个过程的细节。)
+例如，附录 B 中包含命令
+\begintt
+\delcode`(="028300  \delcode`.=0
+\endtt
+它表明，左圆括号的小组分在第 0 族的位置 \hex{28} 上，
+大组分在第 3 族的位置 0 上；
+还有，句点没有什么组分，因此`|\left.|'得到的是一个空分界符。%
+实际上，在第 3 族中有几个不同的左括号符号；
+最小的在位置 0,
+其它的通过字体中的信息链接在一起。%
+所有的 delcode 在被命令 |\delcode| 改变之前都是 $-1$。
+
+%\ddangerexercise Appendix~B defines |\delcode`<| so that there is a
+%shorthand notation for ^{angle brackets}. Why do you think Appendix~B
+%doesn't go further and define |\delcode`{|?
+%\answer If\/ |\delcode`{| were set to some nonnegative delimiter code, you
+%would get no error message when you wrote something like `|\left{|'.
+%This would be bad because strange effects would happen when certain
+%subformulas were given as arguments to macros, or when they appeared
+%in alignments. But it has an even worse defect, because a user who
+%gets away with `|\left{|' is likely to try also `|\bigl{|', which
+%fails miserably.
+\ddangerexercise 附录 B 定义了 |\delcode`<|，使得^{角括号}有简短的名称。
+想想为什么附录 B 不进一步定义出 |\delcode`{|？
+\answer 如果给 |\delcode`{| 设定了非负的分界码，
+在像 `|\left{|' 这样写时你不会得到任何错误信息。
+这个定义是糟糕的，因为当某些子公式被作为宏参量，或者当它们出现在阵列中时，
+将会有奇怪的效果。但它还有一个更加糟糕的缺点，
+因为顺利使用 `|\left{|' 的用户将可能尝试使用 `|\bigl{|'，
+这将会失败得很惨。
+
+%\ddanger A delimiter can also be given directly, as `^|\delimiter|\<number>'.
+%In this case the number can be as high as \hex{7FFFFFF}, i.e., seven
+%hexadecimal digits; the leading digit specifies a class, from 0 to~7,
+%as in a |\mathchar|. For example, Appendix~B contains the definition
+%\begintt
+%\def\langle{\delimiter"426830A }
+%\endtt
+%and this means that ^|\langle| is an opening (class 4) whose small
+%variant is \hex{268} and whose large variant is \hex{30A}. When |\delimiter|
+%appears after |\left| or |\right|, the class digit is ignored; but
+%when |\delimiter| occurs in other contexts, i.e., when \TeX\ isn't
+%looking for a delimiter, the three rightmost digits are dropped and
+%the remaining four digits act as a |\mathchar|. For example, the expression
+%`|$\langle x$|' is treated as if it were `|$\mathchar"4268 x$|'.
+\ddanger 分界符也可以直接给出，就象`|\delimiter|\<number>'这样。%
+在这种情况下，数字最大为 \hex{7FFFFFF},
+即七位十六进制数；领头的数字给出类，从 0 到 7, 象在 |\mathchar| 中一样。%
+例如，附录 B 包含定义
+\begintt
+\def\langle{\delimiter"426830A }
+\endtt
+它的意思是，|\langle| 是一个开符号(第 4 类), 其小组分为 \hex{268},
+大组分为 \hex{30A}。%
+当 |\delimiter| 出现在 |\left| 或 |\right| 后面时，
+类的数字忽略掉；
+但是当 |\delimiter| 出现在其它情况下时，即，当 \TeX\ 不把它看作分界符时，
+三个最右边的数字去掉，剩下的四个作为 |\mathchar| 出现。%
+例如，式子`|$\langle x$|'将被看作`|$\mathchar"4268 x$|'。
+
+%\ddangerexercise What goes wrong if you type
+%`|\bigl\delimiter"426830A|'\thinspace?
+%\answer Since |\bigl| is defined as a macro with one parameter,
+%it gets just `|\delimiter|' as the argument. You have to write
+%`|\bigl{\delimiter"426830A}|' to make this work. On the other hand,
+%|\left| will balk if the following character is a left brace. Therefore
+%it's best to have control sequence names for all delimiters.
+\ddangerexercise \1输入`|\bigl\delimiter"426830A|'会产生什么错误？
+\answer 由于 |\bigl| 被定义为有一个参数的宏，它将以 `|\delimiter|' 为参数。
+你得写成 `|\bigl{\delimiter"426830A}|' 以让它正常执行。
+另一方面，当随后的字符为左花括号时 |\left| 将出错。
+因此，最好给所有分界符都定义一个控制系列名。
+
+%\ddanger Granted that these numeric conventions for |\mathchar| and
+%|\delimiter| are not beautiful, they sure do pack a lot of information into
+%a small space. That's why \TeX\ uses them for low-level definitions inside
+%formats. Two other low-level primitives also deserve to be mentioned:
+%^|\radical| and ^|\mathaccent|. Plain \TeX\ makes ^{square root signs}
+%and math accents available by giving the commands
+%\begintt
+%\def\sqrt{\radical"270370 }
+%\def\widehat{\mathaccent"362 }
+%\endtt
+%and several more like them. The idea is that |\radical| is followed by
+%a delimiter code and |\mathaccent| is followed by a math character code,
+%so that \TeX\ knows the family and character positions for the symbols
+%used in radical and accent constructions. Appendix~G gives precise
+%information about the positioning of these characters. By changing the
+%definitions, \TeX\ could easily be extended so that it would typeset a
+%variety of different radical signs and a variety of different accent
+%signs, if such symbols were available in the fonts.
+%^^{surd signs, see radical}
+\ddanger 当然 |\mathchar| 和 |\delimiter| 的这些数字约定不好看，
+它们确实太臃肿了。%
+这就是 \TeX\ 把它们作为格式中低级定义的原因。%
+还有两个低级原始命令要提一下：
+~|\radical| 和 |\mathaccent|。%
+Plain \TeX\ 通过命令
+\begintt
+\def\sqrt{\radical"270370 }
+\def\widehat{\mathaccent"362 }
+\endtt
+给出根号符号和数学重音，还有几个类似的命令。%
+思路是，|\radical| 后面跟的是分界符代码，|\mathaccent| 后面跟的是%
+数学组分代码，使得 \TeX\ 知道了用在根号和重音构造中的族和字符位置。%
+附录 G 给出了这些字符位置的准确信息。%
+通过改变定义， \TeX\ 很容易得扩展到排版各种不同的根号和各种不同的重音，
+只要这样的符号在字体中可用。
+
+%\ddanger Plain \TeX\ uses ^{family~1} for math italic letters, ^{family~2} for
+%ordinary math symbols, and ^{family~3} for large symbols. \TeX\ insists that
+%^^{math fonts}
+%the fonts in families 2 and~3 have special ^|\fontdimen| parameters,
+%which govern mathematical spacing according to the rules in Appendix~G\null;
+%the ^|cmsy| and ^|cmex| ^{symbol fonts} have these parameters, so
+%their assignment to families 2 and~3 is almost mandatory. \ (There is, however,
+%a way to modify the parameters of any font, using the ^|\fontdimen| command.) \
+%^|INITEX| initializes the mathcodes of all ^{letters} |A| to~|Z| and |a| to~|z|
+%so that they are symbols of class~7 and family~1; that's why
+%it is natural to use family~1 for math italics.  Similarly, the digits |0|
+%to~|9| are class~7 and family~0.  None of the other families
+%is treated in any special way by \TeX. Thus, for example, plain \TeX\ puts
+%^{text italic} in family~4, slanted roman in family~5, bold roman in family~6,
+%and typewriter type in family~7, but any of these numbers could be
+%switched around. There is a macro ^|\newfam|, analogous to |\newbox|,
+%that will assign symbolic names to families that aren't already used.
+\ddanger Plain \TeX\ 把第 1 族用于数学 italic 字母，
+第 2 族用于普通数学符号，第 3 族用于巨符号。%
+ \TeX\ 的第 2 和 3 族中给出了一个叫 |\fontdimen| 的特殊参数，
+由它按照附录 G 的规则来控制数学间距；
+符号字体 |cmsy| 和 |cmex| 有这些参数，
+因此，差不多把它们都指定到第 2 和 3 族中。%
+(但是，用命令 |\fontdimen| 可用修改任何字体的参数。)
+|INITEX| 初始化所有字母 |A| 到 |Z| 和 |a| 到 |z| 的 mathcode,
+使得它们变成第 7 类第 1 族的符号；
+这就是把第 1 族用于数学 italic 的原因。%
+类似地，数字 |0| 到 |9| 是第 7 类第 0 族。%
+ \TeX\ 不把其它族进行特殊对待了。%
+因此，例如，~plain \TeX\ 把文本 italic 字体放在第 4 族，~slanted roman 字体%
+放在第 5 族，bold roman 放在第 6 族，
+typewriter 字体放在第 7 族，但是这些数字可以转换。%
+有一个叫 |\newfam| 的宏，类似于 |\newbox|,
+它把符号的名称指向未使用的族。
+
+%\ddanger When \TeX\ is in horizontal mode, it is making a horizontal list;
+%in vertical mode, it is making a vertical list. Therefore it should come
+%as no great surprise that \TeX\ is making a ^{math list} when it is in
+%^{math mode}. The contents of horizontal lists were explained in Chapter~14,
+%and the contents of vertical lists were explained in Chapter~15; it's time
+%now to describe what math lists are made of. Each item in a math list
+%is one of the following types of things:\enddanger
+\ddanger 当 \TeX\ 在水平模式时，它制作一个水平列；
+在垂直模式下，制作一个垂直列。%
+因此，在数学模式下当然得到的是数学列了。%
+水平列的讨论见第十四章，
+垂直列的讨论见第十五章；
+现在讨论的是数学列。%
+数学列中的每个项目都是下列某个类型：\enddanger
+
+%\smallskip
+%\item\bull an ^{atom} (to be explained momentarily);
+\smallskip
+\item\bull 原子(马上就讨论);
+
+%\item\bull horizontal material (a rule or discretionary or penalty or
+%``whatsit'');
+\item\bull 水平内容(标尺，可断点，惩罚或``无名'');
+
+%\item\bull vertical material (from |\mark| or |\insert| or |\vadjust|);
+\item\bull 垂直内容(来自 |\mark|, |\insert| 或 |\vadjust|);
+
+%\item\bull a glob of ^{glue} (from |\hskip| or |\mskip| or |\nonscript|);
+\item\bull 粘连团(来自 |\hskip|, |\mskip| 或 |\nonscript|);
+
+%\item\bull a ^{kern} (from |\kern| or |\mkern|);
+\item\bull 紧排(来自 |\kern| 或 |\mkern|);
+
+%\item\bull a ^{style change} (from |\displaystyle|, |\textstyle|, etc.);
+\item\bull 样式改变(来自 |\displaystyle|, |\textstyle|, 等等);
+
+%\item\bull a ^{generalized fraction} (from |\above|, |\over|, etc.);
+\item\bull 广义分数(来自 |\above|, |\over|, 等等);
+
+%\item\bull a ^{boundary} (from |\left| or |\right|);
+\item\bull 分界符(来自 |\left| 或 |\right|);
+
+%\item\bull a four-way ^{choice} (from ^|\mathchoice|).
+\item\bull 四分支选择(来自 |\mathchoice|).
+
+%\ddanger The most important items are called {\sl atoms}, and they have
+%three parts: a {\sl^{nucleus}}, a {\sl^{superscript}}, and a {\sl^{subscript}}.
+%For example, if you type
+%\begintt
+%(x_i+y)^{\overline{n+1}}
+%\endtt
+%in math mode, you get a math list consisting of five atoms:
+%$($, $x_i$, $+$, $y$, and~$)^{\overline{n+1}}$. The nuclei of these atoms
+%are $($, $x$, $+$, $y$, and~$)$; the subscripts are empty except for the
+%second atom, which has subscript~$i$; the superscripts are empty except for the
+%last atom, whose superscript is~$\overline{n+1}$. This superscript is
+%itself a math list consisting of one atom, whose nucleus is~$n+1$; and that
+%nucleus is a math list consisting of three atoms.
+\ddanger \1最重要的项目称为{\KT{9}原子}, 有三个部分：
+{\KT{9}核，上标，下标}。%
+例如，在数学模式下，如果输入
+\begintt
+     (x_i+y)^{\overline{n+1}}
+\endtt
+就得到由五个原子组成的数学列：
+$($, $x_i$, $+$, $y$ 和 $)^{\overline{n+1}}$。%
+这些原子的核为 $($, $x$, $+$, $y$ 和 $)$;
+除了第二项下标为 $i$ 外其它下标都是空的；
+除了最后一项的上标为 $\overline{n+1}$ 其它上标都是空的。%
+这个上标自己也是由一个原子组成的数学列，其核为 $n+1$;
+这个核是由三个原子组成的数学列。
+
+%\ddanger There are thirteen kinds of atoms, each of which might act
+%differently in a formula; for example, `$($' is an Open atom because
+%^^{atomic types, table}
+%it comes from an opening. Here is a complete list of the different kinds:
+%$$\halign{\indent#\hfil&\enskip#\hfil\cr
+%Ord&is an ordinary atom like `$x$'\thinspace;\cr
+%Op&is a large operator atom like `$\sum$'\thinspace;\cr
+%Bin&is a binary operation atom like `$+$'\thinspace;\cr
+%Rel&is a relation atom like `$=$'\thinspace;\cr
+%Open&is an opening atom like `$($'\thinspace;\cr
+%Close&is a closing atom like `$)$'\thinspace;\cr
+%Punct&is a punctuation atom like `$,$'\thinspace;\cr
+%Inner&is an inner atom like `$1\over2$'\thinspace;\cr
+%Over&is an overline atom like `$\overline x$'\thinspace;\cr
+%Under&is an underline atom like `$\underline x$'\thinspace;\cr
+%Acc&is an accented atom like `$\hat x$'\thinspace;\cr
+%Rad&is a radical atom like `$\sqrt2$'\thinspace;\cr
+%Vcent&is a vbox to be centered, produced by |\vcenter|.\cr
+%}$$
+\ddanger 有十三种原子，每种在公式中的表现都不同；
+例如，`$($'是一个开原子，因为它来自开符号。%
+下面是不同种类的完整列表：
+$$\halign{\indent#\hfil&\enskip#\hfil\cr
+Ord&普通原子，如`$x$'\thinspace;\cr
+Op&巨原子，如`$\sum$'\thinspace;\cr
+Bin&二元运算原子，如`$+$'\thinspace;\cr
+Rel&关系原子，如`$=$'\thinspace;\cr
+Open&开原子，如`$($'\thinspace;\cr
+Close&闭原子，如`$)$'\thinspace;\cr
+Punct&标点原子，如`$,$'\thinspace;\cr
+Inner&内部原子，如`$1\over2$'\thinspace;\cr
+Over&上划线原子，如`$\overline x$'\thinspace;\cr
+Under&下划线原子，如`$\underline x$'\thinspace;\cr
+Acc&重音原子，如`$\hat x$'\thinspace;\cr
+Rad&根号原子，如`$\sqrt2$'\thinspace;\cr
+Vcent&|\vcenter| 生成的垂直居中 vbox。\cr
+}$$
+
+%\ddanger An atom's nucleus, superscript, and subscript are called its
+%{\sl ^{fields}}, and there are four possibilities for each of these fields.
+%A field can be\enddanger
+\ddanger 原子的核，上标和下标称为{\KT{9}字段},
+并且每个字段有四种可能；一个字段可以是\enddanger
+
+%\smallskip
+%\item\bull empty;
+\smallskip
+\hskip 20pt\item\bull 空的；
+
+%\item\bull a math symbol (specified by family and position number);
+\item\bull 数学符号(由族和位置给出);
+
+%\item\bull a box; or
+\item\bull 盒子；或者
+
+%\item\bull a math list.
+\item\bull 数学列。
+
+%\smallskip\noindent
+%For example, the Close atom $)^{\overline{n+1}}$ considered above has an
+%empty subscript field; its nucleus is the symbol `$)$', which is
+%character~\hex{28} of family~0 if the conventions of plain \TeX\ are
+%in force; and its superscript field is the math list $\overline{n+1}$.
+%The latter math list consists of an Over atom whose nucleus
+%is the math list $n+1$; and that math list, in turn, consists of
+%three atoms of types Ord, Bin, Ord.
+\smallskip\noindent
+例如，上面讨论的闭原子 $)^{\overline{n+1}}$ 的上标字段是空的；
+核为符号`$)$', 如果采用 plain \TeX\ 的约定，那么它是第 0 族的字符 \hex{28};
+其上标字段为数学列 $\overline{n+1}$。%
+后一个数学列由一个上划线原子组成，其核为数学列 $n+1$;
+而这个数学列由三个原子组成，分别是普通原子，二元运算原子，普通原子。
+
+%\ddanger You can see \TeX's view of a math list by typing ^|\showlists|
+%in math mode. ^^{internal list format}
+%For example, after `|$(x_i+y)^{\overline{n+1}}\showlists|' your log
+%file gets the following curious data:
+%\begindisplay
+%|\mathopen|\cr
+%|.\fam0 (|\cr
+%|\mathord|\cr
+%|.\fam1 x|\cr
+%|_\fam1 i|\cr
+%\noalign{\penalty-500}
+%|\mathbin|\cr
+%|.\fam0 +|\cr
+%\noalign{\penalty-500}
+%|\mathord|\cr
+%|.\fam1 y|\cr
+%\noalign{\penalty-500}
+%|\mathclose|\cr
+%|.\fam0 )|\cr
+%|^\overline|\cr
+%|^.\mathord|\cr
+%|^..\fam1 n|\cr
+%|^.\mathbin|\cr
+%|^..\fam0 +|\cr
+%|^.\mathord|\cr
+%|^..\fam0 1|\cr
+%\enddisplay
+%In our previous experiences with |\showlists| we observed that there can
+%be boxes within boxes, and that each line in the log file is
+%prefixed by dots to indicate its position in the hierarchy. Math lists
+%have a slightly more complex structure; therefore a dot is used to denote
+%the nucleus of an atom, a~`|^|' is used for the superscript field, and
+%a~`|_|' is used for the subscript field. Empty fields are not shown. Thus,
+%for example, the Ord atom~$x_i$ is represented here by three lines
+%`|\mathord|', `|.\fam1 x|', and `|_\fam1 i|'.
+\ddanger 可以通过在数学模式下输入 |\showlists| 看看 \TeX\ 是怎样处理的。%
+例如，编译 `|$(x_i+y)^{\overline{n+1}}\showlists$|' 后，
+在日志文件中得到下列古怪的信息：
+\begindisplay
+|\mathopen|\cr
+|.\fam0 (|\cr
+|\mathord|\cr
+|.\fam1 x|\cr
+|_\fam1 i|\cr
+\noalign{\penalty-500}
+|\mathbin|\cr
+|.\fam0 +|\cr
+\noalign{\penalty-500}
+|\mathord|\cr
+|.\fam1 y|\cr
+\noalign{\penalty-500}
+|\mathclose|\cr
+|.\fam0 )|\cr
+|^\overline|\cr
+|^.\mathord|\cr
+|^..\fam1 n|\cr
+|^.\mathbin|\cr
+|^..\fam0 +|\cr
+|^.\mathord|\cr
+|^..\fam0 1|\cr
+\enddisplay
+\1依照我们前面关于 |\showlists| 的经验可以看出，
+有盒子套盒子，而且 log 文件中每行前面的点表明它所处的层次。%
+数学列的结构略微复杂一些；
+因此，一个点表示原子的核，一个`|^|'用来表示上标字段，
+一个`|_|'用来表示下标字段。%
+空字段没有显示。%
+因此，例如，普通原子 $x_i$ 在这里用三行来表示：
+`|\mathord|', `|.\fam1 x|'和`|_\fam1 i|'。
+
+%\ddanger Certain kinds of atoms carry additional information besides their
+%nucleus, subscript, and superscript fields: An Op atom will be marked
+%`^|\limits|' or `^|\nolimits|' if the normal ^|\displaylimits|
+%convention has been overridden; a Rad atom contains
+%a delimiter field to specify what radical sign is to be used; and an Acc atom
+%contains the family and character codes of the accent symbol.
+\ddanger 某些种类的原子除了核，上标和下标字段外还有额外的东西：
+在正常的 |\displaylimits| 被覆盖时，巨算符原子要标记上`|\limits|' 或 `|\nolimits|';
+根号原子包含根号要用到的分界符字段；
+重音原子包含重音符号的族和字符代码。
+
+%\ddanger When you say ^|\hbox||{...}| in math mode, an Ord atom is placed
+%on the current math list, with the hbox as its nucleus.  Similarly,
+%^|\vcenter||{...}| produces a Vcent atom whose nucleus is a box. But in
+%most cases the nucleus of an atom will be either a symbol or a math list.
+%You can experiment with |\showlists| to discover how other things like
+%fractions and mathchoices are represented internally.
+\ddanger 当在数学模式下输入 |\hbox||{...}| 时，普通原子就放在了当前数学列上，
+其中 hbox 为其核。%
+类似地，|\vcenter||{...}| 得到的 Vcent 原子的核是一个盒子。%
+但是在大多数情况下，原子的核是一个符号或一个数学列。%
+可以用 |\showlists| 试试象分数和 mathchoice 在内部表示为什么东西了。
+
+%\ddanger Chapter~26 contains complete details of how math lists are
+%constructed.  As soon as math mode ends (i.e., when the closing `|$|'
+%occurs), \TeX\ dismantles the current math list and converts it into a
+%horizontal list.  The rules for this conversion are spelled out in
+%Appendix~G\null. You can see ``before and after'' representations of such math
+%typesetting by ending a formula with `|\showlists$\showlists|'; the first
+%|\showlists| will display the math list, and the second will show the
+%(possibly complex) horizontal list that is manufactured from it.
+\ddanger 第二十六章包含了构造数学列的完整细节。%
+一旦数学列结束了(即闭符号`|$|'出现了),  \TeX\ 将卸开当前数学列，
+并且把它转换到水平列。%
+这个转换的规则在附录 G 给出。%
+可以对比这样的数学排版的``前后''表示：在公式结尾输入`|\showlists$\showlists|';
+第一个 |\showlists| 显示的是数学列，第二个显示的是从它加工出的水平列(可能很复杂)。
+
+\endchapter
+
+The learning time is short. A few minutes gives the general flavor, and
+typing a page or two of a paper generally uncovers most of the misconceptions.
+\author ^{KERNIGHAN} and ^{CHERRY}, {\sl A System for %
+  Typesetting Mathematics\/} (1975)
+  % in {\sl Communications of the ACM\/} p152
+
+\bigskip
+
+Within a few hours (a few days at most)
+a typist with no math or typesetting experience
+can be taught to input even the most complex equations.
+\author PETER J. ^{BOEHM}, {\sl Software and Hardware Considerations %
+  for a\break Technical Typesetting System\/} (1976)
+%  in {\sl IEEE Transactions on Professional Communication\/} PC-19, pp15--19
+
+\vfill\eject\byebye

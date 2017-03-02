@@ -1,0 +1,741 @@
+% -*- coding: utf-8 -*-
+
+\input macros
+
+%\beginchapter Chapter 8. The Characters\\You Type
+\beginchapter Chapter 8. 字符输入
+
+\origpageno=43
+
+%A lot of different keyboards are used with \TeX, but few keyboards can
+%produce 256 different symbols. Furthermore, as we have seen, some of the
+%characters that you {\sl can\/} type on your ^{keyboard} are reserved for
+%^^{terminal keyboard}
+%special purposes like escaping and grouping. Yet when we studied fonts it
+%was pointed out that there are 256 characters per font. So how can you
+%refer to the characters that aren't on your keyboard, or that have been
+%pre-empted for formatting?
+\1使用 \TeX\ 时会遇到不同的键盘，但是很少有键盘能提供 256 个不同的字符。%
+还有，就象我们已经看到的那样，某些{\KT{10}可以}从键盘键入的字符被保留为象转义符和编组等%
+特殊目的而使用。%
+但\hbox{是，} 当我们讨论字体时就提出了，每个字体有 256 个字符。%
+那么怎样才能得到不在键盘上或者已经被占用的字符呢？
+
+%One answer is to use control sequences. For example, the plain format
+%of Appendix B\null, which defines |%| to be a special kind of symbol so that you
+%can use it for comments, defines the control sequence |\%| to mean
+%a ^{percent sign}.
+一个方法是利用控制系列。%
+例如，在附录 B 的 plain \TeX\ 格式中，把 |%| 定义为表示注释的一类特殊符号，
+就可以定义控制系列 |\%| 来得到百分号。
+
+%To get access to any character whatsoever, you can type
+%\begindisplay
+%|\char|\<number>
+%\enddisplay
+%where \<number> is any number from 0 to 255 (optionally followed by a space);
+%you will get the corresponding character from the current font. That's how
+%Appendix~B handles |\%|; it defines `|\%|' to be an abbreviation for
+%`|\char37|', since 37 is the character code for a percent sign.
+为了得到任意字符，可以键入
+\begindisplay
+|\char|\<number>
+\enddisplay
+其中，\<number> 是从 0 到 255 的任意数字(后面要跟一个随意的空格);
+就会得到当前字体的相应字符。%
+附录 B 也是这样得到 |\%| 的；
+它把`|\%|'定义为`|\char37|'缩写，因为 37 是百分号的字符\hbox{代码。}
+
+%The codes that \TeX\ uses internally to represent characters are based on
+%``^{ASCII},'' the American Standard Code for Information Interchange.
+%^^{internal character codes} ^^{character codes}
+%Appendix~C gives full details of this code, which assigns numbers to
+%certain control functions as well as to ordinary letters and punctuation
+%marks.  For example, ^\<space>${}=32$ and ^\<return>${}=13$.
+%There are 94~standard visible symbols, and they have been assigned code
+%numbers from 33 to~126, inclusive.
+\TeX\ 在内部表示字符的代码是基于``ASCII''的，即美国标准信息交换码。%
+附录 C 给出了这个代码的整个详细资料，它指定了某些控制符以及普通字母和标点符号的代码。%
+例如，\<space>${}=32$ 和 \<return>${}=13$。%
+有 94 个可见的标准符号，它们的代码是从 33 到 126。
+
+%It turns out that `|b|' is character number 98 in ASCII. So you can
+%typeset the word |bubble| in a strange way by putting
+%\begintt
+%\char98 u\char98\char98 le
+%\endtt
+%into your manuscript, if the |b|-key on your keyboard is broken. \
+%(An optional space is ignored after constants like `|98|'.
+%Of course you need the |\|, |c|, |h|, |a|, and~|r| keys to type `^|\char|',
+%so let's hope that they are always working.)
+这里，`|b|'在 ASCII 中的字符代码是 98。%
+所以，如果键盘的 |b| 键坏了，那么你可以用下列怪方法键入单词 |bubble|:
+\begintt
+\char98 u\char98\char98 le
+\endtt
+(常数`|98|'后面的任意空格将被忽略。
+当然，你需要 |\|, |c|, |h|, |a| 和 |r|这些键来键入`|\char|',
+所以它们必须是好的。)
+
+%\danger \TeX\ always uses the internal character code of Appendix~C
+%for the standard ASCII characters,
+%regardless of what external coding scheme actually appears in the files
+%being read.  Thus, |b| is 98 inside of \TeX\ even when your computer
+%normally deals with ^{EBCDIC} or some other non-ASCII scheme; the \TeX\
+%software has been set up to convert text files to internal code, and to
+%convert back to the external code when writing text files.
+%Device-independent (^|dvi|) output files use \TeX's internal code. In
+%this way, \TeX\ is able to give identical results on all computers.
+\danger \TeX\ 总是使用附录 C 的标准 ASCII 字符的内部字符代码，
+不管读入的文件中的外部代码实际的表\hbox{现。}%
+因此，即使当计算机通常是用 EBCDIC 还是其它非 ASCII 设置来处理，
+|b| 在 \TeX\ 中也是 98; \TeX\ 软件已经被设置为把文本文件转换为内部代码，
+并且当输入文本文件时再转换回外部代码。%
+设备独立(|dvi|)文件使用的是 \TeX\ 内部代码。%
+因此，\TeX\ 在所有计算机上都给出相同的结果。
+
+%\danger Character code tables like those in Appendix~C often give the code
+%numbers in {\sl ^{octal notation}}, i.e., the radix-8 number system, in which
+%the digits are {\it0},~{\it1}, {\it2}, {\it3}, {\it4}, {\it5}, {\it6},
+%and~{\it7}.\footnote*{The author of this manual likes to use italic digits
+%for octal numbers, and typewriter type for hexadecimal numbers, in order
+%to provide a typographic clue to the underlying radix whenever possible.}
+%Sometimes {\sl^{hexadecimal notation}\/} is also used, in which case the
+%digits are |0|,~|1|, |2|, |3|, |4|, |5|, |6|, |7|, |8|, |9|, |A|, |B|, |C|,
+%|D|, |E|, and~|F|. For example, the octal code for `|b|' is {\it142}, and
+%its hexadecimal code is |62|. A ^\<number> in \TeX's language can begin
+%with~a~|'|, in which case it is regarded as octal, or with a |"|, when it is
+%regarded as hexadecimal. Thus, |\char'142| and |\char"62| are equivalent
+%to |\char98|. The legitimate character codes in octal notation run from
+%\oct0 to \oct{377}; in hexadecimal, they run from \hex0 to \hex{FF}.
+%^^{apostrophe}^^{doublequote}
+\danger 象附录 C 中的字符代码表通常以{\KT{10}八进制}的方式给出代码数字，
+即，以 8 为基数的方法，其中的数字是 {\it0},~{\it1}, {\it2}, {\it3}, {\it4},
+{\it5}, {\it6} 和 {\it7}。(本手册的作者喜欢用 italic 数字表示八进制数，
+以 typewriter 字体表示十六进制数，目的是尽可能在排版上提示不同的进制。)
+有时候，也使用{\KT{10}十六进制}, 在这种情况下，数字为%
+|0|,~|1|, |2|, |3|, |4|, |5|, |6|, |7|, |8|, |9|, |A|, |B|, |C|,
+|D|, |E| 和 |F|。%
+\1例如，`|b|'的八进制代码是{\it142}, 十六进制代码是 |62|。%
+在 \TeX\ 中，如果 \<number> 的数字前面有 |'| 表示其为八进制，如果前面有 |"| 将%
+表示十六进制。%
+因此，|\char'142| 和 |\char"62| 等价于 |\char98|。%
+在八进制中，合法的字符代码是从 \oct0 到 \oct{377};
+在十六进制中，则是从 \hex0 到 \hex{FF}。
+
+%\danger But \TeX\ actually provides another kind of \<number> that makes it
+%unnecessary for you to know ASCII at all! The token |`|$_{12}$ (^{left quote}),
+%when followed by any character token or by any control sequence token
+%whose name is a single character, stands for \TeX's internal code for the
+%character in question. For example, |\char`b| and |\char`\b| are also
+%equivalent to |\char98|. ^^{reverse apostrophe}
+%If you look in Appendix~B to see how |\%| is defined, you'll notice that
+%the definition is
+%\begintt
+%\def\%{\char`\%}
+%\endtt
+%instead of\/ |\char37| as claimed above.
+\danger 但是，\TeX\ 提供了另外一种方法，使得你根本不必知道 ASCII!
+记号 |`|$_{12}$~(左引号)后面跟任意字符记号或者跟单个字符命名的任意控制系列时，
+表示所跟的字符的 \TeX\ 内部代码。%
+例如，|\char`b| 和 |\char`\b| 也等价于 |\char98|。%
+如果你阅读附录 B, 看看 |\%| 是怎样来定义的，就会发现定义为
+\begintt
+\def\%{\char`\%}
+\endtt
+而不是前面声称的 |\char37|。
+
+%\dangerexercise What would be wrong with |\def\%{\char`%}|?
+%\answer The |%| would be treated as a comment character, because its
+%category code is~14; thus, no |%| token or |}| token would get through
+%to the gullet of \TeX\ where numbers are treated. When a character is
+%of category 0, 5, 9, 14, or~15, the extra |\| must be used; and the
+%|\| doesn't hurt, so you can always use it to be safe.
+\dangerexercise |\def\%{\char`%}|错在哪里？
+\answer 第二个 |%| 将被视为注释符，因为它的类别码为 14；
+从而，|%| 记号和 |}| 记号都无法到达 \TeX\ 的食道；数字都在食道中处理。
+当字符属于第 0, 5, 9, 14 或 15 类时，必须使用额外的 |\|；
+而 |\| 又不会有任何坏处，因此为安全起见你可以始终使用它。
+
+%\ddanger The preface to this manual points out that the author
+%tells little white lies from time to time. Well, if you actually
+%check Appendix~B you'll find that
+%\begintt
+%\chardef\%=`\%
+%\endtt
+%is the true definition of\/ |\%|. Since format designers often want to
+%associate a special character with a special control sequence name, \TeX\
+%provides the construction `^|\chardef|\<control sequence>|=|\<number>'
+%for numbers between 0 and 255, as an efficient alternative to
+%`^|\def|\<control sequence>|{\char|\<number>|}|'.
+\ddanger 本手册前言中提到，作者要不时地编些谎话。%
+唔，如果你亲自去核对附录 B, 就会发现，
+\begintt
+      \chardef\%=`\%
+\endtt
+是 |\%| 的真实定义。%
+因为格式的设计者通常希望把一个特殊字符与一个特殊控制系列联系起来，
+所以 \TeX\ 给出了一个命令`|\chardef|\<control sequence>|=|\<number>',
+其中的数字在 0 和 255 之间，它可以有效地替代%
+`|\def|\<control sequence>|{\char|\<number>|}|'。
+
+%Although you can use |\char| to access any character in the current
+%font, you can't use it in the middle of a control sequence. For example,
+%if you type
+%\begintt
+%\\char98
+%\endtt
+%\TeX\ reads this as the control sequence |\\| followed by |c|, |h|, |a|,
+%etc., not as the control sequence |\b|.
+虽然你可以用 |\char| 来得到当前字体的任意字符，但是它们不能在控制系列中间使用。%
+例\hbox{如，} 如果你键入
+\begintt
+\\char98
+\endtt
+\TeX\ 将把它认为是控制系列 |\\|, 后面跟着 |c|, |h|, |a| 等等，
+而不是控制系列 |\b|。
+
+%You will hardly ever need to use |\char| when typing a manuscript, since
+%the characters you want will probably be available as predefined control
+%sequences; |\char| is primarily intended for the designers of book formats
+%like those in the appendices. But some day you may require a ^{special
+%symbol}, and you may have to hunt through a font catalog until you find
+%it. Once you find it, you can use it by simply selecting the appropriate
+%font and then specifying the character number with |\char|. For example,
+%the ``^{dangerous bend}'' sign used in this manual appears as character
+%number~127 of font ^|manfnt|, and that font is selected by the control
+%sequence ^|\manual|. The macros in Appendix~E therefore display dangerous
+%bends by saying `|{\manual\char127}|'.
+在输入文稿时，你几乎用不到 |\char|, 因为你可能要用到的字符已经有了相应的控制系列；
+|\char| 主要是为象附录中的那些格式设计者所准备的。%
+但是，有一天，你可能需要一个特殊的字符，并且可能必须在字体的目录中才能找到它。%
+一旦找到后，你可以直接通过选定相应的字体在用 |\char| 给出字符代码来调用它。%
+例如，本手册使用的``危险''标志出现在字体 |manfnt| 中，字符代码是 127,
+并且字体用控制系列 |\manual| 选定。%
+因此，附录 E 中的宏用`|{\manual\char127}|'来给出这个危险标志。
+
+%We have observed that the ASCII character set includes only 94 printable
+%symbols; but \TeX\ works internally with 256 different character codes,
+%from 0 to 255, each of which is assigned to one of the sixteen categories
+%described in Chapter~7. If your keyboard has additional symbols, or if it
+%doesn't have the standard~94, the people who installed your local \TeX\ system
+%can tell you the correspondence between what you type and the character
+%number that \TeX\ receives. Some people are fortunate enough to have keys
+%marked `{\tentex\char'32}' and `{\tentex\char'34}' and `{\tentex\char'35}';
+%it is possible to install \TeX\ so that it will recognize these handy symbols
+%and make the typing of mathematics more pleasant. But if you do not have
+%such keys, you can get by with the control sequences ^|\ne|, ^|\le|,
+%and ^|\ge|. ^^{not-equal}^^{less-or-equal}^^{greater-or-equal}
+我们已经看到，ASCII 字符集只包括了 94 个可打印的字符；
+但是 \TeX\ 要处理从 0 到 255 的 256 个不同的字符，
+它们中的每一个都被指定了第七章中讨论的 16 类中的一个。%
+如果你的键盘有额外的符号，或者如果它不是标准的 94 键，安装本地 \TeX\ 系统的人会%
+告诉你键入的内容与 \TeX\ 接受到的代码之间的对应关系。%
+\1有些人很幸运，键盘上有`{\tentex\char'32}', `{\tentex\char'34}'和`{\tentex\char'35}';
+可以按照 \TeX\ 使得它认识这些便利的符号，并且使得数学符号的键入更方便。%
+但是如果你没有这些键，就可以用控制系列 |\ne|, |\le| 和 |\ge| 来得到它们。
+
+%\danger \TeX\ has a standard way to refer to the invisible characters of ASCII:
+%Code~0 can be typed as the sequence of three characters |^^@|, code~1 can
+%be typed |^^A|, and so on up to code~31, which is |^^_| (see Appendix~C\null).
+%If the character following |^^| has an internal code between 64 and 127, \TeX\
+%subtracts 64 from the code; if the code is between 0 and 63, \TeX\
+%adds~64. Hence code 127 can be typed |^^?|, and
+%the dangerous bend sign can be obtained by saying
+%|{\manual^^?}|. However, you must change the category code of character
+%127 before using it, since this character ordinarily has category~15
+%(^{invalid}); say, e.g., |\catcode`\^^?=12|.
+%^^{double hat} ^^{hat hat}
+%The |^^| notation is different from |\char|, because |^^| combinations are
+%like single characters; for example, it would not be permissible to say
+%|\catcode`\char127|, but |^^| symbols can even be used as letters within
+%control words.
+\danger \TeX\ 有一个指向不可见 ASCII 字符的标准方法：
+代码 0 可以键入为三个字符的系列 |^^@|,
+代码 1 为 |^^A|, 等等诸如此类直到代码 31——|^^_|(见附录 C)。
+如果跟着 |^^| 的字符的内部代码是 64 到 127, 那么 \TeX\ 将它们的代码减去 64;
+如果代码是从 0 到 63, 那么 \TeX\ 要把它加上 64。%
+因此，代码 127 可以键入为 |^^?|, 并且危险标志可以用 |{\manual^^?}| 来得到。%
+但是，在使用字符的类代码 127 前，你必须改变它，
+因为这个字符一般是 15 类(无用字符); 比如，用 |\catcode`\^^?=12|。%
+符号 |^^| 与 |\char| 不同，因为 |^^| 可以象单个字符一样组词；
+例如，不允许使用 |\catcode`\char127|, 但是 |^^| 符号可以象字母一样在控制词中使用。
+
+%\danger One of the overfull box messages in Chapter 6 illustrates the fact
+%that \TeX\ sometimes uses the funny |^^| convention in its output:
+%The umlaut character in that example appears as |^^?|, and the cedilla appears
+%as~|^^X|, because `\thinspace\"{}\thinspace' and `\char'30' occur in
+%positions \oct{177} and~\oct{30} of the ^|\tenrm| font.
+\danger 在第六章，盒子溢出的一个信息说明了一个问题，
+\TeX\ 有时候在输出中使用古怪的 |^^| 规则：
+在那个例子中的变元音字符以 |^^?| 出现，并且变音符号以 |^^X| 出现，
+因为`\thinspace\"{}\thinspace'和`\char'30'出现在 |\tenrm| 字体的%
+\oct{177} 和 \oct{30}位置。%
+
+%\danger There's also a special convention in which |^^| is
+%followed by {\sl two\/} ``lowercase hexadecimal digits,'' |0|--|9| or |a|--|f|.
+%With this convention, all 256 characters are obtainable in a uniform
+%way, from |^^00| to |^^ff|. Character 127 is |^^7f|.
+\danger 还有一个特殊的规则，其中 |^^| 后跟{\KT{10}两个}``小写十六进制数字'',
+|0|--|9| 或 |a|--|f|。%
+利用这个规则，所有 256 个字符可以用一种方法得到，即从 |^^00| 到 |^^ff|。%
+字符 127 是 |^^7f|。
+
+%\danger Most of the |^^| codes are unimportant except in unusual applications.
+%But |^^M| is particularly noteworthy because it is code 13, the ASCII
+%^\<return> that \TeX\ normally places at the right end of every line of
+%your input file. By changing the category of~|^^M| you can obtain useful
+%special effects, as we shall see later. ^^{hat hat M}
+\danger 除了不常见的应用外，大多数 |^^| 代码并不重要。%
+但是 |^^M| 特别值得注意，因为它的代码是 13, 就是 ASCII 的 \<return>,
+一般在输入文件每行的右边结尾。%
+通过改变 |^^M| 的类，可以发挥特殊的作用，我们将在后面看到它。
+
+%\danger The control code |^^I| is also of potential interest, since it's
+%the ASCII ^\<tab>. Plain \TeX\ makes \<tab> act like a blank space.
+\danger 控制代码 |^^I| 也有潜在的意义，因为它是 ASCII 的 \<tab>。%
+Plain \TeX\ 把 \<tab> 看作一个空格。
+
+%\ddanger People who install \TeX\ systems for use with non-American alphabets
+%can make \TeX\ conform to any desired standard.  For example, suppose
+%you have a ^{Norwegian keyboard} containing the letter {\tt\ae}, which
+%^^{Scandinavian letters} ^^{foreign languages}
+%comes in as code~241 (say). Your local format package should define
+%|\catcode`|{\tt\ae}|=11|; then you could have control sequences like
+%|\s|{\tt\ae}|rtrykk|. Your \TeX\ input files could be made readable by
+%American installations of \TeX\ that don't have your keyboard, by
+%substituting |^^f1| for character~241. \ (For example, the stated control
+%sequence would appear as |\s^^f1rtrykk| in the file; your American
+%friends should also be provided with the format that you used, with its
+%|\catcode`^^f1=11|.) \ Of course you should also arrange your fonts
+%so that \TeX's character 241 will print as {\ae}; and you should
+%change \TeX's hyphenation algorithm so that it will do correct
+%Norwegian hyphenation. The main point is that such changes are not
+%extremely difficult; nothing in the design of \TeX\ limits it to the
+%American alphabet. Fine printing is obtained by fine tuning to the
+%language or languages being used.
+%^^{keyboards, non-ASCII}
+\ddanger 使用非美国字母的人可以把 \TeX\ 转变为其它所要的标准。%
+例如，假定你有一个挪威键盘，包含字母 {\tt\ae},
+假定它是斯堪的纳维亚语字母中代码为 241 的字母。%
+你的个人格式包可以定义 |\catcode`|{\tt\ae}|=11|, 这样，你可以使用象%
+~|\s|{\tt\ae}|rtrykk| 这样的控制系列了。%
+用 |^^f1| 代替字符 241 后，你的 \TeX\ 输入文件就可以被没有你的键盘的%
+美国式 \TeX\ 系统所读。%
+(例如，文件中使用的控制系列为 |\s^^f1rtrykk|;
+你的美国朋友也可以使用你的格式，只要设置 |\catcode`^^f1=11| 即可。)
+当然，你也可能排列字体使得 \TeX\ 的字符 241 输出为 {\ae};
+并且你应当改变 \TeX\ 连字算法，使得它能得到正常的挪威语连字符。%
+要点是，这些变化不是非常困难；\TeX\ 的任何设计都不只限于美国字母。%
+使用的语言不同，精细地调节后就得到精美的输出。
+
+%\ddanger European languages can also be accommodated effectively with
+%only a limited character set.
+%For example, let's consider Norwegian again, but suppose that you
+%want to use a keyboard without an {\tt\ae} character. You can arrange the
+%^{font metric file} so that \TeX\ will interpret |ae|, |o/|, |aa|, |AE|,
+%|O/|, and |AA| as ligatures that produce \ae, \o, \aa, \AE, \O, and \AA,
+%respectively; and you could put the characters \aa\ and \AA\ into positions
+%128 and~129 of the font.  By setting |\catcode`/=11| you would be able to
+%use the ligature |o/| in control sequences like `|\ho/yre|'.  \TeX's
+%hyphenation method is not confused by ligatures; so you could use this
+%scheme to operate essentially as suggested before, but with two keystrokes
+%occasionally replacing one. \ (Your typists would have to watch out for
+%the occasional times when the adjacent characters |aa|, |ae|, and |o/|
+%should not be treated as ligatures; also, `|\/|' would be a ^{control
+%word}, not a ^{control symbol}.)
+\ddanger 欧洲语言也可以用一个有限的字符集来得到。
+例如，再来考虑挪威语，但假定你所用的是没有 {\tt\ae} 字符的键盘。
+\1你可以改写你的字体度量文件，使得 \TeX\ 把 |ae|、|o/|、|aa|、|AE|、
+|O/| 和 |AA| 分别解释为生成 \ae 、\o 、\aa 、\AE 、\O 和 \AA 连写；
+并且把字符 \aa 和 \AA 放在字体的第 128 和 129 位置上。
+通过设定 |\catcode`/=11|，
+你将可以像 `|\ho/yre|' 这样在控制系列中使用连写 |o/|。%
+（当相邻字符 |aa|、|oe| 和 |o/| 不是连写时，你的打字员必须能清楚地辨认出；
+还有，此时 `|\/|' 应该是一个控制词而不是一个控制符号。
+
+%\ddanger The rest of this chapter is devoted to \TeX's reading rules,
+%which define the conversion from text to tokens. For example, the fact
+%that \TeX\ ignores spaces after control words is a consequence of
+%the rules below, which imply among other things that spaces after control
+%words never become space tokens. The rules are intended to work the
+%way you would expect them to, so you may not wish to bother reading them;
+%but when you are communicating with a computer, it is nice to understand
+%what the machine thinks it is doing, and here's your chance.
+\ddanger 本章剩下的部分要讲 \TeX\ 的读入规则，
+它规定了从文本到记号的转换。%
+例如，\TeX\ 忽略掉控制词后面的空格，这个结果来自下列一系列的规则，
+这些规则意味着控制词后面的空格永远不能变成空格记号。%
+规则将会按照你所期望的方法去实行，所以你可能不希望麻烦地了解它们；
+但是当你与计算机交流时，看看计算机在认为它正在做什么是有好处的，
+这里给你一个机会。
+
+%\ddanger The input to \TeX\ is a sequence of ``^{lines}.''
+%Whenever \TeX\ is reading a line of text from a file, or a line of
+%text that you entered directly on your terminal, the computer's
+%reading apparatus is in one of three so-called ^{states}:
+%\begindisplay
+%\noalign{\vskip1pt}
+%State $N$&Beginning a new line;\cr
+%State $M$&Middle of a line;\cr
+%State $S$&Skipping blanks.\cr
+%\noalign{\vskip-3pt}
+%\enddisplay
+%At the beginning of every line it's in state $N$; but most of the time it's
+%in state $M$, and after a control word or a space it's in state $S$.
+%Incidentally, ``states'' are different from the ``^{modes}'' that we will
+%be studying later; the current {\sl state\/} refers to \TeX's eyes and
+%mouth as they take in characters of new text, but the current {\sl mode\/}
+%refers to the condition of \TeX's gastro-intestinal tract. Most of the
+%things that \TeX\ does when it converts characters to ^{tokens} are independent
+%of the current state, but there are differences when spaces or end-of-line
+%characters are detected (categories 10 and 5).
+\ddanger \TeX\ 的输入是一系列``行''。%
+只要 \TeX\ 从文件中或者你在终端所直接输入的一行文本中读入一行文本，
+计算机的读入器就处在三个所谓状态的一个：
+\begindisplay
+\noalign{\vskip1pt}
+状态 $N$&新行；\cr
+状态 $M$&行中间；\cr
+状态 $S$&跳过空格。\cr
+\noalign{\vskip-3pt}
+\enddisplay
+在每行的开头，它处在状态 $N$;
+但是大部分时间它处在状态 $M$,
+在读入控制词或一个空格后，它处在状态 $S$。%
+顺便说一下，``状态''与我们以后讨论的``模式''不同；
+当前的{\KT{10}状态}是指遇见新文本的字符时 \TeX\ 的眼睛和嘴，
+但是当前{\KT{10}模式}是指 \TeX\ 的胃消化时的环境。%
+当把字符转换为记号时，\TeX\ 所做的大部分事情与当前状态无关，
+但是当发现空格或行尾字符时(第 10 和 5 类), 就与当前状态有关。
+
+%\ddanger \TeX\ deletes any ^\<space> characters (number 32) that occur at the
+%right end of an input line. Then it inserts a ^\<return> character (number~13)
+%at the right end of the line, except that it places nothing additional at the
+%end of a line that you inserted with `|I|'
+%during ^{error recovery}.  Note that \<return> is considered to be an actual
+%character that is part of the line; you can obtain special effects by
+%changing its catcode.
+\ddanger \TeX\ 删除任何出现在行尾的 \<space> 字符(代码为 32)。%
+于是，它在行尾插入有关 \<return> 字符(代码为 13),
+但是在修复错误时用`|I|'插入的行尾除外。%
+注意，\<return> 被看作是实际的字符，从而是行的一部分；
+通过改变它的类你可以得到特殊的效果。
+
+%\ddanger If \TeX\ sees an escape character (category 0) in any state, it
+%scans the entire ^{control sequence} name as follows. (a)~If there are no
+%more characters in the line, the name is empty (like |\csname\endcsname|).
+%^^{null control sequence} ^^{csname endcsname}
+%Otherwise (b)~if the next character is not of category~11 (letter), the
+%name consists of that single symbol. Otherwise (c)~the name consists of all
+%letters beginning with the current one and ending just before the first
+%nonletter, or at the end of the line. This name becomes a control sequence
+%token. \TeX\ goes into state~$S$ in case~(c), or in case~(b) with respect
+%to a character of category~10 (space); otherwise \TeX\ goes into state~$M$.
+\ddanger 如果 \TeX\ 在任意状态得到一个转义符（第 0 类），
+它就如下搜索这个控制系列的名字。%
+(a) 如果在行中没有更多的字符，那么名字为空的（类似 |\csname\endcsname|)。
+其次，(b) 如果下一个字符的类不是 11（字母），那么名字由单个符号组成。
+最后，(c) 名字由当前字符到最后一个非字母字符前或者到行尾的所有字母组成。
+这个名字变成一个控制系列记号。在 (c) 或 (b) 的情况下，
+\TeX\ 进入处理第 10 类的字符的状态 $S$；否则 \TeX\ 进入状态 $M$。
+
+%\ddanger If \TeX\ sees a superscript character (category 7) in any state,
+%and if that character is followed by another identical character, and if
+%those two equal characters are followed by a character of code
+%$c<128$, then they
+%are deleted and 64 is added~to or subtracted from the code~$c$.
+%\ (Thus, |^^A| is
+%replaced by a single character whose code is~1, etc., as explained earlier.) \
+%However, if the two superscript characters are immediately followed by two
+%of the lowercase hexadecimal digits |0123456789abcdef|, the
+%four-character sequence is replaced by a single character having the
+%specified hexadecimal code.
+%The replacement is carried out also if such a trio or quartet of
+%characters is encountered during steps (b) or~(c) of the control-sequence-name
+%scanning procedure described above. After the replacement is made, \TeX\
+%begins again as if the new character had been present all the time.
+%If a superscript character is not the first of such a trio or quartet, it is
+%handled by the following rule.
+\ddanger 如果 \TeX\ 在任意状态遇见上标字符(第 7 类),
+并且此字符所跟的还是另一个一样的字符，另外这两个相同的字符后面跟一个代码 $c<128$ 的字符，
+\1那么它们被去掉，并且从代码 $c$ 中加上或减去 64。%
+(这样，正如前面讨论的那样，|^^A| 就用代码为 1 的一个单个字符来代替，等等。)
+但是，如果两个上标字符后面跟的是小写十六进制数字 |0123456789abcdef|,
+那么这个四字符的序列被所给十六进制代码的单个字符代替。%
+在上面叙述的搜索控制系列名字的过程的 (b) 和 (c) 中，如果遇到这样的三字符或四字符，
+也同样进行替换。%
+替换完毕后，\TeX\ 重新开始，就象新字符始终在那里一样。%
+如果上标字符不是这种三字符或四字符的第一个字符，
+那么使用下列规则来处理。
+
+%\ddanger If \TeX\ sees a character of categories 1, 2, 3, 4, 6, 8, 11, 12,
+%or~13,
+%or a character of category~7 that is not the first of a special
+%sequence as just
+%described, it converts the character to a token by attaching the category
+%code, and goes into state~$M$. This is the normal case; almost every
+%nonblank character is handled by this rule.
+\ddanger 如果 \TeX\ 遇见第 1, 2, 3, 4, 6, 8, 11, 12,
+ 或 13 类的一个字符，或者第 7 类的一个字符且它不是象刚才叙述的特殊序列的开头，
+那么它给字符一个类代码，并且进入状态 $M$。%
+这是正常的情况；
+几乎每个非空白的字符都用这种规则来处理。
+
+%\ddanger If \TeX\ sees an end-of-line character (category 5), it throws
+%away any other information that might remain on the current line. Then if
+%\TeX\ is in state~$N$ (new line), the end-of-line character is converted
+%to the control sequence token `\cstok{par}' ^^|\par| (end of paragraph); if
+%\TeX\ is in state~$M$ (mid-line), the end-of-line character is converted
+%to a token for character~32 (`\]') of category~10 (^{space}); and if \TeX\
+%is in state~$S$ (skipping blanks), the end-of-line character is simply dropped.
+\ddanger 如果 \TeX\ 遇见行尾字符(第 5 类), 那么它就放弃本行剩下的所有的内容。%
+于是，如果 \TeX\ 处在状态 $N$(新行), 那么行尾字符转换到控制系列记号`\cstok{par}'%
+(段结束); 如果 \TeX\ 处在状态 $M$(行中间), 那么行尾字符转换为第 10 类的%
+字符代码为 32(`\]') 的记号(空格);
+如果 \TeX\ 处在状态 $S$(跳过空格), 那么行尾字符就忽略掉。
+
+%\ddanger If \TeX\ sees a character to be ignored (category~9), it simply
+%bypasses that character as if it weren't there, and remains in the same state.
+\ddanger 如果 \TeX\ 遇见要忽略的字符(第 9 类), 那么它直接跳过那个字符，
+就象它不在那里一样，并且保持同样的状态。
+
+%\ddanger If \TeX\ sees a character of category~10 (space), the action
+%depends on the current state. If \TeX\ is in state $N$ or $S$, the
+%character is simply passed by, and \TeX\ remains in the same state.
+%Otherwise \TeX\ is in state $M$; the character is converted to a token
+%of category~10 whose character code is~32, and \TeX\ enters state~$S$.
+%The character code in a space token is always~32.
+\ddanger 如果 \TeX\ 遇见第 10 类的字符(空格), 所得结果与当前状态有关。%
+如果 \TeX\ 处在状态 $N$ 或 $S$, 字符被直接跳过，并且 \TeX\ 保持当前状态。%
+否则 \TeX\ 处在状态 $M$; 字符被转换为第 10 类的记号，其字符代码为 32,
+并且 \TeX\ 进入状态 $S$。%
+空格记号中的字符代码总是 32。
+
+%\ddanger If \TeX\ sees a comment character (category~14), it throws away that
+%character and any other information that might remain on the current line.
+\ddanger 如果 \TeX\ 遇见注释符(第 14 类), 它就不再读入当前行剩下的内容。
+
+%\ddanger Finally, if \TeX\ sees an invalid character (category~15),
+%it bypasses that character, prints an error message, and remains in the
+%same state.
+\ddanger 最后，如果 \TeX\ 遇见无用符(第 15 类), 它跳过此字符，打印出错误信息，
+并且仍保持当前状态。
+
+%\ddanger If \TeX\ has nothing more to read on the current line, it goes to
+%the next line and enters state $N$. However, if\/ ^|\endinput| has been
+%specified for a file being ^|\input|, or if an |\input| file has ended,
+%\TeX\ returns to whatever it was reading when the |\input| command
+%was originally given. \ (Further details of\/ |\input| and |\endinput| are
+%discussed in Chapter~20.)
+\ddanger 如果 \TeX\ 在当前行没有要读入的内容了，那么它转到下一行，
+并且进入状态 $N$。%
+但是，如果被 |\input| 的文件给出了 |\endinput|, 或者 |\input| 文件结束了，
+那么 \TeX\ 返回给出 |\input| 命令的后面。%
+(关于 |\input| 和 |\endinput| 的更详细讨论见第 20 章。)
+
+%\ddangerexercise Test your understanding of \TeX's reading rules by answering
+%the following quickie questions: (a)~What is the difference between
+%categories 5 and~14? (b)~What is the difference between categories 3
+%and~4?  (c)~What is the difference between categories 11 and~12?  (d)~Are
+%spaces ignored after active characters?  (e)~When a line ends with a comment
+%character like |%|, are spaces ignored at the beginning of the next line?
+%(f)~Can an ignored character appear in the midst of a control sequence name?
+%\answer (a)~Both characters terminate the current line; but a character of
+%category~5 might be converted into \]$_{10}$ or a \cstok{par} token, while
+%a character of category~14 never produces a token.  (b)~They produce
+%character tokens stamped with different category numbers.  For example,
+%|$|$_3$ is not the same token as |$|$_4$, so \TeX's digestive processes
+%will treat them differently.  (c)~Same as~(b), plus the fact that control
+%sequence names treat letters differently.  (d)~No. (e)~Yes; characters of
+%category~10 are ignored at the beginning of every line, since every line
+%starts in state~$N$. (f)~No.
+\ddangerexercise 回答下面的简短问题，看看你对 \TeX\ 的读入规则的理解程度：
+(a) 第 5 和第 14 类的不同在什么地方？
+(b) 第 3 和第 4 类的不同在什么地方？
+(c) 第 11 和第 12 类的不同在什么地方？
+(d) 活动符后面的空格要忽略掉吗？
+(e) 当一行以注释符 |%| 结尾时，在下一行开头的空格被忽略了吗？
+(f) 一个可以忽略的字符能出现在控制系列的名字中间吗？
+\answer (a) 两者都结束当前行；第 5 类字符可能被转化为 \]$_{10}$ 或 \cstok{par} 记号，
+而第 14 类字符不会生成记号。(b) 它们生成附加不同类别码的字符记号。例如，
+|$|$_3$ 记号与 |$|$_4$ 记号不同，因此 \TeX\ 在消化时将区别对待它们。
+(c) 与 (b) 一样，另外控制系列名特殊对待字母。(d) 不忽略。(e) 是的；
+出现在行首的第 10 类字符会被忽略，因为每行都以 $N$ 状态开始。(f) 不可以。
+
+%\ddangerexercise Look again at the error message that appears on page
+%\vshippage. When \TeX\ reported that |\vship| was an undefined
+%control sequence, it printed two lines of context, showing that
+%it was in the midst of reading line~2 of the |story| file. At the
+%time of that error message, what state was \TeX\ in? What character
+%was it about to read next?
+%\answer \TeX\ had just read the control sequence |\vship|, so it
+%was in state~$S$, and it was just ready to read the space before `|1in|'.
+%Afterwards it ignored that space, since it was in state~$S$; but if
+%you had typed |I\obeyspaces| in response to that error message,
+%you would have seen the space. Incidentally, when \TeX\ prints
+%the ^{context of an error message}, the bottom pair of lines comes from
+%a text file, but the other pairs of lines are portions of token lists
+%that \TeX\ is reading (unless they begin with `|<*>|', when they
+%represent text inserted during ^{error recovery}).
+\ddangerexercise \1再次看看出现在第 \vshippage 页的错误信息。%
+当 \TeX\ 报告说 |\vship| 是一个未定义的控制系列时，
+它输出了两行上下文，表明它正在读入文件 |story| 的第二行中间部分。%
+在遇见错误的时候，\TeX\ 处于什么状态？
+下一个要读入的是什么字符？
+\answer \TeX\ 刚读取了控制系列 |\vship| 而处于状态 $S$，
+且它正准备读入 `|1in|' 前面的空格。因为它处于状态 $S$，之后它将忽略该空格；
+但如果你在回应错误信息时键入了 |I\obeyspaces|，你将看到该空格。
+顺便说一下，当 \TeX\ 打印^{错误信息上下文}时，底下的双行来自文本文件，
+而其他的各对双行都是 \TeX\ 正在读取的记号列表的一部分
+（除非它们以 `|<*>|' 开头，此时它们表示在^{错误修复}时插入的文本）。
+
+%\ddangerexercise Given the category codes of plain \TeX\ format,
+%what tokens are produced from the input line
+%`| $x^2$~  \TeX  ^^62^^6|'\thinspace?
+%\answer |$|$_{3}$ |x|$_{11}$ |^|$_7$ |2|$_{12}$ |$|$_{3}$ |~|$_{13}$ \]$_{10}$
+%\cstok{TeX} |b|$_{11}$ |v|$_{11}$ \]$_{10}$. The final space comes from the
+%\<return> placed at the end of the line. Code |^^6| yields |v| only
+%when not followed by |0|--|9| or |a|--|f|.
+%The initial space is ignored, because state~$N$
+%governs the beginning of the line.
+\ddangerexercise 给定 plain \TeX\ 格式的类别码后，
+从输入行 `| $x^2$~  \TeX  ^^62^^6|' 得到什么样的记号？
+\answer |$|$_{3}$ |x|$_{11}$ |^|$_7$ |2|$_{12}$ |$|$_{3}$ |~|$_{13}$ \]$_{10}$
+\cstok{TeX} |b|$_{11}$ |v|$_{11}$ \]$_{10}$。末尾的空格来自行尾的 \<return>。
+代码 |^^6| 仅在其后没有 |0|--|9| 或 |a|--|f| 时才得到 |v|。
+开头的空格会被忽略，因为在每行开头总处于状态 $N$。
+
+%\ddangerexercise Consider an input file that contains exactly
+%three lines; the first line says `|Hi!|', while the other two lines
+%are completely blank. What tokens are produced when \TeX\ reads
+%this file, using the category codes of plain \TeX\ format?
+%\answer |H|$_{11}$ |i|$_{11}$ |!|$_{12}$ \]$_{10}$ \cstok{par}
+%\cstok{par}. The `\]' comes from the \<return> at the
+%end of the first line; the second and third lines each contribute
+%a \cstok{par}.
+\ddangerexercise 想想正好有三行的一个输入文件；
+第一行是`|Hi!|', 而剩下的两行完全是空的。%
+当 \TeX\ 读入这个文件时，按照 plain \TeX\ 的类代码，将得到什么记号？
+\answer |H|$_{11}$ |i|$_{11}$ |!|$_{12}$ \]$_{10}$ \cstok{par}
+\cstok{par}。`\]' 来自第一行行尾的 \<return> ；第二和第三行分别给出一个 \cstok{par}。
+
+%\ddangerexercise Assume that the category codes of plain \TeX\ are in
+%force, except that the characters |^^A|, |^^B|, |^^C|, |^^M| belong
+%respectively to categories 0, 7, 10, and 11. What tokens are produced from
+%the (rather ridiculous) input line `|^^B^^BM^^A^^B^^C^^M^^@\M|\]'?
+%(Remember that this line is followed by \<return>, which is
+%|^^M|; and recall that |^^@| denotes the ^\<null> character, which has
+%category~9 when |INITEX| begins.)
+%\answer The two |^^B|'s are not recognized as consecutive superscript
+%characters, since the first |^^B| is converted to code~2 which doesn't
+%equal the following character |^|. Hence
+%the result is seven tokens: |^^B|$_7$ |^^B|$_7$
+%|M|$_{11}$ \cstok{\^{}\^{}B} \]$_{10}$ |^^M|$_{11}$ \cstok{M\^{}\^{}M}.
+%The last of these is a control word whose name has two letters.
+%The \<space> after |\M| is deleted before \TeX\ inserts the \<return> token.
+\ddangerexercise 假定 plain \TeX\ 的类别码有效，
+但是字符 |^^A|, |^^B|, |^^C|, |^^M| 分别属于第 0, 7, 10 和 11 类。%
+输入行`|^^B^^BM^^A^^B^^C^^M^^@\M|\]'（相当可笑吧）会得到什么记号？
+（记住，此行后面跟着 \<return>，即 |^^M|；
+并且记住 |^^@| 表示的是 \<null> 字符，当运行 |INITEX| 时它是第 9 类。）
+\answer 前两个 |^^B| 并不被视为连续两个上标符，
+因为第一个 |^^B| 被转换为编码 2，它与后面的 |^| 字符不相同。
+因此，结果为七个记号：|^^B|$_7$ |^^B|$_7$
+|M|$_{11}$ \cstok{\^{}\^{}B} \]$_{10}$ |^^M|$_{11}$ \cstok{M\^{}\^{}M}。
+最后一个是由两个字母组成的控制词。
+\TeX 删除 |\M| 之后的 \<space>，然后插入 \<return>。
+
+%\ddanger The special character inserted at the end of each line needn't
+%be ^\<return>; \TeX\ actually inserts the current value of an integer
+%parameter called ^|\endlinechar|, which normally equals~13 but it can
+%be changed like any other parameter. If the value of\/ |\endlinechar| is
+%negative or greater than~255, no character is appended, and the effect is
+%as if every line ends with~|%| (i.e., with a comment character).
+\ddanger 在每行结尾插入的特殊字符不必是 \<return>;
+\TeX\ 实际上插入的是一个叫 |\endlinechar| 的整数参数的当前值，
+它一般等于 13, 但是它可以象其它参数那样可以被改变。
+如果 |\endlinechar| 是负数或者大于 255, 那么不添加字符，
+结果就象每行都以 |%|(即注释符)结尾。
+
+%\ddanger Since it is possible to change the category codes, \TeX\ might
+%actually use several different categories for the same character on a single
+%line. For example, Appendices D and~E contain several ways to coerce \TeX\ to
+%process text ``^{verbatim},'' so that the author could prepare this manual
+%without great difficulty. \ (Try to imagine typesetting a \TeX\ manual;
+%backslashes and other special characters need to switch back and forth
+%between their normal categories and category~12!) \ Some care is needed to
+%get the timing right, but you can make \TeX\ behave in a variety of
+%different ways by judiciously changing the categories. On the other hand,
+%it is best not to play with the category codes very often, because you must
+%remember that characters never change their categories once they have become
+%tokens.  For example, when the arguments to a macro are first scanned,
+%they are placed into a token list, so their categories are fixed once and
+%for all at that time.  The author has intentionally kept the category
+%codes numeric instead of mnemonic, in order to discourage people from
+%making extensive use of\/ |\catcode| changes except in unusual
+%circumstances.
+\ddanger 因为可以改变类代码，所以 \TeX\ 可以在同一行内使用几个不同类的同一字符。%
+例如，附录 D 和 E 给出了控制``逐字(verbatim)''处理文本的几种方法，
+使得作者可以无大碍地编写本手册。%
+(试着想像排版一个 \TeX\ 手册；
+反斜线和其它特殊字符需要在正常类和第 12 类之间换来换去!)
+需要注意正确适时地运用，但是你可以通过巧妙地改变类来得到各种各样的 \TeX\ 结果。%
+另一方面，最好不要频繁改变类代\hbox{码},
+因为只要它们变成记号，那么就不能再改变它们的类代码了。%
+例如，当一个宏的参量第一次被搜索到时，它们就被放置在记号列中，因此，
+它们的类只要一次固定将从此全部都固定。%
+为了阻止人们在普通情况下太多地使用 |\catcode| 的变化，作者有意%
+把类代码保留为数值格式而不是容易记忆的格式。
+
+%\ddangerexercise Appendix B defines ^|\lq| and ^|\rq| to be abbreviations
+%for |`| and |'| (single left and right quotes, respectively). Explain why
+%the definitions
+%\begintt
+%\chardef\lq=96    \chardef\rq=39
+%\endtt
+%would not be as good.
+%\answer Both alternatives work fine in text; in particular, they combine
+%as in |\lq\lq| to form ligatures. But the definition in Appendix~B works
+%also in connection with constants; e.g., |\char\lq\%| and
+%|\char\rq140| are valid. \ (Incidentally, the construction |\let\lq=`|
+%would not work with constants, since the quotes in a ^\<number> must
+%come from character tokens of category~12; after |\let\lq=`| the control
+%sequence token |\lq| will not expand into a character token, nor {\sl is\/}
+%it a character token!) ^^|\let| ^^{implicit character}
+\ddangerexercise 附录 B 用 |\lq| 和 |\rq| 来定义 |`| 和 |'|~(分别是左右单引号)。%
+解释一下，为什么下列定义
+\begintt
+\chardef\lq=96    \chardef\rq=39
+\endtt
+并不是很好。
+\answer 这两个替代定义在文本中很好用；特别地，像 |\lq\lq| 这样连起来可以形成连写。
+但是附录 B 的定义可以用于表示常数；例如 |\char\lq\%| 和 |\char\rq140| 都是合法的。
+（顺便说一下，|\let\lq=`| 这种定义也不能用于表示常数，
+因为表示 ^\<number> 的引号必须为第 12 类的字符记号；
+在 |\let\lq=`| 定义之后，控制系列 |\lq| 不会展开为字符记号，
+也{\sl 不会\/}是一个字符记号！）^^|\let| ^^{implicit character}
+
+\endchapter
+
+for life's not a paragraph
+\quad
+ % he left a blank line here, really
+And death i think is no parenthesis.
+\author e.~e.~^{cummings}, {\sl since feeling is first\/} (1926)
+
+\bigskip
+
+This coded character set is to facilitate
+the general interchange of information
+among information processing systems,
+communication systems, and
+associated equipment.
+$\ldots$ An 8-bit set was considered
+but the need for more than 128 codes
+in general applications was not yet evident.
+\author ASA SUBCOMMITTEE X3.2, {\sl American Standard\break %
+  Code for Information Interchange\/^^{ASCII}} (1963)
+% in {\sl Communications of the ACM\/}
+
+\vfill\eject\byebye

@@ -1,0 +1,1536 @@
+% -*- coding: utf-8 -*-
+
+\input macros
+
+%\beginchapter Chapter 23. Output Routines
+\beginchapter Chapter 23. 输出例行程序
+
+\origpageno=251
+
+%We investigated \TeX's page-building technique in Chapter 15, where we
+%discussed the basic two-stage strategy that is used: \TeX\ gathers
+%material until it has accumulated more than will fit on a page; then it
+%spews out one page of data, based on what it thinks is the best breakpoint
+%between pages; then it returns to gather material for the next page in
+%the same way.  Page numbers, headings, and similar things are attached
+%after each page has been ejected, by a special sequence of \TeX\ commands
+%called the current {\sl^{output routine}}.
+\1在第十五章，我们讨论了 \TeX\ 组建页面的方法，它分为两个基本阶段：
+ \TeX\ 收集超过一个页面的内容；
+接着按照页面之间的最佳断点分出一个页面；
+再接下来用同样的方法收集下一个页面的内容。%
+页码，页眉等类似的内容在分页后由一个 \TeX\ 的一系列特殊命令添加上去，
+这就是所谓的当前{\KT{10}输出例行程序}。
+
+%Plain \TeX\ has an output routine that takes care of ordinary jobs. It
+%handles the simple things that most manuscripts require, and it also
+%copes with more complicated things like the insertions made with
+%^|\footnote| and ^|\topinsert|, as described in the dangerous bends of
+%Chapter~15. We shall begin the present chapter by discussing how to make
+%simple changes to the behavior of plain \TeX's output routine; then we
+%shall turn to the details of how to define output routines that do more
+%complex tasks.
+Plain \TeX\ 有一个输出例行程序，由它完成普通的任务。%
+它处理大多数文稿所要求的简单任务，以及象 |\footnote| 和 |\topinsert|~%
+所做的插入对象这些更复杂的任务，
+就象第十五章中``危险''段落中讨论的那样。%
+在本章我们将首先讨论怎样直接改变 plain \TeX\ 输出例行程序的设置；
+接着将转到怎样定义输出例行程序的详细内容，以处理更复杂的任务。
+
+%If you run \TeX\ without modifying the ^{plain \TeX\ format}, you get
+%^^{page format, modifying}
+%pages that are numbered at the bottom; and each page will be approximately
+%8$1\over2$~inches wide and 11~inches tall, including 1-inch margins at
+%all four sides. This format is suitable for preprints of
+%technical papers, but you might well want to change it, especially if
+%you are not using \TeX\ to make a preprint of a technical paper.
+如果你不加修改地运行 plain \TeX\ 的格式，得到的页码就在底部；
+并且每个页面的宽为 8$1\over2$ 英寸，高为 11 英寸，在四个边缘是 1 英寸的页边。%
+这种格式对专业论文的预印比较合适，但是你可能希望改变它，
+特别是在你要得到的不是专业论文的预印格式时。
+
+%For example, we saw in the experiments of Chapter 6 that the width of the
+%material on a page can be changed by giving a different value to the
+%horizontal line size, ^|\hsize|. Plain \TeX\ format says `|\hsize=6.5in|',
+%in order to obtain 8.5-inch pages with 1-inch margins; you can change
+%|\hsize| to whatever you want. Similarly, you can control the vertical
+%size of a page by changing ^|\vsize|. Plain \TeX\ sets |\vsize=8.9in|
+%(not |9in|, since |\vsize| doesn't include the space for page numbers at the
+%bottom of each page); if you say `|\vsize=4in|' you will get shorter pages,
+%with only 4 inches of copy per sheet. It's best not to monkey with
+%|\hsize| and |\vsize| except at the very beginning of a job, or after you
+%have ejected all pages from \TeX's memory.
+例如，在第六章的实战中我们已经看到，页面中内容的宽度由水平行尺寸 |\hsize| 的%
+不同值来确定。%
+在 plain \TeX\ 的格式中，由设置`|\hsize=6.5in|'得到的 8.5 英寸%
+页面中，页边为 1 英寸；
+你可以按自己的要求改变 |\hsize|。%
+同样，要改变页面的垂直尺寸就要改变 |\vsize|。%
+Plain \TeX\ 设置 |\vsize=8.9in|(不是 |9in|, 因为 |\vsize| 没有把每个页面底部%
+页码的空间包括进去);
+如果给出`|\vsize=4in|', 就得到更短的页码，每页只用了 4 英寸。%
+除了在任务最开头或者已经把所有页面从 \TeX\ 的内存中去掉后以外，
+最好别乱改动 |\hsize| 和 |\vsize|。
+
+%If you want your output to be positioned differently when it is ultimately
+%printed, you can offset it by giving nonzero values to ^|\hoffset| and
+%^|\voffset|. For example,
+%\begintt
+%\hoffset=.5in   \voffset=1.5in
+%\endtt
+%will move the output half an inch to the right of its normal position, and
+%1.5 inches down. You should be careful not to offset the output so much
+%that it falls off the edge of the physical medium on which it is being
+%printed, unless you know that such out-of-bounds activity won't cause trouble.
+如果要改变你的输出结果最后打印的位置，可以把它偏移，即给 |\hoffset|~%
+和 |\voffset| 一个非零值。%
+例如，
+\begintt
+\hoffset=.5in   \voffset=1.5in
+\endtt
+就把输出从正常位置向右平移半英寸，向下平移 1.5 英寸。%
+注意别偏移得超出所用打印的物理介质的边缘，
+除非你知道这样超出边界不会出现问题。
+
+%\TeX\ is often used to typeset announcements, ^{brochures}, or other
+%documents for which ^{page numbers} are inappropriate. If you say
+%\begintt
+%\nopagenumbers
+%\endtt
+%at the beginning of your manuscript, plain \TeX\ will refrain from inserting
+%numbers at the bottom of each page.
+ \TeX\ 常常用于排版公告，小册子或者其它没有页码的文档。%
+如果在文稿开头声明了
+\begintt
+\nopagenumbers
+\endtt
+那么 plain \TeX\ 就不在每个页码的底部插入数字了。
+
+%\danger In fact, ^|\nopagenumbers| is a special case of a much more general
+%mechanism by which you can control headings and footings. The plain \TeX\
+%output routine puts out a special line of text called the {\sl^{headline}\/}
+%at the top of each page, and another special line of text called the
+%{\sl^{footline}\/} at the bottom. The headline is normally blank, and
+%the footline is normally a centered page number, but you can specify any
+%headline and footline that you want by redefining the control sequences
+%^|\headline| and ^|\footline|. For example, ^^|\hrulefill|
+%\begintt
+%\headline={\hrulefill}
+%\endtt
+%will put a horizontal rule at the top of every page. The basic idea is
+%that plain \TeX\ puts `|\line{\the\headline}|' at the top and
+%`|\line{\the\footline}|' at the bottom, with blank lines separating these
+%extra lines from the other material. \ (Recall that ^|\line| is an
+%abbreviation for `|\hbox to\hsize|'; hence the headline and footline are
+%put into boxes as wide as the normal lines on the page itself.) \ The
+%normal value of\/ |\headline| is `|\hfil|', so that no heading is visible.
+%The |\nopagenumbers| macro described earlier is simply an abbreviation for
+%`|\footline={\hfil}|'.
+\danger \1实际上，~|\nopagenumbers| 是控制页眉和页脚的更广泛的方法的一个特殊情形。%
+Plain \TeX\ 的输出例行程序把一个叫{\KT{9}页眉}~{\sl^{headline}\/} 的特殊的行放在每个页面的顶部，
+把另一个叫{\KT{9}页脚}~{\sl^{footline}\/} 的特殊行放在底部。%
+此页眉一般是空的，而页脚一般是居中的页码，
+但是通过重新定义控制系列 |\headline| 和 |\footline|, 可以得到你所要的页眉和页脚。%
+例如，
+\begintt
+\headline={\hrulefill}
+\endtt
+将把水平线放在每个页眉的顶部。%
+基本思路是，~plain \TeX\ 把`|\line{\the\headline}|'放在顶部，
+把\allowbreak`|\line{\the\footline}|'放在底部，在这些额外行和其它内容之间是一个空行。%
+(记住，|\line| 的定义是`|\hbox to\hsize|';
+因此，页眉和页脚被放在宽度为正常页面行宽的盒子中。)
+|\headline| 的正常值是`|\hfil|', 这样就没有可见的页眉。%
+前面给出的宏 |\nopagenumbers| 的定义就是`|\footline={\hfil}|'。
+
+%\danger The normal value of\/ |\footline| is `|\hss\tenrm\folio\hss|';
+%this centers the page number on a line, using font ^|\tenrm|, because
+%^|\folio| is a control sequence that produces the number of the current
+%page in text form.
+\danger |\footline| 的正常值是 `|\hss\tenrm\folio\hss|'；
+它用 |\tenrm| 字体在一行中显示居中的页码，
+因为 |\folio| 是生成当前页码的文本形式的控制系列。
+
+%\danger The page number appears in \TeX's internal register |\count0|,
+%as explained in Chapter~15, and plain \TeX\ makes ^|\pageno| an
+%abbreviation for ^|\count0|. Thus you can say `|\pageno=100|' if you want
+%the next page of your output to be number~100. The |\folio| macro
+%converts negative page numbers to ^{roman numerals}; if your manuscript
+%begins with `|\pageno=-1|', the pages will be numbered i, ii, iii, iv,
+%v,~etc. In fact, Appendix~B defines |\folio| to be an abbreviation for
+%^^|\romannumeral|^^|\number|
+%\begintt
+%\ifnum\pageno<0 \romannumeral-\pageno \else\number\pageno \fi
+%\endtt
+\danger 就象第十五章中讨论的那样，页码在 \TeX\ 的内部寄存器 |\count0| 中，
+并且 plain \TeX\ 把 |\pageno| 定义为 |\count0|。%
+因此，如果要让输出的下一页的页码为 100, 就要给出 `|\pageno=100|'。%
+宏 |\folio| 把负的页码变成 Roman 数字；
+如果你的文稿以`|\pageno=-1|'开始，那么页码就是 i, ii, iii, iv, v 等等。%
+实际上，附录 B 把 |\folio| 定义为
+\begintt
+\ifnum\pageno<0 \romannumeral-\pageno \else\number\pageno \fi
+\endtt
+
+%\danger It is important to include the name of each font explicitly
+%whenever you are defining a headline or footline, because an output routine
+%in \TeX\ can come into action at somewhat unpredictable times. For example,
+%suppose that |\footline| had been set to `|\hss\folio\hss|', without
+%specifying |\tenrm|; then the page number would be typeset in whatever
+%font happens to be current when \TeX\ decides to output a page.
+%Mysterious effects can occur in such cases, because \TeX\ is typically
+%in the midst of page~101 when it is outputting page~100.
+\danger 重要的是把所定义页码和页脚的每个字体名称明确包括进来，
+因为 \TeX\ 中的输出例行程序在某些预料不到的时候要用到。%
+例如，假定 |\footline| 已经设定为`|\hss\folio\hss|', 而没有使用 |\tenrm|;
+这样，当 \TeX\ 要输出页码时，页码就用任何当前字体进行排版。%
+在这样的情况下，就会出现预想不到的结果，
+因为当输出页面 100 时 \TeX\ 最可能在页面 101 的中间。
+
+%\dangerexercise Explain how to put ^{en-dashes} around the page numbers in a
+%plain \TeX\ job. For example, `\hbox{ -- 4 -- }' should appear at the bottom
+%of page~4.
+%\answer |\footline={\hss\tenrm-- \folio\ --\hss}|
+\dangerexercise 看看怎样把连接号放在页码两边。
+例如，`\hbox{ -- 4 -- }' 出现在第 4 页的底部。
+\answer |\footline={\hss\tenrm-- \folio\ --\hss}|
+
+%\danger Here is an example of a headline in which the page numbers
+%appear at the top. Furthermore, odd-numbered and even-numbered pages are
+%treated differently:
+%\begintt
+%\nopagenumbers % suppress footlines
+%\headline={\ifodd\pageno\rightheadline \else\leftheadline\fi}
+%\def\rightheadline{\tenrm\hfil RIGHT RUNNING HEAD\hfil\folio}
+%\def\leftheadline{\tenrm\folio\hfil LEFT RUNNING HEAD\hfil}
+%\voffset=2\baselineskip
+%\endtt
+%English-language books traditionally have ^{odd-numbered pages} on the
+%right and ^{even-numbered pages} on the left. Text that appears as a
+%headline on several pages is often called a ``^{running head}.'' When
+%you use headlines, it is generally wise to set ^|\voffset| to the
+%equivalent of two lines of text, as shown in this example, so that there
+%will still be a margin of one inch at the top of your output pages.
+\danger 下面是页眉的一个例子，其中页码放在顶部。%
+还有，奇数和偶数页面要做不同的对待：
+\begintt
+\nopagenumbers % suppress footlines
+\headline={\ifodd\pageno\rightheadline \else\leftheadline\fi}
+\def\rightheadline{\tenrm\hfil RIGHT RUNNING HEAD\hfil\folio}
+\def\leftheadline{\tenrm\folio\hfil LEFT RUNNING HEAD\hfil}
+\voffset=2\baselineskip
+\endtt
+\1习惯上，英文书籍的奇数页面在右边，偶数页面在左边。%
+作为某些页上的页眉的文本常常称为``可变页眉''。%
+当使用页眉时，象本例这样用 |\voffset| 向下偏移两行文字的空间一般是比较明智的，
+这样在所得到页面的顶部仍然是一英寸的页边。
+
+%\dangerexercise Suppose that you're using \TeX\ to typeset your ^{r\'esum\'e},
+%which is several pages long. Explain how to define |\headline| so that
+%the first page is headed by `{\bf R\'ESUM\'E}', centered in boldface type,
+%while each subsequent page has a headline like this: ^^{Thor}
+%$$\line{R\'esum\'e of A. U. Thor \dotfill\ Page 2}$$
+%\answer |\headline={\ifnum\pageno=1 \hss\tenbf R\'ESUM\'E\hss|\parbreak
+%        |  \else\tenrm R\'esum\'e of A. U. Thor \dotfill\ Page \folio\fi}|
+%\smallskip\noindent (You should also say |\nopagenumbers| and
+%|\voffset=2\baselineskip|.)
+\dangerexercise 假定要用 \TeX\ 排版个人简历（r\'esum\'e），它包含几个页面。
+看看怎样定义 |\headline| 才能使第一页的页眉为居中的黑体 `{\bf R\'ESUM\'E}'，
+而其它页眉是这样：
+$$\line{R\'esum\'e of A. U. Thor \dotfill\ Page 2}$$
+\answer |\headline={\ifnum\pageno=1 \hss\tenbf R\'ESUM\'E\hss|\parbreak
+        |  \else\tenrm R\'esum\'e of A. U. Thor \dotfill\ Page \folio\fi}|
+\smallskip\noindent （你应当另外写上 |\nopagenumbers| 和
+|\voffset=2\baselineskip|。）
+
+%\danger If you don't change the |\vsize|, all of the headlines and footlines
+%will occur in the same place regardless of the contents of the page
+%between them. Thus, for example, if you are using ^|\raggedbottom| as
+%explained in Chapter~15, so that pages do not always contain the same
+%amount of text, the raggedness will occur above the footline; the
+%footline won't move up. If you do change ^|\vsize|, the footline position
+%will change correspondingly, while the headline will stay put.
+\danger 如果不修改 |\vsize|, 那么所有的页眉和页脚都出现在同样的位置，
+而不管它们中间页面的内容如何。%
+因此，例如，如果象第十五章中讨论的那样使用了 |\raggedbottom|,
+从而导致每个页面所包含的内容长度不尽相同，那么页脚上面就变得参差不齐；
+页脚也不会向上移动。%
+如果改变了 |\vsize|, 那么页脚的位置就会相应地改变，而页面不变。
+
+%\ddanger The rest of this chapter is intended for people who want an
+%output format that is substantially different from what plain \TeX\ provides.
+%Double dangerous bends are used in all of the subsequent paragraphs, because
+%you should be familiar with the rest of \TeX\ before you plunge into these
+%final mysteries of the language. Chapter~22 taught you how to be a \TeX\
+%Master, i.e., a person who can produce complicated tables using |\halign|
+%and |\valign|; the following material will take you all the way to the
+%rank of ^{Grandmaster}, i.e., a person who can design output routines.
+%When you are ready for this rank, you will be pleased to discover
+%that---like alignments---output routines are not really so mysterious as
+%they may seem at first.
+\ddanger 本章剩下的内容把对象限制在要得到与 plain \TeX\ 所给出的输出例行程序不同的格式的人。
+随后的所有段落都有双``危险''标记，因为在攻入本语言最后的堡垒时要精通 \TeX\ 的其它内容。
+第二十二章教出了 \TeX\ 大师，即，能用 |\halign| 和 |\valign| 排版出复杂表格的人；
+接下来的内容将使你一鼓作气地达到统帅的等级，即，可以设计输出例行程序的人。
+当你学会后，就会欣喜地发现，就象对齐阵列一样，输出例行程序不象刚开始看起来那样神秘。
+
+%\ninepoint % it's all \ddangerous from here on
+%\ddanger Let's begin by recapping some of the rules at the end of Chapter~15.
+%\TeX\ periodically chooses to output a page of information, by breaking
+%its main vertical list at what it thinks is the best place, and at such times
+%it enters internal vertical mode and begins to read the commands in the
+%current |\output| routine. When the output routine begins, ^|\box255|
+%contains the page that \TeX\ has completed; the output routine is supposed to
+%do something with this vbox. When the output routine ends, the list of
+%items that it has constructed in internal vertical mode is placed just
+%before the material that follows the page break. In this way \TeX's
+%page-break decisions can effectively be changed: Some or all of the material
+%on the broken-off page can be removed and carried forward to the next page.
+\ninepoint % it's all \ddangerous from here on
+\ddanger 我们首先来回顾一下第十五章结尾的一些规则。%
+ \TeX\ 周期性地输出一个页面的内容，这是通过把主垂直列在所选定的最佳处裂分而得到的，
+并且在这时它进入内部垂直模式并且开始读入当前 |\output| 例行程序的命令。%
+当输出例行程序开始时，|\box255| 中包含 \TeX\ 已经完成的页面；
+输出例行程序可以看作对此 vbox 进行一些处理。%
+当输出例行程序结束时，在内部垂直模式下构建的项目列就放在分页后面的内容的紧前面。%
+用这种方法， \TeX\ 的分页结果会被明显修改：
+已完成分页的页面的某些或全部内容会被去掉并且送到下一页。
+
+%\ddanger The current ^|\output| routine is defined as a token list
+%parameter, just like ^|\everypar| or ^|\errhelp|, except that \TeX\
+%automatically inserts a begin-group symbol~`|{|' at the beginning
+%and an end-group symbol~`|}|' at the end. These ^{grouping characters}
+%help to keep the output routine from interfering with what
+%\TeX\ was doing when the page break was chosen; for example, an output
+%routine often changes the ^|\baselineskip| when it puts a headline
+%or footline on a page, and the extra ^{braces} keep this change local.
+%If no |\output| routine has been specified, or if the user has said
+%`|\output={}|', \TeX\ supplies its own routine, which is essentially
+%equivalent to `|\output={\shipout\box255}|'; this outputs the page without
+%any headline or footline, and without changing the page number.
+%^^{default output routine}^^|\shipout|
+\ddanger 当前 |\output| 例行程序被定义为一个记号列参数，就像 |\everypar|
+或者 |\errhelp| 一样，只是 \TeX\ 自动在开头插入组开始符号，
+在结尾插入组结束符号而已。这些编组符号有利于输出例行程序不受分页时 \TeX\
+的状态的干扰；例如，当输出例行程序在页面上放置页眉和页脚时，
+常常修改 |\baselineskip|，这样额外的花括号就使得这个修改被限制在局部中。
+如果没有给出 |\output| 例行程序，或者用户声明了 `|\output={}|'，那么 \TeX\
+就使用自己的例行程序，它实际上等价于 `|\output={\shipout\box255}|'；
+它输出的页面没有页眉和页脚，也没有页码。
+
+%\ddanger \TeX's primitive command |\shipout|\<box> is what actually
+%causes output. It sends the contents of the box to the |dvi| file,
+%which is \TeX's main output file; after \TeX\ has finished,
+%the ^|dvi| file will contain a compact device-independent encoding of
+%instructions that specify exactly what should be printed.  When a
+%box is shipped out, \TeX\ displays the values of\/ |\count0| through
+%|\count9| on your terminal, ^^|\count0| as explained in Chapter~15; these
+%ten counters are also recorded in the |dvi| file, where they can be used
+%to identify the page. All of the ^|\openout|, ^|\closeout|, and ^|\write|
+%commands that appear inside of the \<box> are performed in their natural
+%order as that box is being shipped out. Since a |\write| command
+%expands macros, as explained in Chapter~21, \TeX's scanning mechanism
+%might detect syntax errors while a |\shipout| is in progress. If
+%^|\tracingoutput| is nonzero at the time of a |\shipout|, the contents
+%of the \<box> being shipped are written into your log file in symbolic
+%form. You can say |\shipout| anywhere, not only in an output routine.
+\ddanger \1实际上是 \TeX\ 的原始命令 |\shipout|\<box> 产生的输出。%
+它把盒子的内容送到 \TeX\ 的主要输出文件——|dvi| 文件；
+在 \TeX\ 运行结束后，|dvi| 文件就包含了一个紧凑的与设备无关的指令编码，
+它准确地给出了要输出的信息。%
+当盒子被送出时， \TeX\ 把 |\count0| 到 |\count9| 的值都显示在你的终端上，
+就象第十五章中讨论的那样；
+这十个计数器都保存在 |dvi| 文件中，它们就确定了此页面。%
+当盒子被送出时，在 \<box> 中出现的所有 |\openout|, |\closeout| 和 |\write| 命令都按照%
+它们的正常顺序被执行。%
+因为命令 |\write| 展开一个宏，就象第二十一章讨论的那样，所以当 |\shipout| 正在%
+进行时 \TeX\ 的扫描程序可能会发现语法错误。%
+如果在 |\shipout| 时 |\tracingoutput| 不为零，那么要被送出的 \<box> 的内容%
+将用符号的形式写入你的 log 文件。%
+可以在任何地方使用 |\shipout|, 而不仅仅是输出例行程序中。
+
+%\ddanger The delayed aspect of\/ |\write| imposes a noteworthy restriction:
+%It is necessary to be sure that all macros that might appear within the
+%text of a |\write| are properly defined when a |\shipout| command is
+%given. For example, the plain \TeX\ format in Appendix~B temporarily makes
+%spaces active and says `|\global\let|\]|=|^|\space|'; the reason is that
+%^|\obeyspaces| might be in force during a |\write| command, so a definition
+%for \] as an active character should exist during the next |\shipout|,
+%even though \TeX\ might no longer be making ^{spaces active} at that time.
+\ddanger |\write| 延迟性强加了一个值得注意的限制：
+当命令 |\shipout| 给定时，必须确保出现在 |\write| 文本中的所有宏要有正确的定义。%
+例如，附录 B 中的 plain \TeX\ 格式暂时把空格变成活动符，
+并且声明`|\global\let|\]|=|^|\space|';
+这是因为 |\obeyspaces| 可能在 |\write| 命令中起作用，
+因此把 \] 定义为活动符应该持续到下一个 |\shipout|,
+即使此时 \TeX\ 可能不再用空格作活动符。
+
+%\ddanger Chapter 15 points out that \TeX\ gives special values to
+%certain internal registers and parameters, in addition to |\box255|,
+%just before the output routine begins. Insertions are put into their
+%own vboxes, and ^|\insertpenalties| is set equal to the total number of
+%heldover insertions; furthermore the ^|\outputpenalty| parameter is
+%set to the value of the penalty at the current breakpoint. An output
+%routine can be made to do special things when these quantities have
+%special values. For example, the output routine of plain \TeX\ recognizes
+%a ^|\supereject| (which ejects all held-over insertions) by the fact that
+%|\supereject| causes |\outputpenalty| to be $-20000$, and by using
+%|\insertpenalties| to decide if any insertions are being held over.
+\ddanger 第十五章提到，在输出例行程序开始之前， \TeX\ 把特殊值赋予给了%
+包括 |\box255| 在内的某些内部寄存器和参数。%
+插入对象被放在它自己的 vbox 中，并且 |\insertpenalties| 被设为与延迟的插入对象%
+的总数相等；还有，参数 |\outputpenalty| 被设为当前断点的惩罚的值。%
+当这些量赋予特殊值后，输出例行程序就可以用来做很多特殊的工作。%
+例如，~plain \TeX\ 的输出例行程序用到一个命令 |\supereject|(它把所有延迟的%
+插入对象都驱出), 原因是 |\supereject| 把 |\outputpenalty| 变成 $-20000$,
+并且用 |\insertpenalties| 来确定是否所有的插入对象都被延迟了。
+
+%\ddanger The default output routine, `|\shipout\box255|', illustrates one
+%extreme in which nothing is put into the vertical list that is carried over
+%to the next page. The other extreme is
+%\begintt
+%\output={\unvbox255
+%  \ifnum\outputpenalty<10000 \penalty\outputpenalty\fi}
+%\endtt
+%which ships nothing out and puts {\sl everything\/} back onto the main
+%vertical list. \ (The command `^|\unvbox||255|' takes the completed page
+%out of its box, and the command `|\penalty\outputpenalty|' reinserts the
+%penalty at the chosen breakpoint.) \ This makes a seamless join between
+%the completed page and the subsequent material, because \TeX\ has still
+%not discarded glue and penalties at the breakpoint when it invokes
+%an |\output| routine; hence \TeX\ will go back and reconsider the page
+%break. If the |\vsize| hasn't changed, and if all insertions have been
+%held in place, the same page break will be found; but it will be found
+%much faster than before, because the vertical list has already been
+%constructed---the paragraphing doesn't need to be done again. Of course,
+%an output routine like this makes \TeX\ spin its wheels endlessly, so
+%it~is of no use except as an example of an extreme case.
+\ddanger 默认的输出例行程序`|\shipout\box255|'给出的是一个极端的情况，
+它不把任何内容放在下一个页面的垂直列中。%
+另一个极端是
+\begintt
+\output={\unvbox255 \penalty\outputpenalty}
+\endtt
+它什么也不输出，并且把{\KT{9}所有内容}都放回主垂直列。%
+(命令`|\unvbox||255|'把这个页面从盒子中取出，命令`|\penalty\outputpenalty|'%
+在选定的断点处重新插入惩罚。)
+这使得整个页面与其后的内容恰好合并起来，
+因为当 \TeX\ 调用 |\output| 例行程序时没有丢掉任何断点处的粘连和惩罚；
+这样 \TeX\ 就回来重新考虑分页。%
+如果 |\vsize| 没有改变，并且所有的插入对象都还在原地，那么就得到同样的分页；
+但是找到它的速度比以前要更快，因为垂直列已经构建好了——%
+不需要再次分段为行了。%
+当然，这样的输出例行程序使得 \TeX\ 陷入死循环，
+因此它仅仅是个极端的例子，而没有什么用处。
+
+%\ddanger To prevent such looping, your output routine should always
+%make progress of some sort whenever it comes into play. If you make a mistake,
+%\TeX\ may be able to help you diagnose the error, because a special
+%loop-detection mechanism has been built in:
+%There is an internal integer variable called ^|\deadcycles|,
+%which is cleared to zero after every |\shipout| and increased by~1
+%just before every |\output|. Thus, |\deadcycles| keeps track of how
+%many times an output routine has been initiated since the most recent
+%|\shipout|, unless you change the value of\/ |\deadcycles| yourself.
+%There's also an integer parameter called |\maxdeadcycles|, which plain
+%\TeX\ sets to~25. If\/ |\deadcycles| is greater than or equal to
+%|\maxdeadcycles| when your output routine is about to be started (i.e.,
+%when |\deadcycles| is about to be increased), \TeX\ issues an error
+%message and performs the ^{default output routine} instead of yours.
+\ddanger \1为了防止这样的循环，在出现这种情况时要对你的输出例行程序进行一些改进。%
+如果你出现了失误， \TeX\ 可能会帮你找出错误，因为内置了一个特殊的循环检测方法：
+有一个叫 |\deadcycles| 的内部整数变量，在每次 |\shipout| 后都回到零，
+并且在每个 |\output| 紧前面要增加 1。%
+这样，|\deadcycles| 跟踪的就是最近一次 |\shipout| 后输出例行程序启动的次数，
+只要你自己不改变 |\deadcycles| 的值。%
+还有一个整数参数叫做 |\maxdeadcycles|, ~plain \TeX\ 把它设置为 25。%
+当输出例行程序将要启动时(即当 |\deadcycles| 要增加时),
+如果 |\deadcycles| 大于或等于 |\maxdeadcycles|,  \TeX\ 就输出错误信息，
+并且执行默认的输出例行程序，来代替你的例行程序。
+
+%\ddanger When your output routine is finished, |\box255| should be void.
+%In other words, you must do something with the information in that
+%box; it should either be shipped out or put into some other place.
+%Similarly, ^|\box255| should be void when \TeX\ is getting ready to
+%fill it with a new page of material, just before starting an output
+%routine. If\/ |\box255| is nonvoid at either of those times, \TeX\ will
+%complain that you are misusing this special register, and the
+%register contents will be destroyed.
+\ddanger 当输出例行程序结束时，|\box255| 应该被置空。%
+换句话说，你必须用一些方法来处理此盒子中的信息；
+它应该被送出或者是放在某些其它地方。%
+类似地，当 \TeX\ 准备放入下一页内容，在启动输出例行程序紧前面，
+|\box255| 应该被置空。%
+如果在某个这些时刻 |\box255| 没有被置空，那么 \TeX\ 将告诉说你误用了这个特殊寄存器，
+并且此寄存器的内容将被毁掉。
+
+%\ddanger But let's not talk forever about borderline cases and special
+%parameters; let's look at some real examples. The output routine of
+%plain \TeX, found in Appendix~B\null, is set up by saying
+%`|\output={\plainoutput}|', where ^|\plainoutput| is an abbreviation for
+%\begintt
+%\shipout\vbox{\makeheadline
+%  \pagebody
+%  \makefootline}
+%\advancepageno
+%\ifnum\outputpenalty>-20000 \else\dosupereject\fi
+%\endtt
+%Let us consider this ``program'' one line at a time:\enddanger
+\ddanger 然而让我们别再讨论边界情形和特殊参数了；我们来看看一些真实的例子。
+在附录 B 中的 plain \TeX\ 的输出例行程序被设置为 `|\output={\plainoutput}|'，
+其中 |\plainoutput| 被定义为
+\begintt
+\shipout\vbox{\makeheadline
+  \pagebody
+  \makefootline}
+\advancepageno
+\ifnum\outputpenalty>-20000 \else\dosupereject\fi
+\endtt
+下面我们逐行讨论这个``程序''：\enddanger
+
+%\medskip
+%\textindent{1)} The ^|\makeheadline| macro constructs a vbox of height
+%and depth zero in such a way that the headline is properly positioned
+%above the rest of the page. Its actual code is ^^|\headline|^^|\nointerlineskip|
+%\begintt
+%\vbox to 0pt{\vskip-22.5pt
+%  \line{\vbox to8.5pt{}\the\headline}\vss}
+%\nointerlineskip
+%\endtt
+%The magic constant $-22.5\pt$ is equal to $\bigl(\hbox{topskip}-\hbox{height of
+%strut}-2(\hbox{baselineskip})\bigr)$, i.e., $10\pt-8.5\pt-24\pt$;
+%^^{strut}^^|\vss| ^^|\line| this places the reference point of the headline
+%exactly $24\pt$ above the reference point of the top line on the page,
+%unless the headline or the top line are excessively large.
+\medskip
+\textindent{1)} 宏 |\makeheadline| 构建了一个高度和深度都为零的 vbox,
+这样页眉就正好放在页面的空白处了。%
+它的实际定义是：
+\begintt
+\vbox to 0pt{\vskip-22.5pt
+  \line{\vbox to8.5pt{}\the\headline}\vss}
+\nointerlineskip
+\endtt
+$-22.5\pt$ 这个神秘的常数等于 $\bigl(\hbox{顶部粘连}-\hbox{支架高度}
+-2(\hbox{行高})\bigr)$, 即 $10\pt-8.5\pt-24\pt$;
+它把页眉的基点正好放在页面顶行基点上面正好 $24\pt$ 的地方，
+只要页眉或顶行不是太宽即可。
+
+%\medbreak
+%\textindent{2)} The ^|\pagebody| macro is an abbreviation for
+%\begintt
+%\vbox to\vsize{\boxmaxdepth=\maxdepth \pagecontents}
+%\endtt
+%The value of\/ ^|\boxmaxdepth| is set to ^|\maxdepth| so that the vbox
+%will be constructed under the assumptions that \TeX's page builder has
+%used to set up |\box255|.
+\medbreak
+\textindent{2)} 宏 |\pagebody| 的定义是
+\begintt
+\vbox to\vsize{\boxmaxdepth=\maxdepth \pagecontents}
+\endtt
+|\boxmaxdepth| 的值设置为 |\maxdepth|, 这样就构建了 vbox,
+其中假定 \TeX\ 的页面已经设置为 |\box255| 了。
+
+%\medbreak
+%\textindent{3)} The ^|\pagecontents| macro produces a vertical list for
+%everything that belongs on the main body of the page, namely the contents
+%of\/ |\box255| together with illustrations (inserted at the top)
+%and footnotes (inserted at the bottom): ^^|\topins| ^^|\footnote|
+%\begintt
+%\ifvoid\topins \else\unvbox\topins\fi
+%\dimen0=\dp255 \unvbox255
+%\ifvoid\footins\else % footnote info is present
+%  \vskip\skip\footins
+%  \footnoterule
+%  \unvbox\footins\fi
+%\ifraggedbottom \kern-\dimen0 \vfil \fi
+%\endtt
+%Here ^|\topins| and ^|\footins| are the insertion class numbers for
+%the two kinds of insertions used in plain \TeX; if more classes of
+%^{insertions} are added, |\pagecontents| should be changed accordingly.
+%Notice that the boxes are unboxed so that the glue coming from
+%insertions can help out the glue on the main page. The ^|\footnoterule|
+%macro in Appendix~B places a dividing line between the page and its
+%footnotes; it makes a net contribution of $0\pt$ to the height of
+%the vertical list. ^{Ragged-bottom setting} is achieved by inserting ^^|\vfil|
+%^{infinite glue}, which overpowers the stretchability of\/ ^|\topskip|.
+\medbreak
+\textindent{3)} \1宏 |\pagecontents| 得到了一个垂直列，它的所有内容都是页面的主体，
+即 |\box255| 的内容以及图表(插入在顶部)和脚注(插入在底部):
+\begintt
+\ifvoid\topins \else\unvbox\topins\fi
+\dimen0=\dp255 \unvbox255
+\ifvoid\footins\else % footnote info is present
+  \vskip\skip\footins
+  \footnoterule
+  \unvbox\footins\fi
+\ifraggedbottom \kern-\dimen0 \vfil \fi
+\endtt
+这里的 |\topins| 和 |\footins| 是 plain \TeX\ 中用到的两种插入对象的类代码；
+如果要添加更多插入对象的类，|\pagecontents| 应该随之改变。%
+注意，这些盒子要去掉外围盒子，这样来自插入对象的粘连才能变成主页面的粘连。%
+附录 B 中的宏 |\footnoterule| 把一个分隔线放在页面和脚注之间；
+它的垂直列净高度是 $0\pt$。%
+设置底部不对齐要插入无限大粘连，它的级别要比 |\topskip| 的伸长能力高。
+
+%\medbreak
+%\textindent{4)} The ^|\makefootline| macro puts ^|\footline| into
+%its proper position:
+%\begintt
+%\baselineskip=24pt
+%\line{\the\footline}
+%\endtt
+\medbreak
+\textindent{4)} 宏 |\makefootline| 把 |\footline| 放在相应的位置：
+\begintt
+\baselineskip=24pt
+\line{\the\footline}
+\endtt
+
+%\medbreak
+%\textindent{5)} The ^|\advancepageno| macro normally advances ^|\pageno|
+%by~$+1$; but if\/ |\pageno| is negative (for roman numerals), the advance is
+%by~$-1$. The new value of\/ |\pageno| will be appropriate for the next time
+%the output routine is called into action. ^^|\global|^^|\advance|
+%\begintt
+%\ifnum\pageno<0 \global\advance\pageno by-1
+%\else \global\advance\pageno by 1 \fi
+%\endtt
+\medbreak
+\textindent{5)} 宏 |\advancepageno| 一般要把 |\pageno| 加 $+1$;
+但是如果 |\pageno| 是负的(Roman 数字), 就加 $-1$。%
+新的 |\pageno| 值在下一次输出例行程序中被调用。
+\begintt
+\ifnum\pageno<0 \global\advance\pageno by-1
+\else \global\advance\pageno by 1 \fi
+\endtt
+
+%\medbreak
+%\textindent{6)} Finally, the ^|\dosupereject| macro is designed to clear
+%out any insertions that have been held over, whether they are illustrations
+%or footnotes or both: ^^|\insertpenalties| ^^|\supereject|
+%\begintt
+%\ifnum\insertpenalties>0
+%  \line{} \kern-\topskip \nobreak
+%  \vfill\supereject\fi
+%\endtt
+%The mysterious negative ^|\kern| here cancels out the natural space of the
+%^|\topskip| glue that goes above the empty |\line|; that empty line box
+%prevents the ^|\vfill| from disappearing into a page break.  The vertical
+%list that results from |\dosupereject| is placed on \TeX's list of things
+%to put out next, just after the straggling insertions have been
+%reconsidered as explained in Chapter~15. Hence another super-eject will
+%occur, and the process will continue until no insertions remain.
+\medbreak
+\textindent{6)} 最后，宏 |\dosupereject| 是为了把所有延迟的插入对象清除掉，
+不管它们是图表还是脚注：
+\begintt
+\ifnum\insertpenalties>0
+  \line{} \kern-\topskip \nobreak
+  \vfill\supereject\fi
+\endtt
+这里的负 |\kern| 是为了抵消空 |\line| 上面出现的粘连 |\topskip| 的自然间距；
+此空行的盒子是防止 |\vfill| 在分页时丢失。%
+|\dosupereject| 所得到的垂直列被放在 \TeX\ 的列中以便下次使用，
+就在延迟的插入对象象在第十五章中讨论的那样被重新考虑后。%
+因此，出现了另一个 |\supereject|, 并且这个过程一直持续到没有插入对象为止。
+
+%\ddangerexercise Explain how to change the output routine of plain \TeX\
+%so that it will produce twice as many pages. The material that would
+%ordinarily go on pages 1,~2, 3,~etc., should go onto pages 1,~3, 5,~\dots;
+%and the even-numbered pages should be entirely blank except for the
+%headline and footline. \ (Imagine that photographs will be mounted
+%on those blank pages later.)
+%\answer |\output={\plainoutput\blankpageoutput}|\parbreak
+%        |\def\blankpageoutput{\shipout\vbox{\makeheadline|\parbreak
+%        |    \vbox to\vsize{}\makefootline}\advancepageno}|
+\ddangerexercise 看看如何改变 plain \TeX\ 的输出例行程序才能得到两倍的页面。
+原来放在第 1、2、3 页上的内容现在放在第 1、3、5 页上面；
+偶数页面除了页眉和页脚之外是空白。（想象以后要把照片贴在这些空白页上。）
+\answer |\output={\plainoutput\blankpageoutput}|\parbreak
+        |\def\blankpageoutput{\shipout\vbox{\makeheadline|\parbreak
+        |    \vbox to\vsize{}\makefootline}\advancepageno}|
+
+%\ddanger Suppose now that ^{double-column} format is desired.
+%More precisely, let's attempt to modify plain \TeX\ so that it sets type
+%in columns whose width is ^|\hsize||=3.2in|. Each actual page of
+%output should contain two such columns separated by $0.1\rm\,in$ of
+%space; thus the text area of each page will still be 6.5~inches wide.
+%The headlines and footlines should span both columns, but the columns
+%themselves should contain independent insertions as if they were the
+%facing pages of a book. In other words, each column should contain
+%its own footnotes and its own illustrations; we do not have to change
+%the ^|\pagebody| macro. ^^{two-column format} ^^{multicolumn format}
+\ddanger \1假定现在要得到双栏的格式。%
+更准确地说，我们要修改 plain \TeX\ 使得它的每栏宽度为 |\hsize||=3.2in|。%
+所输出的每个页面应该包含两个这样的栏，中间有 $0.1\rm\,in$ 的间距；
+这样，每页的文本区仍然是 6.5 英寸宽。%
+页眉和页脚要横贯两个栏，但是栏自己要象书籍对开的页面那样包含各自的插入对象。%
+换句话说，每个栏有自己的脚注和图表；
+我们不必改变宏 |\pagebody|。
+
+%\ddanger In order to solve this problem, let us first introduce a
+%new dimension register called ^|\fullhsize| that represents the
+%width of an entire page.
+%\begintt
+%\newdimen\fullhsize
+%\fullhsize=6.5in \hsize=3.2in
+%\def\fullline{\hbox to\fullhsize}
+%\endtt
+%The ^|\makeheadline| and ^|\makefootline| macros should be modified
+%so that they use `^|\fullline|' instead of `^|\line|'.
+\ddanger 为了完成这个任务，我们首先引入新的尺寸寄存器 |\fullhsize|,
+它表示整个页面的宽度。
+\begintt
+\newdimen\fullhsize
+\fullhsize=6.5in \hsize=3.2in
+\def\fullline{\hbox to\fullhsize}
+\endtt
+宏 |\makeheadline| 和 |\makefootline| 应该变成用`|\fullline|'而不是`|\line|'。
+
+%\ddanger The new output routine will make use of a control sequence
+%|\lr| that is set to either `|L|' or `|R|', according as the
+%next column belongs at the left or at the right of the next page.
+%When a left column has been completed, the output routine simply
+%saves it in a box register; when a right column has been completed,
+%the routine outputs both columns and increases the page number.
+%^^|\advancepageno|
+%\begintt
+%\let\lr=L \newbox\leftcolumn
+%\output={\if L\lr
+%    \global\setbox\leftcolumn=\columnbox \global\let\lr=R
+%  \else \doubleformat \global\let\lr=L\fi
+%  \ifnum\outputpenalty>-20000 \else\dosupereject\fi}
+%\def\doubleformat{\shipout\vbox{\makeheadline
+%    \fullline{\box\leftcolumn\hfil\columnbox}
+%    \makefootline}
+%  \advancepageno}
+%\def\columnbox{\leftline{\pagebody}}
+%\endtt
+%The |\columnbox| macro uses |\leftline| in order to ensure that it produces a
+%box whose width is |\hsize|. The width of\/ |\box255| is usually, but not
+%always, equal to |\hsize| at the beginning of an output routine; any other
+%width would louse up the format.
+\ddanger 新输出例行程序将用控制系列 |\lr| 来设置`|L|'或`|R|',
+根据下一栏在下一页面的左边还是右边而定。%
+当左栏结束时，输出例行程序直接把它保存在盒子寄存器中；
+当右栏结束时，例行程序输出两个栏并且增加页码。
+\begintt
+\let\lr=L \newbox\leftcolumn
+\output={\if L\lr
+    \global\setbox\leftcolumn=\columnbox \global\let\lr=R
+  \else \doubleformat \global\let\lr=L\fi
+  \ifnum\outputpenalty>-20000 \else\dosupereject\fi}
+\def\doubleformat{\shipout\vbox{\makeheadline
+    \fullline{\box\leftcolumn\hfil\columnbox}
+    \makefootline}
+  \advancepageno}
+\def\columnbox{\leftline{\pagebody}}
+\endtt
+宏 |\columnbox| 使用 |\leftline| 是为了确保它得到的盒子的宽度是 |\hsize|。%
+但是在输出例行程序的开头，|\box255| 的宽度通常——但不总是——等于 |\hsize|;
+任何其它宽度都会把格式毁坏。
+
+%\ddanger When double-column setting ends, there's a 50-50 chance that the
+%final column has fallen at the left, so it will not yet have been output.
+%The code
+%\begintt
+%\supereject
+%\if R\lr \null\vfill\eject\fi
+%\endtt
+%supplies an empty right-hand column in this case, ensuring that all
+%of the accumulated material will be printed. It's possible to do
+%fancier column balancing on the last page, but the details are tricky
+%if footnotes and other insertions need to be accommodated as well.
+%Appendix~E includes the macros that were used to balance the columns at the
+%end of the index in Appendix~I\null, and to start two-column format in mid-page.
+\ddanger 当双栏设置完毕时，最后一栏处在左边有一半的几率，
+因此仍然不能输出。%
+在这种情况下，代码
+\begintt
+\supereject
+\if R\lr \null\vfill\eject\fi
+\endtt
+补上一个空白的右栏，以确保所有的内容都被输出。%
+在最后一页，可以把两栏对齐，但是如果还要容纳下脚注和其它插入对象就要有些技巧。%
+附录 E 中有用来对齐附录 I 中索引结尾的宏，
+并且在页面中间开始一个双栏格式。
+
+%\ddangerexercise How should the example above be modified if you want
+%^{three-column output}?
+%\answer Set |\hsize=2.1in|, allocate `|\newbox\midcolumn|', and use the
+%following code:
+%\begintt
+%\output={\if L\lr
+%    \global\setbox\leftcolumn=\columnbox \global\let\lr=M
+%  \else\if M\lr
+%    \global\setbox\midcolumn=\columnbox \global\let\lr=R
+%  \else \tripleformat \global\let\lr=L\fi\fi
+%  \ifnum\outputpenalty>-20000 \else\dosupereject\fi}
+%\def\tripleformat{\shipout\vbox{\makeheadline
+%    \fullline{\box\leftcolumn\hfil\box\midcolumn\hfil\columnbox}
+%    \makefootline}
+%  \advancepageno}
+%\endtt
+%At the end, |\supereject| and say `|\if L\lr \else\null\vfill\eject\fi|'
+%twice.
+\ddangerexercise 怎样修改上面的例子才能得到三栏的输出？
+\answer 设定 |\hsize=2.1in|，分配 `|\newbox\midcolumn|'，然后使用下面的代码：
+\begintt
+\output={\if L\lr
+    \global\setbox\leftcolumn=\columnbox \global\let\lr=M
+  \else\if M\lr
+    \global\setbox\midcolumn=\columnbox \global\let\lr=R
+  \else \tripleformat \global\let\lr=L\fi\fi
+  \ifnum\outputpenalty>-20000 \else\dosupereject\fi}
+\def\tripleformat{\shipout\vbox{\makeheadline
+    \fullline{\box\leftcolumn\hfil\box\midcolumn\hfil\columnbox}
+    \makefootline}
+  \advancepageno}
+\endtt
+在最后，使用 |\supereject| 并写两遍 `|\if L\lr \else\null\vfill\eject\fi|'。
+
+%\ddanger Since \TeX's output routine lags behind its page-construction
+%activity, you can get erroneous results if you change the |\headline| or the
+%|\footline| in an uncontrolled way. For example, suppose that you are
+%typesetting a book, and that the format you are using allows chapters
+%to start in the middle of a page; then it would be a mistake to change
+%the ^{running headline} at the moment you begin a new chapter, since the
+%next actual page of output might not yet include anything from the new
+%chapter. Consider also the task of typesetting a dictionary or a
+%membership roster; a well-designed reference book displays the current range
+%of entries at the top of each page or pair of pages, so that it is
+%easy for readers to thumb through the book when they are searching for
+%isolated words or names. But \TeX's asynchronous output mechanism
+%makes it difficult, if not impossible, to determine just what range
+%of entries is actually present on a page.
+\ddanger \1因为 \TeX\ 的输出例行程序滞后于其构建页面的动作，
+所以如果要无限制地改动 |\headline| 或者 |\footline| 就会得到错误的结果。%
+例如，假定要排版一本书，你所使用的格式允许在页面中间开始一章；
+这样，如果在开始新的章时改动可变的页眉是不对的，
+因为实际的页面可能还没有包括新章的任何内容。%
+再看看排版字典或会员册；
+设计精良的参考书在每页或每对开页的顶部都给出了当前内容的区间，
+使得读者在查找单个单词或人名时很容易翻阅。%
+但是 \TeX\ 非同步的输出方法使得难以找出当前页上内容的区间，即使可以找见。
+
+%\ddanger Therefore \TeX\ provides a way to put ``^{marks}'' into a list;
+%these marks inform the output routine about the range of information on
+%each page. The general idea is that you can say ^^|\mark|
+%\begindisplay
+%|\mark{|\<mark text>|}|
+%\enddisplay
+%in the midst of the information you are typesetting, where the
+%\<mark text> is a token list that is expanded as in the commands
+%|\edef|, |\message|, etc. \TeX\ puts an internal representation of
+%the mark text into the list it is building; then later on, when a
+%completed page is packed into |\box255|, \TeX\ allows the output
+%routine to refer to the first and last mark texts on that page.
+\ddanger 因此， \TeX\ 给出了一种方法，把``标记''放在列中；
+这些标记告诉输出例行程序每个页面内容的区间。%
+一般思路是，可以在你所排版的内容中间声明
+\begindisplay
+|\mark{|\<mark text>|}|
+\enddisplay
+其中 \<mark text> 是一个记号列，展开后是命令 |\edef|, |\message| 等等。%
+ \TeX\ 把这些标记文本的内部表示放在正在建立的列中；
+接着随后，当整个页被封装在 |\box255| 中时，
+ \TeX\ 允许输出例行程序调用本页的第一和最后一个标记文本。
+
+%\ddanger The best way to think of this is probably to imagine that
+%\TeX\ generates an arbitrarily long vertical list of boxes, glue,
+%and other items such as penalties and marks. Somehow that long vertical
+%list gets divided up into pages, and the pages are made available to
+%the output routine, one at a time. Whenever a page is put in |\box255|,
+%\TeX\ sets up the value of three quantities that act essentially
+%like macros:\enddanger
+%\smallskip
+%\item\bull ^|\botmark| is the mark text most recently encountered on the
+%page that was just boxed;
+\ddanger 理解它的最好方法可能是把它想像为 \TeX\ 输出的一个任意长的垂直列，
+其中有盒子，粘连和象惩罚和标记这样的其它项目。%
+由于某种原因，整个长的垂直列被分割为页面，并且这些页面一次只有一个进入输出例行程序。%
+只要页面被放在 |\box255| 中， \TeX\ 设定了本质上与宏一样的三个量的值：\enddanger
+\smallskip
+\item\bull ^|\botmark| 是在刚刚放在盒子中的页面上最近出现的标记文本；
+
+%\item\bull ^|\firstmark| is the mark text that was first encountered on
+%the page that was just boxed;
+\item\bull ^|\firstmark| 是在刚刚放在盒子中的页面上第一次出现的标记文本；
+
+%\item\bull ^|\topmark| has the value that |\botmark| had just before the
+%current page was boxed.
+%\smallbreak\noindent
+%Before the first page, all three of these are null, i.e., they expand
+%to nothing. When there is no mark on a page, all three are equal to
+%the previous |\botmark|.
+\item\bull ^|\topmark| 的值为当前页面盒子紧前面的 |\botmark| 的值。
+\smallbreak\noindent
+在第一个页面前，所有这三个值都是空的，即它们展开时什么也没有。%
+当在页面上没有标记时，所有三个标记都等于前一个 |\botmark|。
+
+%\ddanger For example, suppose that your manuscript includes exactly four
+%marks, and that the pages are broken in such a way that |\mark{|$\alpha$|}|
+%happens to fall on page~2, |\mark{|$\beta$|}| and |\mark{|$\gamma$|}|
+%on page~4, and |\mark{|$\delta$|}| on page~5. Then
+%$$\halign{\indent\hfil#\hfil&&\qquad\hfil#\hfil\cr
+%On page&|\topmark| is&|\firstmark| is&|\botmark| is\cr
+%\noalign{\vskip2pt}
+%1&null&null&null\cr
+%2&null&$\alpha$&$\alpha$\cr
+%3&$\alpha$&$\alpha$&$\alpha$\cr
+%4&$\alpha$&$\beta$&$\gamma$\cr
+%5&$\gamma$&$\delta$&$\delta$\cr
+%6&$\delta$&$\delta$&$\delta$\cr}$$
+\ddanger 例如，假定你的文稿包括四个标记，并且分页方式如下：
+|\mark{|$\alpha$|}| 出现在第 2 页，|\mark{|$\beta$|}| 和 |\mark{|$\gamma$|}|~%
+在第 4 页，|\mark{|$\delta$|}| 在第 5 页。%
+这样，
+$$\halign{\indent\hfil#\hfil&&\qquad\hfil#\hfil\cr
+页面&|\topmark| 为&|\firstmark| 为&|\botmark| 为\cr
+\noalign{\vskip2pt}
+1&null&null&null\cr
+2&null&$\alpha$&$\alpha$\cr
+3&$\alpha$&$\alpha$&$\alpha$\cr
+4&$\alpha$&$\beta$&$\gamma$\cr
+5&$\gamma$&$\delta$&$\delta$\cr
+6&$\delta$&$\delta$&$\delta$\cr}$$
+
+%\ddanger When you use a |\mark| command in vertical mode, \TeX\ puts a
+%mark into the main vertical list. When you use a |\mark| command in
+%horizontal mode, \TeX\ treats it as vertical mode material like
+%^|\vadjust| and ^|\insert|; i.e., after the paragraph has been broken
+%into lines, each mark will go into the main vertical list just after the
+%box for the line where that mark originally appeared. If
+%you use |\mark| in restricted horizontal mode, the mark may migrate out to
+%the enclosing vertical list in the same way that |\insert| and |\vadjust|
+%items do (see Chapter~24); but a mark that is locked too deeply inside
+%a box will not ^{migrate}, so it will never appear as a |\firstmark|
+%or |\botmark|.  Similarly, a |\mark| that occurs in internal vertical mode
+%goes into a vbox, and it is not accessible in the main vertical list.
+\ddanger \1当在垂直模式下使用 |\mark| 命令时， \TeX\ 把一个标记放在主垂直列中。%
+当在水平模式下使用 |\mark| 命令时， \TeX\ 把它看作象 |\vadjust| 和 |\insert|~%
+那样垂直模式下的内容；
+即，在分段为行后，每个标记在主垂直列中的位置就在它最初出现的行的紧后面。%
+如果在受限水平模式下使用 |\mark|, 那么标记就用与 |\insert| 和 |\vadjust|~%
+同样的方法移出封装的垂直列(见第二十四章);
+但是在盒子中埋得太深的标记不会移出，因此它不会作为 |\firstmark| 或%
+~|\botmark| 而出现。%
+类似地，出现在内部垂直模式下的 |\mark| 将放在一个 vbox 中，
+并且它也不进入主垂直列。
+
+%\ddanger Chapter 15 discusses the ^|\vsplit| command, which allows you to
+%break up vertical lists by yourself. This operation sometimes provides
+%a useful alternative to \TeX's ordinary page-building mechanism.
+%For example, if you simply want to typeset some material in two columns
+%of equal height, you can put that material into a vbox, then |\vsplit|
+%the box into two pieces; no output routine is needed at all. The
+%|\vsplit| operation sets up the values of two macro-like quantities
+%that were not mentioned in Chapter~15: ^|\splitfirstmark| and
+%^|\splitbotmark| expand to the mark texts of the first and last
+%marks that appear in the vertical list that was split off by the most
+%recent |\vsplit| command. Both quantities are null if there were no
+%such marks. The values of\/ |\topmark|, |\firstmark|, |\botmark|,
+%|\splitfirstmark|, and |\splitbotmark| are global; i.e., they are
+%not affected by \TeX's ^{grouping} mechanism.
+\ddanger 第十五章讨论了命令 |\vsplit|, 它本身就可以分割垂直列。%
+这个命令有时候可以用在 \TeX\ 普通的页面构建上。%
+例如，如果要直接把某些内容放在等高的两个栏中，就可以把它们放在一个 vbox 中，
+接着用 |\vsplit| 把盒子分为两半；根本不需要任何输出例行程序。%
+命令 |\vsplit| 设置了两个类似于宏的量，它们在第十五章没有被讨论：
+|\splitfirstmark| 和 |\splitbotmark| 就延伸为最近的 |\vsplit| 命令所裂分的垂直列中%
+出现的第一和最后一个标记文本。%
+如果没有这样的标记，它们就是空的。%
+|\topmark|, |\firstmark|, |\botmark|,
+|\splitfirstmark| 和 |\splitbotmark| 的值是全局的；即，
+它们不受 \TeX\ 编组的影响。
+
+%\ddanger Most dictionaries use the equivalent of\/ |\firstmark| and |\botmark|
+%to give ^{guide words} at the top of each pair of facing pages. For example,
+%if the definition of the word `type' starts on page~1387 and continues
+%onto page~1388, the guide word on page~1387 (a right-hand page)
+%will be `type'; but the guide word at the top of page~1388 (a left-hand page)
+%will be the next word in the dictionary (e.g., `typecast') even though
+%the top of page~1388 is about `type'.
+\ddanger 大多数字典在对开页面的顶部用 |\firstmark| 和 |\botmark| 配对来给出引导词。%
+例如，如果单词`type'的定义起于第 1387 页，并且延续到第 1388 页，
+那么在 1387 页(页在右边)的引导词为`type';
+但是在 1388 页(页在左边)的引导词为字典中的下一个词(比如，`typecast'),
+即使 1388 页上还有`type'的内容。
+
+%\ddanger The dictionary scheme works fine for dictionaries, since a reader
+%should start reading each dictionary entry at its beginning. But a different
+%scheme is appropriate for a technical book like the author's {\sl^{Art
+%of Computer Programming}}, ^^{Knuth} where Section~1.2.8 (for example)
+%starts in the middle of page~78, but the top of page~78 contains
+%exercises 19--24 of Section~1.2.7. The headline at the top of page~78
+%refers to `1.2.7', because that will help somebody who is searching
+%for exercise 1.2.7--22. Notice that the dictionary convention would put
+%`1.2.8' at the top of page~78, but that would be appropriate only if
+%Section~1.2.8 had begun exactly at the top of that page.
+\ddanger 字典的程序可以很好地处理字典，因为读者每次是从头开始查阅字典的。%
+但是对象作者的专业书籍 {\sl^{Art of Computer Programming}} 需要用不同的方法，
+其中第 1.2.8 节(例如)从第 78 页的中间开始，但是第 78 页的顶部包含有第 1.2.7 节%
+的练习 19--24。%
+第 78 页的页眉指的是`1.2.7', 这样对查找练习 1.2.7--22 有好处。%
+注意，字典的约定是把 1.2.8 放在第 78 页，但是只有当第 1.2.8 节从此页顶部就开始%
+这才比较合适。
+
+%\ddanger Continuing this example from {\sl The Art of Computer Programming},
+%let's suppose that the \TeX\ manuscript for Section~1.2.8 begins with
+%a macro call like
+%\begintt
+%\beginsection 1.2.8. Fibonacci Numbers.
+%\endtt
+%How should |\beginsection| be defined? Here is one attempt:
+%\begintt
+%\def\beginsection #1. #2.
+%  {\sectionbreak
+%  \leftline{\sectionfont #1. #2}
+%  \mark{#1}
+%  \nobreak\smallskip\noindent}
+%\endtt
+%The |\sectionbreak| macro should encourage \TeX\ either to break the page at the
+%current position, or to leave a goodly amount of blank space; e.g.,
+%|\sectionbreak| might be an abbreviation for `|\penalty-200| |\vskip18pt|
+%|plus4pt| |minus6pt|'. The |\beginsection| macro ends with commands that
+%suppress indentation of the first paragraph in the section. But the thing
+%that concerns us with respect to output routines is the |\mark| command
+%that follows |\leftline|.  In the example we have been considering, the
+%beginning of Section~1.2.8 would insert `|\mark{1.2.8}|' into the main
+%vertical list just after the box containing the title of that section.
+\ddanger 继续讨论这个来自 {\sl The Art of Computer Programming} 的例子，
+假定第 1.2.8 节的文稿以一个宏开始，象下面这样：
+\begintt
+\beginsection 1.2.8. Fibonacci Numbers.
+\endtt
+那么怎样定义 |\beginsection|? 下面是一种尝试：
+\begintt
+\def\beginsection #1. #2.
+  {\sectionbreak
+  \leftline{\sectionfont #1. #2}
+  \mark{#1}
+  \nobreak\smallskip\noindent}
+\endtt
+\1宏 |\sectionbreak| 提示 \TeX\ 在此处分页或者留下一定的间距；
+比如，|\sectionbreak| 可以定义为`|\penalty|\allowbreak|-200| |\vskip18pt|
+|plus4pt| |minus6pt|'。%
+宏 |\beginsection| 结尾的命令把本节第一段的缩进给去掉了。%
+但是我们关心的是跟在 |\leftline| 后面与输出例行程序有关的命令 |\mark|。%
+在本例中我们要讨论的是，在盒子把此节的题目包含进去的紧后面，
+我们要在第 1.2.8 节的开头把%
+`|\mark{1.2.8}|'插入到主垂直列中。
+
+%\ddanger Is such a |\mark| adequate? Unfortunately, no, not even if we
+%assume for simplicity that at most one section begins on each page.
+%The page that contains the beginning of Section~1.2.8 will then have
+%|\topmark=1.2.7| and |\firstmark=1.2.8|, regardless of whether or not the
+%section starts at the very top of the page. What we want in this application
+%is a cross between |\topmark| and |\firstmark|: something that will reflect
+%the mark text that represents the state of affairs just after the first
+%line of the page. And \TeX\ doesn't provide that.
+\ddanger 这样一个 |\mark| 就行了吗？
+很不幸，不行，即使我们为了简化而假设每个页面上至多有一节也不行。%
+包含第 1.2.8 节开头的页面就有 |\topmark=1.2.7| 和 |\firstmark=1.2.8|, %
+而不管节是不是从页面顶部开始。%
+在这个应用中我们要的是 |\topmark| 和 |\firstmark| 之间的一个交叉：
+反映的应该是此页面第一行紧后面情况的标记文本。
+而 \TeX\ 没有给出它。
+
+%\ddanger The solution is to emit the |\mark| just before the |\sectionbreak|,
+%instead of just after the |\leftline|. Then |\topmark| will always reflect
+%the truth about the section that is current at the top line. \ (Think about it.)
+\ddanger 解决方法是把 |\mark| 放在 |\sectionbreak| 紧前面而不是 |\leftline|~%
+紧后面。%
+这样 |\topmark| 反映的总是当前页面顶行的节的情况。%
+(想一想。)
+
+%\ddanger However, the format for {\sl The Art of Computer Programming\/}
+%is more complex than this. On left-hand pages, the section number in the
+%headline is supposed to reflect the situation at the top of the page,
+%as we have just discussed, but on right-hand pages it is supposed to refer
+%to the bottom of the page. Our solution to the previous problem made
+%|\topmark| correct for the top, but it can make |\botmark| incorrect
+%at the bottom. In order to satisfy both requirements, it is necessary
+%to pack more information into the marks. Here's one way to solve the problem:
+%\begintt
+%\def\beginsection #1. #2.
+%  {\mark{\currentsection \noexpand\else #1}
+%  \sectionbreak
+%  \leftline{\sectionfont #1. #2}
+%  \mark{#1\noexpand\else #1} \def\currentsection{#1}
+%  \nobreak\smallskip\noindent}
+%\def\currentsection{} % the current section number
+%\endtt
+%The idea is to introduce two marks, one just before the section break
+%and one just after the section has begun. Furthermore each mark has two
+%parts; the mark just before the potential break between Sections 1.2.7
+%and~1.2.8 is `|1.2.7\else 1.2.8|', while the one just after that potential
+%break is `|1.2.8\else 1.2.8|'. It follows that the section number corresponding
+%to the bottom of a page is the left component of\/ |\botmark|; the section
+%number corresponding to the top of a page is the right component of\/
+%|\topmark|.  The |\rightheadline| macro can make use of
+%`^|\iftrue||\botmark\fi|' to read the left component, and the
+%|\leftheadline| macro can say `^|\expandafter|^|\iffalse||\topmark\fi|' to
+%read the right component.
+\ddanger 但是，{\sl The Art of Computer Programming\/} 的格式比这更复杂。%
+在左侧页面上，页眉上的节名反映的是页眉顶部的情况，就象我们刚讨论的那样，
+但是在右侧页面上，要对应的是此页面底部的情况。%
+前一个问题的解决之道是正确地把 |\topmark| 放在顶部，
+而它却错误地把 |\botmark| 放在底部。%
+为了满足这两个要求，必须把更多的内容赋予此标记。%
+下面就是一种解决的方法：
+\begintt
+\def\beginsection #1. #2.
+  {\mark{\currentsection \noexpand\else #1}
+  \sectionbreak
+  \leftline{\sectionfont #1. #2}
+  \mark{#1\noexpand\else #1} \def\currentsection{#1}
+  \nobreak\smallskip\noindent}
+\def\currentsection{} % the current section number
+\endtt
+思路就是引入两个标记，一个放在节断点紧前面，一个放在节开始的紧后面。%
+还有，每个标记有两个部分；在第 1.2.7 节和第 1.2.8 节的潜在断点紧前面的标记是%
+`|1.2.7\else 1.2.8|', 而潜在断点后面的是`|1.2.8\else 1.2.8|'。%
+这样，对应于页面底部的节号是 |\botmark| 的左分量；
+对应于页面顶部的节号是 |\topmark| 的右分量。%
+宏 |\rightheadline| 可以利用`|\iftrue||\botmark\fi|'来读入左分量，
+宏 |\leftheadline| 可以用`|\expandafter|^|\iffalse||\topmark\fi|'来读入右分量。
+
+%\ddangerexercise B. C. ^{Dull} used a construction very much like the one above,
+%but he put the second |\mark| just before the |\leftline| instead of
+%just after it. What went wrong?
+%\answer He forgot that ^{interline glue} is inserted automatically before
+%the |\leftline|; this permits a legal breakpoint between the |\mark| and
+%the |\leftline| box, according to the rules of page breaking in Chapter~15.
+%One cure would be to say ^|\nobreak| just after the |\mark|; but it's
+%usually best to put marks and ^{insertions} just {\sl after\/} boxes.
+\ddangerexercise 用户^{呆呆}使用的定义非常类似与上面的那个，
+但是他把第二个 |\mark| 从 |\leftline| 紧后面变成紧前面。
+这样会出现什么错误？
+\answer 他忘记 \TeX\ 将自动在 |\leftline| 之前插入^{行间粘连}；
+依照第 15 章介绍的分页规则，这允许在在 |\mark| 和 |\leftline|
+盒子之间出现分页点。有种纠正方法是在 |\mark| 前面写上 ^|\nobreak| ；
+但一般来说最好是让标记和^{插入项}紧跟在盒子{\sl 后面}。
+
+%\ddangerexercise The marks in the previous construction have the form
+%`$\alpha$|\else|$\,\beta$', where $\alpha$ and $\beta$ are two independent
+%pieces of information. The `|\else|' makes it possible to select
+%either $\alpha$ or $\beta$ by means of\/ ^|\iftrue| and ^|\iffalse|.
+%Generalize this idea: Suppose that you have an application in which
+%marks are supposed to carry five independent pieces of information,
+%and that each mark has the form `$\alpha_0$|\or|$\,\alpha_1$|\or|%
+%$\,\alpha_2$|\or|$\,\alpha_3$|\or|$\,\alpha_4$'. Explain how to select
+%any one of the five $\alpha$'s from such a mark.
+%\answer Say, for example, |\ifcase2\expandafter\relax\botmark\fi| to
+%read part $\alpha_2$ of\/ |\botmark|. Another solution puts the five
+%components into five parameters of a macro, analogous to the method
+%used by |\inxcheck| later in this chapter; but the |\ifcase| approach
+%is usually more efficient, because it lets \TeX\ pass over the unselected
+%components at high speed.
+\ddangerexercise \1前面构造的标记的格式为 `$\alpha$|\else|$\,\beta$'，
+其中 $\alpha$ 和 $\beta$ 是两个不相关的内容。用 `|\else|' 使得可以用
+|\iftrue| 和 |\iffalse| 来选择 $\alpha$ 或 $\beta$。推广一下：
+假定在一个任务中，标记中有五个不相关的内容，并且每个标记的格式为
+`$\alpha_0$|\or|$\,\alpha_1$|\or|$\,\alpha_2$|\or|$\,\alpha_3$|\or|$\,\alpha_4$'。
+看看怎样从这样的标记中任意选择出某个 $\alpha$。
+\answer 比如可以用 |\ifcase2\expandafter\relax\botmark\fi| 读取 |\botmark|
+的 $\alpha_2$。另一种解法类似于本章后面在 |\inxcheck| 中所用的，
+即将五部分内容作为一个宏的五个参数；但是 |\ifcase| 方法通常更加高效，
+因为它让 \TeX\ 以高速跳过未选择的部分。
+
+%\ddanger Let's conclude our discussion of output routines by considering an
+%application to indexes, such as the index to this manual that appears
+%^^{index marks} ^^{index example}
+%in Appendix~I\null. The most complicated entries in such an index will
+%look something like this:
+%\begindisplay
+%Main entry, 4, 6, 8--10, 12, 14--16,\cr
+%\qquad 18--22, 24--28, 30.\cr
+%\quad first subsidiary entry, 1--3, 6, 10--11,\cr
+%\qquad 15, 21, 24, 28.\cr
+%\quad second subsidiary entry, 1, 3, 6--7,\cr
+%\qquad  10, 15, 21, 25, 28, 31.\cr
+%\enddisplay
+%Main entries and subsidiary entries are typeset ^{ragged-right},
+%with two ems of hanging indentation after the first line; subsidiary entries
+%are indented one em on the first line. Our goal will be to typeset
+%such material from input that looks like this:
+%\begintt
+%\beginindex
+%...
+%Main entry, 4, 6, 8--10, 12, 14--16, 18--22, 24--28, 30.
+%\sub first subsidiary entry, 1--3, 6, 10--11, 15, 21, 24, 28.
+%\sub second subsidiary entry, 1, 3, 6--7, 10, 15, 21, 25, %
+%  28, 31.
+%...
+%\endindex
+%\endtt
+%where `|...|'\ stands for other entries. Each line of input normally specifies
+%one main entry or one subsidiary entry; if an entry is so long that it doesn't
+%fit on a single input line, `\]|%|' is typed at the end of the line so
+%that it merges with the following one.
+\ddanger 在输出例行程序最后，我们讨论把它应用于索引，
+比如本手册中出现在附录 I 中的索引。%
+在这样的索引中，最复杂的条目是象这样的：
+\begindisplay
+Main entry, 4, 6, 8--10, 12, 14--16,\cr
+\qquad 18--22, 24--28, 30.\cr
+\quad first subsidiary entry, 1--3, 6, 10--11,\cr
+\qquad 15, 21, 24, 28.\cr
+\quad second subsidiary entry, 1, 3, 6--7,\cr
+\qquad  10, 15, 21, 25, 28, 31.\cr
+\enddisplay
+主条目和子条目都是作对齐，第一行后要悬挂缩进两个 em;
+子条目的第一行要缩进一个 em。%
+我们的目的是从下列这样的输入来排版：
+\begintt
+\beginindex
+...
+Main entry, 4, 6, 8--10, 12, 14--16, 18--22, 24--28, 30.
+\sub first subsidiary entry, 1--3, 6, 10--11, 15, 21, 24, 28.
+\sub second subsidiary entry, 1, 3, 6--7, 10, 15, 21, 25, %
+  28, 31.
+...
+\endindex
+\endtt
+其中`|...|'表示其它条目。%
+每个输入行一般给出一个主条目或一个子条目；
+如果条目太长在一行放不下，就可以在此行结尾输入`\]|%|'%
+使得可以在下一行继续输入。
+
+%\ddanger The interesting thing about this index problem is that it is
+%desirable to set up a system of marks so that the output routine can insert
+%special lines of text when an entry has been broken between columns or
+%pages. For example, if a page break occurs between any of the six lines
+%of typeset output shown above, the output routine should emit the special
+%line
+%\begindisplay
+%Main entry ({\it continued}\thinspace):
+%\enddisplay
+%and if a page break occurs within a subsidiary entry, an additional special
+%line
+%\begindisplay
+%\quad subsidiary entry ({\it continued}\thinspace):
+%\enddisplay
+%should also appear. The solution below produces marks so that |\botmark|
+%will be null if a break occurs between main entries; it will be
+%`|Main entry|' if a break occurs after lines 1, 2, or~4 of the six
+%example output lines; it will be `|Main entry\sub first subsidiary entry|'
+%if a break occurs after line~3 (within the first subsidiary entry); and it will
+%be `|Main entry\sub second subsidiary entry|' if a break occurs after line~5.
+\ddanger 对这个索引问题，感兴趣的是设置一个标记系统，使得当一个条目出现在不同栏%
+或页面时输出例行程序可以插入一行特殊文字。%
+例如，如果在上述六行中出现了分页，那么输出例行程序可以输出特殊文字行
+\begindisplay
+Main entry ({\it continued}\thinspace):
+\enddisplay
+并且当分页出现在子条目时，也会出现另外的特殊行
+\begindisplay
+\quad subsidiary entry ({\it continued}\thinspace):
+\enddisplay
+下面的解决方法得到的标记使得当断点出现在主条目之间时 |\botmark| 为空；
+如果出现在六个例句行的第 1, 2 或 4 行后面时它是`|Main entry|';
+当出现在第 3 行(第一个条目中)后面时它是`|Main entry\sub first subsidiary entry|';
+如果出现在第 5 行后面时它是`|Main entry\sub second subsidiary entry|'。
+
+%\ddanger The reader may wish to try solving this problem before looking at
+%the solution, because it will then be easier to appreciate the subtler
+%issues that are involved. \ (Go ahead: Try to define a macro |\beginindex|
+%that does the ragged-right setting and produces the specified marks. Turn
+%back to the previous page to study the problem carefully, before peeking
+%at the answer.)
+%^^|\everypar| ^^|\futurelet| ^^|\exhyphenpenalty| ^^|\raggedright|
+%^^|\hangindent|
+%\begintt
+%\def\beginindex{\begingroup
+%  \parindent=1em \maxdepth=\maxdimen
+%  \def\par{\endgraf \futurelet\next\inxentry}
+%  \obeylines \everypar={\hangindent 2\parindent}
+%  \exhyphenpenalty=10000 \raggedright}
+%\def\inxentry{\ifx\next\sub \let\next=\subentry
+%  \else\ifx\next\endindex \let\next=\vfill
+%  \else\let\next=\mainentry \fi\fi \next}
+%\def\endindex{\mark{}\break\endgroup}
+%\let\sub=\indent \newtoks\maintoks \newtoks\subtoks
+%\def\mainentry#1,{\mark{}\noindent
+%  \maintoks={#1}\mark{\the\maintoks}#1,}
+%\def\subentry\sub#1,{\mark{\the\maintoks}\indent
+%  \subtoks={#1}\mark{\the\maintoks\sub\the\subtoks}#1,}
+%\endtt
+%Even if you have read this solution, you probably want an explanation of
+%what it does, because it uses ``\TeX tics'' that have not appeared before
+%in this manual.\enddanger
+%\smallskip
+%\textindent{1)} The |\beginindex| macro uses ^|\begingroup| to keep other
+%changes local; thus, it won't be necessary to restore ^|\parindent| and
+%^|\maxdepth|, etc., to their former values when the index is finished.
+%The |\maxdepth| parameter is set to ^|\maxdimen|, which is essentially
+%infinite, so that |\box255| will have the true depth of the last box that
+%it contains; we will use this fact below. \ (It is safe to disable
+%|\maxdepth| in this way, since the entries in an index can be assumed
+%to have reasonably small depth.) \ Notice that ^|\obeylines| is used, so
+%that ^|\par| will effectively be inserted at the end of every line of
+%input. The meaning of\/ |\par| is changed so that it does more than usual:
+%First it does ^|\endgraf|, which is \TeX's ordinary |\par| operation;
+%then it sets |\next| to the first token of the next line, after which the
+%macro |\inxentry| will be expanded.
+\ddanger \1读者可能希望在看答案之前解决这个问题，
+因为它没有什么难点，比较简单。%
+(继续：先定义一个宏 |\beginindex|, 它左对齐，并且生成给定的标记。%
+在回到前一页，在看答案前仔细研究这个问题。)
+\begintt
+\def\beginindex{\begingroup
+  \parindent=1em \maxdepth=\maxdimen
+  \def\par{\endgraf \futurelet\next\inxentry}
+  \obeylines \everypar={\hangindent 2\parindent}
+  \exhyphenpenalty=10000 \raggedright}
+\def\inxentry{\ifx\next\sub \let\next=\subentry
+  \else\ifx\next\endindex \let\next=\vfill
+  \else\let\next=\mainentry \fi\fi \next}
+\def\endindex{\mark{}\break\endgroup}
+\let\sub=\indent \newtoks\maintoks \newtoks\subtoks
+\def\mainentry#1,{\mark{}\noindent
+  \maintoks={#1}\mark{\the\maintoks}#1,}
+\def\subentry\sub#1,{\mark{\the\maintoks}\indent
+  \subtoks={#1}\mark{\the\maintoks\sub\the\subtoks}#1,}
+\endtt
+即使你看完这个答案，也希望有一些解释，因为它用到了本手册前面未出现过的%
+`` \TeX\ 技术''。
+\enddanger
+\smallskip
+\textindent{1)} 宏 |\beginindex| 用 |\begingroup| 来保持其它改变的局部性；
+因此，当索引结束时，不需要恢复 |\parindent| 和 |\maxdepth| 等以前的值。%
+参数 |\maxdepth| 设定为 |\maxdimen|, 它实际上是无限大，这样 |\box255| 的深度%
+就是它所包含的最后盒子的真实深度；下面我们将用到这个结果。%
+(用这种方法可以安全地把 |\maxdepth| 无用化，因为索引中的条目可以假定有相当小的深度。)
+注意，这里使用了 |\obeylines|, 因此在输入行的结尾处都插入了 |\par|。%
+改变 |\par| 意思可以让它完成比以前更多的任务：
+首先，它实现了 |\endgraf| 这个 \TeX\ 的普通 |\par| 的任务；
+其次，它把 |\next| 设置为下一行的第一个记号，在此后面，将展开宏 |\inxentry|。
+
+%\smallskip
+%\textindent{2)} When |\inxentry| comes into play it looks at |\next|
+%to decide what to do. There are three cases: If\/ |\next| is `|\sub|',
+%the line will be treated as a subsidiary entry; if\/ |\next| is `|\endindex|',
+%the next commands executed will be `|\vfill|\allowbreak
+%|\mark{}|\allowbreak|\break|\allowbreak|\endgroup|';
+%otherwise the line will be treated as a main entry.
+\smallskip
+\textindent{2)} 当 |\inxentry| 开始时，它要看 |\next| 以决定要做什么。%
+有三种情况：
+如果 |\next| 是`|\sub|', 此行就看作子条目；
+如果 |\next| 是`|\endindex|', 下一个执行的命令就是`|\vfill|\allowbreak
+|\mark{}|\allowbreak|\break|\allowbreak|\endgroup|';
+否则，此行就是主条目。
+
+%\smallskip
+%\textindent{3)} The text of a main entry is put into parameter |#1| of
+%|\mainentry|; this parameter is delimited by a comma. The first thing that
+%|\mainentry| does is `|\mark{}|', which clears the mark in case of a
+%break between entries. Then comes `^|\noindent|', which causes \TeX\ to
+%go into horizontal mode and to emit ^|\parskip| glue. \ (The |\parskip|
+%glue will be a legal breakpoint between lines; it will later be followed
+%by interline glue, when the first line of the main entry has been typeset
+%by \TeX's paragraphing routine.) \ Then another |\mark| is put into
+%the paragraph itself; this one contains the text of the main entry,
+%and a ^|\toks| register called ^|\maintoks| is used to ^{inhibit
+%expansion} of the mark text. When the paragraph is completed and broken
+%into lines, this particular mark will immediately follow the box for the
+%paragraph's first line, so it will be the |\botmark| if a page break
+%occurs anywhere within the paragraph.
+\smallskip
+\textindent{3)} 主条目的文本被放在 |\mainentry| 的参数 |#1| 中；
+此参数的分界符是逗号。%
+|\mainentry| 做的第一件事是`|\mark{}|', 断点在条目之间时就清空此标记。%
+接着是`|\noindent|', 它使 \TeX\ 进入水平模式并且放置粘连 |\parskip|。%
+(粘连 |\parskip| 是行间的一个合理断点；当排版好主条目的第一行时，
+接下来的是行间粘连。)
+接着另一个 |\mark| 自己被放在段落中；
+它包含主条目的文本和一个叫做 |\maintoks| 的 |\toks| 寄存器，
+此寄存器用来禁止标记文本展开。%
+当段落结束和裂分为行时，这个特殊的标记就立即放到段落第一行的后面，
+因此如果分页出现在段落中的任何地方，它就是 |\botmark|。
+
+%\smallskip
+%\textindent{4)} A similar construction is used for |\subentry|, but the
+%mark is more complicated. The |\maintoks| register will still contain the
+%main entry. The text for the subsidiary entry is added using another
+%token list register, |\subtoks|.  Since |\sub| has been defined to equal
+%^|\indent|, it will not be expanded in this |\mark|.
+\smallskip
+\textindent{4)} \1类似的构造也用在 |\subentry| 上，但是这个标记更复杂。%
+|\maintoks| 寄存器包含的仍然是主条目。%
+子条目的文本用另一个记号列寄存器 |\subtoks| 来添加。%
+因为 |\sub| 已经定义得等于 |\indent|, 所以在此标记中它不会展开。
+
+%\ddanger The macros just defined will typeset entries that contain the
+%necessary marks; now we must construct an output routine that uses
+%these marks in the desired way, to insert new lines that say `({\it
+%continued}\thinspace)' as mentioned above. Again, the reader is advised to
+%try solving this problem before looking at the following solution.
+%\begintt
+%\output={\dimen0=\dp255 \normaloutput
+%  \expandafter\inxcheck\botmark\sub\end}
+%\def\inxcheck#1\sub#2\end{\def\next{#1}%
+%  \ifx\next\empty % do nothing if \botmark is null
+%  \else\noindent #1\continued % `Main entry (continued):'
+%    \def\next{#2}%
+%    \ifx\next\empty % nothing more if \botmark has no \sub
+%    \else\let\sub=\continued \indent #2\fi
+%    \advance\dimen0 by-\prevdepth \kern\dimen0 \fi}
+%\def\continued{ ({\it continued}\thinspace):\endgraf}
+%\endtt
+%This coding is a bit more subtle than usual. It assumes that |\normaloutput|
+%takes care of shipping out |\box255| (possibly putting it into multicolumn
+%format) and advancing the page number; then comes new stuff, which is
+%performed by |\inxcheck|. The |\inxcheck| macro is invoked in an interesting
+%way that allows |\botmark| to be separated into its components. If\/ |\botmark|
+%^^{macro arguments}
+%is null, argument~|#1| to |\inxcheck| will be null; hence |\next| will be
+%found equivalent to ^|\empty|. \ (Plain \TeX\ says `|\def\empty{}|' in
+%order to accommodate situations like this.) \ If\/ |\botmark| doesn't contain
+%the token~|\sub|, argument~|#1| will be the contents of\/ |\botmark| while
+%|#2|~will be null. Otherwise, if\/ |\botmark| has the form $\alpha$|\sub|$\,
+%\beta$, argument~|#1| will be $\alpha$ and |#2|~will be `$\beta$|\sub|'.
+\ddanger 刚才定义的宏就把包含必要的标记的条目排版出来了；
+现在我们必须构造一个输出例行程序，它按照所要求的方法使用这些标记，
+以插入象前面提到的新行`({\it continued}\thinspace)'。%
+我们再次建议读者在看答案之前动手解决这个问题。
+\begintt
+\output={\dimen0=\dp255 \normaloutput
+  \expandafter\inxcheck\botmark\sub\end}
+\def\inxcheck#1\sub#2\end{\def\next{#1}%
+  \ifx\next\empty % do nothing if \botmark is null
+  \else\noindent #1\continued % `Main entry (continued):'
+    \def\next{#2}%
+    \ifx\next\empty % nothing more if \botmark has no \sub
+    \else\let\sub=\continued \indent #2\fi
+    \advance\dimen0 by-\prevdepth \kern\dimen0 \fi}
+\def\continued{ ({\it continued}\thinspace):\endgraf}
+\endtt
+这段代码比一般的要深奥。%
+它假定了 |\normaloutput| 被送到 |\box255|(可能它是一个多栏的格式),
+并且增加页码；
+接着出现新的素材，它由 |\inxcheck| 来执行。%
+宏 |\inxcheck| 用一种有趣的方式来调用，它允许把 |\botmark| 分解为其分量。%
+如果 |\botmark| 为空，那么 |\inxcheck| 的参量 |#1| 就是空的；
+因此 |\next| 就等价于 |\empty|。%
+(Plain \TeX\ 声明`|\def\empty{}|'是为了这种情况而使用。)
+如果 |\botmark| 不包含记号 |\sub|, 那么参量 |#1| 就是 |\botmark| 的内容，
+而 |#2| 为空。%
+否则，如果 |\botmark| 的形式为 $\alpha$|\sub|$\,\beta$,
+那么参量 |#1| 就是 $\alpha$ 而 |#2| 就是`$\beta$|\sub|'。
+
+%\ddanger If\/ |\botmark| isn't null, the |\inxcheck| macro produces one or
+%more lines of text that will be contributed to \TeX's main vertical list
+%at the position of the page break. And here's where the most subtle point
+%arises: There will be ^{interline glue} at the page break, computed on
+%the basis of the depth of the box that preceded the break. That depth
+%is known to the output routine, since it's the depth of\/ |\box255|. \ (The
+%value of\/ ^|\maxdepth| was made infinite for precisely this reason.) \
+%Therefore the |\inxcheck| macro can insert a ^|\kern| to compensate for
+%the difference in depth between the old box and the one that will be
+%inserted before the interline glue that has already been computed. Without
+%this |\kern|, the spacing would be wrong. The reader should study this
+%example carefully, to understand the reasoning behind the |\kern| command,
+%before designing an output routine that inserts new boxes between
+%random lines of output.
+\ddanger 如果 |\botmark| 是非空的，那么宏 |\inxcheck| 就得到一行或多行文本，
+它们将被放置到 \TeX\ 主垂直列的页面断点的地方。%
+并且最深奥的要点是在下面：
+在分页处将有一个行间粘连，它是基于断点前面的盒子深度而计算出的。%
+对输出例行程序，此深度是已知的，因为它是 |\box255| 的深度。%
+(|\maxdepth| 的值就是为此而变成无限大的。)
+因此，宏 |\inxcheck| 可以插入一个 |\kern| 以弥补旧盒子和已经计算好要插入到%
+行间粘连前的盒子之间深度的差。%
+没有此 |\kern| 的话，间距就是错误的。%
+在设计在随机输出行之间插入新盒子的输出例行程序前，
+读者应该好好研究一下这个例子，以理解命令 |\kern| 背后的原因。
+
+%\ddangerexercise Modify this construction so that continuation lines are
+%inserted only in the left columns of even-numbered pages, assuming
+%two-column format.
+%\answer |\output={\dimen0=\dp255 \normaloutput|\parbreak
+%        |  \ifodd\pageno\else\if L\lr|\parbreak
+%        |    \expandafter\inxcheck\botmark\sub\end\fi\fi}|
+%\smallskip\noindent In this case the |\normaloutput| macro should be the
+%two-column output routine that was described earlier in this chapter, beginning
+%with `|\if L\lr|' and ending with `|\let\lr=L\fi|'. \ (There is no need
+%to test for |\supereject|.)
+\ddangerexercise 修改这个构造，使得在双栏时，续行只插入在偶数页的左侧栏中。
+\answer |\output={\dimen0=\dp255 \normaloutput|\parbreak
+        |  \ifodd\pageno\else\if L\lr|\parbreak
+        |    \expandafter\inxcheck\botmark\sub\end\fi\fi}|
+\smallskip\noindent 在这个情形中，|\normaloutput|
+宏应当是本章之前描述的双栏输出例行程序，它以 `|\if L\lr|' 开头以
+`|\let\lr=L\fi|' 结尾。（没有必要检验 |\supereject|。）
+
+%\ddangerexercise True or false: The |\inxcheck| macro in this
+%example contributes at most two lines of output to the main vertical list.
+%\answer False. If the text of the main and/or subsidiary entry is lengthy,
+%a continuation line may actually become two or more lines. \ (Incidentally,
+%hanging indentation will then occur, because the |\everypar| command---which
+%was set up outside the |\output| routine---is effective inside.) \ The
+%|\vsize| must be large enough to accommodate all continuation lines plus
+%at least one more line of index material, or else infinite looping will occur.
+\ddangerexercise 真假题：在本例中的宏 |\inxcheck| 至多把两行输出放在主垂直列。
+\answer 假。如果主条目或子条目很长，续行可能实际上有两行或更多。%
+（顺便说一下，此时悬挂缩进将出现，因为在其中 |\everypar| 命令是生效的——
+此命令是在 |\output| 例行程序外边设置的。）%
+|\vsize| 必须足够大，以容纳所有续行加上至少一行索引素材，否则会出现无限循环。
+
+%\ddanger When \TeX\ sees an ^|\end| command, it terminates the job only
+%if the main vertical list has been entirely output and if\/ ^|\deadcycles||=0|.
+%Otherwise it inserts the equivalent of
+%\begintt
+%\line{} \vfill \penalty-'10000000000
+%\endtt
+%into the main vertical list, and prepares to read the `|\end|' token again.
+%This has the effect of invoking the output routine repeatedly until
+%everything has been shipped out. In particular, the last column of two-column
+%format will not be lost.
+\ddanger \1当 \TeX\ 遇到命令 |\end| 时，
+只有当主垂直列已经完全输出并且 |\deadcycles||=0| 时它才终止任务。
+否则它就把与
+\begintt
+\line{} \vfill \penalty-'10000000000
+\endtt
+等价的命令插入到主垂直列中，并且准备着再次读入记号 `|\end|'。
+其结果是重复调用输出例行程序直到所有内容都送出去了。
+特别是，双栏格式中的最后一栏也不会落掉。
+
+%\ddanger It is possible to devise output routines that always leave a residue
+%on the main vertical list, yet they never allow |\deadcycles| to
+%increase. In such a case \TeX\ will never come to an end! An output
+%routine can recognize that it is being invoked by \TeX's endgame, because
+%of the highly negative |\outputpenalty| caused by the special
+%^|\penalty-'10000000000|. At such times the output routine should modify
+%its behavior, if necessary, so that a happy ending will ensue.
+\ddanger 可能设计出一个输出例行程序，它总是在主垂直列上剩下一些残余，
+然而却不允许 |\deadcycles| 增加。%
+在这种情况下， \TeX\ 就永不结束!
+输出例行程序可意识到，它由 \TeX\ 的终结程序所调用，
+因为特殊的 |\penalty-'10000000000| 会导致 |\outputpenalty| 是很大的负值。%
+这时，如果必要，输出例行程序就修改其参数使得出现一个不错的结尾。
+
+\endchapter
+
+I think you will like them,
+when you shall see them on a beautiful quarto page,
+where a neat rivulet of text
+shall meander through a meadow of margin.
+'Fore Gad they will be the most elegant things of their kind!
+\author RICHARD BRINSLEY ^{SHERIDAN}, %
+  {\sl The School for Scandal\/} (1777) % Act I Sc 1
+
+\bigskip
+
+The influence of technical changes upon outputs
+through variation in the general investment level {\cmman\char'14}
+is so small that actually it could have been neglected.
+\author WASSILY W. ^{LEONTIEF}\kern-1pt, %
+ {\sl The Structure of American Economy, 1919--1929\/} (1941)
+
+\vfill\eject\byebye

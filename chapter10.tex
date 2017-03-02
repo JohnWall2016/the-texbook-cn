@@ -1,0 +1,557 @@
+% -*- coding: utf-8 -*-
+
+\input macros
+
+%\beginchapter Chapter 10. Dimensions
+\beginchapter Chapter 10. 尺寸
+
+\origpageno=57
+
+%Sometimes you want to tell \TeX\ how big to make a space, or how wide to
+%make a line. For example, the short story of Chapter~6 used the instruction
+%`|\vskip .5cm|' to skip vertically by half a centimeter, and we also
+%said `|\hsize=4in|' to specify a horizontal size of 4~inches. It's time now
+%to consider the various ways such ^{dimensions} can be communicated to \TeX.
+\1有时候，需要告诉 \TeX\ 产生多大的间距，或者生成一条多长的直线。%
+例如，第六章简短的 stroy 中，使用了命令`|\vskip .5cm|'来在垂直方向跳过半厘米，
+并且用`|\hsize=4in|'给出了宽度为 4 英寸的水平栏。%
+现在，应该讨论一下把这些尺寸要求告诉 \TeX\ 的各种方法了。
+
+%``^{Points}'' and ``^{picas}'' are the traditional units of measure for
+%printers and compositors in English-speaking countries, so \TeX\
+%understands points and picas. \TeX\ also understands inches and metric
+%units, as well as the continental European versions of points and picas.
+%Each unit of measure is given a two-letter abbreviation, as follows:
+%^^{units of measure, table}
+%$$\halign{\indent\tt#&\quad#\hfil\cr
+%pt&point (baselines in this manual are $12\pt$ apart)\cr
+%pc&pica ($\rm1\,pc=12\,pt$)\cr
+%in&inch ($\rm1\,in=72.27\,pt$)\cr
+%bp&big point ($\rm72\,bp=1\,in$)\cr
+%cm&centimeter ($\rm2.54\,cm=1\,in$)\cr
+%mm&millimeter ($\rm10\,mm=1\,cm$)\cr
+%dd&didot point ($\rm1157\,dd=1238\,pt$)\cr
+%cc&cicero ($\rm1\,cc=12\,dd$)\cr
+%sp&scaled point ($\rm65536\,sp=1\,pt$)\cr}$$
+%^^|pt|^^{point}
+%^^|pc|^^{pica}
+%^^|in|^^{inch}
+%^^|bp|^^{big point}
+%^^|cm|^^{centimeter}
+%^^|mm|^^{millimeter}
+%^^|dd|^^{didot point}^^{Didot, F. A.}
+%^^|cc|^^{cicero}
+%^^|sp|^^{scaled point}
+%The output of \TeX\ is firmly grounded in the metric system, using the
+%conversion factors shown here as exact ratios.
+在使用英语的国家，``{points}''和``{picas}''是打印机和排版界的传统的度量单位，
+所有 \TeX\ 认识 points 和 picas。%
+\TeX\ 还认识英寸制和米制，以及欧洲大陆使用的 points 和 picas。%
+每个度量单位用两个字母的缩写表示如下：
+$$\halign{\indent\tt#&\quad#\hfil\cr
+pt&point ({\hbox{本手册的基线之间距离是}}~$12\pt$)\cr
+pc&pica ($\rm1\,pc=12\,pt$)\cr
+in&inch ($\rm1\,in=72.27\,pt$)\cr
+bp&big point ($\rm72\,bp=1\,in$)\cr
+cm&centimeter ($\rm2.54\,cm=1\,in$)\cr
+mm&millimeter ($\rm10\,mm=1\,cm$)\cr
+dd&didot point ($\rm1157\,dd=1238\,pt$)\cr
+cc&cicero ($\rm1\,cc=12\,dd$)\cr
+sp&scaled point ($\rm65536\,sp=1\,pt$)\cr}$$
+利用列在这里的转换因子作为精确的比例，\TeX\ 严格按照米制系统输出。
+
+%\exercise How many points are there in 254 centimeters?
+%\answer Exactly $7227\pt$.
+\exercise 在 254 厘米中有多少 points?
+\answer 正好 $7227\pt$。
+
+%When you want to express some physical dimension to \TeX, type it as
+%\begindisplay
+%\<optional sign>\<number>\<unit of measure>\cr
+%\noalign{\hbox{or}}
+%\<optional sign>\<digit string>|.|\<digit string>\<unit of measure>\cr
+%\enddisplay
+%where an ^\<optional sign> is either a `|+|' or a `|-|' or nothing at all,
+%and where a ^\<digit string> consists of zero or more consecutive
+%decimal digits. The `|.|'\ can also be a `|,|'\null.
+%For example, here are six typical dimensions:
+%$$\halign{\indent#\hfil&\hskip 6em#\hfil\cr
+%|3 in|&|29 pc|\cr
+%|-.013837in|&|+ 42,1 dd|\cr
+%|0.mm|&|123456789sp|\cr}$$
+%A plus sign is redundant, but some people occasionally like extra
+%redundancy once in a~while. Blank spaces are optional before the signs and the
+%numbers and the units of measure, and you can also put an optional space
+%after the dimension; but you should not put spaces within the digits
+%of a number or between the letters of the unit of measure.
+当你要告诉 \TeX\ 某些物理尺寸时，如下输入：
+\begindisplay
+\<optional sign>\<number>\<unit of measure>\cr
+\noalign{\hbox{或者}}
+\<optional sign>\<digit string>|.|\<digit string>\<unit of measure>\cr
+\enddisplay
+其中，\<optional sign> 可以是`|+|'或`|-|', 也可以什么也没有，
+\<digit string> 由零或更多的连续的小数组成。%
+`|.|'也可以是`|,|'。%
+例如，下面是六个典型的尺寸：
+$$\halign{\indent#\hfil&\hskip 6em#\hfil\cr
+|3 in|&|29 pc|\cr
+|-.013837in|&|+ 42,1 dd|\cr
+|0.mm|&|123456789sp|\cr}$$
+正号是多余的，多少有些人喜欢偶尔画蛇添足。%
+在正负号，数字和测量单位前面的空格可有可无，
+也可以在尺寸后面放一个空格；
+但是在数字的数中间，或者在测量单位的字母之间不能有空格。
+
+%\exercise Arrange those six ``typical dimensions'' into order,
+%from smallest to largest.
+%\answer $\rm-.013837\,in$, $\rm0.\,mm$, $\rm+42.1\,dd$, $\rm3\,in$,
+%$\rm29\,pc$, $\rm123456789\,sp$.
+%\ (The lines of text in this manual are 29~picas wide.)
+\exercise 把上面的六个``典型的尺寸''从小到大排序。
+\answer $\rm-.013837\,in$，$\rm0.\,mm$，$\rm+42.1\,dd$，$\rm3\,in$，
+$\rm29\,pc$，$\rm123456789\,sp$。%
+（本手册的文本行的宽度为29~picas。）
+
+%\dangerexercise Two of the following three dimensions are legitimate
+%according to \TeX's rules. Which two are they? What do they mean?
+%Why is the other one incorrect?
+%\begintt
+%'.77pt
+%"Ccc
+%-,sp
+%\endtt
+%\answer The first is not allowed, since octal notation cannot be used with
+%a decimal point. The second is, however, legal, since a \<number> can be
+%hexadecimal according to the rule mentioned in Chapter~8; it means
+%$\rm12\,cc$, which is $\rm144\,dd\approx154.08124\,pt$. The third is also
+%accepted, since a \<digit string> can be empty; it is a complicated
+%way to say $\rm0\,sp$.
+\dangerexercise \1下面的三个尺寸有两个是符合 \TeX\ 的规则的。%
+它们是哪两个？意思各是什么？
+\begintt
+'.77pt
+"Ccc
+-,sp
+\endtt
+\answer 第一个是不允许的，因为八进制表示法不能用在小数点之前。
+第二个却是允许的，因为根据第 8 章介绍的规则，\<number> 可以为十六进制数；
+它表示 $\rm12\,cc$，即 $\rm144\,dd\approx154.08124\,pt$。
+第三个也是允许的，因为 \<digit string> 可以为空；
+它是 $\rm0\,sp$ 的复杂说法。
+
+%\smallskip
+%The following ``rulers'' have been typeset by \TeX\ so that you can get
+%some idea of how different units compare to each other. If no distortion
+%has been introduced during the camera work and printing processes that
+%have taken place after \TeX\ did its work, these rulers are highly accurate.
+%$$ \abovedisplayskip 15pt plus 4pt minus 4pt
+%\belowdisplayskip 15pt plus 4pt minus 4pt
+%\vbox{
+%\def\1{\vrule height 0pt depth 2pt}
+%\def\2{\vrule height 0pt depth 4pt}
+%\def\3{\vrule height 0pt depth 6pt}
+%\def\4{\vrule height 0pt depth 8pt}
+%\def\ruler#1#2#3{\leftline{$\vcenter{\hrule\hbox{\4#1}}\,\,\rm#2\,{#3}$}}
+%\def\\#1{\hbox to .125in{\hfil#1}}
+%\def\8{\\\1\\\2\\\1\\\3\\\1\\\2\\\1\\\4}
+%\ruler{\8\8\8\8}4{in}
+%\vskip 18pt
+%\def\\#1{\hbox to 10pt{\hfil#1}}
+%\def\8{\\\1\\\1\\\1\\\1\\\2\\\1\\\1\\\1\\\1\\\4}
+%\ruler{\8\8\8}{300}{pt}
+%\vskip 18pt
+%\def\\#1{\hbox to 10dd{\hfil#1}}
+%\def\8{\\\1\\\1\\\1\\\1\\\2\\\1\\\1\\\1\\\1\\\4}
+%\ruler{\8\8\8}{300}{dd}
+%\vskip 18pt
+%\def\\#1{\hbox to 5mm{\hfil#1}}
+%\def\8{\\\2\\\4}
+%\ruler{\8\8\8\8\8\8\8\8\8\8}{10}{cm}
+%\vskip 6pt}$$
+\smallskip
+下面的``标尺''已经被 \TeX\ 画出来了，这样你可以通过互相比较它们来%
+体会一下它们的差\hbox{别。}%
+如果 \TeX\ 输出结束后在打印过程中没有发生变形，这些标尺是非常精确的。%
+$$ \abovedisplayskip 15pt plus 4pt minus 4pt
+\belowdisplayskip 15pt plus 4pt minus 4pt
+\vbox{
+\def\1{\vrule height 0pt depth 2pt}
+\def\2{\vrule height 0pt depth 4pt}
+\def\3{\vrule height 0pt depth 6pt}
+\def\4{\vrule height 0pt depth 8pt}
+\def\ruler#1#2#3{\leftline{$\vcenter{\hrule\hbox{\4#1}}\,\,\rm#2\,{#3}$}}
+\def\\#1{\hbox to .125in{\hfil#1}}
+\def\8{\\\1\\\2\\\1\\\3\\\1\\\2\\\1\\\4}
+\ruler{\8\8\8\8}4{in}
+\vskip 18pt
+\def\\#1{\hbox to 10pt{\hfil#1}}
+\def\8{\\\1\\\1\\\1\\\1\\\2\\\1\\\1\\\1\\\1\\\4}
+\ruler{\8\8\8}{300}{pt}
+\vskip 18pt
+\def\\#1{\hbox to 10dd{\hfil#1}}
+\def\8{\\\1\\\1\\\1\\\1\\\2\\\1\\\1\\\1\\\1\\\4}
+\ruler{\8\8\8}{300}{dd}
+\vskip 18pt
+\def\\#1{\hbox to 5mm{\hfil#1}}
+\def\8{\\\2\\\4}
+\ruler{\8\8\8\8\8\8\8\8\8\8}{10}{cm}
+\vskip 6pt}$$
+
+%\dangerexercise (To be worked after you know about boxes and glue and have
+%read Chapter~21.) \ Explain how to typeset such a $\rm10\,cm$ ^{ruler},
+%using \TeX.
+%\answer {\obeylines|\def\tick#1{\vrule height 0pt depth #1pt}|
+%|\def\\{\hbox to 1cm{\hfil\tick4\hfil\tick8}}|
+%|\vbox{\hrule\hbox{\tick8\\\\\\\\\\\\\\\\\\\\}}|
+%\noindent(You might also try putting ticks at every millimeter, in order %
+%to see how good your system is; %
+%some output devices can't handle 101~rules all at once.)}
+\dangerexercise （在学会盒子和粘连以及看完第21章后再做。）
+看看怎样用 \TeX\ 画出 $\rm10\,cm$ 的这样的标尺。
+\answer {\obeylines|\def\tick#1{\vrule height 0pt depth #1pt}|
+|\def\\{\hbox to 1cm{\hfil\tick4\hfil\tick8}}|
+|\vbox{\hrule\hbox{\tick8\\\\\\\\\\\\\\\\\\\\}}|
+\noindent （你也可以试着在各毫米处都标上刻度线，以看看你的系统的表现；%
+有些输出设备不能同时处理全部 101 个标尺。）}
+
+%\danger \TeX\ represents all dimensions internally as an integer multiple
+%of the tiny units called sp. Since the wavelength of visible light is
+%approximately $\rm100\,sp$, % in fact: violet=75sp, red=135sp!
+%rounding errors of a few sp make no difference to the eye.
+%However, \TeX\ does all of its arithmetic very carefully so that
+%identical results will be obtained on different computers. Different
+%implementations of \TeX\ will produce the same line breaks and the same
+%page breaks when presented with the same document, because the integer
+%arithmetic will be the same.
+%^^{machine-independence} ^^{rounding}
+\danger 在 \TeX\ 内部把所有尺寸表示为一个叫做 sp 的小单位的整数倍。%
+因为可见光的波长近似等于 $\rm100\,sp$, 几个 sp 的误差眼睛是看不出来的。%
+但是，\TeX\ 非常仔细地进行计算，使得在不同计算机上得到的结果相同。%
+对同一文档，\TeX\ 的不同运行环境却能得到同样的断行和分页，
+因为它所应用的整数算法是\hbox{相同的。}
+
+%\danger The units have been defined here so that precise conversion to~sp
+%is~efficient on a wide variety of machines. In order to achieve this,
+%\TeX's ``pt'' has been made slightly larger than the official printer's
+%point, which was defined to equal exactly $\rm.013837\,in$ by the American
+%Typefounders Association in~1886 [cf.~National Bureau of Standards
+%Circular~570 (1956)]. In fact, one classical point is exactly
+%$.99999999\pt$, so the ``error'' is essentially one part in $10^8$.
+%This is more than two orders of magnitude less than the amount by which
+%the inch itself changed during 1959, when it shrank to $\rm2.54\,cm$ from
+%its former value of $\rm(1/0.3937)\,cm$; so there is no point in worrying
+%about the difference. The new definition $\rm72.27\,pt=1\,in$ is not only
+%better for calculation, it~is also easier to remember.
+\danger 在这里，给定单位是为了转换为 sp 时在各种计算机上的效率都很高。%
+为此，\TeX\ 的``pt''比官方打印机的 point 略大，
+在 1886 年，American
+Typefounders Association 把point 精确地定义为 $\rm.013837\,in$%
+[参见 National Bureau of Standards Circular~570 (1956)]。%
+实际上，一个传统的 point 精确地等于 $.99999999\pt$, 因此``误差''最大在 $10^8$ 分%
+之几。%
+这个差比 1959 年英寸从先前的 $\rm(1/0.3937)\,cm$ 缩到 $\rm2.54\,cm$ 时减小的%
+量小两个量级；所以不必在意这个差别。%
+新定义 $\rm72.27\,pt=1\,in$ 不仅好计算，而且容易\hbox{记住。}
+
+%\danger \TeX\ will not deal with dimensions whose absolute value is
+%$\rm2^{30}\,sp$ or more. In other words, the ^{maximum legal dimension} is
+%slightly less than $16384\pt$. This is a distance of about 18.892 feet
+%(5.7583 meters), so it won't cramp your style.
+\danger \TeX\ 不能处理绝对值大于等于$\rm2^{30}\,sp$的尺寸。%
+换句话说，最大的可能的尺寸比 $16384\pt$ 略小。%
+这大概是 18.892 feet(5.7583 米), 所以它是不会束缚你的。
+
+%In a language manual like this it is convenient to use ``^{angle brackets}''
+%in abbreviations for various constructions like \<number> and \<optional
+%sign> and \<digit string>. Henceforth we shall use the term ^\<dimen> to
+%stand for a legitimate \TeX\ dimension. For example,
+%\begindisplay
+%|\hsize=|\<dimen>
+%\enddisplay
+%will be the general way to define the column width that \TeX\ is supposed
+%to use. The idea is that \<dimen> can be replaced by any quantity like
+%`|4in|' that satisfies \TeX's grammatical rules for dimensions;
+%abbreviations in angle brackets make it easy to state such laws of grammar.
+\1在类似本书这样的编程的手册中，对像 \<number>、\<optional sign> 和
+\<digit string> 这些指令使用``角括号''表示缩写是很方便的。
+因此，我们将用 \<dimen> 表示 \TeX\ 允许的尺寸。例如，
+\begindisplay
+|\hsize=|\<dimen>
+\enddisplay
+就是 \TeX\ 设置的定义栏宽度的一般方法。意思就是，
+\<dimen> 可以用任何像 `|4in|' 这样符合 \TeX\ 语法规则的尺寸的量来代替；
+角括号中的缩写把这样的语法规律叙述得更清楚。
+
+%When a dimension is zero, you have to specify a unit of measure even
+%though the unit is irrelevant. Don't just say `|0|'\thinspace; say `|0pt|' or
+%`|0in|' or something.
+当尺寸为零时，你必须给出一个测量单位，即使它没什么关系。%
+不能只使用`|0|'\thinspace; 应该使用`|0pt|', `|0in|'或其它东西。
+
+%\smallbreak
+%The 10-point size of type that you are now reading is normal in textbooks,
+%but you probably will often find yourself wanting a larger font. Plain \TeX\
+%makes it easy to do this by providing {\magnifiedfiverm ^{magnif{}ied
+%output}.} If you say
+%\begintt
+%\magnification=1200
+%\endtt
+%at the beginning of your manuscript, everything will be enlarged by 20\%;
+%i.e., it will come out at 1.2 times the normal size. Similarly,
+%`|\magnification=2000|' doubles everything; this actually quadruples the area of
+%each letter, since heights and widths are both doubled. To magnify a
+%document by the factor $f$, you say ^|\magnification||=|\<number>, where
+%the \<number> is 1000~times~$f$. This instruction must be given before the
+%first page of output has been completed. You cannot apply two different
+%magnifications to the same document.
+\smallbreak
+在本手册中你所看到的是 10-point 的大小，但是可能你会经常遇到要使用更大的字体的时候。
+Plain \TeX\ 通过放大输出来很容易地实现它。如果你在文稿的开头规定
+\begintt
+\magnification=1200
+\endtt
+那么所有的内容都被放大 20\%；即变成正常尺寸的 1.2 倍大小。
+类似地，`|\magnification=2000|' 把所有内容放大一倍；
+这实际上把每个字符的面积变成四倍，因为高度和宽度都加倍了。
+为了按照因子 $f$ 来放大文档，你可以规定 |\magnification||=|\<number>，
+其中 \<number> 是 1000 乘以 $f$。这个指令必须在第一页输出完成之前给出。
+在同一文档不能使用两个不同的放大率。
+
+%Magnification has obvious advantages: You'll have less ^{eyestrain} when
+%you're ^{proofreading}; you can easily make ^{transparencies} ^^{slides}
+%for lectures; and you can photo-reduce magnified output, in order to minimize
+%the deficiencies of a ^{low-resolution printer}. Conversely, you might
+%even want `|\magnification=500|' in order to create a ^{pocket-size}
+%version of some book. ^^{squint print} But there's a slight catch:
+%You can't use magnification unless your printing device happens to have the
+%fonts that you need at the magnification you desire. In other words, you need
+%to find out what sizes are available before you can magnify. Most
+%installations of \TeX\ make it possible to print all the fonts of plain
+%\TeX\ if you magnify by ^|\magstep||0|,~|1|, |2|,~|3|, and perhaps~|4| or
+%even~|5| (see Chapter~4); but the use of large fonts can be expensive
+%because a lot of system memory space is often required to store the shapes.
+放大功能有一个明显的好处：
+当你在校对时，眼睛不会感到太累；
+可以简单地得到演讲用的透明胶片；
+还可以弥补低分辨率打印机对输出图像的造成的损失。%
+反过来，为了把某些书变成口袋大小，你可能要用`|\magnification=500|'。%
+但是有个条件：
+如果你的打印设备凑巧没有你所要放大的字体，那么就不能使用放大功能。%
+只要你按照 |\magstep||0|,~|1|, |2|,~|3|, 甚至是 |4| 和 |5|(见第四章)来放大，
+那么可能大部分安装好的 \TeX\ 都能打印所有 plain \TeX\ 的字体；
+但是使用大字体可能花费比较大，因为通常需要许多内存空间来储存字形。
+
+%\exercise Try printing the short story of Chapter 6 at 1.2, 1.44, and 1.728
+%times the normal size. What should you type to get \TeX\ to do this?
+%\answer For example, say `|\magnification=\magstep1 \input story \end|'
+%to get magnification 1200; |\magstep2| and |\magstep3| are 1440 and 1728.
+%Three separate runs are needed, since there can be at most one
+%magnification per job. The output may look funny if the fonts don't exist
+%at the stated magnifications.
+\exercise 试试按照正常尺寸的 1.2，1.44 和 1.728 倍来输出第 6 章的 story。%
+应该怎样做才可以？
+\answer 例如，键入 `|\magnification=\magstep1 \input story \end|'
+就可以得到 1200 的放大因子；而|\magstep2| 和 |\magstep3| 分别为 1440 和 1728。
+你需要分别运行三次，因为每个任务只能有一个放大率。
+如果指定放大率的字体不存在，输出结果看起来将很可笑。
+
+%\danger When you say |\magnification=2000|, an operation like
+%`|\vskip.5cm|' will actually skip $\rm1.0\,cm$ of space in the final
+%document. If you want to specify a dimension in terms of the final size,
+%\TeX\ allows you to say `^|true|' just before |pt|, |pc|, |in|, |bp|,
+%|cm|, |mm|, |dd|, |cc|, and |sp|.  This unmagnifies the units, so that the
+%subsequent magnification will cancel out. For example, `|\vskip.5truecm|'
+%is equivalent to `|\vskip.25cm|' if you have previously said
+%`|\magnification=2000|'. Plain \TeX\ uses this feature in the
+%|\magnification| command itself: Appendix~B includes the instruction
+%\begintt
+%\hsize = 6.5 true in
+%\endtt
+%just after a new magnification has taken effect. This adjusts the line width
+%so that the material on each page will be $6{1\over2}$ inches wide when it
+%is finally printed, regardless of the magnification factor.
+%There will be an inch of margin at both left and right,
+%assuming that the paper is $8{1\over2}$ inches wide.
+\danger 当你规定了 |\magnification=2000| 后，象`|\vskip.5cm|'这样的结果实际上%
+在最后的文档中是跳过了 $\rm1.0\,cm$ 的空白。%
+如果你要给出一个不变的尺寸，\TeX\ 允许在 |pt|, |pc|, |in|, |bp|,
+|cm|, |mm|, |dd|, |cc| 和 |sp| 紧前面加上`|true|'。%
+\1这是不被放大的尺寸，
+使得后面的放大被取消。%
+例如，如果你在前面规定了`|\magnification=2000|', 那么`|\vskip.5truecm|'%
+等价于`|\vskip.25cm|'。%
+Plain \TeX\ 在 |\magnification| 命令自己中使用了这个特性：
+附录 B 就在新的放大指令起作用后，包括了指令
+\begintt
+\hsize = 6.5 true in
+\endtt
+它调整行的宽度，使得最后输出时，在每页的内容都是 $6{1\over2}$ 英寸宽，
+而与放大因子无关。%
+设定纸的宽度为 $8{1\over2}$ 英寸，那么在左右各有 1 英寸的边界。
+
+%\danger If you use no `|true|' dimensions, \TeX's internal computations are not
+%affected by the presence or absence of magnification; line breaks and page
+%breaks will be the same, and the ^|dvi| file will change in only two places.
+%\TeX\ simply tells the printing routine that you want a certain magnification,
+%and the printing routine will do the actual enlargement when it reads the
+%|dvi| file.
+\danger 如果你没有使用`|true|'尺寸，那么 \TeX\ 的内部运算不会因为放大的出现或%
+不存在而受到影响；
+断行和分页是一样的，并且 |dvi| 文件只改变两个地方。%
+\TeX\ 将直接告诉打印机你想要的放大率，当读入 |dvi| 文件时，
+打印机将给出实际的放大输出。
+
+%\dangerexercise Chapter 4 mentions that fonts of different magnifications
+%can be used in the same job, by loading them `^|at|' different sizes.
+%Explain what fonts will be used when you give the commands
+%^^{magnified fonts} ^^|scaled|
+%\begintt
+%\magnification=\magstep1
+%\font\first=cmr10 scaled\magstep1
+%\font\second=cmr10 at 12truept
+%\endtt
+%\answer Magnification is by a factor of 1.2. Since font |\first| is |cmr10|
+%at $12\pt$, it will be |cmr10| at $14.4\pt$ after magnification;
+%font |\second| will be |cmr10| at $12\pt$. \ (\TeX\ changes
+%`|12truept|' into `|10pt|', and the final output magnifies it back to
+%$12\pt$.)
+\dangerexercise 第 4 章提到，通过 `|at|' 不同大小载入字体，
+不同放大率的字体可以在同一文档中使用。%
+当你给出下列命令时，看看使用的是什么字体：
+\begintt
+\magnification=\magstep1
+\font\first=cmr10 scaled\magstep1
+\font\second=cmr10 at 12truept
+\endtt
+\answer 放大率为 1.2。字体 |\first| 为 |cmr10|
+at $12\pt$，在放大后它将变为 |cmr10| at $14.4\pt$；
+而字体 |\second| 将变为 |cmr10| at $12\pt$。%
+(\TeX\ 将 `|12truept|' 改成 `|10pt|'，
+因此在最终输出中它将变回 $12\pt$。）
+
+%\ddanger Magnification is actually governed by \TeX's ^|\mag| primitive,
+%which is an integer parameter that should be positive and at~most~32768.
+%The value of\/ |\mag| is examined in three cases: (1)~just before the
+%first page is shipped to the |dvi| file; (2)~when computing a |true|
+%dimension; (3)~when the |dvi| file is being closed. Alternatively,
+%some implementations of \TeX\ produce non-|dvi| output; they examine
+%|\mag| in case~(2) and also when shipping out each page. Since each
+%document has only one magnification, the value of\/ |\mag| must not change
+%after it has first been examined.
+\ddanger 放大功能实际上是由 \TeX\ 的原始控制系列 |\mag| 所控制，
+它是一个整数参数，应当是正数且最大为 32768。%
+|\mag| 的值在三种情况下被用到：
+(1) 在第一页被输出到 |dvi| 文件之前；
+(2) 当计算一个 |true| 尺寸时；
+(3) 当 |dvi| 文件结束时。%
+另外，有些 \TeX\ 的输出不是 |dvi| 文件；
+这时在情况(2)下并且当输出到每页时要用到 |\mag|。%
+因为每个文档只有一个放大率，所以一旦 |\mag| 的值第一次被用到后，
+就不能\hbox{改变了。}
+
+%\danger \TeX\ also recognizes two units of measure that are relative
+%rather than absolute; i.e., they depend on the current context:
+%\begindisplay
+%^|em| is the width of a ``^{quad}'' in the current font;\cr
+%^|ex| is the ``^{x-height}'' of the current font.\cr
+%\enddisplay
+%Each font defines its own em and ex values. In olden days, an ``em'' was
+%the width of an `M', but this is no longer true; ems are simply arbitrary
+%units that come with a font, and so are exes.  The Computer Modern fonts
+%have the property that an em-dash is one em wide, each of the ^{digits} 0
+%to~9 is half an em wide, and lowercase `x' is one ex high; but these are
+%not hard-and-fast rules for all fonts.
+%The |\rm| font (^|cmr10|) of plain \TeX\ has $\rm1\,em=10\,pt$
+%and $\rm1\,ex\approx4.3\,pt$; the |\bf| font (^|cmbx10|) has
+%$\rm1\,em=11.5\,pt$ and $\rm1\,ex\approx4.44\,pt$; and the |\tt| font
+%(^|cmtt10|) has $\rm1\,em=10.5\,pt$ and $\rm1\,ex\approx4.3\,pt$. All of
+%these are ``10-point'' fonts, yet they have different em and ex values.
+%It~is generally best to use |em| for horizontal measurements and |ex| for
+%vertical measurements that depend on the current font.
+\danger \TeX\ 还有两个相对而不是绝对的测量单位；
+即，它们与当前的上下文有关：
+\begindisplay
+|em| 是当前字体的一个``{quad}''的宽度；\cr
+|ex| 是当前字体的``{x-height}''。\cr
+\enddisplay
+每个字体都有它自己的 em 和 ex 值。%
+在过去，``em''是`M'的宽度，但是现在不是了；
+em 是直接来自字体的任意单位，ex 也是。%
+对 Computer Modern 字体，em 破折号的宽度是一个 em,
+每个数字 0 到 9 的宽度是半个 em, 小写`x'的高度是一个 ex;
+但是不是对所有字体都这样。%
+Plain \TeX\ 的 |\rm| 字体(|cmr10|)为 $\rm1\,em=10\,pt$, $\rm1\,ex\approx4.3\,pt$;
+|\bf| 字体(|cmbx10|)为 $\rm1\,em=11.5\,pt$ 和 $\rm1\,ex\approx4.44\,pt$;
+|\tt| 字体(|cmtt10|)为 $\rm1\,em=10.5\,pt$ 和 $\rm1\,ex\approx4.3\,pt$。%
+它们都是``10-point''字体，但是 em 和 ex 值却不同。%
+对当前字体的水平距离最好用 |em|, 对垂直距离最好用 |ex|。
+
+%\danger A \<dimen> can also refer to \TeX's internal registers or parameters.
+%We shall discuss registers later, and a complete definition of everything that
+%a ^\<dimen> can be will be given in Chapter~24. For now it will suffice to
+%give some hints about what is to come:
+%`|\hsize|' stands for the current horizontal line size,
+%and `|.5\hsize|' is half that amount;
+%`|2\wd3|' denotes twice the width of register~|\box3|;
+%`|-\dimen100|' is the negative of register~|\dimen100|.
+\danger \1\<dimen> 也能用 \TeX\ 的内部寄存器或参数。%
+我们在后面将讨论寄存器，\<dimen> 的所有内容的完整定义在第二十四章给出。%
+`|\hsize|'是当前行的宽度，那么`|.5\hsize|'是那个量的一半；
+`|2\wd3|'表示寄存器 |\box3| 的两倍；
+`|-\dimen100|'是寄存器 |\dimen100| 的负值。
+
+%\ddanger Notice that the unit names in dimensions
+%are not preceded by backslashes. The same is true of other so-called
+%^{keywords} of the \TeX\ language. Keywords can be given in uppercase letters
+%or in a mixture of upper and lower case; e.g., `|Pt|' is equivalent to `|pt|'.
+%The category codes of these letters are irrelevant; you may, for example,
+%be using a |p| of category~12 (other) that was generated by expanding
+%`|\the\hsize|' as explained in Chapter~20.
+%\TeX\ gives a special interpretation to keywords only when they
+%appear in certain very restricted contexts. For example, `|pt|' is a
+%keyword only when it appears after a number in a \<dimen>;
+%`|at|' is a keyword only when it appears after the external name of a
+%font in a |\font| declaration.
+%Here is a complete list of \TeX's keywords, in case you are wondering about
+%the full set: |at|, |bp|, |by|, |cc|, |cm|, |dd|, |depth|, |em|, |ex|,
+%|fil|, |height|, |in|, |l|, |minus|, |mm|, |mu|, |pc|, |plus|,
+%|pt|, |scaled|, |sp|, |spread|, |to|, |true|, |width|. ^^{reserved words}
+%\ (See Appendix~I for references to the contexts in which each of these is
+%recognized as a keyword.)
+\ddanger 注意，在尺寸中，单位的名称前面没有反斜线。%
+\TeX\ 语言的其它所谓关键词也是如此。%
+关键词可以用大写或大写小写混合起来；
+比如，`|Pt|'等价于`|pt|'。%
+这些字母的类代码无关；
+例如你可以正在用第 12 类(其它字符)的 |p|, 正如第二十章讨论的那样所展开的%
+`|\the\hsize|'生成。%
+只要当关键词出现在某些非常有限的上下文中时，\TeX\ 才给出特殊解释。%
+例如，只有当出现在 \<dimen> 中的数字后面时`|pt|'才是关键词；
+只有当出现在 |\font| 声明中的字体外部名字后面时，`|at|'才是关键词。%
+如果你想知道所有的关键词，下面就是 \TeX\ 的全部关键词的列表：
+|at|, |bp|, |by|, |cc|, |cm|, |dd|, |depth|, |em|, |ex|,
+|fil|, |height|, |in|, |l|, |minus|, |mm|, |mu|, |pc|, |plus|,
+|pt|, |scaled|, |sp|, |spread|, |to|, |true|, |width|。%
+(至于在哪些情况下它们被看作关键词，见附录 I 给出的参考。)
+
+\endchapter
+
+The methods that have hitherto been taken
+to discover the measure of the Roman foot,
+will, upon examination, be found so unsatisfactory, that
+it is no wonder the learned are not yet agreed on that point.
+$\ldots$
+9 London inches are equal to 8,447 Paris inches.
+\author MATTHEW ^{RAPER}, in {\sl Philosophical Transactions\/} (1760)
+% ``An Enquiry into the Measure of the {\sl Roman\/} Foot,''
+% {\sl Philos.\ Trans.\ \bf51} (1760), 774--823.
+
+\bigskip
+
+%\checkequals\sesame\pageno %
+Without the letter U,
+units would be nits.
+\author ^{SESAME STREET}{^^{Children's Television Workshop}} (1970)
+
+\vfill\eject\byebye

@@ -1,0 +1,378 @@
+% -*- coding: utf-8 -*-
+
+\input macros
+
+%\beginchapter Appendix C. Character\\Codes
+\beginchapter Appendix C. 字符编码
+
+%\ninepoint
+%Different computers tend to have different ways of representing the
+%characters in files of text, but \TeX\ gives the same results on
+%all machines, because it converts everything to a standard internal
+%code when it reads a file. \TeX\ also converts back from its internal
+%representation to the appropriate external code, when it writes
+%a file of text; therefore most users need not be aware of the fact
+%that the ^{codes} have actually switched back and forth inside the machine.
+\ninepoint
+不同的计算机往往用不同的方式表示文本文件的字符，
+但 \TeX\ 在所有机器上都给出相同的结果，
+因为它在读取文件时将所有东西都转换为标准的内部编码。
+而 \TeX\ 在写入文本文件时也将内部编码转回恰当的外部编码；
+因此大多数用户不会意识到实际上字符^{编码}在机器中来回转换过。
+
+%The purpose of this appendix is to define \TeX's internal code,
+%which has the same characteristics on all implementations of \TeX.
+%The existence of such a code is important, because it
+%makes \TeX\ constructions ``portable.'' For example, \TeX\ allows
+%^{alphabetic constants} like |`b| to be used as numbers; the fact
+%that |`b| always denotes the integer~98 means that we can
+%write machine-independent macros that decide, for instance, whether
+%a given character is a digit between |0| and |9|.
+%Furthermore the internal code of \TeX\ also survives in its ^|dvi|
+%output files, which can be printed by software that knows nothing
+%about where the |dvi| data originated; essentially the same
+%output will be obtained from all implementations of \TeX, regardless
+%of the host computer, because the |dvi| data is expressed in a
+%machine-independent code.
+这个附录的目的是定义 \TeX\ 的内部编码，它在所有 \TeX\ 实现中都是一致的。
+这种编码的存在性是重要的，因为它使得 \TeX\ 是``可移植的''。
+例如，\TeX\ 允许将类似 |`b| 的^{字母表常数}作为整数使用；
+|`b| 永远表示整数~98 意味着我们可以编写机器无关的宏，
+用于确定给定的字符是否为一个在 |0| 和 |9| 之间的数字。
+此外，\TeX\ 的内部编码还用于它的 ^|dvi| 输出文件；
+打印 |dvi| 文件的软件不知道其数据来自哪里，
+但在任何主机的 \TeX\ 实现中将得到完全相同的输出，
+因为 |dvi| 数据是用机器无关的编码表示的。
+
+%\smallskip
+%\TeX's internal code is based on the American Standard Code for
+%Information Interchange, known popularly as ``^{ASCII}.'' There are
+%128 codes, numbered 0~to~127; we conventionally express the numbers
+%in octal notation, from \oct{000} to \oct{177}, or in
+%hexadecimal notation, from \hex{00} to \hex{7F}. Thus, the value of
+%|`b| is normally called \oct{142} or \hex{62}, not 98. In the
+%ASCII scheme, codes \oct{000} through \oct{040} and
+%code \oct{177} are~assigned to special functions; for example,
+%code \oct{007} is called |BEL|, and it means ``Ring the bell.''
+%The other 94 codes are assigned to visible symbols. Here is a
+%chart that shows ASCII codes in such a way that octal and hexadecimal
+%equivalents can easily be read off:
+\smallskip
+\TeX\ 的内部编码基于``^{ASCII}''（American Standard Code for
+Information Interchange）。其中一共有 128 个代码，以 0~到~127 编号；
+习惯上对这些数字我们用 \oct{000} 到 \oct{177} 的八进制表示，
+或者用 \hex{00} 到 \hex{7F} 的十六进制表示。
+因此，|`b| 的值通常被称为 \oct{142} 或 \hex{62}，而不是 98。
+在 ASCII 体制中，从 \oct{000} 到 \oct{040} 以及 \oct{177}
+的代码分配给特殊功能；例如，编码 \oct{007} 称为 |BEL|，
+它的意思为 ``Ring the bell''。另外 94 个代码分配给可见符号。
+这里有个图表显示了 ASCII 编码，在其中很容易看出八进制和十六进制的对应：
+\beginchart{\global\count@='41\tentt
+  \def\chartstrut{\lower4.3pt\vbox to13.6pt{}}}
+&\oct{00x}&&NUL&&SOH&&STX&&ETX&&EOT&&ENQ&&ACK&&BEL&&\oddline0
+&\oct{01x}&&BS&&HT&&LF&&VT&&FF&&CR&&SO&&SI&\evenline
+&\oct{02x}&&DLE&&DC1&&DC2&&DC3&&DC4&&NAK&&SYN&&ETB&&\oddline1
+&\oct{03x}&&CAN&&EM&&SUB&&ESC&&FS&&GS&&RS&&US&\evenline
+&\oct{04x}&&SP&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\oddline2
+&\oct{05x}&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\:&\evenline
+&\oct{06x}&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\oddline3
+&\oct{07x}&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\:&\evenline
+&\oct{10x}&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\oddline4
+&\oct{11x}&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\:&\evenline
+&\oct{12x}&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\oddline5
+&\oct{13x}&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\:&\evenline
+&\oct{14x}&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\oddline6
+&\oct{15x}&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\:&\evenline
+&\oct{16x}&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\oddline7
+&\oct{17x}&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&DEL&\evenline
+\endchart
+
+%Ever since ASCII was established in the early 1960s, people have had
+%different ideas about what to do with positions \oct{000}--\oct{037} and
+%\oct{177}, because most of the functions assigned to those codes are
+%appropriate only for special purposes like file transmission, not for
+%applications to printing or to interactive computing. It turned out that
+%manufacturers soon started producing line printers that were capable of
+%generating 128 characters, 33~of~which were tailored to the special needs
+%of particular customers; part of the advantage of a standard code was
+%therefore lost. On the other hand, the remaining 95~codes (including
+%\oct{40}=|SP|, a blank space) have become widely adopted, and they are now
+%implanted within most of today's computer terminals. When an ASCII
+%keyboard is available, you can specify each of the 128 codes to \TeX\ in
+%terms of the 95 standard characters, as follows:
+自从 1960 年代 ASCII 建立之后，
+人们对如何对待位置 \oct{000}--\oct{037} 和 \oct{177} 有不同的想法，
+因为这些编码对应的功能仅在文件传输等特殊目的中才用得到，在打印或者交互计算中用不到。
+结果是制造商很快就开始生产可以生成 128 个字符的行式打印机，
+其中的 33 个字符被按照特定客户的特别需求而定制；标准编码因此丢失了部分优势。
+另一方面，剩下的 95 个编码（包括 \oct{40}=|SP|，即空格）被广泛采用，
+并在今天的大多数计算机终端中扎根。在有 ASCII 键盘可用时，
+你可以用 95 个标准字符给 \TeX\ 指定 128 个编码中任何一个，方法如下：
+\beginchart{\def\?{\char`^\char`^\:}\global\count@='100
+  \postdisplaypenalty=0 \tentt}
+&\oct{00x}&&\?&&\?&&\?&&\?&&\?&&\?&&\?&&\?&&\oddline0
+&\oct{01x}&&\?&&\?&&\?&&\?&&\?&&\?&&\?&&\?&\evenline
+&\oct{02x}&&\?&&\?&&\?&&\?&&\?&&\?&&\?&&\?&&\oddline1
+&\oct{03x}&&\?&&\?&&\?&&\?&&\?&&\?&&\?&&\?&\evenline
+&\global\count@='40
+\oct{04x}&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\oddline2
+&\oct{05x}&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\:&\evenline
+&\oct{06x}&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\oddline3
+&\oct{07x}&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\:&\evenline
+&\oct{10x}&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\oddline4
+&\oct{11x}&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\:&\evenline
+&\oct{12x}&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\oddline5
+&\oct{13x}&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\:&\evenline
+&\oct{14x}&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\oddline6
+&\oct{15x}&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\:&\evenline
+&\oct{16x}&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\oddline7
+&\oct{17x}&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\char`^\char`^?&\evenline
+\endchart
+%(Here `|^^|' ^^{uparrow uparrow} doesn't necessarily mean two
+%circumflex characters; it means two identical characters whose
+%current |\catcode| is~7. In such cases \TeX\ simply adds or
+%subtracts \oct{100} from the internal code of the character
+%that immediately follows. For example, |*|~can also be typed as |^^j|;
+%|j|~can also be typed as |^^*|.)
+（这里的 `|^^|' ^^{uparrow uparrow} 并不一定非得是两个扬抑符；
+两个当前 |\catcode| 为~7 的字符也可以。
+在这种用法中，\TeX\ 就将后面跟随的字符的内部编码加上或减去 \oct{100}。
+例如，输入 |^^j| 可以得到 |*|；而输入 |^^*| 可以得到|j|。）
+
+%An extended ASCII code intended for text editing and interactive computing
+% was developed at several universities about 1965, and
+%for many years there have been terminals in use at Stanford, MIT,
+%Carnegie-Mellon, and elsewhere that have 120 or~121 symbols, not just~95.
+%Aficionados of these keyboards (like the author of this book)
+%are loath to give up their extra characters; it seems that
+%such people make heavy use of about 5~of the extra~25, and occasional
+%use of the other~20, although
+%different people have different groups of five. For example, the
+%author developed \TeX\ on a keyboard that includes the symbols
+%{\tentex\char'30},~{\tentex\char1}, {\tentex\char'32}, {\tentex\char'34},
+%and~{\tentex\char'35}, and he finds that this makes it much more pleasant
+%to type class notes,
+%technical papers, and computer programs of the kind he likes to write;
+%his logician friends make heavy use of the {\tentex\char'24} and
+%{\tentex\char'25} keys; and so on. It is recommended that \TeX\
+%implementations on systems with large character sets be consistent with the
+%following codes:
+%\beginchart{\tentex\postdisplaypenalty=0}
+%\normalchart
+%\endchart
+%Of course, designers of \TeX\ macro packages that are intended to be
+%widely used should stick to the standard ASCII characters.
+在 1965 年左右，有些大学开发了一个面向文本编辑和交互计算的扩展 ASCII 编码，
+而在 Stanford、MIT、Carnegie-Mellon 和其他大学使用多年的一种终端有
+120 或 121 个符号，不仅仅是 95 个。
+这些键盘的爱好者（如本书作者）不愿意放弃他们的附加字符；
+看起来这些人经常使用这 25 个补充字符的其中 5 个，而偶尔使用另外 20 个，
+虽然常使用的 5 个字符对不同人来说是不同的。
+例如，作者在一个包含符号 {\tentex\char'30}、{\tentex\char1}、{\tentex\char'32}、
+{\tentex\char'34} 和 {\tentex\char'35} 的键盘上开发 \TeX ，
+他发现这可以更加愉快地输入课程笔记、技术论文以及他喜欢编写的那些计算机程序；
+而他的逻辑学朋友经常使用 {\tentex\char'24} 和 {\tentex\char'25} 按键；等等。
+建议在拥有大字符集的系统上的 \TeX\ 实现与下面的编码保持一致：
+\beginchart{\tentex\postdisplaypenalty=0}
+\normalchart
+\endchart
+当然，面向广大用户的 \TeX\ 宏包的设计者应当只使用标准的 ASCII 字符。
+
+%Incidentally, the ASCII character |^| that appears in position \oct{136}
+%is sometimes called a ``^{caret},'' but dictionaries of English tell us
+%that a caret is a larger symbol, more like character \oct{004} in the
+%extended set above. The correct name for |^| is ``^{circumflex},'' but
+%this is quite a mouthful, so a shorter name like ``^{hat}'' is preferable.
+%It seems desirable to preserve the traditional distinction between
+%caret and hat.
+Incidentally, the ASCII character |^| that appears in position \oct{136}
+is sometimes called a ``^{caret},'' but dictionaries of English tell us
+that a caret is a larger symbol, more like character \oct{004} in the
+extended set above. The correct name for |^| is ``^{circumflex},'' but
+this is quite a mouthful, so a shorter name like ``^{hat}'' is preferable.
+It seems desirable to preserve the traditional distinction between
+caret and hat.
+
+%The extended code shown above was developed at MIT; it is similar to, but
+%slightly better than, the code implemented at Stanford. Seven of the codes
+%are conventionally assigned to the standard ASCII control functions
+%|NUL| (^\<null>), |HT| (^\<tab>), |LF| (^\<linefeed>), |FF|
+%(^\<formfeed>), |CR| (^\<return>), |ESC| (^\<escape>), and
+%|DEL| (^\<delete>), and they appear in the standard ASCII positions; hence the
+%corresponding seven characters
+%{\tentex\char0~\char'11~\char'12~\char'14~\char'15~\char'33~\char'177}
+%do not actually appear on the keyboard. These seven ``hidden''
+%characters show up only on certain output devices.
+The extended code shown above was developed at MIT; it is similar to, but
+slightly better than, the code implemented at Stanford. Seven of the codes
+are conventionally assigned to the standard ASCII control functions
+|NUL| (^\<null>), |HT| (^\<tab>), |LF| (^\<linefeed>), |FF|
+(^\<formfeed>), |CR| (^\<return>), |ESC| (^\<escape>), and
+|DEL| (^\<delete>), and they appear in the standard ASCII positions; hence the
+corresponding seven characters
+{\tentex\char0~\char'11~\char'12~\char'14~\char'15~\char'33~\char'177}
+do not actually appear on the keyboard. These seven ``hidden''
+characters show up only on certain output devices.
+
+%Modern keyboards allow 256 codes to be input, not just 128; so \TeX\
+%represents characters internally as numbers in the range 0--255 (i.e.,
+%\oct{000}--\oct{377}, or \hex{00}--\hex{FF}). Implementations of \TeX\
+%differ in which characters they will accept in input files and which
+%they will transmit to output files; these subsets can be specified
+%independently. A completely permissive version of \TeX\ allows full
+%256-character input and output; other versions might ignore all
+%but the visible characters of ASCII; still other versions might
+%distinguish the tab character (code \oct{011}) from a space on input,
+%but might output each tab as a sequence of three characters |^^I|.
+Modern keyboards allow 256 codes to be input, not just 128; so \TeX\
+represents characters internally as numbers in the range 0--255 (i.e.,
+\oct{000}--\oct{377}, or \hex{00}--\hex{FF}). Implementations of \TeX\
+differ in which characters they will accept in input files and which
+they will transmit to output files; these subsets can be specified
+independently. A completely permissive version of \TeX\ allows full
+256-character input and output; other versions might ignore all
+but the visible characters of ASCII; still other versions might
+distinguish the tab character (code \oct{011}) from a space on input,
+but might output each tab as a sequence of three characters |^^I|.
+
+%Many people, unfortunately, have the opposite problem:\ Instead of the
+%95~standard characters and some others, they have fewer than~95 symbols
+%actually available. What can be done in such cases? Well, it's possible
+%to use \TeX\ with fewer symbols, by invoking more control
+%sequences; for example, plain \TeX\ defines ^|\lq|, ^|\rq|, ^|\lbrack|,
+%^|\rbrack|, ^|\sp|, and ^|\sb|, so that you need not type |`|,~|'|, |[|, |]|,
+%|^|, and~|_|, respectively.
+Many people, unfortunately, have the opposite problem:\ Instead of the
+95~standard characters and some others, they have fewer than~95 symbols
+actually available. What can be done in such cases? Well, it's possible
+to use \TeX\ with fewer symbols, by invoking more control
+sequences; for example, plain \TeX\ defines ^|\lq|, ^|\rq|, ^|\lbrack|,
+^|\rbrack|, ^|\sp|, and ^|\sb|, so that you need not type |`|,~|'|, |[|, |]|,
+|^|, and~|_|, respectively.
+
+%A person who implements \TeX\ on computer systems that do not have
+%95~externally representable symbols should adhere to the following
+%guidelines: \ (a)~Stay as close as possible to the ASCII conventions.
+%\ (b)~Make sure that codes \oct{041}--\oct{046}, \oct{060}--\oct{071},
+%\oct{141}--\oct{146}, and \oct{160}--\oct{171} are present and that
+%each unrepresentable
+%internal code $<\null$\oct{200} leads to a representable code when \oct{100} is
+%added or subtracted; then all 256 codes can be input and output.
+%\ (c)~Cooperate with everyone else who shares
+%the same constraints, so that you all adopt the same policy.
+%\ (See Appendix~J for information about the \TeX\ Users Group.)
+A person who implements \TeX\ on computer systems that do not have
+95~externally representable symbols should adhere to the following
+guidelines: \ (a)~Stay as close as possible to the ASCII conventions.
+\ (b)~Make sure that codes \oct{041}--\oct{046}, \oct{060}--\oct{071},
+\oct{141}--\oct{146}, and \oct{160}--\oct{171} are present and that
+each unrepresentable
+internal code $<\null$\oct{200} leads to a representable code when \oct{100} is
+added or subtracted; then all 256 codes can be input and output.
+\ (c)~Cooperate with everyone else who shares
+the same constraints, so that you all adopt the same policy.
+\ (See Appendix~J for information about the \TeX\ Users Group.)
+
+%\def\Russiantt#1{{\tt\hbox to.5em{\hss\eighttt\char#1\hss}}}
+%Very few conventions about character codes are hardwired into \TeX:
+%Almost everything can be changed by a format package that changes parameters
+%like |\escapechar| and sets up the |\catcode|, |\mathcode|, |\uccode|,
+%|\lccode|, |\sfcode|, and |\delcode| tables.
+%Thus a \TeX\ manuscript that has been written in ^{Denmark}, say,
+%can be run in California, and vice versa, even though quite different
+%conventions might be used in different countries. The only character codes
+%that \TeX\ actually ``knows'' are these: \ (1)~|INITEX| initializes
+%the code tables as described in Appendix~B\null; the same initialization is
+%done by all implementations of \TeX. \ (2)~\TeX\ uses the character codes
+%\]|+-.,`'"<=>0123456789ABCDEF| in its syntax rules (Chapters 20, 24, and
+%Appendix~H\null), and it
+%uses most of the uppercase and lowercase letters in its ^{keywords}
+%|pt|, |to|, |plus|, etc. These same codes and keywords are used in
+%all implementations of \TeX. For example, when \TeX\ is implemented
+%for ^{Cyrillic} ^^{Russian} keyboards, the letter `\Russiantt5' should be
+%assigned to code \oct{160} and `\Russiantt{`T}' to code \oct{164}, so that
+%`\Russiantt5\Russiantt{`T}' still means `|pt|'; or else control sequences
+%should be defined so that what \TeX\ sees is equivalent to the keywords
+%it needs. \ (3)~The operations |\number|,
+%|\romannumeral|, |\the|, and |\meaning| can generate letters, digits, spaces,
+%decimal points, minus signs, double quotes, colons, and `|>|' signs; these same
+%codes are generated in all implementations of \TeX.
+%\ (4)~The |\hyphenation| and |\pattern| commands described in Appendix~H
+%give special interpretation to the ten digits and to the characters
+%`|.|' and~`|-|'. \ (5)~The codes for the four characters |$|~|.|~|{|~|}|
+%are inserted when \TeX\ recovers from certain errors, and braces are
+%inserted around an ^|\output| routine; appropriate catcodes are attached
+%to these tokens, so it doesn't matter if these symbols have their plain
+%\TeX\ meanings or not. \ (6)~There is a special convention for
+%representing characters 0--255 in the hexadecimal forms
+%|^^00|--|^^ff|, explained in Chapter~8. This convention is always
+%acceptable as input, when |^| is any character of catcode~7. Text
+%output is produced with this convention only when representing
+%characters of code $\ge128$ that a \TeX\ installer has chosen not to
+%output directly.
+\def\Russiantt#1{{\tt\hbox to.5em{\hss\eighttt\char#1\hss}}}
+Very few conventions about character codes are hardwired into \TeX:
+Almost everything can be changed by a format package that changes parameters
+like |\escapechar| and sets up the |\catcode|, |\mathcode|, |\uccode|,
+|\lccode|, |\sfcode|, and |\delcode| tables.
+Thus a \TeX\ manuscript that has been written in ^{Denmark}, say,
+can be run in California, and vice versa, even though quite different
+conventions might be used in different countries. The only character codes
+that \TeX\ actually ``knows'' are these: \ (1)~|INITEX| initializes
+the code tables as described in Appendix~B\null; the same initialization is
+done by all implementations of \TeX. \ (2)~\TeX\ uses the character codes
+\]|+-.,`'"<=>0123456789ABCDEF| in its syntax rules (Chapters 20, 24, and
+Appendix~H\null), and it
+uses most of the uppercase and lowercase letters in its ^{keywords}
+|pt|, |to|, |plus|, etc. These same codes and keywords are used in
+all implementations of \TeX. For example, when \TeX\ is implemented
+for ^{Cyrillic} ^^{Russian} keyboards, the letter `\Russiantt5' should be
+assigned to code \oct{160} and `\Russiantt{`T}' to code \oct{164}, so that
+`\Russiantt5\Russiantt{`T}' still means `|pt|'; or else control sequences
+should be defined so that what \TeX\ sees is equivalent to the keywords
+it needs. \ (3)~The operations |\number|,
+|\romannumeral|, |\the|, and |\meaning| can generate letters, digits, spaces,
+decimal points, minus signs, double quotes, colons, and `|>|' signs; these same
+codes are generated in all implementations of \TeX.
+\ (4)~The |\hyphenation| and |\pattern| commands described in Appendix~H
+give special interpretation to the ten digits and to the characters
+`|.|' and~`|-|'. \ (5)~The codes for the four characters |$|~|.|~|{|~|}|
+are inserted when \TeX\ recovers from certain errors, and braces are
+inserted around an ^|\output| routine; appropriate catcodes are attached
+to these tokens, so it doesn't matter if these symbols have their plain
+\TeX\ meanings or not. \ (6)~There is a special convention for
+representing characters 0--255 in the hexadecimal forms
+|^^00|--|^^ff|, explained in Chapter~8. This convention is always
+acceptable as input, when |^| is any character of catcode~7. Text
+output is produced with this convention only when representing
+characters of code $\ge128$ that a \TeX\ installer has chosen not to
+output directly.
+
+\endchapter
+
+%Code sets obtained by modifying the standard as shown above
+%or by other replacements are nonstandard.
+%\author ASA SUBCOMMITTEE X3.2, {\sl American Standard\break %
+%  Code for Information Interchange\/^^{ASCII}} (1963)
+%% in {\sl Communications of the ACM\/}
+Code sets obtained by modifying the standard as shown above
+or by other replacements are nonstandard.
+\author ASA SUBCOMMITTEE X3.2, {\sl American Standard\break %
+  Code for Information Interchange\/^^{ASCII}} (1963)
+% in {\sl Communications of the ACM\/}
+
+\bigskip
+
+%Both the Stanford and DEC uses of the ASCII control characters
+%are in violation of the USA Standard Code,
+%but no Federal Marshal is likely to come running out
+%and arrest people who type control-T to their computers.
+%\author BRIAN ^{REID}, {\sl SCRIBE Introductory User's Manual\/} (1978) % p82
+Both the Stanford and DEC uses of the ASCII control characters
+are in violation of the USA Standard Code,
+but no Federal Marshal is likely to come running out
+and arrest people who type control-T to their computers.
+\author BRIAN ^{REID}, {\sl SCRIBE Introductory User's Manual\/} (1978) % p82
+
+%\eject
+\eject\byebye

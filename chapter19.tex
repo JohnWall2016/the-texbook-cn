@@ -1,0 +1,1509 @@
+% -*- coding: utf-8 -*-
+
+\input macros
+
+%\beginchapter Chapter 19. Displayed Equations
+\beginchapter Chapter 19. 陈列公式
+
+\origpageno=185
+
+%By now you know how to type mathematical formulas so that \TeX\ will handle
+%them with supreme elegance; your knowledge of math typing is nearly complete.
+%But there is one more part to the story, and the purpose of this chapter
+%is to present the happy ending. We have discussed how to deal with individual
+%formulas; but ^{displays} often involve a whole bunch of different formulas,
+%or different pieces of a huge formula, and it's a bit of a problem to
+%lay them out so that they line up properly with each other. Fortunately,
+%large displays generally fall into a few simple patterns.
+\1现在你已经知道怎样输入数学公式以得到漂亮的排版了；
+数学排版方面的知识基本差不多了。%
+但是还有部分内容，本章将要讨论它。%
+我们已经讨论过怎样排版单个公式；
+但是陈列公式常常包括一整组不同的公式，
+或者一个大公式的不同片段，
+并且在把它们正确地对齐时会出现一点问题。%
+幸运的是，大量陈列公式一般可以分为几个简单的类型。
+
+%\subsection One-line displays. Before plunging into the general question
+%of display layout, let's recapitulate what we have already covered.  If
+%you type `|$$|\<formula>|$$|', \TeX\ will display the formula
+%^^{dollardollar} in flamboyant display style, centering it on a line by
+%itself. We have also noted in Chapter~18 that it's possible to display two
+%short formulas at once, by typing
+%`|$$|\<formula$_1$>^|\qquad|\<formula$_2$>|$$|'; this reduces the
+%two-formula problem to a one-formula problem. You get the two formulas
+%separated by two quads of space, the whole being centered on a line.
+\subsection 单行陈列公式.
+在讨论陈列公式排版的一般问题前，我们先简要地复习一下。%
+如果输入`|$$|\<formula>|$$|', 那么 \TeX\ 将把公式用精美的陈列样式显示出来，
+自己单独占一行，并且居中。%
+我们还注意到，在第十八章，可以同时显示两个短公式，只要输入%
+`|$$|\<formula$_1$>|\qquad|\<formula$_2$>|$$|'即可；
+它把两个公式的问题简化为一个公式的问题。%
+你所得到的两个公式用两个 quad 的间距隔开，而它们整体行居中。
+
+%Displayed equations often involve ordinary text. Chapter~18 explains
+%how to get roman type into formulas without leaving math mode, but the
+%best way to get text into a display is to put it into an ^|\hbox|.
+%There needn't even be any math at all; to typeset
+%$$\hbox{Displayed Text}$$
+%you can simply say `|$$\hbox{Displayed Text}$$|'. But here's a more interesting
+%example:
+%$$X_n=X_k \qquad\hbox{if and only if}\qquad
+%    Y_n=Y_k \quad\hbox{and}\quad Z_n=Z_k.$$
+%Formulas and text were combined in this case by typing
+%\begintt
+%$$X_n=X_k \qquad\hbox{if and only if}\qquad
+%    Y_n=Y_k \quad\hbox{and}\quad Z_n=Z_k.$$
+%\endtt
+%Notice that |\qquad| appears around `if and only if', but a single ^|\quad|
+%surrounds `and'; this helps to indicate that the $Y$ and~$Z$ parts of the
+%display are related more closely to each other than to the $X$~part.
+陈列公式常常包含普通文本。%
+第十八章讨论了怎样在不离开数学模式的情况下在公式中输入 roman 字体，
+但是在陈列公式中排版文本的最好方法是把它放在 |\hbox| 中。%
+这样甚至不需要任何数学内容；
+为了得到
+$$\hbox{要显示的文本}$$
+可以只输入`|$$\hbox{要显示的文本}$$|'。%
+但是更好的例子在下面：
+$$X_n=X_k \qquad\hbox{if and only if}\qquad
+    Y_n=Y_k \quad\hbox{and}\quad Z_n=Z_k.$$
+在这种情况下，公式和文本都被组合起来，只要输入
+\begintt
+$$X_n=X_k \qquad\hbox{if and only if}\qquad
+    Y_n=Y_k \quad\hbox{and}\quad Z_n=Z_k.$$
+\endtt
+注意，|\qquad| 出现在`if and only if'两边，但是在`and'两边只有一个 |\quad|;
+这清楚地表明了陈列公式的 $Y$ 和 $Z$ 的关系比它们与 $X$ 的关系更近。
+
+%Consider now the display
+%$$Y_n=X_n\bmod p \quad\hbox{and}\quad Z_n=X_n\bmod q
+%    \qquad\hbox{for all }n\ge0.$$
+%Can you figure out how to type this? One solution is
+%\begintt
+%$$Y_n=X_n\bmod p \quad\hbox{and}\quad Z_n=X_n\bmod q
+%    \qquad\hbox{for all }n\ge0.$$
+%\endtt
+%Notice that a space has been left after `|all|' in the hbox here, since spaces
+%disappear when they are out in formula-land. But there's a simpler and more
+%logical way to proceed, once you get used to \TeX's idea of modes: You can type
+%\begintt
+%... \qquad\hbox{for all $n\ge0$.}$$
+%\endtt
+%Wow---that's math mode inside of horizontal mode inside of display
+%math mode. But in this way your manuscript mirrors what you are trying to
+%accomplish, while the previous solution (with the space after `|all|')
+%looks somewhat forced.
+现在看看陈列公式
+$$Y_n=X_n\bmod p \quad\hbox{and}\quad Z_n=X_n\bmod q
+    \qquad\hbox{for all }n\ge0.$$
+    你知道怎样输入吗？一种方法是
+\begintt
+$$Y_n=X_n\bmod p \quad\hbox{and}\quad Z_n=X_n\bmod q
+    \qquad\hbox{for all }n\ge0.$$
+\endtt
+注意，这里 hbox 中的`|all|'后面有一个空格，
+因为当空格出现在公式区时会去掉。%
+但是一旦你理解了 \TeX\ 的模式思想，就有更好和更合理的方法：
+可以输入
+\begintt
+... \qquad\hbox{for all $n\ge0$.}$$
+\endtt
+\1噢——是陈列数学模式中的水平模式中的数学模式。%
+但是用这种方法，文稿正好反映出你要表达的意思，
+而前一种方法(`|all|'后面加空格)看起来有点不得已。
+
+%\exercise Typeset the following four displays (one at a time):
+%$$\openup1\jot\displaylines{
+%\sum_{n=0}^\infty a_nz^n\qquad\hbox{converges if}\qquad
+%  \vert z\vert<\Bigl(\limsup_{n\to\infty}
+%    \root n\!\of{\vert a_n\vert}\,\Bigr)^{-1}.\cr
+%{f(x+\Delta x)-f(x)\over\Delta x}\to f'(x)\qquad\hbox{as $\Delta x\to0$.}\cr
+%\noalign{\vskip2pt}
+%\Vert u_i\Vert=1,\qquad u_i\cdot u_j=0\quad\hbox{if $i\ne j$.}\cr
+%\it\hbox{The confluent image of}\quad\left\{
+%  \matrix{\hbox{an arc}\hfill\cr\hbox{a circle}\hfill\cr
+%    \hbox{a fan}\hfill\cr}
+%  \right\}\quad\hbox{is}\quad\left\{
+%  \matrix{\hbox{an arc}\hfill\cr\hbox{an arc or a circle}\hfill\cr
+%    \hbox{a fan or an arc}\hfill\cr}\right\}.\cr
+%\noalign{\vskip-8pt}}$$
+%^^|\Delta| ^^|\Vert|
+%% the last example comes from Proc AMS 55 (1976), 410, with typos corrected
+%\answer |$$\sum_{n=0}^\infty a_nz^n\qquad\hbox{converges if}\qquad|\parbreak
+%|  |\||z|\||<\Bigl(\limsup_{n\to\infty}\root n\!\of{|\||a_n|\|^^|\root|
+%  |}\,\Bigr)^{-1}.$$|\kern-.33pt\par
+%\smallskip
+%|$${f(x+\Delta x)-f(x)\over\Delta x}\to f'(x)|\parbreak
+%|    \qquad\hbox{as $\Delta x\to0$.}$$|\par
+%\smallskip
+%|$$\|\||u_i\|\||=1,\qquad u_i\cdot u_j=0\quad\hbox{if $i\ne j$.}$$|\par
+%\smallskip
+%|$$\it\hbox{The confluent image of}\quad\left\{|\parbreak
+%|    \matrix{\hbox{an arc}\hfill\cr\hbox{a circle}\hfill\cr|\parbreak
+%|      \hbox{a fan}\hfill\cr}|\parbreak
+%|    \right\}\quad\hbox{is}\quad\left\{|\parbreak
+%|    \matrix{\hbox{an arc}\hfill\cr|\parbreak
+%|      \hbox{an arc or a circle}\hfill\cr|\parbreak
+%|      \hbox{a fan or an arc}\hfill\cr}\right\}.$$|\par
+%\smallskip\noindent
+%The first example includes |\!| and |\,| to give slightly refined spacing;
+%but the point of the problem was to illustrate the hbox, not to fuss over
+%such extra details.
+%The last example can be done much more simply using the ideas of
+%Chapter~22, if you don't mind descending to the level of \TeX\ primitives;
+%for example, the first matrix could be replaced by ^^|\halign|
+%\begintt
+%\,\vcenter{\halign{#\hfil\cr an arc\cr a circle\cr a fan\cr}}\,
+%\endtt
+%and the second is similar.
+\exercise 输入下列四个陈列公式（一次一个）：
+$$\openup1\jot\displaylines{
+\sum_{n=0}^\infty a_nz^n\qquad\hbox{converges if}\qquad
+  \vert z\vert<\Bigl(\limsup_{n\to\infty}
+    \root n\!\of{\vert a_n\vert}\,\Bigr)^{-1}.\cr
+{f(x+\Delta x)-f(x)\over\Delta x}\to f'(x)\qquad\hbox{as $\Delta x\to0$.}\cr
+\noalign{\vskip2pt}
+\Vert u_i\Vert=1,\qquad u_i\cdot u_j=0\quad\hbox{if $i\ne j$.}\cr
+\it\hbox{The confluent image of}\quad\left\{
+  \matrix{\hbox{an arc}\hfill\cr\hbox{a circle}\hfill\cr
+    \hbox{a fan}\hfill\cr}
+  \right\}\quad\hbox{is}\quad\left\{
+  \matrix{\hbox{an arc}\hfill\cr\hbox{an arc or a circle}\hfill\cr
+    \hbox{a fan or an arc}\hfill\cr}\right\}.\cr
+\noalign{\vskip-8pt}}$$
+\answer |$$\sum_{n=0}^\infty a_nz^n\qquad\hbox{converges if}\qquad|\parbreak
+|  |\||z|\||<\Bigl(\limsup_{n\to\infty}\root n\!\of{|\||a_n|\|^^|\root|
+  |}\,\Bigr)^{-1}.$$|\kern-.33pt\par
+\smallskip
+|$${f(x+\Delta x)-f(x)\over\Delta x}\to f'(x)|\parbreak
+|    \qquad\hbox{as $\Delta x\to0$.}$$|\par
+\smallskip
+|$$\|\||u_i\|\||=1,\qquad u_i\cdot u_j=0\quad\hbox{if $i\ne j$.}$$|\par
+\smallskip
+|$$\it\hbox{The confluent image of}\quad\left\{|\parbreak
+|    \matrix{\hbox{an arc}\hfill\cr\hbox{a circle}\hfill\cr|\parbreak
+|      \hbox{a fan}\hfill\cr}|\parbreak
+|    \right\}\quad\hbox{is}\quad\left\{|\parbreak
+|    \matrix{\hbox{an arc}\hfill\cr|\parbreak
+|      \hbox{an arc or a circle}\hfill\cr|\parbreak
+|      \hbox{a fan or an arc}\hfill\cr}\right\}.$$|\par
+\smallskip\noindent
+第一个例子用 |\!| 和 |\,| 给出精细点的间距；
+但此问题的要点是要说明 hbox，而非关注太多细节。
+如果不介意用 \TeX\ 原始命令，
+利用第 22 章的想法你可以大大简化最后一个例子；
+比如第一个矩阵可以改写为^^|\halign|
+\begintt
+\,\vcenter{\halign{#\hfil\cr an arc\cr a circle\cr a fan\cr}}\,
+\endtt
+而第二个矩阵类似。
+
+%\dangerexercise Sometimes display style is too grandiose, when the formula
+%being displayed is
+%$$y={1\over2}x$$
+%or something equally simple. One day B. L. ^{User} tried to remedy this by
+%typing it as `|$$y={\scriptstyle1\over\scriptstyle2}x$$|', but the
+%resulting formula
+%$$y={\scriptstyle1\over\scriptstyle2}x$$
+%wasn't at all what he had in mind. What's the right way to get ^^{one half}
+%^^{1/2--unslashed form} simply `$y={1\over2}x$' when you don't want big
+%^{fractions in displays}?
+%\answer |$$\textstyle y={1\over2}x$$|. \ (Switching to text style is
+%especially common in multiline formulas. For example, you will probably
+%find occasions to use ^|\textstyle| on both sides of the |&|'s within
+%an ^|\eqalign|.)
+\dangerexercise 当要排版的公式为
+$$y={1\over2}x$$
+或者类似这样的简单东西时，有时候陈列样式太大了。
+有一天^{用户笨笨}希望通过输入
+`|$$y={\scriptstyle1|\allowbreak|\over\scriptstyle2}x$$|'
+来弥补一下，结果得到的
+$$y={\scriptstyle1\over\scriptstyle2}x$$
+根本不是他想要的。在不想要陈列公式中的大分式，
+而仅仅得到 `$y={1\over2}x$' 时，正确的方法是什么？
+\answer |$$\textstyle y={1\over2}x$$|。%
+（切换到文本样式是多行公式中相当常见的用法。例如，
+你将发现在 ^|\eqalign| 的 |&| 的两边有时会用到 ^|\textstyle|。）
+
+%\dangerexercise What difference, if any, is there between the result of
+%typing `|$$|\<formula>|$$|' and the result of typing
+%`|$$\hbox{$|\<formula>|$}$$|'\thinspace?
+%\answer The latter formula will be in text style, not display style.
+%And even if you do type `|$$\hbox{$\displaystyle{|\<formula>|}$}$$|', the
+%results are not quite the same, as we will see later: \TeX\ will compress
+%the glue in `|$$|\<formula>|$$|' if the formula is too wide to fit on
+%a line at its natural width, but the glue inside |\hbox{...}| is frozen
+%at its natural width. The |\hbox| version also invokes |\everymath|.
+\dangerexercise 输入 `|$$|\<formula>|$$|' 和 `|$$\hbox{$|\<formula>|$}$$|'
+所得到的结果之间有什么差别么？
+\answer 后一个公式将用文本样式，而不是陈列样式显示。
+而且即使你确实输入了 `|$$\hbox{$\displaystyle{|\<formula>|}$}$$|'，
+结果也不会完全一样，这是我们稍后会看到的：
+当公式太宽而无法以自然宽度放在一行时，
+\TeX\ 将会压缩 `|$$|\<formula>|$$|' 的粘连，
+但|\hbox{...}| 内的粘连总是固定为它的自然宽度。
+|\hbox| 版本还调用了 |\everymath|。
+
+%\dangerexercise You may have noticed that most of the displays in this
+%manual are not centered; displayed material is usually aligned at the
+%left with the paragraph indentation, as part of the book design, because
+%this is an unusual book. Explain how you could typeset a formula like
+%$$\leftline{\indent$\displaystyle
+%    1-{1\over2}+{1\over3}-{1\over4}+\cdots=\ln2$}$$
+%^^{displays, non-centered}
+%that is off-center in this way.
+%\answer One solution is to put the formula in an hbox that occupies a full line:
+%\begintt
+%$$\leftline{\indent$\displaystyle
+%    1-{1\over2}+{1\over3}-{1\over4}+\cdots=\ln2$}$$
+%\endtt
+%But this takes a bit of typing. If you make the definitions
+%\begintt
+%\def\leftdisplay#1$${\leftline{\indent$\displaystyle{#1}$}$$}
+%\everydisplay{\leftdisplay}
+%\endtt
+%you can type `|$$|\<formula>|$$|' as usual, and the formatting will be
+%inserted automatically. \ (This doesn't work with equation numbers;
+%Appendix~D illustrates how to handle them as well.)
+\dangerexercise 你可能已经注意到了，本手册的大部分陈列公式都不是居中的；
+因为本书不是一般的书，作为书籍设计的一部分，陈列公式一般与段落左边的缩进对齐。
+看看怎样排版出下面这样不居中的公式：
+$$\leftline{\indent$\displaystyle
+    1-{1\over2}+{1\over3}-{1\over4}+\cdots=\ln2$}$$
+\answer 其中一种解法是将公式放在一个占用整行的 hbox 中：
+\begintt
+$$\leftline{\indent$\displaystyle
+    1-{1\over2}+{1\over3}-{1\over4}+\cdots=\ln2$}$$
+\endtt
+但这将需要多键入一些字符。如果你使用下面的定义
+\begintt
+\def\leftdisplay#1$${\leftline{\indent$\displaystyle{#1}$}$$}
+\everydisplay{\leftdisplay}
+\endtt
+你就可以像往常一样键入 `|$$|\<formula>|$$|'，而公式的格式化将被自动插入。%
+（这不能用于编号公式；附录 D 说明如何同时处理这种公式。）
+
+%If you've had previous experience typing mathematical papers, you probably
+%have been thinking, ``What about ^{equation numbers}? When is this book
+%going to talk about them?'' Ah yes, now is the time to discuss those sneaky
+%little labels that appear off to the side of displays. If you type
+%\begindisplay
+%|$$|\<formula>|\eqno|\<formula>|$$|
+%\enddisplay
+%\TeX\ will display the first formula and it will also put an equation number
+%(the second formula) at the right-hand margin. For example,
+%\begintt
+%$$x^2-y^2 = (x+y)(x-y).\eqno(15)$$
+%\endtt
+%^^|\eqno|
+%will produce this:
+%$$x^2-y^2 = (x+y)(x-y).\eqno(15)$$
+%You can also get equation numbers at the left-hand margin, with ^|\leqno|.
+%For example,
+%\begintt
+%$$x^2-y^2 = (x+y)(x-y).\leqno(16)$$
+%\endtt
+%will produce this:
+%$$x^2-y^2 = (x+y)(x-y).\leqno(16)$$
+%Notice that you always give the equation number second, even when it is going
+%to appear at the left. Everything from the |\eqno| or |\leqno| command to
+%the |$$| that ends the display is the equation number. Thus, you're not
+%allowed to have two equation numbers in the same display; but there's a
+%way to get around that restriction, as we'll see later.
+如果你有以前排版数学文章的经验，可能会想，
+``方程编号放在哪里？
+本书什么时候讨论它？''
+的确，现在是该讨论在陈列公式外边好远才偷偷摸摸出现的小标记了。%
+如果输入
+\begindisplay
+|$$|\<formula>|\eqno|\<formula>|$$|
+\enddisplay
+\1\TeX\ 就陈列显示出第一个公式，并且还把方程编号(第二个公式)放在右页边处。%
+例如，
+\begintt
+$$x^2-y^2 = (x+y)(x-y).\eqno(15)$$
+\endtt
+得到的是：
+$$x^2-y^2 = (x+y)(x-y).\eqno(15)$$
+也可以把方程编号放在左页边处，用的是 |\leqno|。%
+例如，
+\begintt
+$$x^2-y^2 = (x+y)(x-y).\leqno(16)$$
+\endtt
+得到的是：
+$$x^2-y^2 = (x+y)(x-y).\leqno(16)$$
+注意，方程编号总是放在第二位，即使要出现在左边。%
+从 |\eqno| 到 |\leqno| 命令到结束陈列公式的 |$$| 的所有东西都是方程编号。%
+因此，不允许在同一陈列公式中出现两个方程编号；
+但是有一种方法可以绕过这个限制，我们后面要讨论它。
+
+%\danger Nowadays people are using right-hand equation numbers more and more,
+%because a display most often comes at the end of a sentence or clause, and
+%the right-hand convention keeps the number from intruding into the clause.
+%Furthermore, it's often possible to save space when a displayed equation
+%follows a short text line, since less space is needed above the display;
+%such savings are not possible with |\leqno|, because there's no room for
+%overlap. For example, there is less space above display~(15) than there is
+%above~(16) in our illustrations of\/ |\eqno| and |\leqno|, although the
+%formulas and text are otherwise identical.
+\danger 现在，人们越来越多地使用方程的右边编号，
+因为陈列公式常常出现在句子或条款的结尾处，
+右边约定使得编号与条款不混淆。%
+还有，当陈列公式跟在一个短行后面时，还常常可以节约空间，
+因为在陈列公式上面需要的间距更少；
+用 |\leqno| 时就不能这样节约空间，
+因为没有可以叠起来的空白。%
+例如，在我们关于 |\eqno| 和 |\leqno| 的示例中，公式 (15) 上面的空间比公式 (16)~%
+要少，虽然公式和文本这些其它东西都是一样的。
+
+%\danger If you look closely at (15) and (16) above, you can see that the
+%displayed formulas have been centered without regard to the presence of
+%the equation numbers. But when a formula is large, \TeX\ makes sure that
+%it does not interfere with its number; the equation number may even be
+%placed on a line by itself.
+\danger 如果你仔细观察上面的 (15) 和 (16), 就会发现陈列公式已经居中了，
+而没有计及方程编号的出现。%
+但是当公式很大时，
+ \TeX\ 要确保方程与编号之间互不干扰；
+方程编号甚至可以单独放一行。
+
+%\exercise How would you produce the following display?
+%$$\prod_{k\ge0}{1\over(1-q^kz)}=
+%    \sum_{n\ge0}z^n\bigg/\!\!\prod_{1\le k\le n}(1-q^k).\eqno(16')$$
+%\answer |$$\prod_{k\ge0}{1\over(1-q^kz)}=|\parbreak
+%        |   \sum_{n\ge0}z^n\bigg/\!\!\prod_{1\le k\le n}(1-q^k).\eqno(16')$$|
+\exercise 怎样单独下列陈列公式？
+$$\prod_{k\ge0}{1\over(1-q^kz)}=
+    \sum_{n\ge0}z^n\bigg/\!\!\prod_{1\le k\le n}(1-q^k).\eqno(16')$$
+\answer |$$\prod_{k\ge0}{1\over(1-q^kz)}=|\parbreak
+        |   \sum_{n\ge0}z^n\bigg/\!\!\prod_{1\le k\le n}(1-q^k).\eqno(16')$$|
+
+%\dangerexercise Equation numbers are math formulas, typeset in text style.
+%So how can you get an equation number like `\hbox{(3--1)}'
+%(with an ^{en-dash})?
+%\answer |\eqno\hbox{(3--1)}|.
+\dangerexercise 公式编号是用文本样式排版的数学公式。
+因此，怎样才能得到象`\hbox{(3--1)}'（有一个连接号）这样的公式编号？
+\answer |\eqno\hbox{(3--1)}|。
+
+%\ddangerexercise B. L. ^{User} tried typing `|\eqno(*)|' and `|\eqno(**)|',
+%and he was pleased to discover that this produced the equation numbers
+%`$(*)$' and `$(**)$'. \ [He had been a bit worried that they would come out
+%`(*)' and `(**)' instead.] \ But then a few months later he tried
+%`|\eqno(***)|' and got a surprise. What was it?
+%\answer When you type an ^{asterisk} in math mode, plain \TeX\ considers
+%|*| to be a binary operation. In the cases `|(*)|' and `|(**)|', the
+%binary operations are converted to type~Ord, because they don't appear in
+%a binary context; but the middle asterisk in `|(***)|' remains of type~Bin.
+%So the result was `$(***)$'. To avoid the extra medium spaces, you can
+%type `|\eqno(*{*}*)|'; or you can change ^|\mathcode||`*|, if you never use
+%|*| as a binary operation.
+\ddangerexercise ^{用户笨笨}试着输入了`|\eqno(*)|' 和 `|\eqno(**)|'，
+他高兴地发现，得到的方程编号是`$(*)$'和`$(**)$'。%
+[ 他为结果不是 `(*)' 和 `(**)' 而感到有点困惑。]
+但是，几个月后，他输入 `|\eqno(***)|' 却得到意想不到的结果。这个结果是什么？
+\answer 当你在数学模式中输入^{星号}时，plain \TeX\ 将 |*| 视为二元运算符。
+在 `|(*)|' 和 `|(**)|' 的情形，因为它们没出现在二元运算环境中，
+二元运算符被转换为 Ord 类型；但 `|(***)|' 中间的星号将保留为 Bin 类型。
+所以结果将为 `$(***)$'。为避免多余的空白，你可以输入 `|\eqno(*{*}*)|'；
+如果你从不将 |*| 用作二元运算符，你也可以改变 ^|\mathcode||`*|。
+
+%\ddanger Somewhere in this manual there ought to be a description of exactly
+%how \TeX\ displays formulas; i.e., how it centers them, how it places the
+%equation numbers, how it inserts extra space above and below, and so on.
+%Well, now is the time for those rules to be stated. They are somewhat
+%complex, because they interact with things like |\parshape|, and because
+%they involve several parameters that haven't been discussed yet. The purpose
+%of the rules is to explain exactly what sorts of boxes, glue, and
+%penalties are placed onto the current ^{vertical list} when a display occurs.
+\ddanger \1应该在本手册的某些地方讨论一下 \TeX\ 到底是怎样排版陈列公式的：
+即，怎样把它们居中，怎样放方程编号，怎样在上下插入额外间距等等。%
+嗯，现在该讨论它们了。%
+它们是有些复杂，因为它们与象 |\parshape| 这样的东西互相影响，
+并且包括了几个还未讨论的参数。%
+这些规则的目的就是当出现陈列公式时，要把什么样的盒子，粘连和惩罚%
+放在当前垂直列中。
+
+%\ddanger If a display occurs after, say, four lines of a paragraph, \TeX's
+%internal register called ^|\prevgraf| will be equal to~4 when the display
+%starts.  The display will be assumed to take three lines, so |\prevgraf|
+%will become~7 when the paragraph is resumed at the end of the display
+%(unless you have changed |\prevgraf| in the meantime). \TeX\ assigns
+%special values to three \<dimen> parameters immediately after the opening
+%|$$| is sensed:  ^|\displaywidth| and ^|\displayindent| are set to the
+%line width~$z$ and the shift amount~$s$ for line number |\prevgraf|${}+2$,
+%based on the current paragraph shape or hanging indentation. \ (Usually
+%|\displaywidth| is the same as ^|\hsize|, and |\displayindent| is zero,
+%but the paragraph shape can vary as described in Chapter~14.) \ Furthermore,
+%^|\predisplaysize| is set to the effective width~$p$ of the line preceding
+%the display, as follows: If there was no previous line (e.g., if the |$$|
+%was preceded by ^|\noindent| or by the closing |$$| of another display),
+%$p$~is set to $-16383.99999\pt$ (i.e., to the smallest legal dimension,
+%$-$^|\maxdimen|).  Otherwise \TeX\ looks inside the hbox that was formed
+%by the previous line, and sets $p$ to the position of the right edge of
+%the rightmost box inside that hbox, plus the indentation by which the
+%enclosing hbox has been moved right, plus two ems in the current font.
+%However, if this value of~$p$ depends on the fact that glue in that hbox
+%was stretching or shrinking---for example, if the ^|\parfillskip| glue is
+%finite, so that the material preceding it has not been set at its natural
+%width---then $p$~is set to |\maxdimen|. \ (This doesn't happen
+%often, but it keeps \TeX\ machine independent, since $p$~never depends on
+%quantities that may be rounded differently on different computers.)  \
+%Notice that |\displaywidth| and |\displayindent| are not
+%affected by |\leftskip| and |\rightskip|, but
+%|\predisplaysize| is. The values of\/ |\displaywidth|,
+%|\displayindent|, and |\predisplaysize|
+%will be used by \TeX\ after the displayed formula has been
+%read, as explained below; your program can examine them and/or change
+%them, if you want the typesetting to be done differently.
+\ddanger 如果陈列公式出现在段落的第 4 行后面，
+在陈列公式开始时， \TeX\ 的内部寄存器 |\prevgraf| 就等于 4。%
+陈列公式设置的行数为 3, 因此当在陈列公式结束处恢复到段落时，
+~|\prevgraf| 就变成 7~(除非在其间你改动过 |\prevgraf|)。%
+在读入开符号 |$$| 后， \TeX\ 紧接着就指定了三个 \<dimen> 参数的特殊值：
+|\displaywidth| 设定的是行的宽度 $z$, |\displayindent| 按照当前段落的形状%
+和悬挂缩进设定了第 |\prevgraf|${}+2$ 行的偏移量 $s$。%
+(一般情况下，|\displaywidth| 与 |\hsize| 是一样的，
+而 |\displayindent| 等于零，
+但是段落形状可以象第十四章讨论的那样变化。)
+还有，|\predisplaysize| 设定了陈列公式前面行的有效宽度 $p$, 如下：
+如果前面没有行(比如，如果 |$$| 前面是 |\noindent| 或者是另一个陈列公式的闭符号 |$$|),
+~$p$ 就设定为 $-16383.99999\pt$(即，可用的最小尺寸，$-$|\maxdimen|)。%
+否则， \TeX\ 要根据前面的行所形成的 hbox 把 $p$ 设定为此 hbox 中最右边%
+盒子的右边界的位置，加上把封装盒子向右移的缩进，再加上当前字体的 2 em。%
+但是，如果 $p$ 的这个值由此盒子中粘连的伸缩所确定——例如，
+如果 |\parfillskip| 粘连是有限的，使得在其前面的内容不是其自然宽度——%
+那么 $p$ 就设定为 |\maxdimen|。%
+(这不是常常出现，但是它保持了 \TeX\ 系统的独立性，
+因为 $p$ 不依赖于不同计算机的四舍五入得到的量。)
+注意，|\displaywidth| 和 |\displayindent| 不受 |\leftskip| 和 |\rightskip| 影响，
+但是 |\predisplaysize| 却受其影响。%
+在陈列公式读入后， \TeX\ 才用到 |\displaywidth|, %
+|\displayindent| 和 |\predisplaysize| 的值，其讨论见下面；
+如果要得到不同的排版，可用检验和/或改变它们。
+
+%\ddanger After a display has been read, \TeX\ converts it from a math list
+%to a horizontal list~$h$ in display style, as explained in
+%Appendix~G\null.  An equation number, if present, is processed in text
+%style and put into an hbox~$a$ with its natural width. Now the fussy
+%processing begins: Let $z$, $s$, and~$p$ be the current values of\/\
+%|\displaywidth|, |\displayindent|, and
+%|\predisplaysize|. Let $q$ and~$e$ be zero if there is no equation
+%number; otherwise let~$e$ be the width of the equation number, and let~$q$
+%be equal to $e$~plus one quad in the symbols font (i.e., in
+%^|\textfont||2|). Let $w_0$ be the natural width of the displayed
+%formula~$h$. If $w_0+q\le z$, list~$h$~is packaged in an hbox~$b$ having
+%its natural width~$w_0$.  But if $w_0+q>z$ (i.e., if the display is too
+%wide to fit at its natural width), \TeX\ performs the following ``^{squeeze
+%routine}'':  If $e\ne0$ and if there is enough shrinkability in the
+%displayed formula~$h$ to reduce its width to $z-q$, then list $h$ is
+%packaged in an hbox~$b$ of width~$z-q$. Otherwise $e$ is set to zero, and
+%list~$h$ is packaged in a (possibly overfull) hbox~$b$ of width $\min(w_0,z)$.
+\ddanger 在读入陈列公式后， \TeX\ 把它从数学列转换到陈列样式的水平列 $h$,
+就象在附录 G 中讨论的那样。%
+如果出现方程编号，就把它按文本样式处理，并且放在宽度为自然宽度的 hbox 中。%
+现在进行烦琐的处理：
+设 $z$, ~$s$ 和 $p$ 是 |\displaywidth|, |\displayindent| 和 |\predisplaysize|~%
+的当前值。%
+如果没有方程编号，就设 $q$ 和 $e$ 为零；
+否则，设 $e$ 为方程编号的宽度，
+并且设 $q$ 等于 $e$ 加上符号字体(即，|\textfont||2|)的一个 quad。%
+设 $w_0$ 是陈列公式 $h$ 的自然宽度。%
+如果 $w_0+q\le z$, 就把列 $h$ 包装进宽度为自然宽度 $w_0$ 的 hbox~~$b$ 中。%
+但是如果 $w_0+q>z$~(即，如果陈列公式太宽按照自然宽度放不下),
+那么 \TeX\ 执行下列``挤压程序'':
+如果 $e\ne0$ 并且在陈列公式 $h$ 中有足够的收缩性把其宽度减小到 $z-q$,
+那么列 $h$ 就包装进宽度为 $z-q$ 的 hbox~~$b$ 中。%
+否则，把 $e$ 设为零，并且把列 $h$ 包装进宽度为 $\min(w_0,z)$ 的 hbox~~$b$ 中%
+(可能溢出)。
+
+%\ddanger (Continuation.) \ \TeX\ tries now to center the display without
+%regard to the equation number. But if such centering would make it too close
+%to that number (where ``too close'' means that the space between them is less
+%than the width~$e$), the equation is either centered in the remaining space
+%or placed as far from the equation number as possible. The latter alternative
+%is chosen only if the first item on list~$h$ is glue, since \TeX\ assumes that
+%such glue was placed there in order to control the spacing precisely.
+%But let's state the rules more formally: Let~$w$ be the width of box~$b$.
+%\TeX\ computes a displacement~$d$, to be used later when positioning box~$b$,
+%by first setting $d={1\over2}(z-w)$. If $e>0$ and if $d<2e$, then $d$~is
+%reset to ${1\over2}(z-w-e)$ or to zero, where zero is chosen if list~$h$
+%begins with a glue item.
+\ddanger (续) 现在 \TeX\ 试着把陈列公式居中，而不管方程编号。%
+但是如果这样的居中使得它与此编号太近(``太近''就是它们之间的间距小于宽度 $e$),
+\1那么方程在剩下的间距上居中，或者放在离方程编号尽可能远的地方。%
+只有当列 $h$ 上的第一个项目是粘连时，才选择后一种方法，
+因为 \TeX\ 假定这样的粘连放在那里是为了精确地控制间距。%
+但是我们要正式给出规则：
+设 $w$ 是盒子 $b$ 的宽度。%
+通过首先设 $d={1\over2}(z-w)$ 来计算位移量 $d$——当放置盒子 $b$ 时要用到它。%
+如果 $e>0$ 并且 $d<2e$, 那么 $d$ 被重新设定为 ${1\over2}(z-w-e)$ 或者零，
+其中只有列 $h$ 的开头为一个粘连项目时才选择零。
+
+%\ddanger (Continuation.) \ \TeX\ is now ready to put things onto the current
+%vertical list, just after the material previously constructed for the
+%paragraph-so-far. First comes a ^{penalty} item, whose cost is an integer
+%parameter called ^|\predisplaypenalty|. Then comes glue. If $d+s\le p$,
+%or if there was a left equation number (|\leqno|), \TeX\ sets $g_a$ and
+%$g_b$ to glue items specified by the parameters ^|\abovedisplayskip|
+%and ^|\belowdisplayskip|, respectively; otherwise $g_a$ and $g_b$ become
+%glue items corresponding to ^|\abovedisplayshortskip| and
+%^|\belowdisplayshortskip|. \ [Translation: If the predisplaysize is short
+%enough so that it doesn't overlap the displayed formula, the glue above and
+%below the display will be ``short'' by comparison with the glue that is
+%used when there is an overlap.] \ If $e=0$ and if there is an |\leqno|,
+%the equation number is appended as an hbox by itself, shifted right~$s$ and
+%preceded by interline glue as usual; an infinite penalty is also appended,
+%to prevent a page break between this number and the display. Otherwise
+%a glue item~$g_a$ is placed on the vertical list.
+\ddanger (续) 现在 \TeX\ 要把这些东西放在当前垂直列，紧接在前面段落所%
+构造的内容后面。%
+首先出现的是一个惩罚项目，它的成本是整数参数 |\predisplaypenalty|。%
+接着出现的是粘连。%
+如果 $d+s\le p$, 或者如果方程编号在左边(|\leqno|), 那么 \TeX\ 分别把 $g_a$~%
+和 $g_b$ 设置为给定的粘连项目参数 |\abovedisplayskip| 和 |\belowdisplayskip|;
+否则 $g_a$ 和 $g_b$ 就变成对应于 |\abovedisplayshortskip| 和%
+~|\belowdisplayshortskip| 的粘连项目。%
+[转换：如果 predisplaysize 足够小，使得它与陈列公式不重叠，
+那么陈列公式上下的粘连就比有重叠时的粘连要``小''。]
+如果 $e=0$ 并且如果有 |\leqno|, 那么方程编号就就象一个 hbox 一样追加在自己后面，
+向右平移 $s$ 并且在前面象通常那样放上行间粘连；
+还要追加一个无限大惩罚，来防止这个编号与陈列公式之间断行。%
+否则，就把粘连项目 $g_a$ 放在垂直列中。
+
+%\ddanger (Continuation.) \ Now comes the displayed equation itself. If
+%$e\ne0$, the equation number box~$a$ is combined with the formula box~$b$ as
+%follows: Let~$k$ be a kern of width $z-w-e-d$. In the |\eqno| case, box~$b$
+%is replaced by an hbox containing $(b,k,a)$; in the |\leqno| case, box~$b$
+%is replaced by an hbox containing $(a,k,b)$, and $d$~is set to zero. In all
+%cases, box~$b$ is then appended to the vertical list, shifted right by~$s+d$.
+\ddanger (续) 现在出现的是陈列公式自己了。%
+如果 $e\ne 0$, 那么方程编号的盒子 $a$ 就与公式的盒子 $b$ 如下组合起来：
+设 $k$ 为宽度为 $z-w-e-d$ 的紧排。%
+在 |\eqno| 的情况下，盒子 $b$ 由包含 $(b,k,a)$ 的 hbox 代替；
+在 |\leqno| 的情况下，盒子 $b$ 由包含 $(a,k,b)$ 的 hbox 代替，
+并且把 $d$ 设为零。%
+在所有情形下，接下来都把盒子 $b$ 追加到垂直列中，向右平移 $s+d$。
+
+%\ddanger (Continuation.) \ The final task is to append the glue or the
+%equation number that follows the display. If there was an |\eqno| and if
+%$e=0$, an infinite penalty is placed on the vertical list, followed by the
+%equation number box~$a$ shifted right by $s+z$ minus its width, followed
+%by a penalty item whose cost is the value of\/ ^|\postdisplaypenalty|.
+%Otherwise a penalty item for the |\postdisplaypenalty| is appended
+%first, followed by a glue item for~$g_b$ as specified above. \TeX\ now
+%adds~3 to |\prevgraf| and returns to horizontal mode, ready to resume the
+%paragraph.
+\ddanger (续) 最后一个任务就是追加上粘连或跟在陈列公式下面的方程编号。%
+如果有一个 |\eqno| 并且 $e=0$, 就在垂直列中放一个无限大惩罚；
+后面是方程编号的盒子 $a$, 它向右平移 $s+z$ 减掉其宽度的距离；
+再接下来是成本为 |\postdisplaypenalty| 的值的惩罚项目。%
+否则，首先追加的是 |\postdisplaypenalty| 的惩罚项目，
+接着是由上面给出的 $g_b$ 的粘连项目。%
+现在， \TeX\ 把 |\prevgraf| 增加 3 并且返回水平模式，
+就回复到段落。
+
+%\ddanger One consequence of these rules is that you can force an equation
+%number to appear on a line by itself by making its width zero, i.e.,
+%by saying either `|\eqno|^|\llap||{$|\<formula>|$}|' or
+%`|\leqno|^|\rlap||{$|\<formula>|$}|'. This makes $e=0$, and
+%the condition $e=0$ controls \TeX's positioning logic, as explained
+%in the rules just given.
+\ddanger 这些规则的一个结果就是通过把方程编号盒子的宽度变成零，
+即，使用`|\eqno||\llap||{$|\<formula>|$}|'%
+或者`|\leqno||\rlap||{$|\<formula>|$}|', 你可以把它单独放在一行上。%
+它使得 $e=0$, 并且条件 $e=0$ 在逻辑上控制着 \TeX\ 的放置方法，
+就象刚刚讨论的规则那样。
+
+%\ddanger Plain \TeX\ sets |\predisplaypenalty=10000|, because fine
+%printers traditionally shun displayed formulas at the very top of a page.
+%You can change |\predisplaypenalty| and
+%|\postdisplaypenalty| if you want to encourage or discourage
+%page breaks just before or just after a display. For example,
+%`\hbox{|$$\postdisplaypenalty=|}\allowbreak\hbox{|-10000|\<formula>|$$|}'
+%will force a page break, putting the formula at the bottom line. It is better
+%to force a ^{page break} this way than to say ^|\eject| right after |$$...$$|;
+%such an eject (which follows the |\belowdisplayskip| glue below the
+%display) causes the page to be short, because it leaves unwanted glue at
+%the bottom.
+\ddanger Plain \TeX\ 设置 |\predisplaypenalty=10000|,
+因为按照惯例，好的排版应该避免把陈列公式放在页面紧顶部的地方。%
+如果你希望或者不希望正好在陈列公式前或后分页，
+就可以改变 |\predisplaypenalty| 和 |\postdisplaypenalty|。%
+例如，`\hbox{|$$\postdisplaypenalty=|}\allowbreak\hbox{|-10000|\<formula>|$$|}'
+就强制分页，把公式放在最底的一行了。%
+这种强制分页的方法比在 |$$...$$| 输入 |\eject| 要好；
+这样的 eject~(它跟在陈列公式下面的 |\belowdisplayskip| 粘连后)%
+得到一个短页面，因为它在底部留下了不想要的粘连。
+
+%\ddangerexercise Read the rules carefully and deduce the final position
+%of `$x=y$' in the formula
+%\begintt
+%$$\quad x=y \hskip10000pt minus 1fil \eqno(5)$$
+%\endtt
+%assuming that there is no hanging indentation. Also consider |\leqno|
+%instead of\/ |\eqno|.
+%\answer Assuming that |\hsize| is less than $10000\pt$, the natural width of
+%this equation will be too large to fit on a line; also, |\quad| specifies
+%glue at the left. Therefore `$x=y$' will appear exactly $1\em$ from
+%the left, and `(5)' will appear flush right. \ (The widths will satisfy
+%^^{displays, non-centered} $w=z-q$, $d=0$, $k=q-e=18\rm\,mu$.) \
+%In the case of\/ |\leqno|, `(5)' will appear flush left, followed by
+%one quad of space in |\textfont2|, followed by one quad of space in the
+%current text font, followed by `$x=y$'.
+\ddangerexercise \1详细阅读上面的规则，假定没有悬挂缩进，推导出公式
+\begintt
+$$\quad x=y \hskip10000pt minus 1fil \eqno(5)$$
+\endtt
+中`$x=y$'的最后位置。要是将 |\eqno| 改为 |\leqno| 呢？
+\answer 假设 |\hsize| 小于 $10000\pt$，公式的自然宽度将太大而无法放在一行；
+另外，|\quad| 在左边指定了一个粘连。
+因此 `$x=y$' 将出现在离左侧 $1\em$ 的位置，而 `(5)' 将靠右对齐。%
+（各宽度将满足 ^^{displays, non-centered}$w=z-q$，$d=0$，$k=q-e=18\rm\,mu$。）
+改为 |\leqno| 以后，`(5)' 将靠左对齐，
+后面跟着 |\textfont2| 字体的 1 quad 的空白，
+后面跟着当前文本字体的 1 quad 空白，后面跟着 `$x=y$'。
+
+%\ddanger \TeX\ also allows ``^{alignment displays},'' which are not
+%processed in math mode because they contain no formulas at the outer
+%level. An alignment display is created by commands of the general form
+%\begindisplay
+%|$$|\<assignments>|\halign{|\<alignment>|}|\<assignments>|$$|
+%\enddisplay
+%where the \<assignments> are optional things like parameter changes that do not
+%produce any math lists. In such displays, the |\halign| is processed exactly
+%as if it had appeared in vertical mode, and it will construct a vertical
+%list~$v$ as usual, except that each row of the alignment will be shifted
+%right by the ^|\displayindent|. After the alignment and the closing
+%assignments have been processed, \TeX\ will put a ^|\predisplaypenalty|
+%item and some ^|\abovedisplayskip| glue on the main vertical list, followed
+%by~$v$, followed by a ^|\postdisplaypenalty| item and ^|\belowdisplayskip|
+%glue. Thus, alignment displays are essentially like ordinary alignments,
+%except that they can interrupt paragraphs; furthermore, they are embedded in
+%glue and penalties just like other displays. The ^|\displaywidth| and
+%^|\predisplaysize| do not affect the result, although you could use
+%those parameters in your ^|\halign|. An entire alignment display is considered
+%to be only three lines long, as far as ^|\prevgraf| is concerned.
+\ddanger  \TeX\ 还允许``对齐的陈列公式'',
+它们不在数学模式下处理，因为在外层没有包含公式。%
+对齐的陈列公式由一般形式为
+\begindisplay
+|$$|\<assignments>|\halign{|\<alignment>|}|\<assignments>|$$|
+\enddisplay
+的命令生成，其中 \<assignments> 是象参数那样的可选内容，它不输出任何数学列。%
+在这样的陈列公式中，|\halign| 就象它出现在垂直模式中那样处理，
+并且构造出象通常那样的垂直列 $v$, 只是对齐的每行后向右平移了 |\displayindent|。%
+在对齐和闭对齐都处理完后， \TeX\ 将把一个 |\predisplaypenalty| 项目%
+和一些 |\abovedisplayskip| 粘连放在主垂直列，
+接着是 $v$, 再接下来是一个 |\postdisplaypenalty| 项目和 |\belowdisplayskip| 粘连。%
+这样，对齐的陈列公式本质上就象普通的对齐一样了，
+只是它们可以插在段落中间；
+还有，它们就象其它陈列公式那样嵌入在粘连和惩罚中。%
+|\displaywidth| 和 |\predisplaysize| 不会影响结果，
+虽然你可以在 |\halign| 使用它们。%
+至于 |\prevgraf|, 这个对齐列表只看作三行长。
+
+%\subsection Multi-line displays. OK, the use of displayed formulas is
+%very nice. But when you try typing a lot of manuscripts you will run into
+%some displays that don't fit the simple pattern of a one-line formula with
+%or without an equation number. Plain \TeX\ provides special control
+%sequences that will cover most of the remaining cases.
+\subsection 多行陈列公式.
+好，陈列公式非常有用。%
+但是当你要排版许多文稿时，就会发现有些陈列公式只用有无编号的单行方程这种%
+简单式样不合适。%
+Plain \TeX\ 提供了特殊控制系列来解决大多数剩下的问题。
+
+%Multi-line displays usually consist of several equations that should be
+%lined up by their `$=$'~signs, as in
+%$$\eqalign{X_1+\cdots+X_p&=m,\cr
+%           Y_1+\cdots+Y_q&=n.\cr}$$
+%The recommended procedure for such a display is to use ^|\eqalign|,
+%which works with special markers |&| ^^{ampersand} and ^|\cr| that we
+%have already encountered in connection with |\cases| and |\matrix|
+%in Chapter~18. Here's how to type this particular one:
+%\begintt
+%$$\eqalign{X_1+\cdots+X_p&=m,\cr
+%           Y_1+\cdots+Y_q&=n.\cr}$$
+%\endtt
+%There can be any number of equations in an |\eqalign|; the general pattern is
+%$$\halign{\indent#&#\hfil\cr
+%|\eqalign{|&\<left-hand side$_1$>|&|\<right-hand side$_1$>|\cr|\cr
+%           &\<left-hand side$_2$>|&|\<right-hand side$_2$>|\cr|\cr
+%\noalign{\vskip-2pt}
+%           &\qquad\vdots\cr
+%           &\<left-hand side$_n$>|&|\<right-hand side$_n$>|\cr}|\cr}$$
+%where each \<right-hand side> starts with the symbol on which you want
+%alignment to occur. For example, every right-hand side often begins
+%with an $=$~sign. The equations will be typeset in display style.
+多行陈列公式通常由几个方程组成，它们的`$=$'应当对齐，就象下面这样：
+$$\eqalign{X_1+\cdots+X_p&=m,\cr
+           Y_1+\cdots+Y_q&=n.\cr}$$
+这样的陈列公式建议使用的命令是 |\eqalign|,
+它用到特殊标记 |&| 和 |\cr|, 这些我们在第十八章中与 |\cases| 和 |\matrix|~%
+有关的地方已经见过。%
+下面就是上面公式的输入方法：
+\begintt
+$$\eqalign{X_1+\cdots+X_p&=m,\cr
+           Y_1+\cdots+Y_q&=n.\cr}$$
+\endtt
+在 |\eqalign| 中可以有任意个方程；
+一般样式为
+$$\halign{\indent#&#\hfil\cr
+|\eqalign{|&\<left-hand side$_1$>|&|\<right-hand side$_1$>|\cr|\cr
+           &\<left-hand side$_2$>|&|\<right-hand side$_2$>|\cr|\cr
+\noalign{\vskip-2pt}
+           &\qquad\vdots\cr
+           &\<left-hand side$_n$>|&|\<right-hand side$_n$>|\cr}|\cr}$$
+其中每个 \<right-hand side> 以要对齐的符号开头。%
+\1例如，每个右边都常常以 $=$ 开头。%
+方程用陈列样式排版。
+
+%\exercise In practice, the left-hand sides of aligned formulas are often
+%blank, and the alignment is often done with respect to other symbols
+%as well as~$=$. For example, the following display is typical; see if you
+%can guess how the author typed it:
+%$$\eqalign{T(n)\le T(2^{\lceil\lg n\rceil})
+%    &\le c(3^{\lceil\lg n\rceil}-2^{\lceil\lg n\rceil})\cr
+%    &<3c\cdot3^{\lg n}\cr
+%    &=3c\,n^{\lg3}.\cr}$$ % from v2 p279
+%\answer (Note in particular that the final `|.|'\ comes {\sl before\/} the
+%final `|\cr|'.)
+%\begintt
+%$$\eqalign{T(n)\le T(2^{\lceil\lg n\rceil})
+%    &\le c(3^{\lceil\lg n\rceil}-2^{\lceil\lg n\rceil})\cr
+%    &<3c\cdot3^{\lg n}\cr
+%    &=3c\,n^{\lg3}.\cr}$$
+%\endtt
+\exercise 在实践中，要对齐的公式的左边常常是空的，
+对齐经常出现在其它符号以及 $=$ 上。
+例如，下列陈列公式就比较典型；看看你是否知道作者是怎样输入的：
+$$\eqalign{T(n)\le T(2^{\lceil\lg n\rceil})
+    &\le c(3^{\lceil\lg n\rceil}-2^{\lceil\lg n\rceil})\cr
+    &<3c\cdot3^{\lg n}\cr
+    &=3c\,n^{\lg3}.\cr}$$ % from v2 p279
+\answer （特别要注意最后的 `|.|' 要放在最后一个 `|\cr|'  {\sl 之前\/}。）
+\begintt
+$$\eqalign{T(n)\le T(2^{\lceil\lg n\rceil})
+    &\le c(3^{\lceil\lg n\rceil}-2^{\lceil\lg n\rceil})\cr
+    &<3c\cdot3^{\lg n}\cr
+    &=3c\,n^{\lg3}.\cr}$$
+\endtt
+
+%The result of\/ |\eqalign| is a vertically centered box. This makes it easy to
+%get a formula like
+%$$\left\{
+%\eqalign{\alpha&=f(z)\cr \beta&=f(z^2)\cr \gamma&=f(z^3)\cr}
+%\right\}\qquad\left\{
+%\eqalign{x&=\alpha^2-\beta\cr y&=2\gamma\cr}\right\}.$$ % meaningless
+%You simply use |\eqalign| twice in the same line:
+%\begintt
+%$$\left\{
+%\eqalign{\alpha&=f(z)\cr \beta&=f(z^2)\cr \gamma&=f(z^3)\cr}
+%\right\}\qquad\left\{
+%\eqalign{x&=\alpha^2-\beta\cr y&=2\gamma\cr}\right\}.$$
+%\endtt
+|\eqalign| 得到的结果是一个垂直居中的盒子。%
+这使得很容易得到象下面这样的公式：
+$$\left\{
+\eqalign{\alpha&=f(z)\cr \beta&=f(z^2)\cr \gamma&=f(z^3)\cr}
+\right\}\qquad\left\{
+\eqalign{x&=\alpha^2-\beta\cr y&=2\gamma\cr}\right\}.$$ % meaningless
+可以直接在同一行中使用 |\eqalign| 两次：
+\begintt
+$$\left\{
+\eqalign{\alpha&=f(z)\cr \beta&=f(z^2)\cr \gamma&=f(z^3)\cr}
+\right\}\qquad\left\{
+\eqalign{x&=\alpha^2-\beta\cr y&=2\gamma\cr}\right\}.$$
+\endtt
+
+%\exercise Try your hand at the numbered two-line display % Polya/Szego V.29
+%$$\eqalign{P(x)&=a_0+a_1x+a_2x^2+\cdots+a_nx^n,\cr
+%   P(-x)&=a_0-a_1x+a_2x^2-\cdots+(-1)^na_nx^n.\cr}\eqno(30)$$
+%[{\sl Hint:\/} Use the fact that |\eqalign| produces a vertically centered
+%box; the equation number `(30)' is supposed to appear halfway between
+%the two lines.]
+%\answer |$$\eqalign{P(x)&=a_0+a_1x+a_2x^2+\cdots+a_nx^n,\cr|\parbreak
+%        |   P(-x)&=a_0-a_1x+a_2x^2-\cdots+(-1)^na_nx^n.\cr}\eqno(30)$$|\par
+\exercise 练练手，看看怎样得到带编号的双行陈列公式：
+$$\eqalign{P(x)&=a_0+a_1x+a_2x^2+\cdots+a_nx^n,\cr
+   P(-x)&=a_0-a_1x+a_2x^2-\cdots+(-1)^na_nx^n.\cr}\eqno(30)$$
+[~{\KT{10}提示}：利用 |\eqalign| 得到垂直居中的盒子；
+假定方程编号 `(30)' 出现在两行中间。]
+\answer |$$\eqalign{P(x)&=a_0+a_1x+a_2x^2+\cdots+a_nx^n,\cr|\parbreak
+        |   P(-x)&=a_0-a_1x+a_2x^2-\cdots+(-1)^na_nx^n.\cr}\eqno(30)$$|\par
+
+%\exercise What happens if you forget the |&| in one equation of an |\eqalign|?
+%\answer Both sides of that equation are considered to be on the left, so
+%you get results that look like this:
+%$$\openup-\jot
+%\left\{\eqalign{\alpha&=f(z)\cr \beta&=f(z^2)\cr \gamma=f(z^3)\cr}
+%  \right\}.$$
+\exercise 如果在 |\eqalign| 的一个方程中你忘记输入 |&|，会出现什么情况？
+\answer 方程两边的内容都被放在左边，因此你将得到类似下面的结果：
+$$\openup-\jot
+\left\{\eqalign{\alpha&=f(z)\cr \beta&=f(z^2)\cr \gamma=f(z^3)\cr}
+  \right\}.$$
+
+%\danger Multi-line formulas sometimes fit together in odd ways, and you'll
+%find that every once in a~while you will want to move certain lines farther
+%apart or closer together. If you type `^|\noalign||{|^|\vskip|\<glue>|}|'
+%after any |\cr|, \TeX\ will insert the given amount of extra glue just
+%after that particular line. For example,
+%\begintt
+%\noalign{\vskip3pt}
+%\endtt
+%will put $3\pt$ of additional space between lines. You can also change the
+%amount of space before the first line, in the same way.
+\danger 多行公式有时候用奇怪的方法放在一起，
+并且偶尔你希望把行发散或紧凑一些。%
+如果在任意 |\cr| 输入`|\noalign||{||\vskip|\<glue>|}|', 那么 \TeX\ 将%
+在规定的行后面插入给定量的额外粘连。%
+例如，
+\begintt
+\noalign{\vskip3pt}
+\endtt
+将把 $3\pt$ 的额外间距放在行之间。%
+用同样的方法也可以改变第一行前面的间距。
+
+%The next level of complexity occurs when you have several aligned
+%equations with several equation numbers. Or perhaps some of the
+%lines are numbered and others are not:
+%$$\eqalignno{(x+y)(x-y)&=x^2-xy+yx-y^2\cr
+%    &=x^2-y^2;&(4)\cr
+%  (x+y)^2&=x^2+2xy+y^2.&(5)\cr}$$
+%For this situation plain \TeX\ provides ^|\eqalignno|; you use it like
+%|\eqalign|, but on each line that you want an equation number you add
+%`|&|\<equation number>' just before the |\cr|. The example above was
+%generated by
+%\begintt
+%$$\eqalignno{(x+y)(x-y)&=x^2-xy+yx-y^2\cr
+%    &=x^2-y^2;&(4)\cr
+%  (x+y)^2&=x^2+2xy+y^2.&(5)\cr}$$
+%\endtt
+%Notice that the second |&| is omitted unless there's an equation number.
+\1当你有几个要对齐的方程和几个方程编号时，就出现更复杂的情况了。%
+或许有些行有编号，有些又没有编号：
+$$\eqalignno{(x+y)(x-y)&=x^2-xy+yx-y^2\cr
+    &=x^2-y^2;&(4)\cr
+  (x+y)^2&=x^2+2xy+y^2.&(5)\cr}$$
+为此 plain \TeX\ 提供了 |\eqalignno|;
+你可以象 |\eqalign| 那样使用它，但是在每个有方程编号的行上，只需要%
+在 |\cr| 前面添加`|&|\<equation number>'即可。%
+上面的例子由下面得到：
+\begintt
+$$\eqalignno{(x+y)(x-y)&=x^2-xy+yx-y^2\cr
+    &=x^2-y^2;&(4)\cr
+  (x+y)^2&=x^2+2xy+y^2.&(5)\cr}$$
+\endtt
+注意，如果没有方程编号，那么第二个 |&| 就可以省略。
+
+%And there's also ^|\leqalignno|, which puts equation numbers at the left.
+%In this case it is appropriate to move the `(4)' to the beginning
+%of its equation:
+%$$\leqalignno{(x+y)(x-y)&=x^2-xy+yx-y^2&(4)\cr
+%    &=x^2-y^2;\cr
+%  (x+y)^2&=x^2+2xy+y^2.&(5)\cr}$$
+%Although the equation numbers appear at the left, you are still supposed to
+%input them at the right, just as you do with |\leqno|; in other words,
+%you should type
+%`|$$\leqalignno{(x+y)(x-y)&...&(4)\cr...}$$|' to get the previous display.
+还有一个 |\leqalignno|, 它把方程编号放在左边。%
+在这种情况下，输出结果中`(4)'就相应地出现在方程前面：
+$$\leqalignno{(x+y)(x-y)&=x^2-xy+yx-y^2&(4)\cr
+    &=x^2-y^2;\cr
+  (x+y)^2&=x^2+2xy+y^2.&(5)\cr}$$
+虽然方程编号出现在左边，你却仍然要把它们输入在右边，就像 |\leqno| 那样；
+换句话说，要得到前面的陈列公式，应该输入的是：
+\begintt
+$$\leqalignno{(x+y)(x-y)&...&(4)\cr...}$$
+\endtt
+
+%Caution: |\eqalignno| and |\leqalignno| both center the set of equations
+%without regard to the widths of the equation numbers. If the equations or
+%their numbers get too wide, they might overlap, yet no error message will
+%be given.
+注意：|\eqalignno| 和 |\leqalignno| 都把方程组居中，而不管方程编号的宽度。%
+如果方程或它们的编号太宽，可能会重叠，但是却不给出错误信息。
+
+%\exercise Typeset the following display: ^^|\gcd|
+%$$\leqalignno{\gcd(u,v)&=\gcd(v,u);&(9)\cr
+%    \gcd(u,v)&=\gcd(-u,v).&(10)\cr}$$ % v2 p316
+%\answer |$$\leqalignno{\gcd(u,v)&=\gcd(v,u);&(9)\cr|\parbreak
+%        |    \gcd(u,v)&=\gcd(-u,v).&(10)\cr}$$|
+\exercise 排版下列陈列公式：
+$$\leqalignno{\gcd(u,v)&=\gcd(v,u);&(9)\cr
+    \gcd(u,v)&=\gcd(-u,v).&(10)\cr}$$ % v2 p316
+\answer |$$\leqalignno{\gcd(u,v)&=\gcd(v,u);&(9)\cr|\parbreak
+        |    \gcd(u,v)&=\gcd(-u,v).&(10)\cr}$$|
+
+%\exercise And here's another one to try, just to keep in practice: ^^|\int|
+%$$\vbox{
+%\eqalignno{\biggl(\int_{-\infty}^\infty e^{-x^2}\,dx\biggr)^2
+%  &=\int_{-\infty}^\infty\int_{-\infty}^\infty
+%    e^{-(x^2+y^2)}\,dx\,dy\cr
+%  &=\int_0^{2\pi}\int_0^\infty e^{-r^2}r\,dr\,d\theta\cr
+%  &=\int_0^{2\pi}\biggl(-{e^{-r^2}\over2}
+%    \bigg\vert_{r=0}^{r=\infty}\,\biggr)\,d\theta\cr
+%  &=\pi.&(11)\cr}
+%}$$ % cf Joy of TeX
+%\answer %
+%|$$\eqalignno{\biggl(\int_{-\infty}^\infty e^{-x^2}\,dx\biggr)^2|\parbreak
+%        |  &=\int_{-\infty}^\infty\int_{-\infty}^\infty|\parbreak
+%        |    e^{-(x^2+y^2)}\,dx\,dy\cr|\parbreak
+%        |  &=\int_0^{2\pi}\int_0^\infty e^{-r^2}r\,dr\,d\theta\cr|\parbreak
+%        |  &=\int_0^{2\pi}\biggl(-{e^{-r^2}\over2}|\parbreak
+%        |    \bigg|\||_{r=0}^{r=\infty}\,\biggr)\,d\theta\cr|\parbreak
+%        |  &=\pi.&(11)\cr}$$| ^^|\bigg|
+\exercise 试试另一个，只是为了经常练习：^^|\int|
+$$\vbox{
+\eqalignno{\biggl(\int_{-\infty}^\infty e^{-x^2}\,dx\biggr)^2
+  &=\int_{-\infty}^\infty\int_{-\infty}^\infty
+    e^{-(x^2+y^2)}\,dx\,dy\cr
+  &=\int_0^{2\pi}\int_0^\infty e^{-r^2}r\,dr\,d\theta\cr
+  &=\int_0^{2\pi}\biggl(-{e^{-r^2}\over2}
+    \bigg\vert_{r=0}^{r=\infty}\,\biggr)\,d\theta\cr
+  &=\pi.&(11)\cr}
+}$$ % cf Joy of TeX
+\answer %
+|$$\eqalignno{\biggl(\int_{-\infty}^\infty e^{-x^2}\,dx\biggr)^2|\parbreak
+        |  &=\int_{-\infty}^\infty\int_{-\infty}^\infty|\parbreak
+        |    e^{-(x^2+y^2)}\,dx\,dy\cr|\parbreak
+        |  &=\int_0^{2\pi}\int_0^\infty e^{-r^2}r\,dr\,d\theta\cr|\parbreak
+        |  &=\int_0^{2\pi}\biggl(-{e^{-r^2}\over2}|\parbreak
+        |    \bigg|\||_{r=0}^{r=\infty}\,\biggr)\,d\theta\cr|\parbreak
+        |  &=\pi.&(11)\cr}$$| ^^|\bigg|
+
+%\danger Although |\eqalign| and |\eqalignno| look nearly the same, there's
+%really a fundamental distinction between them: |\eqalign| makes a single,
+%vertically centered box, which is no wider than it needs to be; but
+%|\eqalignno| generates a set of lines that have the full display width
+%(reaching all the way to both margins). Thus, for example, you can use
+%|\eqalign| several times in a display, but |\eqalignno| can appear only
+%once. If you try to use ^|\eqno| in conjunction with |\eqalign|,
+%you get a decent result, but if you try to use |\eqno| in connection
+%with |\eqalignno| you'll get some sort of weird error message(s).
+\danger \1虽然 |\eqalign| 和 |\eqalignno| 看起来几乎一样，
+但是它们之间有一个根本的不同：
+|\eqalign| 得到的是一个垂直居中的盒子，宽度不会超过所需要的宽度；
+但是 |\eqalignno| 生成了一组行，宽度为整个陈列公式的宽度(每行都延伸到两个边界)。%
+因此，例如，可以在一个陈列公式中使用几次 |\eqalign|,
+但是只能用一次 |\eqalignno|。%
+如果把 |\eqno| 与 |\eqalign| 联合起来用，得到的结果还可以，
+但是如果把 |\eqno| 与 |\eqalignno| 联合起来用，就会得到某些奇怪的错误信息。
+
+%\ddanger The definitions in Appendix~B reveal why |\eqalign| and |\eqalignno|
+%behave differently: |\eqalign| is an
+%abbreviation for ^|\vcenter||{|^|\halign||{...}}|, while
+%|\eqalignno| is an abbreviation for |\halign to\displaywidth{...}|;
+%thus the |\eqalignno| macro generates an ``^{alignment display}.''
+\ddanger 附录 B 中的定义揭示了 |\eqalign| 和 |\eqalignno| 的性质如此不同的原因：
+因为 |\eqalign| 的定义是 |\vcenter||{||\halign||{...}}|，
+而 |\eqalignno| 的定义是 |\halign to\displaywidth{...}|；
+所以，宏 |\eqalignno| 得到的是``陈列的对齐阵列''。
+
+%\ddanger This difference between |\eqalign| and |\eqalignno| has two
+%interesting consequences. \ (1)~It's impossible to break an |\eqalign|
+%between pages, but an |\eqalignno| can be broken. In fact, you can
+%{\sl force\/} a ^{page break} after a particular line if you insert
+%`^|\noalign||{|^|\break||}|'
+%after the |\cr| for that line. You can prohibit {\sl all\/} breaks
+%in an |\eqalignno| if you set ^|\interdisplaylinepenalty||=10000|; or you
+%can enclose the whole works in a ^|\vbox|:
+%\begintt
+%$$\vbox{\eqalignno{...}}$$
+%\endtt
+%(2) You can also insert a line of text between two equations, without
+%losing the alignment. For example, consider the two displays
+%$$\eqalignno{x&=y+z\cr
+%  \noalign{\hbox{and}}
+%  x^2&=y^2+z^2.\cr}$$
+%These were actually generated as a single display by typing
+%\begintt
+%$$\eqalignno{x&=y+z\cr
+%  \noalign{\hbox{and}}
+%  x^2&=y^2+z^2.\cr}$$
+%\endtt
+%Therefore the fact that their $=$ signs line up is not just a lucky
+%coincidence. Sometimes you will want to adjust the spacing above or below
+%such a line of inserted text, by putting a |\vskip| or two inside of the
+%|\noalign{...}|.  Incidentally, this example also shows that it is
+%possible to use |\eqalignno| without giving any equation numbers.
+\ddanger |\eqalign| 和 |\eqalignno| 之间的这个差别有两个有意思的后果：
+(1). 不可能在 |\eqalign| 中分页，但是在 |\eqalignno| 中可以。%
+实际上，如果在某行的 |\cr| 后插入`|\noalign||{||\break||}|',
+就可以在此行后{\KT{9}强制}分页。%
+如果要禁止 |\eqalignno| 中的{\KT{9}所有}分页，可以设置%
+~|\interdisplaylinepenalty||=10000|;
+或者可以把整个公式组放在 |\vbox| 中：
+\begintt
+$$\vbox{\eqalignno{...}}$$
+\endtt
+(2). 还可以在两个方程之间插入一行文本，而不影响对齐结果。%
+例如，看看下面两个陈列公式：
+$$\eqalignno{x&=y+z\cr
+  \noalign{\hbox{and}}
+  x^2&=y^2+z^2.\cr}$$
+它们实际上由一个陈列公式输入：
+\begintt
+$$\eqalignno{x&=y+z\cr
+  \noalign{\hbox{and}}
+  x^2&=y^2+z^2.\cr}$$
+\endtt
+因此，它们的 $=$ 对齐不是因为凑巧。%
+有时候可能要调整所插入文本上下的间距，只要输入 |\vskip|~%
+或者两边放上 |\noalign{...}| 即可。%
+顺便说一句，整个例子还表明，可以在无方程编号时使用 |\eqalignno|。%
+
+%\ddangerexercise What happens if\/ |\eqalign| is substituted for
+%|\eqalignno| in this last example?
+%\answer You get the displayed box
+%$$\eqalign{x&=y+z\cr
+%  \noalign{\hbox{and}}
+%  x^2&=y^2+z^2.\cr}$$
+%Reason: The `and' occurs at the left of the |\eqalign| box, not at the
+%left of the whole display, and the |\eqalign| box is centered as usual.
+\ddangerexercise 如果上一个例子中，
+用 |\eqalign| 代替 |\eqalignno| 会出现什么情况？
+\answer 你将会得到陈列的盒子
+$$\eqalign{x&=y+z\cr
+  \noalign{\hbox{and}}
+  x^2&=y^2+z^2.\cr}$$
+原因：`and' 出现在 |\eqalign| 盒子的左边，
+而不是在整个陈列公式的左边，且 |\eqalign| 盒子通常是居中的。
+
+%\ddangerexercise Our friend Ben ^{User} got into trouble again when he tried to
+%move an equation number up higher than its usual position, by typing this:
+%^^|\raise|
+%\begintt
+%$$\eqalignno{...&\raise6pt\hbox{(5)}\cr}$$
+%\endtt
+%What was his oversight, and what could he have done instead?
+%\answer By raising the equation number, he increased the line height,
+%so \TeX\ put extra space between that line and the previous line
+%when it calculated the inter-line glue. If he had said
+%`^|\smash||{\raise...}|', he wouldn't have had that problem.
+\ddangerexercise 我们的朋友笨笨又遇到麻烦了，
+当他要把方程编号从原来的位置上抬高时，他输入的是：
+\begintt
+$$\eqalignno{...&\raise6pt\hbox{(5)}\cr}$$
+\endtt
+他的失误在哪里？怎样才能实现他的愿望？
+\answer 提升公式编号将增加行高，
+因此在计算行间粘连时，\TeX\ 将在该行和前一行之间留下额外的间距。
+如果他输入 `^|\smash||{\raise...}|'，就不会有此问题。
+
+%\danger For other types of displays, plain \TeX\ provides ^|\displaylines|,
+%which lets you display any number of formulas in any way you want,
+%without any alignment. The general form is
+%$$\halign{\indent\hfil#&#\hfil\cr
+%|$$\displaylines{|&\<displayed formula$_1$>|\cr|\cr
+%    &\<displayed formula$_2$>|\cr|\cr
+%\noalign{\vskip-2pt}
+%    &\qquad\vdots\cr
+%    &\<displayed formula$_n$>|\cr}$$|\cr}$$
+%Each formula will be centered, because |\displaylines| puts ^|\hfil| at
+%the left and the right of each line; you can override this centering to
+%get things flush left or flush right by inserting ^|\hfill|, which takes
+%precedence over |\hfil|.
+\danger \1对其它类型的陈列公式，~plain \TeX\ 提供了 |\displaylines|,
+用它可以用任意想要的方式输入任意个公式，
+但是没有对齐。%
+一般形式为
+$$\halign{\indent\hfil#&#\hfil\cr
+|$$\displaylines{|&\<displayed formula$_1$>|\cr|\cr
+    &\<displayed formula$_2$>|\cr|\cr
+\noalign{\vskip-2pt}
+    &\qquad\vdots\cr
+    &\<displayed formula$_n$>|\cr}$$|\cr}$$
+每个公式都要居中，因为 |\displaylines| 在每行的两边都放上了 |\hfil|;
+插入比 |\hfil| 更强的 |\hfill| 可以把它左对齐或右对齐。
+
+%\dangerexercise Use |\displaylines| to typeset the three-line display
+%$$\displaylines{\hfill x\equiv x;\hfill\llap{(1)}\cr
+%   \hfill\hbox{if}\quad x\equiv y\quad\hbox{then}\quad
+%      y\equiv x;\hfill\llap{(2)}\cr
+%   \hfill\hbox{if}\quad x\equiv y\quad\hbox{and}\quad
+%      y\equiv z\quad\hbox{then}\quad
+%      x\equiv z.\hfill\llap{(3)}\cr}$$
+%\answer |$$\displaylines{\hfill x\equiv x;\hfill\llap{(1)}\cr|\parbreak
+%        |   \hfill\hbox{if}\quad x\equiv y\quad\hbox{then}\quad|\parbreak
+%        |      y\equiv x;\hfill\llap{(2)}\cr|\parbreak
+%        |   \hfill\hbox{if}\quad x\equiv y\quad\hbox{and}\quad|\parbreak
+%        |      y\equiv z\quad\hbox{then}\quad|\parbreak
+%        |      x\equiv z.\hfill\llap{(3)}\cr}$$|\par\medskip\noindent
+%There's also a trickier solution, which begins with
+%\begintt
+%$$\displaylines{x\equiv x;\hfil\llap{(1)}\hfilneg\cr
+%\endtt
+\dangerexercise 用 |\displaylines| 来排版下列的三行陈列公式：
+$$\displaylines{\hfill x\equiv x;\hfill\llap{(1)}\cr
+   \hfill\hbox{if}\quad x\equiv y\quad\hbox{then}\quad
+      y\equiv x;\hfill\llap{(2)}\cr
+   \hfill\hbox{if}\quad x\equiv y\quad\hbox{and}\quad
+      y\equiv z\quad\hbox{then}\quad
+      x\equiv z.\hfill\llap{(3)}\cr}$$
+\answer |$$\displaylines{\hfill x\equiv x;\hfill\llap{(1)}\cr|\parbreak
+        |   \hfill\hbox{if}\quad x\equiv y\quad\hbox{then}\quad|\parbreak
+        |      y\equiv x;\hfill\llap{(2)}\cr|\parbreak
+        |   \hfill\hbox{if}\quad x\equiv y\quad\hbox{and}\quad|\parbreak
+        |      y\equiv z\quad\hbox{then}\quad|\parbreak
+        |      x\equiv z.\hfill\llap{(3)}\cr}$$|\par\medskip\noindent
+还有一种更巧妙的解法，即将第一行改为
+\begintt
+$$\displaylines{x\equiv x;\hfil\llap{(1)}\hfilneg\cr
+\endtt
+
+%\danger If you look closely at the multi-line displays in this chapter,
+%you'll see that the baselines are farther apart than they are in normal
+%text; mathematics publishers generally do this in order to make the
+%displays easier to read. In accordance with this tradition, |\eqalign| and
+%its relatives automatically increase the ^|\baselineskip|. If~you are
+%making a multi-line display with \TeX's primitive ^|\halign| command,
+%instead of using one of the plain \TeX\ macros, you might want to make
+%this same baseline adjustment, and you can do it easily by saying
+%`|$$\openup1\jot \halign{...}$$|'. The ^|\openup| macro increases
+%^|\lineskip| and ^|\lineskiplimit| as well as |\baselineskip|. If
+%you say `|\openup2\jot|', the lines are spread apart 2 extra units, where
+%plain \TeX\ opens things up in units of $3\pt$. Since |$$...$$| acts as a
+%^{group}, the effect of\/ |\openup| will disappear when the display is
+%finished. Any \<dimen> can follow |\openup|, but it's customary to express the
+%amount symbolically in terms of a ^|\jot| instead of using absolute units;
+%^^{generic coding}
+%then your manuscript can be used with a variety of different formats.
+\danger 如果你仔细观察本章中多行陈列公式，就会发现其基线比正常文本的基线要%
+分开得更宽；
+数学出版界这样做是为了使得陈列公式更易于阅读。%
+遵循这个惯例，|\eqalign| 等自动增加其 |\baselineskip|。%
+如果你用 \TeX\ 的原始命令 |\halign| 而不是 plain \TeX\ 的宏来制作多行陈列公式，
+就可能要做同样的基线调整，这只需输入`|$$\openup1\jot \halign{...}$$|'即可。%
+宏 |\openup| 增加 |\lineskip|, |\lineskiplimit| 以及 |\baselineskip|。%
+如果输入的是`|\openup2\jot|', 基线就多分开 2 个单位，
+~plain \TeX\ 的设置为增加 $3\pt$ 的单位。%
+因为 |$$...$$| 有编组的作用，所以当陈列公式结束时 |\openup| 的影响就消失了。%
+|\openup| 后面可以跟任何 \<dimen>, 但是习惯上用 |\jot| 符号来表示这个量，
+而不用绝对单位；
+这样你的文稿就可用于各种格式了。
+
+%\ddanger Plain \TeX's ^|\displaylines|, ^|\eqalignno|, and ^|\leqalignno|
+%macros begin with `|\openup1\jot|'. If you don't want the lines to be
+%opened up, you can cancel this by saying, e.g.,
+%`|$$\openup-1\jot \eqalignno{...}$$|', because |\openup| has a cumulative
+%effect.
+\ddanger Plain \TeX\ 宏 |\displaylines|、|\eqalignno| 和 |\leqalignno|~
+以 `|\openup1\jot|' 开头。如果不希望行分开太多，可以取消它，
+比如输入 `|$$\openup-1\jot \eqalignno{...}$$|'，因为 |\openup| 有累加性。
+
+%\ddanger Suppose that you have decided to make a homegrown display having
+%the general form `|$$\openup1\jot \halign{...}$$|'; and for convenience,
+%let's suppose that the normal conventions of plain \TeX\ are in force, so
+%that |\jot=3pt| and |\baselineskip=12pt|. Then the |\openup| macro
+%changes the baselineskip distance to $15\pt$. It follows that the baseline
+%of the text line that immediately precedes the display will be $15\pt$
+%above the topmost baseline of the display, plus the ^|\abovedisplayskip|.
+%But when the paragraph resumes, its next baseline will be only $12\pt$
+%below the bottom baseline of the display, plus the ^|\belowdisplayskip|,
+%because the |\baselineskip| parameter will have reverted to its normal
+%value. The |\eqalignno| and |\displaylines| macros say
+%`|\noalign{\vskip|$-d$|}|' before their first lines, where $d$ is
+%the net amount of opening-up, in order to compensate for this difference.
+\ddanger 假定你要自制一个其一般形式为 `|$$\openup1\jot \halign{...}$$|' 的陈列公式；
+并且为了使用方便，假定使用的是 plain \TeX\ 的正常约定，
+即有 |\jot=3pt| 且 |\baselineskip=12pt|。
+因此，宏 |\openup| 把 baselineskip 的距离变成 $15\pt$。
+由此可知，陈列公式前面紧邻的文本行的基线与它的最高基线的距离将等于
+$15\pt$ 加上 |\abovedisplayskip|。但是在回到段落时，
+陈列公式后面紧邻的文本行的基线与它的最低基线的距离只有 $12\pt$ 加上
+|\belowdisplayskip|，这是因为参数 |\baselineskip| 已经回到其正常值。
+为了弥补这个差距，在宏 |\eqalignno| 和 |\displaylines|
+的第一行前面添加上 `|\noalign{\vskip|$-d$|}|'，其中 $d$ 是多分开的距离。
+
+%\subsection Long formulas. Our discussion of mathematics typing is almost
+%complete; we need to deal with just one more problem: What should be
+%done when a formula is so long that it doesn't fit on a single line?
+\subsection 长公式.
+\1我们关于数学排版的讨论差不多结束了；
+现在只想要再处理一个问题：
+当公式太长在一行放不下时怎么办？
+
+%For example, suppose that you encounter the equation
+%$$\hfuzz=20pt % overfull box tolerated here
+%\sigma(2^{34}-1,2^{35},1)=
+%  -3+(2^{34}-1)/2^{35}+2^{35}\!/(2^{34}-1)+7/2^{35}(2^{34}-1)
+%  -\sigma(2^{35},2^{34}-1,1).$$ % from v2, 1st ed, p76
+%You'll have to break it up somehow; \TeX\ has done its best to squeeze
+%everything together by shrinking the spaces next to the $+$ and~$-$ signs
+%to zero, but still the line has come out overfull.
+例如，假定你碰到方程
+$$\hfuzz=20pt % overfull box tolerated here
+\sigma(2^{34}-1,2^{35},1)=
+  -3+(2^{34}-1)/2^{35}+2^{35}\!/(2^{34}-1)+7/2^{35}(2^{34}-1)
+  -\sigma(2^{35},2^{34}-1,1).$$ % from v2, 1st ed, p76
+那么就不得不把它裂分；
+ \TeX\ 只是尽力通过把 $+$ 和 $-$ 间距收缩到零，从而把所有内容挤在一起，
+但是这样仍得到溢出的行。
+
+%Let's try to break that equation just before the `$+7$'. One common way to
+%do this is to type
+%\begintt
+%$$\eqalign{\sigma(2^{34}-1,2^{35},1)
+%&=-3+(2^{34}-1)/2^{35}+2^{35}\!/(2^{34}-1)\cr
+%&\qquad+7/2^{35}(2^{34}-1)-\sigma(2^{35},2^{34}-1,1).\cr}$$
+%\endtt
+%which yields
+%$$\eqalign{\sigma(2^{34}-1,2^{35},1)
+%  &=-3+(2^{34}-1)/2^{35}+2^{35}\!/(2^{34}-1)\cr
+%  &\qquad+7/2^{35}(2^{34}-1)-\sigma(2^{35},2^{34}-1,1).\cr}$$
+%The idea is to treat a long one-line formula as a two-line formula,
+%using |\qquad| on the second line so that the second part of the formula
+%appears well to the right of the $=$~sign on the first line.
+我们试着在`$+7$'前面把方程裂分。%
+一个常用的方法是输入
+\begintt
+$$\eqalign{\sigma(2^{34}-1,2^{35},1)
+&=-3+(2^{34}-1)/2^{35}+2^{35}\!/(2^{34}-1)\cr
+&\qquad+7/2^{35}(2^{34}-1)-\sigma(2^{35},2^{34}-1,1).\cr}$$
+\endtt
+它得到的是
+which yields
+$$\eqalign{\sigma(2^{34}-1,2^{35},1)
+  &=-3+(2^{34}-1)/2^{35}+2^{35}\!/(2^{34}-1)\cr
+  &\qquad+7/2^{35}(2^{34}-1)-\sigma(2^{35},2^{34}-1,1).\cr}$$
+这个方法是把单行长公式变成两行的公式，
+在第二行用 |\qquad| 给第一行的 $=$ 留下对应的空白。
+
+%\exercise Explain how to deal with the following display. % v2 p107
+%$$\eqalignno{x_nu_1+\cdots+x_{n+t-1}u_t
+%   &=x_nu_1+(ax_n+c)u_2+\cdots\cr
+%   &\qquad+\bigl(a^{t-1}x_n+c(a^{t-2}+\cdots+1)\bigr)u_t\cr
+%   &=(u_1+au_2+\cdots+a^{t-1}u_t)x_n+h(u_1,\ldots,u_t).
+%     \quad&(47)\cr}$$
+%\answer |$$\eqalignno{x_nu_1+\cdots+x_{n+t-1}u_t|\parbreak
+%        |   &=x_nu_1+(ax_n+c)u_2+\cdots\cr|\parbreak
+%        |   &\qquad+\bigl(a^{t-1}x_n+c(a^{t-2}+\cdots+1)\bigr)u_t\cr|\parbreak
+%        |   &=(u_1+au_2+\cdots+a^{t-1}u_t)x_n+h(u_1,\ldots,u_t).|\parbreak
+%        |     \quad&(47)\cr}$$|\par\noindent
+%You weren't expected to insert the `|\quad|' on the last line; such
+%refinements usually can't be anticipated until you see the first proofs.
+%But without that |\quad| the `(47)' would occur half a quad closer to the
+%formula.
+\exercise 怎样输入下列陈列公式？
+$$\eqalignno{x_nu_1+\cdots+x_{n+t-1}u_t
+   &=x_nu_1+(ax_n+c)u_2+\cdots\cr
+   &\qquad+\bigl(a^{t-1}x_n+c(a^{t-2}+\cdots+1)\bigr)u_t\cr
+   &=(u_1+au_2+\cdots+a^{t-1}u_t)x_n+h(u_1,\ldots,u_t).
+     \quad&(47)\cr}$$
+\answer |$$\eqalignno{x_nu_1+\cdots+x_{n+t-1}u_t|\parbreak
+        |   &=x_nu_1+(ax_n+c)u_2+\cdots\cr|\parbreak
+        |   &\qquad+\bigl(a^{t-1}x_n+c(a^{t-2}+\cdots+1)\bigr)u_t\cr|\parbreak
+        |   &=(u_1+au_2+\cdots+a^{t-1}u_t)x_n+h(u_1,\ldots,u_t).|\parbreak
+        |     \quad&(47)\cr}$$|\par\noindent
+不指望你会在最后一行插入 `|\quad|'；这种细调在看到初校稿之前不大可能做到。
+但是没有这个 |\quad|，`(47)' 和公式的距离将减少半个 quad。
+
+%\danger It's quite an art to decide how to ^{break long displayed formulas}
+%into several lines; \TeX\ never attempts to break them, because no set of
+%rules is really adequate. The author of a mathematical manuscript is
+%generally the best judge of what to do, since break positions depend on
+%subtle factors of mathematical exposition. For example, it is often
+%desirable to emphasize some of the symmetry or other structure that
+%underlies a formula, and such things require a solid understanding of
+%exactly what is going on in that formula.
+\danger 怎样把长的陈列公式裂分成几行是一项技术；
+ \TeX\ 从不试图把它们裂分，因为实在没有一组适当的规则。%
+一般情况下，数学文稿的作者是最好的裁判，因为断点的位置%
+依赖于数学含义的微妙因素。%
+例如，常常希望强调某些对称性或者公式的其它潜在意义，
+并且这样的东西要求确实理解了此公式中要表达的意思。
+
+%\begingroup\ninepoint
+%\danger Nevertheless, it is possible to state a few rules of thumb about
+%how to deal with long formulas in displays, since there are some
+%principles that the best mathematical typesetters tend to follow:\enddang
+\begingroup\ninepoint
+\danger 然而，对处理陈列公式中长公式，可能有几个笨规则，
+因为有几个最好的数学排版者要遵循的原理：\enddanger
+
+%\smallskip
+%\textindent{a)}Although formulas within a paragraph always break {\sl after\/}
+%binary operations and relations, displayed formulas always break {\sl before\/}
+%binary operations and relations. Thus, we didn't end the first line of
+%our $\sigma(\,\ldots\,)$ example with `|(2^{34}-1)+|'; we ended it with
+%`|(2^{34}-1)|' and began the second line with `|+|'.
+\smallskip
+\textindent{a)}虽然段落中的公式总是在二元运算和关系符号{\KT{9}之后}断行，
+但是陈列公式总是在它们{\KT{9}之前}断行。%
+因此，不要在 $\sigma(\,\ldots\,)$ 这个例子的`|(2^{34}-1)+|'处结束第一行；
+应该在`|(2^{34}-1)|'处结束它，并且以`|+|'开始第二行。
+
+%\smallskip
+%\textindent{b)}When an equation is broken before a binary operation, the second
+%line should start at least two quads to the right of where the innermost
+%subformula containing that binary operation begins on the first line.
+%For example, if you wish to break
+%\begindisplay
+%|$$\sum_{0<k<n}\left(|\<formula$_1$>|+|\<formula$_2$>|\right)$$|
+%\enddisplay
+%at the plus sign between \<formula$_1$> and \<formula$_2$>, it is almost
+%mandatory to have the plus sign on the second line appear somewhat to the
+%right of the large left parenthesis that corresponds to `|\left(|'.
+\smallskip
+\textindent{b)}\1当方程在二元运算前被裂分时，第二行至少在%
+包含第一行此二元运算的最内层子公式右边的两个 quad 后面才开始。%
+例如，如果要在 \<formula$_1$> 和 \<formula$_2$> 之间的加号处裂分公式
+\begindisplay
+|$$\sum_{0<k<n}\left(|\<formula$_1$>|+|\<formula$_2$>|\right)$$|
+\enddisplay
+那么几乎是人为地把第二行的加号出现在左侧大圆括号(它由`|\left(|'得到)的右边。
+
+\endgroup
+
+%\danger In the example just considered, special care is needed to break the
+%formula into two lines, because ^|\left| and ^|\right| delimiters cannot be
+%used in isolation; you can't have only |\left| in one line of a formula
+%and only |\right| in the second. Furthermore, you'll want the two delimiters
+%to be of the same size, even though they occur in different lines. The best
+%solution is usually to choose the delimiter size yourself; for example,
+%you could type
+%\begindisplay
+%|$$\eqalign{\sum_{0<k<n}\biggl(&|\<formula$_1$>|\cr|\cr
+%|             &\qquad{}+|\<formula$_2$>|\biggr)\cr}$$|\cr
+%\enddisplay
+%if\/ ^|\bigg| delimiters are best. Notice that the |&|~markers don't occur
+%at $=$~signs in this example, they just mark a point of alignment.
+\danger 在刚刚讨论的例子中，想要特别注意要把公式裂分为两行，
+因为 |\left| 和 |\right| 分界符不能单独使用；
+不能在第一行只用 |\left| 和在第二行只用 |\right|。%
+还有，如果要得到同样大小的两个分界符——即使它们在不同的行，
+那么最好的方法通常是自己选定分界符的尺寸；
+例如，如果 |\bigg| 最适合，可以输入
+\begindisplay
+|$$\eqalign{\sum_{0<k<n}\biggl(&|\<formula$_1$>|\cr|\cr
+|             &\qquad{}+|\<formula$_2$>|\biggr)\cr}$$|\cr
+\enddisplay
+注意，在本例中，标记 |&| 后面没有 $=$ 号，它们仅仅是标记要对齐的点。
+
+%\danger There's another way to break long formulas, sometimes called the
+%{\sl^{two-line}\/} form. The idea is to put the first part of the formula
+%almost ^{flush left}, and to put the second part almost ^{flush right},
+%where ``almost flush'' means ``one quad away.'' Thus, the two-line form of
+%the long $\sigma(\,\ldots\,)$ equation considered earlier is
+%$$\displaylines{\quad\sigma(2^{34}-1,2^{35},1)
+%  =-3+(2^{34}-1)/2^{35}+2^{35}\!/(2^{34}-1)\hfill\cr
+%\hfill{}+7/2^{35}(2^{34}-1)-\sigma(2^{35},2^{34}-1,1).\quad\cr}$$
+%It isn't difficult to get this two-line effect with ^|\displaylines|:
+%\begintt
+%$$\displaylines{\quad\sigma(2^{34}-1,2^{35},1)
+%  =-3+(2^{34}-1)/2^{35}+2^{35}\!/(2^{34}-1)\hfill\cr
+%\hfill{}+7/2^{35}(2^{34}-1)-\sigma(2^{35},2^{34}-1,1).\quad\cr}$$
+%\endtt
+%An extra `|{}|' was typed on the second line here so that \TeX\ would know
+%that the `|+|' is a binary operation.  The two-line form is especially
+%recommended for equations that have a long left-hand side; in that case the
+%break generally comes just before the~$=$~sign.
+\danger 还有另一种方法了裂分长公式，有时候把它称为{\KT{9}双行}形式。%
+其想法是，公式的第一部分几乎居左，第二部分几乎居右，其中``几乎居…''表示%
+``差一个 quad''。%
+这样，前面讨论的长方程 $\sigma(\,\ldots\,)$ 的双行形式为
+$$\displaylines{\quad\sigma(2^{34}-1,2^{35},1)
+  =-3+(2^{34}-1)/2^{35}+2^{35}\!/(2^{34}-1)\hfill\cr
+\hfill{}+7/2^{35}(2^{34}-1)-\sigma(2^{35},2^{34}-1,1).\quad\cr}$$
+用 |\displaylines| 不难得到这种双行的效果：
+\begintt
+$$\displaylines{\quad\sigma(2^{34}-1,2^{35},1)
+  =-3+(2^{34}-1)/2^{35}+2^{35}\!/(2^{34}-1)\hfill\cr
+\hfill{}+7/2^{35}(2^{34}-1)-\sigma(2^{35},2^{34}-1,1).\quad\cr}$$
+\endtt
+这里第二行的额外`|{}|'是为了告诉 \TeX, `|+|'是一个二元运算。%
+对左边长的方程特别推荐使用双行形式；
+在这种情况下，断点一般选在 $=$ 好前面。
+
+%\dangerexercise Typeset the following display:
+%$$\displaylines{\quad\sum_{1\le j\le n}{1\over
+%    (x_j-x_1)\ldots(x_j-x_{j-1})(x-x_j)(x_j-x_{j+1})
+%    \ldots(x_j-x_n)}\hfill\cr
+%  \hfill={1\over(x-x_1)\ldots(x-x_n)}.\quad(27)\cr}$$ % v2 p80
+%\answer |$$\displaylines{\quad\sum_{1\le j\le n}{1\over|\parbreak
+%        |    (x_j-x_1)\ldots(x_j-x_{j-1})(x-x_j)(x_j-x_{j+1})|\parbreak
+%        |    \ldots(x_j-x_n)}\hfill\cr|\parbreak
+%        |  \hfill={1\over(x-x_1)\ldots(x-x_n)}.\quad(27)\cr}$$|
+\dangerexercise 排版下列陈列公式：
+$$\displaylines{\quad\sum_{1\le j\le n}{1\over
+    (x_j-x_1)\ldots(x_j-x_{j-1})(x-x_j)(x_j-x_{j+1})
+    \ldots(x_j-x_n)}\hfill\cr
+  \hfill={1\over(x-x_1)\ldots(x-x_n)}.\quad(27)\cr}$$ % v2 p80
+\answer |$$\displaylines{\quad\sum_{1\le j\le n}{1\over|\parbreak
+        |    (x_j-x_1)\ldots(x_j-x_{j-1})(x-x_j)(x_j-x_{j+1})|\parbreak
+        |    \ldots(x_j-x_n)}\hfill\cr|\parbreak
+        |  \hfill={1\over(x-x_1)\ldots(x-x_n)}.\quad(27)\cr}$$|
+
+%\ddangerexercise If it is necessary to typeset a huge fraction like
+%^^{fraction, huge}
+%$$\def\\#1;{(#1;q^2)_\infty}
+%q^{{1\over2}n(n+1)}\\ea;\\eq/a;\\caq/e;\\cq^2\!/ae;
+%\over(e;q)_\infty(cq/e;q)_\infty$$
+%in a single narrow column, you might have to break up the numerator and
+%resort to
+%\begindisplay
+%$\displaystyle{\def\\#1;{(#1;q^2)_\infty}
+%\displaystyle{q^{{1\over2}n(n+1)}\\ea;\\eq/a;\qquad\atop
+%  \hfill\\caq/e;\\cq^2\!/ae;}
+%\over(e;q)_\infty(cq/e;q)_\infty}$
+%\enddisplay
+%How would you specify the latter fraction to \TeX?
+%% cf SIAM J Math Anal 7 (1976) p333; even longer ones appear on p334
+%\answer |$$\def\\#1;{(#1;q^2)_\infty} % to save typing|\parbreak
+%        |\displaystyle{q^{{1\over2}n(n+1)}\\ea;\\eq/a;\qquad\atop|\parbreak
+%        |  \hfill\\caq/e;\\cq^2\!/ae;}|\parbreak
+%        |\over(e;q)_\infty(cq/e;q)_\infty$$|
+\ddangerexercise 倘若你必须在窄栏中输入像下面这样的大分式
+$$\def\\#1;{(#1;q^2)_\infty}
+q^{{1\over2}n(n+1)}\\ea;\\eq/a;\\caq/e;\\cq^2\!/ae;
+\over(e;q)_\infty(cq/e;q)_\infty$$
+\1你也许只能把分子断开，变成
+\begindisplay
+$\displaystyle{\def\\#1;{(#1;q^2)_\infty}
+\displaystyle{q^{{1\over2}n(n+1)}\\ea;\\eq/a;\qquad\atop
+  \hfill\\caq/e;\\cq^2\!/ae;}
+\over(e;q)_\infty(cq/e;q)_\infty}$
+\enddisplay
+怎样用 \TeX\ 得到后一个分式？
+\answer |$$\def\\#1;{(#1;q^2)_\infty} % to save typing|\parbreak
+        |\displaystyle{q^{{1\over2}n(n+1)}\\ea;\\eq/a;\qquad\atop|\parbreak
+        |  \hfill\\caq/e;\\cq^2\!/ae;}|\parbreak
+        |\over(e;q)_\infty(cq/e;q)_\infty$$|
+
+\endchapter
+
+When a formula is too long for the page-width
+and has to be broken into successive lines
+(and we are now, of course, speaking of displayed formulae),
+it should be broken, if possible, at the end of a natural `phrase';
+if, for example, it is a much-bracketed formula,
+it should be broken at the end of one of the major brackets
+and not at an inner symbol.
+This natural phrasing (as in music or speech)
+makes for intelligibility between writer and reader
+and should not be left to the compositor.
+An author, when he finds himself writing a longish formula,
+should indicate a convenient point of fracture in case of need.
+\author ^{CHAUNDY}, ^{BARRETT}, and ^{BATEY}, %
+ {\sl The Printing of Mathematics\/} (1954) % p38
+
+\bigskip
+
+Some authors use display with discretion,
+some run even extremely long, complicated equations into the text,
+while others tend to display every equation in the paper.
+The tendency to overdisplay is probably more predominant
+than the tendency to underdisplay;
+for this reason it is possible for the copy editor to shorten
+(and even improve) papers by running displayed material into text. $\ldots$
+On the other hand, there are occasions when the copy editor needs
+to suggest the display of complicated expressions that have been run into text,
+particularly when it would involve a bad break at the end of a text line.
+\author ELLEN ^{SWANSON}, {\sl Mathematics into Type\/} (1971) % p41
+
+\vfill\eject\byebye

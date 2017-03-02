@@ -1,0 +1,1161 @@
+% -*- coding: utf-8 -*-
+
+\input macros
+
+%\beginchapter Chapter 16. Typing\\Math Formulas
+\beginchapter Chapter 16. 数学公式
+
+\origpageno=127
+
+%\TeX\ is designed to handle complex ^{mathematical expressions} in such a way
+%that most of them are easy to input. The basic idea is that a complicated
+%formula is composed of less complicated ^{formulas} put together in a
+%simple way; the less complicated formulas are, in turn, made up of simple
+%combinations of formulas that are even less complicated; and so on. Stating
+%this another way, if you know how to type simple formulas and how to combine
+%formulas into larger ones, you will be able to handle virtually any formula
+%at all. So let's start with simple ones and work our way up.
+\1设计 \TeX\ 就是为了能够用简单的输入方法来处理复杂的数学公式。%
+基本想法是，一个复杂的公式按照一个简单的方法由不太复杂的公式组成；
+而不太复杂的公式又是由较简单的公式组成；等等。%
+从另一个角度来看，如果知道怎样输入简单公式和怎样把它们组合成大公式，
+那么就能灵活地处理任何公式了。%
+因此，我们从简单公式开始，逐步展开我们的方法。
+
+%The simplest formula is a single letter, like `$x$', or a single number,
+%like `2'. In order to put these into a \TeX\ text, you type `|$x$|' and
+%`|$2$|', respectively. Notice that all mathematical formulas are enclosed
+%in special math brackets; we are using |$| as the math bracket in this
+%manual, in accord with the plain \TeX\ format defined in Appendix~B\null,
+%because mathematics is supposedly expensive.
+最简单的公式就是象`$x$'这样的单个字母，或者象`2'这样的单个数字。%
+为了把它们输入到 \TeX\ 文本中，应该分别键入`|$x$|'和`|$2$|'。%
+注意，所有的数学公式都要用特殊的数学括号封装起来；
+在本手册中，按照附录 B 中定义的 plain \TeX\ 格式，
+把 |$| 作为数学括号使用，
+因为料想数学内容很多。
+
+%When you type `|$x$|' the `$x$' comes out in italics, but when you
+%type `|$2$|' the `$2$' comes out in roman type.  In general, all
+%characters on your keyboard have a special interpretation in math
+%formulas, according to the normal conventions of mathematics printing:
+%Letters now denote ^{italic} letters, while digits and punctuation
+%denote ^{roman} digits and punctuation; a hyphen ({\tt-}) now denotes a ^{minus
+%sign} ($-$), which is almost the same as an em-dash but not quite (see
+%Chapter~2). The first |$| that you type puts you into ``^{math mode}'' and the
+%second takes you out (see Chapter~13).  So if you forget one |$| or type
+%one |$| too many, \TeX\ will probably become thoroughly confused and you
+%will probably get some sort of error message. ^^{dollarsign}
+当键入`|$x$|'时，`$x$'以 italic 格式出现，
+但是当键入`|$2$|'时，`$2$'以 roman 格式出现。%
+一般地，按照数学排版的通常惯例，键盘上的所有字符在数学公式中都有专门的解释：
+在这里，字母是 italic 字母，而数字和标点是 roman 数字和标点；
+连字符({\tt-})是负号($-$), 它与破折号几乎一样但是有点差别(见第二章)。%
+键入第一个 |$| 就进入了``数学模式'',
+键入第二个就跳出数学模式了(见第十三章)。%
+因此，如果忘记了一个 |$| 或多输入一个 |$|, 那么 \TeX\ 可能因不知所措而错误百出。
+
+%Formulas that have been typeset by a printer who is unaccustomed to
+%mathematics usually look quite strange to a mathematician, because a
+%novice printer usually gets the spacing all wrong. In order to alleviate
+%this problem, \TeX\ does most of its own spacing in math formulas; and it
+%{\sl ignores\/} any ^{spaces} that you yourself put between |$|'s. For
+%example, if you type `|$ x$|' and `|$ 2 $|', they will mean the same thing
+%as `|$x$|' and `|$2$|'. You can type `\hbox{|$(x + y)/(x - y)$|}' or
+%`|$(x+y) / (x-y)$|', but both will result in `$(x+y)/(x-y)$', a formula in
+%which there is a bit of extra space surrounding the $+$ and~$-$ signs but
+%none around the~/~sign.  Thus, you do not have to memorize the complicated
+%rules of math spacing, and you are free to use blank spaces in any way you
+%like.  Of course, spaces are still used in the normal way to mark the end
+%of control sequences, as explained in Chapter~3.  In most circumstances
+%\TeX's spacing will be what a mathematician is accustomed to; but we will
+%see in Chapter~18 that there are control sequences by which you can
+%override \TeX's spacing rules if you want to.
+在数学家看来，不熟悉数学的人排版出来的数学公式一般看起来怪怪的，
+因为新手一般把间距都弄错了。%
+为了缓和这种矛盾， \TeX\ 在数学公式中设置了自己的间距；
+并且它{\KT{10}忽略}掉你个人在 |$| 之间输入的任何空格。%
+例如，如果输入的是`|$ x$|'和`|$ 2 $|', 那么它们与`|$x$|'和`|$2$|'是一样的。%
+可以输入`\hbox{|$(x + y)/(x - y)$|}'或者`|$(x+y) / (x-y)$|',
+但是它们两个的结果都是`$(x+y)/(x-y)$', 在这个公式中，在符号 $+$ 和 $-$ 两边%
+有一点额外的间距，但是在符号 / 两边却没有。%
+因此，你不需要记住复杂的数学间距规则，
+并且可以随心所欲地使用空格。%
+当然，空格还要按照正常的方法来标记出控制系列的结尾，就象在第三章中讨论的那样。%
+在大多数情况下， \TeX\ 的间距都符合数学家的习惯；
+但是在第十八章将看到，如果需要的话，可以用控制系列来改变 \TeX\ 的间距。
+
+%One of the things mathematicians like to do is make their formulas look
+%like ^{Greek} to the uninitiated. In plain \TeX\ language you can type
+%`|$$\alpha, \beta, \gamma, \delta;$$|' and you will get the first four
+%Greek letters ^^|\alpha|^^|\beta|^^|\gamma|^^|\delta|
+%$$\alpha,\beta,\gamma,\delta;$$ furthermore there are uppercase Greek
+%letters like `$\Gamma$', which you can get by typing `|$\Gamma$|'.
+%^^|\Gamma| Don't feel intimidated if you aren't already familiar with Greek
+%letters; they will be easy to learn if you need them. The only difficulty
+%is that some symbols that look nearly the same must be carefully
+%distinguished. For example, the Greek letters ^|\nu|~($\nu$) and
+%^|\kappa|~($\kappa$) should not be confused with the italic letters $v$
+%and~$x$; the Greek ^|\phi|~($\phi$) is different from the slashed zero
+%called ^|\emptyset|~($\emptyset$).  A~lowercase epsilon ($\epsilon$) is
+%quite different from the symbol used to denote membership in a set
+%($\in$); type `|$\epsilon$|' for $\epsilon$ and `|$\in$|' for $\in$.
+%^^|\epsilon| ^^|\in| Some of the lowercase Greek letters have variant
+%forms in plain \TeX's math italic fonts:
+%`|$(\phi,\theta,\epsilon,\rho)$|' yields
+%`$(\phi,\theta,\epsilon,\rho)$' while
+%`|$(\varphi,\vartheta,\varepsilon,\varrho)$|' yields
+%`$(\varphi,\vartheta,\varepsilon,\varrho)$'.
+%^^|\phi|^^|\theta|^^|\rho|^^|\varphi|^^|\vartheta|^^|\varrho|^^|\varepsilon|
+数学家喜欢做的一件事就是在公式使用希腊字母。%
+在 plain \TeX\ 格式中，输入`|$$\alpha, \beta, \gamma, \delta;$$|'就可得到%
+前四个希腊字母$$\alpha,\beta,\gamma,\delta;$$
+还有，象`$\Gamma$'这样的大写希腊字母可以输入`|$\Gamma$|'来得到。%
+如果对希腊字母还不熟悉也别有压力；如果需要的话很容易就掌握它们了。%
+\1唯一的困难是某些看起来几乎一样的字符却要细心区分开。%
+例如，不要把希腊字母 |\nu|~($\nu$) 和 |\kappa|~($\kappa$) 同 italic 字母 $v$~%
+和 $x$ 混淆；
+希腊字母 |\phi|~($\phi$) 与``空集''符号 |\emptyset|~($\emptyset$) 不同。%
+小写 epsilon ($\epsilon$) 与集合论中的``属于''符号($\in$)不同；
+`|$\epsilon$|'得到的是 $\epsilon$, `|$\in$|'得到的是 $\in$。%
+在 plain \TeX\ 的数学 italic 字体中，某些小写希腊字母有变体：
+`|$(\phi,\theta,\epsilon,\rho)$|'得到%
+`$(\phi,\theta,\epsilon,\rho)$'而%
+`|$(\varphi,\vartheta,\varepsilon,\varrho)$|'得到%
+`$(\varphi,\vartheta,\varepsilon,\varrho)$'。
+
+%Besides Greek letters, there are a lot of ^{funny symbols} like `$\approx$'
+%(which you get by typing `|$\approx$|') ^^|\approx|^^{special symbols for math}
+%and `$\mapsto$' (which you ^^|\mapsto|^^{math symbols}
+%get by typing `|$\mapsto$|').
+% A complete list of these control sequences
+%and the characters they correspond to appears in Appendix~F\null.
+%Such control sequences are allowed only in math mode, i.e., between
+%|$|'s, because the corresponding symbols appear in the math fonts.
+除了希腊字母，还有许多有趣的符号，像 `$\approx$'（其输入为`|$\approx$|'）%
+和 `$\mapsto$'（输入为`|$\mapsto$|'）。
+这些控制希腊及其对应的字符的完整列表在附录~F~中给出。
+这样的控制系列只允许在数学模式下使用，即在 |$| 之间，
+因为相应的符号来自数学字体。
+
+%\exercise What should you type to get the formula
+%`$\gamma+\nu\in\Gamma$'\thinspace?
+%\answer |$\gamma+\nu\in\Gamma$|.
+\exercise 怎样得到下列公式%
+`$\gamma+\nu\in\Gamma$'？
+\answer |$\gamma+\nu\in\Gamma$|。
+
+%\exercise Look at Appendix F to discover the control sequences for
+%`$\le$', `$\ge$', and~`$\ne$'. \ (These are probably the three most
+%commonly used math symbols that are not present on your keyboard.)
+%\ What does plain \TeX\ call them?
+%\answer ^|\le|, ^|\ge|, and ^|\ne|. \ (These are short for ``less-or-equal,''
+%``greater-or-equal,'' and ``not-equal.'') \ You can also use the names
+%^|\leq|, ^|\geq|, and ^|\neq|. \ (The fourth most common symbol is, perhaps,
+%`$\infty$', which stands for ``^{infinity}'' and is called `^|\infty|'.)
+\exercise 在附录 F 中找出`$\le$'、`$\ge$' 和 `$\ne$' 的控制系列。%
+（它们可能是不在键盘上的最常用的三个数学符号了。）%
+在 plain \TeX\ 中其名称是什么？
+\answer ^|\le|、^|\ge| 和 ^|\ne|。%
+（它们是``less-or-equal''、``greater-or-equal'' 和``not-equal'' 的缩写。）%
+你也可以用 ^|\leq|、^|\geq| 和 ^|\neq|。%
+（第四个最常用的符号也许是 `$\infty$'，
+它表示``^{无穷大}''，其控制系列为 `^|\infty|'。）
+
+%Now let's see how the more complex formulas get built up from simple ones.
+%In the first place, you can get ^{superscripts} $\rm^{(up\,high)}$ and
+%^{subscripts} $\rm_{(down\,low)}$
+%^^{indices, see subscripts}
+%^^{superiors, see superscripts} ^^{inferiors, see subscripts}
+%by using `|^|' and `|_|', as shown in the following examples:
+%\beginmathdemo
+%\it Input&\it Output\cr
+%\noalign{\vskip2pt}
+%|$x^2$|&x^2\cr
+%|$x_2$|&x_2\cr
+%|$2^x$|&2^x\cr
+%|$x^2y^2$|&x^2y^2\cr
+%|$x ^ 2y ^ 2$|&x ^ 2y ^ 2\cr
+%|$x_2y_2$|&x_2y_2\cr
+%|$_2F_3$|&_2F_3\cr
+%\endmathdemo
+%Notice that |^| and |_| apply only to the next single character.
+%If you want several things to be superscripted or subscripted, just enclose
+%them in braces:
+%\beginmathdemo
+%|$x^{2y}$|&x^{2y}\cr
+%|$2^{2^x}$|&2^{2^x}\cr
+%|$2^{2^{2^x}}$|&2^{2^{2^x}}\cr
+%|$y_{x_2}$|&y_{x_2}\cr
+%|$y_{x^2}$|&y_{x^2}\cr
+%\endmathdemo
+%The braces in these examples have been used to specify ``^{subformulas},''
+%i.e., simpler parts of a larger formula.  \TeX\ makes a box for each
+%subformula, and treats that box as if it were a single symbol.  Braces
+%also serve their usual purpose of grouping, as discussed in Chapter~5.
+现在我们讨论怎样从简单公式来构建更复杂的公式。%
+首先，通过使用`|^|'和`|_|', 可以得到上标 $\rm^{(up\,high)}$ 和下标 $\rm_{(down\,low)}$,
+如下例所示：
+\beginmathdemo
+{\KT{10}输入}&\hbox{\KT{10}输出}\cr
+\noalign{\vskip2pt}
+|$x^2$|&x^2\cr
+|$x_2$|&x_2\cr
+|$2^x$|&2^x\cr
+|$x^2y^2$|&x^2y^2\cr
+|$x ^ 2y ^ 2$|&x ^ 2y ^ 2\cr
+|$x_2y_2$|&x_2y_2\cr
+|$_2F_3$|&_2F_3\cr
+\endmathdemo
+注意，~|^| 和 |_| 只作用在下一个单个字符上。%
+如果要在上标或下标中放几个字符，就要把它们封装在大括号中：
+\beginmathdemo
+|$x^{2y}$|&x^{2y}\cr
+|$2^{2^x}$|&2^{2^x}\cr
+|$2^{2^{2^x}}$|&2^{2^{2^x}}\cr
+|$y_{x_2}$|&y_{x_2}\cr
+|$y_{x^2}$|&y_{x^2}\cr
+\endmathdemo
+在这些例子中的大括号是用来确定``子公式''的，即大公式的简单组分。%
+\1\TeX\ 把每个子公式做成一个盒子，并且把盒子看作一个单个字符。%
+括号还有通常的编组功能，就象第五章中讨论的那样。
+
+%It is illegal to type `|x^y^z|' or `|x_y_z|'; \TeX\ will
+%complain of a ``double superscript'' or ``double subscript.'' You must type
+%`|x^{y^z}|' or `|x^{yz}|' or
+%`|x_{y_z}|' or `|x_{yz}|' in order to make your intention clear.
+输入`|x^y^z|'或`|x_y_z|'是不合法的；
+ \TeX\ 将为``双上标''或``双下标''而抱怨。%
+为了明确表达出你的意思，必须输入`|x^{y^z}|'或`|x^{yz}|'或%
+`|x_{y_z}|'或`|x_{yz}|'。
+
+%A superscript or subscript following a character applies to that character
+%only; but when following a subformula it applies to that whole subformula,
+%and it will be raised or lowered accordingly. For example,
+%\beginmathdemo
+%|$((x^2)^3)^4$|&((x^2)^3)^4\cr
+%|${({(x^2)}^3)}^4$|&{({(x^2)}^3)}^4\cr
+%\endmathdemo
+%In the first formula the `|^3|' and `|^4|' are superscripts on the ^{right
+%parentheses}, i.e., on the `|)|' characters that immediately precede them,
+%but in the second formula they are superscripts on the subformulas that
+%are enclosed in braces. The first alternative is preferable, because it is
+%much easier to type and it is just as easy to read.
+如果上标或下标后面跟的是一个字符，就只作用在字符上；
+但是当跟的是一个子公式时，就作用在整个子公式上，
+并且它将因此而升高或降低。%
+例如，
+\beginmathdemo
+|$((x^2)^3)^4$|&((x^2)^3)^4\cr
+|${({(x^2)}^3)}^4$|&{({(x^2)}^3)}^4\cr
+\endmathdemo
+在第一个公式中，`|^3|'和`|^4|'是右小括号的上标，即，是直接在它们前面的字符`|)|'的上标，
+但是在第二个公式中，它们是封装在大括号中子公式的上标。%
+第一个更好一些，因为它容易输入和理解。
+
+%\danger A subscript or superscript following nothing (as in the `|_2F_3|'
+%example on the preceding page, where the `|_2|' follows nothing) is taken
+%to mean a subscript or superscript of an empty subformula. Such notations
+%are (fortunately) rare in mathematics; but if you do encounter them it is
+%better to make your intention clear by showing the empty subformula
+%explicitly with braces.  In other words, the best way to get `${}_2F_3$'
+%in a formula is to type `|{}_2F_3|' or `|{_2}F_3|' or `|{_2F_3}|'.
+\danger 如果上标或下标前面什么也没有(就象前页的例子`|_2F_3|'那样，`|_2|'前面%
+什么也没有), 那么它就是一个空子公式的上标或下标。%
+这样的情况在数学中很少(幸好); 但是如果真遇到它，最好用大括号明确给出空子公式%
+来表达你的意思。%
+换句话说，要在公式中得到`${}_2F_3$', 最好输入`|{}_2F_3|'或`|{_2}F_3|'或`|{_2F_3}|'。%
+
+%\dangerexercise What difference, if any, is there between the output of
+%`|$x + _2F_3$|' and the output of `|$x + {}_2F_3$|'\thinspace?
+%\answer In the former, the `|_2|' applies to the plus sign ($x + _2F_3$);
+%but in the latter, it applies to an empty subformula ($x + {}_2F_3$).
+\dangerexercise `|$x + _2F_3$|' 和 `|$x + {}_2F_3$|' 的结果是否有差别？
+有的话，差别在哪？
+\answer 前者的 `|_2|' 应用到加号（$x + _2F_3$）；
+但后者的 `|_2|' 应用到一个空的子公式（$x + {}_2F_3$）。
+
+%\dangerexercise Describe the differences between the outputs of `|${x^y}^z$|'
+%and `|$x^{y^z}$|'.
+%\answer The results are `${x^y}^z$' and `$x^{y^z}$'; the $z$ in the first
+%alternative is the same size as the $y$, but in the second it is smaller.
+%Furthermore, the $y$ and $z$ in the first case aren't quite at the same height.
+%\ (Good typists never even think of the first construction, because
+%mathematicians never want it.)
+\dangerexercise 描述 `|${x^y}^z$|' 和 `|$x^{y^z}$|' 的输出之间的差别。
+\answer 结果为 `${x^y}^z$' 和 `$x^{y^z}$'；
+前者的 $z$ 与 $y$ 相同尺寸，而后者的却小一点。
+此外，前者的 $y$ 和 $z$ 的高度并不完全一致。%
+（优秀的排字员从不考虑前者，因为数学家决不会用它。）
+
+%You can have simultaneous subscripts and superscripts, and you can specify them
+%in any order:
+%\beginmathdemo
+%|$x^2_3$|&x^2_3\cr
+%|$x_3^2$|&x_3^2\cr
+%|$x^{31415}_{92}+\pi$|&x^{31415}_{92}+\pi\cr
+%\noalign{\smallskip}
+%|$x_{y^a_b}^{z_c^d}$|&x_{y^a_b}^{z_c^d}\cr
+%\endmathdemo
+%Notice that simultaneous su$\rm_b^{per\kern-1pt}$scripts are positioned
+%over each other.  However, a subscript will be ``tucked in'' slightly when it
+%follows certain letters; for example, `|$P_2^2$|' produces `$P_2^2$'.
+%If for some reason you want the left edges of both subscript and superscript
+%to be aligned, you can fool \TeX\ by inserting a null subformula:
+%`|$P{}_2^2$|' produces `$P{}_2^2$'.
+你可以同时给出上下标，并且可以用任意次序：
+\beginmathdemo
+|$x^2_3$|&x^2_3\cr
+|$x_3^2$|&x_3^2\cr
+|$x^{31415}_{92}+\pi$|&x^{31415}_{92}+\pi\cr
+\noalign{\smallskip}
+|$x_{y^a_b}^{z_c^d}$|&x_{y^a_b}^{z_c^d}\cr
+\endmathdemo
+注意，同时使用$_{\hbox{\ST{7}下}}^{\hbox{\ST{7}上}}$标时上标在下标上方居左。%
+但是，当在某些字母后面时，下标会``挤进去''一点；
+例如，`|$P_2^2$|'得到的是`$P_2^2$'。%
+如果要使得上下标的左边界对齐，可以通过插入空的子公式来欺骗 \TeX:
+`|$P{}_2^2$|'得到的就是`$P{}_2^2$'。
+
+%The control sequence ^|\prime| stands for the symbol `$\prime$', which
+%is used mostly in superscripts. In fact, `$\prime$' is so big as it stands
+%that you would never want to use it except in a subscript or superscript,
+%where it occurs in a smaller size. Here are some typical examples:
+%\beginmathdemo
+%\it Input&\it Output\cr
+%\noalign{\vskip2pt}
+%|$y_1^\prime$|&y_1^\prime\cr
+%|$y_2^{\prime\prime}$|&y_2^{\prime\prime}\cr
+%|$y_3^{\prime\prime\prime}$|&y_3^{\prime\prime\prime}\cr
+%\endmathdemo
+%Since single and double primes occur rather frequently, plain \TeX\
+%provides a convenient abbreviation: You can simply type |'| instead
+%of |^\prime|, and |''| instead of |^{\prime\prime}|, and so on.
+%\beginmathdemo
+%|$f'[g(x)]g'(x)$|&f'[g(x)]g'(x)\cr
+%|$y_1'+y_2''$|&y_1'+y_2''\cr
+%|$y'_1+y''_2$|&y'_1+y''_2\cr
+%|$y'''_3+g'^2$|&y'''_3+g'{}^2\cr
+%\endmathdemo
+\1控制系列 |\prime| 得到的是符号 `$\prime$'，它一般用作上标。
+实际上，`$\prime$'太大，一般只作为上下标使用，这时它将以较小的尺寸出现。
+下面是一些典型的例子：
+\beginmathdemo
+{\KT{10}输入}&\hbox{\KT{10}输出}\cr
+\noalign{\vskip2pt}
+|$y_1^\prime$|&y_1^\prime\cr
+|$y_2^{\prime\prime}$|&y_2^{\prime\prime}\cr
+|$y_3^{\prime\prime\prime}$|&y_3^{\prime\prime\prime}\cr
+\endmathdemo
+因为单个和两个撇号经常要用到，所以 plain \TeX\ 提供了一种方便的简写：
+你可以直接输入 |'| 以代替 |^\prime|，输入 |''| 以代替 |^{\prime\prime}|，等等。%
+\beginmathdemo
+|$f'[g(x)]g'(x)$|&f'[g(x)]g'(x)\cr
+|$y_1'+y_2''$|&y_1'+y_2''\cr
+|$y'_1+y''_2$|&y'_1+y''_2\cr
+|$y'''_3+g'^2$|&y'''_3+g'{}^2\cr
+\endmathdemo
+
+%\dangerexercise Why do you think \TeX\ treats |\prime| as a large symbol
+%that appears only in superscripts, instead of making it a smaller
+%symbol that has already been shifted up into the superscript position?
+%\answer The second alternative doesn't work properly when there's a
+%subscript at the same time as a prime. Furthermore, some mathematicians
+%use |\prime| also in the subscript position; they write, for example,
+%$F'(w,z)=\partial F(w,z)/\partial z$ and $F_\prime(w,z)=\partial F(w,z)/
+%\partial w$.
+\dangerexercise 想想为何 \TeX\ 将 |\prime| 作为只出现在上标的大个字符，
+而不是将它作为已提升到上标位置的小个字符？
+\answer 第二种做法在下标和撇号同时出现时不够好看。
+此外，有些数学家也在下标位置使用 |\prime|；他们会像这样写
+$F'(w,z)=\partial F(w,z)/\partial z$ 和 $F_\prime(w,z)=\partial F(w,z)/
+\partial w$。
+
+%\dangerexercise Mathematicians sometimes use ``^{tensor notation}''
+%in which subscripts and superscripts are staggered, as in `$R_i{}^{jk}{}_l$'.
+%Explain how to achieve such an effect.
+%\answer |$R_i{}^{jk}{}_l$|.
+\dangerexercise 有时候数学家用到的``张量符号''要求上标和下标错开，
+就象`$R_i{}^{jk}{}_l$'这样。怎样才能得到这种结果？
+\answer |$R_i{}^{jk}{}_l$|。
+
+%Another way to get complex formulas from simple ones is to use the control
+%sequences ^|\sqrt|, ^|\underline|, or ^|\overline|.
+%^^{surds, see sqrt} ^^{vinculum, see overline}
+%Like |^| and |_|, these operations apply to the character or subformula
+%that follows them:
+%\beginmathdemo
+%|$\sqrt2$|&\sqrt2\cr
+%|$\sqrt{x+2}$|&\sqrt{x+2}\cr
+%|$\underline4$|&\underline4\cr
+%|$\overline{x+y}$|&\overline{x+y}\cr
+%|$\overline x+\overline y$|&\overline x+\overline y\cr
+%|$x^{\underline n}$|&x^{\underline n}\cr
+%|$x^{\overline{m+n}}$|&x^{\overline{m+n}}\cr
+%|$\sqrt{x^3+\sqrt\alpha}$|&\sqrt{x^3+\sqrt\alpha}\cr
+%\endmathdemo
+%You can also get cube roots `$\root3\of{\phantom{h}}$' and similar things
+%by using ^|\root|:
+%\beginmathdemo
+%|$\root 3 \of 2$|&\root 3 \of 2\cr
+%|$\root n \of {x^n+y^n}$|&\root n \of {x^n+y^n}\cr
+%|$\root n+1 \of a$|&\root n+1 \of a\cr
+%\endmathdemo
+从简单公式组合出复杂公式的另一种方法是利用控制系列 |\sqrt|、
+|\underline| 或 |\overline|。
+与 |^| 和 |_| 一样，这些命令也作用在其后的字符或子公式上：
+\beginmathdemo
+|$\sqrt2$|&\sqrt2\cr
+|$\sqrt{x+2}$|&\sqrt{x+2}\cr
+|$\underline4$|&\underline4\cr
+|$\overline{x+y}$|&\overline{x+y}\cr
+|$\overline x+\overline y$|&\overline x+\overline y\cr
+|$x^{\underline n}$|&x^{\underline n}\cr
+|$x^{\overline{m+n}}$|&x^{\overline{m+n}}\cr
+|$\sqrt{x^3+\sqrt\alpha}$|&\sqrt{x^3+\sqrt\alpha}\cr
+\endmathdemo
+也可以得到 3 次方根号`$\root3\of{\phantom{h}}$', 类似的要用到 |\root|:
+\beginmathdemo
+|$\root 3 \of 2$|&\root 3 \of 2\cr
+|$\root n \of {x^n+y^n}$|&\root n \of {x^n+y^n}\cr
+|$\root n+1 \of a$|&\root n+1 \of a\cr
+\endmathdemo
+
+%\danger The |\sqrt| and |\underline| and |\overline| operations are able to
+%place lines above or below subformulas of any size or shape; the bar lines
+%change their size and position, so that they are long enough to cover the
+%subformula, and high enough or low enough not to bump into it. For example,
+%consider `|\overline|~|l|' ($\,\overline l\,$) versus `|\overline|~|m|'
+%($\,\overline m\,$):  The first has a shorter bar line, and this line has
+%been raised higher than the bar in the second. Similarly, the bar in
+%`|\underline|~|y|' ($\,\underline y\,$) is lower than the bar in
+%`|\underline|~|x|' ($\,\underline x\,$); and square root signs appear in a
+%variety of positions based on the height and depth of what is being
+%|\sqrt|'d: $\sqrt a + \sqrt d + \sqrt y$. \TeX\ knows the height, depth, and
+%width of every letter and every subformula, because it considers them to be
+%boxes, as explained in Chapter~11. If you have a formula in which there is
+%only one |\sqrt|, or only one |\overline| or |\underline|, the normal
+%positioning rules work fine; but sometimes you want to have uniformity
+%between different members of a complex formula. For example, you might want to
+%typeset `$\sqrt{\mathstrut a}+\sqrt{\mathstrut d}+\sqrt{\mathstrut y}$',
+%putting all square roots in the same vertical position. There's an easy way
+%to do this, using the control sequence ^|\mathstrut| as follows:
+%\begintt
+%$\sqrt{\mathstrut a}+\sqrt{\mathstrut d}+\sqrt{\mathstrut y}$.
+%\endtt
+%A |\mathstrut| is an invisible box whose width is zero; its height and depth
+%are the height and depth of a parenthesis `('. Therefore subformulas
+%that contain |\mathstrut| will always have the same height and depth,
+%unless they involve more complicated constructions like subscripts and
+%superscripts. Chapter~18 discusses more powerful operations called ^|\smash|
+%and ^|\phantom| by which you can obtain complete control over the positioning
+%of roots and similar signs.
+\danger \1命令 |\sqrt|, |\underline| 和 |\overline| 可以把直线放在任意尺寸和形状%
+的子公式上面或下面；
+横线可以改变其长度和位置，使得长的足以盖住后面的子公式，高或低到足以使子公式%
+碰不到它。%
+例如，看看`|\overline|~|l|' ($\,\overline l\,$)与`|\overline|~|m|'
+($\,\overline m\,$):
+第一个是短横线，但是比第二个要高。%
+类似地，`|\underline|~|y|' ($\,\underline y\,$)中的横线比%
+`|\underline|~|x|' ($\,\underline x\,$)要低；
+在 $\sqrt a + \sqrt d + \sqrt y$ 中，由于各个字母高度和深度各异，
+所以根号出现在不同位置上。%
+ \TeX\ 知道每个字母和每个子公式的高度，深度和宽度，
+因为正如在第十一章中讨论的那样，它把这些都看作盒子。%
+如果公式中只有一个 |\sqrt|, 或者只有一个 |\overline| 或 |\underline|,
+那么这样的规则就是完美的了；
+但是有时候要求在一个复杂公式的不同组分之间位置一致。%
+例如，在`$\sqrt{\mathstrut a}+\sqrt{\mathstrut d}+\sqrt{\mathstrut y}$',
+要求其中根号的垂直位置是相同的。%
+有一个简单的办法来实现它，就是利用控制系列 |\mathstrut|, 如下：
+\begintt
+$\sqrt{\mathstrut a}+\sqrt{\mathstrut d}+\sqrt{\mathstrut y}$.
+\endtt
+|\mathstrut|是一个看不见的盒子，其宽度为零，高度和深度是圆括号`('的高度和深度。%
+因此，如果没有更复杂的象上下标那样的构造，包含 |\mathstrut| 的子公式总有相同的%
+高度和深度。%
+第十八章讨论了 |\smash| 和 |\phantom| 这些更强大的命令，
+通过它可以完全控制根号和类似符号的位置。
+
+%\exercise Test your understanding of what you have read so far in this chapter
+%by explaining what should be typed to get the following formulas. \ (Be
+%sure to check your answer with Appendix~A to confirm that you're right.)
+%$$\hbox to\hsize{\indent
+%  $\displaystyle
+%  10^{10}\hfil 2^{n+1}\hfil (n+1)^2\hfil \sqrt{1-x^2}\hfil
+%  \overline{w+\overline z}\hfil p_1^{e_1}\hfil a_{b_{c_{d_e}}}\hfil
+%  \root3\of{h''_n(\alpha x)}\hfil$}$$
+%\answer |10^{10}|; \stretch|2^{n+1}|; \stretch|(n+1)^2|; \stretch|\sqrt{1-x^2}|;
+%\stretch|\overline{w+\overline z}|; \stretch|p_1^{e_1}|; \stretch
+%|a_{b_{c_{d_e}}}|; \stretch|\root3\of{h''_n(\alpha x)}|.
+%\ (Of course, you should enclose these formulas in dollar signs so that
+%\TeX\ will process them in math mode.  Superscripts and subscripts can be
+%given in either order; for example, |h''_n| and |h_n''| both work the
+%same.  You should not leave out any of the braces shown here; for example,
+%`|$10^10$|' would yield `$10^10$'. But it doesn't hurt to insert
+%additional braces around letters or numbers, as in `|({n}+{1})^{2}|'. The
+%indicated blank spaces are necessary unless you use extra braces;
+%otherwise \TeX\ will complain about undefined control sequences
+%|\overlinez| and |\alphax|.)
+\exercise 测验一下到目前为止你对本章内容理解得怎么样：看看怎样输入下列公式。%
+（一定要与附录 A 的答案核对一下。）
+$$\hbox to\hsize{\indent
+  $\displaystyle
+  10^{10}\hfil 2^{n+1}\hfil (n+1)^2\hfil \sqrt{1-x^2}\hfil
+  \overline{w+\overline z}\hfil p_1^{e_1}\hfil a_{b_{c_{d_e}}}\hfil
+  \root3\of{h''_n(\alpha x)}\hfil$}$$
+\answer |10^{10}|；\stretch|2^{n+1}|；\stretch|(n+1)^2|；\stretch|\sqrt{1-x^2}|；
+\stretch|\overline{w+\overline z}|；\stretch|p_1^{e_1}|；
+\stretch|a_{b_{c_{d_e}}}|；\stretch|\root3\of{h''_n(\alpha x)}|。%
+（当然，你需要将这些公式用美元号括起来，以让 \TeX\ 在数学模式中排版它们。
+上下标可以用不同顺序给出；例如 |h''_n| 和 |h_n''| 是一样的。
+不要遗漏这里给出的任何花括号；例如 `|$10^10$|' 将得到 `$10^10$'。
+但是在字母和数字两边插入多余的花括号是没有害处的，比如 `|({n}+{1})^{2}|'。
+这里给出的空格都是必需的，除非你使用额外的花括号；
+否则 \TeX\ 将抱怨未定义的控制系列 |\overlinez| 和 |\alphax|。）
+
+%\exercise What mistake did B. C. ^{Dull} discover after he typed the
+%following?
+%\begintt
+%If$ x = y$, then $x$ is equal to $y.$
+%\endtt
+%\answer He got `If$ x = y\ldots$' because he forgot to leave a space
+%after `|If|'; ^{spaces} disappear between dollar signs. He should
+%also have ended the sentence with `|$y$.|'; punctuation that belongs
+%to a sentence should not be included in a formula, as we will see
+%in Chapter~18. \ (But you aren't expected to know that yet.)
+\exercise 在键入下列内容后，B. C. ^{Dull} 将会发现什么错误？
+\begintt
+If$ x = y$, then $x$ is equal to $y.$
+\endtt
+\answer 因为他忘记在 `|If|' 之后留下空格，他将得到 `If$ x = y\ldots$'；
+在美元号之间的^{空格}都消失了。他还应该用 `|$y$.|' 结束该句子；
+属于句子的标点不应该包含到公式里面，在第 18 章我们将会学到。%
+（但是不指望你已经明白这一点。）
+
+%\exercise Explain how to type the following sentence:
+%\begindisplay
+%Deleting an element from an $n$-tuple leaves an $(n-1)$-tuple.
+%\enddisplay
+%\answer |Deleting an element from an $n$-tuple leaves an $(n-1)$-tuple.|
+\exercise 看看怎样输入下列句子：
+\begindisplay
+Deleting an element from an $n$-tuple leaves an $(n-1)$-tuple.
+\enddisplay
+\answer |Deleting an element from an $n$-tuple leaves an $(n-1)$-tuple.|
+
+%\exercise List all the italic letters that descend below the baseline.
+%\ (These are the letters for which |\underline| will lower its bar line.)
+%\answer $Q,f,g,j,p,q,y$. \ (The analogous ^{Greek} letters are
+%^^{italic letters with descenders} ^^{descenders}
+%$\beta,\gamma,\zeta,\eta,\mu,\xi,\rho,\phi,\varphi,\chi,\psi$.)
+\exercise 列出所有低于基线的意大利体字母。%
+（对这些字母，|\underline| 要降低其横线。）
+\answer $Q,f,g,j,p,q,y$。（类似的^{希腊}字母有
+^^{italic letters with descenders} ^^{descenders}
+$\beta,\gamma,\zeta,\eta,\mu,\xi,\rho,\phi,\varphi,\chi,\psi$。）
+
+%We have discussed the fact that the characters you type have special meanings
+%in math mode, but the examples so far are incomplete; they don't reveal all
+%the power that is at your fingertips just after you press the `|$|' key.
+%It's time now to go back to basics: Let us make a systematic survey of
+%what each character does, when it is used in a formula.
+我们已经说过，在数学模式下输入的字符都有专门的意思，
+但是迄今为止的举例还不够；
+还不能反映输入 |$| 后全部的效果。%
+现在回到基本问题：
+我们系统地总结一下当字符用在公式中时的情况。
+
+%The 52 ^{letters} (|A| to |Z| and |a| to |z|) denote italic symbols
+%($A$~to~$Z$ and $a$~to~$z$), which a mathematician would call ``^{variables}.''
+%\TeX\ just calls them ``^{ordinary symbols},'' because they make up the
+%bulk of math formulas. There are two variants of lowercase L in plain \TeX,
+%namely `$l$' (which you get by simply typing `|l|') and `$\ell$'
+%(which you get by typing `^|\ell|'). Although mathematicians commonly
+%write something that looks like `$\ell$' in their manuscripts, they
+%do so only to distinguish it from the numeral~`1'.  This
+%distinguishability problem is not present in printed mathematics, since an
+%italic `$l$' is quite different from a~`1'; therefore it is traditional to
+%use `$l$' unless `$\ell$' has been specifically requested.
+\152 个字母(|A| 到 |Z| 和 |a| 到 |z|)表示 italic 符号($A$ 到 $Z$ 和 $a$ 到 $z$),
+数学家称其为``变量'',  \TeX\ 却只把它称为``普通符号'', 因为它们是数学公式的主体。%
+在 plain \TeX\ 中，有两个小写 L 的变体，即`$l$'(输入为`|l|')和`$\ell$'%
+(输入为`|\ell|')。%
+虽然数学家一般在手稿中写作`$\ell$', 但是这只是为了与数字`1'区分开。%
+在打印的数学文稿中，不需要区分它们，因为 italic~`l'与`1'很容易区分；
+因此，一般使用的是`$l$', 除非特别要求使用`$\ell$'。
+
+%Plain \TeX\ also treats the 18 characters
+%\begintt
+%0 1 2 3 4 5 6 7 8 9 ! ? . || / ` @ "
+%\endtt
+%^^{digits}^^{numerals}
+%as ordinary symbols; i.e., it doesn't insert any extra space when these
+%symbols occur next to each other or next to letters. Unlike the letters,
+%these 18 characters remain in roman type when they appear in formulas.
+%There's nothing special for you to remember about them, except that the
+%^{vertical line} `\|' has special uses that we shall discuss later.
+%Furthermore, you should be careful to distinguish between `oh' and `zero':
+%The italic letter~$O$ is almost never used in formulas unless it appears
+%just before a left parenthesis, as in `$O(n)$'; ^^{big-$O$ notation}
+%and the numeral~$0$ is almost never used just before a left parenthesis
+%unless it is preceded by another digit, as in `$10(n-1)$'. Watch for
+%left parentheses and you'll be $0K$. \ (Lowercase o's also tend to
+%appear only before left parentheses; type `|x_0|' instead of `|x_o|',
+%since the formula `$x_0$' is generally more correct than `$x_o$'.)
+Plain \TeX\ 还把下列 18 个字符看作普通符号：
+\begintt
+0 1 2 3 4 5 6 7 8 9 ! ? . || / ` @ "
+\endtt
+即，当这些符号出现在字母后面或这 18 个字符后面时，不插入任何额外的间距。%
+但是与字母不同的是，当出现在公式中时，这 18 个字符仍然是 roman 字体。%
+对你而言，毋需特别去记它们，除了竖线`\|'有我们后面要讨论的特殊的用法外。%
+还有，应当注意区分字母`O'和零：
+italic 字母 $O$ 几乎从不出现在公式中，除了出现在左圆括号的前面，比如`$O(n)$';
+而数字 $0$ 从不出现在左圆括号的前面，除非它前面是一个数字，比如`$10(n-1)$'。%
+看看左圆括号就 $0K$ 了。%
+(小写 o 好像也只出现在左圆括号前面；
+输入的是`|x_0|'而不是`|x_o|',
+因为公式`$x_0$'一般比`$x_o$'更正确。
+
+%The three characters |+|, |-|, and |*|
+%are called ``^{binary operations},'' because they operate on two parts of
+%a formula. For example, |+|~is a ^{plus sign}, which is used for the sum
+%of two numbers; |-|~is a ^{minus sign}. The ^{asterisk}~(|*|) is rarer
+%^^{star, see asterisk}
+%in mathematics, but it also behaves as a binary operation. Here are
+%some examples of how \TeX\ typesets binary operations when they appear
+%next to ordinary symbols:
+%\beginmathdemo
+%\it Input&\it Output\cr
+%\noalign{\vskip2pt}
+%|$x+y-z$|&x+y-z\cr
+%|$x+y*z$|&x+y*z\cr
+%|$x*y/z$|&x*y/z\cr
+%\endmathdemo
+%Notice that |-| and |*| produce quite different math symbols from what you
+%get in normal text: The ^{hyphen}~(-) becomes a minus sign~($-$), and
+%the raised asterisk~(*) drops down to a lower level~($*$).
+|+|, |-| 和 |*| 这三个字符称为``二元运算'',
+因为它们作用在公式的两个组分上。%
+例如，|+| 是一个加号，用于求两个数的和；
+|-| 是减号。星号(|*|)很少用在数学中，但是它也是一个二元运算。%
+下面的例子表明了当这些二元符号出现在普通符号后面时 \TeX\ 是怎样排版它们的：
+\beginmathdemo
+{\KT{10}输入}&{\hbox{\KT{10}输出}}\cr
+\noalign{\vskip2pt}
+|$x+y-z$|&x+y-z\cr
+|$x+y*z$|&x+y*z\cr
+|$x*y/z$|&x*y/z\cr
+\endmathdemo
+注意，|-| 和 |*| 所得到的数学符号与普通文本中所得到的很不一样：
+连字符(-)变成减号($-$), 而高高的星号(*)降下来变成了低一些的($*$)。
+
+%\danger \TeX\ does not treat |/| as a binary operation, even though a
+%^{slash} stands for division (which qualifies as a binary operation on
+%mathematical grounds). The reason is that printers traditionally put extra
+%space around the symbols $+$, $-$, and~$*$, but not around~$/$. If \TeX\ were to
+%typeset |/| as a binary operation, the formula `|$1/2$|' would come out
+%`$1\mathbin/2$', which is wrong; so \TeX\ considers |/| to be an ordinary
+%symbol.
+\danger  \TeX\ 不把 |/| 看作二元运算，虽然斜线表示的是除法(它在数学领域的确是%
+一个二元运算)。%
+原因是排版者一般在符号 $+$, ~$-$ 和 $*$ 两边添加额外间距，但是在 $/$ 两边不添加。%
+如果 \TeX\ 把 |/| 按照二元运算进行排版，那么公式`|$1/2$|'得到的是`$1\mathbin/2$',
+这并不好；因此 \TeX\ 把 |/| 看作普通符号。
+
+%\danger Appendix F lists many more binary operations, for which you type
+%control sequences instead of single characters. Here are some examples:
+%\beginmathdemo
+%|$x\times y\cdot z$|&x\times y\cdot z\cr
+%|$x\circ y\bullet z$|&x\circ y\bullet z\cr
+%|$x\cup y\cap z$|&x\cup y\cap z\cr
+%|$x\sqcup y\sqcap z$|&x\sqcup y\sqcap z\cr
+%|$x\vee y\wedge z$|&x\vee y\wedge z\cr
+%|$x\pm y\mp z$|&x\pm y\mp z\cr
+%\endmathdemo
+%It is important to distinguish $\times$ (^|\times|) from $X$ (|X|)
+%and from $x$ (|x|); to distinguish $\cup$ (^|\cup|) from $U$ (|U|)
+%and from $u$ (|u|); to distinguish $\vee$ (^|\vee|) from $V$ (|V|)
+%and from $v$ (|v|); to distinguish $\circ$ (^|\circ|) from $O$ (|O|)
+%and from $o$ (|o|). ^^|\cdot|^^|\bullet|^^|\cap|^^|\sqcup|^^|\sqcap|^^|\wedge|
+%^^{cross, see dagger, times}
+%^^|\pm|^^|\mp| The symbols `$\lor$' and `$\land$' can also be called
+%^|\lor| and ^|\land|, since they frequently stand for binary operations
+%that are called ``^{logical~or}'' and ``^{logical~and}.''
+\danger \1附录 F 列出了更多的二元运算，输入它们需要用控制系列而不是单个字符。%
+下面是一些例子：
+\beginmathdemo
+|$x\times y\cdot z$|&x\times y\cdot z\cr
+|$x\circ y\bullet z$|&x\circ y\bullet z\cr
+|$x\cup y\cap z$|&x\cup y\cap z\cr
+|$x\sqcup y\sqcap z$|&x\sqcup y\sqcap z\cr
+|$x\vee y\wedge z$|&x\vee y\wedge z\cr
+|$x\pm y\mp z$|&x\pm y\mp z\cr
+\endmathdemo
+重要的是把 $\times$ (|\times|) 与 $X$ (|X|)%
+ 和 $x$ (|x|); 把 $\cup$ (|\cup|) 与 $U$ (|U|)%
+ 和 $u$ (|u|); 把 $\vee$ (|\vee|) 与 $V$ (|V|)%
+ 和 $v$ (|v|); 把 $\circ$ (|\circ|) 与 $O$ (|O|)%
+ 和 $o$ (|o|) 区分开。符号`$\lor$'和`$\land$'可以叫做 |\lor| 和 |\land|,
+因为它们常常表示称为``逻辑或(logical or)''和``逻辑与(logical and)''的二元运算。
+
+%\danger Incidentally, binary operations are treated as ordinary symbols
+%if they don't occur between two quantities that they can operate on.
+%For example, no extra space is inserted next to the $+$, $-$, and~$*$
+%in cases like the following:
+%\beginmathdemo
+%|$x=+1$|&x=+1\cr
+%|$3.142-$|&3.142-\cr
+%|$(D*)$|&(D*)\cr
+%\endmathdemo
+%Consider also the following examples, which show that binary
+%operations can be used as ordinary symbols in superscripts and subscripts:
+%\beginmathdemo
+%|$K_n^+,K_n^-$|&K_n^+,K_n^-\cr
+%|$z^*_{ij}$|&z^*_{ij}\cr
+%|$g^\circ \mapsto g^\bullet$|&g^\circ \mapsto g^\bullet\cr
+%|$f^*(x) \cap f_*(y)$|&f^*(x) \cap f_*(y)\cr
+%\endmathdemo
+\danger 顺便说一下，如果二元运算不出现在它们要操作的两个量之间，
+那么就看作普通符号。%
+例如，在下列情形下，在 $+$, $-$ 和 $*$ 两边没有添加额外的间距：
+\beginmathdemo
+|$x=+1$|&x=+1\cr
+|$3.142-$|&3.142-\cr
+|$(D*)$|&(D*)\cr
+\endmathdemo
+再考虑下列例子，它们表明，在上下标中，二元运算被看作普通符号：
+\beginmathdemo
+|$K_n^+,K_n^-$|&K_n^+,K_n^-\cr
+|$z^*_{ij}$|&z^*_{ij}\cr
+|$g^\circ \mapsto g^\bullet$|&g^\circ \mapsto g^\bullet\cr
+|$f^*(x) \cap f_*(y)$|&f^*(x) \cap f_*(y)\cr
+\endmathdemo
+
+%\dangerexercise How would you obtain the formulas `$z^{*2}$'
+%and `$h_*'(z)$'\thinspace?
+%\answer |$z^{*2}$| and |$h_*'(z)$|.
+\dangerexercise 怎样得到公式`$z^{*2}$'和`$h_*'(z)$'？
+\answer |$z^{*2}$| 和 |$h_*'(z)$|。
+
+%Plain \TeX\ treats the four characters |=|, |<|, |>|, and |:|\ as
+%``^{relations}'' because they express a relationship between two
+%quantities. For example, `${x<y}$' means that $x$~is less than~$y$.
+%Such relationships have a rather different meaning from binary
+%operations like $+$, and the symbols are typeset somewhat differently:
+%\beginmathdemo
+%|$x=y>z$|&x=y>z\cr
+%|$x:=y$|&x:=y\cr
+%|$x\le y\ne z$|&x\le y\ne z\cr
+%|$x\sim y\simeq z$|&x\sim y\simeq z\cr
+%|$x\equiv y\not\equiv z$|&x\equiv y\not\equiv z\cr
+%|$x\subset y\subseteq z$|&x\subset y\subseteq z\cr
+%\endmathdemo
+%^^|\le|^^|\ne|^^|\simeq|^^{colon}^^{equals}^^{lessthan}^^{greaterthan}
+%^^{colonequals}^^|\equiv|^^|\not|^^|\subset|^^|\subseteq|^^|\sim|
+%^^{hooks, see subset, supset} ^^{wiggle, see sim}
+%(The last several examples show some of the many other
+%relational symbols that plain \TeX\ makes available via control sequences;
+%see Appendix~F.)
+Plain \TeX\ 把 |=|, |<|, |>| 和 |:| 这四个字符看作``关系符号'',
+因为它们表达了两个量之间的关系。%
+例如，`${x<y}$'的意思是 $x$ 小于 $y$。%
+这样的关系与象 $+$ 那样的二元运算的意思差别很大，
+并且符号在排版时也有些不同：
+\beginmathdemo
+|$x=y>z$|&x=y>z\cr
+|$x:=y$|&x:=y\cr
+|$x\le y\ne z$|&x\le y\ne z\cr
+|$x\sim y\simeq z$|&x\sim y\simeq z\cr
+|$x\equiv y\not\equiv z$|&x\equiv y\not\equiv z\cr
+|$x\subset y\subseteq z$|&x\subset y\subseteq z\cr
+\endmathdemo
+(后几个例子中出现了很多其它关系符号，~plain \TeX\ 通过控制系列来调用它们；
+见附录 F。)
+
+%The two characters `|,|' (^{comma}) and `|;|' (^{semicolon}) are treated
+%as ^{punctuation marks in formulas}; this means that \TeX\ puts a little
+%extra space after them, but not before them.
+%\beginmathdemo
+%|$f(x,y;z)$|&f(x,y;z)\cr
+%\endmathdemo
+%It isn't customary to put extra space after a `|.|'\ (^{period}) in
+%math formulas, so \TeX\ treats a period as an ordinary symbol.
+%If you want the `|:|'\ character to be treated as a punctuation mark
+%instead of as a relation, just call it ^|\colon|:
+%\beginmathdemo
+%|$f:A\to B$|&f:A\to B\cr
+%|$f\colon A\to B$|&f\colon A\to B\cr
+%\endmathdemo
+%^^|\to|
+%If you want to use a comma as an ordinary symbol (e.g., when it
+%appears in a large number), just put it in braces; \TeX\ treats
+%anything in braces as an ordinary symbol. For instance,
+%\beginmathdemo
+%|$12,345x$|&12,345x\qquad\rm(wrong)\cr
+%|$12{,}345x$|&12{,}345x\qquad\,\rm(right)\cr
+%\endmathdemo
+\1逗号`|,|'和分号`|;|'这两个字符被看作公式中的标点；
+这意味着 \TeX\ 在它们后面添加额外的小间距，但是在前面没有。%
+\beginmathdemo
+|$f(x,y;z)$|&f(x,y;z)\cr
+\endmathdemo
+习惯上在数学公式的句点`|.|'后面不添加额外间距，因此 \TeX\ 把句号看作一个普通符号。%
+如果要把字符`|:|'看作标点符号而不是关系符号，就要用 |\colon|:
+\beginmathdemo
+|$f:A\to B$|&f:A\to B\cr
+|$f\colon A\to B$|&f\colon A\to B\cr
+\endmathdemo
+如果要把逗号看作普通符号(即当出现在科学计数法中时), 就把它放在大括号中；
+ \TeX\ 把大括号中的任何东西都看作普通符号。%
+比如，
+\beginmathdemo
+|$12,345x$|&12,345x\qquad\rm(\hbox{错})\cr
+|$12{,}345x$|&12{,}345x\qquad\,\rm(\hbox{对})\cr
+\endmathdemo
+
+%\dangerexercise What's an easy way to get a raised dot in a decimal
+%constant (e.g., `$3{\cdot}1416$')?
+%\answer |$3{\cdot}1416$|. \ (One of the earlier examples in this
+%chapter showed that ^|\cdot| is a binary operation; putting it in braces
+%makes it act like an ordinary symbol.)\par
+%If you have lots of constants like this, for example in a table, there's a way
+%to make ordinary periods act like |\cdot| symbols: Just define
+%^|\mathcode||`.| to be |"0201|, assuming that the fonts of plain \TeX\ are
+%being used.  However, this could be dangerous, since ordinary
+%periods are used frequently in displayed equations; the |\mathcode| change
+%should be confined to places where every period is to be a |\cdot|.
+\dangerexercise 怎样用简单的方法得到一个小数，其小数点是升高了的%
+（比如`$3{\cdot}1416$'）？
+\answer |$3{\cdot}1416$|。（本章之前的例子显示^|\cdot| 是一个二元运算符；
+将它放在花括号中就使得它像一个普通符号。）\par
+如果你有许多类似这样的常数，比如在表格中，
+还有一种让普通句点变得像 |\cdot| 符号的方法：
+假定所用的是 plain \TeX\ 的字体，只要将 ^|\mathcode||`.|\ 定义为 |"0201| 就可以。
+然而这可能是危险的做法，因为普通句点经常在陈列公式中用到，
+对 |\mathcode| 的改变应当限制在想让每个句点都变成 |\cdot| 的范围内。
+
+%So far we have considered letters, other ordinary symbols, binary operations,
+%relations, and punctuation marks; hence we have covered almost every key on
+%the typewriter. There are just a few more: The characters `|(|' ^^{lparen}
+%and `|[|' ^^{lbracket} are called ``^{openings},'' while `|)|' ^^{rparen} and
+%^^{fences, see opening, closing, delimiters}
+%`|]|' ^^{rbracket} are called ``^{closings}''; these act pretty much like
+%ordinary symbols, but they help \TeX\ to decide when a binary operation is
+%not really being used in a binary way.  Then there is the character~|'|,
+%which we know is used as an abbreviation for |\prime| superscripts.
+%Finally, we know that plain \TeX\ reserves the other ten characters:
+%\begintt
+%\ $ % # & ~ { } _ ^
+%\endtt
+%These are not usable for symbols in math mode unless their ^|\catcode|
+%values are changed (see Chapter~7). Although |{| and |}| specify
+%grouping, the control sequences `|\{|' and `|\}|' ^^|\lbrace|^^|\rbrace| can
+%be used to get `$\{$' as an opening and `$\}$' as a closing.
+现在我们已经讨论了字母，其它普通符号，二元运算，关系符号和标点符号；
+因此我们几乎覆盖了打字机上的每个键。%
+只是还有几个：
+字符`|(|'和`|[|'称为``开符号'', 而`|)|'和`|]|'称为``闭符号'';
+它们非常象普通符号，但是当二元运算不真是用在二元关系上时，它们辅助 \TeX\ 来判断出来。%
+接着还有一个字符 |'|, 我们知道它是 |\prime| 上标的缩写。%
+最后我们知道 plain \TeX\ 保留下其它十个字符：
+\begintt
+\ $ % # & ~ { } _ ^
+\endtt
+如果它们的 |\catcode| 值不改变(见第七章), 那么它们在数学模式下不便于当作符号使用。%
+虽然 |{| 和 |}| 用于编组，但是控制系列`|\{|'和`|\}|'可以用来得到作为开符号的`$\{$'%
+和作为闭符号的`$\}$'。
+
+%\ddanger All of these math mode interpretations are easily changeable, since
+%each character has a ^|\mathcode|, as explained in Chapter~17; none of
+%the conventions are permanently built into \TeX\null. However, most of them are
+%so standard that it is usually unwise to make many changes, except perhaps
+%in the interpretations of |`|, |"|, and |@|. ^^{at sign} ^^{leftquote}
+%^^{doublequote}
+\ddanger 所有这些数学模式的含义都容易改变，
+因为每个字符都有一个 |\mathcode|, 就象在第十七章中讨论的那样；
+ \TeX\ 没有建立不可改变的约定。%
+但是它们的大多数是如此标准以致于改变它们是不明智的，
+当然改变 |`|, |"| 和 |@| 的含义除外。
+
+%The special characters |^| and |_| that designate superscripts
+%^^{circumflex}^^{underbar}
+%and subscripts should not be used except in formulas. Similarly,
+%the names of math symbols like |\alpha| and |\approx|, and the
+%control sequences for math operations like |\overline|, must not
+%invade ordinary text. \TeX\ uses these facts to detect ^{missing dollar
+%signs} in your input, before such mistakes cause too much trouble. For
+%example, suppose you were to type
+%\begintt
+%The smallest $n such that $2^n>1000$ is~10.
+%\endtt
+%\TeX\ doesn't know that you forgot a `|$|' after the first `|n|', because
+%it doesn't understand English; so it finds a ``formula'' between the
+%first two |$| signs:
+%\begindisplay
+%The smallest $n such that $
+%\enddisplay
+%after which it thinks that `|2|' is part of the text. But then the |^|
+%reveals an inconsistency; \TeX\ will automatically insert a~|$| before
+%the~|^|, and you will get an error message. In this way the computer has
+%gotten back into synch, and the rest of the document can be typeset as if
+%nothing had happened.
+表示上下标的特殊字符 |^| 和 |_| 不能在公式外面使用。%
+类似地，象 |\alpha| 和 |\approx| 这样的数学符号的名字，和象 |\overline| 这样的%
+数学运算的控制系列也不能进入普通文本。%
+在输入中落掉 |$| 符号时， \TeX\ 在错误百出之前就利用这些规则来检测出这个失误。%
+例如，假设输入的是
+\begintt
+The smallest $n such that $2^n>1000$ is~10.
+\endtt
+\1\TeX\ 不知道在第一个`|n|'落掉了一个`|$|',
+因为它不懂英语；
+因此它在前两个 |$| 符号之间发现一个数学公式：
+\begindisplay
+The smallest $n such that $
+\enddisplay
+之后它把`|2|'看作文本的一部分。%
+但是接着 |^| 引出了矛盾；
+ \TeX\ 将自动在 |^| 前面插入一个 |$|,
+并且产生一个错误信息。%
+这样计算机就回到正常状态了，并且就象什么也没有发生一样继续处理剩下的内容。
+
+%\danger Conversely, a blank line or ^|\par| is not permitted in math mode.
+%This gives \TeX\ another way to recover from a missing~|$|; such
+%errors will be confined to the paragraph in which they occur.
+\danger 反过来，空行或 |\par| 也不能出现在数学模式下。%
+这样 \TeX\ 就可以用另一种方法来修复落掉 |$| 这个失误了；
+这个错误将被限制在它所出现的段落中。
+
+%\danger If for some reason you cannot use |^| and |_| for superscripts
+%and subscripts, because you have an unusual keyboard or because you need
+%|^| for French accents or something, plain \TeX\ lets you type ^|\sp|
+%and ^|\sb| instead. For example, `|$x\sp2$|' is another way to get `$x\sp2$'.
+%On the other hand, some people are lucky enough to have keyboards that
+%contain additional symbols besides those of standard ASCII.
+%^^{character set}
+%When such symbols are available, \TeX\ can be set up to make math
+%typing a bit more pleasant. For example, at the author's installation there
+%are keys labeled \up\ and~\dn\ that produce visible symbols
+%(these make superscripts and subscripts look much nicer
+%on the screen); there are keys for the relations {\tentex\char'34},
+%{\tentex\char'35}, and {\tentex\char'32} (these save time); and there are
+%about two dozen more keys that occasionally come in handy. \ (See Appendix~C.)
+%^^{uparrow}^^{downarrow}^^{leq}^^{geq}^^{neq}
+\danger 如果由于某些原因不能用 |^| 和 |_| 来表示上下标，
+因为可能使用的键盘不通用，或者因为需要把 |^| 保留给法语重音或其它用处，
+那么 plain \TeX\ 提供了替代方法 |\sp| 和 |\sb|。%
+例如，`|$x\sp2$|'是得到`$x\sp2$'的另一种方法。%
+另一方面，有些人很幸运，键盘上的字符比标准 ASCII 还多。%
+当可以使用这些符号时，输入 \TeX\ 数学公式更轻松。%
+例如，作者的键盘上有能产生可见符号的 \up 和 \dn(它们使屏幕上在上下标更漂亮);
+还有关系符号{\tentex\char'34},
+{\tentex\char'35} 和 {\tentex\char'32}(它们可以节省时间);
+以及两打偶尔要用到的键。
+
+%\danger Mathematicians are fond of using ^{accents} over letters, because
+%this is often an effective way to indicate relationships between
+%mathematical objects, and because it greatly extends the number of available
+%symbols without increasing the number of necessary fonts.
+%Chapter~9 discusses the use of accents in ordinary text, but mathematical
+%accents are somewhat different, because spacing is not the same; \TeX\ uses
+%special conventions for accents in formulas, so that the two sorts of
+%accents will not be confused with each other. The following math accents
+%are provided by plain~\TeX:
+%\beginmathdemo
+%|$\hat a$|&\hat a\cr
+%|$\check a$|&\check a\cr
+%|$\tilde a$|&\tilde a\cr
+%|$\acute a$|&\acute a\cr
+%|$\grave a$|&\grave a\cr
+%|$\dot a$|&\dot a\cr
+%|$\ddot a$|&\ddot a\cr
+%|$\breve a$|&\breve a\cr
+%|$\bar a$|&\bar a\cr
+%|$\vec a$|&\vec a\cr
+%\endmathdemo
+%^^|\hat|^^|\check|^^|\tilde|^^|\acute|^^|\grave|
+%^^|\dot|^^|\ddot|^^|\breve|^^|\bar|^^|\vec|
+%The first nine of these are called |\^|, |\v|, |\~|, |\'|, |\`|, |\.|,
+%|\"|, |\u|, and |\=|, respectively, when they appear in text; |\vec| is an
+%accent that appears only in formulas. \TeX\ will complain if you try to
+%use |\^| or |\v|, etc., in formulas, or if you try to use |\hat| or
+%|\check|, etc., in ordinary text.
+\danger 数学家偏爱在字母上面加重音，
+因为这常常是表明数学对象之间关系的有效方法，
+再者因为它在不增加所需字体数量的情况下可以大大扩展可以符号的数量。%
+第九章讨论了在普通文本上使用重音，
+但是数学重音有些不一样，因为间距是不同的；
+对公式中的重音， \TeX\ 使用特殊的约定，使得两种重音互相不冲突。%
+下面的数学重音由 plain \TeX\ 提供：
+\beginmathdemo
+|$\hat a$|&\hat a\cr
+|$\check a$|&\check a\cr
+|$\tilde a$|&\tilde a\cr
+|$\acute a$|&\acute a\cr
+|$\grave a$|&\grave a\cr
+|$\dot a$|&\dot a\cr
+|$\ddot a$|&\ddot a\cr
+|$\breve a$|&\breve a\cr
+|$\bar a$|&\bar a\cr
+|$\vec a$|&\vec a\cr
+\endmathdemo
+对于前九个，出现在文本中时分别称为 |\^|, |\v|, |\~|, |\'|, |\`|, |\.|,
+|\"|, |\u| 和 |\=|;
+|\vec| 是只出现在公式中的重音。%
+如果在公式中使用 |\^| 或 |\v| 等，或者在普通文本中使用 |\hat| 或 |\check| 等，
+ \TeX\ 就会提醒。
+
+%\danger It's usually a good idea to define special control sequences for
+%accented letters that you need frequently. For example, you can put
+%^^|\def|
+%\begintt
+%\def\Ahat{{\hat A}}
+%\def\chat{{\hat c}}
+%\def\scheck{{\check s}}
+%\def\xtilde{{\tilde x}}
+%\def\zbar{{\bar z}}
+%\endtt
+%at the beginning of a manuscript that uses the symbols $\hat A$, $\hat c$,
+%$\check s$, $\tilde x$, and $\bar z$ more than, say, five times.  This
+%saves you a lot of keystrokes, and it makes the manuscript easier to
+%read.  Chapter~20 explains how to define control sequences.
+\danger \1一般把常用的带重音的字母定义为专门的控制系列是明智之举。%
+例如，可以把
+\begintt
+\def\Ahat{{\hat A}}
+\def\chat{{\hat c}}
+\def\scheck{{\check s}}
+\def\xtilde{{\tilde x}}
+\def\zbar{{\bar z}}
+\endtt
+放在文稿开头，如果每个符号 $\hat A$, $\hat c$,
+$\check s$, $\tilde x$ 和 $\bar z$ 用到超过(比如说)~5 次，
+那么就节省了很多劳动量，
+并且文稿容易阅读。%
+第二十章讨论了怎样定义控制系列。
+
+%\danger When the letters $i$ and $j$ are accented in math formulas, ^{dotless}
+%symbols $\imath$ and $\jmath$ should be used under the accents. These
+%symbols are called ^|\imath| and ^|\jmath| in plain \TeX. Thus, for example,
+%a paper that uses `$\hat\imath$' and `$\hat\jmath$' ought to begin with
+%the following definitions:
+%\begintt
+%\def\ihat{{\hat\imath}}
+%\def\jhat{{\hat\jmath}}
+%\endtt
+\danger 当在数学公式中在字母 $i$ 和 $j$ 上加重音时，
+重音下面要用到无点的字母 $\imath$ 和 $\jmath$。%
+在 plain \TeX\ 中这些符号叫做 |\imath| 和 |\jmath|。%
+因此，比如论文中要用到`$\hat\imath$'和`$\hat\jmath$', 就应当如下定义：
+\begintt
+\def\ihat{{\hat\imath}}
+\def\jhat{{\hat\jmath}}
+\endtt
+
+%\def\Ahat{{\hat A}}
+%\danger You can put ^{accents on top of accents}, making symbols like
+%$\skew6\hat\Ahat$ that might cause a mathematician to
+%squeal with ecstasy. However, it takes a bit of finesse to get the
+%upper accent into a position that looks right, because the designer of a
+%font for mathematics usually tells \TeX\ to position math accents in
+%special ways for special letters. Plain \TeX\ provides a control sequence
+%called ^|\skew| that makes it fairly easy to shift superaccents into their
+%proper place. For example, `|\skew6\hat\Ahat|' was used to produce the
+%symbol above. The number `|6|' in this example was chosen by trial and
+%error; `|5|'~seems to put the upper accent a bit too far left, while
+%`|7|'~makes it a bit too far right, at least in the author's opinion.
+%The idea is to fiddle with the amount of skew until you find what
+%pleases you best.
+\def\Ahat{{\hat A}}
+\danger 可以在重音上面放重音，所得到的符号象 $\skew6\hat\Ahat$ 这样，
+这可能使得数学家高兴得直叫。%
+但是，要把上面的重音放在最佳位置需要一点技巧，
+因为数学字体的设计者一般告诉 \TeX\ 按照专门的方法把数学重音放在特定的字母上。%
+Plain \TeX\ 提供了一个叫做 |\skew| 的控制系列，
+它使得把上面的重音移到正确的位置变得相当简单。%
+例如，`|\skew6\hat\Ahat|'就是用来得到上面的符号。%
+本例中的数字`|6|'是反复试验出来的；
+`|5|'让上面的重音太靠左了，而`|7|'又太靠右了，至少作者看来是如此。%
+想法就是调节 skew 的量直到你满意为止。
+
+%\danger It's possible, in fact, to put math accents on any subformula, not
+%just on single characters or accented characters. But there's usually not
+%much point in doing so, because \TeX\ just centers the accent over the
+%whole subformula. For example, `|$\hat{I+M}$|' yields `$\hat{I+M}$'. In
+%particular, a |\bar| accent always stays the same size; it's not like
+%^|\overline|, which grows with the formula under it. Some people prefer
+%the longer line from |\overline| even when it applies to only a single
+%letter; for example, `|$\bar z+\overline z$|' produces `$\bar z+\overline
+%z$', and you can take your pick when you define |\zbar|.  However, plain
+%\TeX\ does provide two accents that grow; they are called ^|\widehat| and
+%^|\widetilde|:
+%\beginmathdemo
+%|$\widehat x,\widetilde x$|&\tenmath\widehat x,\widetilde x\cr
+%|$\widehat{xy},\widetilde{xy}$|&\tenmath\widehat{xy},\widetilde{xy}\cr
+%|$\widehat{xyz},\widetilde{xyz}$|&\tenmath\widehat{xyz},\widetilde{xyz}\cr
+%\endmathdemo
+%The third example here shows the maximum size available.
+\danger 实际上，可以把数学重音放在任何子公式上，
+不仅仅是单个字符或重音字符上。%
+但是这样做一般不太好，因为 \TeX\ 仅仅就是把重音放在整个子公式上方正中。%
+例如，`|$\hat{I+M}$|'得到的是`$\hat{I+M}$'。%
+特别是，重音 |\bar| 的长度变成不变；
+它不象 |\overline| 那样随其下公式的增长而增长。%
+即使应用于单个字符，有些人也希望用 |\overline| 得到较长的横线；
+例如，`|$\bar z+\overline z$|'得到的是`$\bar z+\overline z$',
+在定义 |\zbar| 时你可以择优使用。
+但是 plain \TeX\ 的确给出了两个可伸长的重音；
+它们叫做 |\widehat| 和 |\widetilde|:
+\beginmathdemo
+|$\widehat x,\widetilde x$|&\tenmath\widehat x,\widetilde x\cr
+|$\widehat{xy},\widetilde{xy}$|&\tenmath\widehat{xy},\widetilde{xy}\cr
+|$\widehat{xyz},\widetilde{xyz}$|&\tenmath\widehat{xyz},\widetilde{xyz}\cr
+\endmathdemo
+这里的第三个例子显示的是可用的最大尺寸。
+
+%\def\ghat{{\hat g}}
+%\exercise This has been another long chapter; but cheer up, you have learned
+%a lot! Prove it by explaining what to type in order to get the formulas
+%$e^{-x^2}$, $D\sim p^\alpha M+l$, and $\ghat\in(H^{\pi_1^{-1}})'$. \ (In
+%the last example, assume that a control sequence |\ghat| has already been
+%defined, so that |\ghat| produces the accented letter $\ghat$.)
+%\answer |$e^{-x^2}$|, |$D\sim p^\alpha M+l$|, and |$\ghat\in(H^{\pi_1^{-1}})'$|.
+%\ (If you are reading the dangerous bend sections, you know that the
+%recommended way to define |\ghat| is `|\def\ghat{{\hat g}}|'.)
+\def\ghat{{\hat g}}
+\exercise 本章也是很长的；但打起精神来，你已经学会了很多！
+为了证明这一点，解释一下怎样得到下列公式：
+$e^{-x^2}$，$D\sim p^\alpha M+l$ 和 $\ghat\in(H^{\pi_1^{-1}})'$。%
+（\1在最后这个例子中，假设控制系列 |\ghat| 已经被定义，
+使得 |\ghat| 得到的是重音字母 $\ghat$。）
+\answer |$e^{-x^2}$|，|$D\sim p^\alpha M+l$| 和 |$\ghat\in(H^{\pi_1^{-1}})'$|。%
+（如果你阅读了险弯内容，你会知道推荐的 |\ghat| 定义方式是 `|\def\ghat{{\hat g}}|'。）
+
+\endchapter
+
+Producing ^{Greek} letters is as easy as $\pi$.
+You just type |... as easy as $\pi$.|
+\author LESLIE ^{LAMPORT}, {\sl The ^{L\kern-.2em\raise.6ex\hbox{a}%
+  \kern-.1em\TeX} Document Preparation System\/} (1983)
+        % Note: the final manual has a slightly different wording on p43.
+        % It's now called "LaTeX: A Document Preparation System" (1986)
+        % But I decided to cite the original, partly because I have
+        % no smallcaps sans-serif `A' to match the new LaTeX logo!
+
+\bigskip
+
+\TeX\ has no regard for the glories of the Greek tongue---\/
+as far as it is concerned, Greek letters are just additional weird symbols,
+and they are allowed\/ {\rm only} in math mode.
+In a pinch you can get the output $\tau\epsilon\chi$ by typing %
+  |$\tau\epsilon\chi$|,
+but if you're actually setting Greek text, you will be using
+a different version of \TeX, designed for a keyboard with Greek letters on it,
+and you shouldn't even be reading this manual,
+which is undoubtedly all English to you.
+\author MICHAEL ^{SPIVAK}, {\sl The Joy of \TeX\/} (1982)
+
+\vfill\eject\byebye

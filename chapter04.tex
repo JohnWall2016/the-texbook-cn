@@ -1,0 +1,537 @@
+% -*- coding: utf-8 -*-
+
+\input macros
+
+%\beginchapter Chapter 4. Fonts\\of Type
+\beginchapter Chapter 4. 字体风格
+
+\origpageno=13
+
+%Occasionally you will want to change from one ^{typeface} to another, for
+%example if you wish to be {\bf ^{bold}} or to {\sl emphasize\/} something.
+%\TeX\ deals with sets of up to 256 characters called ``^{fonts}'' of type,
+%and control sequences are used to select a particular font. For example,
+%you could specify the last few words of the first sentence above
+%in the following way, using the plain \TeX\ format of Appendix~B:
+%\begintt
+%to be \bf bold \rm or to \sl emphasize \rm something.
+%\endtt
+%Plain \TeX\ provides the following control sequences for changing fonts:
+%\begindisplay
+%^|\rm| switches to the normal ``roman'' typeface:&Roman\cr
+%^|\sl| switches to a slanted roman typeface:&\sl Slanted\cr
+%^|\it| switches to italic style:&\it Italic\cr
+%^|\tt| switches to a typewriter-like face:&\tt Typewriter\cr
+%^|\bf| switches to an extended boldface style:&\bf Bold\cr
+%\enddisplay
+%^^{typewriter type}^^{face}
+%At the beginning of a run you get ^{roman type} (|\rm|) unless you specify
+%otherwise.
+\1有时候，你想把字体从一种变成另一种，例如当你要 {\bf {bold}}~%
+或 {\sl emphasize\/} 某些内容时。%
+\TeX\ 能处理 256 个字符的集合——所谓的字体，
+并且用控制系列来选择特殊的字体。%
+例如，你可以用下列方法来指定几个词的字体(采用附录 B 的 plain \TeX\ 格式):
+\begintt
+to be \bf bold \rm or to \sl emphasize \rm something.
+\endtt
+\begindisplay
+to be \bf bold \rm or to \sl emphasize \rm something.
+\enddisplay
+Plain \TeX\ 提供了下列控制系列来改变字体：
+\begindisplay
+|\rm| 转变为标准``roman''字体：&Roman\cr
+|\sl| 转变为斜 roman 字体：&\sl Slanted\cr
+|\it| 转变为 italic 字体：&\it Italic\cr
+|\tt| 转变为类似 typewriter 的字体：&\tt Typewriter\cr
+|\bf| 转变为 bold 的字体：&\bf Bold\cr
+\enddisplay
+在开始排版前，如果你不定义为其它字体，将使用 roman 字体 (|\rm|)。
+
+%Notice that two of these faces have an ``^{oblique}'' slope for emphasis:
+%{\sl ^{Slanted type} is essentially the same as roman, but the letters are
+%slightly skewed, \it while the letters in ^{italic type} are drawn in a
+%different style.} \ (You can perhaps best appreciate the difference between
+%the roman and italic styles by contemplating {\tenu letters that are
+%in an unslanted italic face.}) \ Typographic conventions are presently
+%in a state of transition, because new technology has made it possible to
+%do things that used to be prohibitively expensive; people are wrestling
+%with the question of how much to use their new-found typographic freedom.
+%Slanted roman type was introduced in the 1930s, but it first became widely
+%used as an alternative to the conventional italic during the late 1970s.
+%It can be bene\-ficial in mathematical texts, since slanted
+%letters are distinguishable from the italic letters in math formulas.
+%The double use of italic type for two different purposes---for example,
+%when statements of theorems are italicized as well as the names of variables in
+%those theorems---has led to some confusion, which can now be
+%avoided with slanted type. People are not generally agreed about the relative
+%merits of slanted versus italic, but slanted type is rapidly becoming a
+%favorite for the titles of books and journals in bibliographies.
+注意，为了起强调作用，这些类型中的 roman 和 {\sl Slanted} 字体之间有一个倾斜，
+而它们本质上是同一个字体，仅仅字母有一些歪斜；而 {\it italic} 字体%
+与它们在本质上不是一个字体。%
+(通过观察 {\tenu unslanted italic} 字体的字母，你可能会更好地体会到 roman 和%
+~italic 字体之间的差别。)
+目前排版业行规处于变革时代，因为新技术把过去不可能的工作变得可能；
+人们正致力于解决使用新排版技术的成本问题。%
+Slanted roman 字体出现在 1930 年代，但是直到 1970 年代后期，它才作为传统 italic~%
+字体的替代品而被广泛使用。%
+在数学文稿中使用它是有益的，因为 slanted 字母可以与数学公式中的 italic 字母%
+区别开。%
+在两个不同目的下使用同一 italic 字体——例如，定理的陈述和定理中%
+变量的名称都使用 italic——将产生冲突，现在可以用 slanted 类型字体来避免了。%
+人们一般对 slanted 相对于 italic 字体的用处不怎么认可，但是 slanted 类型%
+正成为参考文献中的书名和杂志名的受欢迎的字体。
+
+%Special fonts are effective for emphasis, but not for sustained reading;
+%your eyes would tire if long portions of this manual were entirely set in
+%a bold or slanted or italic face. Therefore roman type accounts for the
+%bulk of most typeset material. But it's a nuisance to say `|\rm|' every
+%time you want to go back to the roman style, so \TeX\ provides an easier
+%way to do it, using ``^{curly brace}^^{brace}'' symbols: You can switch
+%fonts inside the special symbols |{| and |}|, without affecting the fonts
+%outside. For example, the displayed phrase at the beginning of this
+%chapter is usually rendered
+%\begintt
+%to be {\bf bold} or to {\sl emphasize} something.
+%\endtt
+%This is a special case of the general idea of ``^{grouping}'' that we shall
+%discuss in the next chapter. It's best to forget about the first way of
+%changing fonts, and to use grouping instead; then your \TeX\ manuscripts
+%will look more natural, and you'll probably
+%never\footnote*{Well \dots, hardly ever.} have to type `|\rm|'.
+特殊字体有利于强调，但是不利于阅读；
+如果本手册的很长一部分完全设置为 bold 或 slanted 或 italic 字体，
+你的眼睛会很累。%
+因此，roman 字体占据了大部分排版内容。%
+但是，当要回到 roman 字体时每次都键入`|\rm|'太费事，
+于是 \TeX\ 给出了一个简单的办法，利用``大括号''符号：
+你可以在特殊符号 |{| 和 |}| 中转换字体而不影响括号外的字体。%
+例如，表达本章上面的语句一般用
+\begintt
+to be {\bf bold} or to {\sl emphasize} something.
+\endtt
+这是一般编组思想的特殊例子，我们将在下一章讨论它。%
+最好把改变字体的前一种方法忘掉，而使用编组；
+\1这样，你的 \TeX\ 文稿看起来更舒服，并且可能从不(或几乎从不)要键入`|\rm|'。
+
+%\exercise Explain how to type the bibliographic reference `Ulrich ^{Dieter},
+%{\sl Journal f\"ur die reine und angewandte Mathematik\/ \bf201} (1959),
+%37--70.' [Use grouping.]
+%\answer |Ulrich Dieter, {\sl Journal f\"ur die reine und angewandte|\parbreak
+%        |Mathematik\/ \bf201} (1959), 37--70.|\par\nobreak\smallskip\noindent
+%It's convenient to use a single group for both |\sl| and |\bf| here. The
+%`|\/|' is a refinement that you might not understand until you read the
+%rest of Chapter~4.
+\exercise 看看怎样键入参考文献%
+`Ulrich {Dieter},
+{\sl Journal f\"ur die reine und angewandte Mathematik\/ \bf201} (1959),
+37--70.' [\ 利用编组。]
+\answer |Ulrich Dieter, {\sl Journal f\"ur die reine und angewandte|\parbreak
+        |Mathematik\/ \bf201} (1959), 37--70.|\par\nobreak\smallskip\noindent
+这里将 |\sl| 和 |\bf| 放在同一个编组中更方便。
+`|\/|' 是个细微改良，你读完本章其他内容就会明白它。
+
+%We have glossed over an important aspect of quality in the preceding
+%discussion. Look, for example, at the {\it italicized} and {\sl slanted}
+%words in this sentence. Since italic and slanted styles slope to the right,
+%the d's stick into the spaces that separate these words from the roman
+%type that follows; as a result, the spaces appear to be too skimpy,
+%although they are correct at the base of the letters. To equalize the
+%effective white space, \TeX\ allows you to put the special control sequence
+%`^|\/|' just before switching back to unslanted letters. When you type
+%\begintt
+%{\it italicized\/} and {\sl slanted\/} words
+%\endtt
+%you get {\it italicized\/} and {\sl slanted\/} words that look better.
+%The `|\/|' tells \TeX\ to add an\break % makes the line tighter, to be fair
+%``{\sl^{italic correction}\/}'' to the
+%previous letter, depending on that letter; this correction is about four
+%times as much for an `$f$' as for a `$c$', in a typical italic font.
+在上面的讨论中，我们已经阐述了排版质量的一个重要方面。%
+例如，观察本句中的 {\it italicized} and 和 {\sl slanted} words 两组词。%
+因为 italic 和 slanted 字体向右倾斜，字母 d 刺进了它与随后 roman 字体的%
+单词之间的空格；
+因此，间距看起来就不够了，虽然字母都是正确的。
+为了补偿损失的间距，\TeX\ 允许就在转换回 unslanted 字母前放一个控制系列`|\/|'。
+当你键入
+\begintt
+{\it italicized\/} and {\sl slanted\/} words
+\endtt
+时，就得到 {\it italicized\/} and 和 {\sl slanted\/} words, 更好看了。%
+`|\/|'告诉 \TeX\ 要按不同字母对前一字母作一个``{\sl {italic correction}\/}'';
+对标准的 italic 字体，这个校正对 $f$ 是对 $c$ 的 4 倍。
+
+%Sometimes the italic correction is not desirable, because other factors take
+%up the visual slack. The standard rule of thumb is to use |\/| just before
+%switching from slanted or italic to roman or bold, unless the next
+%character is a period or comma. For example, type
+%\begintt
+%{\it italics\/} for {\it emphasis}.
+%\endtt
+%Old manuals of style say that the ^{punctuation} after a word should be in the
+%{\it same\/} font as that {\it word;\/} but an italic semicolon often looks
+%wrong, so this convention is changing. When an italicized word occurs
+%just before a semicolon, the author recommends typing `|{\it word\/};|'.
+有时候，不想要 italic 校正，因为其它的因素使得在视觉上不感松散。%
+标准的上策是只在从 slanted 或 italic 转换到 roman 或 bold 前使用 |\/|,
+除非下一个字符是句点或逗号。%
+例如，键入
+\begintt
+{\it italics\/} for {\it emphasis}.
+\endtt
+在以前的手册格式中，单词后的标点与单词的字体相同；
+但是 italic 的分号一般很难看，所以这个约定被改过来了。%
+当一个 italicized 单词正好出现在分号前时，作者建议使用 `|{\it word\/};|'。
+
+%\exercise {\it Explain how to typeset a\/ {\rm roman} word in the midst
+%of an italicized sentence.}
+%\answer |{\it Explain ... typeset a\/ {\rm roman} word ... sentence.}|
+%Note the position of the italic correction in this case.
+\exercise {\it Explain how to typeset a\/ {\rm roman} word in the midst
+of an italicized sentence.}（说明怎样在 italicized 句子中间键入一个 roman 单词）。
+\answer |{\it Explain ... typeset a\/ {\rm roman} word ... sentence.}|
+注意在此例子中倾斜校正的位置。
+
+%\danger Every letter of every font has an italic correction, which you can
+%bring to life by typing |\/|. The correction is usually zero in unslanted
+%styles, but there are exceptions: To typeset a bold `{\bf f\/}' in quotes,
+%you should say |a| |bold| \hbox{|`{\bf f\/}'|}, lest you get a bold `{\bf f}'.
+\danger 每种字体的每个字母都有 italic 校正，你可通过键入 |\/| 来激活它。%
+在 unslanted 字体中校正一般是\hbox{零，} 但是有一些例外：
+为了排版引号中的 bold `{\bf f\/}', 你应该键入 |bold| \hbox{|`{\bf f\/}'|},
+以免得到的是\hbox{bold `{\bf f}'。}
+
+%\ddangerexercise Define a control sequence |\ic| such that `|\ic c|' puts the
+%italic correction of character $c$ into \TeX's register |\dimen0|.
+%\answer |\def\ic#1{\setbox0=\hbox{#1\/}\dimen0=\wd0|\parbreak
+%|\setbox0=\hbox{#1}\advance\dimen0 by -\wd0}|.
+\ddangerexercise 定义一个控制系列 |\ic| 使得`|\ic c|'把字符 $c$ 的 italic 校正%
+赋值给 \TeX\ 的记数器 |\dimen0|。
+\answer |\def\ic#1{\setbox0=\hbox{#1\/}\dimen0=\wd0|\parbreak
+|\setbox0=\hbox{#1}\advance\dimen0 by -\wd0}|。
+
+%\ddanger The primitive control sequence ^|\nullfont| stands for a font that
+%has no characters. This font is always present, in case you haven't
+%specified any others.
+\ddanger 原始控制系列 |\nullfont| 代表无字符的一种字体。%
+如果你没有给定其它字体，这种字体总会\hbox{出现。}
+
+%Fonts vary in size as well as in shape. For example, the font you are now
+%reading is called a ``10-point'' font, because certain features of its
+%design are 10 ^{points} apart, when measured in printers' units. \ (We
+%will study the point system later; for now, it should suffice to point out
+%that the parentheses around this sentence are exactly 10 points tall---and
+%the em-dash is just 10 points wide.) \ The ``^{dangerous bend}''
+%sections of this manual are set in 9-point type, the foot\-notes in 8-point,
+%^{subscripts} in 7-point or 6-point, sub-subscripts in 5-point.
+\1字体的外形随字体大小而变。%
+例如，你现在所看到的是所谓``10-point'字体，因为在用打印机的单位测量时，
+它的设计上的某些特征分别是 10 points。%
+(后面我们将阐述 point system; 现在，只需指出，本句的括号的高度正好是 10 points%
+---且单破折号的宽度正好是 10 points。)
+本手册的``危险''标识的段落设置为 9-point 字体，脚注为 8-point,
+上标为 7-point 或 6-point, 上上标为 5-point。
+
+%Each font used in a \TeX\ manuscript is associated with a control sequence;
+%for example, the 10-point font in this paragraph is called ^|\tenrm|, and
+%the corresponding 9-point font is called ^|\ninerm|. The slanted fonts that
+%match |\tenrm| and |\ninerm| are called ^|\tensl| and ^|\ninesl|. These
+%control sequences are not built into \TeX, nor are they the actual names
+%of the fonts; \TeX\ users are just supposed to make up convenient names,
+%whenever new fonts are introduced into a manuscript. Such control
+%sequences are used to change typefaces.
+在 \TeX\ 文稿中使用的每个字体都伴随一个控制系列；
+例如，本段的 10-point 字体叫做 |\tenrm|, 而且相应的 9-point 字体叫做 |\ninerm|。%
+与 |\tenrm| 和 |\ninerm| 对应的 slanted 字体叫做 |tensl| 和 |ninesl|。%
+这些控制系列不是 \TeX\ 内建的，也不是它们的真实字体名；
+当需要在文稿中引入新字体时，只建议 \TeX\ 用户使用便利的名字即可。%
+这样的控制系列的作用是改变字体。
+
+%When fonts of different sizes are used simultaneously, \TeX\ will line the
+%letters up according to their ``^{baseline}s.'' For example, if you type
+%\begintt
+%\tenrm smaller \ninerm and smaller
+%\eightrm and smaller \sevenrm and smaller
+%\sixrm and smaller \fiverm and smaller \tenrm
+%\endtt
+%the result is {smaller \ninerm and smaller \eightrm and smaller
+%\sevenrm and smaller \sixrm and smaller \fiverm and smaller}. Of course
+%this is something that authors and readers aren't accustomed to, because
+%printers couldn't do such things with traditional lead types. Perhaps
+%poets who wish to speak in {\fiverm a still small voice} will cause future
+%books to make use of frequent font variations, but nowadays it's only
+%an occasional font freak {\fiverm(like the author of this manual)} who
+%likes such experiments. One should not get too carried away by the prospect
+%of font switching unless there is good reason.
+当同时使用不同大小的字体时，\TeX\ 将按照它们的``基线''把字母排成一行。%
+例如，如果你键入
+\begintt
+\tenrm smaller \ninerm and smaller
+\eightrm and smaller \sevenrm and smaller
+\sixrm and smaller \fiverm and smaller \tenrm
+\endtt
+得到的是 {smaller \ninerm and smaller \eightrm and smaller
+\sevenrm and smaller \sixrm and smaller \fiverm and smaller}。%
+当然，这是作者和读者都不习惯的样子，因为打印机不能象传统的铅字排版那样。%
+可能希望用 {\fiverm a still small voice} 诵读的诗人会为未来的诗作而采用%
+频繁变幻的字体，但是现在仅仅是 {\fiverm(like the author of this manual)} 做实验%
+来使用这样古怪的字体。%
+要没有更好的理由，你不应该因追求字体转换的效果而忘记主要任务。
+
+%An alert reader might well be confused at this point because we started out
+%this chapter by saying that `|\rm|' is the command that switches to roman
+%type, but later on we said that `|\tenrm|' is the way to do it. The truth
+%is that both ways work. But it has become customary to set things up so that
+%|\rm| means ``switch to roman type in the current size'' while |\tenrm| means
+%``switch to roman type in the 10-point size.'' In plain \TeX\ format, nothing
+%but 10-point fonts are provided, so |\rm| will always get you |\tenrm|; but
+%in more complicated formats the meaning of\/ |\rm| will change in different
+%parts of the manuscript. For example, in the format used by the author to
+%typeset this manual, there's a control sequence `^|\tenpoint|' that causes
+%|\rm| to mean |\tenrm|, |\sl| to mean |\tensl|, and so on, while
+%`^|\ninepoint|' changes the definitions so that |\rm| means |\ninerm|,
+%etc. There's another control sequence used to introduce the quotations at
+%the end of each chapter; when the quotations are typed, |\rm| and |\sl|
+%temporarily stand for {\eightss 8-point unslanted sans-serif type} and
+%{\eightssi 8-point slanted sans-serif type}, respectively. This device of
+%constantly redefining the abbreviations |\rm| and |\sl|, behind the
+%scenes, frees the typist from the need to remember what size or style of
+%type is currently being used.
+小心的读者对这点可能会感到困惑，因为在本章开头我们说`|\rm|'是转换到 roman 字体%
+的命令，但是后面我们又说`|\tenrm|'也是如此。%
+事实上两种方法都可以。%
+但在习惯设置上，~|\rm| 的意思是`转换到当前大小的 roman 字体';
+而 |\tenrm| 的意思是``转换到 10-point 的 roman 字体''。%
+在 plain \TeX\ 格式中，只提供了 10-point 字体，所以 |\rm| 总是等价于 |\tenrm|;
+但在更复杂的格式中，|\rm| 的意思在文稿的不同部分是不同的。%
+例如，在作者排版本手册所用的格式中，有一个控制系列`|\tenpoint|',
+它导致了 |\rm| 等于 |\tenrm|, |\sl| 等于 |\tensl|, 等等；
+而`|\ninepoint|'也改变了上述定义使得 |\rm| 等于 |\ninerm| 等等。%
+还有另外一个控制系列，它用在每章的结尾的引用语上；
+当引用语出现时，|\rm| 和 |\sl| 临时分别变成 {\eightss 8-point
+unslanted sans-serif type} 和%
+~{\eightssi 8-point slanted sans-serif type}。%
+暗中常常重新定义简写 |\rm| 和 |\sl| 的这种方法使得排版者不需要记住%
+现在需要使用的字体及其大小。
+
+%\exercise Why do you think the author chose the names `|\tenpoint|' and
+%`|\tenrm|', etc., instead of `|\10point|' and `|\10rm|'\thinspace?
+%\answer Control word names are made of letters, not digits.
+\exercise \1你知道为什么作者选用`|\tenpoint|'和`|\tenrm|'等等这样的名字，
+而不使用`|\10point|'和`|\10rm|'\allowbreak\hbox{呢？}
+\answer 控制词的名称只能由字母组成，不能包含数字。
+
+%\dangerexercise Suppose that you have typed a manuscript using slanted type for
+%emphasis, but your editor suddenly tells you to change all the slanted to
+%italic.  What's an easy way to do this?
+%\answer Say |\def\sl{\it}| at the beginning, and delete other definitions
+%of\/ |\sl| that might be present in your format file (e.g., there might be
+%one inside a |\tenpoint| macro).
+\dangerexercise 假设你在一个文稿中用 slanted 字体表示强调，但是编辑却突然%
+告诉你把所有的 slanted 改成 italic。怎样用简单的方法来实现它？
+\answer 在开头写上 |\def\sl{\it}|，然后删除你的格式文件中可能包含的
+对 |\sl| 的其他定义（比如在 |\tenpoint| 宏里面可能有一个）。
+
+%\danger Each font has an external name that identifies it with respect to
+%all other fonts in a particular library. For example, the font in this
+%sentence is called `|cmr9|', which is an abbreviation for ``^{Computer
+%Modern} Roman 9~point.'' ^^{cm fonts} In order to prepare \TeX\ for
+%using this font, the command
+%\begintt
+%\font\ninerm=cmr9
+%\endtt
+%appears in Appendix E\null. In general you say `^|\font||\cs=|\<external
+%font name>' to load the information about a particular font into \TeX's
+%memory; afterwards the control sequence |\cs| will select that font for
+%typesetting.  Plain \TeX\ makes only sixteen fonts available initially (see
+%Appendix~B and Appendix~F\null), but you can use |\font| to access
+%anything that exists in your system's font library.
+\danger 每个字体都有一个外部名字以区别于这个特殊库中的所有其它字体。%
+例如，本句中的字体(英文版)称为`|cmr9|', 它是``{Computer
+Modern} Roman 9~point''的缩写。%
+为了让 \TeX\ 使用本字体，在附录 E 中出现了下列命令
+\begintt
+\font\ninerm=cmr9
+\endtt
+一般地，你用`|\font||\cs=|\<external
+font name>'把一个特殊字体的有关信息载入到内存中；
+然后控制系列 |\cs| 将在排版时选择那个字体。%
+Plain \TeX\ 最初只定义了 16 个字体(见附录 B 和 E),
+但是你可以用 |\font| 把你的系统字体库中的任何字体为 \TeX\ 所用。
+
+%\danger It is often possible to use a font at several different sizes, by
+%magnifying or shrinking the character images. Each font has a so-called
+%^{design size}, which reflects the size it normally has by default; for
+%example, the design size of |cmr9| is 9~points. But on many systems there is
+%also a range of sizes at which you can use a particular font, by scaling its
+%dimensions up or down. To load a scaled font into \TeX's memory, you
+%simply say `|\font\cs=|\<external font name> ^|at| \<desired size>'.
+%For example, the command
+%\begintt
+%\font\magnifiedfiverm=cmr5 at 10pt
+%\endtt
+%brings in 5-point Computer Modern Roman at twice its normal size. \ (Caution:
+%Before using this `|at|' feature, you should check to make sure that your
+%typesetter supports the font at the size in question; \TeX\ will accept any
+%\<desired size> that is positive and less than 2048 points, but the final
+%output will not be right unless the scaled font really is available on your
+%printing device.)
+\danger 通过放大或缩小字符的图像，通常一种字体可以有几种不同的大小。%
+每种字体有一个所谓设计尺寸，它表示其正常尺寸的缺省值；
+例如，|cmr9| 的设计尺寸是 9 points。%
+但是在许多系统中，通过放大和缩小尺寸，在一个大小范围内也可以使用某一特定字体。%
+为了把缩放后的字体载入 \TeX\ 的内存，你只需直接使用%
+`|\font\cs=|\<external font name> |at| \<desired size>'。%
+例如，命令
+\begintt
+\font\magnifiedfiverm=cmr5 at 10pt
+\endtt
+把两倍于正常尺寸的 5-point Computer Modern Roman 载入。%
+(注意：在使用这个`|at|'属性时，你应该确保你的排字机支持所讨论的那个尺寸的字体；
+\TeX\ 容许小于 2048 points 的正值的任意 \<desired size>,
+但是如果你的打印设备不支持缩放的字体，输出结果就不会正确。
+
+%\danger What's the difference between |cmr5| |at| |10pt| and the normal
+%10-point font, |cmr10|? Plenty; a well-designed font will be drawn
+%differently at different point sizes, and the letters will often have
+%different relative heights and widths, in order to enhance readability.
+%\begindisplay
+%\tenrm Ten-point type is different from%
+%  \magnifiedfiverm\ magnif{}ied f{}ive-point type.
+%\enddisplay
+%It is usually best to scale fonts only slightly with respect to
+%their design size, unless the final product is going to be photographically
+%reduced after \TeX\ has finished with it, or unless you are trying for an
+%unusual effect.^^{magnification}^^{reduction}
+\danger 在 |cmr5| |at| |10pt| 和正常的 10-point 字体 |cmr10| 之间有什么差别呢？
+很多呀；设计精良的字体在不同尺寸的图像是不同的，并且%
+为了提高观感，字母通常有不同的相对高度和宽度。
+\begindisplay
+\tenrm Ten point type is different from%
+  \magnifiedfiverm\ magnif{}ied f{}ive-point type.
+\enddisplay
+通常最好只相对于设计尺寸微微放大字体，除非在 \TeX\ 输出完毕后最后输出图像要%
+重新缩减回去，或者你在实验一种特殊效果。
+
+%\danger Another way to magnify a font is to specify a scale factor that is
+%relative to the design size. For example, the command
+%\begintt
+%\font\magnifiedfiverm=cmr5 scaled 2000
+%\endtt
+%is another way to bring in the font ^|cmr5| at double size. The scale factor
+%is specified as an integer that represents a magnification ratio times~1000.
+%Thus, a scale factor of 1200 specifies magnification by 1.2, etc.
+\danger 放大字体的另一种方法是相对于设计尺寸给出放大比例因子。%
+例如，命令
+\begintt
+\font\magnifiedfiverm=cmr5 scaled 2000
+\endtt
+\1是得到 |cmr5| 字体两倍尺寸的另一种方法。%
+放大比例因子规定是整数，等于放大比例乘以 1000。%
+因此，放大因子为 1200 就是放大 1.2 倍，等等。
+
+%\dangerexercise State two ways to load font |cmr10| into \TeX's memory
+%at half its normal size.
+%\answer |\font\squinttenrm=cmr10 at 5pt|\parbreak
+%        |\font\squinttenrm=cmr10 scaled 500|
+\dangerexercise 用两种方法把 |cmr10| 的正常尺寸的一半大小的字体载入 \TeX\ 内存中。
+\answer |\font\squinttenrm=cmr10 at 5pt|\parbreak
+        |\font\squinttenrm=cmr10 scaled 500|
+
+%\font\onerm=cmr10 scaled\magstep1
+%\font\onett=cmtt10 scaled\magstep1
+%\font\tworm=cmr10 scaled\magstep2
+%\font\twott=cmtt10 scaled\magstep2
+%%\font\threerm=cmr10 scaled\magstep3 % such large magnifications look ugly
+%%\font\threett=cmtt10 scaled\magstep3 % in a book context!
+%\danger At many computer centers it has proved convenient to supply fonts
+%at magnifications that grow in geometric ratios---something like equal-tempered
+%tuning on a ^{piano}. The idea is to have all fonts available at their true
+%size as well as at magnifications 1.2 and~1.44 (which is $1.2\times1.2$);
+%perhaps also at magnification~1.728 ($=1.2\times1.2\times1.2$) and even
+%higher. Then you can magnify an entire document by 1.2 or~1.44 and still
+%stay within the set of available fonts. Plain \TeX\ provides the
+%abbreviations ^|\magstep||0| for a scale factor of 1000, |\magstep1| for a
+%scaled factor of 1200, |\magstep2| for 1440, and so on up to |\magstep5|.
+%You say, for example,
+%\begintt
+%\font\bigtenrm=cmr10 scaled\magstep2
+%\endtt
+%to load font |cmr10| at $1.2\times1.2$ times its normal size.
+%\begindisplay \lineskip5pt
+%\tenrm\llap{``}This is {\tentt cmr10} at normal size
+%  ({\tentt \char`\\magstep0}).''\cr
+%\onerm\llap{``}This is {\onett cmr10} scaled once by 1.2
+%  ({\onett \char`\\magstep1}).''\cr
+%\tworm\llap{``}This is {\twott cmr10} scaled twice by 1.2
+%  ({\twott \char`\\magstep2}).''\cr
+%%\threerm\llap{``}This is {\threett cmr10} scaled by
+%%  {\threett \char`\\magstep3}.''\cr
+%\enddisplay
+%(Notice that a little magnification goes a long way.) \
+%There's also ^|\magstephalf|, which magnifies by $\sqrt{1.2}$,
+%i.e., halfway between steps 0 and~1.
+\font\onerm=cmr10 scaled\magstep1
+\font\onett=cmtt10 scaled\magstep1
+\font\tworm=cmr10 scaled\magstep2
+\font\twott=cmtt10 scaled\magstep2
+%\font\threerm=cmr10 scaled\magstep3 % such large magnifications look ugly
+%\font\threett=cmtt10 scaled\magstep3 % in a book context!
+\danger 在许多计算机中心，已表明按照几何比例使用放大的字体是很有益的——%
+有点象钢琴上精确的调\hbox{音。}%
+这个思想使所有字体在正常尺寸，1.2 倍和 1.44($1.2\times1.2$) 倍尺寸都可以使用；
+可能还可以放大到 1.728($=1.2\times1.2\times1.2$) 倍或更大。%
+因此，你可以把整个书稿放大 1.2 或 1.44 倍而仍然得到精美的\hbox{字体。}%
+Plain \TeX\ 提供了一个缩略命令，|\magstep||0| 是放大 1000 比例因子，
+|\magstep1| 是放大 1200 比例因子，|\magstep2| 是 1440, 如此直到 |\magstep5|。%
+例如，使用
+\begintt
+\font\bigtenrm=cmr10 scaled\magstep2
+\endtt
+就载入了 |cmr10| 字体的正常尺寸的 $1.2\times1.2$ 倍。
+\begindisplay \lineskip5pt
+\tenrm\llap{``}This is {\tentt cmr10} at normal size
+  ({\tentt \char`\\magstep0}).''\cr
+\onerm\llap{``}This is {\onett cmr10} scaled once by 1.2
+  ({\onett \char`\\magstep1}).''\cr
+\tworm\llap{``}This is {\twott cmr10} scaled twice by 1.2
+  ({\twott \char`\\magstep2}).''\cr
+%\threerm\llap{``}This is {\threett cmr10} scaled by
+%  {\threett \char`\\magstep3}.''\cr
+\enddisplay
+(注意：略微放大这种方法用处很大。)
+还有一个命令 |\magstephalf|, 它放大 $\sqrt{1.2}$ 倍，即介于 |\magstep0| 和%
+~|\magstep1| 之间。
+
+%\danger Chapter~10 explains how to apply magnification to an entire
+%document, over and above any magnification that has been specified when
+%fonts are loaded. For example, if you have loaded a font that is scaled
+%by |\magstep1| and if you also specify ^|\magnification||=\magstep2|, the
+%actual font used for printing will be scaled by |\magstep3|. Similarly, if
+%you load a font scaled by |\magstephalf| and if you also say
+%|\magnification=\magstephalf|, the printed results will be
+%scaled by |\magstep1|.
+\danger 除了字体载入时已经被%
+给定的放大之外，第10章阐述了怎样在整个书稿上使用放大方法。%
+例如，如果你已按 |\magstep1| 载入一个字体，并且你还规定 |\magnification||=\magstep2|,
+那么在打印时所用的实际字体就按 |\magstep3| 放大。%
+类似地，如果载入字体的放大是 |\magstephalf| 且 |\magnification=||\magstephalf|,
+那么打印结果放大 |\magstep1|。
+
+\endchapter
+
+Type faces---like people's faces---have distinctive features
+indicating aspects of character. % I don't think he was kidding
+\author MARSHALL ^{LEE}, {\sl Bookmaking\/} (1965) % page 83
+
+\bigskip
+
+This was the Noblest Roman of them all.
+\author WILLIAM ^{SHAKESPEARE}, {\sl The Tragedie %
+  of Julius C\ae sar\/} (1599) % Act V, Scene 5, line 68
+  % For Shakespeare I'm using the spelling from First Folio (1623)
+  % (titles not from the contents page, but the running heads in the plays)
+  % but act/line numbers from The Riverside Shakespeare (throughout)
+
+\vfill\eject\byebye

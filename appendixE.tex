@@ -1,0 +1,1518 @@
+% -*- coding: utf-8 -*-
+
+\input macros
+
+%\beginchapter Appendix E. Example Formats
+\beginchapter Appendix E. 版式举例
+
+%Although the plain \TeX\ format of Appendix B is oriented to technical
+%reports, it can readily be adapted to quite different applications. Examples of
+%three such adaptations are provided in this appendix: (1)~a~format for
+%business letters; (2)~a~format for concert programs; (3)~the~format used
+%to typeset this book.
+尽管附录~B 的 plain \TeX\ 格式是针对技术报告设计的，
+稍加修改也可以有完全不同的应用。这个附录给出三种应用的例子：%
+(1)~用于商业信件的格式；(2)~用于音乐会节目单的格式；%
+(3)~用于排版本书的格式。
+
+%Let's consider ^{business letters} first. Suppose that you want \TeX\ to
+%format your ^{correspondence}, and that you have $n$~letters to send. ^^{mail}
+%If your computer system contains a file ^|letterformat.tex| like the one
+%described later in this appendix, it's easy to do the job by applying \TeX\ to
+%a file that looks like this:
+\bookmark{2}{+. 商业信件}\baselineskip=14pt
+我们先考虑^{商业信件}。假设你想用 \TeX\ 设计版式并发送 $n$~封^{信件}。
+^^{mail}如果计算机中包含类似本附录稍后描述的 ^|letterformat.tex| 的文件，
+用 \TeX\ 排版类似下面的文件，就可以轻松完成任务：
+\begindisplay
+\<optional magnification>\cr
+^|\input|| letterformat|\cr
+\<business letter$_1$>\cr
+\noalign{\vskip-1pt}
+\qquad\vdots\cr
+\<business letter$_n$>\cr
+^|\end|\cr
+\enddisplay
+%Here each of the $n$ business letters has the form
+其中这 $n$ 封商业信件中每封都有下面的形式
+\begindisplay
+\<letterhead>\cr
+^|\address|\cr
+\<one or more lines of address>\cr
+^|\body|\cr
+\<one or more paragraphs of text>\cr
+^|\closing|\cr
+\<one or more lines for salutation and signature>\cr
+\<optional annotations>\cr
+\<optional postscripts>\cr
+^|\endletter|\cr
+^|\makelabel|| % omit this if you don't want an address label|\cr
+\enddisplay
+%The \<letterhead> at the beginning of this construction is usually a
+%control sequence like |\rjdletterhead| for letters by R.~J.~D.; each
+%letter writer can have a personalized letterhead that is stored with the
+%|letterformat| macros. The \<optional annotations> at the end are any number
+%of one-line notes preceded by `^|\annotations|'; the \<optional postscripts>
+%are any number of paragraphs preceded by `^|\ps|'. When \TeX\ is processing the
+%|\address| and the |\closing| and the optional |\annotations|, it produces
+%output line-for-line just as the lines appear in the input file; but when
+%\TeX\ is processing the |\body| of the letter and the optional |\ps|, it
+%chooses line breaks and justifies lines as it normally does when
+%typesetting paragraphs in books.
+开头的 \<letterhead> 通常是一个类似 |\rjdletterhead| 的控制系列，表示信件来自 R.~J.~D.；
+每个写信者可以有自己的信头，它保存在 |letterformat| 的宏中。
+结尾的 \<optional annotations> 是以 `^|\annotations|' 开始的任意多个单行附注；
+\<optional postscripts> 是以 `^|\ps|' 开始的任意多个段落。
+当 \TeX\ 在处理 |\address| 和 |\closing| 和可选的 |\annotations| 时，
+它依照输入文件的各行逐行生成输出；
+但是当 \TeX\ 在处理信件的 |\body| 和可选的 |\ps| 时，
+它像排版书籍段落那样选择断行点并让各行两侧对齐。
+
+%A complete example, together with the resulting output, appears on the
+%next two pages. This example starts with `^|\magnification||=|^|\magstep||1|'
+%because the letter is rather short. Magnification is usually omitted if the
+%letters are long-winded; `|\magnification=|^|\magstephalf|' is
+%appropriate when they are medium-size. The same magnification applies to
+%all~$n$ letters, so you must run \TeX\ more than once if you want more than
+%one magnification.
+后面两页给出了一个完整的例子，以及它的输出结果。
+这个例子的信件相当简短，因而它以 `^|\magnification||=|^|\magstep||1|' 开头，
+如果信件是冗长的，通常就需要去掉这个放大率；
+而适合中等长度信件的放大率为 `|\magnification=|^|\magstephalf|'。
+同样的放大率将应用到所有 $n$ 封信件，因此如果你想要多个放大率，你必须多次运行 \TeX 。
+
+%\eject
+%\begingroup \obeylines
+%|\magnification=\magstep1|
+%|\input letterformat|
+%\bigskip
+%|\rjdletterhead % (see the output on the next page)|
+%\bigskip
+%|\address|
+%|Prof.~Brian~K. Reid|^^{Reid}
+%|Department of Electrical Engineering|
+%|Stanford University|
+%|Stanford, CA 94305|
+%\bigskip
+%|\body|
+%|Dear Prof.~Reid:|
+%\bigskip
+%|I understand that you are having difficulties with|
+%|Alka-Seltzer tablets.  Since there are 25~pills|^^{Alka-Seltzer}^^{ties}
+%|per bottle, while the manufacturer's directions|
+%|recommend ``plop,~plop, fizz,~fizz,'' my colleagues|
+%|tell me that you have accumulated a substantial|
+%|number of bottles in which there is one tablet|
+%|left. % (See the 1978 SCRIBE User Manual, page 90.)|^^{Scribe}
+%\bigskip
+%|At present I am engaged in research on the potential|
+%|applications of isolated analgesics. If you would|
+%|be so kind as to donate your Alka-Seltzer collection|
+%|to our project, I would be more than happy to send|
+%|you preprints of any progress reports that we may|
+%|publish concerning this critical problem.|
+%\bigskip
+%|\closing|
+%|Sincerely,|
+%|R. J. Drofnats|^^{Drofnats}
+%|Professor|
+%\bigskip
+%|\annotations|
+%|RJD/dek|
+%|cc: {\sl The \TeX book}|
+%\bigskip
+%|\ps|
+%|P. S. \ If you like, I will check into the|
+%|possibility that your donation and the meals that|
+%|you have been eating might be tax-deductible, in|^^{IRS}
+%|connection with our research.|
+%|\endletter|
+%|\makelabel|
+%\eject\endgroup
+\eject
+\begingroup \obeylines\baselineskip=12pt
+|\magnification=\magstep1|
+|\input letterformat|
+\bigskip
+|\rjdletterhead % (see the output on the next page)|
+\bigskip
+|\address|
+|Prof.~Brian~K. Reid|^^{Reid}
+|Department of Electrical Engineering|
+|Stanford University|
+|Stanford, CA 94305|
+\bigskip
+|\body|
+|Dear Prof.~Reid:|
+\bigskip
+|I understand that you are having difficulties with|
+|Alka-Seltzer tablets.  Since there are 25~pills|^^{Alka-Seltzer}^^{ties}
+|per bottle, while the manufacturer's directions|
+|recommend ``plop,~plop, fizz,~fizz,'' my colleagues|
+|tell me that you have accumulated a substantial|
+|number of bottles in which there is one tablet|
+|left. % (See the 1978 SCRIBE User Manual, page 90.)|^^{Scribe}
+\bigskip
+|At present I am engaged in research on the potential|
+|applications of isolated analgesics. If you would|
+|be so kind as to donate your Alka-Seltzer collection|
+|to our project, I would be more than happy to send|
+|you preprints of any progress reports that we may|
+|publish concerning this critical problem.|
+\bigskip
+|\closing|
+|Sincerely,|
+|R. J. Drofnats|^^{Drofnats}
+|Professor|
+\bigskip
+|\annotations|
+|RJD/dek|
+|cc: {\sl The \TeX book}|
+\bigskip
+|\ps|
+|P. S. \ If you like, I will check into the|
+|possibility that your donation and the meals that|
+|you have been eating might be tax-deductible, in|^^{IRS}
+|connection with our research.|
+|\endletter|
+|\makelabel|
+\eject\endgroup\normalbaselines
+%\def\proofcopy(#1){\ifproofmode\raise.5in\hbox{\sevenrm(#1)}\else\hfil\fi}
+%\vglue-\topskip \nointerlineskip
+%\dimen0=\vsize \advance\dimen0 by-1.2pt \advance\dimen0 by-2.1in
+%\vbox{\hrule
+%  \hbox{\vrule height \dimen0
+%    \hbox to 4.25in{\hss\proofcopy(Output page goes here, reduced 50\%.)\hss}
+%    \vrule}}
+%\nointerlineskip
+%\hrule
+%\line{\vrule height 2.1in
+%  \hss\proofcopy(Label and stamp go here, reduced 50\%.)\hss\vrule}
+%\hrule
+%\vskip 0pt plus .001pt minus .001pt % in case of rounding errors
+%\eject
+\def\proofcopy(#1){\ifproofmode\raise.5in\hbox{\sevenrm(#1)}\else\hfil\fi}
+\vglue-\topskip \nointerlineskip
+\dimen0=\vsize \advance\dimen0 by-1.2pt \advance\dimen0 by-2.1in
+\special{pdf:image width 310pt height 0pt depth 439pt (artwork/letter1a.png)}
+\vbox{\hrule
+  \hbox{\vrule height \dimen0
+    \hbox to 4.25in{\hss\proofcopy(Output page goes here, reduced 50\%.)\hss}
+    \vrule}}
+\nointerlineskip
+\special{pdf:image width 348pt height 0pt depth 153pt (artwork/letter1b.png)}
+\hrule
+\line{\vrule height 2.1in
+  \hss\proofcopy(Label and stamp go here, reduced 50\%.)\hss\vrule}
+\hrule
+\vskip 0pt plus .001pt minus .001pt % in case of rounding errors
+\eject
+%If the letter is more than one page long, the addressee, date, and
+%page number will appear at the top of subsequent pages. For example,
+%the previous letter comes out as follows, if additional paragraphs are
+%added to the text:
+%\medskip
+%\hrule
+%\line{\vrule height 3.1127in
+%  \hfil\proofcopy(First page, reduced to 28.3\%.)\hfil\vrule\hfil
+%  \proofcopy(Second page, reduced to 28.3\%.)\hfil\vrule}
+%\hrule
+如果信件长度超过一页，收信人地址、日期和页码将出现在后续页面顶部。
+假如添加额外段落到信件正文中，之前的例子就变成下面这样：
+\medskip
+%FIXME: 这里有多余的竖直空白
+\vbox to 0pt{\noindent
+\hbox{\special{pdf:image width 170pt height 0pt depth 240pt (artwork/letter2a.png)}}\hfil
+\hbox{\special{pdf:image width 170pt height 0pt depth 240pt (artwork/letter2b.png)}}\hfil}%
+\hrule
+\line{\vrule height 3.1127in
+  \hfil\proofcopy(First page, reduced to 28.3\%.)\hfil\vrule\hfil
+  \proofcopy(Second page, reduced to 28.3\%.)\hfil\vrule}
+\hrule
+%\bigskip
+%\ninepoint
+%The macro package |letterformat.tex| that produces this format begins
+%with a simple macro that expands to the current ^{date}.
+\bigskip
+\ninepoint
+生成这个格式的 |letterformat.tex| 宏包以一个展开为当前^{日期}的简单宏开始。
+\beginlines
+|\def|^|\today||{|^|\ifcase|^|\month|^|\or|
+|  January\or February\or March\or April\or May\or June\or|
+|  July\or August\or September\or October\or November\or December\fi|
+|  |^|\space|^|\number|^|\day||, \number|^|\year||}|
+\endlines
+
+%Then comes the specification of page layout, which is ``ragged'' at the
+%bottom. A rather large ^|\interlinepenalty| is used so that page
+%breaks will tend to occur between paragraphs.
+接着指定页面为底部不齐平的布局。
+还设定相当大的 ^|\interlinepenalty| 值，以让 \TeX\ 尽量在段落之间分页。
+\beginlines
+^|\raggedbottom|
+|\interlinepenalty=1000|
+^|\hsize||=6.25truein|
+^|\voffset||=24pt|
+|\advance|^|\vsize|| by-\voffset|
+^|\parindent||=0pt|
+^|\parskip||=0pt|
+^|\nopagenumbers|
+^|\headline||={\ifnum|^|\pageno||>1|
+|  \tenrm To \addressee\hfil\today\hfil Page |^|\folio|
+|  \else\hfil\fi}|
+\endlines
+
+%The contents of a letter are typeset either in ``line mode'' (obeying lines)
+%or in ``paragraph mode'' (producing paragraphs in ^{block style}). Control
+%sequences |\beginlinemode| and |\beginparmode| are defined to initiate these
+%modes; and another control sequence, |\endmode|, is defined and redefined so
+%that the current mode will terminate properly:
+信件内容以``逐行模式''（保持各行）或``段落模式''（生成^{齐头式}段落）排版。
+控制系列 |\beginlinemode| 和 |\beginparmode| 用于初始化这两个模式；
+在两者的定义中重定义另外的控制系列 |\endmode|，使得当前模式能够正确终结：
+\beginlines
+|\def\beginlinemode{\endmode|
+|  |^|\begingroup|^|\obeylines||\def\endmode{\par|^|\endgroup||}}|
+|\def\beginparmode{\endmode|
+|  \begingroup\parskip=\medskipamount \def\endmode{\par\endgroup}}|
+|\let\endmode=\par|
+|\def\endletter{\endmode\vfill|^|\supereject||}|
+\endlines
+
+%One of the chief characteristics of this particular business letter format
+%is a parameter called ^|\longindentation|, which is used to indent the
+%closing material, the date, and certain aspects of the letterhead. The
+%^|\address| macro creates a box that will be used both in the letter and in
+%the label on the envelope. If individual lines of the address exceed
+%|\longindentation|, they are broken, and hanging indentation is used for any
+%material that must be carried over.
+这个商业信件格式的主要特征是一个称为 ^|\longindentation| 的参数，
+它用于缩进结尾，日期以及信头的某些东西。
+宏 ^|\address| 创建一个盒子，它将会在信件里面以及信封标签上用到。
+如果地址里面宽度超过 |\longindentation| 的那些行将会被折行，
+并且使用悬挂缩进显示后续行。
+\beginlines
+|\newdimen\longindentation \longindentation=4|^|true||in|
+|\newbox\theaddress|
+|\def\address{\beginlinemode\getaddress}|
+|{\obeylines|^|\gdef||\getaddress #1|
+|  #2|
+|  {#1\gdef\addressee{#2}%|
+|    \global\setbox\theaddress=\vbox|^|\bgroup|^|\raggedright||%|
+|    \hsize=\longindentation |^|\everypar||{|^|\hangindent||2em}#2|
+|    \def\endmode{\egroup\endgroup |^|\copy||\theaddress |^|\bigskip||}}}|
+\endlines
+%(Parameter |#2| to |\getaddress| ^^{parameters, delimited}
+%will be the contents of the line following |\address|, i.e., the
+%name of the addressee.)
+（ 宏 |\getaddress| 的 |#2| 参数^^{parameters, delimited}是
+|\address| 下一行的内容，即收信人地址。）
+
+%The closing macros are careful not to allow a page break anywhere between the
+%end of the ^|\body| and the beginning of a ^|\ps|.
+结尾宏需要小心处理，使得页面不在 ^|\body| 结束处与 ^|\ps| 开始处之间分开。
+\beginlines
+|\def\body{\beginparmode}|
+|\def\closing{\beginlinemode\getclosing}|
+|{\obeylines\gdef\getclosing #1|
+|  #2|
+|  {#1|^|\nobreak||\bigskip |^|\leftskip||=\longindentation #2|
+|    \nobreak\bigskip\bigskip\bigskip % space for signature|
+|    \def|
+|    {|^|\endgraf||\nobreak}}}|
+|\def\annotations{\beginlinemode\def\par{\endgraf\nobreak}\obeylines\par}|
+|\def\ps{\beginparmode\nobreak|
+|  \interlinepenalty5000\def\par{\endgraf\penalty5000}}|
+\endlines
+
+%The remaining portion of |letterformat.tex| deals with ^{letterheads} and
+%labels, which of course will be different for different organizations.
+%The following macros were used to generate the examples in this
+%appendix; they can be modified in more-or-less obvious ways to produce
+%suitable letterheads of other kinds. Special fonts are generally
+%needed, and they should be loaded at `^|true|' sizes so that they are not
+%affected by magnification.  One tiny refinement worth noting here is the
+%^|\up| macro, which raises ^{brackets} so that they look better in a
+%^{telephone number}.
+|letterformat.tex| 的剩余部分处理^{信头}和标签，这当然是因组织而异的。
+下列宏用于生成此附录的例子；稍作修改就可以得到适合其他类型的信头。
+这里通常要用特殊字体，而且要以 `^|true|' 尺寸载入它们，
+以让它们不受放大率影响。这里值得一提的是宏 ^|\up| 这个微小改进，
+它提高^{方括号}的位置，使得它们在^{电话号码}中更加美观。
+\beginlines
+|\def\up#1{|^|\leavevmode|| |^|\raise||.16ex\hbox{#1}}|
+|\font\smallheadfont=cmr8 |^|at|| 8truept|
+|\font\largeheadfont=cmdunh10 at 14.4truept|
+|\font\logofont=manfnt at 14.4truept|
+\smallbreak
+|\def\rjdletterhead{|
+|  \def\sendingaddress{R. J. DROFNATS, F.T.U.G.\par|^^{TeX Users Group}
+|    PROFESSOR OF FARM ECOLOGY\par|
+|    TEX.RJD @ SU-SCORE.ARPA\par|^^{atsign}
+|    \up[415\up]\thinspace 497-4975\par}|
+|  \def\returnaddress{R. J. Drofnats, Dept.~of Farm Ecology\par|
+|    The University of St.~Anford\par|
+|    P. O. Box 1009, Haga Alto, CA 94321 USA}|
+|  \letterhead}|
+\smallbreak
+|\def\letterhead{\pageno=1 \def\addressee{} \univletterhead|
+|  {\leftskip=\longindentation|
+|    {\baselineskip9truept\smallheadfont\sendingaddress}|
+|    \bigskip\bigskip\rm\today\bigskip}}|
+\smallbreak
+|\def\univletterhead{\vglue-\voffset|
+|  \hbox{\hbox to\longindentation{\raise4truemm\hbox{\logofont|
+|        \kern2truept X\kern-1.667truept|
+|        \lower2truept\hbox{X}\kern-1.667truept X}\hfil|
+|      \largeheadfont The University of St.~Anford\hfil}%|
+|    \kern-\longindentation|
+|    \vbox{\smallheadfont\baselineskip9truept|
+|      \leftskip=\longindentation BOX 1009\par HAGA ALTO, CA 94321}}|
+|  \vskip2truept\hrule\vskip4truept }|
+\smallbreak
+|\def|^|\makelabel||{\endletter\hbox{\vrule|
+|    \vbox{\hrule \kern6truept|
+|      \hbox{\kern6truept\vbox to 2truein{\hsize=\longindentation|
+|          \smallheadfont\baselineskip9truept\returnaddress|
+|          \vfill\moveright 2truein\copy\theaddress\vfill}%|
+|        \kern6truept}\kern6truept\hrule}\vrule}|
+|  \pageno=0\vfill\eject}|
+\endlines
+
+%\medbreak
+%Our second example is a format for ^{concert programs}, to be used in
+%^^{music} ^^{programs, for music}
+%connection with orchestra performances, recitals, and the like. We shall
+%assume that the entire program fits on a single page, and that the
+%copy is to be 4~inches wide. Comparatively large type ($12\pt$) will
+%normally be used, but there is a provision for $10\pt$ and even ^^{sizes
+%of type} $8\pt$ type in case the program includes pieces with a lot of
+%subparts (e.g., ^{Bach}'s Mass in B~minor, or ^{Beethoven}'s ^{Diabelli}
+%Variations). To select the ^{type size}, a user says ^|\bigtype|,
+%^|\medtype|, or ^|\smalltype|, respectively. These macros for ^{size switching}
+%are comparatively simple because concert programs don't require any
+%mathematics; hence the math fonts don't need to be changed. On the other
+%hand, the format does take sharp and flat signs from the ``^{math italic}''
+%font, which it calls `|\mus|':
+\medbreak
+\bookmark{2}{+. 音乐会节目单}
+第二个例子是一个^{音乐会节目单}的格式, 它可用于管弦乐表演、独奏音乐会等。
+^^{music} ^^{programs, for music}
+我们假定整个节目单为 4~英寸宽，且可以印在一页中。
+通常使用相对较大的字体（$12\pt$），但 $10\pt$ 甚至 $8\pt$ 的字体也可能用到，
+特别在节目包含许多部分时（比如^{巴赫}的 B~小调弥撒曲，
+或者^{贝多芬}的^{迪亚贝利}变奏曲）。用户可以分别用 ^|\bigtype|、^|\medtype|
+或 ^|\smalltype| 选择^{字体尺寸}。这些^{尺寸切换}宏相对来说是很简单的，
+因为音乐会节目单不需要任何数学公式；因此数学字体不需要改变。另一方面，
+此格式确实从``^{数学意大利字体}''中借用了升半音和降半音符号，
+并将该字体称为 `|\mus|'：
+\beginlines
+|\font\twelverm=cmr12|
+|\font\twelvebf=cmbx12|
+|\font\twelveit=cmti12|
+|\font\twelvesl=cmsl12|
+|\font\twelvemus=cmmi12|
+\smallskip
+|\font\eightrm=cmr8|
+|\font\eightbf=cmbx8|
+|\font\eightit=cmti8|
+|\font\eightsl=cmsl8|
+|\font\eightmus=cmmi8|
+\smallskip
+|\def\bigtype{\let|^|\rm||=\twelverm \let|^|\bf||=\twelvebf|
+|  \let|^|\it||=\twelveit \let|^|\sl||=\twelvesl \let\mus=\twelvemus|
+|  \baselineskip=14pt minus 1pt|
+|  \rm}|
+|\def\medtype{\let\rm=\tenrm \let\bf=\tenbf|
+|  \let\it=\tenit \let\sl=\tensl \let\mus=\teni|
+|  \baselineskip=12pt minus 1pt|
+|  \rm}|
+|\def\smalltype{\let\rm=\eightrm \let\bf=\eightbf|
+|  \let\it=\eightit \let\sl=\eightsl \let\mus=\eightmus|
+|  \baselineskip=9.5pt minus .75pt|
+|  \rm}|
+\smallskip
+|\hsize=4in|
+|\nopagenumbers|
+|\bigtype|
+\endlines
+%Notice the ^{shrinkability} in the ^|\baselineskip| settings. This would be
+%undesirable in a book format, because different ^{spacing between lines}
+%^^{leading} on different pages would look bad; but in a one-page document
+%it helps squeeze the copy to fit the page, in an emergency. \ (There's no
+%need for ^{stretchability} in the baselineskip here, because a |\vfill| will
+%be used at the bottom of the page.)
+注意其中设定了^{可收缩的} ^|\baselineskip|。这在书籍格式中是无法忍受的，
+因为不同页面的^{行间距}不同将很难看；
+但在这个单页文档中，它将有助于紧急时将内容压缩到一页内。%
+（这里的 |\baselineskip| 并不需要有^{可伸长性}，
+因为在页面底部将会使用 |\vfill|。）
+
+%Musical programs have a specialized vocabulary, and it is desirable to define
+%a few control sequences for things that plain \TeX\ doesn't make as convenient
+%as they could be for this particular application:
+音乐节目单有特定的词汇，为了方便我们可以为此定义一些控制系列：
+\beginlines
+|\def\(#1){{\rm(}#1\/{\rm)}}|
+|\def\sharp{\raise.4ex\hbox{\mus\char"5D}}|
+|\def\flat{\raise.2ex\hbox{\mus\char"5B}}|
+|\let\,=|^|\thinspace|
+\endlines
+%The ^|\(| macro produces roman ^{parentheses} in the midst of ^{italicized
+%text}; the ^|\sharp| and ^|\flat| macros produce musical signs in the
+%current type size. The ^|\,|~macro makes it easy to specify
+%the ^{thin space} that is used in constructions like
+%`K.\thinspace550' ^^{K\"ochel}^^{Mozart} % his 40th symphony
+%and `Op.\thinspace59'. ^^{Dvo\v r\'ak} % his Legends
+%\ (Plain \TeX\ has already defined |\,| and |\sharp| and |\flat| in a different
+%way; but those definitions apply only to math formulas, so they aren't
+%relevant in this application.)
+宏 ^|\(| 用于在^{意大利体文本}中间排印罗马体^{圆括号}；
+宏 ^|\sharp| 和 ^|\flat| 以当前字体大小排印音乐符号。
+宏 ^|\,| 使得指定^{细小空白}更加容易，它可用于类似
+`K.\thinspace550' ^^{K\"ochel}^^{Mozart} % his 40th symphony
+和 `Op.\thinspace59'. ^^{Dvo\v r\'ak} % his Legends
+的地方。(Plain \TeX\ 已经以不同方式定义了 |\,| 和 |\sharp| 和 |\flat|；
+但这些定义只用于数学公式，所以与这种应用无关。）
+
+%Before discussing the rest of the music macros, let's take a look at a complete
+%example. The next two pages show the input and output for a typical concert
+%program.
+在讨论音乐宏的其他部分之前，我们先来看看完整的例子，
+下面两页显示了典型音乐会节目单的输入及输出结果。
+
+%\eject
+%\begingroup \parindent=0pt \obeylines
+%|\input concert|
+%\medskip
+%|\tsaologo|
+%|\medskip|
+%|\centerline{Friday, November 19, 1982, 8:00 p.m.}|
+%|\bigskip|
+%|\centerline{\bf PROGRAM}|
+%|\medskip|
+%\medskip
+%|\composition{Variations on a Theme by Tchaikovsky}|%
+%  ^^{Tchaikovsky, see Cha\u\i...}
+%|\composer{Anton S. Arensky (1861--1906)}|^^{Arenski\u\i}
+%|\smallskip|
+%|{\medtype|
+%|\movements{Tema: Moderato\cr|
+%|  Var.~I: Un poco pi\`u mosso&Var.~V: Andante\cr|
+%|  Var.~II: Allegro non troppo&Var.~VI: Allegro con spirito\cr|
+%|  Var.~III: Andantino tranquillo&Var.~VII: Andante con moto\cr|
+%|  Var.~IV: Vivace&Coda: Moderato\cr}|
+%|}|
+%\medskip
+%|\bigskip|
+%\medskip
+%|\composition{Concerto for Horn and Hardart, S.\,27}|
+%|\composer{P. D. Q. Bach (1807--1742)?}|^^{Bach, PDQ}
+%|\smallskip|
+%|\movements{Allegro con brillo\cr|
+%|  Tema con variazione \(su una tema differente)\cr|
+%|  Menuetto con panna e zucchero\cr}|
+%|\medskip|
+%|\soloists{Ben Lee User, horn\cr|^^{User}
+%|  Peter Schickele, hardart\cr}|^^{Schickele}
+%\medskip
+%|\bigskip|
+%|\centerline{INTERMISSION}|
+%|\bigskip|
+%\medskip
+%|\composition{Symphony No.\,3 in E\flat\ Major\cr|
+%|  Op.\,55, ``The Eroica''\cr}|
+%|\composer{Ludwig van Beethoven (1770--1827)}|^^{Beethoven}
+%|\smallskip|
+%|\movements{Allegro con brio\cr|
+%|  Marcia funebre: Adagio assai\cr|
+%|  Scherzo: Allegro vivace\cr|
+%|  Finale: Allegro molto\cr}|
+%\medskip
+%|\bigskip|
+%|\smalltype \noindent|
+%|Members of the audience are kindly requested to turn off the|
+%|alarms on their digital watches, and to cough only between movements.|
+%\medskip
+%|\bye|
+%\eject\endgroup
+%\hbox to\hsize{\hss \vbox{ % \centerline is not a \long macro!
+%\font\twelverm=cmr12
+%\font\twelvebf=cmbx12
+%\font\twelveit=cmti12
+%\font\twelvesl=cmsl12
+%\font\twelvemus=cmmi12
+\eject
+\begingroup \parindent=0pt \obeylines \baselineskip=11.5pt
+|\input concert|
+\medskip
+|\tsaologo|
+|\medskip|
+|\centerline{Friday, November 19, 1982, 8:00 p.m.}|
+|\bigskip|
+|\centerline{\bf PROGRAM}|
+|\medskip|
+\medskip
+|\composition{Variations on a Theme by Tchaikovsky}|%
+  ^^{Tchaikovsky, see Cha\u\i...}
+|\composer{Anton S. Arensky (1861--1906)}|^^{Arenski\u\i}
+|\smallskip|
+|{\medtype|
+|\movements{Tema: Moderato\cr|
+|  Var.~I: Un poco pi\`u mosso&Var.~V: Andante\cr|
+|  Var.~II: Allegro non troppo&Var.~VI: Allegro con spirito\cr|
+|  Var.~III: Andantino tranquillo&Var.~VII: Andante con moto\cr|
+|  Var.~IV: Vivace&Coda: Moderato\cr}|
+|}|
+\medskip
+|\bigskip|
+\medskip
+|\composition{Concerto for Horn and Hardart, S.\,27}|
+|\composer{P. D. Q. Bach (1807--1742)?}|^^{Bach, PDQ}
+|\smallskip|
+|\movements{Allegro con brillo\cr|
+|  Tema con variazione \(su una tema differente)\cr|
+|  Menuetto con panna e zucchero\cr}|
+|\medskip|
+|\soloists{Ben Lee User, horn\cr|^^{User}
+|  Peter Schickele, hardart\cr}|^^{Schickele}
+\medskip
+|\bigskip|
+|\centerline{INTERMISSION}|
+|\bigskip|
+\medskip
+|\composition{Symphony No.\,3 in E\flat\ Major\cr|
+|  Op.\,55, ``The Eroica''\cr}|
+|\composer{Ludwig van Beethoven (1770--1827)}|^^{Beethoven}
+|\smallskip|
+|\movements{Allegro con brio\cr|
+|  Marcia funebre: Adagio assai\cr|
+|  Scherzo: Allegro vivace\cr|
+|  Finale: Allegro molto\cr}|
+\medskip
+|\bigskip|
+|\smalltype \noindent|
+|Members of the audience are kindly requested to turn off the|
+|alarms on their digital watches, and to cough only between movements.|
+\medskip
+|\bye|
+\eject\endgroup
+\hbox to\hsize{\hss \vbox{ % \centerline is not a \long macro!
+\font\twelverm=cmr12
+\font\twelvebf=cmbx12
+\font\twelveit=cmti12
+\font\twelvesl=cmsl12
+\font\twelvemus=cmmi12
+
+\def\bigtype{\let\rm=\twelverm \let\bf=\twelvebf \let\it=\twelveit
+  \let\sl=\twelvesl \let\mus=\twelvemus \baselineskip=14pt minus 1pt \rm}
+\def\medtype{\let\rm=\tenrm \let\bf=\tenbf \let\it=\tenit
+  \let\sl=\tensl \let\mus=\teni \baselineskip=12pt minus 1pt \rm}
+\def\smalltype{\let\rm=\eightrm \let\bf=\eightbf \let\it=\eightit
+  \let\sl=\eightsl \let\mus=\eighti \baselineskip=9.5pt minus .75pt \rm}
+
+\def\flat{\raise.2ex\hbox{\mus\char"5B}}
+\def\sharp{\raise.4ex\hbox{\mus\char"5D}}
+\let\,=\thinspace
+\def\(#1){{\rm(}#1\/{\rm)}}
+
+\hsize=4in
+\bigtype
+
+\def\composition#1{\halign{\bf\quad##\hfil\cr
+    \kern-1em#1\crcr}} % use \cr's if more than one line
+\def\composer#1{\rightline{\bf#1}}
+\def\movements#1{\halign{\quad\it##\hfil&&\qquad\it##\hfil\cr#1\crcr}}
+\def\soloists#1{\centerline{\bf\vbox{\halign{##\hfil\cr#1\crcr}}}}
+
+\def\tsaologo{\vbox{\bigtype\bf
+    \line{\hrulefill}
+    \kern-.5\baselineskip
+    \line{\hrulefill\phantom{ THE ST.\,ANFORD ORCHESTRA }\hrulefill}
+    \kern-.5\baselineskip
+    \line{\hrulefill\hbox{ THE ST.\,ANFORD ORCHESTRA }\hrulefill}
+    \kern-.5\baselineskip
+    \line{\hrulefill\phantom{ R. J. Drofnats, Conductor }\hrulefill}
+    \kern-.5\baselineskip
+    \line{\hrulefill\hbox{ R. J. Drofnats, Conductor }\hrulefill}
+    }}
+\tsaologo
+\medskip
+\centerline{Friday, November 19, 1982, 8:00 p.m.}
+\bigskip
+\centerline{\bf PROGRAM}
+\medskip
+
+\composition{Variations on a Theme by Tchaikovsky}
+\composer{Anton S. Arensky (1861--1906)}
+\smallskip
+{\medtype
+\movements{Tema: Moderato\cr
+  Var.~I: Un poco pi\`u mosso&Var.~V: Andante\cr
+  Var.~II: Allegro non troppo&Var.~VI: Allegro con spirito\cr
+  Var.~III: Andantino tranquillo&Var.~VII: Andante con moto\cr
+  Var.~IV: Vivace&Coda: Moderato\cr}
+}
+
+\bigskip
+
+\composition{Concerto for Horn and Hardart, S.\,27}
+\composer{P. D. Q. Bach (1807--1742)?}
+\smallskip
+\movements{Allegro con brillo\cr
+  Tema con variazione \(su una tema differente)\cr
+  Menuetto con panna e zucchero\cr}
+\medskip
+\soloists{Ben Lee User, horn\cr
+  Peter Schickele, hardart\cr}
+
+\bigskip
+\centerline{INTERMISSION}
+\bigskip
+
+\composition{Symphony No.\,3 in E\flat\ Major\cr
+  Op.\,55, ``The Eroica''\cr}
+\composer{Ludwig van Beethoven (1770--1827)}
+\smallskip
+\movements{Allegro con brio\cr
+  Marcia funebre: Adagio assai\cr
+  Scherzo: Allegro vivace\cr
+  Finale: Allegro molto\cr}
+
+\bigskip
+\smalltype \noindent
+Members of the audience are kindly requested to turn off the
+alarms on their digital watches, and to cough only between movements.
+}\hss}^^{Drofnats}\vfill\eject
+
+\edef\\{\hskip\the\parindent} % I'm emphasizing this "design element" here!
+Most of the macros in |concert.tex| have already been defined. Plain \TeX\
+takes care of things like |\centerline| and |\bigskip|, so only
+|\composition|, |\composer|, |\movements|, and |\soloists| remain to
+be specified:
+\beginlines
+|\def\composition#1{\halign{\bf\quad##\hfil\cr|
+\\|\kern-1em#1\crcr}} % use \cr's if more than one line|
+|\def\composer#1{\rightline{\bf#1}}|
+|\def\movements#1{\halign{\quad\it##\hfil&&\qquad\it##\hfil\cr#1\crcr}}|
+|\def\soloists#1{\centerline{\bf\vbox{\halign{##\hfil\cr#1\crcr}}}}|
+\endlines
+The |\composition| macro is set up to put the title of the composition on
+two or more lines, if needed, but a single line usually suffices. Notice
+that ^|\crcr| has been used so that the final ^|\cr| in the argument to
+|\composition| is not needed. Similarly, |\movements| might be used to
+produce only a single line, and |\soloists| might be used when there
+is only one soloist.
+
+There's also a |\tsaologo| macro. It applies only to one particular
+orchestra, but the definition is somewhat interesting nonetheless:
+\beginlines
+|\def\tsaologo{\vbox{\bigtype\bf|
+\\^|\line||{|^|\hrulefill||}|
+\\|\kern-.5\baselineskip|
+\\|\line{\hrulefill|^|\phantom||{ THE ST.\,ANFORD ORCHESTRA }\hrulefill}|
+\\|\kern-.5\baselineskip|
+\\|\line{\hrulefill\hbox{ THE ST.\,ANFORD ORCHESTRA }\hrulefill}|
+\\|\kern-.5\baselineskip|
+\\|\line{\hrulefill\phantom{ R. J. Drofnats, Conductor }\hrulefill}|
+\\|\kern-.5\baselineskip|
+\\|\line{\hrulefill\hbox{ R. J. Drofnats, Conductor }\hrulefill}|
+\\|}}|
+\endlines
+
+The author ^^{Knuth} has extended these macros to a more elaborate format
+that includes special features for listing the members of the orchestra and
+for program notes, etc.; in this way it becomes fairly easy to typeset little
+booklets for concert patrons. Such extensions need not be discussed further
+in this appendix, because they don't illustrate any essentially new ideas.
+
+Notice that the |\composition| and |\movements| and |\soloists| macros do
+not include any special provision for vertical ^{spacing}; the user is
+supposed to insert ^|\smallskip|, ^|\medskip|, and ^|\bigskip| as
+desired. This was done deliberately, because different concert programs
+seem to demand different spacing; no automatic scheme actually works very
+well in practice, since musical literature is so varied.
+
+%\medbreak
+%Let's turn now to the design of a format for an entire book, using this book
+%itself as an example. How did the author prepare the computer file
+%that generated {\sl The \TeX book\/}?  We have already seen several hundred
+%pages of output produced from that file; our goal in the remainder of this
+%appendix will be to examine the input that was used behind the scenes.
+\medbreak
+\bookmark{2}{+. 本书格式}
+Let's turn now to the design of a format for an entire book, using this book
+itself as an example. How did the author prepare the computer file
+that generated {\sl The \TeX book\/}?  We have already seen several hundred
+pages of output produced from that file; our goal in the remainder of this
+appendix will be to examine the input that was used behind the scenes.
+
+In the first place, the author prepared ^{sample pages} and showed them to
+the publisher's book designer. \ (The importance of this step cannot be
+overemphasized. There is a danger that authors---who are now able to
+typeset their own books with \TeX---will attempt to do their own designs,
+^^{author, typesetting by}
+without professional help. ^{Book design} is an art that requires considerable
+creativity, skill, experience, and taste; it is one of the most important
+services that a publisher traditionally provides to an author.)
+
+Sample pages that are used as the basis of a design should show each of
+the elements in the book. In this case the elements included chapter titles,
+illustrations, subchapter headings, footnotes, displayed formulas,
+typewriter type, dangerous bends, exercises, answers, quotations,
+tables, numbered lists, bulleted lists, etc.; the author also expressed
+a desire for generous margins, so that readers could make marginal notes.
+
+The designer, Herb ^{Caswell}, faced a difficult problem of bringing all
+those disparate elements into a consistent framework. He decided to achieve
+this by using a uniform indentation of 3~^{picas} for normal paragraph openings
+as well as for dangerous bends; and to establish this element of the design
+by using it also for all the displayed material, instead of centering the
+displays.
+
+He decided to put the page numbers in bold type, out in the margins (where
+there was plenty of room, thanks to the author's request for white space);
+and he decided to use italic type with caps and lower case for the running
+headlines, so that the pages would have a somewhat informal flavor.
+
+He chose 10-point type (on a 12-point base) for the main text, and 9-point type
+(on an 11-point base) for the dangerous bends; the typeface was predetermined.
+He~chose an ^|\hsize| of 29~picas and a ^|\vsize| of 44~picas. He decided
+to give subheadings like `\kern1pt{\manual\char'170}\kern.15em
+{\eightbf EXERCISE \bf13.8}' in boldface caps before the statement of each
+exercise. He~specified the amount of vertical space before and after such
+things as exercises, dangerous-bend paragraphs, and displayed equations.
+He decided to devote an entire left-hand page to each chapter illustration.
+And so on; each decision influenced the others, so that the final book would
+appear to be as coherent and attractive as possible under the circumstances.
+After the main portion of the book was designed, he worked out a format for
+the ^{front matter} (i.e., the pages that precede page~1); he arranged to
+have the same amount of ``^{sinkage}'' (white space) at the top of each page
+there, so that the opening pages of the book would look unified and ``open.''
+
+The author hasn't actually followed the designer's specifications in every
+detail. For example, nothing about stretching or shrinking of vertical spaces
+appeared in the design specs; the author introduced the notion of flexible
+glue on his own initiative, based on his observations of cut-and-paste
+operations often used in page makeup. If this book has any beauties, they
+should be ascribed to Herb Caswell; if it has any blemishes, they should be
+ascribed to Don Knuth, who wrote the formatting
+macros that we are now about to discuss.
+
+The computer file |manual.tex| that generated {\sl The \TeX book\/} begins
+with a copyright notice, and then it says `|\input| |manmac|'. The auxiliary
+file ^|manmac.tex| contains the formatting macros, and it begins by
+loading 9-point, 8-point, and 6-point~fonts:
+\beginlines
+|\font\ninerm=cmr9   \font\eightrm=cmr8   \font\sixrm=cmr6|
+|\font\ninei=cmmi9   \font\eighti=cmmi8   \font\sixi=cmmi6|
+|\font\ninesy=cmsy9  \font\eightsy=cmsy8  \font\sixsy=cmsy6|
+|\font\ninebf=cmbx9  \font\eightbf=cmbx8  \font\sixbf=cmbx6|
+|\font\ninett=cmtt9  \font\eighttt=cmtt8|
+|\font\nineit=cmti9  \font\eightit=cmti8|
+|\font\ninesl=cmsl9  \font\eightsl=cmsl8|
+\endlines
+(These fonts had been ^|\preloaded| in Appendix B\null; now they're officially
+loaded.)
+
+The fonts intended for math formulas need to have a nonstandard ^|\skewchar|.
+The typewriter fonts are given ^|\hyphenchar||=-1| so that ^{hyphenation}
+is inhibited when control sequence names and keywords appear in the text
+of a paragraph.
+\beginlines
+|\skewchar\ninei='177  \skewchar\eighti='177  \skewchar\sixi='177|
+|\skewchar\ninesy='60  \skewchar\eightsy='60  \skewchar\sixsy='60|
+|\hyphenchar\ninett=-1 \hyphenchar\eighttt=-1 \hyphenchar\tentt=-1|
+\endlines
+
+A few more fonts are needed for special purposes:
+\beginlines
+|\font\tentex=cmtex10               % TeX character set as in Appendix C|
+|\font\inchhigh=cminch              % inch-high caps for chapter openings|
+|\font\titlefont=cmssdc10 at 40pt   % titles in chapter openings|
+|\font\eightss=cmssq8               % quotations in chapter closings|
+|\font\eightssi=cmssqi8             % ditto, slanted|
+|\font\tenu=cmu10                   % unslanted text italic|
+|\font\manual=manfnt                % METAFONT logo and special symbols|
+|\font\magnifiedfiverm=cmr5 at 10pt % to demonstrate magnification|
+\endlines
+
+Now we come to the ^{size-switching} macros, which are much more
+elaborate than they were in the previous example because mathematics
+needs to be supported in three different sizes. The format also
+provides for a pseudo ``^{small caps}'' (|\sc|); a true caps-and-small-caps
+font was not really necessary in the few cases that |\sc| was used.
+A~dimension variable ^|\ttglue| is set equal to the desired spacing for
+the typewriter-like text that occasionally appears in paragraphs; the
+|\tt| fonts have fixed spacing, which doesn't mix well with
+variable spacing, hence the macros below use |\ttglue| between words in
+appropriate places.
+\beginlines
+|\catcode`@=11 % we will access private macros of plain TeX (carefully)|
+^|\newskip||\ttglue|^^{atsign}
+\smallbreak
+|\def|^|\tenpoint||{\def|^|\rm||{|^|\fam||0\tenrm}% switch to 10-point type|
+|  |^|\textfont||0=\tenrm \scriptfont0=\sevenrm \scriptscriptfont0=\fiverm|
+|  \textfont1=\teni  |^|\scriptfont||1=\seveni  \scriptscriptfont1=\fivei|
+|  \textfont2=\tensy \scriptfont2=\sevensy |^|\scriptscriptfont||2=\fivesy|
+|  \textfont3=\tenex \scriptfont3=\tenex   \scriptscriptfont3=\tenex|
+|  \textfont|^|\itfam||=\tenit  \def|^|\it||{\fam\itfam\tenit}%|
+|  \textfont|^|\slfam||=\tensl  \def|^|\sl||{\fam\slfam\tensl}%|
+|  \textfont|^|\ttfam||=\tentt  \def|^|\tt||{\fam\ttfam\tentt}%|
+|  \textfont|^|\bffam||=\tenbf  \scriptfont\bffam=\sevenbf|
+|   \scriptscriptfont\bffam=\fivebf  \def|^|\bf||{\fam\bffam\tenbf}%|
+|  \tt \ttglue=.5em plus.25em minus.15em|
+|  |^|\normalbaselineskip=12pt|
+|  \setbox|^|\strutbox||=\hbox{\vrule height8.5pt depth3.5pt width0pt}%|
+|  \let|^|\sc||=\eightrm  \let|^|\big||=\tenbig  \normalbaselines\rm}|
+\smallbreak
+|\def|^|\ninepoint||{\def\rm{\fam0\ninerm}% switch to 9-point type|
+|  \textfont0=\ninerm \scriptfont0=\sixrm \scriptscriptfont0=\fiverm|
+|  \textfont1=\ninei  \scriptfont1=\sixi  \scriptscriptfont1=\fivei|
+|  \textfont2=\ninesy \scriptfont2=\sixsy \scriptscriptfont2=\fivesy|
+|  \textfont3=\tenex  \scriptfont3=\tenex \scriptscriptfont3=\tenex|
+|  \textfont\itfam=\nineit  \def\it{\fam\itfam\nineit}%|
+|  \textfont\slfam=\ninesl  \def\sl{\fam\slfam\ninesl}%|
+|  \textfont\ttfam=\ninett  \def\tt{\fam\ttfam\ninett}%|
+|  \textfont\bffam=\ninebf  \scriptfont\bffam=\sixbf|
+|   \scriptscriptfont\bffam=\fivebf  \def\bf{\fam\bffam\ninebf}%|
+|  \tt \ttglue=.5em plus.25em minus.15em|
+|  \normalbaselineskip=11pt|
+|  \setbox\strutbox=\hbox{\vrule height8pt depth3pt width0pt}%|
+|  \let\sc=\sevenrm  \let\big=\ninebig  \normalbaselines\rm}|
+\smallbreak
+|\def|^|\eightpoint||{\def\rm{\fam0\eightrm}% switch to 8-point type|
+|  \textfont0=\eightrm \scriptfont0=\sixrm \scriptscriptfont0=\fiverm|
+|  \textfont1=\eighti  \scriptfont1=\sixi  \scriptscriptfont1=\fivei|
+|  \textfont2=\eightsy \scriptfont2=\sixsy \scriptscriptfont2=\fivesy|
+|  \textfont3=\tenex   \scriptfont3=\tenex \scriptscriptfont3=\tenex|
+|  \textfont\itfam=\eightit  \def\it{\fam\itfam\eightit}%|
+|  \textfont\slfam=\eightsl  \def\sl{\fam\slfam\eightsl}%|
+|  \textfont\ttfam=\eighttt  \def\tt{\fam\ttfam\eighttt}%|
+|  \textfont\bffam=\eightbf  \scriptfont\bffam=\sixbf|
+|   \scriptscriptfont\bffam=\fivebf  \def\bf{\fam\bffam\eightbf}%|
+|  \tt \ttglue=.5em plus.25em minus.15em|
+|  \normalbaselineskip=9pt|
+|  \setbox\strutbox=\hbox{\vrule height7pt depth2pt width0pt}%|
+|  \let\sc=\sixrm  \let\big=\eightbig  \normalbaselines\rm}|
+\smallbreak
+|\def\tenbig#1{{\hbox{$\left#1\vbox to8.5pt{}\right.\n@space$}}}|
+|\def\ninebig#1{{\hbox{$\textfont0=\tenrm\textfont2=\tensy|
+|  \left#1\vbox to7.25pt{}\right.\n@space$}}}|
+|\def\eightbig#1{{\hbox{$\textfont0=\ninerm\textfont2=\ninesy|
+|  \left#1\vbox to6.5pt{}\right.\n@space$}}}|
+|\def\tenmath{\tenpoint\fam-1 } % for 10-point math in 9-point territory|
+\endlines
+
+Issues of page layout are dealt with next. First, the basics:^^|pc|
+\beginlines
+^|\newdimen||\pagewidth \newdimen\pageheight \newdimen\ruleht|
+^|\hsize||=29pc  |^|\vsize||=44pc  |^|\maxdepth||=2.2pt  |^|\parindent||=3pc|
+|\pagewidth=\hsize \pageheight=\vsize \ruleht=.5pt|
+^|\abovedisplayskip||=6pt plus 3pt minus 1pt|
+^|\belowdisplayskip||=6pt plus 3pt minus 1pt|
+^|\abovedisplayshortskip||=0pt plus 3pt|
+^|\belowdisplayshortskip||=4pt plus 3pt|
+\endlines
+(The curious value of\/ |\maxdepth| was chosen only to provide an example
+in Chapter~15; there's no deep reason behind it.)
+
+When the author prepared this book, he made notes about what things ought
+to go into the index from each page. These notes were shown in small type
+on his proofsheets, like the words `^{marginal hacks}' in the right
+\insert\margin{\hbox{\marginstyle mar-}}%
+\insert\margin{\hbox{\marginstyle ginal}}%
+\insert\margin{\hbox{\marginstyle hacks}}%
+margin of this page. The |manmac| format uses an insertion class called
+^|\margin| to handle such notes.
+\beginlines
+^|\newinsert||\margin|
+|\dimen\margin=\maxdimen % no limit on the number of marginal notes|
+|\count\margin=0 \skip\margin=0pt % marginal inserts take up no space|
+\endlines
+
+The ^|\footnote| macro of plain \TeX\ needs to be changed because
+^{footnotes} are indented and set in 8-point type. Some simplifications have
+also been made, since footnotes are used so infrequently in this book.
+\beginlines
+|\def\footnote#1{\edef\@sf{\spacefactor\the\spacefactor}#1\@sf|
+|      \insert\footins\bgroup\eightpoint|
+|      \interlinepenalty100 \let\par=|^|\endgraf|
+|        \leftskip=0pt \rightskip=0pt|
+|        \splittopskip=10pt plus 1pt minus 1pt \floatingpenalty=20000|
+|        \smallskip|^|\item||{#1}\bgroup\strut\aftergroup\@foot\let\next}|
+|\skip\footins=12pt plus 2pt minus 4pt % space added when footnote exists|
+|\dimen\footins=30pc % maximum footnotes per page|
+\endlines
+
+The text of ^{running headlines} will be kept in a control sequence
+called |\rhead|. Some pages should not have headlines; the |\titlepage|
+macro suppresses the headline on the next page that is output.
+\beginlines
+^|\newif||\iftitle|
+|\def\titlepage{\global\titletrue} % for pages without headlines|
+|\def\rhead{} % \rhead contains the running headline|
+\smallskip
+|\def\leftheadline{\hbox to \pagewidth{%|
+|    \vbox to 10pt{}% strut to position the baseline|^^{strut}
+|    |^|\llap||{\tenbf|^|\folio|^|\kern||1pc}% folio to left of text|
+|    \tenit\rhead\hfil}} % running head flush left|
+|\def\rightheadline{\hbox to \pagewidth{\vbox to 10pt{}%|
+|    \hfil\tenit\rhead\/% running head flush right|
+|    |^|\rlap||{\kern1pc\tenbf\folio}}} % folio to right of text|
+\endlines
+
+Pages are shipped to the output by the |\onepageout| macro, which
+attaches headlines, marginal notes, and/or footnotes, as appropriate.
+Special ^{registration marks} are typeset at the top of title pages, so
+that the pages will line up properly on printing plates that are made
+photographically from \TeX's ``camera-ready'' output. ^^{camera alignment}
+A small page number is also printed next to the corner markings; such
+auxiliary information will, of course, be erased before the pages are
+actually printed.
+\beginlines
+|\def\onepageout#1{\shipout\vbox{ % here we define one page of output|
+|    |^|\offinterlineskip|| % butt the boxes together|
+|    \vbox to 3pc{ % this part goes on top of the 44pc pages|
+|      \iftitle \global\titlefalse \setcornerrules|
+|      \else|^|\ifodd||\pageno\rightheadline\else\leftheadline\fi\fi \vfill}|
+|    \vbox to \pageheight{|
+|      |^|\ifvoid||\margin\else % marginal info is present|
+|       |^|\rlap||{\kern31pc\vbox to0pt{\kern4pt\box\margin \vss}}\fi|
+|      #1 % now insert the main information|
+|      \ifvoid\footins\else % footnote info is present|
+|       \vskip\skip\footins \kern-3pt|
+|       \hrule height\ruleht width\pagewidth \kern-\ruleht \kern3pt|
+|       \unvbox\footins\fi|
+|      \boxmaxdepth=\maxdepth}}|
+|  |^|\advancepageno||}|
+\smallbreak
+|\def\setcornerrules{\hbox to \pagewidth{% for camera alignment|
+|    \vrule width 1pc height\ruleht \hfil \vrule width 1pc}|
+|  \hbox to \pagewidth{|^|\llap||{\sevenrm(page \folio)\kern1pc}%|
+|    \vrule height1pc width\ruleht depth0pt|
+|    \hfil \vrule width\ruleht depth0pt}}|
+\smallbreak
+^|\output||{\onepageout{|^|\unvbox||255}}|
+\endlines
+
+A different ^{output routine} is needed for Appendix~I (the index), because
+most of that appendix appears in ^{two-column format}. Instead of handling
+double columns with an `|\lr|' switch, as discussed in Chapter~23,
+|manmac| does the job with ^|\vsplit|, after collecting more than
+enough material to fill a page. This approach makes it comparatively
+easy to ^{balance the columns} on the last page of the index. A~more
+difficult approach would be necessary if the index contained
+insertions (e.g., footnotes); fortunately, it doesn't.
+Furthermore, there is no need to use ^|\mark| as suggested in the
+index example of Chapter~23, since the entries in Appendix~I tend to
+be quite short. The only real complication that |manmac| faces
+is the fact that Appendix~I begins and ends with single-column format;
+partial pages need to be juggled carefully as the format changes back and forth.
+\beginlines
+^|\newbox||\partialpage|
+|\def\begindoublecolumns{\begingroup|
+|  \output={\global\setbox\partialpage=\vbox{\unvbox255\bigskip}}\eject|
+|  \output={\doublecolumnout} |^|\hsize||=14pc |^|\vsize||=89pc}|
+|\def\enddoublecolumns{\output={\balancecolumns}\eject|
+|  \endgroup \pagegoal=\vsize}|
+\smallbreak
+|\def\doublecolumnout{\splittopskip=\topskip |^|\splitmaxdepth||=\maxdepth|
+|  \dimen@=44pc \advance\dimen@ by-\ht\partialpage|
+|  \setbox0=\vsplit255 to\dimen@ \setbox2=\vsplit255 to\dimen@|
+|  \onepageout\pagesofar \unvbox255 \penalty|^|\outputpenalty||}|
+|\def\pagesofar{\unvbox\partialpage|
+|  |^|\wd||0=\hsize \wd2=\hsize \hbox to\pagewidth{\box0\hfil\box2}}|
+|\def\balancecolumns{\setbox0=\vbox{\unvbox255} \dimen@=\ht0|
+|  \advance\dimen@ by\topskip \advance\dimen@ by-\baselineskip|
+|  |^|\divide||\dimen@ by2 |^|\splittopskip||=\topskip|
+|  {\vbadness=10000 |^|\loop|| \global\setbox3=\copy0|
+|    \global\setbox1=\vsplit3 to\dimen@|
+|    |^|\ifdim|^|\ht||3>\dimen@ \global\advance\dimen@ by1pt \repeat}|
+|  \setbox0=\vbox to\dimen@{\unvbox1} \setbox2=\vbox to\dimen@{\unvbox3}|
+|  \pagesofar}|
+\endlines
+The balancing act sets ^|\vbadness| infinite while it is searching for
+a suitable column height, so that ^{underfull} vboxes won't be reported
+unless the actual columns are bad after balancing. The columns in Appendix~I
+have a lot of stretchability, since there's a ^|\parskip|
+of |0pt| |plus|~|.8pt| between adjacent entries, and since there is room for
+more than 50 lines per column; therefore the |manmac| balancing routine tries
+to make both the top and bottom baselines agree at the end of the index.
+In applications where the glue is not so flexible it would be more
+appropriate to let the right-hand column be a little short; the best
+way to do this is probably to replace the command `|\unvbox3|' by
+`|\dimen2=|^|\dp||3| |\unvbox3| |\kern-\dimen2| ^|\vfil|'.
+
+The next macros are concerned with chapter formatting. Each chapter in the
+manuscript file starts out with the macro ^|\beginchapter|; it ends
+with ^|\endchapter| and two ^{quotations}, ^^{epigraphs} followed
+by ^|\eject|. For example, Chapter~15 was generated by \TeX\ commands
+that look like this in the file |manual.tex|:
+\beginlines
+|\beginchapter Chapter 15. How \TeX\ Makes\\Lines into Pages|
+\medskip
+|\TeX\ attempts to choose desirable places to divide your document into|
+\qquad\dots\quad (about 1100 lines of the manuscript are omitted here)
+|break. \ (Deep breath.) \ You got that?|
+\medskip
+|\endchapter|
+\medskip
+|Since it is impossible to foresee how [footnotes] will happen to come out|
+|in the make-up, it is |%
+  |impracticable to number them from 1 up on each page.|\kern-1em
+|The best way is to number them consecutively throughout an article|
+|or by chapters in a book.|
+|\author UNIVERSITY OF CHICAGO PRESS, {\sl Manual of Style\/} (1910)|
+\medskip^^{CHICAGO}^^{KNUTH}
+|\bigskip|
+\medskip
+|Don't use footnotes in your books, Don.|
+|\author JILL KNUTH (1962)|
+\medskip
+|\eject|
+\endlines
+The `|\\|' in the title line specifies a line break to be used on the
+left-hand title page that faces the beginning of the chapter. Most of the
+|\beginchapter| macro is devoted to preparing that title page; the
+^|\TeX| logo needs somewhat different spacing when it is typeset in
+|\titlefont|, and the |\inchhigh| digits need to be brought closer
+together in order to look right in a title.
+\beginlines
+^|\newcount||\exno % for the number of exercises in the current chapter|
+|\newcount\subsecno % for the number of subsections in the current chapter|
+\smallbreak
+^|\outer||\def\beginchapter#1 #2#3. #4\par{\def\chapno{#2#3}|
+|  \global\exno=0 \subsecno=0|
+|  \ifodd\pageno|
+|   |^|\errmessage||{You had too much text on that last page; I'm backing up}|
+|   \advance\pageno by-1 \fi|
+|  \def\\{ } % \\'s in the title will be treated as spaces|
+|  |^|\message||{#1 #2#3:} % show the chapter title on the terminal|
+|  |^|\xdef||\rhead{#1 #2#3: #4\unskip} % establish a new running headline|
+|  {\def\TeX{T\kern-.2em\lower.5ex\hbox{E}\kern-.06em X}|
+|    \def\\{#3}|
+|    |^|\ifx||\empty\\ \rightline{\inchhigh #2\kern-.04em}|
+|    \else\rightline{\inchhigh #2\kern-.06em#3\kern-.04em}\fi|
+|    \vskip1.75pc \baselineskip=36pt \lineskiplimit=1pt \lineskip=12pt|
+|    \let\\=|^|\cr|| % now the \\'s are line dividers|
+|    \halign{\line{\titlefont\hfil##}\\#4\unskip\\}|
+|    \titlepage\vfill\eject} % output the chapter title page|
+|  \tenpoint\noindent\ignorespaces} % the first paragraph is not indented|
+\endlines
+
+An extra page is ejected at the end of a chapter, if necessary, so
+that the closing quotations will occur on a right-hand page. \ (The
+logic for doing this is not perfect, but it doesn't need to be, because
+it fails only when the chapter has to be shortened or lengthened anyway;
+book preparation with \TeX, as with type, encourages interaction between
+humans and machines.) \
+The lines of the quotations are set ^{flush right} by using
+^|\obeylines| together with a stretchable ^|\leftskip|:
+\beginlines
+|\outer\def\endchapter{\ifodd\pageno \else\vfill|^|\eject||\null\fi|
+|  \begingroup\bigskip\vfill % beginning of the quotes|
+|  \def\eject{|^|\endgroup||\eject} % ending of the quotes|
+|  \def\par{\ifhmode\/\endgraf\fi}\obeylines|
+|  \def|^|\TeX||{T\kern-.2em\lower.5ex\hbox{E}X}|
+|  \eightpoint \let\tt=\ninett \baselineskip=10pt |^|\interlinepenalty||=10000|
+|  \leftskip=0pt plus 40pc minus \parindent |^|\parfillskip||=0pt|
+|  \let|^|\rm||=\eightss \let|^|\sl||=\eightssi \everypar{\sl}}|
+|\def\author#1(#2){\smallskip\noindent\rm--- #1|^|\unskip|^|\enspace||(#2)}|
+\endlines
+
+We come now to what goes on inside the chapters themselves. Dangerous and
+doubly dangerous bends are specified by typing `^|\danger|' or `^|\ddanger|'
+just before a paragraph that is supposed to display a warning symbol:
+\beginlines
+|\def\dbend{{\manual\char127}} % "dangerous bend" sign|^^{dangerous bend}
+|\def\d@nger{\medbreak|^|\begingroup|^|\clubpenalty||=10000|
+|  \def\par{|^|\endgraf|^|\endgroup|^|\medbreak||} |%
+  ^|\noindent|^|\hang|^|\hangafter||=-2|
+|  \hbox to0pt{\hskip-\hangindent\dbend\hfill}|^|\ninepoint||}|
+^|\outer||\def\danger{\d@nger}|
+|\def\dd@nger{\medbreak\begingroup\clubpenalty=10000|
+|  \def\par{\endgraf\endgroup\medbreak} \noindent\hang\hangafter=-2|
+|  \hbox to0pt{\hskip-\hangindent\dbend\kern1pt\dbend\hfill}\ninepoint}|
+|\outer\def\ddanger{\dd@nger}|
+|\def\enddanger{\endgraf\endgroup} % omits the \medbreak|
+\endlines
+(It's necessary to type `|\enddanger|' at the end of a dangerous bend
+only in rare cases that a medium space is not desired after the paragraph;
+e.g., `|\smallskip|^|\item|' might be used to give an itemized list within
+the scope of the dangerous bend sign.)
+
+A few chapters and appendices of this book (e.g., Chapter~18 and Appendix~B)
+are divided into numbered subsections. Such subsections are specified
+in the manuscript by typing, for example,
+\begintt
+\subsection Allocation of registers.
+\endtt
+Appendix A is subdivided in another way, by paragraphs that have answer numbers:
+\beginlines
+|\outer\def\subsection#1. {\medbreak\advance\subsecno by 1|
+|  \noindent{\it \the\subsecno.\enspace#1.\enspace}}|
+|\def\ansno#1.#2:{\medbreak\noindent|
+|  \hbox to\parindent{\bf\hss#1.#2.\enspace}\ignorespaces}|
+\endlines
+We will see below that the manuscript doesn't actually specify an |\ansno|
+directly; each call of\/ |\ansno| is generated automatically by the
+|\answer| macro.
+
+Appendix H points out {\sl The \TeX book\/} calls for
+three hyphenation exceptions:
+\beginlines
+^|\hyphenation||{man-u-script man-u-scripts ap-pen-dix}|
+\endlines
+
+A few macros in |manmac| provide special constructions that are occasionally
+needed in paragraphs: |\MF| for ^^{METAFONT}`\MF', |\AmSTeX| for ^^{AmSTeX}
+`\AmSTeX', ^|\bull| for ^^{square bullet} `\bull', |\dn| and |\up| for
+`\dn' and `\up', |\|\| and |\]| for `\|' and ^^{visible space} `\]'.  ^^{the
+visible space symbol} To typeset
+\begindisplay
+$3\pt$ of \<stuff>, $\oct{105}=69$, $\hex{69}=105$, \cstok{wow}
+\enddisplay
+the manuscript says ^^{lxix}^^{octal constant}^^{hexadecimal constant}
+^^{angle brackets} % cf. The Hacker's Dictionary
+\begintt
+$3\pt$ of \<stuff>, $\oct{105}=69$, $\hex{69}=105$, \cstok{wow}
+\endtt
+using the macros |\pt|, |\<|, |\oct|, |\hex|, and |\cstok|.
+\beginlines
+|\def\MF{{\manual META}\-{\manual FONT}}|
+|\def\AmSTeX{$\cal A\kern-.1667em\lower.5ex\hbox{$\cal M$}\kern-.075em|
+|  S$-\TeX}|
+|\def\bull{\vrule height .9ex width .8ex depth -.1ex } % square bullet|
+|\def\SS{{\it SS}} % scriptscript style|
+|\def\dn{\leavevmode\hbox{\tt\char'14}} % downward arrow|
+|\def\up{|^|\leavevmode||\hbox{\tt\char'13}} % upward arrow|
+|\def\|\||{\leavevmode\hbox{\tt\char`\|\||}} % vertical line|
+|\def\]{\leavevmode\hbox{\tt\char`\ }} % visible space|
+\smallbreak
+|\def\pt{\,{\rm pt}} % units of points, in math formulas|
+|\def\<#1>{\leavevmode\hbox{$\langle$#1\/$\rangle$}} % syntactic quantity|
+|\def\oct#1{\hbox{\rm\'{}\kern-.2em\it#1\/\kern.05em}} % octal constant|
+|\def\hex#1{\hbox{\rm\H{}\tt#1}} % hexadecimal constant|
+|\def\cstok#1{\leavevmode\thinspace\hbox{|^|\vrule||\vtop{\vbox{\hrule\kern1pt|
+|        \hbox{\vphantom{\tt/}\thinspace{\tt#1}\thinspace}}|
+|      \kern1pt|^|\hrule||}\vrule}\thinspace} % control sequence token|
+\endlines
+
+^{Displays} in this book are usually indented rather than centered,
+and they usually involve text rather than mathematics. The
+|manmac| format makes such displays convenient by introducing
+two macros called |\begindisplay| and |\enddisplay|; there's
+also a pair of macros |\begintt| and |\endtt| for displays that
+are entirely in ^{typewriter type}. The latter displays are copied
+^{verbatim} from the manuscript file, without interpreting
+symbols like |\| or |$| in any special way. For example,
+part of the paragraph above was typed as follows:
+\begintt
+... To typeset
+\begindisplay
+$3\pt$ of \<stuff>, $\oct{105}=69$, $\hex{69}=105$, \cstok{wow}
+\enddisplay
+the manuscript says
+\begintt
+$3\pt$ of \<stuff>, $\oct{105}=69$, $\hex{69}=105$, \cstok{wow}
+|char`|\endtt
+using the macros ||\pt||, ||\<||, ||\oct||, ||\hex||, and ||\cstok||.
+\endtt
+(The last line of this example illustrates the fact
+that verbatim typewriter text can be obtained within a
+paragraph by using vertical lines as brackets.) \ The |\begindisplay|
+macro is actually more general than you might expect from this example;
+it allows multiline displays, with ^|\cr| following each line, and
+it also allows local definitions (which apply only within the display) to
+be specified immediately after |\begindisplay|.
+\beginlines
+|\outer\def\begindisplay{\obeylines\startdisplay}|
+|{\obeylines\gdef\startdisplay#1|
+|  {\catcode`\^^M=5$$#1\halign|^|\bgroup||\indent##\hfil&&\qquad##\hfil\cr}}|
+|\outer\def\enddisplay{|^|\crcr|^|\egroup||$$}|^^{dollardollar}
+\smallbreak
+^|\chardef|^|\other||=12|
+|\def\ttverbatim{\begingroup \catcode`\\=\other \catcode`\{=\other|
+|  \catcode`\}=\other \catcode`\$=\other \catcode`\&=\other|
+|  \catcode`\#=\other \catcode`\%=\other \catcode`\~=\other|
+|  \catcode`\_=\other \catcode`\^=\other|
+|  \obeyspaces \obeylines \tt}|
+|{|^|\obeyspaces||\gdef {\ }} % \obeyspaces now gives \ , not \space|
+\smallbreak
+|\outer\def\begintt{$$\let\par=\endgraf \ttverbatim \parskip=0pt|
+|  \catcode`\|\||=0 |^|\rightskip||=-5pc \ttfinish}|
+|{\catcode`\|\||=0 |\||catcode`|\||\=\other % |\|%
+  | is temporary escape character|
+|  |\||obeylines % end of line is active|
+|  |\||gdef|\||ttfinish#1^^M#2\endtt{#1|\||vbox{#2}|\||endgroup$$}}|
+\smallbreak
+^|\catcode||`\|\||=|^|\active|
+|{\obeylines\gdef|\||{\ttverbatim\spaceskip=\ttglue\let^^M=\ \let|\|%
+  |=\endgroup}}|\kern-.3pt
+\endlines
+These macros are more subtle than the others in this appendix, and they
+deserve careful study because they illustrate how to disable \TeX's
+normal formatting. The `\|' character is normally active (category~13)
+in |manmac| format, and its appearance causes the |\ttverbatim| macro to
+make all of the other unusual characters into normal symbols (category~12).
+However, within the scope of\/ |\begintt...\endtt| a vertical line is an
+^{escape character} (category~0); this permits an escape out of verbatim mode.
+
+The |\begintt| macro assumes that a comparatively small amount of
+text will be displayed; the verbatim lines are put into a vbox, so
+that they cannot be broken between pages. A different approach has
+been used for most of the typewriter copy in this appendix and in
+Appendix~B\null: Material that is quoted from a format file is
+delimited by |\beginlines| and |\endlines|, between which it
+is possible to give commands like `^|\smallbreak|' to help with
+spacing and page breaking. The |\beginlines| and |\endlines| macros
+also insert rules, fore and aft:
+\beginlines
+|\def\beginlines{\par\begingroup\nobreak\medskip\parindent=0pt|
+\nobreak
+|  |^|\hrule||\kern1pt\nobreak \obeylines |^|\everypar||{\strut}}|
+|\def\endlines{\kern1pt\hrule\endgroup\medbreak\noindent}|
+\endlines
+For example, the previous three lines were typeset by the specification
+\begintt
+\beginlines
+||\def\beginlines{\par\begingroup\nobreak\medskip\parindent=0pt||
+\nobreak
+||  \hrule\kern1pt\nobreak \obeylines \everypar{\strut}}||
+||\def\endlines{\kern1pt\hrule\endgroup\medbreak\noindent}||
+\endlines
+\endtt
+A ^{strut} is placed in each line so that the rules will be positioned
+properly. The |manmac| format also has macros |\beginmathdemo...\endmathdemo|
+that were used to produce examples of mathematics in Chapters 16--19,
+|\beginsyntax...\endsyntax| for the formal syntax in Chapters 24--26,
+|\beginchart...\endchart| for the font tables in Appendices C and~F\null, etc.;
+those macros are comparatively simple and they need not be shown here.
+
+Exercises are specified by an |\exercise| macro; for example, the first
+exercise in Chapter~1 was generated by the following lines in the
+manuscript:
+\begintt
+\exercise After you have mastered the material in this book,
+what will you be: A \TeX pert, or a \TeX nician?
+\answer A \TeX nician (underpaid); sometimes also called
+a \TeX acker.
+\endtt
+Notice that the |\answer| is given immediately after each exercise;
+that makes it easy to insert new exercises or to delete old ones,
+without keeping track of exercise numbers. Exercises that are dangerous
+or doubly dangerous are introduced by the macros |\dangerexercise|
+and~|\ddangerexercise|.
+\beginlines
+|\outer\def\exercise{\medbreak \global\advance\exno by 1|
+|  \noindent|^|\llap||{\manual\char'170\rm\kern.15em}% triangle in margin|
+|  {\ninebf EXERCISE \bf\chapno.\the\exno}\par\nobreak\noindent}|
+|\def\dexercise{\global\advance\exno by 1|
+|  \llap{\manual\char'170\rm\kern.15em}% triangle in indented space|
+|  {\eightbf EXERCISE \bf\chapno.\the\exno}\hfil\break}|
+|\outer\def\dangerexercise{\d@nger \dexercise}|
+|\outer\def\ddangerexercise{\dd@nger \dexercise}|
+\endlines
+(The last two lines use |\d@nger| and |\dd@nger|, which are non-|\outer|
+equivalents of\/ |\danger| and |\ddanger|; such duplication is necessary
+because control sequences of type ^|\outer| cannot appear within a |\def|.)
+
+The |\answer| macro copies an answer into a file called
+|answers.tex|; then Appendix~A reads this
+file by saying `^|\immediate|^|\closeout||\ans| |\ninepoint|
+^|\input| |answers|'. Each individual answer ends with a blank line;
+thus, |\par| must be used between the paragraphs of a long answer.
+\beginlines
+^|\newwrite||\ans|
+|\immediate|^|\openout||\ans=answers % file for answers to exercises|
+|\outer\def\answer{\par\medbreak|
+|  \immediate|^|\write||\ans{}|
+|  \immediate\write\ans{\string\ansno\chapno.|^|\the||\exno:}|
+|  \copytoblankline}|
+|\def\copytoblankline{\begingroup\setupcopy\copyans}|
+|\def\setupcopy{\def\do##1{\catcode`##1=\other}\dospecials|
+|  \catcode`\|\||=\other \obeylines}|
+|{\obeylines \gdef\copyans#1|
+|  {\def\next{#1}%|
+|  \ifx\next\empty\let\next=\endgroup %|
+|  \else\immediate\write\ans{\next} \let\next=\copyans\fi\next}}|
+\endlines
+Notice the use of\/ ^|\dospecials| here, to set up the ^{verbatim copying}.
+The |\ttverbatim| macro could have invoked |\dospecials| in the same way;
+^^{efficiency}
+but |\ttverbatim| is used quite frequently, so it was streamlined for speed.
+
+The remaining macros in |manmac| format are designed to help in producing
+a good ^{index}. When a paragraph contains a word or group of words that
+deserve to be indexed, the manuscript indicates this by inserting
+|^{...}|; for example, the first sentence of the present paragraph
+actually ends with `|a good ^{index}|'. This caused an appropriate
+entry to be written onto a file |index.tex| when \TeX\ was typesetting
+the page; it also put the word `{\sevenrm index}' into the margin
+of the proofsheets, so that the author could remember what
+had been marked for indexing without looking into the manuscript file.
+Indexing with the |^{...}| notation doesn't change \TeX's behavior in
+any essential way; thus, the word `index' appears
+in the text as well as in the index. ^^{strut}
+\beginlines
+^|\newwrite||\inx|
+^|\immediate|^|\openout||\inx=index % file for index reminders|
+|\def\marginstyle{\sevenrm % marginal notes are in 7-point type|
+|  \vrule height6pt depth2pt width0pt } % a strut for \insert\margin|
+\endlines
+
+Sometimes it is desirable to index words that don't actually appear on the
+page; the notation |^^{...}| stands for a ``silent'' index entry, and
+spaces are ignored after the closing `|}|' in such a case. For example,
+Appendix~I lists page~1 under `beauty', even though page~1 contains only
+the word `beautiful'; the manuscript achieves this by saying
+`|beautiful ^^{beauty}|'.  \ (The author felt that it was important to
+index `beauty' because he had already indexed `truth'.)
+
+It's not difficult to make |^| into an active character that produces
+such index entries, while still retaining its use for superscripts in
+math formulas, because ^|\ifmmode| can be used to test whether a
+control sequence is being used in math mode. However, |manmac|'s use
+of\/ |^| as an active character means that |^^M| cannot be used to refer
+^^{hat as an active character} ^^{hat hat}
+to a \<return> character. Fortunately the |^^M| notation isn't needed
+except when the formatting macros themselves are being defined.
+
+The following macros set things up so that |^| and |^^| are respectively
+converted to |\silentfalse\xref| and |\silenttrue\xref|, outside of
+math mode:
+\beginlines
+^|\newif||\ifsilent|
+|\def\specialhat{\ifmmode\def\next{^}\else\let\next=\beginxref\fi\next}|
+|\def\beginxref{|^|\futurelet||\next\beginxrefswitch}|
+|\def\beginxrefswitch{\ifx\next\specialhat\let\next=\silentxref|
+|  \else\silentfalse\let\next=\xref\fi \next}|
+|\catcode`\^=\active \let ^=\specialhat|
+|\def\silentxref^{\silenttrue\xref}|
+\endlines
+
+Entries in the index aren't always words in roman type; they might require
+special typesetting conventions. For example, there are
+hundreds of items in Appendix~I that are preceded by a backslash and
+set in typewriter type. The |manmac| format makes it easy to produce
+such entries by typing, e.g., `|^|\||\immediate|\|' instead of
+`|^{|\||\immediate|\||}|'. In this case the backslash is not written
+onto the |index| file, because it would interfere with alphabetization
+of the entries; a code number is written out so that the backslash can
+be reinstated after the index has been sorted. The code number also
+is used to put the entry in typewriter type.
+
+The indexing macros of |manmac| produce entries of four kinds, which are
+assigned to codes 0,~1, 2, and~3. Code~0 applies when the argument is enclosed
+in braces, e.g., `|^{word}|'\thinspace; code~1 applies when the argument
+is enclosed in vertical lines and there's no backslash, e.g.,
+`|^|\||plus|\|'\thinspace; code~2 is similar but with a backslash, e.g.,
+`|^|\||\par|\|'\thinspace; code~3 applies when the argument is enclosed in
+angle brackets, e.g., `|^\<stuff>|'.  The four example entries in the previous
+sentence will be written on file |index.tex| in the form\strut
+\begintt
+word !0 123.
+plus !1 123.
+par !2 123.
+stuff !3 123.
+|kern-3pt
+\endtt
+if they appear on page 123 of the book.
+\beginlines
+|\chardef\bslash=`\\ % \bslash makes a backslash (in tt fonts)|
+|\def\xref{\futurelet\next\xrefswitch} % branch on the next character|
+|\def\xrefswitch{\begingroup\ifx\next|\||\aftergroup\vxref|
+|  \else\ifx\next\<\aftergroup\anglexref|
+|    \else\aftergroup\normalxref \fi\fi \endgroup}|
+|\def\vxref|\||{\catcode`\\=\active \futurelet\next\vxrefswitch}|
+|\def\vxrefswitch#1|\||{\catcode`\\=0|
+|  \ifx\next\empty\def\xreftype{2}%|
+|    \def\next{{\tt\bslash\text}}% code 2, |\||\arg|\|
+|  \else\def\xreftype{1}\def\next{{\tt\text}}\fi % code 1, |\||arg|\|
+|  \edef\text{#1}\makexref}|
+|{|^|\catcode||`\|\||=0 \catcode`\\=\active |\||gdef\{}}|
+|\def\anglexref\<#1>{\def\xreftype{3}\def\text{#1}%|
+|  \def\next{\<\text>}\makexref} % code 3, \<arg>|
+|\def\normalxref#1{\def\xreftype{0}\def\text{#1}\let\next=\text\makexref}|
+\endlines
+
+Indexing is suppressed unless the |proofmode| switch is set to true,
+since material is gathered for the index only during trial runs---not
+on the triumphant occasion when the book is finally being printed.
+\beginlines
+|\newif\ifproofmode|
+|\proofmodetrue % this should be false when making camera-ready copy|
+|\def\makexref{\ifproofmode\insert\margin{\hbox{\marginstyle\text}}%|
+|   |^|\xdef||\writeit{|^|\write||\inx{\text\space!\xreftype\space|
+|     |^|\noexpand|^|\number||\pageno.}}\writeit|
+|   \else\ifhmode\kern0pt \fi\fi|
+|  \ifsilent|^|\ignorespaces||\else\next\fi}|
+\endlines
+(The ^|\insert| suppresses ^{hyphenation} when proofs are being checked;
+a ^|\kern||0pt| is therefore emitted to provide consistent behavior
+in the other case.)
+
+The material that accumulates on file |index.tex| gives a good first
+approximation to an index, but it doesn't contain enough information to do
+the whole job; a topic often occurs on several pages, but only the first
+of those pages is typically listed in the file.  The author ^^{Knuth}
+prefers not to generate indexes automatically; he likes to reread his
+books as he checks the cross-references, thereby having the opportunity to
+rethink everything and to catch miscellaneous errors before it is too
+late. As a result, his books tend to be delayed, but the indexes tend to
+be pretty good.  Therefore he designed the indexing scheme of |manmac| to
+provide only the clues needed to make a real index. On the other hand,
+it would be possible to extend the macros above and to obtain a comprehensive
+system that generates an excellent index with no subsequent human intervention;
+see, for example, ``An indexing facility for \TeX'' by Terry ^{Winograd}
+and Bill ^{Paxton}, in {\sl ^{TUGboat}\/ \bf1} (1980), A1--A12.
+
+The |manmac| macros have now been fully presented; we shall close this
+appendix by presenting one more example of their use. Chapter~27 mentions
+the desirability of creating a long book in small parts, by using a
+``^{galley}'' file. The author adopted that strategy for {\sl The \TeX book},
+entering each chapter into a small file |galley.tex| that looked like this:
+\beginlines
+|\input manmac|
+|\tenpoint|
+|\pageno=800|
+|\def\rhead{Experimental Pages for The \TeX book}|
+|\def\chapno{ X}|
+|{\catcode`\%=12 \immediate\write\ans{% Answers for galley proofs:}}|
+\qquad\vdots
+\<new text being tested, usually an entire chapter>
+\qquad\vdots
+| |
+|% that blank line will stop an unfinished \answer|
+|\immediate\closeout\ans|
+|\vfill\eject|
+|\ninepoint \input answers % typeset the new answers, if any|
+|\bye|
+\endlines
+
+\endchapter
+
+It is much easier to use macros than to define them.
+$\ldots$
+The use of macro libraries, in fact, mirrors almost exactly
+the use of subroutine libraries for programming languages.
+There are the same levels of specialization,
+from publicly shared subroutines
+to special subroutines within a single program,
+and there is the same need for a programmer
+with particular skills to define the subroutines.
+\author PETER ^{BROWN}, {\sl Macro Processors\/} (1974) % p10
+
+\bigskip
+
+The ^{epigraph} is among the most delightful of scholarly habits.
+Donald ^{Knuth}'s work on fundamental algorithms would be
+just as important if he hadn't begun with a quotation
+from Betty ^{Crocker}, but not so enjoyable.
+Part of the fun of an epigraph is turning a source to an unexpected use.
+\author MARY-CLAIRE ^{VAN LEUNEN}, {\sl A Handbook for Scholars\/} (1978)
+ % page 53. [But it was McCall's, not Betty Crocker]
+
+%\eject
+\eject\byebye

@@ -1,0 +1,523 @@
+% -*- coding: utf-8 -*-
+
+\input macros
+
+%\beginchapter Chapter 3. Controlling\\\TeX
+\beginchapter Chapter 3. 控制系列
+
+\origpageno=7
+
+%Your keyboard has very few keys compared to the large number of symbols that you
+%may want to specify. In order to make a limited keyboard sufficiently versatile,
+%one of the characters that you can type is reserved for special use, and
+%it is called the {\sl ^{escape character}}. Whenever you want to type
+%something that controls the format of your manuscript, or something that
+%doesn't use the keyboard in the ordinary way, you should type the escape
+%character followed by an indication of what you want to do.
+\1你的键盘所含的字符与所期望得到的符号相比太少了。%
+为了充分利用有限的键盘，你可以键入的某个字符被保留为特殊用途，即所谓%
+的转义符(escape cha\-racter)。%
+只要你要键入控制文稿格式的信息或不能直接使用键盘的内容，
+就应该键入转义符，再在后面跟上对应的指令。
+
+%Note: Some computer terminals have a key marked `|ESC|', but that is {\sl not\/}
+%your escape character! It is a key that sends a special message to the operating
+%system, so don't confuse it with what this manual calls ``escape.''
+注意：有些计算机终端上有一个标记为`|ESC|'的键，
+但不是你的转义符!
+它是一个向操作系统发送特殊指令的键，所以不要把它与本手册的``转义(escape)''混淆。
+
+%\TeX\ allows any character to be used for escapes, but the ``^{backslash}''
+%character `|\|' is usually adopted for this purpose, since backslashes are
+%reasonably convenient to type and they are rarely needed in ordinary text.
+%Things work out best when different \TeX\ users do things consistently,
+%so we shall escape via backslashes in all the examples of this manual.
+\TeX\ 允许使用任何字符作为转义符，但是一般采用反斜线字符`|\|',
+因为反斜线较方便键入且在一般文本中很少使用。%
+当不同的 \TeX\ 用户统一规则时，做事就最有效，
+所以我们将在本手册的所有例子中使用反斜线字符作为转义符。
+
+%Immediately after typing `|\|' (i.e., immediately after an escape
+%character) you type a coded command telling \TeX\ what you have in mind.
+%Such commands are called {\sl ^{control sequences}}. For example, you might type
+%^^{markup commands, see control sequences}
+%\begintt
+%\input MS
+%\endtt
+%which (as we will see later) causes \TeX\ to begin reading a file called
+%`|MS.tex|'; the string of characters `^|\input|' is a control sequence.
+%Here's another example:
+%\begintt
+%George P\'olya and Gabor Szeg\"o.
+%\endtt
+%% sic; this is the spelling used in opening pages of their famous books
+%% but I give the Hungarian spellings in the index
+%\TeX\ converts this to `George P\'olya and Gabor Szeg\"o.' There are two
+%^^{Polya}^^{Szego}^^{acute}^^{umlaut}
+%control sequences, ^|\'| and ^|\"|, here; these control sequences
+%have been used to place ^{accents} over some of the letters.
+键入`|\|'后，紧接(即在转义符后面紧接)着键入一个代码命令来告诉 \TeX\ 你的想法。%
+这样的命令称为{\KT{10}控制系列}。%
+例如，你可以键入
+\begintt
+\input MS
+\endtt
+(就象我们后面将讲述的那样)它让 \TeX\ 开始读入名字为`|MS.tex|'的文件；
+字符串 `|\input|'是一个控制系列。%
+另一个例子是
+\begintt
+George P\'olya and Gabor Szeg\"o.
+\endtt
+\TeX\ 把它转换为`George P\'olya and Gabor Szeg\"o.'。
+这里有两个控制系列，|\'| 和 |\"|;
+这些控制系列用来把重音号放在字母上。
+
+%Control sequences come in two flavors. The first kind, like |\input|,
+%is called a {\sl^{control word}\/}; it
+%consists of an escape character followed by one or more {\sl letters}, followed
+%by a space or by something besides a letter. \ (\TeX\ has to know where the
+%control sequence ends, so you must put a space after a control word if
+%the next character is a letter. For example, if you type `|\inputMS|',
+%\TeX\ will naturally interpret this as a control word with seven
+%letters.) \ In case you're wondering what a ``^{letter}'' is, the answer
+%is that \TeX\ normally regards the 52 symbols |A...Z| and |a...z| as
+%letters. The digits |0...9| are {\sl not\/} considered to be
+%letters, so they don't appear in control sequences of the first kind.
+控制系列有两种类型。%
+第一类象|\input|一样，称为{\KT{10}控制词};
+它由转义符后跟一个或多个{\KT{10}字母}组成，后面跟一个空格或非字母的字符。%
+(\TeX\ 必须知道控制系列何时结束，因此，如果下一个字符是字母，你必须在控制词后%
+加一空格。%
+例如，如果你键入`|\inputMS|', \TeX\ 将认为它是一个7个字母组成的控制词。)
+ 要是对``字母''有疑问，答案就是，\TeX\ 一般把52个字母 |A...Z| 和 |a...z| 看作字母。%
+数字 |0...9| 不被看作字母，所以不能出现在第一类控制系列中。
+
+%A control sequence of the other kind, like |\'|, is called a {\sl
+%^{control symbol}\/}; it consists of the escape
+%character followed by a single {\sl nonletter}. In this case you don't
+%need a space to separate the control sequence from a letter that follows,
+%since control sequences of the second kind always have exactly one
+%symbol after the escape character.
+另一类控制系列，象 |\'| 一样，被称为{\KT{10}控制符号};
+它由转义符后跟一个单个{\KT{10}非字母}组成。%
+在这种情况下，你不必用空格把控制系列与其后的字母分开，
+因为第二类控制系列在转义符后永远只有一个符号。
+
+%\exercise What are the control sequences in `|\I'm \exercise3.1\\!|'\thinspace?
+%\answer |\I|, |\exercise|, and |\\|. (The last of these is of type~2, i.e.,
+%a control symbol, since the second backslash is not a letter; the first
+%backslash keeps the second one from starting its own control sequence.)
+\exercise 在`|\I'm \exercise3.1\\!|'中，控制系列有哪些？
+\answer |\I|、|\exercise| 和 |\\| 。（最后一个属于第二种，即控制符号，
+因为第二个反斜线不是一个字母；第一个反斜线阻止第二个反斜线开始自己的控制系列。）
+
+%\exercise We've seen that the input |P\'olya| yields `P\'olya'. Can
+%you guess how the French words `math\'ematique' and `centim\`etre'
+%should be specified?
+%\answer |math\'ematique| and |centim\`etre|.^^|\'|^^|\`|
+\exercise \1我们已经知道键入 |P\'olya| 就得到`P\'olya'。%
+你猜出来法语单词`math\'ematique' 和`centim\`etre'怎样键入吗？
+\answer |math\'ematique| 和 |centim\`etre| 。^^|\'|^^|\`|
+
+%When a space comes after a control word (an all-letter control
+%sequence), it is ignored by
+%\TeX; i.e., it is not considered to be a ``real'' space belonging to the
+%manuscript that is being typeset. But when a space comes after a control
+%symbol, it's truly a space.
+当空格出现在控制词(一个完全由字母组成的控制系列)后面时，
+它被 \TeX\ 所忽略；即，它不会被看作属于所排版文稿的``实际''空格。%
+但是，当空格出现在控制符号后面时，它就是一个实际空格。
+
+%Now the question arises, what do you do if you actually {\sl want\/} a
+%space to appear after a control word? We will see later that \TeX\
+%treats two or more consecutive spaces as a single ^{space}, so the answer
+%is {\sl not\/} going to be ``type two spaces.'' The correct answer is to
+%type ``control space,'' ^^|\ | namely
+%\begintt
+%\|]
+%\endtt
+%(the escape character followed by a blank space); \TeX\ will treat this as
+%a space that is not to be ignored. Notice that |\|\] is a control
+%sequence of the second kind, namely a control symbol, since there is a
+%single nonletter (\]) following the escape character. Two consecutive
+%spaces are considered to be equivalent to a single space, so further
+%spaces immediately following |\|\] will be ignored. But if you want to
+%enter, say, three consecutive spaces into a manuscript you can type
+%`|\|\]|\|\]|\|\]'.  Incidentally, typists are often taught to put two
+%spaces at the ends of sentences; but we will see later that \TeX\ has its
+%own way to produce extra space in such cases. Thus you needn't be
+%consistent in the number of spaces you type.
+现在，出现问题了，如果真要在控制词后面得到一个空格该怎样做呢？
+后面我们会看到，\TeX\ 把两个或多个连续空格看作单个空格，
+所以``键入两个空格''不解决问题。
+正确的方法是键入``控制空格'', 即
+\begintt
+\|]
+\endtt
+(转义符后面跟一个空格);
+\TeX\ 将把它看作不能忽略的空格。%
+注意，控制空格是第二类控制系列，即控制符号，因为跟在转义符后面的是一个单个非字母(\])。%
+两个连续空格被看作等价于单个空格，所以跟在 |\|\] 后的多余的空格将被忽略。%
+但是，如果你要在文稿中键入3个连续空格，就应该键入`|\|\]|\|\]|\|\]'。%
+顺便说一下，打字员通常在句子后面要键入两个空格；
+但是以后我们将知道，在这种情况下，\TeX\ 用自己的方式来得到额外的间距。
+因此，你不需在意所键入的空格数目的一致性。
+
+%\danger Nonprinting control characters like \<return> might follow
+%an escape character, and these lead to distinct control sequences according
+%to the rules. \TeX\ is initially set up to treat |\|\<return> and
+%|\|\<tab> ^^|\<return>|^^|\<tab>|
+%the same as |\|\] (control space); these special control sequences
+%should probably not be redefined, because you can't see the difference
+%between them when you look at them in a file.
+%^^{carriage-return, see <return>}
+\danger 象 \<return> 这样不能显示出来的控制符也可以跟在转义符后面，
+并且按照上面的规则，它们是一些独特的控制系列。%
+\TeX\ 从开始就把 |\|\<return> 和 |\|\<tab> 看作同 |\|\]~(控制空格)一样；
+这些特殊的控制系列不可能重新被定义，因为在文件中无法区分它们。
+
+%It is usually unnecessary for you to use ``control space,'' since control
+%sequences aren't often needed at the ends of words. But here's an example
+%that might shed some light on the matter: This manual itself has been
+%typeset by \TeX, and one of the things that occurs fairly often is the
+%tricky ^{logo} `\TeX', which requires backspacing and lowering the E.
+%There's a special control word
+%\begintt
+%\TeX
+%\endtt
+%that produces the half-dozen or so instructions necessary to typeset `\TeX'.
+%When a phrase like `\TeX\ ignores spaces after control words.' is
+%desired, the manuscript renders it as follows:
+%\begintt
+%\TeX\ ignores spaces after control words.
+%\endtt
+%Notice the extra |\| following ^|\TeX|; this produces the control space
+%that is necessary because \TeX\ ignores spaces after control words.
+%Without this extra |\|, the result would have been
+%\begindisplay
+%\TeX ignores spaces after control words.
+%\enddisplay
+%On the other hand, you can't simply put |\| after |\TeX| in all contexts.
+%For example, consider the phrase
+%\begintt
+%the logo `\TeX'.
+%\endtt
+%In this case an extra backslash doesn't work at all; in fact,
+%you get a curious result if you type
+%\begintt
+%the logo `\TeX\'.
+%\endtt
+%Can you guess what happens? \ Answer: The |\'| is a control sequence denoting
+%an acute accent, as in our |P\'olya| example above; the effect is
+%therefore to put an accent over the next nonblank character,
+%which happens to be a period. In other words, you get an accented
+%period, and the result is
+%\begindisplay
+%the logo `\TeX\'.
+%\enddisplay
+%Computers are good at following instructions, but not at reading your mind.
+对你而言，通常不需要使用``控制空格'',
+因为控制系列不经常出现在单词的尾部。%
+但是，这里有一个这方面的典型例子：
+本手册本身是用 \TeX\ 排版的，并且相当频繁出现的一个东西就是乖巧的`\TeX',
+它要求回退间距和降低 E。%
+这是一个特殊的控制词
+\begintt
+\TeX
+\endtt
+为了排版`\TeX', 它使用了大概半打的指令。%
+当要排版出`\TeX\ ignores spaces after control words.'\allowbreak 这样的语句时，
+所键入的文稿如下：
+\begintt
+\TeX\ ignores spaces after control words.
+\endtt
+注意，\TeX\ 后面有一个额外的 |\|; 因为 \TeX\ 忽略掉了控制词后面的空格，
+所以它生成了必需的控制空格。%
+如果没有这个额外的 |\|, 结果就是
+\begindisplay
+\TeX ignores spaces after control words.
+\enddisplay
+\1另外，不能在任何情况下都在 \TeX\ 后面直接跟一个 |\|。%
+比如，考虑一下下列语句
+\begintt
+the logo `\TeX'.
+\endtt
+在这种情况下，额外的 |\| 根本就不对；
+实际上，如果你键入
+\begintt
+the logo `\TeX\'.
+\endtt
+就会得到稀奇古怪的结果。
+你知道得到什么吗？
+答案是：|\'| 是重音符的控制系列，就象上面例子中的 |P\'olya| 一样；
+因此结果是在下一个非空白的字符——凑巧是句点——上面加重音。%
+换句话说，你得到一个带重音的句点，排版结果是
+\begindisplay
+the logo `\TeX\'.
+\enddisplay
+计算机正确地执行了后面的指令，但没有正确表达你的意思。
+
+%\TeX\ understands about 900 control sequences as part of its built-in
+%vocabulary, and all of them are explained in this manual somewhere. But
+%you needn't worry about learning so many different things, because you won't
+%really be needing very many of them unless you are faced with unusually
+%complicated copy. Furthermore, the ones you do need to learn actually fall into
+%relatively few categories, so they can be assimilated without great difficulty.
+%For example, many of the control sequences are simply the names of special
+%characters used in math formulas; you type `^|\pi|'~to get~`$\pi$',
+%`^|\Pi|'~to get~`$\Pi$',
+%`^|\aleph|'~to get~`$\aleph$',
+%`^|\infty|'~to get~`$\infty$',
+%`^|\le|'~to get~`$\le$',
+%`^|\ge|'~to get~`$\ge$',
+%`^|\ne|'~to get~`$\ne$',
+%`^|\oplus|'~to get~`$\oplus$',
+%`^|\otimes|'~to get~`$\otimes$'.
+%Appendix~F contains several tables of such symbols.
+\TeX\ 能执行大约 900 个控制系列，这是它的内置语汇的一部分，
+所有这些控制系列都阐述在本手册的某个地方。%
+但是别为要掌握这么多不同的内容而担心，因为只要不是对付不常用的复杂排版，
+你是不需要掌握很多控制系列的。%
+再者，你需要实际掌握的那些只在相对少的几个种类\hbox{中，} 所以它们不太难理解。%
+例如，许多控制系列就是数学公式中特殊字符的名字；
+键入`|\pi|'就得到 $\pi$,
+`|\Pi|' 得到 `$\Pi$',
+`|\aleph|' 得到 `$\aleph$',
+`|\infty|' 得到 `$\infty$',
+`|\le|' 得到 `$\le$',
+`|\ge|' 得到 `$\ge$',
+`|\ne|' 得到 `$\ne$',
+`|\oplus|' 得到 `$\oplus$',
+`|\otimes|' 得到 `$\otimes$'。%
+附录 F 包含了这类符号的几个列表。
+
+%\danger There's no built-in relationship between ^{uppercase} and ^{lowercase}
+%letters in control sequence names. For example, `|\pi|' and `|\Pi|'
+%and `|\PI|' and `|\pI|' are four different control words.
+\danger 在控制系列的名称中，大写和小写字母之间没有内在的等价关系。%
+例如，`|\pi|', `|\Pi|, `|\PI|' 和 `|\pI|' 是四个不同的控制词。
+
+%The 900 or so control sequences that were just mentioned actually aren't
+%the whole story, because it's easy to define more.  For example, if you
+%want to substitute your own favorite names for math symbols, so that you
+%can remember them better, you're free to go right ahead and do it;
+%Chapter~20 explains how.
+刚刚提到的大约 900 个控制系列并不是全部，因为可以容易地定义更多的控制系列。%
+例如，如果你想用自己喜欢的名字来定义数学符号，那么就更好记住它们，
+你可以随心所欲地命名它们；
+第 20 章告诉你这方面的内容。
+
+%About 300 of \TeX's control sequences are called {\sl ^{primitive}\/}; these
+%are the low-level atomic operations that are not decomposable into simpler
+%functions. All other control sequences are defined, ultimately, in terms
+%of the primitive ones. For example, ^|\input| is a primitive operation,
+%but ^|\'| and ^|\"| are not; the latter are defined in terms of an
+%^|\accent| primitive.
+大约 300 个控制系列称为{\KT{10}原始控制系列};
+它们是不能分解为更简单作用的低级控制系列。%
+所有其它控制系列归根结底都由这些原始控制系列来定义。%
+例如，|\input| 是原始控制系列，|\'| 和 |\"| 却不是；
+后者用原始控制系列 |\accent| 来定义。
+
+%People hardly ever use \TeX's primitive control sequences in their
+%manuscripts, because the primitives are $\ldots$ well $\ldots$ so
+%{\sl primitive}. You have to type a lot of instructions when you are
+%trying to make \TeX\ do low-level things; this takes time and invites
+%mistakes. It is generally better to make use of higher-level control
+%sequences that state what functions are desired, instead of typing
+%out the way to achieve each function each time. The higher-level control
+%sequences need to be defined only once in terms of primitives. For
+%example, |\TeX| is a control sequence that means ``typeset the \TeX\ logo'';
+%|\'| is a control sequence that means ``put an acute accent over the
+%next character''; and both of these control sequences might require different
+%combinations of primitives when the style of type changes. If \TeX's logo
+%were to change, the author would simply have to change one definition, and the
+%changes would appear automatically wherever they were needed. By contrast,
+%an enormous amount of work would be necessary to change the logo if it
+%were specified as a sequence of primitives each time.
+在文稿中，人们几乎用不到 \TeX\ 的原始控制系列，
+因为原始控制系列是那么 $\ldots$ 地{\KT{10}原始}。%
+如果你试图做 \TeX\ 的低级事情，就必需键入许多指令；
+这浪费时间且容易犯错误。%
+一般最好利用规定相应功能的高级控制系列，而不要每次都把得到本功能的%
+所有东西都键入。%
+高级控制系列只需要用原始控制系列定义一次。%
+\1例如，|\TeX| 是``排版 \TeX\ 的标识符''的控制系列；
+|\'| 是``在下一字符上放重音''的控制系列；
+并且当排版格式变化时，所有这些控制系列只需原始控制系列的不同组合即可。%
+如果 \TeX\ 的标识符要改变，作者只必须改变一个定义，并且改变后的东西自动出现%
+在需要出现的地方。%
+相反，如果它每次作为一系列的原始控制系列而确定时，改变标识符将要花费大量劳力。
+
+%At a still higher level, there are control sequences that govern the
+%overall format of a document. For example, in the present book the author
+%typed `^|\exercise|' just before stating each exercise; this |\exercise|
+%command was programmed to make \TeX\ do all of the following things:
+在更高级方面，有管理文档整个格式的控制系列。%
+例如，在前面作者在给出每个练习之前，键入了`|\exercise|';
+
+%\nobreak\medskip
+%\item\bull compute the exercise number (e.g., `3.2' for the second
+%exercise in Chapter~3);
+%\smallskip
+%\item\bull typeset `\thinspace{\manual\char'170\rm\kern.15em
+%  \ninebf EXERCISE \bf3.2}' with the appropriate typefaces, on a line by
+%  itself, and with the triangle sticking out in the left margin;
+%\smallskip
+%\item\bull leave a little extra space just before that line, or begin
+%  a new page at that line if appropriate;
+%\smallskip
+%\item\bull prohibit beginning a new page just after that line;
+%\smallskip
+%\item\bull suppress indentation on the following line.
+%\medbreak\noindent
+%It is obviously advantageous to avoid typing all of these individual
+%instructions each time. And since the manual is entirely described in
+%terms of high-level control sequences, it could be printed in a radically
+%different format simply by changing a dozen or so definitions.
+%% and sweating over the page layout in the math and alignment chapters!
+\nobreak\medskip
+\item\bull 算出练习的编号(比如，对第三章的第二个练习得到`3.2');
+\smallskip
+\item\bull 在同一行上，用相应的字体排版出`\thinspace{\manual\char'170\rm\kern.15em
+  \ninebf EXERCISE \bf3.2}', 并且让三角形顶左边；
+\smallskip
+\item\bull 在行前留出额外小间距，如果需要的话在此行换页；
+\smallskip
+\item\bull 禁止在此行后换页；
+\smallskip
+\item\bull 保证接下来的行不缩进。
+\medbreak\noindent
+明显的好处是不必每次键入所有这些单个指令。%
+并且因为本手册完全用高级控制系列所描述，所以通过改变大约一打的定义，
+就可以用完全不同的格式来打印出它来。
+
+%\danger How can a person distinguish a \TeX\ primitive from a control sequence
+%that has been defined at a higher level? There are two ways: \ (1)~The index
+%to this manual lists all of the control sequences that are discussed, and each
+%primitive is marked with an asterisk. \ (2)~You can display the meaning of a
+%control sequence while running \TeX\null. If you type `^|\show||\cs|'
+%where |\cs| is any control sequence, \TeX\ will respond with its current
+%meaning. For example, `|\show\input|' results in \hbox{`|> \input=\input.|'},
+%because |\input| is primitive. On the other hand, `|\show|^|\thinspace|' yields
+%\begintt
+%> \thinspace=macro:
+%->\kern .16667em .
+%\endtt
+%This means that |\thinspace| has been defined as an abbreviation for
+%`|\kern|~|.16667em|~'. By typing `|\show|\penalty0|\kern|' you can verify
+%that ^|\kern| is primitive. The results of\/ |\show| appear on your
+%terminal and in the ^{log file} that you get after running \TeX.
+\danger 怎样从高级控制系列中区分出 \TeX\ 的原始控制系列呢？
+有两种方法：
+(1)~本手册的索引罗列了讨论过的所有控制系列，每个原始控制系列都用星号标记了。
+(2)~当运行 \TeX\ 时，你可以显示出某个控制系列的含义。
+如果你键入 `|\show||\cs|'（其中 |\cs| 是任意控制系列），\TeX\ 将回答出它的当前含义。
+例如，`|\show\input|' 得到 \hbox{`|> \input=\input.|'}，
+这是因为 |\input| 是原始控制系列。另一方面，`|show||\thinspace|' 得到
+\begintt
+> \thinspace=macro:
+->\kern .16667em .
+\endtt
+这意味着 |\thinspace| 已经被定义为 `|\kern|~|.16667em|~'。
+通过键入 `|\show|\penalty0|\kern|'，你可以验证 |\kern| 是原始命令。
+|\show| 的结果出现在你的终端和运行 \TeX\ 结束后的日志文件中。
+
+%\dangerexercise Which of the control sequences |\|\] and
+%|\|\<return> is primitive?
+%\answer According to the index, |\|\] is primitive but
+%|\|\<return> isn't. The command `|\def\^^M{\ }|' in
+%Appendix~B is what actually defines |\|\<return>, since a
+%return is representable as |^^M|. Asking \TeX\ to |\show\^^M|
+%\looseness-1
+%produces the response `|>| |\^^M=macro:->\|\]|.|'.
+\dangerexercise 控制系列 |\|\] 和|\|\<return>中，哪个是原始的？
+\answer 从索引中可以看到，|\|\] 是原始的，而 |\|\<return> 不是。
+附录 B 中的 `|\def\^^M{\ }|' 定义了 |\|\<return>，因为回车符用 |^^M| 表示。
+用 |\show\^^M| 可以让 \TeX\ 显示 `|>| |\^^M=macro:->\|\]|.|' 。
+
+%In the following chapters we shall frequently discuss ``^{plain \TeX}''
+%format, which is a set of about 600 ^{basic control sequences} that are
+%defined in Appendix~B\null. These control sequences, together with the 300
+%or so primitives, are usually present when \TeX\ begins to process a
+%manuscript; that is why \TeX\ claims to know roughly 900 control sequences
+%when it starts.  We shall see how plain \TeX\ can be used to create
+%documents in a flexible format that meets many people's needs, using some
+%typefaces that come with the \TeX\ system. However, you should keep in
+%mind that plain \TeX\ is only one of countless ^{formats} that can be
+%designed on top of \TeX's primitives; if you want some other format, it
+%will usually be possible to adapt \TeX\ so that it will handle whatever
+%you have in mind. The best way to learn is probably to start with plain
+%\TeX\ and to change its definitions, little by little, as you gain more
+%experience.
+在后面的章节，我们将频繁讨论``plain \TeX''格式，
+它大约有 600 个基本控制系列，这些都在附录 B 中定义出。
+当 \TeX\ 开始处理文稿时，这些控制系列及 300 个左右的原始控制系列通常一起出现，
+\1这就是为什么 \TeX\ 在一开始声称大概有 900 个控制系列。%
+我们将看到 plain \TeX\ 怎样被用来得到灵活格式的文档以满足不同人们的需要，
+不过要使用 \TeX\ 系统所带的一些字体。%
+但是要记住，plain \TeX\ 只不过是在 \TeX\ 的原始控制系列上设计的无数格式的一种；
+如果想要其它格式，通常可以改编 \TeX\ 以得到你心中想要的。%
+领会的最好方法可能是从 plain \TeX\ 开始，随着经验的积累，一点一点地修改它的定义。
+
+%\danger Appendix E contains examples of formats that can be added to
+%Appendix~B for special applications; for example, there is a set of
+%definitions suitable for business correspondence. A complete specification
+%of the format used to typeset this manual also appears in Appendix~E\null.
+%Thus, if your goal is to learn how to design \TeX\ formats, you will
+%probably want to study Appendix~E while mastering Appendix~B\null. After you
+%have become skilled in the lore of control-sequence definition, you
+%will probably have developed some formats that other people will want
+%to use; you should then write a supplement to this manual, explaining
+%your style rules.
+\danger 附录 E 中含有格式的例子，它们可以与附录 B 一起满足特殊要求；
+例如，其中有一组适用于商业通信的定义。%
+排版本书稿的完整的格式规定也在附录 E 中。%
+因此，如果你的目的是设计 \TeX\ 格式，在学会附录 B 后你可能要研究研究附录 E。%
+在经过定义控制系列的知识的训练后，你就可以为其他人们编写一些格式；
+那么你应该为本手册写一个附录，解释一下你的设计规则。
+
+%The main point of these remarks, as far as novice \TeX\ users are concerned, is
+%that it is indeed possible to define nonstandard \TeX\ control sequences.
+%When this manual says that something is part of ``plain \TeX,'' it means
+%that \TeX\ doesn't insist on doing things exactly that way; a person
+%could change the rules by changing one or more of the definitions in
+%Appendix~B\null. But you can safely rely on the control sequences of plain
+%\TeX\ until you become an experienced \TeX nical~typist.
+就 \TeX\ 新手所关心的而言，这些讨论的重点是，的确可以定义一些非标准的 \TeX\ 控制系\hbox{列。}%
+当 \TeX\ 讲什么属于``plain \TeX''时，就意味着 \TeX\ 不是只能按照这种方法才可；
+你可以通过改变附录 B 中一个或多个定义来改变结果。%
+但是在你成为有经验的 \TeX\ 排版专家前，确实可以依赖 plain \TeX\ 的控制系列。
+
+%\ddangerexercise How many different control sequences of length~2
+%(including the escape character) are possible? How many of length~3?
+%\answer There are 256 of length~2; most of these are undefined when \TeX\
+%begins. \ (\TeX\ allows any character to be an escape, but it does not
+%distinguish between control sequences that start with different escape
+%characters.) \
+%If we assume that there are 52 letters, there are exactly $52^2$
+%possible control sequences of length~3 (one for each pair of letters, from
+%|AA| to |zz|). But Chapter~7 explains how to use ^|\catcode| to change any
+%character into a ``^{letter}''; therefore it's possible to use any of
+%$256^2$ potential control sequences of length~3.
+\ddangerexercise 有多少 2 个字符的不同控制系列（转义符算一个字符）？
+有多少 3 个字符的？
+\answer 两个字符长的有 256 个；其中大部分在 \TeX\ 开始运行时是未定义的。%
+（\TeX\ 允许任何字符作为转义符，但它不区分以不同转义符开始的控制系列。）
+如果我们假设有 52 个字母，则总共有 $52^2$ 个可能的三个字符长的控制系列%
+（从 |AA| 到 |zz|，一对字母对应一个控制系列）。
+但第 7 章将介绍如何用 ^|\catcode| 将任何字符改为 ``^{字母}''；
+因此我们可以使用 $256^2$ 个潜在的三字符长的控制系列中的任何一个。
+
+\endchapter
+
+Syllables govern the world.
+\author JOHN ^{SELDEN}, {\sl Table Talk\/} (1689) % section on Power
+
+\bigskip
+
+I claim not to have controlled events,
+but confess plainly that events have controlled me.
+\author ABRAHAM ^{LINCOLN} (1864) % letter to A. G. Hodges, April 4
+
+\vfill\eject\byebye

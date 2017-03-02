@@ -1,0 +1,567 @@
+% -*- coding: utf-8 -*-
+
+\input macros
+
+%\beginchapter Chapter 13. Modes
+\beginchapter Chapter 13. 模式
+
+\origpageno=85
+
+%Just as people get into different moods, \TeX\ gets into different ``modes.'' \
+%(Except that \TeX\ is more predictable than people.) \ There are six ^{modes}:
+\1正如人们有不同心情一样，\TeX\ 也有不同的``模式''。%
+（只是 \TeX\ 比人更容易掌握。）其中有六种模式：
+
+%\medskip
+%\item\bull^{Vertical mode}. [Building the main vertical list, from which
+%the pages of output are derived.]
+\medskip
+\item\bull 垂直模式。[构建主垂直列，输出的页面源于此。]
+
+%\smallskip\item\bull
+%^{Internal vertical mode}. [Building a vertical list for a vbox.]
+\smallskip\item\bull 内部垂直模式。[构建 vbox 的垂直列。]
+
+%\smallskip\item\bull
+%^{Horizontal mode}. [Building a horizontal list for a paragraph.]
+\smallskip\item\bull 水平模式。[构建段落的水平列。]
+
+%\smallskip\item\bull
+%^{Restricted horizontal mode}. [Building a horizontal list for an hbox.]
+\smallskip\item\bull 受限水平模式。[构建 hbox 的水平列。]
+
+%\smallskip\item\bull
+%^{Math mode}. [Building a mathematical formula to be placed in
+%a horizontal list.]
+\smallskip\item\bull 数学模式。[构建数学公式，并放在水平列中。]
+
+%\smallskip\item\bull
+%^{Display math mode}. [Building a mathematical formula to be placed
+%on a line by itself, temporarily interrupting the current paragraph.]
+\smallskip\item\bull 陈列数学模式。[暂时中断当前段，构建数学公式并单独放在一行上。]
+
+%\medskip\noindent In simple situations, you don't need to be aware of what
+%mode \TeX\ is in, because the computer just does the right thing.  But
+%when you get an error message that says `\thinspace|!|~|You| |can't| |do|
+%|such-and-such| |in| |restricted| |horizontal| |mode|\thinspace', a
+%knowledge of modes helps to explain why \TeX\ thinks you goofed.
+\medskip\noindent 在简单情况下，你不需要知道 \TeX\ 处在什么模式中，
+因为计算机正在正常工作。%
+但是，如果你看见错误信息说`\thinspace|!|~|You| |can't| |do|
+|such-and-such| |in| |restricted| |horizontal| |mode|\thinspace',
+那么模式方面的知识有助于弄明白 \TeX\ 认为出了什么问题。
+
+%Basically \TeX\ is in one of the vertical modes when it is preparing a list of
+%boxes and glue that will be placed vertically above and below one another on
+%the page; it's in one of the horizontal modes when it is preparing a list
+%of boxes and glue that will be strung out horizontally next to each other
+%with baselines aligned; and it's in one of the math modes when it is
+%reading a formula.
+一般说来，当 \TeX\ 正在处理的是页面上一列互相叠放的盒子和粘连时，就处在一种垂直模式中；
+当处理的是沿基线对齐的一列紧挨着的盒子和粘连时，就处在一种水平模式；
+当遇到公式时，就处在一种数学模式。
+
+%A play-by-play account of a typical \TeX\ job should make the mode idea clear:
+%At the beginning, \TeX\ is in vertical mode, ready to construct pages. If you
+%specify glue or a box when \TeX\ is in vertical mode, the glue or the box gets
+%placed on the current page below what has already been specified. For example,
+%the ^|\vskip| instructions in the sample run we discussed in Chapter~6
+%contributed vertical glue to the page; and the ^|\hrule| instructions
+%contributed horizontal rules at the top and bottom of the story. The
+%^|\centerline| commands also produced boxes that were included in the main
+%vertical list; but those boxes required a bit more work than the rule boxes:
+%\TeX\ was in vertical mode when it encountered
+%`|\centerline{\bf A SHORT STORY}|', and it went temporarily into restricted
+%horizontal mode while processing the words `|A SHORT STORY|'; then
+%the digestive process returned to vertical mode, after setting the
+%glue in the~|\centerline|~box.
+一个有代表性的 \TeX\ 工作的信息说明就可以把模式的原理搞清楚：
+在开头， \TeX\ 处于垂直模式，准备好构造页面。%
+如果当 \TeX\ 处在垂直模式时你给出粘连或盒子，那么粘连或盒子就放在已经排好%
+的当前页面的下面。%
+例如，在我们讨论过的第六章的样例中，|\vskip| 指令把垂直粘连放在页面中；
+|\hrule| 在 story 的顶部和底部放上水平标尺。%
+|\centerline| 命令得到的也是包含在垂直列中的盒子；
+但是那些盒子所需要的处理比标尺盒子要多一点：
+当遇到`|\centerline{\bf A SHORT STORY}|'时， \TeX\ 处在垂直模式，
+当处理词语`|A SHORT STORY|'时，它临时转到受限水平模式；
+然后，在设置好 |\centerline| 的粘连后，处理程序回到垂直模式。
+
+%Continuing with the example of Chapter 6, \TeX\ switched into horizontal
+%mode as soon as it read the `|O|' of `|Once upon a time|'. Horizontal mode
+%is the mode for making ^{paragraphs}. The entire paragraph (lines 7 to~11
+%of the |story| file) was input in horizontal mode; then the text was
+%divided into output lines of the appropriate width, those lines were
+%put in boxes and appended to the page (with appropriate interline glue between
+%them), and \TeX\ was back in vertical mode. The `|M|' on line~12 started up
+%horizontal mode again.
+继续讨论第六章的例子，一旦遇到`|Once upon a time|'的`|O|',  \TeX\ 就转到水平模式。%
+水平模式是构建段落的模式。%
+这个段落(story 文件的第 7 到第 11 行)是在水平模式下输入的；
+接着文本被分割为相应宽度的输出行，
+这些行被放在盒子中并添加到页面(它们之间要加上相应的行间粘连),
+最后， \TeX\ 回到垂直模式。%
+第 12 行的`|M|'再次启动水平模式。
+
+%When \TeX\ is in vertical mode or internal vertical mode,
+%the first token of a new paragraph changes the mode to horizontal for the
+%duration of a paragraph. In other words, things that do not have a vertical
+%orientation cause the mode to switch automatically from vertical to
+%horizontal. This occurs when you type any character, or ^|\char| or ^|\accent|
+%or ^|\hskip| or |\|\] ^^{control space} or ^|\vrule| or math shift (|$|);
+%\TeX\ inserts the current paragraph ^{indentation} and rereads the
+%horizontal token as if it had occurred in horizontal mode.
+当 \TeX\ 处在垂直模式或内部垂直模式时，
+新段落的第一个记号在段落期间改变为水平模式。%
+\1换句话说，非垂直定向的东西把模式自动从垂直变成水平了。%
+当你输入任何字符，|\char|, |\accent|,
+|\hskip|, |\|\], |\vrule| 或数学转换符 (|$|) 时，就发生这种情况；
+ \TeX\ 将插入当前段落的缩进，并且好像它已经处在水平模式一样重新读入水平记号。
+
+%\danger You can also tell \TeX\ explicitly to go into horizontal mode,
+%instead of relying on such implicit mode-switching, by saying `^|\indent|'
+%or `^|\noindent|'. For example, if line~7 of the |story| file in Chapter~6
+%had begun
+%\begintt
+%\indent Once upon a time, ...
+%\endtt
+%the same output would have been obtained, because `|\indent|' would have
+%instructed \TeX\ to begin the paragraph. And if that line had begun with
+%\begintt
+%\noindent Once upon a time, ...
+%\endtt
+%the first paragraph of the story would not have been indented. The
+%|\noindent| command simply tells \TeX\ to enter horizontal mode if the
+%current mode is vertical or internal vertical; |\indent| is similar,
+%but it also creates an empty box whose width is the current value of
+%^|\parindent|, and it puts this empty box into the current horizontal list.
+%Plain \TeX\ sets |\parindent=20pt|.
+%If you say |\indent\indent|, you get double indentation; if you say
+%|\noindent\noindent|, the second |\noindent| does nothing.
+\danger 也可以明确告诉 \TeX\ 要进入水平模式，而不是靠这些暗中进行的模式转换，
+只要使用`|\indent|'或`|\noindent|'即可。%
+例如，如果第六章的 |stroy| 文件的第 7 行的开头为
+\begintt
+\indent Once upon a time, ...
+\endtt
+那么得到的是同样的输出，因为`|\indent|'将告诉 \TeX\ 要开始一段。%
+还有，如果行的开头为
+\begintt
+\noindent Once upon a time, ...
+\endtt
+那么 story 的第一段就不缩进。如果当前模式为垂直或内部垂直模式，
+那么命令 |\noindent| 直接告诉 \TeX\ 要进入水平模式；
+|\indent| 也类似，但是它还产生一个宽度为 |\parindent|
+的当前值的空盒子，并把它放在当前水平列中。
+Plain \TeX\ 设置 |\parindent=20pt|。
+如果你输入 |\indent\indent|，就得到双倍缩进；
+如果输入 |\noindent\noindent|，那么第二个 |\noindent| 就不起作用。
+
+%\dangerexercise If you say `^|\hbox||{...}|' in horizontal mode, \TeX\ will
+%construct the specified box and it will contribute the result to the
+%current paragraph. Similarly, if you say `|\hbox{...}|' in vertical mode,
+%\TeX\ will construct a box and contribute it to the current page.
+%What can you do if you want to begin a paragraph with an |\hbox|?
+%\answer Simply saying |\hbox{...}| won't work, since that box will just
+%continue the previous vertical list without switching modes. You need
+%to start the paragraph explicitly, and the straightforward way to
+%do that is to say |\indent\hbox{...}|.
+%But suppose you want to define
+%a macro that expands to an hbox, where this macro is to be used in the
+%midst of a paragraph as well as at the beginning; then you don't want
+%to force users to type |\indent| before calling your macro at the
+%beginning of a paragraph, nor do you want to say |\indent| in the
+%macro itself (since that might insert unwanted indentations).  One
+%solution to this more general problem is to say
+%`|\|\]^|\unskip||\hbox{...}|', since |\|\] makes the mode
+%horizontal while |\unskip| removes the unwanted space. Plain \TeX\
+%provides a ^|\leavevmode| macro, which solves this problem in what is
+%probably the most efficient way: |\leavevmode| is an abbreviation for
+%`|\unhbox\voidbox|', where |\voidbox| is a permanently empty box register.
+\dangerexercise 如果在水平模式输入`|\hbox||{...}|'，\TeX\ 就构建给出的盒子，
+并把它放在当前段。%
+类似地，如果在垂直模式输入`|\hbox{...}|'，\TeX\ 就构建盒子，并把它放在当前页面。%
+如果要用 |\hbox| 开始一个新段，应该怎样做？
+\answer 简单地使用 |\hbox{...}| 是不可行的，
+因为这样该盒子会被放在之前的垂直列后面，而不会切换模式。
+你需要显式开始该段落，最直接的方式是用 |\indent\hbox{...}|。
+但假设你想定义一个展开为 hbox 的宏，
+该宏既可以在段落开头使用，也可以在段落中间使用；
+此时你既不想强制用户在段落开头键入 |\indent|，
+也不想在宏里面使用 |\indent|（这样可能插入不需要的缩进）。
+对这个更一般的问题，有一个解决办法是用 `|\|\]^|\unskip||\hbox{...}|'，
+因为 |\|\] 将切换到水平模式，而 |\unskip| 删除这个不需要的空格。
+Plain \TeX\ 提供了 ^|\leavevmode| 宏，它给出的解决方法也许是效率最高的：
+|\leavevmode| 是 `|\unhbox\voidbox|' 的缩写，
+其中 |\voidbox| 是一个永远为空的盒子寄存器。
+
+%When handling simple manuscripts, \TeX\ spends almost all of its time in
+%horizontal mode (making paragraphs), with brief excursions into vertical
+%mode (between paragraphs). A paragraph is completed when you type ^|\par|
+%or when your manuscript has a blank line, since a blank line is converted
+%to |\par| by the reading rules of Chapter~8. A paragraph also ends when
+%you type certain things that are incompatible with horizontal mode.
+%For example, the command `|\vskip 1in|' on line~16 of Chapter~6's |story|
+%file was enough to terminate the paragraph about `|...beautiful
+%documents.|'; no |\par| was necessary, since |\vskip| introduced
+%vertical glue that couldn't belong to the~paragraph.
+当处理简单文稿时， \TeX\ 几乎把所有时间都花在水平模式(构建段落)中，
+在垂直模式(段落之间)只有少量时间。%
+当输入 |\par| 或者空行时，一个段落就结束了，因为安装第八章的读入规则，
+空行将被转换成 |\par|。%
+当输入与水平模式不相容的某些东西时，段落也要结束。%
+例如，在第六章的 |story| 文件的第 16 行，命令`|\vskip 1in|'也足以结束%
+与`|...beautiful documents.|'有关的这段了；
+不需要 |\par|, 因为 |\vskip| 要插入不能在段落中出现的垂直粘连。
+
+%If a begin-math token (|$|) appears in
+%horizontal mode, \TeX\ plunges into math mode and processes the formula up until
+%the closing `|$|', then appends the text of this formula to the current
+%paragraph and returns to horizontal mode. Thus, in the ``I wonder why?''\
+%example of Chapter~12, \TeX\ went into math mode temporarily
+%while processing |\ldots|, treating the dots as a formula.
+如果在水平模式中出现数学模式开始的记号(|$|),
+那么 \TeX\ 将进入数学模式并处理到结束符`|$|'的公式，
+接着把此公式的文本添加到当前段落，返回水平模式。%
+因此，在第十二章的``I wonder why?''例子中， \TeX\ 在处理 |\ldots| 时临时%
+进入数学模式，把 dot 看作公式。
+
+%However, if two consecutive begin-math tokens appear in a paragraph (|$$|),
+%\TeX\ interrupts the paragraph where it is, contributes the paragraph-so-far
+%to the enclosing vertical list, then processes a math formula in display
+%math mode, then contributes this formula to the enclosing list, then
+%returns to horizontal mode for more of the paragraph. \ (The formula to be
+%displayed should end with `|$$|'.) \ For example, suppose you type
+%\begintt
+%the number $$\pi \approx 3.1415926536$$ is important.
+%\endtt
+%\TeX\ goes into display math mode between the |$$|'s, and the output you
+%get states that the number $$\pi \approx 3.1415926536$$ is important.
+%^^|\pi|
+但是，如果在段落中出现两个紧接的数学模式开始的记号(|$$|),
+ \TeX\ 将在此中断段落，把至此的段落放在要封装的垂直列中，
+接着在陈列数学模式下处理数学公式，再把这个公式也放在要封装的垂直列中，
+最后，回到水平模式，处理段落后面的内容。%
+(要列表的公式要以`|$$|'结束。)
+\1例如，如果输入
+\begintt
+the number $$\pi \approx 3.1415926536$$ is important.
+\endtt
+ \TeX\ 就在 |$$| 之间进入陈列数学模式，并且所得到的输出如下：
+the number $$\pi \approx 3.1415926536$$ is important.
+
+%\smallskip
+%\TeX\ ignores blank spaces and blank lines (or ^|\par| commands) when it's
+%in vertical or internal vertical mode, so you need not worry that
+%such things might change the mode or affect a printed document.
+%A ^{control space} (|\|\]) will, however, be regarded as the
+%beginning of a paragraph; the paragraph will start with a blank space
+%after the indentation.
+\smallskip
+当处在垂直或内部垂直模式时， \TeX\ 将忽略掉空格和空行(或者 |\par|),
+所以不必担心这些东西会改变模式或影响排版结果。%
+但是，控制空格(|\|\])将被看作一个段落的开头；
+在缩进后，此段落将以空格来开始。
+
+%\smallskip
+%At the end of a \TeX\ manuscript it's usually best to finish everything off
+%by typing `^|\bye|', which is plain \TeX's abbreviation for
+%`|\vfill\eject\end|'. The `|\vfill|' gets \TeX\ into vertical
+%mode and inserts enough space to fill up the last page; `|\eject|' outputs
+%that last page; and `|\end|' sends the computer into its ^{endgame} routine.
+\smallskip
+在 \TeX\ 文稿的结尾，一般最好输入`|\bye|'以结束所有内容，
+其意思是`|\vfill\eject\end|'。%
+其中，`|vfill|'把 \TeX\ 转换到垂直模式，并插入足够的空白来充满最后一页；
+`|\eject|'把最后一页输出；
+`|\end|'告诉计算机进入终结程序。
+
+%\danger \TeX\ gets into internal vertical mode when you ask it to construct
+%something from a vertical list of boxes (using |\vbox| or |\vtop| or |\vcenter|
+%or |\valign| or |\vadjust| or |\insert|). It gets into restricted
+%horizontal mode when you ask it to construct something from a horizontal list
+%of boxes (using |\hbox| or |\halign|). Box construction is discussed
+%in Chapters 12 and~21. We will see later that there is very little difference
+%between internal vertical mode and ordinary vertical mode, and very little
+%difference between restricted horizontal mode and ordinary horizontal mode;
+%but they aren't quite identical, because they have different goals.
+\danger 当要从盒子的垂直列(使用 |\vbox|, |\vtop|, |\vcenter|, |\valign|,
+|\vadjust| 或 |\insert|时)构建输出时， \TeX\ 进入内部垂直模式。%
+当要从盒子的水平列(使用 |\hbox| 或 |\halign| 时)构建输出时，
+进入受限水平模式。%
+盒子的构建在第十二和二十一章中讨论。%
+后面我们将看到，在内部垂直模式和普通垂直模式之间，在受限水平模式和%
+普通水平模式之间只有很小的差别；
+但是它们却不雷同，因为目的不同。
+
+%\danger Whenever \TeX\ looks at a token of input to decide what should be
+%done next, the current mode has a potential influence on what that token
+%means. For example, ^|\kern| specifies vertical spacing in vertical mode,
+%but it specifies horizontal spacing in horizontal mode; a math shift
+%character like `|$|' causes entry to math mode from horizontal mode, but
+%it causes exit from math mode when it occurs in math mode; two consecutive
+%math shifts (|$$|) appearing in horizontal mode will initiate display
+%math mode, but in restricted horizontal mode they simply denote an empty
+%math formula.  \TeX\ uses the fact that some operations are inappropriate
+%in certain modes to help you recover from errors that might have crept
+%into your manuscript.  Chapters 24 to~26 explain exactly what
+%happens to every possible token in every possible mode.
+\danger 只要 \TeX\ 遇见一个输入记号，要确定下一步应该怎样做时，
+当前模式都潜在地影响此记号的意义。%
+例如，在垂直模式中，|\kern| 生成一个垂直间距，但是在水平模式生成一个水平间距；
+象`|$|'这样的数学转换符在水平模式中要进入数学模式，但是在数学模式时，
+其作用是退出数学模式；
+两个紧接的数学转换符(|$$|)在水平模式中要进入陈列数学模式，
+但是在受限水平模式中它们只表示一个空白数学公式。%
+某些命令在某些模式下不相称，利用这个情况， \TeX\ 就可以帮助你把潜伏在文稿%
+中的错误进行修复。%
+第二十四和二十六章详细讨论了每个可能的记号在每个模式中的作用。
+
+%\danger \TeX\ often interrupts its work in one mode to do some task in
+%another mode, after which the original mode is resumed again.
+%For example, you can say `|\hbox{|' in any mode; when \TeX\ digests this,
+%it suspends whatever else it was doing and enters restricted horizontal
+%mode. The matching `|}|' will eventually cause the hbox to be completed,
+%whereupon the postponed task will be taken up anew. In this sense \TeX\ can
+%be in many modes simultaneously, but only the innermost
+%mode influences the calculations at any time; the other modes have
+%been pushed out of \TeX's consciousness.
+\danger  \TeX\ 常常在一个模式中中断其工作以在另一个模式执行其它任务，
+在执行完毕后，将重新恢复到原来的模式。%
+例如，可以在任何模式中输入`|\hbox{|';
+当 \TeX\ 要处理它时，就把正在处理的东西搁置起\hbox{来，} 并且进入限制水平模式。%
+最后匹配的`|}|'将结束 hbox, 于是搁置起来的工作又重新进行。%
+在这种情况下， \TeX\ 可以同时处在很多模式中，但是只有最内部的模式在当时起作用；
+其它模式被 \TeX\ 暂时忘记了。
+
+%\goodbreak
+%\danger One way to become familiar with \TeX's modes is to consider the
+%following curious test file called |modes.tex|, which exercises all the
+%modes at once:
+%$$\halign{\hbox to\parindent{\hfil\sevenrm#\ \ }&#\hfil\cr
+%1&|\tracingcommands=1|\cr\noalign{^^|\tracingcommands|}
+%2&|\hbox{|\cr
+%3&|$|\cr
+%4&|\vbox{|\cr
+%5&|\noindent$$|\cr
+%6&|x\showlists|\cr
+%7&|$$}$}\bye|\cr}$$
+%The first line of ^|modes.tex| tells \TeX\ to log every command it
+%receives; \TeX\ will produce diagnostic data whenever
+%|\tracingcommands| is positive. Indeed, if you run \TeX\ on |modes.tex|
+%you will get a |modes.log| file that includes the following information:
+%\begintt
+%{vertical mode: \hbox}
+%{restricted horizontal mode: blank space  }
+%{math shift character $}
+%{math mode: blank space  }
+%{\vbox}
+%{internal vertical mode: blank space  }
+%{\noindent}
+%{horizontal mode: math shift character $}
+%{display math mode: blank space  }
+%{the letter x}
+%\endtt
+%The meaning is that \TeX\ first saw an |\hbox| token in vertical mode;
+%this caused it to go ahead and read the `|{|' behind the scenes.
+%Then \TeX\ entered restricted horizontal mode, and
+%saw the blank space token that resulted from the end of line~2 in the
+%file. Then it saw a math shift character token (still in restricted
+%horizontal mode), which caused a shift to math mode; another
+%blank space came through. Then |\vbox| inaugurated internal
+%vertical mode, and |\noindent| instituted horizontal mode within that; two
+%subsequent |$| signs led to display math mode. \ (Only the first |$| was
+%shown by |\tracingcommands|, because that one caused \TeX\ to look ahead
+%for another.)
+\goodbreak
+\danger \1要理解 \TeX\ 的模式，就看看下面这个古怪的测试文件 |modes.tex|,
+它同时包含了所有的模式：
+$$\halign{\hbox to\parindent{\hfil\sevenrm#\ \ }&#\hfil\cr
+1&|\tracingcommands=1|\cr\noalign{}
+2&|\hbox{|\cr
+3&|$|\cr
+4&|\vbox{|\cr
+5&|\noindent$$|\cr
+6&|x\showlists|\cr
+7&|$$}$}\bye|\cr}$$
+|modes.tex| 的第一行告诉 \TeX\ 记录下接到的每个命令；
+只要 |\tracingcommands| 是正的， \TeX\ 就给出诊断信息。%
+的确，如果编译 |\modes.tex|, 就得到了文件 |modes.log|, 它包含下列信息：
+\begintt
+{vertical mode: \hbox}
+{restricted horizontal mode: blank space}
+{math shift character $}
+{math mode: blank space}
+{\vbox}
+{internal vertical mode: blank space}
+{\noindent}
+{horizontal mode: math shift character $}
+{display math mode: blank space}
+{the letter x}
+\endtt
+意思是， \TeX\ 首先在垂直模式下遇见一个记号 |\hbox|;
+这使其继续进行并且在幕后读入`|{|'。%
+接着 \TeX\ 进入受限水平模式，并且遇见来自文件的第二行结尾的空格记号。%
+接着遇见数学转换符记号(仍然处在受限水平模式), 它使得转换到数学模式；
+接下来是另一个空格。%
+再接着 |\vbox| 导致进入内部垂直模\hbox{式，} 并且 |\noindent| 在内部开始了水平模式；
+两个紧接的 |$| 号导致进入陈列数学模式。
+(只有第一个 |$| 被 |\tracingcommands| 显示出来，这是因为它使得 \TeX\ 到%
+前面去找另一个。)
+
+%\danger The next thing in |modes.log| after the output above is
+%`|{|^|\showlists||}|'. This is another handy diagnostic command that
+%you can use to find out things that \TeX\ ordinarily keeps to itself; it
+%causes \TeX\ to display the lists that are being worked on, in the current
+%mode and in all enclosing modes where the work has been suspended:
+%\begintt
+%### display math mode entered at line 5
+%\mathord
+%.\fam1 x
+%### internal vertical mode entered at line 4
+%prevdepth ignored
+%### math mode entered at line 3
+%### restricted horizontal mode entered at line 2
+%\glue 3.33333 plus 1.66666 minus 1.11111
+%spacefactor 1000
+%### vertical mode entered at line 0
+%prevdepth ignored
+%\endtt
+%In this case the lists represent five levels of activity, all
+%present at the end of line~6 of |modes.tex|.
+%The current mode is shown first, namely, display math mode, which began
+%on line~5. The current math list contains one ``^{mathord}''
+%object, consisting of the letter~|x| in family~1. \ (Have patience and you
+%will understand what that means, when you learn about \TeX's math formulas.) \
+%Outside of display math mode comes internal vertical mode, to which \TeX\
+%will return when the paragraph containing the
+%displayed formula is complete. The vertical list ^^|prevdepth ignored|
+%on that level is empty; `|prevdepth ignored|' means that |\prevdepth|
+%has a value $\le-1000\pt$, so that the next interline glue will be omitted
+%(cf.~Chapter~12). The math mode outside of this internal vertical mode has
+%an empty list, likewise, but the restricted horizontal mode enclosing the math
+%mode contains some glue. Finally, we see the main vertical mode that
+%encloses everything; this mode was `|entered at line 0|', i.e., before
+%the file |modes.tex| was input; nothing has been contributed
+%so far to the vertical list on this outermost level.
+\danger 在上面的输出后面，|modes.log| 的内容是`|{||\showlists||}|'。%
+这是另一个处理诊断的命令，可以用来显示出 \TeX\ 一般不显示的信息；
+它使 \TeX\ 把正在运行的东西列表显示——%
+在当前模式下和在被搁置起来的所有包裹在外面模式下：
+\begintt
+### display math mode entered at line 5
+\mathord
+.\fam1 x
+### internal vertical mode entered at line 4
+prevdepth ignored
+### math mode entered at line 3
+### restricted horizontal mode entered at line 2
+\glue 3.33333 plus 1.66666 minus 1.11111
+spacefactor 1000
+### vertical mode entered at line 0
+prevdepth ignored
+\endtt
+\1在本情况下，列表给出了五个层级的活动，它们都出现在 |modes.tex| 第 6 行的结尾。%
+当前模式首先列出来，即，陈列数学模式，它在第 5 行开始。%
+当前数学列表包含一个``mathord''对象，由第 1 族中的字母 |x| 组\hbox{成。}%
+(耐心一点，当学到 \TeX\ 的数学公式那章时就理解它的意思了。)
+陈列数学模式外面是内部垂直模式，当包含陈列公式的段落结束后， \TeX\ 将回到它。%
+在此等级上，垂直列表是空的；
+`|\prevdepth ignored|'意思是 |\prevdepth| 的值 $\le-1000\pt$,
+因此下一个行间粘连将被去掉(参见第十二章)。%
+这个内部垂直模式外面的数学模式同样也是空列，但是数学模式外面的受限水平模式包含%
+一些粘连。%
+最后是主要垂直模式，它包裹了所有的东西；
+这个模式`|entered at line 0|', 即在文件 |modes.tex| 输入之前；
+在这个最外面的层级上的垂直列迄今为止什么也没有。
+
+%\dangerexercise Why is there glue in one of these lists but not in the
+%others?
+%\answer The output of\/ |\tracingcommands| shows that four blank space tokens
+%were digested; these originated at the ends of lines 2,~3, 4, and~5. Only
+%the first had any effect, since blank spaces are ignored in math formulas
+%and in vertical modes.
+\dangerexercise 为什么在这些列表中只有一个包含粘连，而其它的没有？
+\answer |\tracingcommands| 的输出显示有四个空格记号被消化；
+它们分别来自第 2, 3, 4, 5 行的行尾。
+只有第一个有作用，因为在数学公式和垂直列中的空格都被忽略了。
+
+%\dangerexercise After this output of\/ |\showlists|, the |modes.log| file
+%contains further output from |\tracingcommands|. In fact, the next two
+%lines of that file are
+%\begintt
+%{math shift character $}
+%{horizontal mode: end-group character }}
+%\endtt
+%because the `|$$|' on line 7 finishes the displayed formula, and this
+%resumes horizontal mode for the paragraph that was interrupted.
+%What do you think are the next three lines of |modes.log|\thinspace?
+%\answer The |end-group character| finishes the paragraph and the |\vbox|,
+%and |\bye| stands for `|\par\vfill...|', so the next three commands are
+%\begintt
+%{math mode: math shift character $}
+%{restricted horizontal mode: end-group character }}
+%{vertical mode: \par}
+%\endtt
+\dangerexercise 在 |\showlists| 的输出后，
+|modes.log| 文件包含来自 |\tracingcommands| 的更多输出。%
+实际上，此文件的下两行是
+\begintt
+{math shift character $}
+{horizontal mode: end-group character }}
+\endtt
+因为在第 7 行的`|$$|'结束了陈列公式，并且回到了中断了的水平模式。%
+你知道 |modes.log| 文件的下三行是什么吗？
+\answer |end-group character| 结束段落和 |\vbox|，
+而 |\bye| 表示 `|\par\vfill...|'，因此下面三个命令是：
+\begintt
+{math mode: math shift character $}
+{restricted horizontal mode: end-group character }}
+{vertical mode: \par}
+\endtt
+
+%\dangerexercise Suppose \TeX\ has generated a document without ever
+%leaving vertical mode. What can you say about that document?
+%\answer It contains only mixtures of vertical glue and horizontal rules
+%whose reference points appear at the left of the page; there's no text.
+\dangerexercise 假定 \TeX\ 生成了一个文档，却没有离开过垂直模式。%
+这样的文稿是怎样的呢？
+\answer 它只能包含基准点在页面左边的垂直粘连和水平标尺的混合；不含任何文本。
+
+%\ddangerexercise Some of \TeX's modes cannot immediately enclose other modes;
+%for example, display math mode is never directly enclosed by horizontal
+%mode, even though displays occur within paragraphs, because an interrupted
+%paragraph-so-far of horizontal mode is always completed and
+%removed from \TeX's memory before the processing of a displayed formula
+%begins. Give a complete characterization of all pairs of consecutive
+%modes that can occur in the output of\/ |\showlists|.
+%\answer Vertical mode can occur only as the outermost mode; horizontal
+%mode and display math mode can occur only when immediately enclosed by
+%vertical or internal vertical mode; ordinary math mode cannot be
+%immediately enclosed by vertical or internal vertical mode; all other
+%cases are possible.
+\ddangerexercise 有些 \TeX\ 模式不能直接包在其它模式中；
+例如，陈列数学模式不能直接包含在水平模式中，即使列表出现在段落中，
+这是因为在开始处理陈列公式时，水平模式的搁置起来的当前段落总是要结束掉，
+并且从 \TeX\ 的内存中清除掉。%
+在 |\showlists| 输出中可以连续出现的两个模式，它们之间有什么特征？
+\answer 垂直模式只能作为最外层的模式；
+水平模式和陈列数学模式只能直接包含在竖直或内部竖直模式中；
+普通数学模式不能直接包含在竖直或内部竖直模式中；
+其他情形都是可能的。
+
+\endchapter
+
+Every mode of life has its conveniences.
+\author SAMUEL ^{JOHNSON}, {\sl The Idler\/} (1758)
+
+\bigskip
+
+[Hindu musicians] have eighty-four modes,
+of which thirty-six are in general use,
+and each of which, it appears, has a peculiar expression,
+and the power of moving some particular sentiment or affection.
+\author MOUNTSTUART ^{ELPHINSTONE}, {\sl History of India\/} (1841)
+% III.vii.I.297
+
+\vfill\eject\byebye

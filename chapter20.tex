@@ -1,0 +1,2832 @@
+% -*- coding: utf-8 -*-
+
+\input macros
+
+%\beginchapter Chapter 20. Definitions\\(also called Macros)
+\beginchapter Chapter 20. 宏定义
+
+\origpageno=199
+
+%You can often save time typing math formulas by letting ^{control sequences}
+%stand for constructions that occur frequently in a particular manuscript.
+%For example, if some document uses the vector `$(x_1,\ldots,x_n)$' a lot,
+%you can type
+%\begintt
+%\def\xvec{(x_1,\ldots,x_n)}
+%\endtt
+%and |\xvec| will henceforth be an abbreviation for `|(x_1,\ldots,x_n)|'.
+%Complex displays \rlap{like}
+%$$\def\xvec{(x_1,\ldots,x_n)}
+%\sum_{\xvec\ne(0,\ldots,0)} \bigl(f\xvec+g\xvec\bigr)$$
+%can then be typed simply as
+%\begintt
+%$$\sum_{\xvec\ne(0,\ldots,0)} \bigl(f\xvec+g\xvec\bigr)$$
+%\endtt
+%instead of in a tedious long form. By ^{defining a control sequence}
+%like |\xvec|, you not only cut down on the number of keystrokes that you need
+%to make, you also reduce your chances of introducing typographical errors
+%and inconsistencies. ^^{abbreviations, see macros}
+\1在 \TeX\ 文稿中，把经常用到的命令和符号的组合用控制系列来表示，
+在输入时就可以节约时间了。%
+例如，如果在文档中用到很多`$(x_1,\ldots,x_n)$',
+那么就可以输入
+\begintt
+\def\xvec{(x_1,\ldots,x_n)}
+\endtt
+这样就把 |\xvec| 定义为`|(x_1,\ldots,x_n)|'了。%
+因此，象
+$$\def\xvec{(x_1,\ldots,x_n)}
+\sum_{\xvec\ne(0,\ldots,0)} \bigl(f\xvec+g\xvec\bigr)$$
+这样复杂的陈列公式就可以简单地输入为
+\begintt
+$$\sum_{\xvec\ne(0,\ldots,0)} \bigl(f\xvec+g\xvec\bigr)$$
+\endtt
+而不需要用冗长的输入。%
+通过定义象 |\xvec| 这样的控制系列，不但可以减轻输入的工作量，
+还可以在输入时减少出现错误和矛盾的机会。
+
+%Of course, you usually won't be making a definition just to speed up the
+%typing of one isolated formula; that doesn't gain anything, because time goes by
+%when you're deciding whether or not to make a definition, and when you're
+%typing the definition itself. The real payoff comes when some cluster of
+%symbols is used dozens of times throughout a manuscript. A wise typist will
+%look through a document before typing anything, thereby getting a feeling
+%for what sorts of problems will arise and what sorts of definitions will
+%be helpful. For example, Chapter~16 recommends that the control sequence
+%|\Ahat| be defined at the beginning of any manuscript that makes frequent
+%use of the symbol~$\hat A$.
+当然，通常不要单单为快速输入一个公式而给出定义；
+这样没什么好处，因为在你决定是否给出定义时，以及输入定义本身时就花掉时间了。%
+只有当整个文稿中用到某些符号组合的次数超过一打时，才真正能得到好处。%
+在排版前，聪明的人会浏览一下整个文档，对要出现的问题和要用到的定义有一个印象。%
+例如，第十六章建议，对频繁使用符号 $\hat A$ 的文稿，在其开头给出控制系列 |\Ahat| 的定义。
+
+%Abbreviations like |\xvec| turn out to be useful in many applications of
+%computers, and they have come to be known as {\sl^{macros}\/} because they
+%are so powerful; one little macro can represent an enormous amount of
+%material, so it has a sort of macroscopic effect. System programs like
+%\TeX\ that are designed to deal with macro definitions are said to {\sl
+%expand\/} the user's macros; for example, |\xvec| expands into
+%|(x_1,\ldots,x_n)|, and ^|\ldots| in turn is a macro that expands into
+%|\mathinner{\ldotp\ldotp\ldotp}|.  Thus, |\xvec| is actually an
+%abbreviation for `|(x_1,\mathinner{\ldotp\ldotp\ldotp},x_n)|'.  \ (The
+%expansion stops here, because ^|\mathinner| is a primitive control
+%sequence of \TeX, and because |\ldotp| has been defined with
+%^|\mathchardef|; thus |\mathinner| and |\ldotp| are not macros.)
+像 |\xvec| 这样的缩写在很多计算机应用中都很有用，
+并且因为其威力巨大而被称为{\KT{10}宏}；
+一个很小的宏可以表示很多的内容，因此它有一种宏观效果。
+像 \TeX\ 这样的系统程序，它处理用户定义的方法被称为{\KT{10}宏展开}；
+例如 |\xvec| 展开为 |(x_1,\ldots,x_n)|，而 |\ldots| 实际也是一个宏，
+它接着展开为 |\mathinner{\ldotp\ldotp|\allowbreak |\ldotp}|。因此，
+|\xvec| 实际上是 `|(x_1,\mathinner{\ldotp\ldotp|\allowbreak|\ldotp},x_n)|'
+的缩写。（展开到此为止，因为 |\mathinner| 是 \TeX\ 的原始控制系列，
+而且 |\ldotp| 已经由 |\mathchardef| 定义好了；
+因此，|\mathinner| 和 |\ldotp| 不是宏。）
+
+%\TeX\ users generally build up their own personal ^{library of macros} for
+%things that they want to do in different documents. For example, it is common
+%to have a file called |macros.tex| that contains definitions of your favorite
+%special control sequences, perhaps together with commands that load your
+%favorite special fonts, etc. If you begin a document with the command
+%\begintt
+%\input macros
+%\endtt
+%then \TeX\ will read all those definitions, ^^|\input|
+%saving you all the trouble of retyping them. Of course, \TeX's memory is
+%limited, and it takes time to read a file, so you shouldn't put thousands
+%of definitions into |macros.tex|. A large collection of macro definitions
+%(e.g., the set of definitions in Appendix~B) is called a {\sl^{format}\/}
+%(e.g., ``plain \TeX\ format''); \TeX\ has a special way to input
+%a format at high speed, assuming that the format doesn't change very often.
+ \TeX\ 用户一般要建立自己个人的宏库，以便在不同的文档中使用。%
+例如，一般建立一个叫 |macros.tex| 的文件，其中有你喜爱的专用控制系列的定义，
+可能还有载入所喜欢的特殊字体的命令，等等。%
+如果在文稿开头输入命令：
+\begintt
+\input macros
+\endtt
+那么 \TeX\ 将读入所有这些定义，省得你再次输入它们了。%
+当然， \TeX\ 的内存有限，读入文件要花时间，
+因此不要在 |macros.tex| 中放上千个定义。%
+\1一个大的宏定义集(比如，附录 B 中的定义集)称为一个{\KT{10}格式}(比如，%
+``plain \TeX\ 格式'');
+如果格式不经常改变，那么 \TeX\ 能用一种特殊的方式快速输入一个格式。
+
+%The |\xvec| and |\Ahat| examples apply to math formulas, but you can make
+%good use of macro definitions even when you aren't doing any math at all.
+%For example, if you are using \TeX\ for ^{business correspondence},
+%you can have a |\yours| macro that stands for `Sincerely yours, A.~U.
+%^{Thor}'. If you often write ^{form letters} you can have macros that
+%generate entire sentences or paragraphs or groups of paragraphs.
+%The ^{Internal Revenue Service} could, for example, make use of the
+%following two macros:
+%\begintt
+%\def\badcheck{A penalty has been added because your
+%  check to us was not honored by your bank.\par}
+%\def\cheater{A penalty of 50\% of the underpaid tax
+%  has been added for fraud.\par}
+%\endtt
+%Simple macro definitions, like these, start with `|\def|'; then comes the
+%control sequence name, e.g., `|\badcheck|'; and then comes the replacement
+%text enclosed in `|{|' and~`|}|'. The ^{braces} do not represent
+%^{grouping} in this case; they simply show the extent of the replacement
+%text in the definition.  You could, of course, define a macro that
+%includes actual braces in its replacement text, as long as those braces
+%match each other properly. For example, `|\def\xbold{{\bf x}}|'
+%makes |\xbold| an abbreviation for `|{\bf x}|'.
+例子 |\xvec| 和 |\Ahat| 是应用于数学公式的，但是即使与数学无关时，
+宏定义也非常有用。%
+例如，如果要用 \TeX\ 进行商业通信，
+就可以用宏 |\yours| 了表示`Sincerely yours, A.~U. ^{Thor}'。%
+如果经常用到格式信函，就可以用宏生成整个句子或段落，或者是一组段落。%
+例如，税务机关可以用下面两个宏：
+\begintt
+\def\badcheck{A penalty has been added because your
+  check to us was not honored by your bank.\par}
+\def\cheater{A penalty of 50\% of the underpaid tax
+  has been added for fraud.\par}
+\endtt
+象这样简单的宏定义以`|\def|'开始；
+接着是控制系列的名字，比如`|\badcheck|';
+再接着是要替换的文本，它们要封装在`|{|'和`|}|'中。%
+在这种情况下，大括号不表示编组；
+它们直接表明定义中要替换的文本的范围。%
+当然，在替换文本中包含大括号的宏也是可以定义的，
+只要这些大括号互相正确匹配即可。%
+例如，`|\def\xbold{{\bf x}}|'把 |\xbold| 定义为`|{\bf x}|'。
+
+%\exercise
+%Write a |\punishment| macro that prints 100 lines containing the message
+%`I must not talk in class.' \ [{\sl Hint:\/} First write a macro |\mustnt|
+%that prints the message once; then write a macro |\five| that prints it
+%five times.] \checkequals\punishexno\exno
+%\answer |\def\mustnt{I must not talk in class.\par}|\parbreak
+%        |\def\five{\mustnt\mustnt\mustnt\mustnt\mustnt}|\parbreak
+%        |\def\twenty{\five\five\five\five}|\parbreak
+%        |\def\punishment{\twenty\twenty\twenty\twenty\twenty}|\par
+%\smallskip\noindent Solutions to more complicated problems of this type are
+%discussed later.
+\exercise
+定义 |\punishment| 宏，它要将 `I must not talk in class.' 这句话打印 100 行。%
+[{\KT{10}提示}：首先定义打印一次的宏 |\mustnt|，再定义把 |\mustnt| 输出五次的宏。]
+ \checkequals\punishexno\exno
+\answer |\def\mustnt{I must not talk in class.\par}|\parbreak
+        |\def\five{\mustnt\mustnt\mustnt\mustnt\mustnt}|\parbreak
+        |\def\twenty{\five\five\five\five}|\parbreak
+        |\def\punishment{\twenty\twenty\twenty\twenty\twenty}|\par
+\smallskip\noindent 稍后我们将讨论如何解决这种类型的更复杂的问题。
+
+%\dangerexercise What is the expansion of\/ |\puzzle|, given the following
+%definitions?
+%\begintt
+%\def\a{\b}
+%\def\b{A\def\a{B\def\a{C\def\a{\b}}}}
+%\def\puzzle{\a\a\a\a\a}
+%\endtt
+%\answer |ABCAB|. \ (The first |\a| expands into |A\def\a{B...}|; this redefines
+%|\a|, so the second |\a| expands into |B...|, etc.) \ At least, that's what
+%happens if\/ |\puzzle| is encountered when \TeX\ is building a list. But if
+%|\puzzle| is expanded in an ^|\edef| or ^|\message| or something like that,
+%we will see later that the interior |\def| commands are not performed
+%while the expansion is taking place, and the control sequences following
+%|\def| are expanded; so the result is an infinite string
+%\begintt
+%A\def A\def A\def A\def A\def A\def A\def A\def A...
+%\endtt
+%which causes \TeX\ to abort because the program's input stack is finite.
+%This example points out that a control sequence (e.g., |\b|) need not be
+%defined when it appears in the replacement text of a definition. The example
+%also shows that \TeX\ doesn't expand a macro until it needs to.
+\dangerexercise 对于下面给出的宏定义，|\puzzle| 宏展开后是什么？
+\begintt
+\def\a{\b}
+\def\b{A\def\a{B\def\a{C\def\a{\b}}}}
+\def\puzzle{\a\a\a\a\a}
+\endtt
+\answer |ABCAB|。（第一个 |\a| 展开为 |A\def\a{B...}|；它重定义了 |\a|，
+因此第二个 |\a| 展开为 |B...|，依次类推。）%
+至少，若 \TeX\ 是在构建列表时遇到 |\puzzle|，这就是所得到的结果。
+但如果 |\puzzle| 是在类似 ^|\edef| 或 ^|\message| 的地方展开，
+我们稍后将看到，当执行宏展开时，内部的 |\def| 命令将不会被执行，
+而 |\def| 之后的控制系列却被展开；因此结果就是一个无穷的字符串：
+\begintt
+A\def A\def A\def A\def A\def A\def A\def A\def A...
+\endtt
+\TeX\ 的输入栈是有限的，因此这导致它中止执行。
+此例子指出，控制系列（比如 |\b|）在宏定义的替换文本出现时可以还未定义。
+此例子还显示 \TeX\ 仅在需要用到时才展开一个宏。
+
+%\danger As soon as you get the hang of simple macros like those illustrated
+%above, you will probably begin to think, ``Boy, wouldn't it be nice if I could
+%have a macro in which some of the text in the expansion is changeable? I'd like
+%to be able to stick different things into the middle of that text.'' Well,
+%\TeX\ has good news for you: Control sequences can be defined in terms of
+%{\sl^{parameters}}, and you can supply {\sl^{arguments}\/} that will be
+%substituted for the parameters.
+\danger 只要你略微思考一下上面例子中的简单宏，可能就会想：
+``小子，如果宏展开后某些文本可以改变不是更好？
+最好能把不同的东西放在那些文本中间。''
+好， \TeX\ 带来了好消息：
+控制系列可以用{\KT{10}参数}的方式来定义，
+并且你可以给出要代替参数的{\KT{10}参量}。
+
+%\danger For example, let's consider |\xvec| again. Suppose that you not only
+%refer to `$(x_1,\ldots,x_n)$', but you also make frequent use of
+%`$(y_1,\ldots,y_n)$' and other similar things. Then you might want to type
+%\begintt
+%\def\row#1{(#1_1,\ldots,#1_n)}
+%\endtt
+%\def\row#1{(#1_1,\ldots,#1_n)}%
+%after which |\row x| will produce `$\row x$' and |\row y| will produce
+%`$\row y$'. The symbol |#1| ^^{sharpsign} stands for the first parameter to
+%the macro, and when you say `|\row|~|x|' the |x| is a so-called argument that
+%will be inserted in place of the |#1|'s in the replacement text. In this
+%case the argument consists of a single letter, |x|. You can also say
+%|\row\alpha|, in which case the argument will be the control sequence
+%^|\alpha|, and the result will be `$\row\alpha$'. If you want the argument
+%to contain more than one symbol or control sequence, you can simply enclose
+%it in ^{braces}; for example, |\row{x'}| yields $\row{x'}$. The argument
+%in this case is |x'| (without the braces). Incidentally, if you say
+%|\row{{x'}}|, you get $\row{{x'}}$; the reason is that only one pair of
+%braces is stripped off when the argument is collected, and
+%$({x'}_1,\ldots,{x'}_n)$ is what you get from
+%|({x'}_1,\ldots,{x'}_n)| in math mode, according to the rules
+%of Chapter~16. ^^{apostrophe}
+\danger 例如，再来看看 |\xvec|。%
+假定你不只需要`$(x_1,\ldots,x_n)$', 还需要频繁用到`$(y_1,\ldots,y_n)$'%
+和其它类似的公式。%
+那么你可能要输入
+\begintt
+\def\row#1{(#1_1,\ldots,#1_n)}
+\endtt
+\def\row#1{(#1_1,\ldots,#1_n)}%
+\1此后，|\row x| 得到的就是`$\row x$', |\row y| 得到的是`$\row y$'。%
+符号 |#1| 表示宏的第一个参数，并且当你输入`|\row|~|x|'时，|x| 就是所谓的参量，
+它要代替的是替换文本中 |#1|。%
+在这种情况下，参量由单个字母 |x| 组成。%
+你还可以使用 |\row\alpha|, 这时参量是一个控制系列，所得到的结果是`$\row\alpha$'。%
+如果要让参量包含不止一个符号或控制系列，
+那么可以把它们封装在大括号中；
+例如，|\row{x'}| 得到的是 $\row{x'}$。%
+在这种情况下，参量是 |x'|~(没有大括号)。%
+顺便说一句，如果输入 |\row{{x'}}|, 那么得到的是 $\row{{x'}}$;
+原因是当取参量时，只剥去一对大括号，
+并且按照第十六章的规则，$({x'}_1,\ldots,{x'}_n)$ 是从 |({x'}_1,\ldots,{x'}_n)| 的%
+数学模式得到的。%
+
+%\dangerexercise Continuing this example, what is the result of
+%|$\row{\bf x}$|?
+%\answer \def\row#1{(#1_1,\ldots,#1_n)}$\row{\bf x}$. Note that the
+%subscripts are bold here, because the expansion |(\bf x_1,\ldots,\bf x_n)|
+%doesn't ``turn off'' ^|\bf|. To prevent this, one should write
+%|\row{{\bf x}}|; or (better), |\row\xbold|, in conjunction with
+%|\def\xbold{{\bf x}}|.
+\dangerexercise 继续讨论这个例子，|$\row{\bf x}$| 得到的是什么？
+\answer \def\row#1{(#1_1,\ldots,#1_n)}$\row{\bf x}$。
+注意因为宏展开 |(\bf x_1,\ldots,\bf x_n)| 并未 ``关闭'' ^|\bf|，这里的下标也被加粗了。
+要避免这个结果，你应该写为 |\row{{\bf x}}|；或者写为 |\row\xbold|，
+并补充 |\def\xbold{{\bf x}}|。
+
+%\danger The notation `|#1|' suggests that there might be an opportunity to have
+%more than one parameter, and indeed there is. You can write, for example,
+%\begintt
+%\def\row#1#2{(#1_1,\ldots,#1_#2)}
+%\endtt
+%\def\row#1#2{(#1_1,\ldots,#1_#2)}%
+%after which `|\row xn|' would be the proper protocol for `$\row xn$'. There can
+%be as many as nine parameters, |#1| to~|#9|, and when you use them you must
+%number them~in order. For example, you can't use |#5| in a definition unless
+%the previous parameter in~that definition was called |#4|. \ (This restriction
+%applies only to the initial statement of parameters, before the replacement
+%text starts; the stated parameters can be used any number of times, in any
+%order, in the replacement text itself.)
+\danger 符号`|#1|'意味着可以有不止一个参数，的确如此。%
+例如，可以输入
+\begintt
+\def\row#1#2{(#1_1,\ldots,#1_#2)}
+\endtt
+\def\row#1#2{(#1_1,\ldots,#1_#2)}%
+此后，`|\row xn|'就能得到`$\row xn$'了。%
+至多可以有九个参数，|#1| 到 |#9|, 并且在使用时必须按顺序来。%
+例如，如果定义中没有叫做 |#4| 的前一个参数，就不能用 |#5|。%
+(这个限制只适用于替换文本开始前参数的初始声明；
+在替换文本自己中，所声明的参数可以任意次序地使用任意次。)
+
+%\danger A control sequence has only one definition at a
+%time, so the second definition of\/ |\row| would supersede the first one if
+%both had appeared in the same document. Whenever \TeX\ encounters a macro
+%that it wants to expand, it uses the most recent definition. However,
+%definitions are ^{local} to the group that contains them; old definitions
+%will be restored in the usual way when a ^{group} ends.
+\danger 一个控制系列同时只能有一个定义，因此，
+如果在同一文稿中出现两个 |\row| 的定义，那么第二个就替掉第一个。%
+只要 \TeX\ 遇见要展开的宏，它就使用最近的定义。%
+但是，对于包含定义的组而言，定义是局部的；
+当组结束时，旧定义将按照通常的方法恢复。
+
+%\danger Caution: When you define a macro with simple parameters, as in
+%these examples, you must be careful not to put blank spaces before the
+%`|{|' that begins the replacement text. For example, `|\def\row #1 #2 {...}|'
+%will not give the same result as `|\def\row#1#2{...}|', because the spaces
+%after |#1| and~|#2| tell \TeX\ to look for arguments that are followed by
+%spaces. \ (Arguments can be ``delimited'' in a fairly general way, as
+%explained below.) \ But the space after |\row| is optional, as usual,
+%because \TeX\ always disregards spaces after control words. After
+%you have said `|\def\row#1#2{...}|', you are allowed to put spaces
+%between the arguments (e.g., `|\row x n|'), because \TeX\ doesn't
+%use single spaces as undelimited arguments.
+\danger 注意：当象这些例子中用简单参数定义宏时，必须注意不要在替换文本%
+前面的`|{|'前留下空格。%
+例如，`|\def\row #1 #2 {...}|'与`|\def\row#1#2{...}|'得到的结果是不同的，
+因为 |#1| 和 |#2| 后的空格就要求 \TeX\ 去寻找后面带空格的参量。%
+(就象下面讨论的那样，参量可以用相当一般的方法来``分界''。)
+但是 |\row| 的空格象通常那样是任意的，因为 \TeX\ 总是忽略掉控制词后的空格。%
+在给出`|\def\row#1#2{...}|'后，就允许在参量之间放置空格(比如`|\row x n|'),
+因为 \TeX\ 不把单个空格当作未分界的参量。
+
+%\danger The following exercise is particularly recommended for people who
+%want to learn to write \TeX\ macros. Even if you have gotten into the
+%dangerous habit of skimming other exercises, you should try your hand
+%at this one.
+\danger 下面的练习特别推荐给要掌握 \TeX\ 宏的人。%
+即使你略过其它的练习，也要亲手做下面这个。
+
+%\dangerexercise Extending exercise 20.\punishexno, write a ``generalized
+%punishment'' macro that has two parameters, so that |\punishment{run}{the
+%halls}| will produce 100 paragraphs that say `I~must not run in the halls.'
+%\answer The catch is that the parameters have to percolate down to the
+%|\mustnt| macro, if you extend the previous answer:
+%\begintt
+%\def\mustnt#1#2{I must not #1 in #2.\par}
+%\def\five#1#2{\mustnt{#1}{#2}...\mustnt{#1}{#2}}
+%\def\twenty#1#2{\five{#1}{#2}...\five{#1}{#2}}
+%\def\punishment#1#2{\twenty{#1}{#2}...\twenty{#1}{#2}}
+%\endtt
+%When you pass parameters from one macro to another in this way, you need to
+%enclose them in braces as shown. But actually this particular solution
+%punishes \TeX\ much more than it needs to, because it takes a lot of
+%time to copy the parameters and read them again and again. There's a
+%much more efficient way to do the job, by defining control sequences:
+%\begintt
+%\def\mustnt{I must not \doit\ in \thatplace.\par}
+%\def\punishment#1#2{\def\doit{#1}\def\thatplace{#2}%
+%  \twenty\twenty\twenty\twenty\twenty}
+%\endtt
+%and by defining |\five| and |\twenty| without parameters as before.
+%You can also delve more deeply into \TeX nicalities, constructing solutions
+%that are more efficient yet; \TeX\ works even faster when macros
+%communicate with each other via ^{boxes}.
+%^^{efficient macros} ^^{communication between macros}
+%For example,
+%\begintt
+%\def\mustnt{\copy0 }
+%\def\punishment#1#2{\setbox0=
+%  \vbox{\strut I must not #1 in #2.\strut}%
+%  \twenty\twenty\twenty\twenty\twenty}
+%\endtt
+%sets 100 identical paragraphs at high speed, because \TeX\ has to
+%process the paragraph and break it into lines only once. It's much faster
+%to ^{copy a box} than to build it up from scratch. \ (The ^{struts} in
+%this example keep the interbaseline distances correct between boxed
+%paragraphs, as explained in Chapter~12. Two struts are used, for if the
+%message takes more than one line there will be a strut at both top
+%and bottom. If it were known that each sentence will occupy only a single
+%line, no struts would be needed, because interline glue is added as
+%usual when a box created by |\copy| is appended to the current vertical list.)
+\dangerexercise 扩展练习 20.\punishexno ，
+定义一个适用更广的``处罚''宏，它有两个参数，且使用
+|\punishment{run}{the halls}| 得到的是 100 句 `I~must not run in the halls.'。
+\answer 陷阱在于，如果你在之前答案的基础上改进，
+参数必须逐级传入到 |\mustnt| 宏的定义中：
+\begintt
+\def\mustnt#1#2{I must not #1 in #2.\par}
+\def\five#1#2{\mustnt{#1}{#2}...\mustnt{#1}{#2}}
+\def\twenty#1#2{\five{#1}{#2}...\five{#1}{#2}}
+\def\punishment#1#2{\twenty{#1}{#2}...\twenty{#1}{#2}}
+\endtt
+当你用这种方式将参数从一个宏传递到另一个宏，你需要如上所示将参数包围在花括号中。
+但实际上此种解法太过为难 \TeX 了，因为它将让 \TeX\ 费时地一次次复制并读取参数。
+还有一种更有效率的解决方法，即定义下面的控制系列：
+\begintt
+\def\mustnt{I must not \doit\ in \thatplace.\par}
+\def\punishment#1#2{\def\doit{#1}\def\thatplace{#2}%
+  \twenty\twenty\twenty\twenty\twenty}
+\endtt
+而且像之前那样将 |\five| 和 |\twenty| 定义为无参数的宏。
+通过深入探究 \TeX\ 技术，你还可以构造更加有效率的解法；
+当宏与宏之间利用^{盒子}传递内容时，\TeX\ 的运行速度快多了。
+^^{efficient macros} ^^{communication between macros}
+例如，
+\begintt
+\def\mustnt{\copy0 }
+\def\punishment#1#2{\setbox0=
+  \vbox{\strut I must not #1 in #2.\strut}%
+  \twenty\twenty\twenty\twenty\twenty}
+\endtt
+将以高速设定 100 个相同的段落，因为 \TeX\ 只需处理段落并分段为行一次。
+复制一个盒子比从零开始构建它速度快多了。（如同第 12 章中所解释的，
+这个例子中的^{支架}用于让盒子中的段落保持正确的基线间距离。
+我们需要两个支架，因为如果消息文本需占用超过一行，这将让顶部和底部都有支架。
+如果已知道每个句子都只占用一行，则无需使用支架，
+因为当用 |\copy| 制造的盒子被添加到当前垂直列时，行间粘连本来将会被加上。）
+
+%\ninepoint % the rest of this chapter is all dangerous
+%\ddanger \TeX\ also allows you to define macros whose parameters are delimited
+%in quite a general way; you needn't always enclose arguments in braces.
+%For example,
+%\begintt
+%\def\cs #1. #2\par{...}
+%\endtt
+%defines a control sequence |\cs| with two parameters, and its two arguments
+%will be determined as follows: |#1| will consist of all tokens between
+%|\cs| and the next subsequent appearance of `|.|\]' (period and space);
+%|#2| will consist of all tokens between that `|.|\]' and the next
+%|\par| token. \ (The ^|\par| might be given explicitly, or it might be
+%generated by a blank line as explained in Chapter~8.) \ For example, when
+%\TeX\ expands
+%\begintt
+%\cs You owe \$5.00. Pay it.\par
+%\endtt
+%the first argument is `|You owe \$5.00|' and the second is `|Pay it.|'.
+%The period in `|\$5.00|' doesn't stop |#1|, in this example,
+%because \TeX\ keeps going until finding a period that is followed immediately
+%by a space.
+\ninepoint % the rest of this chapter is all dangerous
+\ddanger \1\TeX\ 还允许定义这样的宏，其参数用相当普遍的方法来分界；
+你不需要总是把参量封装在大括号中。%
+例如，
+\begintt
+\def\cs #1. #2\par{...}
+\endtt
+定义了一个控制系列 |\cs|, 它有两个参数，并且这两个参数如下确定出：
+|#1| 由 |\cs| 和下一个随后出现的`|.|\]'\allowbreak(句点和空格)之间的所有内容组成；
+|#2| 由这个`|.|\]'和其后出现的 |\par| 之间的所有内容组成。%
+(|\par| 可以明确给出，也可以由第十八章讨论的空行生成。)
+例如，当 \TeX\ 展开
+\begintt
+\cs You owe \$5.00. Pay it.\par
+\endtt
+时，第一个参量是`|You owe \$5.00|', 而第二个是`|Pay it.|'。%
+本例中，`|\$5.00|'中的句点不能结束 |#1|,
+因为 \TeX\ 要找的是后面紧跟着空格的句点。
+
+%\ddanger Furthermore, an argument will not stop when its delimiter is enclosed
+%in braces, because that would produce unbalanced braces. For example, in
+%\begintt
+%\def\cs #1.#2\par{...}
+%\endtt
+%the first argument is now delimited by a single period, so |#1| would be
+%`|You owe \$5|' and the |#2| would be `|00. Pay it.|' if\/ |\cs| were
+%invoked as above. But
+%\begintt
+%\cs You owe {\$5.00}. Pay it.\par
+%\endtt
+%satisfactorily hides the first period, making it part of argument |#1|,
+%which becomes \hbox{`|You owe {\$5.00}|'}.
+\ddanger 还有，如果参量的分界符被封装在大括号时，这个参量不在此结束，
+因为这样就得到了不匹配的大括号。例如，在
+\begintt
+\def\cs #1.#2\par{...}
+\endtt
+中，现在第一个参量到一个单句点处结束，因此，如果像上面那样调用 |\cs|，
+|#1| 为 `|You owe \$5|'，而 |#2| 为 `|00. Pay it.|'。但是，
+\begintt
+\cs You owe {\$5.00}. Pay it.\par
+\endtt
+圆满地藏起第一个句点，使得它不能结束参量 |#1|，
+此时 |#1| 就是 \hbox{`|You owe {\$5.00}|'}。
+
+%\ddanger If you are designing a format for mathematical papers, you will
+%probably want to include a macro for the statement of ^{theorems},
+%definitions, lemmas, corollaries, and such things. For example, you might
+%want to typeset a statement like\enddanger
+\ddanger 如果你要设计一个数学论文的格式，那么可能要有陈述定理，定义，引理，
+推论等东西的宏。%
+例如，可能要排版象下面这样的陈述：
+\enddanger
+
+%\proclaim Theorem 1. \TeX\ has a powerful macro capability.\par
+%\noindent from the input
+%\begintt
+%\proclaim Theorem 1. \TeX\ has a powerful macro capability.\par
+%\endtt
+%In fact, plain \TeX\ includes a ^|\proclaim| macro that does just that;
+%its definition is
+%\begintt
+%\def\proclaim #1. #2\par{\medbreak
+%  \noindent{\bf#1.\enspace}{\sl#2}\par\medbreak}
+%\endtt
+%^^{enunciations, see proclaim} ^^{enspace}
+%so the arguments are delimited exactly as in our first |\cs| example. The
+%replacement text here uses |\medbreak| to separate the proclaimed
+%paragraph from what precedes and follows; the title of the proclamation is
+%set in bold face type, while the text itself is set slanted.  \ (The
+%actual definition of\/ |\proclaim| in Appendix~B is not quite the same as
+%this; the final |\medbreak| has been modified so that a break between
+%pages will be discouraged immediately following the statement of a
+%theorem. Hence a short theorem will tend to appear at the top of a page
+%rather than at the bottom.)
+\proclaim Theorem 1. \TeX\ has a powerful macro capability.\par
+\noindent 它用下列方法得到：
+\begintt
+\proclaim Theorem 1. \TeX\ has a powerful macro capability.\par
+\endtt
+实际上，~plain \TeX\ 中有一个象这样的宏 |\proclaim|;
+其定义为
+\begintt
+\def\proclaim #1. #2\par{\medbreak
+  \noindent{\bf#1.\enspace}{\sl#2}\par\medbreak}
+\endtt
+这样，参量就象我们 |\cs| 的第一个例子那样分界。%
+这里的替换文本用 |\medbreak| 把要 proclaim 的段落与其前后内容分开；
+proclaim 的题目设置为 bold 字体，而文本设置为 slanted。%
+(附录 B 中 |\proclaim| 的实际定义与它不完全一样；
+为了使分页不出现在定理陈述紧后面，而修改了最后的 |\medbreak|。%
+因此，短小的定理更倾向于放在页面顶部而不是底部。)
+
+%\ddanger By making changes to the |\proclaim| macro, you can change the
+%format of all the proclamations in your paper, without changing the text
+%of the paper itself. For example, you could produce something like\enddanger
+\ddanger 通过改变宏 |\proclaim|, 你可以改变论文中所有 proclaim 的格式，
+而不需要改动论文自己的文本。%
+例如，可以得到象下面这样的东西：
+\enddanger
+
+%\medbreak
+%\font\tencsc=cmcsc10
+%\noindent {\tencsc Theorem 1:}\enspace
+%{\it\TeX\ has a powerful macro capability.}
+%\goodbreak\medbreak\noindent
+%by making simple alterations to the replacement text of\/ |\proclaim|,
+%assuming that you have a ``^{caps and small caps}'' font. \TeX\ is
+%intended to support ^{higher-level languages for composition} in which all of
+%the control sequences that a user actually types are macros rather than
+%\TeX\ primitives. The ideal is to be able to describe important classes of
+%documents in terms of their components, without mentioning actual fonts or
+%point sizes or details of spacing; a single ^{style-independent document}
+%^^{format-independent document}^^{generic coding}
+%can then be set in many different styles.
+\medbreak
+\font\tencsc=cmcsc10
+\noindent {\tencsc Theorem 1:}\enspace
+{\it\TeX\ has a powerful macro capability.}
+\goodbreak\medbreak\noindent
+\1这只需要直接修改 |\proclaim| 的替换文本即可，我们假定你有所用到的字体。%
+ \TeX\ 希望支持复合的高级语言，其中用户使用的所有的控制系列都是宏，
+而不是 \TeX\ 原始命令。%
+思路是要能用几个要素来描述出重要类型的文档，
+而不涉及到实际的字体，字体尺寸或详细的间距；
+因此，可以用很多不同的字体来设置一个与字体无关的文档。
+
+%\ddanger Now that we have seen a number of examples, let's look at the
+%precise rules that govern \TeX\ macros. Definitions have the general form
+%\begindisplay
+%|\def|\<control sequence>\<parameter text>|{|\<replacement text>|}|
+%\enddisplay
+%where the \<parameter text> contains no ^{braces}, and where all occurrences
+%of |{| and |}| in the \<replacement text> are properly nested. Furthermore
+%the |#| symbol has a special significance: In the \<parameter text>, the
+%first appearance of |#| must be followed by~|1|, the next by~|2|, and
+%so on; up to nine |#|'s are allowed. In the \<replacement text> each~|#|
+%must be followed by a digit that appeared after~|#| in the \<parameter text>,
+%or else the~|#| should be followed by another~|#|. The latter case stands
+%for a single~|#| token when the macro is expanded; the former case stands
+%for insertion of the corresponding argument.
+\ddanger 现在我们已经看到一些例子，接下来我们讨论 \TeX\ 宏的准确规则。%
+定义的一般形式为
+\begindisplay
+|\def|\<control sequence>\<parameter text>|{|\<replacement text>|}|
+\enddisplay
+其中 \<parameter text> 不包含大括号，
+并且在 \<replacement text> 中所出现的 |{| 和 |}| 要正确嵌套。%
+还有，符号 |#| 有特殊含义：
+在 \<parameter text> 中，第一个出现的 |#| 后面必须跟 |1|,
+下一个要跟 |2|, 等等；
+只允许九个 |#|。%
+在 \<replacement text> 中，每个 |#| 后面必须跟一个在 \<parameter text> 中%
+的 |#| 后面出现过的数字，或者一个 |#| 后面跟一个 |#|。%
+表示当宏展开时，后一种情况表示一个单个 |#|;
+前一种情况表示插入相应的参量。
+
+%\ddanger For example, let's consider a ``random'' definition that doesn't
+%do anything useful except that it does exhibit \TeX's rules. The definition
+%\begintt
+%\def\cs AB#1#2C$#3\$ {#3{ab#1}#1 c##\x #2}
+%\endtt
+%says that the control sequence |\cs| is to have a parameter text consisting of
+%nine tokens
+%\begindisplay
+%|A|$_{11}$, \ |B|$_{11}$, \ |#1|, \ |#2|, \ |C|$_{11}$, \
+%  |$|$_3$, \ |#3|, \ \cstok{\char`$}, \ \]$_{10}$
+%\enddisplay
+%(assuming the ^{category codes} of plain \TeX), and a replacement text
+%of twelve tokens
+%\begindisplay
+%|#3|, \ |{|$_1$, \ |a|$_{11}$, \ |b|$_{11}$, \ |#1|, \
+%  |}|$_2$, \ |#1|, \ \]$_{10}$, \ |c|$_{11}$, \ |#|$_6$, \ \cstok{x}, \ |#2|.
+%\enddisplay
+%Henceforth when \TeX\ reads the control sequence |\cs| it will expect that
+%the next two tokens will be |A|$_{11}$ and |B|$_{11}$ (otherwise you will
+%get the error message `|Use| |of| |\cs| |doesn't| |match| |its|
+%|definition|'); then comes argument~|#1|, followed by argument~|#2|,
+%then~|C|$_{11}$, then~|$|$_3$, then argument~|#3|, then |\$|, and finally
+%a space token. It is customary to use the word ``argument'' to mean the
+%string of tokens that gets substituted for a parameter; parameters appear
+%in a definition, and arguments appear when that definition is used. \ (For
+%the purposes of these rules, we are extending Chapter~7's definition of
+%^{token}: In addition to control sequences and (character code, category
+%code) pairs, \TeX\ also recognizes ``^{parameter tokens},'' denoted here
+%by |#1|~to~|#9|. Parameter tokens can appear only in token lists for macros.)
+\ddanger 例如，我们讨论一个``随便的''定义，
+它只是为了展示 \TeX\ 的规则。%
+定义
+\begintt
+\def\cs AB#1#2C$#3\$ {#3{ab#1}#1 c##\x #2}
+\endtt
+表示，控制系列 |\cs| 有一个参数文本，它由 9 个记号组成(假定采用 plain \TeX\ 的类代码):
+\begindisplay
+|A|$_{11}$, \ |B|$_{11}$, \ |#1|, \ |#2|, \ |C|$_{11}$, \
+  |$|$_3$, \ |#3|, \ \cstok{\char`$}, \ \]$_{10}$
+\enddisplay
+有一个替换文本，由 12 个记号组成：
+\begindisplay
+|#3|, \ |{|$_1$, \ |a|$_{11}$, \ |b|$_{11}$, \ |#1|, \
+  |}|$_2$, \ |#1|, \ \]$_{10}$, \ |c|$_{11}$, \ |#|$_6$, \ \cstok{x}, \ |#2|.
+\enddisplay
+因此，当 \TeX\ 读入控制系列 |\cs| 后，要读入的下两个记号应该是 |A|$_{11}$ 和%
+~|B|$_{11}$~(否则就会得到错误信息`|Use| |of| |\cs| |doesn't| |match| |its|
+|definition|');
+接下来是参量 |#1|, 参量 |#2|, ~|C|$_{11}$, ~|$|$_3$, 再接着是参量 |#3|,
+|\$|, 最后是空格记号。%
+习惯上用``参量''这个词表示要替换参数的记号串；
+参数出现在定义中，而当使用定义时，出现的是参量。%
+(为此，我们要扩展第七章记号的定义：除了控制系列和(字符代码，类代码)对外，
+ \TeX\ 还有``参数记号'', 在这里它用 |#1| 到 |#9| 来 表示。%
+参数记号只出现在宏的记号列中。
+
+%\ddanger How does \TeX\ determine where an argument stops, you ask.
+%Answer: There are two cases. A {\sl^{delimited parameter}\/} is followed
+%in the \<parameter text> by one or more non-parameter tokens, before
+%reaching the end of the parameter text or the next parameter token;
+%in this case the corresponding argument is the shortest (possibly empty)
+%sequence of tokens with properly nested |{...}| groups that is followed in
+%the input by this particular list of non-parameter tokens. \ (Category
+%codes and character codes must both match, and control sequence names
+%must be the same.) \ An {\sl^{undelimited parameter}\/} is followed immediately
+%in the \<parameter text> by a parameter token, or it occurs at the very end
+%of the parameter text; in this case the corresponding argument is the
+%next nonblank token, unless that token is `|{|', when the argument will
+%be the entire |{...}| group that follows. In both cases, if the argument
+%found in this way has the form `|{|\<nested tokens>|}|', where \<nested
+%tokens> stands for any sequence of tokens that is properly nested with
+%respect to braces, the outermost braces enclosing the argument are removed
+%and the \<nested tokens> will remain. For example, let's continue with
+%|\cs| as defined above and suppose that the subsequent text contains
+%\begintt
+%\cs AB {\Look}C${And\$ }{look}\$ 5.
+%\endtt
+%Argument |#1| will be the token \cstok{Look}, since |#1| is an undelimited
+%parameter (it is followed immediately by~|#2| in the definition);
+%in this case \TeX\ ignores the blank space after |B|, and strips the
+%braces off~of |{\Look}|. Argument~|#2| will be empty, since |C$| follows
+%immediately. And argument~|#3| will be the thirteen tokens corresponding
+%to the text |{And\$|\]|}{look}|, because |#3| is to be followed by `|\$|\]',
+%and because the first occurrence of `|\$|\]' is within braces. Even though
+%argument~|#3| begins with a left brace and ends with a right brace, the
+%braces are not removed, since that would leave the unnested tokens `|And\$
+%}{look|'.  The net effect then, after substituting arguments for
+%parameters in the replacement text, will be that \TeX\ will next read the
+%token list
+%\begintt
+%{And\$ }{look}{ab\Look}\Look|]c#\x5.
+%\endtt
+%The space \] here will be part of the resulting token list, even though
+%it follows the control word |\Look|, because ^{spaces} are removed
+%after ^{control word} tokens only when \TeX\ first converts input lines to
+%token lists as described in Chapter~8.
+\ddanger 问： \TeX\ 怎样才能知道参量在哪里结束？
+答：分两种情况。%
+在 \<parameter text> 中，{\KT{9}分界的参数}要跟一个或多个非参数记号，
+才能到达参数文本的结尾或下一个参数记号；
+在这种情况下，相应的参量是长度最短(可能是空)的记号序列，并且组的嵌套要正确，
+后面跟的是在输入中的非参数记号列。%
+(类代码和字符代码都要匹配，而且控制系列命名必须相同。)
+在 \<parameter text> 中，{\KT{9}未分界的参数}后面要紧接一个参数记号，
+或者要出现在参数文本的最结尾；
+\1在这种情况下，相应的参量就是下一个非空的记号，如果此记号是`|{|', 这时%
+参量是所跟的整个组 |{...}|。%
+在所有两种情况下，如果用这两种方法找到的的参量的形式为`|{|\<nested tokens>|}|',
+其中 \<nested tokens>~ 表示关于大括号正确嵌套的任意记号列，
+那么就去掉封装记号的最外层的盒子，只留下 \<nested tokens>。%
+例如，我们继续讨论上面的例子 |\cs|, 假定接下来的文本包含
+\begintt
+\cs AB {\Look}C${And\$ }{look}\$ 5.
+\endtt
+参量 |#1| 将是记号 \cstok{Look}, 因为 |#1| 是未分界的参数(在定义中，
+它后面紧跟的是 |#2|);
+在这种情况下， \TeX\ 将忽略掉 |B| 后面的空格，并且剥去 |{\Look}| 外面的大括号。%
+参量 |#2| 将是空的，因为 |C$| 紧跟着。%
+而参量 |#3| 将是对应于文本 |{And\$|\]|}{look}| 的 13 个记号，
+因为 |#3| 后面跟着`|\$|\]',
+并且因为第一个出现的`|\$|\]'在大括号里面。%
+即使参量 |#3| 以左大括号开头，以右大括号结尾，这些大括号也不会被剥去，
+因为那样得到的是未嵌套的记号`|And\$ }{look|'。%
+因此，总的结果是，在替换文本中用参量替换参数后， \TeX\ 下一个要读入的记号列为
+\begintt
+{And\$ }{look}{ab\Look}\Look|]c#\x5.
+\endtt
+这里的空格 \] 是得到的记号列的一部分，即使它跟在控制词 |\Look|, 因为只有当%
+ \TeX\ 首先把输入行转换为记号列时控制词后面的空格才去掉，就象第八章讨论的那样。%
+
+%\ddangerexercise The example definition of\/ |\cs| includes a |##| in
+%its replacement text, but the way |##| is actually used in that example
+%is rather pointless. Give an example of a definition where |##| serves
+%a useful purpose. ^^{sharp sharp}
+%\answer The |##| feature is indispensable when the replacement text of
+%a definition contains other definitions. For example, consider
+%\begintt
+%\def\a#1{\def\b##1{##1#1}}
+%\endtt
+%after which `|\a!|'\ will expand to `|\def\b#1{#1!}|'. We will see later
+%that |##| is also important for alignments; see, for example, the definition
+%of\/ |\matrix| in Appendix~B.
+\ddangerexercise 在定义 |\cs| 的例子中，替换文本里面包含一个 |##|，
+但是在此例子中这样使用 |##| 没什么意义。给出一个让 |##| 有意义的例子。
+\answer 如果宏定义的替换文本中还包含另一个定义，|##| 的这个功能就是不可或缺的。
+比如在下面宏定义
+\begintt
+\def\a#1{\def\b##1{##1#1}}
+\endtt
+之后，`|\a!|' 将展开为 `|\def\b#1{#1!}|'。我们稍后将看到 |##|
+对于对齐阵列也是很重要的；比如看附录 B 中 |\matrix| 的定义。
+
+%\ddanger A special extension is allowed to these rules: If the very
+%last character of the \<parameter text> is~|#|, so that this~|#| is
+%immediately followed by~|{|, \TeX\ will behave as if the~|{| had been
+%inserted at the right end of both the parameter text and the replacement text.
+%For example, if you say `|\def\a#1#{\hbox to #1}|', the
+%subsequent text `|\a3pt{x}|' will expand to `|\hbox to 3pt{x}|', because
+%the argument of\/ |\a| is delimited by a left brace.
+%^^{dimensions as arguments}
+\ddanger 这些规则允许一个特殊的扩展：
+如果 \<parameter text> 的最后一个字符是 |#|, 使得这个 |#| 后面紧跟着 |{|,
+那么看起来就好像 \TeX\ 把 |{| 插入到参数文本的右结尾和替换文本的右结尾处。%
+例如，如果给出`|\def\a#1#{\hbox to #1}|', 那么在后面文本中的`|\a3pt{x}|'将%
+展开为`|\hbox to 3pt{x}|', 因为 |\a| 的参量以左大括号为定界符。
+
+%\ddanger Tokens that precede the first parameter token in the \<parameter
+%text> of a definition are required to follow the control sequence; in
+%effect, they become part of the control sequence name. For example, the author
+%might have said
+%\begintt
+%\def\TeX/{...}
+%\endtt
+%instead of defining ^|\TeX| without the slash. Then it would be necessary
+%to type |\TeX/| each time the \TeX\ logo is desired, but the new definition
+%would have the advantage that spaces are {\sl not\/} ignored after
+%`|\TeX/|'. You can use this idea to define macros that are intended to
+%be used in sentences, so that users don't have to worry about the possible
+%disappearance of ^{spaces}.
+\ddanger 在定义的 \<parameter text>  中，在第一个参数记号前面的记号要跟在控制系列%
+后面；实际上，它们变成了控制系列名字的一部分。%
+例如，作者可能给出过
+\begintt
+\def\TeX/{...}
+\endtt
+而没有使用无斜线的 |\TeX| 的定义。%
+这样，每次要得到 \TeX\ 标志时必须输入 |\TeX/|,
+但是新定义的优点是，`|\TeX/|'的空格{\KT{9}不}被忽略掉。%
+可以利用这种思路来定义在句子中使用的宏，使得用户不必担心空格可能会被吃掉。
+
+%\ddangerexercise Define a control sequence |\a| such that |\a{...}| expands
+%to |\b{...}|, and such that \TeX\ gives an error message if\/ |\a| is not
+%immediately followed by a left brace.
+%\answer |\def\a#{\b}|.
+\ddangerexercise 定义一个控制系列 |\a| 使得 |\a{...}| 展开为 |\b{...}|，
+并且使得如果 |\a| 后面没有紧跟一个左花括号 \TeX\ 就给出错误信息。
+\answer |\def\a#{\b}|。
+
+%\ddanger Complicated macros have a habit of behaving differently from what
+%you expect, when you first define them, even though \TeX's rules are
+%not especially complicated. If you have trouble understanding why some
+%|\def| doesn't work the way you think it should, help is available:
+%You can set |\tracingmacros=1|, whereupon \TeX\ will write something in
+%your log file whenever it expands a macro, and whenever it has read a
+%macro argument. For example, if\/ ^|\tracingmacros| is positive when
+%\TeX\ processes the |\cs| example above, it will put the following
+%four lines into the log: ^^{debugging macros}
+%\begintt
+%\cs AB#1#2C$#3\$ ->#3{ab#1}#1 c##\x #2
+%#1<-\Look
+%#2<-
+%#3<-{And\$ }{look}
+%\endtt
+\ddanger \1当你第一次定义复杂的宏时，结果常常与你所预想的不同，即使 \TeX\ 的规则%
+不太复杂。%
+如果不知道为什么 |\def| 不听你的话，可以使用帮助：
+你可以设置 |\tracingmacros=1|, 这样 \TeX\ 就在它展开宏和读入宏的参量时在你的%
+~log 文件中写入一些东西。%
+例如，如果在 \TeX\ 处理上面的宏 |\cs| 时 |\tracingmacros| 是正值，
+它就把下列四行放到 log 文件中：
+\begintt
+\cs AB#1#2C$#3\$ ->#3{ab#1}#1 c##\x #2
+#1<-\Look
+#2<-
+#3<-{And\$ }{look}
+\endtt
+
+%\ddanger In all of the rules stated above, `|{|' and `|}|' and `|#|' stand
+%for any characters whose ^{category codes} are respectively 1, 2, and 6 in
+%the token list when \TeX\ reads the macro definition; there's nothing
+%sacred about the particular symbols that plain \TeX\ uses to denote
+%grouping and parameters.  You can even make use of several different
+%characters with these category codes, all at the same time.
+\ddanger 在上述所有规则中，`|{|', `|}|'和`|#|'表示 \TeX\ 读入宏定义时%
+记号列中类代码分别为 1, 2 和 6 的任意字符；
+~plain \TeX\ 表示编组和参数的这些特殊符号没有什么不能改变的。%
+你甚至可以同时使用同类代码的几个不同字符。
+
+%\ddangerexercise Suppose that `|[|', `|]|', and `|!|'\ have the respective
+%catcodes 1,~2, and~6, as do `|{|',~`|}|', and~`|#|'. See if you can guess
+%what the following definition means:
+%\begintt
+%\def\!!1#2![{!#]#!!2}
+%\endtt
+%What token list will result when `|\! x{[y]][z}|' is expanded?
+%\answer Let's go slowly on this one, so that the answer will give enough
+%background to answer all similar questions. The \<parameter text> of the
+%definition consists of the three tokens |#1|, |#2|, |[|$_1$; the
+%\<replacement text> consists of the six tokens |{|$_1$, |#|$_6$, |]|$_2$,
+%|!|$_6$, |#2|, |[|$_1$. \ (When two tokens of category~6 occur in the
+%replacement text, the character code of the second one survives; the
+%character code of a category-6 character is otherwise irrelevant. Thus,
+%`|\def\!#1!2#[{##]!!#2]|' would produce an essentially identical
+%definition.) \ When expanding the given token list, argument~|#1| is
+%|x|$_{11}$, since it is undelimited. Argument~|#2| is delimited by~|[|$_1$,
+%which is different from~|{|$_1$, so it is set provisionally to |{[y]]|;
+%but the outer ``braces'' are stripped off, so |#2|~reduces to the
+%three tokens |[|$_1$, |y|$_{11}$,~|]|$_2$. The result of the expansion
+%is therefore
+%\begindisplay
+%|{|$_1$ |#|$_6$ |]|$_2$ |!|$_6$ |[|$_1$ |y|$_{11}$ |]|$_2$
+%  |[|$_1$ |z|$_{11}$ |}|$_2$.
+%\enddisplay
+%Incidentally, if you display this with ^|\tracingmacros||=1|, \TeX\ says
+%\begintt
+%\!!1#2[->{##]!!#2[
+%#1<-x
+%#2<-[y]
+%\endtt
+%Category codes are not shown, but a character of category~6 always
+%appears twice in succession. A parameter token in the replacement text
+%uses the character code of the final parameter in the parameter text.
+%^^{token lists, as displayed by TeX}
+\ddangerexercise 假定 `|[|'、`|]|' 和 `|!|' 的类别码分别为 1、2 和 6，
+就像 `|{|'、`|}|' 和 `|#|' 一样。看看下面定义的意思是什么：
+\begintt
+\def\!!1#2![{!#]#!!2}
+\endtt
+当展开`|\! x{[y]][z}|'时得到的记号列是什么？
+\answer 我们将慢慢解说这个问题，给出足以回答所有类似问题的来龙去脉。
+这个定义的 \<parameter text> 由三个记号 |#1|、|#2|、|[|$_1$ 组成；
+而 \<replacement text> 由六个记号 |{|$_1$、|#|$_6$、|]|$_2$、|!|$_6$、
+|#2|、|[|$_1$ 组成。（当两个类别 6 的记号出现在替换文本时，
+只留下第二个的字符码；类别 6 字符的字符码是无关紧要的。
+因此，用 `|\def\!#1!2#[{##]!!#2]|' 给出的是本质上完全相同的定义。）%
+在展开给定的记号列时，参量 |#1| 是非定界的，因此它是 |x|$_{11}$。
+参量 |#2| 被 |[|$_1$ 定界（此时 |[|$_1$ 和 |{|$_1$ 不同），因此它被临时设定为 |{[y]]|；
+但外层的``花括号''将被剥离，因此 |#2| 减少为三个记号 |[|$_1$、|y|$_{11}$、|]|$_2$。
+从而宏展开的结果为
+\begindisplay
+|{|$_1$ |#|$_6$ |]|$_2$ |!|$_6$ |[|$_1$ |y|$_{11}$ |]|$_2$
+  |[|$_1$ |z|$_{11}$ |}|$_2$.
+\enddisplay
+顺便说一下，如果你用 ^|\tracingmacros||=1| 显示这些，\TeX\ 将给出
+\begintt
+\!!1#2[->{##]!!#2[
+#1<-x
+#2<-[y]
+\endtt
+类别码不会显示出来，但类别 6 字符总是连续出现两次。
+替换文本中的参数记号使用参数文本最后一个参数的字符码。
+^^{token lists, as displayed by TeX}
+
+%\ddanger In practice, we all make mistakes. And one of the most common
+%typographic errors is to forget a~`|}|', or to insert an extra~`|{|',
+%somewhere in an argument to a macro. If \TeX\ were to follow the rules
+%blindly in such a case, it would have to keep absorbing more and
+%more tokens in hopes of finding the end of the argument. But a mistyped
+%argument is unending, like so many arguments in real life (sigh); so
+%\TeX\ would have to go on until the end of the file, or (more likely)
+%until tokens completely fill the computer's memory. In either case, a
+%single typographical error would have ruined the run, and the user would
+%be forced to start over. Therefore \TeX\ has another rule, intended
+%to confine such errors to the paragraph in which they occur: {\sl The
+%token `\thinspace^|\par|' is not allowed to occur as part of an argument},
+%unless you explicitly tell \TeX\ that |\par| is OK. Whenever \TeX\ is
+%about to include |\par| as part of an argument, it will abort the current
+%macro expansion and report that a ``^{runaway} argument'' has been found.
+\ddanger 在实践中，我们总是要犯错误的。%
+而且最常见的排版错误就是在宏的参量中落掉一个`|}|'或者多插入一个`|{|'。%
+如果在这种情况下 \TeX\ 盲目地遵循规则，就要因为要找到参量的结尾而不得不读入越来越%
+多的记号。%
+但是象实际使用中如此多参量，只要参量中有一个这样的笔误就无法结束(唉);
+因此， \TeX\ 不得不一直读到文件结束，或者(更可能的是)直到记号把计算机内存都塞满为止。%
+不论哪种情况，单个的排版失误将导致无法运行，并且用户被迫重新开始。%
+因此 \TeX\ 还有另一个规则，用它把这样的错误限制在它所在的段落中：
+{\KT{9}记号`\thinspace^|\par|'不允许作为参量的一部分而出现},
+除非你明确告诉 \TeX\ 可以使用 |\par|。%
+只要 \TeX\ 把 |\par| 作为参量的一部分而包括进来，它就终止当前宏的展开，
+并且给出信息说，发现一个``失控的参量''。
+
+%\ddanger If you actually want a control sequence to allow arguments with
+%|\par| tokens, you can define it to be a ``long'' macro by saying
+%`^|\long|' just before `|\def|'. For example, the |\bold| macro
+%defined by
+%\begintt
+%\long\def\bold#1{{\bf#1}}
+%\endtt
+%is capable of setting several paragraphs in boldface type. \ (However,
+%such a macro is not an especially good way to typeset bold text.
+%It would be better to say, e.g.,
+%\begintt
+%\def\beginbold{\begingroup\bf}
+%\def\endbold{\endgroup}
+%\endtt
+%because this doesn't fill \TeX's memory with a long argument.)
+\ddanger 如果你真要定义一个控制系列，其参量允许出现记号 |\par|,
+那么在`|\def|'紧前面加上`^|\long|'把它定义为一个``长''宏。%
+例如，宏 |\bold| 的定义为
+\begintt
+\long\def\bold#1{{\bf#1}}
+\endtt
+它可以把几个段落都设置为 bold 字体。%
+(但是，这样的宏并不是排版 bold 文本的特别好的方法。%
+更好的是，比如
+\begintt
+\def\beginbold{\begingroup\bf}
+\def\endbold{\endgroup}
+\endtt
+因为对长的参量，它不会把 \TeX\ 的内存塞满。)
+
+%\ddanger The |\par|-forbidding mechanism doesn't catch all conceivable
+%missing-brace errors, however; you might forget the |}| at the end of a
+%|\def|, and the same problem would arise. In this case it's harder to
+%confine the error, because |\par| is a useful thing in replacement
+%texts; we wouldn't want to forbid |\par| there, so \TeX\ has another
+%mechanism:  When a macro definition is preceded by `^|\outer|', the
+%corresponding control sequence will not be allowed to appear in any place
+%where tokens are being absorbed at high speed. ^^{forbidden control sequence}
+%An |\outer| macro cannot appear in an argument (not even when |\par| is
+%allowed), nor can it appear in the parameter text or the replacement text
+%of a definition, nor in the ^{preamble} to an alignment, nor in ^{conditional
+%text} that is being skipped over.  If an |\outer| macro does show up in
+%such places, \TeX\ stops what it is doing and reports either a
+%``runaway'' situation or an ``^{incomplete}'' conditional. The ^{end of an
+%input file} or alignment template ^^{endtemplate}
+%is also considered to be |\outer| in this sense; for example, a
+%file shouldn't end in the middle of a definition. If you are designing a
+%format for others to use, you can help them detect errors before too much
+%harm is done, by using |\outer| with all control sequences that should
+%appear only at ``quiet times'' within a document. For example, Appendix~B
+%defines ^|\proclaim| to be |\outer|, since a user shouldn't be stating a
+%theorem as part of a definition or argument or preamble.
+\ddanger \1但是，禁用 |\par| 这个方法不能预防所有可能出现的落掉大括号的错误；
+如果你在 |\def| 的结尾处落掉了 |}|，也要出同样的问题。%
+在这种情况下，更难限制住错误，因为 |\par| 在替换文本中是一个有用的东西；
+在这里我们不想禁用 |\par|, 因此， \TeX\ 提供了另一种方法：
+当宏定义前面有`^|\outer|'时，相应的控制系列不允许出现在记号被高速读入的任何地方。%
+|\outer| 宏不允许出现在参量中（即使允许出现 |\par| 它也不能出现），
+也不允许出现在定义的参数文本或替换文本中，以及对齐阵列的导言中和要被跳过的条件文本中。%
+如果 |\outer| 宏确实在这些地方出现了，那么 \TeX\ 就停下来，
+并且给出``失控地点''或者一个``不完整''的条件。%
+在此意义上，输入文件的结束也被看作是 |\outer| 的；
+例如，文件不能在定义中间结束。%
+如果你为他人设计了一个格式，通过在每个在文档中只``默默运行''的控制系列前面加上 |\outer|，
+就可以检验出可能出现的错误。%
+例如，附录 B 把 |\proclaim| 定义为 |\outer| 型，
+因为用户不应该把定理陈述作为定义、参量或导言的一部分。%
+
+%\ddanger We have now seen that |\def| can be preceded by |\long|
+%or~|\outer|, and it can also be preceded by ^|\global| if the definition
+%is supposed to transcend its group. These three prefixes can be applied
+%to |\def| in any order, and they can even appear more than once.
+%\TeX\ also has a ^|\gdef| primitive that is equivalent to |\global\def|.
+%Thus, for example,
+%\begintt
+%\long\outer\global\long\def
+%\endtt
+%means the same thing as `|\outer\long\gdef|'.
+\ddanger 我们现在已经知道，~|\def| 前面可以加 |\long| 或 |\outer|,
+并且如果定义要延伸到组外还可以在前面加 |\global|。%
+这三个前缀可以按任意次序放在 |\def| 前面，并且可以不止出现一次。%
+ \TeX\ 还有一个原始命令 |\gdef|, 它等价于 |\global\def|。%
+因此，例如，
+\begintt
+\long\outer\global\long\def
+\endtt
+与`|\outer\long\gdef|'的意思是一样的。
+
+%\ddanger So far in this manual we have encountered several ways to
+%assign a meaning to a control sequence. For example,
+%$$\halign{\indent#\hfil\quad&#\hfil\cr
+%|\font\cs=|\<external font name>&makes |\cs| a font identifier;\cr
+%|\chardef\cs=|\<number>&makes |\cs| a character code;\cr
+%|\countdef\cs=|\<number>&makes |\cs| a |\count| register;\cr
+%|\def\cs...{...}|&makes |\cs| a macro.\cr
+%\noalign{\medskip \hbox{It's time now to reveal another important command
+%  of this type:} \medskip}
+%|\let\cs=|\<token>&gives |\cs| the token's current meaning.\cr}$$
+%^^|\let|
+%If the \<token> is another control sequence, |\cs| will acquire the
+%same significance as that control sequence. For example, if you say
+%`|\let\a=\def|', you could then say `|\a\b...{...}|' to define a macro~|\b|,
+%because |\a| would behave like \TeX's primitive |\def| command.
+%If you say
+%\begintt
+%\let\a=\b \let\b=\c \let\c=\a
+%\endtt
+%you have interchanged the former meanings of\/ |\b| and |\c|. And if you say
+%\begintt
+%\outer\def\a#1.{#1:}
+%\let\b=\a
+%\endtt
+%the effect is exactly the same as `|\outer\def\b#1.{#1:} \let\a=\b|'.
+\ddanger 到现在为止，在本手册我们已经见过几种定义控制系列的方法。%
+例如，
+$$\halign{\indent#\hfil\quad&#\hfil\cr
+|\font\cs=|\<external font name>&把 |\cs| 变成字体标识符；\cr
+|\chardef\cs=|\<number>&把 |\cs| 变成字符代码；\cr
+|\countdef\cs=|\<number>&把 |\cs| 变成 |\count| 寄存器；\cr
+|\def\cs...{...}|&把 |\cs| 变成宏。\cr
+\noalign{\medskip \hbox{现在要给出此类中的另一个重要的命令：
+} \medskip}
+|\let\cs=|\<token>&把记号当前的含义赋予给 |\cs|。\cr}$$
+如果 \<token> 是另一个控制系列，|\cs| 就得到与那个控制系列同样的意义。%
+例如，如果给出`|\let\a=\def|', 那么用`|\a\b...{...}|'就可以定义宏 |\b|,
+因为 |\a| 的性质象 \TeX\ 的原始命令 |\def| 一样。%
+如果我们给出
+\begintt
+\let\a=\b \let\b=\c \let\c=\a
+\endtt
+就把 |\b| 和 |\c| 中的原来的意思互换了。%
+并且如果给出
+\begintt
+\outer\def\a#1.{#1:}
+\let\b=\a
+\endtt
+其结果与`|\outer\def\b#1.{#1:} \let\a=\b|'完全一样。
+
+%\ddanger If the \<token> in a |\let| is a single character---i.e.,
+%if it is a (character code, category code) pair---then
+%the control sequence will behave to a certain extent like that
+%character; but there are some differences. For example, after
+%`|\let\zero=0|' you can't use |\zero| in a numerical constant, because
+%\TeX\ requires the tokens in a numerical constant to be digits, after
+%macro expansion; |\zero| is not a macro, so it doesn't expand. However,
+%such uses of\/ |\let| have their value, as we will see later.
+\ddanger \1如果 |\let| 中的 \<token> 是单个字符——即如果它是(字符代码，类代码)%
+对——那么在一定程度上控制系列就象此字符一样；
+但是有一些不同。%
+例如，给出`|\let\zero=0|'后，不能在数字常数中使用 |\zero|,
+因为 \TeX\ 要求宏展开后数字常数中的记号是数字；
+|\zero| 不是一个宏，因此它不能展开。%
+但是，这样的 |\let| 也有其用处，我们将在后面讨论。
+
+%\ddangerexercise Is there a significant difference between `|\let\a=\b|'
+%and `|\def\a{\b}|'?
+%\answer Yes indeed. In the first case, |\a| receives the meaning of\/~|\b|
+%that is current at the time of the |\let|. In the second case, |\a|~becomes
+%a~macro that will expand into the token~|\b| whenever |\a|~is used,
+%so it has the meaning of\/~|\b| that is current at the time of use.
+%You need |\let|, if you want to interchange the meanings of\/ |\a| and~|\b|.
+\ddangerexercise `|\let\a=\b|' 和 `|\def\a{\b}|' 之间有无明显的区别？
+\answer 确实有区别。在第一种情形中，|\a| 得到运行 |\let| 时 |\b| 的当前含义。
+在第二种情形中，|\a| 成为一个每次使用时展开为 |\b| 的宏，
+因此它得到在使用时 |\b| 的当前含义。
+如果你想交换 |\a| 和 |\b| 的含义，你需要使用 |\let|。
+
+%\ddangerexercise Experiment with \TeX\ to discover the answers to the
+%following questions: (a)~If the control sequence ^|\par| has been redefined
+%(e.g., `|\def\par{\endgroup\par}|'\thinspace), is |\par| still forbidden
+%to appear in an argument? \ (b)~If you say |\let\xpar=\par|, is |\xpar|
+%also forbidden in an argument?
+%\answer (a) Yes. \ (b) No; any other control sequence can appear
+%(except those declared as |\outer| macros).
+\ddangerexercise 实际运行 \TeX\ 试着得到下面问题的答案：
+(a) 如果控制系列 |\par| 被重新定义（比如 `|\def\par{\endgroup\par}|'），
+那么 |\par| 在参量中仍然被禁用吗？
+(b) 如果给出了 |\let\xpar=\par|，那么 |\xpar| 在参量中也被禁用吗？
+\answer (a) 是的。(b) 不是；其他任何控制系列都能出现%
+（哪些已被声明为 |\outer| 的宏除外）。
+
+%\ddanger \TeX\ also allows the construction
+%`^|\futurelet||\cs|\<token$_1$>\<token$_2$>', which has the effect of
+%`|\let\cs = |\<token$_2$>\<token$_1$>\<token$_2$>'. The idea is that you can
+%say, for example, `|\futurelet\a\b|' at the end of the replacement text of
+%a macro; \TeX~will set |\a| to the token that follows the macro, after
+%which |\b| will be expanded. The control sequence~|\b| can continue the
+%processing, and it can examine |\a| to see what's coming up next.
+%^^{looking ahead}
+\ddanger \TeX\ 也允许 ^|\futurelet||\cs|\<token$_1$>\<token$_2$>' 这种结构，
+它的结果与 `|\let\cs = |\<token$_2$>\<token$_1$>\<token$_2$>' 的一样。
+其想法是，比如，你可以在宏的替换文本结尾处使用 `|\futurelet\a\b|'；
+\TeX\ 将把 |\a| 设定为紧随在这个宏后面的记号，然后再展开 |\b|。
+控制系列 |\b| 将继续宏的处理，并且它可以从 |\a| 得知后面出现的记号是什么。
+^^{looking ahead}
+
+%\danger The next thing a person wants, after getting used to macros with
+%parameters, is the ability to write macros that change their behavior
+%depending on current conditions. \TeX\ provides a variety of primitive
+%commands for this purpose. The general form of such ``^{conditional text}'' is
+%\begindisplay
+%|\if|\<condition>\<true text>|\else|\<false text>|\fi|
+%\enddisplay
+%where the \<true text> is skipped unless the \<condition> is true, and
+%the \<false text> is skipped unless the \<condition> is false.
+%If the \<false text> is empty, you can omit the~^|\else|. The
+%`|\if|\<condition>' part of this construction begins with a control
+%sequence whose first two letters are `|if|'; for example,
+%\begintt
+%\ifodd\count0 \rightpage \else\leftpage \fi
+%\endtt
+%^^|\ifodd|
+%specifies a condition that is true when \TeX's integer register ^|\count||0|
+%is odd. Since \TeX\ generally keeps the current ^{page number} in
+%|\count0|, the macro |\rightpage| will be expanded in this example if
+%the page number is odd, while |\leftpage| will be expanded if the
+%page number is even. Conditional commands always end with a final `^|\fi|'.
+\danger 在学习了含参数的宏之后，要做的下一件事情就是编写宏，
+在当前条件下，用它来改变排版的方式。%
+为此， \TeX\ 提供了各种原始命令。%
+其中``条件文本''的一般形式为
+\begindisplay
+|\if|\<condition>\<true text>|\else|\<false text>|\fi|
+\enddisplay
+其中，如果 \<condition> 为假，那么跳过 \<true text>;
+如果 \<condition> 为真，那么跳过 \<false text>。%
+如果 \<false text> 为空，就可以省略掉 |\else|。%
+这个结构`|\if|\<condition>'的部分以一个控制系列开头，其前两个字母是`|if|';
+例如，
+\begintt
+\ifodd\count0 \rightpage \else\leftpage \fi
+\endtt
+规定了一个条件，当 \TeX\ 的整数寄存器 |\count||0| 是奇数时为真。%
+因为 \TeX\ 一般把当前页码放在 |\count0|, 所以在本例中，如果页码是奇数，
+将展开宏 |\rightpage|, 而如果页码是偶数就展开 |\leftpage|。%
+条件命令总以最后的`^|\fi|'来结束。
+
+%\danger Conditionals are primarily intended for experienced \TeX\ users,
+%who want to define high-level macros; therefore
+%the remaining paragraphs in this chapter are headed by ``double
+%dangerous bends.'' Do not feel guilty about skipping right to Chapter~21;
+%in other words, imagine that the manual says `|\ifexperienced|' right
+%here, and that there is a matching `|\fi|' at the end of the present chapter.
+\danger 条件文本主要是为有经验的 \TeX\ 用户编写高级宏而准备的；
+因此，本章剩下的段落前面都有双``危险''标志。%
+从这里跳到第二十一章不用内疚；
+换句话说，假想本手册在这里使用了`|\ifexperienced|',
+而所匹配的`|\fi|'就出现在本章的结尾。
+
+%\ddanger Before we discuss \TeX's repertoire of\/ |\if...|\ commands, let's
+%look at another example, so that the general ideas will be clear. Suppose
+%that the |\count| register |\balance| holds an amount that somebody
+%has paid in excess of his or her income tax; this amount is given in
+%pennies, and it might be positive, negative, or zero. Our immediate goal
+%will be to write a \TeX\ macro that generates a suitable statement for the
+%^{Internal Revenue Service} to include as part of a letter to that person,
+%based on the amount of the balance. The statement will be quite different
+%for positive balances than for negative ones, so we can exploit \TeX's ability
+%to act conditionally:
+%\begintt
+%\def\statement{\ifnum\balance=0 \fullypaid
+%  \else\ifnum\balance>0 \overpaid
+%       \else\underpaid
+%       \fi
+%  \fi}
+%\endtt
+%Here ^|\ifnum| is a conditional command that compares two numbers; the
+%|\statement| macro reduces to |\fullypaid| if the balance is zero, and so on.
+\ddanger 在我们讨论 \TeX\ 的 |\if...| 命令的指令集前，
+来看另一个例子，这样一般思路就清楚了。%
+假定 |\count| 寄存器 |\balance| 存放的是某人付所得税后的余额；
+这个量用美分来表示，并且它可以是正的，负的或者是零。%
+\1我们的简单目的就是编写一个宏，它要为税务机关按照 balance 的值生成一份报告，
+此报告要作为通知书的一部分寄给此人。%
+正 balance 的报告与负的差别很大，因此我们可以用 \TeX\ 的条件文本来做：
+\begintt
+\def\statement{\ifnum\balance=0 \fullypaid
+  \else\ifnum\balance>0 \overpaid
+       \else\underpaid
+       \fi
+  \fi}
+\endtt
+这里，|\ifnum| 是一个比较两个数的条件命令；
+如果 balance 为零，宏 |\statement| 就只剩下 |\fullypaid|, 等等。
+
+%\ddanger It is vastly important to notice the spaces after the |0|'s in
+%this construction. If the example had said
+%\begintt
+%...=0\fullypaid...
+%\endtt
+%then \TeX\ would have begun to expand `|\fullypaid|' before it knew the
+%value of the constant |0|, because |\fullypaid| might start with a~|1| or
+%something that would change the number. \ (After all, `|01|' is a perfectly
+%acceptable \<number>, in \TeX's eyes.) \ In this particular case the
+%program would still have worked, because we will see in a moment that
+%|\fullypaid| begins with the letter~|Y|; thus, the only problem caused by
+%the missing space would be that \TeX\ would go slower, since it would have
+%to skip over the whole expansion of\/ |\fullypaid| instead of just skipping
+%|\fullypaid| as a single, unexpanded token. But in other situations a
+%missing space like this might cause \TeX\ to expand macros when you don't
+%want any expansion, and such anomalies can cause subtle and confusing errors.
+%For best results, {\sl always put a blank space after a numeric constant\/};
+%this blank space tells \TeX\ that the constant is complete, and
+%such a space will never ``get through'' to the output.  In fact, when you
+%don't have a blank ^{space after a constant}, \TeX\ actually has to do
+%more work, because each constant continues until a non-digit has been
+%read; if this non-digit is not a space, \TeX\ takes the token you did have
+%and backs it up, ready to be read again.  \ (On the other hand, the author
+%often omits the space when a constant is immediately followed by some
+%other character, because extra spaces do look funny in the file;
+%aesthetics are more important than~efficiency.)
+\ddanger 对这个结构中 |0| 后面的空格要特别注意。%
+如果例子中的给出的是
+\begintt
+...=0\fullypaid...
+\endtt
+那么 \TeX\ 在得到常数 |0| 的值之前要展开`|\fullypaid|',
+因为 |\fullypaid| 可能以 |1| 或其它东西开头而改变这个数字。%
+（毕竟，在 \TeX\ 看来，`|01|'是完全可以接受的 \<number>。）
+在这种特殊情况下，程序照样工作，因为待会我们就可以看到，|\fullypaid| 的开头是%
+字母 |Y|; 因此，落掉空格后唯一引起的问题就是 \TeX\ 处理变慢，
+因为它要跳过的是整个展开的 |\fullypaid|, 而不仅仅是一个未展开的单个记号 |\fullypaid|。%
+但是在其它情形，象这样落掉空格可能使得 \TeX\ 在你不希望展开宏时把它展开，
+并且这样的反常会得到敏感而混乱的错误。%
+要得到最好的结果，{\KT{9}总是要在数值常数后面放一个空格};
+这个空格就告诉 \TeX\ 这个常数是完整的，而这样的空格从来不会出现在输出中。%
+实际上，当不在常数后面放空格时， \TeX\ 实际上要做更多的事，
+因为每个常数都要持续到读入一个非数字字符为止；
+如果这个非数字字符不是空格， \TeX\ 就把你的确有的记号取出来并且备份，以便下次再读。%
+(另一方面，当某些其它字符紧跟常数时，作者常常忽略掉空格，
+因为额外的空格在文件中挺难看的；
+美感比效率更重要。)
+
+%\ddangerexercise Continuing the IRS example, assume that |\fullypaid|
+%and |\underpaid| are defined as follows:
+%\begintt
+%\def\fullypaid{Your taxes are fully paid---thank you.}
+%\def\underpaid{{\count0=-\balance
+%  \ifnum\count0<100
+%    You owe \dollaramount, but you need not pay it, because
+%    our policy is to disregard amounts less than \$1.00.
+%  \else Please remit \dollaramount\ within ten days,
+%    or additional interest charges will be due.\fi}}
+%\endtt
+%Write a macro |\overpaid| to go with these, assuming that |\dollaramount|
+%is a macro that generates the contents of\/ |\count0| in dollars and cents.
+%Your macro should say that a check will be mailed under separate cover,
+%unless the amount is less than \$1.00, in which case the person must
+%specifically request a check.
+%\answer |\def\overpaid{{\count0=\balance|\parbreak
+%        |  You have overpaid your tax by \dollaramount.|\parbreak
+%        |  \ifnum\count0<100 It is our policy to refund|\parbreak
+%        |    such a small amount only if you ask for it.|\parbreak
+%        |  \else A check for this amount is being mailed|\parbreak
+%        |    under separate cover.\fi}}|
+\ddangerexercise 继续看看税务机关的例子，
+假定 |\fullypaid| 和 |\underpaid| 的定义如下：
+\begintt
+\def\fullypaid{Your taxes are fully paid---thank you.}
+\def\underpaid{{\count0=-\balance
+  \ifnum\count0<100
+    You owe \dollaramount, but you need not pay it, because
+    our policy is to disregard amounts less than \$1.00.
+  \else Please remit \dollaramount\ within ten days,
+    or additional interest charges will be due.\fi}}
+\endtt
+按此编写宏 |\overpaid|，假定 |\dollaramount| 是一个宏，
+它按美元和美分输出 |\count0| 的内容。你的宏应该给出的是：
+ a check will be mailed under separate cover,
+unless the amount is less than \$1.00, in which case the person must
+specifically request a check.
+\answer |\def\overpaid{{\count0=\balance|\parbreak
+        |  You have overpaid your tax by \dollaramount.|\parbreak
+        |  \ifnum\count0<100 It is our policy to refund|\parbreak
+        |    such a small amount only if you ask for it.|\parbreak
+        |  \else A check for this amount is being mailed|\parbreak
+        |    under separate cover.\fi}}|
+
+%\ddangerexercise Write a |\dollaramount| macro, to complete the Internal
+%Revenue |\statement|.
+%\answer The tricky part is to get the zero in an amount like `|$2.01|'.
+%\begintt
+%\def\dollaramount{\count2=\count0 \divide\count2 by100
+%  \$\number\count2.%
+%  \multiply\count2 by-100 \advance\count2 by\count0
+%  \ifnum \count2<10 0\fi
+%  \number\count2 }
+%\endtt
+\ddangerexercise \1编写宏 |\dollaramount|，以补全税务机关的 |\statement| 宏。
+\answer 有技巧的部分在于从类似 `|$2.01|' 的数目中得到零。
+\begintt
+\def\dollaramount{\count2=\count0 \divide\count2 by100
+  \$\number\count2.%
+  \multiply\count2 by-100 \advance\count2 by\count0
+  \ifnum \count2<10 0\fi
+  \number\count2 }
+\endtt
+
+%\ddanger Now let's make a complete survey of \TeX's conditional commands.
+%Some of them involve features that have not yet been introduced in this
+%manual.\enddanger
+\ddanger 现在，我们完整地总结一下 \TeX\ 的条件命令。%
+其中有一些本手册还未讨论的东西。
+\enddanger
+
+%\nobreak\medskip
+%\item\bull^|\ifnum|\<number$_1$>\<relation>\<number$_2$>\quad
+%  (compare two integers)
+%\nobreak\smallskip\noindent
+%The ^\<relation> must be either `|<|$_{12}$' or `|=|$_{12}$' or `|>|$_{12}$'.
+%The two integer numbers are compared to each other in the usual way, and
+%the result is true or false accordingly.
+\nobreak\medskip
+\item\bull^|\ifnum|\<number$_1$>\<relation>\<number$_2$>\quad
+  (比较两个整数)
+\nobreak\smallskip\noindent
+\<relation> 编写必须是`|<|$_{12}$', `|=|$_{12}$'或`|>|$_{12}$'。%
+两个整数按通常的方法进行比较，因此所得结果为真或假。
+
+%\medbreak
+%\item\bull^|\ifdim|\<dimen$_1$>\<relation>\<dimen$_2$>\quad
+%  (compare two dimensions)
+%\nobreak\smallskip\noindent
+%This is like |\ifnum|, but it compares two \<dimen> values. For example,
+%to test whether the value of\/ |\hsize| exceeds $100\pt$, you can say
+%`|\ifdim\hsize>100pt|'.
+\medbreak
+\item\bull^|\ifdim|\<dimen$_1$>\<relation>\<dimen$_2$>\quad
+  (比较两个尺寸)
+\nobreak\smallskip\noindent
+它与 |\ifnum| 类似，但是比较的是两个 \<dimen> 的值。%
+例如，要检验 |\hsize| 的值是否超过 $100\pt$, 可以用`|\ifdim\hsize>100pt|'。
+
+%\medbreak
+%\item\bull^|\ifodd|\<number>\quad(test for odd integer)
+%\nobreak\smallskip\noindent
+%The condition is true if the \<number> is odd, false if it is even.
+\medbreak
+\item\bull^|\ifodd|\<number>\quad(奇数测试)
+\nobreak\smallskip\noindent
+如果 \<number> 为奇数则真，为偶数则假
+
+%\medbreak
+%\item\bull^|\ifvmode|\quad(test for vertical mode)
+%\nobreak\smallskip\noindent
+%True if \TeX\ is in vertical mode or internal vertical mode (see Chapter~13).
+\medbreak
+\item\bull^|\ifvmode|\quad(垂直模式测试)
+\nobreak\smallskip\noindent
+如果 \TeX\ 处在垂直模式或者内部垂直模式则真(见第十三章)。
+
+%\medbreak
+%\item\bull^|\ifhmode|\quad(test for horizontal mode)
+%\nobreak\smallskip\noindent
+%True if \TeX\ is in horizontal mode or restricted horizontal mode
+%(see Chapter~13).
+\medbreak
+\item\bull^|\ifhmode|\quad(水平模式测试)
+\nobreak\smallskip\noindent
+如果 \TeX\ 处在水平模式或受限水平模式则真(见第十三章)。
+
+%\medbreak
+%\item\bull^|\ifmmode|\quad(test for math mode)
+%\nobreak\smallskip\noindent
+%True if \TeX\ is in math mode or display math mode (see Chapter~13).
+\medbreak
+\item\bull^|\ifmmode|\quad(数学模式测试)
+\nobreak\smallskip\noindent
+如果 \TeX\ 处在数学模式或陈列数学模式则真(见第十三章)。
+
+%\medbreak
+%\item\bull^|\ifinner|\quad(test for an internal mode)
+%\nobreak\smallskip\noindent
+%True if \TeX\ is in internal vertical mode, or restricted
+%horizontal mode, or (nondisplay) math mode (see Chapter~13).
+\medbreak
+\item\bull^|\ifinner|\quad(内部模式测试)
+\nobreak\smallskip\noindent
+如果 \TeX\ 处在内部垂直模式或受限水平模式或(非列表)数学模式则真(见第十三章)。
+
+%\medbreak
+%\item\bull^|\if|\<token$_1$>\<token$_2$>\quad(test if character codes agree)
+%\nobreak\smallskip\noindent
+%\TeX\ will expand macros following |\if| until two unexpandable tokens are
+%found. If either token is a control sequence, \TeX\ considers it to have
+%character code~256 and category code~16, unless the current equivalent of
+%that control sequence has been |\let| equal to a non-active character
+%token.  In this way, each token specifies a (character~code,
+%\hbox{category}~code) pair.  The condition is true if the character codes
+%are equal, independent of the category codes. For example, after
+%|\def\a{*}| and |\let\b=*| and |\def\c{/}|, the tests `|\if*\a|' and
+%`|\if\a\b|' will be true, but `|\if\a\c|' will be false. Also
+%`|\if\a\par|' will be false, but `|\if\par\let|' will be true. % Beresford=true
+\medbreak
+\item\bull^|\if|\<token$_1$>\<token$_2$>\quad(测试字符代码是否相同)
+\nobreak\smallskip\noindent
+ \TeX\ 将把 |\if| 后面的宏展开为两个不能再展开的记号。%
+如果其中一个记号是控制系列，那么 \TeX\ 就把它看作字符代码为 256 和类代码为 16,
+除非此控制系列的当前内容被 |\let| 为等于非活动字符记号。%
+用这种方法，每个记号给出一个(字符代码，类代码)对。%
+如果字符代码相等，条件成立，而与类代码无关。%
+例如，在给出 |\def\a{*}|, |\let\b=*| 和 |\def\c{/}| 后，`|\if*\a|'%
+和`|\if\a\b|'为真，但是`|\if\a\c|'为假。%
+还有，`|\if\a\par|'为假，但是`|\if\par\let|'为真。
+
+%\medbreak
+%\item\bull^|\ifcat|\<token$_1$>\<token$_2$>\quad(test if category codes agree)
+%\nobreak\smallskip\noindent
+%This is just like |\if|, but it tests the ^{category codes}, not the character
+%codes. ^{Active characters} have category~13, but you have to say
+%`^|\noexpand|\<active character>' in order to suppress expansion when you
+%are looking at such characters with |\if| or |\ifcat|. For example, after
+%\begintt
+%\catcode`[=13 \catcode`]=13 \def[{*}
+%\endtt
+%the tests `|\ifcat\noexpand[\noexpand]|' and `|\ifcat[*|' will be true,
+%but the test `|\ifcat\noexpand[*|' will be false.
+\medbreak
+\item\bull^|\ifcat|\<token$_1$>\<token$_2$>\quad （测试类代码是否相同）
+\nobreak\smallskip\noindent
+它就像 |\if| 那样，但是测试的是类别码，而不是字符码。
+^{活动字符}的类别码是 13，但在用 |\if| 或 |\ifcat| 测试这类字符时，
+你必须用 `^|\noexpand|\<active character>' 取消展开。例如，在
+\begintt
+\catcode`[=13 \catcode`]=13 \def[{*}
+\endtt
+之后，测试 `|\ifcat\noexpand[\noexpand]|' 和 `|\ifcat[*|' 的结果将为真，
+而测试 `|\ifcat\noexpand[*|' 的结果为假。
+
+%\medbreak
+%\item\bull^|\ifx|\<token$_1$>\<token$_2$>\quad(test if tokens agree)
+%\nobreak\smallskip\noindent
+%In this case, \TeX\ does {\sl not\/} expand control sequences when it
+%looks at the two tokens. The condition is true if (a)~the two tokens are
+%not macros, and they both represent the same (character code, category
+%code) pair or the same \TeX\ primitive or the same ^|\font| or ^|\chardef|
+%or ^|\countdef|, etc.; or if (b)~the two tokens are macros, and they both
+%have the same status with respect to ^|\long| and ^|\outer|, and they both
+%have the same parameters and ``top level'' expansion. For example, after
+%`|\def\a{\c}| |\def\b{\d}| |\def\c{\e}| |\def\d{\e}| |\def\e{A}|', an
+%|\ifx| test will find |\c| and |\d| equal, but not |\a| and~|\b|, nor |\d|
+%and~|\e|, nor any other combinations of\/ |\a|, |\b|, |\c|, |\d|, |\e|.
+\medbreak
+\item\bull^|\ifx|\<token$_1$>\<token$_2$>\quad\1(测试记号是否相同)
+\nobreak\smallskip\noindent
+在这种情况下，当 \TeX\ 遇见这两个记号时，{\KT{9}不}展开控制系列。%
+如果(a) 两个记号不是宏，并且它们都标识同一(字符代码，类代码)对或同一 \TeX\ 原始%
+命令，同一 |\font| 或 |\chardef| 或 |\countdef| 等等；
+(b) 两个记号是宏，并且它们对 |\long| 和 |\outer| 都处在相同的状态，
+以及它们有同样的测试和``顶级''展开，那么条件为真。%
+例如，设置%
+`|\def\a{\c}| |\def\b{\d}| |\def\c{\e}| |\def\d{\e}| |\def\e{A}|'后，
+在 |\ifx| 测试中，|\c| 和 |\d| 相等，但是 |\a| 和 |\b|, |\d| 和 |\e| 不相等，
+|\a|, |\b|, |\c|, |\d|, |\e| 的其它组合也不相等。
+
+%\medbreak
+%\item\bull^|\ifvoid|\<number>, ^|\ifhbox|\<number>, ^|\ifvbox|\<number>\quad
+%(test a box register)
+%\nobreak\smallskip\noindent
+%The \<number> should be between 0 and 255. The condition is true if that
+%|\box| is void or contains an hbox or a vbox, respectively (see Chapter~15).
+\medbreak
+\item\bull^|\ifvoid|\<number>, ^|\ifhbox|\<number>, ^|\ifvbox|\<number>\quad
+(测试一个盒子寄存器)
+\nobreak\smallskip\noindent
+\<number> 应该在 0 和 255 之间。%
+如果 |\box| 是置空的，或者包含一个 hbox 或 vbox 时条件为真(见第十五章)。
+
+%\medbreak
+%\item\bull^|\ifeof|\<number>\quad(test for end of file)
+%\nobreak\smallskip\noindent
+%The \<number> should be between 0 and 15. The condition is true unless the
+%corresponding input stream is open and not fully read. \ (See the command
+%^|\openin| below.)
+\medbreak
+\item\bull^|\ifeof|\<number>\quad(测试文件是否结束)
+\nobreak\smallskip\noindent
+\<number> 一个在 0 和 15 之间。%
+条件为真，除非相应的输入流是开的并且没有读完。(见下面的命令 |\openin|。)
+
+%\medbreak
+%\item\bull^|\iftrue|, ^|\iffalse|\quad(always true or always false)
+%\nobreak\smallskip\noindent
+%These conditions have a predetermined outcome. But they turn out to be
+%useful in spite of this, as explained below.
+\medbreak
+\item\bull^|\iftrue|, ^|\iffalse|\quad(永远为真或为假)
+\nobreak\smallskip\noindent
+这些条件有预先确定的结果。%
+但是它们却非常有用，见下面的讨论。
+
+%\medbreak
+%Finally, there's one more conditional construction, which is somewhat different
+%from the rest because it is capable of making a many-way branch:
+%\begindisplay
+%\llap{\bull\enspace}^|\ifcase|\<number>\<text for case 0>|\or|\<text
+%  for case 1>|\or|$\;\cdots$\cr
+%|         \or|\<text for case $n$>|\else|\<text for all other cases>|\fi|\cr
+%\enddisplay
+%Here there are $n+1$ cases separated by $n$ ^|\or|'s, where $n$ can be any
+%nonnegative number. The \<number> selects the text that will be used. Once
+%again the ^|\else| part is optional, if you don't want to specify any text
+%for cases when the \<number> is negative or greater than~$n$.
+\medbreak
+最后，有一个多条件结构，它与其它的不同，因为它有多个分支：
+\begindisplay
+\llap{\bull\enspace}^|\ifcase|\<number>\<text for case 0>|\or|\<text
+  for case 1>|\or|$\;\cdots$\cr
+|         \or|\<text for case $n$>|\else|\<text for all other cases>|\fi|\cr
+\enddisplay
+在这里，~$n+1$ 种情形由 $n$ 个 |\or| 分开，
+其中 $n$ 可以是任意非负数。%
+\<number> 选择要使用的文本。%
+~|\else| 部分还是可选的，如果你不想在 \<number> 为负数或大于 $n$ 的情形下%
+给出某些文本的话。
+
+%\ddangerexercise Design a |\category| macro that prints a character's current
+%category code symbolically, given a one-character control sequence for
+%that character. For example, if the category codes of plain \TeX\ are in
+%force, `|\category\\|' should expand to `|escape|', and `|\category\a|'
+%should expand to `|letter|'.
+%\answer |\def\category#1{\ifcase\catcode`#1|\parbreak
+%        |  escape\or begingroup\or endgroup\or math\or|\parbreak
+%        |  align\or endline\or parameter\or superscript\or|\parbreak
+%        |  subscript\or ignored\or space\or letter\or|\parbreak
+%        |  otherchar\or active\or comment\or invalid\fi}|\par
+\ddangerexercise 设计一个宏 |\category|，在其后面输入单个字符后，
+它输出此字符的当前类别码的名称。例如，假设使用 plain \TeX\ 的类代码，
+则 `|\category\\|' 将展开为 `|escape|'，`|\category\a|' 将展开为 `|letter|'。
+\answer |\def\category#1{\ifcase\catcode`#1|\parbreak
+        |  escape\or begingroup\or endgroup\or math\or|\parbreak
+        |  align\or endline\or parameter\or superscript\or|\parbreak
+        |  subscript\or ignored\or space\or letter\or|\parbreak
+        |  otherchar\or active\or comment\or invalid\fi}|\par
+
+%\ddangerexercise Test yourself on the following questions to see if you
+%understand certain borderline situations: After the definitions
+%`|\def\a{}| |\def\b{**}| |\def\c{True}|',
+%which of the following are true?
+%(a)~`|\if\a\b|';
+%(b)~`|\ifcat\a\b|';
+%(c)~`|\ifx\a\b|';
+%(d)~`|\if\c|';
+%(e)~`|\ifcat\c|';
+%(f)~`|\ifx\ifx\ifx|'.
+%(g)~`|\if\ifx\a\b\c\else\if\a\b\c\fi\fi|'.
+%\answer (a,b)~True. (c,d)~False. (e,f)~True. In case~(e), the \<true text>
+%starts with `|ue|'.  (g)~The |\ifx| is false and the inner |\if| is true;
+%so the outer |\if| becomes `|\if True...|', which is false. \
+%(Interestingly, \TeX\ knows that the outer |\if| is false even before it
+%has looked at the |\fi|'s that close the |\ifx| and the inner |\if|.)
+\ddangerexercise 用下列这些问题测验一下自己，看看你是否掌握了这些模糊的情形：
+在定义 `|\def\a{}| |\def\b{**}| |\def\c{True}|' 之后，下面哪些是真的？
+(a)~`|\if\a\b|'；
+(b)~`|\ifcat\a\b|'；
+(c)~`|\ifx\a\b|'；
+(d)~`|\if\c|'；
+(e)~`|\ifcat\c|'；
+(f)~`|\ifx\ifx\ifx|'。
+(g)~`|\if\ifx\a\b\c\else\if\a\b\c\fi\fi|'。
+\answer (a,b) 真。(c,d) 假。(e,f) 真。在情形 (e) 中，\<true text> 以 `|ue|' 开始。
+(g)~|\ifx| 为假，而内部的 |\if| 为真；因此外部的 |\if| 成为`|\if True...|'，它是假的。%
+（有趣的是， \TeX\ 还没看到结束|\ifx| 和内部 |\if| 的两个 |\fi|，
+就已经知道外部 |\if| 是假的。）
+
+%\ddanger Notice that all of the control sequences for conditionals
+%begin with |\if...|, and they all have a matching~|\fi|. This convention---that
+%|\if...|\ pairs up with |\fi|---makes it easier to see the nesting
+%of conditionals within your program. The ^{nesting} of\/ |\if...\fi| is
+%independent of the nesting of |{...}|; thus, you can begin or end a ^{group}
+%in the middle of a conditional, and you can begin or end a conditional
+%in the middle of a group. Extensive experience with macros has shown that
+%such independence is important in applications; but it can also lead to
+%confusion if you aren't careful.
+\ddanger 注意，所有的条件控制系列都以 |\if...| 开头，并且它们都要匹配 |\fi|。%
+这种 |\if...| 与 |\fi| 配对的约定使程序中条件控制系列的嵌套更好分清。%
+|\if...\fi| 的嵌套与 |{...}| 的嵌套无关；
+因此，可以在条件控制系列中间开始或结束一个组，
+也可以在组中间开始或结束一个条件控制系列。%
+编写宏的大量经验表明，这种无关性在应用中很重要；
+但是如果不仔细也会出现问题。
+
+%\ddanger It's sometimes desirable to pass information from one macro to
+%another, and there are several ways to do this: ^^{communication between
+%macros} by passing it as an argument, by putting it into a register, or by
+%defining a control sequence that contains the information. For example,
+%the macros |\hphantom|, |\vphantom|, and ^|\phantom| in Appendix~B are
+%quite similar, so the author ^^{Knuth} wanted to do most of the work in
+%another macro |\phant| that would be common to all three. Somehow |\phant|
+%was to be told what kind of phantom was desired. The first approach was to
+%define control sequences |\hph| and |\vph| something like this:
+%\begintt
+%\def\hphantom{\ph YN} \def\vphantom{\ph NY} \def\phantom{\ph YY}
+%\def\ph#1#2{\def\hph{#1}\def\vph{#2}\phant}
+%\endtt
+%after which |\phant| could test `|\if Y\hph|' and `|\if Y\vph|'. This
+%worked, but there were various ways to make it more efficient; for example,
+%`|\def\hph{#1}|' could be replaced by `|\let\hph=#1|', avoiding macro expansion.
+%An even better idea then suggested itself:
+%\begintt
+%\def\yes{\if00} \def\no{\if01}
+%\def\hphantom{\ph\yes\no}...\def\phantom{\ph\yes\yes}
+%\def\ph#1#2{\let\ifhph=#1\let\ifvph=#2\phant}
+%\endtt
+%after which |\phant| could test `|\ifhph|' and `|\ifvph|'. \ (This
+%construction was tried before |\iftrue| and |\iffalse| were part of the
+%\TeX\ language.) \ The idea worked fine, so the author started to use
+%|\yes| and |\no| in a variety of other situations. But then one day a
+%complex conditional failed, because it contained an |\ifhph|-like test
+%inside another conditional:
+%\begintt
+%\if...  \ifhph...\fi  ... \else  ...  \fi
+%\endtt
+%Do you see the problem that developed? When the \<true text> of the
+%outermost conditional was executed, everything worked fine, because
+%|\ifhph| was either |\yes| or |\no| and it expanded into either |\if00| or
+%|\if01|.  But when the \<true text> was skipped, the |\ifhph| was not
+%expanded, so the first |\fi| was mistakenly paired with the first |\if|;
+%everything soon went haywire. That's when ^|\iftrue| and ^|\iffalse|
+%were put into the language, in place of\/ |\yes| and |\no|; now
+%|\ifhph| is either |\iftrue| or |\iffalse|, so \TeX\ will match it
+%properly with a closing~|\fi|, whether or not it is being skipped over.
+\ddanger \1有时候要把信息从一个宏传到另一个，而实现它有几种方法：
+把它作为一个参量来传递，把它放在一个寄存器中，或者定义一个包含此信息的控制系列。%
+例如，附录 B 中的宏 |\hphantom|, |\vphantom| 和 |\phantom| 非常相似，
+因此作者希望把它们三个的所有部分放在另一个宏 |\phant| 中。%
+用某种方法来告诉 |\phant| 所要的是哪类 phantom。%
+第一种方法是定义象下面这样的控制系列 |\hph| 和 |\vph|:
+\begintt
+\def\hphantom{\ph YN} \def\vphantom{\ph NY} \def\phantom{\ph YY}
+\def\ph#1#2{\def\hph{#1}\def\vph{#2}\phant}
+\endtt
+之后 |\phant| 可测试`|\if Y\hph|'和`|\if Y\vph|'。%
+这可以用，但是有几个更有效的方法；
+例如，`|\def\hph{#1}|'可以用`|\let\hph=#1|'来代替，以避免展开宏。%
+因此，一个更好的方法是：
+\begintt
+\def\yes{\if00} \def\no{\if01}
+\def\hphantom{\ph\yes\no}...\def\phantom{\ph\yes\yes}
+\def\ph#1#2{\let\ifhph=#1\let\ifvph=#2\phant}
+\endtt
+之后 |\phant| 可测试`|\ifhph|'和`|\ifvph|'。%
+(这种结构出现在 \TeX\ 语言中有 |\iftrue| 和 |\iffalse| 之前。)
+想法很好，因此作者就开始把 |\yes| 和 |\no| 用在其它情形中。%
+但是接着有一天，一个复杂的条件控制系列失败了，因为它把象 |\ifhph| 这样的测试%
+放在另一个条件文本中了：
+\begintt
+\if...  \ifhph...\fi  ... \else  ...  \fi
+\endtt
+能看出问题吗？
+当执行最外层条件的 \<true text> 时，所有的都很顺利，
+因为 |\ifhph| 是 |\yes| 或 |\no|, 并且它展开为 |\if00| 或 |\if01|。%
+但是当跳过 \<true text> 时，|\ifhph| 没有被展开，因此第一个 |\fi| 错误地%
+匹配到第一个 |\if| 上；
+很快错误就都出来了。%
+这时 |\iftrue| 和 |\iffalse| 就被加进 \TeX\ 语言中，来代替 |\yes| 和 |\no|;
+现在，|\ifhph| 是 |\iftrue| 或 |\iffalse|,
+因此不管它是否被跳过， \TeX\ 都可正确匹配上 |\fi|。
+
+%\ddanger To facilitate |\if...|~constructions, plain \TeX\ has a
+%^|\newif| macro, such that after you say `|\newif\ifabc|' three
+%control sequences will be defined: |\ifabc| (for testing the switch),
+%|\abctrue| (for making the switch true), and |\abcfalse| (for making
+%it false). The |\phantom| problem is now solved in Appendix~B by writing
+%\begintt
+%\newif\ifhph \newif\ifvph
+%\def\hphantom{\hphtrue\vphfalse\phant}
+%\endtt
+%and with similar definitions of\/ |\vphantom| and |\phantom|. There is no
+%longer any need for a |\ph| macro; again |\phant| tests |\ifhph| and
+%|\ifvph|. Appendix~E contains other examples of conditionals created
+%by~|\newif|. New conditionals are initially false.
+\ddanger 为了便于构造 |\if...|, ~plain \TeX\ 提供了一个叫 |\newif| 的宏，
+这样在给出`|\newif\ifabc|'后，就定义了三个控制系列：
+|\ifabc|(测试真假), |\abctrue|(测试为真)和 |\abcfalse|~(测试为假)。%
+现在，附录 B 的 |\phantom| 问题就可以如下解决：
+\begintt
+\newif\ifhph \newif\ifvph
+\def\hphantom{\hphtrue\vphfalse\phant}
+\endtt
+并且有 |\vphantom| 和 |\phantom| 的类似定义。%
+不再需要宏 |\ph| 了；
+还是 |\phant| 来测试 |\ifhph| 和 |\ifvph|。%
+附录 E 中有由 |\newif| 生成的其它条件文本的例子。%
+新的条件文本开始都设定为假。
+
+%\ddanger Caution: Don't say anything like `|\let\ifabc=\iftrue|' in
+%conditional text. If \TeX\ skips over this command, it will think that
+%both |\ifabc| and |\iftrue| require a matching |\fi|, since the |\let| is
+%not being executed! Keep such commands buried inside macros, so that \TeX\
+%will see the `|\if...|'\ only when it is not skipping over the text that it
+%is reading.
+\ddanger 注意：不要在条件文本中给出象`|\let\ifabc=\iftrue|'这样的东西。%
+如果 \TeX\ 跳过这些命令，就会认为 |\ifabc| 和 |\iftrue| 都要匹配一个 |\fi|,
+因为 |\let| 没有被执行!
+把这样的命令包在宏中，这样 \TeX\ 只有在不跳过要读入的文本时才能遇见`|\if...|'。
+
+%\ddanger \TeX\ has 256 ``^{token list registers}'' called ^|\toks||0|
+%through |\toks255|, so that token lists can easily be shuffled around
+%without passing them through \TeX's reading apparatus.
+%There's also a ^|\toksdef| instruction so that, e.g.,
+%\begintt
+%\toksdef\catch=22
+%\endtt
+%makes |\catch| equivalent to |\toks22|. Plain \TeX\ provides a ^|\newtoks|
+%macro that allocates a new token list register; it is analogous to
+%|\newcount|. Token list registers behave like the ^{token list parameters}
+%|\everypar|, |\everyhbox|, |\output|, |\errhelp|, etc. To assign
+%a new value to a token list parameter or register, you say either
+%\begindisplay
+%\<token variable>|={|\<replacement text>|}|\cr
+%\llap{or }\<token variable>|=|\<token variable>\cr
+%\enddisplay
+%where ^\<token variable> means either a token list parameter or a
+%control sequence defined by |\toksdef| or |\newtoks|, or an
+%explicit register designation `|\toks|\<number>'.
+\ddanger \1\TeX\ 有 256 个``记号列寄存器''叫做 |\toks||0| 到 |\toks255|,
+因此记号列可以在不经过 \TeX\ 读入器时很容易地传来传去。%
+还有一个 |\toksdef| 指令，使得，比如，
+\begintt
+\toksdef\catch=22
+\endtt
+把 |\catch| 与 |\toks22| 等价起来。%
+Plain \TeX\ 提供了一个宏 |\newtoks|, 由它来分配新的记号列寄存器；
+它类似于 |\newcount|。%
+记号列寄存器的性质就象记号列参数 |\everypar|, |\everyhbox|, |\output|,
+|\errhelp| 等等。%
+为了给记号列参数或寄存器指定新值，可以使用
+\begindisplay
+\<token variable>|={|\<replacement text>|}|\cr
+\llap{或者 }\<token variable>|=|\<token variable>\cr
+\enddisplay
+其中 \<token variable> 表示一个记号列参数，或者是由 |\toksdef| 或 |\newtoks|~%
+定义的一个控制系列，
+或者是一个明确的寄存器名字`|\toks|\<number>'。
+
+%\ddanger Everyone who makes extensive use of a powerful macro facility
+%encounters situations when the macros do surprising things. We have
+%already mentioned the possibility of setting |\tracingmacros=1|, in order
+%to see when \TeX\ expands macros and what arguments it finds. There's also
+%another helpful way to watch what \TeX\ is doing: If you set
+%^|\tracingcommands||=1|, \TeX\ will show every command that it executes,
+%as we saw in Chapter~13.  Furthermore, if you set
+%|\tracingcommands=2|, \TeX\ will show all conditional commands and
+%their outcomes, as well as the unconditional commands that are actually
+%performed or expanded. This diagnostic information goes into your log
+%file. You can also see it on your terminal, if you say
+%^|\tracingonline||=1|. \ (Incidentally, if you make |\tracingcommands|
+%greater than~2, you get the same information as when it equals~2.) \
+%Similarly, ^|\tracingmacros||=2| will trace |\output|, |\everypar|, etc.
+\ddanger 经常使用宏这个便利工具的每个人都会遇到编写的宏出问题的时候。%
+我们已经说过，为了看看 \TeX\ 是怎样展开宏和它找到的参量是什么，
+我们可以设置 |\tracingmacros=1|。%
+还有另一个有用的方法来看看 \TeX\ 在做什么：
+如果设置 |\tracingcommands||=1|, 那么 \TeX\ 将显示出它所执行的每个命令，
+就象第十三章那样。%
+还有，如果设置 |\tracingcommands=2|, 那么 \TeX\ 将显示所有条件命令及其结果，
+以及实际执行或展开的非条件命令。%
+这些诊断信息出现在 log 文件中。%
+如果还设置了 |\tracingonline||=1|, 那么在终端上也可以看到。%
+(顺便说一下，如果设置 |\tracingcommands| 大于 2, 那么得到的信息同等于 2 一样。)
+类似地，|\tracingmacros||=2| 将跟踪 |\output|, |\everypar|, 等等。
+
+%\ddanger One way to understand the occasional strangeness of macro
+%operation is to use the tracing features just described, so that you can
+%watch what \TeX\ does in slow motion. Another way is to learn the rules for
+%how macros are expanded; we shall now discuss those rules.
+\ddanger 要知道宏命令出毛病的一个方法就是用刚才讨论的跟踪方法，
+这样就能看到 \TeX\ 每步在做什么。%
+另一种就是掌握宏是怎样展开的；现在我们来讨论这个规则。
+
+%\ddanger \TeX's mastication process converts your input to a long token
+%list, as explained in Chapter~8; and its digestive processes work
+%strictly on this token list. When \TeX\ encounters a control sequence in
+%the token list, it looks up the current meaning, and in certain cases
+%it will expand that token into a sequence of other tokens before
+%continuing to read. The expansion process applies to macros and to
+%certain other special primitives like |\number| and |\if| that we shall
+%consider momentarily. Sometimes, however, the ^{expansion} is not carried out;
+%for example, when \TeX\ is taking care of a |\def|, the \<control sequence>,
+%the \<parameter text>, and the \<replacement text> of that |\def| are
+%not subject to expansion. Similarly, the two tokens after |\ifx| are
+%never expanded. A complete list of occasions when tokens are not expanded
+%appears later in this chapter; you can use it for reference in an emergency.
+\ddanger  \TeX\ 的咀嚼过程把你的输入变成一个长记号列，就象第八章讨论的那样；
+其消化过程严格按照这个记号列进行。%
+当 \TeX\ 遇见记号列中的控制系列时，要查找其当前的意思，
+并且在某些情况下，在继续读入之前要把此记号展开为一系列其它记号。%
+展开过程作用的对象是宏和某些其它特殊的原始命令，象 |\number|~%
+和我们刚刚讨论过的 |\if| 这样。%
+但是有时候，却不进行展开；
+例如，当 \TeX\ 处理一个 |\def|, 此 |\def| 的 \<control sequence>, \<parameter text>~%
+和 \<replacement text> 不被展开。%
+类似地，~|\ifx| 后面的两个记号也不被展开。%
+本章后面要给出一个完整列表，在这些情况下不展开记号；
+在实在没办法时，你可以用它作为参考。
+
+%\ddanger Now let's consider the control sequences that are expanded whenever
+%expansion has not been inhibited. Such control sequences
+%fall into several classes:\enddanger
+\ddanger 现在我们来看看不禁止展开时控制系列的展开情况。%
+这样的控制系列分几种：\enddanger
+
+%\nobreak\medskip
+%\textindent\bull Macros. When a macro is expanded, \TeX\ first determines its
+%arguments (if any), as explained earlier in this chapter. Each argument
+%is a token list; the tokens are not expanded when they are being
+%accepted as arguments. Then \TeX\ replaces the macro and its arguments
+%by the replacement text.
+\nobreak\medskip
+\textindent\bull 宏：\ 当宏被展开时， \TeX\ 首先确定其参量(如果有的话),
+就象本章前面讨论的那样。%
+每个参量是一个记号列；但记号作为参量而看待时，它们不被展开。%
+接着 \TeX\ 用替换文本代替宏及其参量。
+
+%\smallbreak
+%\textindent\bull Conditionals. When an |\if...| is expanded, \TeX\ reads
+%ahead as far as necessary to determine whether the condition is true or
+%false; and if false, it skips ahead (keeping track of\/ |\if...\fi| nesting)
+%until finding the |\else|, |\or|, or~|\fi| that ends the skipped text.
+%Similarly, when |\else|, |\or|, or~|\fi| is expanded, \TeX\ reads to the
+%end of any text that ought to be skipped. The ``expansion'' of a conditional
+%is empty. \ (Conditionals always reduce the number of tokens that are seen by
+%later stages of the digestive process, while macros usually increase the
+%number of tokens.)
+\smallbreak
+\textindent\bull 条件文本：\1当 |\if...| 被展开时， \TeX\ 读入必要的内容来%
+确定条件的真假；如果是假，将跳过前面(保持 |\if...\fi| 的嵌套)直到找到%
+要结束所跳过文本的 |\else|, |\or| 或 |\fi|。%
+类似地，当 |\else|, |\or| 或 |\fi| 被展开时， \TeX\ 读入要跳过的任何文本的结尾。%
+条件文本的``展开''是空的。(条件文本总是减少在后面的消化阶段所遇见的记号量，
+而宏一般增加记号的量。)
+
+%\smallbreak
+%\textindent\bull ^|\number|\<number>. When \TeX\ expands |\number|, it reads
+%the \<number> that follows (expanding tokens as it goes); the final
+%expansion consists of the ^{decimal representation} of that number,
+%preceded by `|-|' if negative.
+\smallbreak
+\textindent\bull ^|\number|\<number>: \ 当 \TeX\ 展开 |\number| 时，
+它读入所跟的 \<number>~(如果需要就展开记号);
+最后的展开由此数的小数表示组成，如果是负的前面要有`|-|'。
+
+%\smallbreak
+%\textindent\bull ^|\romannumeral|\<number>. This is like |\number|, but
+%the expansion consists of lowercase roman numerals. For example,
+%`|\romannumeral 1984|' produces `|mcmlxxxiv|'. The expansion is
+%empty if the number is zero or negative.
+\smallbreak
+\textindent\bull ^|\romannumeral|\<number>: \ 它与 |\number| 类似，
+但是展开由小写 roman 数字组成。%
+例如，`|\romannumeral 1984|'得到的是`|mcmlxxxiv|'。%
+如果数字是零或负，展开为空。
+
+%\smallbreak
+%\textindent\bull ^|\string|\<token>. \TeX\ first reads the \<token> without
+%expansion. If a control sequence token appears, its |\string| expansion
+%consists of the control sequence name (including ^|\escapechar| as an escape
+%character, if the control sequence isn't simply an active character).
+%Otherwise the \<token> is a character token, and its character code
+%is retained as the expanded result.
+\smallbreak
+\textindent\bull ^|\string|\<token>: \  \TeX\ 首先读入 \<token> 而不展开。%
+如果控制系列记号出现，那么它的 |\string| 展开由控制系列的名字组成(如果控制系列%
+不单单是活动字符，就把 |\escapechar| 包括进来作为转义符)。%
+否则，~\<token> 就是字符记号，并且其字符代码保持为展开后的结果。
+
+%\smallbreak
+%\textindent\bull ^|\jobname|. The expansion is the name that \TeX\ has chosen
+%for this job. For example, if \TeX\ is putting its output on files
+%|paper.dvi| and |paper.log|, ^^|dvi| then |\jobname| expands to `|paper|'.
+\smallbreak
+\textindent\bull ^|\jobname|: \ 展开为 \TeX\ 为此进程选定的名字。%
+例如，如果 \TeX\ 把它的输出放在文件 |paper.dvi| 和 |paper.log| 中，
+那么 |\jobname| 就展开为`|paper|'。
+
+%\smallbreak
+%\textindent\bull ^|\fontname|\<font>. The expansion is the external file name
+%corresponding to the given font; e.g., `|\fontname\tenrm|' might expand
+%to `|cmr10|' (five tokens). If the font is not being used at its design size,
+%the ``^{at size}'' also appears in the expansion.  A ^\<font> is either an
+%identifier defined by ^|\font|; or |\textfont|\<number>,
+%|\scriptfont|\<number>, or |\scriptscriptfont|\<number>; or |\font|, which
+%denotes the current font.
+\smallbreak
+\textindent\bull ^|\fontname|\<font>：展开为给定字体对应的外部文件名；
+如 `|\fontname\tenrm|' 将展开为 `|cmr10|'（五个记号）。
+如果字体所用的不是其设计尺寸，那么``^{at size}''也出现在展开中。
+\<font> 是一个由 |\font| 定义的标识符；或是 |\textfont|\<number>，
+|\scriptfont|\<number> 或 |\scriptscriptfont|\<number>；
+或者是 |\font|，它表示当前字体。
+
+%\smallbreak
+%\textindent\bull ^|\meaning|\<token>. \TeX\ expands this to the sequence of
+%characters that would be displayed on your terminal by the commands
+%`|\let\test=|\<token> |\show\test|'. For example, `|\meaning A|' usually
+%expands to `|the letter A|'; `|\meaning\A|' after `|\def\A#1B{\C}|'
+%expands to `|macro:#1B->\C |'.
+\smallbreak
+\textindent\bull ^|\meaning|\<token>：\TeX\ 把它展开为一系列字符，
+它们是命令 `|\let\test= |\<token> |\show\test|' 在你的终端上显示的内容。
+例如，`|\meaning A|' 展开的一般是 `|the letter A|'；
+在 `|\def\A#1B{\C}|' 后，`|\meaning\A|' 展开的是 `|macro:#1B->\C |'。
+
+%\smallbreak
+%\textindent\bull ^|\csname||...|^|\endcsname|. When \TeX\ expands |\csname|
+%it reads to the matching |\endcsname|, expanding tokens as it goes;
+%only character tokens should remain after this expansion has taken place.
+%Then the ``expansion'' of the entire |\csname...\endcsname| text
+%will be a single control sequence token, defined to be like |\relax| if
+%its meaning is currently undefined.
+\smallbreak
+\textindent\bull ^|\csname||...|^|\endcsname|：\TeX\ 在展开 |\csname|
+时要一直读取直到找到匹配的 |\endcsname|，在查找过程中展开读到的记号；
+在展开时，只有字符记号或保留下来。因此，整个 |\csname...\endcsname| 文本的
+``展开''将是单个控制系列记号，如果它当前没有定义，则定义为 |\relax|。
+
+%\smallbreak
+%\textindent\bull ^|\expandafter|\<token>. \TeX\ first reads the token that
+%comes immediately after |\expandafter|, without expanding it;
+%let's call this token~$t$. Then \TeX\ reads the token that comes after~$t$
+%(and possibly more tokens, if that token has an argument), replacing it by
+%its expansion. Finally \TeX\ puts~$t$ back in front of that expansion.
+\smallbreak
+\textindent\bull ^|\expandafter|\<token>: \
+ \TeX\ 首先读入 |\expandafter| 紧后面的记号，而不展开它；
+我们称此记号为 $t$。%
+接着， \TeX\ 读入 $t$ 后面的记号(如果此记号有一个参量，那么可能有更多的记号),
+把它用其展开代替。%
+最后 \TeX\ 把 $t$ 放在此展开的前面。
+
+%\smallbreak
+%\textindent\bull ^|\noexpand|\<token>. The expansion is the token itself;
+%but that token is interpreted as if its meaning were `|\relax|' if it is a
+%control sequence that would ordinarily be expanded by \TeX's expansion rules.
+\smallbreak
+\textindent\bull ^|\noexpand|\<token>: \
+展开为记号自己；但是如果此记号是一个按 \TeX\ 的展开规则一般要被展开的控制系列，
+那么其含义与`|\relax|'一样。
+
+%\smallbreak
+%\textindent\bull ^|\topmark|, ^|\firstmark|, ^|\botmark|, ^|\splitfirstmark|,
+%and ^|\splitbotmark|. \kern-1.7pt % This saves an overfull box (March 27, 1983)
+%The expansion is the token list in the corresponding ``^{mark}'' register
+%(see Chapter~23).
+\smallbreak
+\textindent\bull ^|\topmark|, ^|\firstmark|, ^|\botmark|, ^|\splitfirstmark|,
+和 |\splitbotmark|: \
+展开为相应``标记''寄存器中的记号列(见第二十三章)。
+
+%\smallbreak
+%\textindent\bull ^|\input|\<file name>. The expansion is null; but \TeX\
+%prepares to read from the specified file before looking at any more
+%tokens from its current source.
+\smallbreak
+\textindent\bull ^|\input|\<file name>: \1
+展开为空；但是 \TeX\ 做好准备从给定文件的读入内容，
+之后再在当前文件中继续读入其它记号。
+
+%\smallbreak
+%\textindent\bull ^|\endinput|. The expansion is null. The next time \TeX\ gets
+%to the end of an |\input| line, it will stop reading from the file containing
+%that line.
+\smallbreak
+\textindent\bull ^|\endinput|: \
+展开为空。%
+ \TeX\ 到达了 |\input| 行的结尾，将停止从包含此行的文件中读入。
+
+%\smallbreak
+%\textindent\bull ^|\the|\<internal quantity>. The expansion is a list of
+%tokens representing the current value of one of \TeX's variables, as
+%explained below. For example, `|\the\skip5|' might expand into
+%`|5.0pt plus 2.0fil|' (17~tokens).
+\smallbreak
+\textindent\bull ^|\the|\<internal quantity>: \
+展开为一列记号，它表示某个 \TeX\ 变量的当前值，讨论见下面。%
+例如，`|\the\skip5|'将展开为`|5.0pt plus 2.0fil|'(17 个记号)。
+
+%\ddanger The powerful |\the| operation has many subcases, so we shall discuss
+%them one at a time. A variety of internal numeric quantities
+%can be brought up front:\enddanger
+\ddanger |\the| 这个有用的命令有很多子情形，因此我们要同时讨论它们。%
+各种内部数字量都可以被提出来使用：
+\enddanger
+
+%\nobreak\medskip
+%\textindent\bull |\the|\<parameter>, where \<parameter> is the name of
+%one of \TeX's ^{integer parameters} (e.g., |\the\widowpenalty|),
+%^{dimension parameters} (e.g., |\the\parindent|), ^{glue parameters}
+%(e.g., |\the\leftskip|), or ^{muglue parameters} (e.g., |\the\thinmuskip|).
+\nobreak\medskip
+\textindent\bull |\the|\<parameter>，其中 \<parameter> 是 \TeX\ 的某一个
+整数参数（比如说\break |\the\widowpenalty|）、尺寸参数（比如说 |\the\parindent|）、
+粘连参数（比如说\break |\the\leftskip|）或 muglue 参数（比如说 |\the\thinmuskip|）的名字。
+
+%\smallbreak
+%\textindent\bull |\the|\<register>, where \<register> is the name of
+%one of \TeX's integer ^{registers} (e.g., |\the\count|\stretch|0|),
+%dimension registers (e.g., |\the\dimen169|), glue registers (e.g.,
+%|\the\skip255|), or muglue registers (e.g., |\the\muskip\count2|).
+\smallbreak
+\textindent\bull |\the|\<register>, 其中 \<register> 是某个 \TeX\ 的整数寄存器%
+(比如，|\the\count|\stretch|0|), 尺寸寄存器(比如，|\the\dimen169|),
+粘连寄存器(比如，|\the\skip255|), 或 muglue 寄存器(比如，|\the\muskip\count2|)%
+的名字。
+
+%\smallbreak
+%\textindent\bull |\the|\<codename>\<8-bit number>, where \<codename>
+%stands for either ^|\catcode|, ^|\mathcode|, ^|\lccode|, ^|\uccode|,
+%^|\sfcode|, or ^|\delcode|. For example, |\the\mathcode`/| produces the
+%current (integer) math code value for a slash.
+\smallbreak
+\textindent\bull |\the|\<codename>\<8-bit number>，
+其中 \<codename> 表示 ^|\lccode|、^|\uccode|、|\catcode|、^|\mathcode|、
+^|\sfcode| 或 |\delcode|。
+例如，|\the\mathcode`/| 得到的是斜线的当前数学码（整数）。
+
+%\smallbreak
+%\textindent\bull |\the|\<special register>, where \<special register> is
+%one of the integer quantities ^|\prevgraf|, ^|\deadcycles|, ^|\insertpenalties|,
+%^|\inputlineno|, ^|\badness|,
+%or ^|\parshape| (denoting only the number of lines of\/ |\parshape|); or
+%one of the dimensions ^|\pagetotal|, ^|\pagegoal|, ^|\pagestretch|,
+%^|\pagefilstretch|, ^|\pagefillstretch|, ^|\pagefilllstretch|, ^|\pageshrink|,
+%^|\pagedepth|. In horizontal modes you can also refer to a special integer,
+%|\the\spacefactor|; in vertical modes there's a special dimension,
+%|\the\prevdepth|.
+\smallbreak
+\textindent\bull |\the|\<special register>，其中 \<special register> 是
+|\prevgraf|、^|\deadcycles|、^|\insertpenalties|、^|\inputlineno|、^|\badness|、
+|\parshape|（它只表示 |\parshape| 的行数）中的某个整数量；
+或者是 |\pagetotal|、^|\pagegoal|、^|\pagedepth|、^|\pagestretch|、
+^|\pagefilstretch|、^|\pagefillstretch|、^|\pagefilllstretch|、^|\pageshrink|、
+中的某个尺寸。
+在水平模式下还可用于特殊整数 |\the\spacefactor|；
+在垂直模式下还可用于特殊尺寸 |\the\prevdepth|。
+
+%\smallbreak
+%\textindent\bull |\the|^|\fontdimen|\<parameter number>\<font>.
+%This produces a dimension; for example, parameter~6 of a font is its
+%``^{em}'' value, so `|\the\fontdimen6\tenrm|' yields `|10.0pt|' (six tokens).
+\smallbreak
+\textindent\bull |\the|^|\fontdimen|\<parameter number>\<font>,
+它得到的是一个尺寸；例如，字体的参数 6 为其``em''的值，
+因此，`|\the\fontdimen6\tenrm|'得到的是`|10.0pt|'(6 个记号)。
+
+%\smallbreak
+%\textindent\bull |\the|^|\hyphenchar|\<font>, |\the|^|\skewchar|\<font>.
+%These produce the corresponding integer values defined for the specified font.
+\smallbreak
+\textindent\bull |\the|^|\hyphenchar|\<font>, |\the|^|\skewchar|\<font>,
+它们得到的是定义给定字体的相应整数值。
+
+%\smallbreak
+%\textindent\bull |\the|^|\lastpenalty|, |\the|^|\lastkern|, |\the|^|\lastskip|.
+%These yield the amount of penalty, kerning, glue, or
+%muglue in the final item on the current list, provided that the item is a
+%penalty, kern, or glue, respectively; otherwise they yield `|0|' or `|0.0pt|'.
+\smallbreak
+\textindent\bull |\the|^|\lastpenalty|, |\the|^|\lastkern|, |\the|^|\lastskip|,
+它们得到的是当前列中最后一个项目的惩罚，紧排，粘连或数学粘连的量，
+如果此项目分别是惩罚，紧排，或粘连的话；
+否则得到的是`|0|'或`|0.0pt|'。
+
+%\smallbreak
+%\textindent\bull |\the|\<defined character>, where \<defined character> is
+%a control sequence that has been given an integer value with ^|\chardef| or
+%^|\mathchardef|; the result is that integer value, in decimal notation.
+\smallbreak
+\textindent\bull |\the|\<defined character>, 其中 \<defined character> 是一个%
+控制系列，它已经由 |\chardef| 或 |\mathchardef| 给定一个整数值；
+结果就是此整数值，用小数表示。
+
+%\ddanger In all of the cases listed so far, |\the| produces a result that
+%is a sequence of ^{ASCII} character tokens. Category code~12 (``other'') is
+%assigned to each token, except that character code~32 gets category~10
+%(``space''). The same rule is used to assign ^{category codes} to the
+%tokens produced by ^|\number|, ^|\romannumeral|, ^|\string|, ^|\meaning|,
+%^|\jobname|, and ^|\fontname|.
+\ddanger 在到现在为止的所有情况下，|\the| 得到的结果是一系列 ASCII 字符记号。%
+除了字符代码为 32 的记号(``空格'')的类代码为 10 外，
+每个记号的类代码都是 12~(``其它字符'')。%
+同样的类代码规则也适用于由 |\number|, ^|\romannumeral|, ^|\string|, ^|\meaning|,
+^|\jobname| 和 |\fontname| 得到的记号。
+
+%\ddanger There also are cases in which |\the| produces non-character tokens,
+%either a font identifier like |\tenrm|, or an arbitrary token list:
+\ddanger 在一些情形下，|\the| 得到的是非字符的记号，是象 |\tenrm| 这样的字体标识符，
+或者是任意记号列：
+
+%\textindent\bull |\the|\<font> produces a font identifier that selects the
+%specified font. For example, `|\the\font|' is a control sequence corresponding
+%to the current font.
+\textindent\bull |\the|\<font> 得到的是选择给定字体的字体标识符。%
+例如，`|\the\font|'是对应于当前字体的控制系列。
+
+%\goodbreak\smallskip
+%\textindent\bull |\the|\<token variable> produces a copy of the token list that
+%is the current value of the variable. For example, you can expand
+%`|\the\everypar|' and `|\the\toks5|'.
+\goodbreak\smallskip
+\textindent\bull |\the|\<token variable> \1得到的是一个变量当前值的记号列。%
+例如，可以展开`|\the\everypar|'和 `|\the\toks5|'。
+
+%\ddanger \TeX's primitive command `^|\showthe|' will display on your
+%terminal exactly what `|\the|' would produce in an expanded definition;
+%the expansion is preceded by `|> |' and followed by a period. For example,
+%`|\showthe\parindent|' will display
+%\begintt
+%> 20.0pt.
+%\endtt
+%if the plain \TeX\ paragraph indentation is being used.
+\ddanger  \TeX\ 的原始命令`^|\showthe|'将把在展开定义中`|\the|'所得到的东西%
+显示在终端上；
+展开前面加上 `|> |', 后面跟上句点。%
+例如，如果采用 plain \TeX\ 的段落缩进，那么`|\showthe\parindent|'显示的是
+\begintt
+> 20.0pt.
+\endtt
+
+%\ddanger Here now is the promised list of all cases when expandable tokens
+%are not expanded. Some of the situations involve primitives that
+%haven't been discussed yet, but we'll get to them
+%eventually.  Expansion is suppressed at the following times:\enddanger
+\ddanger 下面是以前说过的可展开的记号不被展开的所有情形的列表。%
+某些情形中含有未讨论过的原始命令，但是我们最后会给出它们的。%
+在下列情形下展开被禁止：
+\enddanger
+
+%\nobreak\medskip
+%\item\bull When tokens are being deleted during ^{error recovery} (see
+%Chapter~6).
+\nobreak\medskip
+\item\bull 当记号在错误修复期间被删除时(见第六章)。
+
+%\smallskip
+%\item\bull When tokens are being skipped because conditional text is being
+%ignored.
+\smallskip
+\item\bull 当因为条件文本被忽略而记号被跳过时。
+
+%\smallskip
+%\item\bull When \TeX\ is reading the arguments of a macro.
+\smallskip
+\item\bull 当 \TeX\ 正在读入宏的参量时。
+
+%\smallskip
+%\item\bull When \TeX\ is reading a control sequence to be defined by
+%^|\let|, ^|\futurelet|, ^|\def|, ^|\gdef|, ^|\edef|, ^|\xdef|, ^|\chardef|,
+%^|\mathchardef|, ^|\countdef|, ^|\dimendef|, ^|\skipdef|, ^|\muskipdef|,
+%^|\toksdef|, ^|\read|, and ^|\font|.
+\smallskip
+\item\bull 当 \TeX\ 正在读入由下列定义的控制系列时：
+^|\let|, ^|\futurelet|, ^|\def|, ^|\gdef|, ^|\edef|, ^|\xdef|, ^|\chardef|,
+^|\mathchardef|, ^|\countdef|, ^|\dimendef|, ^|\skipdef|, ^|\muskipdef|,
+^|\toksdef|, ^|\read| 和 |\font|。
+
+%\smallskip
+%\item\bull When \TeX\ is reading argument tokens for ^|\expandafter|,
+%^|\noexpand|, ^|\string|, ^|\meaning|, ^|\let|, ^|\futurelet|, ^|\ifx|,
+%^|\show|, ^|\afterassignment|, ^|\aftergroup|.
+\smallskip
+\item\bull 当 \TeX\ 正在读入下列控制系列的参量记号时：
+|\expandafter|、^|\noexpand|、^|\string|、^|\meaning|、^|\let|、
+^|\futurelet|、^|\ifx|、^|\show|、^|\afterassignment|、^|\aftergroup|。
+
+%\smallskip
+%\item\bull When \TeX\ is absorbing the parameter text of a |\def|, |\gdef|,
+%|\edef|, or |\xdef|.
+\smallskip
+\item\bull 当 \TeX\ 正在读入的是 |\def|, |\gdef|,
+|\edef| 或 |\xdef| 的参数文本时。
+
+%\smallskip
+%\item\bull When \TeX\ is absorbing the replacement text of a |\def| or
+%|\gdef| or ^|\read|; or the text of a ^{token variable} like ^|\everypar|
+%or ^|\toks||0|; or the token list for ^|\uppercase| or ^|\lowercase| or
+%^|\write|.  \ (The token list for |\write| will be expanded later, when it
+%is actually output to a file.)
+\smallskip
+\item\bull 当 \TeX\ 正在读入的是 |\def| 或者 |\gdef| 或者 |\read| 的替换文本；
+或者是像 |\everypar| 或 |\toks||0| 这样的记号变量的文本；
+或者是 |\uppercase| 或 |\lowercase| 或 ^|\write| 的记号列。%
+（|\write| 的记号列在稍后实际输出到文件时才被展开。）
+
+%\smallskip
+%\item\bull When \TeX\ is reading the preamble of an alignment, except after
+%a token for the primitive command |\span| or when reading the \<glue>
+%after ^|\tabskip|.
+\smallskip
+\item\bull 当 \TeX\ 正在读入对齐阵列的导言时，但是除了在原始命令 |\span| 的一个记号后，
+或者正在读入 |\tabskip| 的 \<glue> 时。
+
+%\smallskip
+%\item\bull Just after a |$|$_3$ token that begins math mode, to see if
+%another~|$|$_3$ follows.
+\smallskip
+\item\bull 在数学模式开始的记号 |$|$_3$ 紧后面时，这是为了看看是否后面%
+还跟着一个 |$|$_3$。
+
+%\smallskip
+%\item\bull Just after a |`|$_{12}$ token that begins an ^{alphabetic constant}.
+\smallskip
+\item\bull 在开始字母常数的记号 |`|$_{12}$ 的后面。
+
+%\ddanger Sometimes you will find yourself wanting to define new macros
+%whose replacement text has been expanded, based on current conditions,
+%instead of simply copying the replacement text verbatim. \TeX\ provides
+%the ^|\edef| (expanded definition) command for this purpose, and also
+%^|\xdef| (which is equivalent to |\global\edef|). The general format
+%is the same as for |\def| and |\gdef|, but \TeX\ blindly expands the tokens
+%of the replacement text according to the expansion rules above. For
+%example, consider
+%\begintt
+%\def\double#1{#1#1}
+%\edef\a{\double{xy}} \edef\a{\double\a}
+%\endtt
+%Here the first |\edef| is equivalent to `|\def\a{xyxy}|' and the second is
+%equivalent to `|\def\a{xyxyxyxy}|'. All of the other kinds of expansion
+%will take place too, including conditionals; for example,
+%\begintt
+%\edef\b#1#2{\ifmmode#1\else#2\fi}
+%\endtt
+%gives a result equivalent to `|\def\b#1#2{#1}|' if \TeX\ is in math
+%mode at the time of the |\edef|, otherwise the result is equivalent to
+%`|\def\b#1#2{#2}|'
+\ddanger 有时候你会发现自己要定义一个新宏，它的替换文本由于当前情形而已经被展开了，
+而不是简单地逐字复制替换文本。%
+为此， \TeX\ 提供了命令 |\edef|~(被展开的定义), 以及 |\xdef|~(它等价于%
+~|\global\edef|)。%
+其一般格式与 |\def| 和 |\gdef| 一样，但是 \TeX\ 盲目地按照上面的展开规则来%
+展开替换文本的记号。%
+例如，看看下面这个定义：
+\begintt
+\def\double#1{#1#1}
+\edef\a{\double{xy}} \edef\a{\double\a}
+\endtt
+这里，第一个 |\edef| 等价于`|\def\a{xyxy}|', 而第二个等价于`|\def\a{xyxyxyxy}|'。%
+所有其它类型的展开也要进行，包括条件文本；
+例如，在 \TeX\ 给出 |\edef| 时处在数学模式的情况下
+\begintt
+\edef\b#1#2{\ifmmode#1\else#2\fi}
+\endtt
+的结果等价于`|\def\b#1#2{#1}|',
+否则结果等价于`|\def\b#1#2{#2}|'。
+
+%\ddanger Expanded definitions that are made with |\edef| or |\xdef| continue
+%to expand tokens until only unexpandable tokens remain, except that
+%token lists produced by `^|\the|' are not expanded further. Furthermore
+%a token following `^|\noexpand|' will not be expanded, since its ability
+%to expand has been nullified. These two operations can be used to control
+%^^{expansion, avoiding} what gets expanded and what doesn't.
+\ddanger \1由 |\edef| 和 |\xdef| 给出的被展开的定义要把记号展开到只剩下%
+不能展开的记号，但是由`^|\the|'生成的记号列不再进一步展开。%
+还有，`^|\noexpand|'后面的记号不展开，因为它的展开能力无效了。%
+这两个命令可以用来控制展开哪些，不展开哪些。
+
+%\ddanger Suppose, for example, that you
+%want to define |\a| to be equal to~|\b| (expanded) followed by~|\c|
+%(not expanded) followed by |\d| (expanded), assuming that |\b| and
+%|\d| are simple macros without parameters. There are two easy ways to do it:
+%\begintt
+%\edef\a{\b\noexpand\c\d}
+%\toks0={\c} \edef\a{\b\the\toks0 \d}
+%\endtt
+%And it's even possible to achieve the same effect without using either
+%|\noexpand| or |\the|; a reader who wants to learn more about \TeX's
+%expansion mechanism is encouraged to try the next three exercises.
+\ddanger 例如，假设你要把 |\a| 定义为 |\b|~(展开的)后面跟 |\c|~(不展开)
+再后面跟 |\d|~(展开的), 并且假定 |\b| 和 |\d| 是无参数的简单宏。%
+就可以用两种方法来实现：
+\begintt
+\edef\a{\b\noexpand\c\d}
+\toks0={\c} \edef\a{\b\the\toks0 \d}
+\endtt
+甚至可以不用 |\noexpand| 或 |\the| 也可得到同样的效果；
+对想多学习一些 \TeX\ 展开原理的读者，建议做一下下面三个练习。
+
+%\ddangerexercise Figure out a way to define |\a| as in the previous paragraph,
+%without using \TeX's primitives `|\noexpand|' and `|\the|'.
+%\answer One idea is to say
+%\begintt
+%\let\save=\c \let\c=0 \edef\a{\b\c\d} \let\c=\save
+%\endtt
+%because control sequences equivalent to characters are not expandable.
+%However, this doesn't expand occurrences of~|\c|
+%that might be present in the expansions of\/ |\b| and~|\d|. Another way,
+%which is free of this defect, is
+%\begintt
+%\edef\next#1#2{\def#1{\b#2\d}} \next\a\c
+%\endtt
+%(and it's worth a close look!).
+\ddangerexercise 不用 `|\noexpand|' 和 `|\the|'，找出定义前一段中 |\a| 的方法。
+\answer 其中一种想法如下：
+\begintt
+\let\save=\c \let\c=0 \edef\a{\b\c\d} \let\c=\save
+\endtt
+这是因为等价于字符的控制系列不会被展开。
+然而，这导致可能出现在 |\b| 和 |\d| 的展开中的 |\c| 也不会被展开。
+另一种可以避免这个缺点的想法是
+\begintt
+\edef\next#1#2{\def#1{\b#2\d}} \next\a\c
+\endtt
+（它值得你仔细观察！）。
+
+%\ddangerexercise Continuing the example of expansion avoidance, suppose that
+%you want to expand |\b| completely until only unexpandable tokens are left,
+%but you don't want to expand |\c| at all, and you want to expand |\d|
+%only one level. For example, after |\def\b{\c\c}| and |\def\c{*}| and
+%|\def\d{\b\c}| the goal would be to get the effect of\/ |\def\a{**\c\b\c}|.
+%How can such a partial expansion be achieved, using ^|\the|?
+%\answer |\toks0={\c} \toks2=\expandafter{\d}|\parbreak
+%        |\edef\a{\b\the\toks0 \the\toks2 }|
+%\smallskip\noindent
+%(Notice that ^|\expandafter| expands the token after the left brace here.)
+\ddangerexercise 继续讨论避免展开的例子，假设要把 |\b|
+完全展开到只剩下不能展开的记号，但是你不希望展开 |\c|，并且对 |\d| 只展开一层。
+例如，在定义 |\def\b{\c\c}|，|\def\c{*}| 和 |\def\d{\b\c}| 后，
+要得到的是 |\def\a{**\c\b\c}| 这样的结果。怎样才能用 |\the| 来实现这个部分展开？
+\answer |\toks0={\c} \toks2=\expandafter{\d}|\parbreak
+        |\edef\a{\b\the\toks0 \the\toks2 }|
+\smallskip\noindent
+（注意这里的 ^|\expandafter| 展开左花括号后面的记号。）
+
+%\ddangerexercise Solve the previous exercise without |\the| or |\noexpand|.
+%\ (This is difficult.)
+%\answer The following shouldn't be taken too seriously, but it does work:
+%^^|\span|
+%\begintt
+%{\setbox0=\vbox{\halign{#{\c\span\d}\cr
+%      \let\next=0\edef\next#1{\gdef\next{\b#1}}\next\cr}}}
+%\let\a=\next
+%\endtt
+\ddangerexercise 不用 |\the| 或 |\noexpand| 解决上一个练习。（这很难。）
+\answer 别太严肃看待下面的解答，但它确实有效：
+^^|\span|
+\begintt
+{\setbox0=\vbox{\halign{#{\c\span\d}\cr
+      \let\next=0\edef\next#1{\gdef\next{\b#1}}\next\cr}}}
+\let\a=\next
+\endtt
+
+%\ddanger \TeX's primitive commands ^|\mark||{...}|, ^|\message||{...}|,
+%^|\errmessage||{...}|, ^|\special||{...}|, and ^|\write|\<number>|{...}|
+%all expand the token lists in braces almost exactly as |\edef| and |\xdef| do.
+%However, a macro parameter
+%character like~|#| should not be duplicated in such commands; you need
+%to say |##| within an |\edef|, but only |#| within a |\mark|. The
+%|\write| command is somewhat special, because its token list is first
+%read without expansion; expansion occurs later, when the tokens
+%are actually being written to a file.
+\ddanger 几乎同 |\edef| 和 |\xdef| 一样，\TeX\ 的原始命令 |\mark||{...}|、
+^|\message||{...}|、^|\errmessage||{...}|、^|\special||{...}| 和
+|\write|\<number>|{...}| 都展开花括号中的记号列。
+但是像 |#| 这样的宏参数字符在这样的命令中不用重复；在 |\edef| 中用 |##|，
+而在 |\mark| 中只用 |#|。命令 |\write| 有点特殊，因为它的记号列首先读入而不展开；
+直到记号实际上被写入一个文件时才进行展开。
+
+%\ddangerexercise Compare the following two definitions:
+%\begintt
+%\def\a{\iftrue{\else}\fi}
+%\edef\b{\iftrue{\else}\fi}
+%\endtt
+%Which of them yields an ^{unmatched left brace}? (This is tricky.)
+%\answer Neither one, although |\a| will behave like an unmatched left
+%brace when it is expanded. The definition of\/ |\b| is {\sl not complete},
+%because it expands to `|\def\b{{}|'; \TeX\ will continue to read ahead,
+%looking for another right brace, possibly discovering a runaway
+%definition! It's impossible to define a macro that has unmatched braces.
+%But you {\sl can\/} say |\let\a={|; Appendix~D discusses several
+%other ^{brace tricks}.
+\ddangerexercise 比较下面两个定义：
+\begintt
+\def\a{\iftrue{\else}\fi}
+\edef\b{\iftrue{\else}\fi}
+\endtt
+哪个得到未匹配的左花括号？（有点技巧。）
+\answer 两者都不能得到左花括号，尽管 |\a| 展开后像一个未匹配的左花括号。
+|\b| 的定义是{\sl 不完整的}，因为它展开为 `|\def\b{{}|'；
+\TeX\ 将继续往前读取，寻找一个右花括号，也许发现定义失控了！
+你不可能定义一个包含未匹配花括号的宏。
+但是你 {\sl 可以\/}用 |\let\a={|；附录 D 讨论了几个其他的^{花括号技巧}。
+
+%\def\rhead{Chapter \chapno: Definitions (aka Macros)% my little joke
+%  \gdef\rhead{Chapter \chapno: Definitions (also called Macros)}}
+
+%\ddanger \TeX\ has the ability to read individual lines of text from up
+%to~16 files at once, in addition to the files that are being |\input|.
+%To initiate reading such an auxiliary file, you should say
+%\begindisplay
+%^|\openin|\<number>|=|\<file name>
+%\enddisplay
+%where the \<number> is between 0 and 15. \ (Plain \TeX\ allocates
+%input stream numbers 0~through~15 with the ^|\newread| command, which
+%is analogous to |\newbox|.) \ In most installations
+%of \TeX, the extension `^|.tex|' will be appended to the file name,
+%as with ^|\input|, if no extension is given explicitly. If the file
+%cannot be found, \TeX\ will give no error message; it will simply consider
+%that the input stream is not open, and you can test this condition
+%with ^|\ifeof|. When you're done with a file, you can say
+%\begindisplay
+%^|\closein|\<number>
+%\enddisplay
+%and the file associated with that input stream number will be closed,
+%i.e., returned to its initial condition, if such a file was open.
+%To get input from an open file, you say
+%\begindisplay
+%^|\read|\<number>^|to|\<control sequence>
+%\enddisplay
+%and the control sequence is defined to be a parameterless macro whose
+%replacement text is the contents of the next line read from the
+%designated file. This line is converted to a token list, using the
+%procedure of Chapter~8, based on the current category codes.
+%Additional lines are read, if necessary, until an equal number of
+%left and right braces has been found. An empty line is implicitly appended
+%to the end of a file that is being |\read|. ^^{empty line at end of file}
+%If the \<number> is not between 0 and~15, or if no such file is open, or if
+%the file has ended, input will be from the terminal; \TeX\ will prompt
+%the user unless the \<number> is negative. The macro definition will be
+%local unless you say |\global\read|.
+\ddanger  \TeX\ 可以同时从大约 16 个文件中读入各个文本行，除了在 |\input| 后的%
+文件之外。%
+为了开始读入这样一个辅助文件，应该使用
+\begindisplay
+^|\openin|\<number>=\<file name>
+\enddisplay
+其中 \<number> 在 0 和 15 之间。%
+(Plain \TeX\ 用命令 |\newread| 了分配输入流的数字 0 到 15, 它类似于 |\newbox|。)
+在大多数 \TeX\ 的安装时，\1如果没有明确给出扩展名，
+那么扩展名`^|.tex|'将添加到文件名之后，就象用 |\input| 一样。%
+如果文件找不到， \TeX\ 不给出错误信息；
+它只把输入流看作没有打开，并且你可以用 |\ifeof| 来测试这种状态。%
+当不再使用某个文件时，
+可以使用
+\begindisplay
+^|\closein|\<number>
+\enddisplay
+并且如果与输入流数字相对应的文件是打开的，那么它将关闭，
+即，返回其初始状态。%
+为了从一个打开的文件得到输入，可以使用
+\begindisplay
+^|\read|\<number>^|to|\<control sequence>
+\enddisplay
+并且所定义的控制系列是一个无参数的宏，其替换文本是从指定文件读入的下一行的内容。%
+此行用第八章的程序按当前类代码转换为一个记号列。%
+如果需要，再读入其它行，直到左右大括号的数目相同。%
+ \TeX\ 在要读入的文件结尾暗中添加了一个空行。%
+如果 \<number> 不在 0 和 15 之间，或者如果这样的文件没有打开，
+或者文件结束了，那么输入就来自终端；
+如果 \<number> 不是负值，那么 \TeX\ 将给出提示符。%
+如果你不使用 |\global\read|, 那么宏的定义将是局部的。
+
+%\ddanger For example, it's easy to have ^{dialogs with the user}, by
+%using |\read| together with the ^|\message| command (which
+%writes an expanded token list on the terminal and in the log file):
+%\begintt
+%\message{Please type your name:}
+%\read16 to\myname
+%\message{Hello, \myname!}
+%\endtt
+%The |\read| command in this case will print `|\myname=|' and it will wait
+%for a response; the response will be echoed on the log file.
+%The `|\myname=|' would have been omitted if `|\read16|' had been
+%`|\read-1|'.
+\ddanger 例如，通过命令 |\read| 以及%
+~|\message|~(它把一个展开的记号列写在终端上和 log 文件中),
+可以很容易实现与用户对话：
+\begintt
+\message{Please type your name:}
+\read16 to\myname
+\message{Hello, \myname!}
+\endtt
+在这种情况下，命令 |\read| 将写入`|\myname=|'并等待应答；
+应答在 log 文件中重复出来。%
+如果`|\read16|'变成`|\read-1|', 那么`|\myname=|'就被省略了。
+
+%\ddangerexercise The |\myname| example just given doesn't work quite right,
+%because the \<return> at the end of the line gets translated into a
+%space. Figure out how to fix that glitch.
+%\answer One way is to redefine |\catcode`\^^M=9| (ignored) just before
+%the |\read|, so that the \<return> will be ignored. Another solution is
+%to redefine ^|\endlinechar||=-1|, so that no character is put at the
+%end of the line. Or you could try to be tricky by stripping off the
+%space with macro expansion as follows:
+%\begintt
+%\def\stripspace#1 \next{#1}
+%\edef\myname{\expandafter\stripspace\myname\next}
+%\endtt
+%The latter solution doesn't work if the user types `|%|' at the end of
+%his~or her name, or if the name contains control sequences.
+\ddangerexercise 刚刚给出的 |\myname| 例子效果并不好，
+因为在行尾的 \<return> 被转换为一个空格。看看怎样解决这个小问题？
+\answer 其中一种方法就是在 |\read| 之前重新定义 |\catcode`\^^M=9|（可忽略符），
+使得 \<return> 被忽略。另一种方法是重新定义 ^|\endlinechar||=-1|，
+使得在行尾不加任何字符。或者你也可以试试更有技巧的方法，用下面的宏去掉空格：
+\begintt
+\def\stripspace#1 \next{#1}
+\edef\myname{\expandafter\stripspace\myname\next}
+\endtt
+如果用户在名字后键入 `|%|'，或者用户名字包含控制系列，后面这个方法将无效。
+
+%\ddangerexercise Continuing the previous example, define a macro
+%|\MYNAME| that contains the letters of\/ |\myname| all in ^{uppercase
+%letters}. For example, if\/ |\myname| expands to |Arthur|, |\MYNAME|
+%should expand to |ARTHUR|. Assume that |\myname| contains only
+%letters and spaces in its expansion.
+%\answer Here are two solutions:
+%\begintt
+%\def\next#1\endname{\uppercase{\def\MYNAME{#1}}}
+%\expandafter\next\myname\endname
+%|smallskip\edef\next{\def\noexpand\MYNAME{\myname}}
+%\uppercase\expandafter{\next}
+%\endtt
+\ddangerexercise 继续前一个例子，定义一个叫 |\MYNAME| 的宏，
+它包含 |\myname| 的所有字母，但改为^{大写字母}。
+例如，如果 |\myname| 展开为 |Arthur|，那么 |\MYNAME| 就展开为 |ARTHUR|。
+假定在 |\myname| 的展开中只包含字母和空格。
+\answer 这里给出两种解法：
+\begintt
+\def\next#1\endname{\uppercase{\def\MYNAME{#1}}}
+\expandafter\next\myname\endname
+|smallskip\edef\next{\def\noexpand\MYNAME{\myname}}
+\uppercase\expandafter{\next}
+\endtt
+
+%\ddanger Appendices B, D, and E contain numerous examples of how to make
+%macros do useful things. Let's close this chapter by presenting a few
+%examples that show how \TeX\ can actually be used as a primitive ^{programming}
+%language, if you want to achieve special effects, and if you don't care very
+%much about computer costs.
+\ddanger 附录 B, D, E 包含大量编写的宏的例子，可以做很多事情。%
+现在，在本章结尾，我们通过几个例子来说明作为编程语言，
+ \TeX\ 实际上可以怎样使用，如果你要得到某些特殊的效果，并且不在意计算机所耗的时间。
+
+%\ddanger Plain \TeX\ contains a |\loop...\repeat| construction, which works
+%like this: You say `^|\loop|~$\alpha$~|\if...|~$\beta$~|\repeat|', where
+%$\alpha$ and~$\beta$ are any sequences of commands, and where |\if...|\
+%is any conditional test (without a matching |\fi|). \TeX\ will first
+%do~$\alpha$; then if the condition is true, \TeX\ will do~$\beta$ and
+%repeat the whole process again starting with~$\alpha$. If the
+%condition ever turns out to be false, the loop will stop. For example,
+%here is a program that carries out a little dialog in which \TeX\ waits for
+%the user to type `|Yes|' or `|No|': ^^{repeating commands, see :loop}
+%\begintt
+%\def\yes{Yes } \def\no{No } \newif\ifgarbage
+%\loop\message{Are you happy? }
+%  \read-1 to\answer
+%  \ifx\answer\yes\garbagefalse % the answer is Yes
+%    \else\ifx\answer\no\garbagefalse % the answer is No
+%      \else\garbagetrue\fi\fi % the answer is garbage
+%  \ifgarbage\message{(Please type Yes or No.)}
+%\repeat
+%\endtt
+\ddanger Plain \TeX\ 中含有一个 |\loop...\repeat| 结构，它像这样工作：
+假设你给出 `^|\loop|~$\alpha$~|\if...|~$\beta$~|\repeat|'，
+其中 $\alpha$ 和 $\beta$ 是任意系列的命令，并且 |\if...| 是任意条件测试（无匹配的 |\fi|）。
+\TeX\ 就首先执行 $\alpha$；接着如果条件为真，\TeX\ 就执行 $\beta$，
+并且再次从 $\alpha$ 开始重复整个过程。如果条件为假，循环就停止。
+\1例如，下面有一个小程序，进行一段对话，其中 \TeX\ 等待用户输入 `|Yes|' 或 `|No|'：
+\begintt
+\def\yes{Yes } \def\no{No } \newif\ifgarbage
+\loop\message{Are you happy? }
+  \read-1 to\answer
+  \ifx\answer\yes\garbagefalse % the answer is Yes
+    \else\ifx\answer\no\garbagefalse % the answer is No
+      \else\garbagetrue\fi\fi % the answer is garbage
+  \ifgarbage\message{(Please type Yes or No.)}
+\repeat
+\endtt
+
+%\ddangerexercise Use the |\loop...\repeat| mechanism to construct a
+%general |\punishment| macro that repeats any given paragraph any given number of
+%times. For example,
+%\begintt
+%\punishment{I must not talk in class.}{100}
+%\endtt
+%should produce the results desired in exercise 20.\punishexno.
+%\answer (Here's a solution that also numbers the lines, so that the number of
+%repetitions is easily verifiable.
+%The only tricky part about this answer is the use of\/ ^|\endgraf|,
+%which is a substitute for |\par| because |\loop| is not a ^|\long| macro.)
+%\begintt
+%\newcount\n
+%\def\punishment#1#2{\n=0
+%  \loop\ifnum\n<#2 \advance\n by1
+%    \item{\number\n.}#1\endgraf\repeat}
+%\endtt
+\ddangerexercise 用 |\loop...\repeat| 原理编写一个一般的 |\punishment| 宏，
+它将任意给定段落重复任意给定次数。例如，
+\begintt
+\punishment{I must not talk in class.}{100}
+\endtt
+将得到练习 20.\punishexno 所要的结果。
+\answer （这个解答还给各行编号，以让重复次数更容易验证。
+唯一有技巧的是使用了 ^|\endgraf|；
+因为 |\loop| 不是 ^|\long| 宏，我们用 ^|\endgraf| 代替 |\par|。）
+\begintt
+\newcount\n
+\def\punishment#1#2{\n=0
+  \loop\ifnum\n<#2 \advance\n by1
+    \item{\number\n.}#1\endgraf\repeat}
+\endtt
+
+%\let\plaind=\d
+%\newif\ifprime \newif\ifunknown
+%\newcount\n \newcount\p \newcount\d \newcount\a
+%\def\primes#1{2,~3% assume that #1 is at least 3
+%  \n=#1 \advance\n by-2 % n more to go
+%  \p=5 % odd primes starting with p
+%  \loop\ifnum\n>0 \printifprime\advance\p by2 \repeat}
+%\def\printp{, % we will invoke \printp if p is prime
+%  \ifnum\n=1 and~\fi % this precedes the last value
+%  \number\p \advance\n by -1 }
+%\def\printifprime{\testprimality \ifprime\printp\fi}
+%\def\testprimality{{\d=3 \global\primetrue
+%  \loop\trialdivision \ifunknown\advance\d by2 \repeat}}
+%\def\trialdivision{\a=\p \divide\a by\d
+%  \ifnum\a>\d \unknowntrue\else\unknownfalse\fi
+%  \multiply\a by\d
+%  \ifnum\a=\p \global\primefalse\unknownfalse\fi}
+%\ddanger The first thirty prime numbers are \primes{30}. You may not
+%find this fact very startling; but you may be surprised to learn that
+%the previous sentence was typeset by saying
+%\begintt
+%The first thirty prime numbers are \primes{30}.
+%\endtt
+%\TeX\ did all of the calculation by expanding the |\primes| macro, so the author
+%is pretty sure that the list of ^{prime numbers} given above is quite free
+%of typographic errors. Here is the set of macros that did it:
+%\begindisplay
+%^|\newif||\ifprime \newif\ifunknown % boolean variables|\cr
+%^|\newcount||\n \newcount\p \newcount\d \newcount\a % integer variables|\cr
+%|\def\primes#1{2,~3% assume that #1 is at least 3|\cr
+%|  \n=#1 \advance\n by-2 % n more to go|\cr
+%|  \p=5 % odd primes starting with p|\cr
+%|  \loop\ifnum\n>0 \printifprime\advance\p by2 \repeat}|\cr
+%|\def\printp{, % we will invoke \printp if p is prime|\cr
+%|  \ifnum\n=1 and~\fi % `and' precedes the last value|\cr
+%|  \number\p \advance\n by -1 }|\cr
+%|\def\printifprime{\testprimality \ifprime\printp\fi}|\cr
+%|\def\testprimality{{\d=3 \global\primetrue|\cr
+%|  \loop\trialdivision \ifunknown\advance\d by2 \repeat}}|\cr
+%\noalign{\penalty-500}
+%|\def\trialdivision{\a=\p \divide\a by\d|\cr
+%|  \ifnum\a>\d \unknowntrue\else\unknownfalse\fi|\cr
+%|  \multiply\a by\d|\cr
+%|  \ifnum\a=\p \global\primefalse\unknownfalse\fi}|\cr
+%\enddisplay
+%^^|\multiply|^^|\divide|^^|\advance|^^|\newcount|
+%The computation is fairly straightforward, except that it involves
+%a loop inside a loop; therefore |\testprimality| introduces an extra
+%set of braces, to keep the inner loop control from interfering with
+%the outer loop. The braces make it necessary to say `^|\global|' when
+%|\ifprime| is being set true or false.  \TeX\ spent more time constructing
+%that sentence than it usually spends on an entire page; the
+%|\trialdivision| macro was expanded 132 times. % cpu time was 4 sec
+\let\plaind=\d
+\newif\ifprime \newif\ifunknown
+\newcount\n \newcount\p \newcount\d \newcount\a
+\def\primes#1{2,~3% assume that #1 is at least 3
+  \n=#1 \advance\n by-2 % n more to go
+  \p=5 % odd primes starting with p
+  \loop\ifnum\n>0 \printifprime\advance\p by2 \repeat}
+\def\printp{, % we will invoke \printp if p is prime
+  \ifnum\n=1 and~\fi % this precedes the last value
+  \number\p \advance\n by -1 }
+\def\printifprime{\testprimality \ifprime\printp\fi}
+\def\testprimality{{\d=3 \global\primetrue
+  \loop\trialdivision \ifunknown\advance\d by2 \repeat}}
+\def\trialdivision{\a=\p \divide\a by\d
+  \ifnum\a>\d \unknowntrue\else\unknownfalse\fi
+  \multiply\a by\d
+  \ifnum\a=\p \global\primefalse\unknownfalse\fi}
+\ddanger 前 30 个素数为 \primes{30}。%
+你可能觉得这没什么；但是你可能吃惊的是上面这句话由下面所排版出：
+\begindisplay
+前|~|30|~|个素数为|~\primes{30}|。
+\enddisplay
+ \TeX\ 通过展开宏 |\primes| 执行了所有的计算，因此作者可以确信上面所给%
+素数列没什么输入错误。%
+下面就是此宏集：
+\begindisplay
+^|\newif||\ifprime \newif\ifunknown % boolean variables|\cr
+^|\newcount||\n \newcount\p \newcount\d \newcount\a % integer variables|\cr
+|\def\primes#1{2,~3% assume that #1 is at least 3|\cr
+|  \n=#1 \advance\n by-2 % n more to go|\cr
+|  \p=5 % odd primes starting with p|\cr
+|  \loop\ifnum\n>0 \printifprime\advance\p by2 \repeat}|\cr
+|\def\printp{, % we will invoke \printp if p is prime|\cr
+|  \ifnum\n=1 and~\fi % `and' precedes the last value|\cr
+|  \number\p \advance\n by -1 }|\cr
+|\def\printifprime{\testprimality \ifprime\printp\fi}|\cr
+|\def\testprimality{{\d=3 \global\primetrue|\cr
+|  \loop\trialdivision \ifunknown\advance\d by2 \repeat}}|\cr
+\noalign{\penalty-500}
+|\def\trialdivision{\a=\p \divide\a by\d|\cr
+|  \ifnum\a>\d \unknowntrue\else\unknownfalse\fi|\cr
+|  \multiply\a by\d|\cr
+|  \ifnum\a=\p \global\primefalse\unknownfalse\fi}|\cr
+\enddisplay
+这种计算相当直接，除了它有一个循环在另一个循环中；
+因此，|\testprimality| 引入了一个额外的大括号组，来保证内部循环控制不受%
+外部循环的影响。%
+当 |\ifprime| 被设定为真或假时，大括号要求编写使用`^|\global|'。%
+ \TeX\ 处理此句所花费的时间比处理一个页面还要多；
+\1宏 |\trialdivision| 被展开了 132 次。
+
+%\let\d=\plaind
+%\ddanger The |\loop| macro that does all these wonderful things is
+%actually quite simple. It puts the code that's supposed to be repeated
+%into a control sequence called |\body|, and then another control
+%sequence iterates until the condition is false:
+%\begintt
+%\def\loop#1\repeat{\def\body{#1}\iterate}
+%\def\iterate{\body\let\next=\iterate\else\let\next=\relax\fi\next}
+%\endtt
+%The expansion of\/ |\iterate| ends with the expansion of\/ |\next|; therefore
+%\TeX\ is able to remove |\iterate| from its memory before
+%invoking |\next|, and the memory does not fill up during a long loop.
+%Computer scientists call this ``^{tail recursion}.''
+\let\d=\plaind
+\ddanger 做这些漂亮工作的宏 |\loop| 实际上非常简单。%
+它把假定要重复的代码放在叫做 |\body| 的控制系列中，
+并且接着用另一个控制系列重复到条件为假：
+\begintt
+\def\loop#1\repeat{\def\body{#1}\iterate}
+\def\iterate{\body\let\next=\iterate\else\let\next=\relax\fi\next}
+\endtt
+|\iterate| 的展开的结尾是 |\next| 的展开；
+因此 \TeX\ 在调用 |\next| 之前能把 |\iterate| 从内存中清除掉，
+这样在长循环中内存就不会被塞满。%
+计算机科学家称其为``末端回归''。
+
+%\ddanger The |\hex| macro below, which converts count register |\n| to
+%^{hexadecimal notation}, illustrates a {\sl recursive\/} control structure
+%in which many copies of\/ |\hex| can be active simultaneously.
+%^{Recursion} works better than simple |\loop| ^{iteration} in this
+%application because the hexadecimal digits are discovered from right to
+%left, while they must be output from left to right.
+%\ (The number in |\n| should be $\ge0$.)
+%\begintt
+%\def\hex{{\count0=\n \divide\n by16
+%  \ifnum\n>0 \hex\fi \count2=\n \multiply\count2 by-16
+%  \advance\count0 by\count2 \hexdigit}}
+%\def\hexdigit{\ifnum\count0<10 \number\count0
+%  \else\advance\count0 by-10 \advance\count0 by`A \char\count0 \fi}
+%\endtt
+\ddanger 下面的宏 |\hex| 把计数寄存器 |\n| 转换为十六进制表示，
+它举例说明了一个{\KT{9}递归}控制结构，许多 |\hex| 的副本都可以在其中同时使用。%
+在这个应用程序中，递归比简单的 |\loop| 重复更好，
+因为十六进制数字是从右到左算出来的，
+而它们在输出时是从左到右。
+(在 |\n| 中的数字必须 $\ge0$。)
+\begintt
+\def\hex{{\count0=\n \divide\n by16
+  \ifnum\n>0 \hex\fi \count2=\n \multiply\count2 by-16
+  \advance\count0 by\count2 \hexdigit}}
+\def\hexdigit{\ifnum\count0<10 \number\count0
+  \else\advance\count0 by-10 \advance\count0 by`A \char\count0 \fi}
+\endtt
+
+%\ddanger Our final example is a macro that computes the number of nonblank
+%tokens in its argument; for example, `|\length{argument}|' expands to
+%`|8|'. This illustrates yet another aspect of macro technique.
+%\begintt
+%\def\length#1{{\count0=0 \getlength#1\end \number\count0}}
+%\def\getlength#1{\ifx#1\end \let\next=\relax
+%  \else\advance\count0 by1 \let\next=\getlength\fi \next}
+%\endtt
+\ddanger 最后这个例子给出一个宏，它用于计算宏参量中非空记号的数目；
+比如 `|\length{argument}|' 展开为 `|8|'。
+这个例子展示了宏的另一个方面的技术。
+\begintt
+\def\length#1{{\count0=0 \getlength#1\end \number\count0}}
+\def\getlength#1{\ifx#1\end \let\next=\relax
+  \else\advance\count0 by1 \let\next=\getlength\fi \next}
+\endtt
+
+\endchapter
+
+By this time [37 A.D.] the influence of ^{Macro} had become supreme.
+\author ^{TACITUS}, {\sl Annals\/} (c.\thinspace120 A.D.) % book VI, ch 45
+
+\bigskip
+
+% Oh, you want a definition.
+I hate definitions.
+\author BENJAMIN ^{DISRAELI}, {\sl Vivian Grey\/} (1826) % Book II, Chapter 6
+
+\vfill\eject\byebye

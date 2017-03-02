@@ -1,0 +1,1295 @@
+% -*- coding: utf-8 -*-
+
+\input macros
+
+%\beginchapter Chapter 6. Running\\\TeX
+\beginchapter Chapter 6. 运行程序
+
+\origpageno=23
+
+%The best way to learn how to use \TeX\ is to use it. Thus, it's high time
+%for you to sit down at a computer terminal and interact with the \TeX\
+%system, trying things out to see what happens. Here are some small but
+%complete examples suggested for your first encounter.
+%^^{Running the program}
+\1掌握 \TeX\ 的最好方法就是使用它。%
+因此，对你而言，该坐在终端前与 \TeX\ 系统交流交流，试一下看看到底怎么样。%
+首先为你准备的是一些短小而全面的例子。
+
+%Caution: This chapter is rather a long one. Why don't you stop reading
+%now, and come back fresh tomorrow?
+注意：本章相当长。要不要现在休息一下，明天接着看？
+
+%\smallskip OK, let's suppose that you're rested and excited about having a
+%trial run of \TeX\null. Step-by-step instructions for using it appear in this
+%chapter. First do this: Go to the lab where the graphic output device is,
+%since you will be wanting to see the output that you get---it won't really
+%be satisfactory to run \TeX\ from a remote location, where you can't hold
+%the generated documents in your own hands. Then log in; and start \TeX. \
+%(You may have to ask somebody how to do this on your local computer. Usually
+%the operating system prompts you for a command and you type `|tex|' or
+%`|run| |tex|' or something like that.)
+\smallskip
+现在，假定你已经精力充沛，并且急于进行 \TeX\ 实战。%
+逐步使用它的指导都在本章中。%
+首先要做的是：
+去有图像输出设备的实验室，因为你将要看到所得到的结果——%
+从远程运行 \TeX\ 不那么过瘾，因为你不能亲手拿到生成的文档。%
+于是，登录；运行 \TeX。%
+(可能你必须问问别人看看怎样做。%
+通常操作系统提示符出现后，键入`|TeX|'或`|run| |tex|'或类似的命令。)
+
+%When you're successful, \TeX\ will welcome you with a message such as
+%\begintt
+%This is TeX, Version 3.141 (preloaded format=plain 89.7.15)
+%**
+%\endtt
+%The `^|**|' is \TeX's way of asking you for an input file name.
+%% Incidentally, 89.7.15 was Jill's 50th birthday.
+当你成功运行后，\TeX\ 将出现如下欢迎信息：
+\begintt
+This is TeX, Version 3.14 (preloaded format=plain 89.7.15)
+**
+\endtt
+`|**|'是 \TeX\ 要求你输入文件名。
+
+%Now type `^|\relax|' (including the backslash), and ^\<return>
+%(or whatever is used to mean ``end-of-line'' on your terminal).
+%\TeX\ is all geared up for action, ready to read a long manuscript; but
+%you're saying that it's all right to take things easy, since this is
+%going to be a real simple run. In fact, |\relax| is a control sequence
+%that means ``do nothing.''
+现在，键入`|\relax|'(要包含反斜线)和 \<return>~(或者其它在你的终端上表示%
+一行结束的符\hbox{号)。}%
+\TeX\ 已经做好准备以读入一篇长文稿；
+但是你刚才的意思是简单做点事，因为仅仅运行了一下。%
+实际上，|relax| 是一个控制系列，意思是``do nothing''。
+
+%The machine will type another asterisk at you. This time type something
+%like `|Hello?|'\ and wait for another ^{asterisk}. Finally type `^|\end|',
+%and stand back to see what happens.
+计算机将输出一个星号来回应你。%
+现在键入象`|Hello?|'这样的内容并且等待下一个星号。
+最好键入`|\end|'且等一下看看有什么情况。
+
+%\TeX\ should respond with `^|[1]|' (meaning that it has finished page~1
+%of your output); then the program will halt, probably with some
+%indication that it has created a file called `|texput.dvi|'. \ (\TeX\
+%uses the name ^|texput| for its output when you haven't specified any
+%better name in your first line of input; and ^|dvi| stands for
+%``^{device independent},'' since |texput.dvi| is capable of
+%being printed on almost any kind of typographic output device.)
+\TeX\ 将回应出`|[1]|'(意思是它完成了一页输出);
+接着程序将停止，可能还有一些显示说它生成了一个叫`|texput.dvi|'的文件。%
+(如果你在输入的第一行没有给定名字，\TeX\ 将使用 |texput| 这个名字；
+还有，|dvi| 的意思是``不依赖于设备'', 因为 |texput.dvi| 可以在几乎%
+所有的印刷输出设备上打印出来。)
+
+%Now you're going to need some help again from your friendly local
+%computer hackers. They will tell you how to produce hardcopy from
+%|texput.dvi|. And when you see the hardcopy---Oh, glorious day!---you
+%will see a magnificent `Hello?'\ and the page number `1' at the bottom.
+%Congratulations on your first masterpiece of fine printing.
+现在你又需要周围友好的计算机高手的帮助了。
+他们会告诉你怎样把 |texput.dvi| 打印出来。
+当你看到结果——噢，太漂亮了！——你会看到一个漂亮的 `Hello?'，
+并且在底部中间有页码`1'。为你的精美印刷的处女作干杯。
+
+%\smallbreak
+%The point is, you understand now how to get something through the whole cycle.
+%It only remains to do the same thing with a somewhat longer document.
+%So our next experiment will be to work from a file instead of typing
+%the input online.
+\smallbreak
+关键是你现在知道了实现它的整个过程。%
+剩下的就是用同样的方法处理更长的文稿。%
+所以我们接下来用文件举例，而不是逐行输入。
+
+%Use your favorite text editor to create a file called ^|story.tex|
+%that contains the following 18 lines of text (no more, no less):
+%$$\halign{\hbox to\parindent{\hfil\sevenrm#\ \ }&#\hfil\cr
+%1&|\hrule|\cr\noalign{^^|\hrule|}
+%2&|\vskip 1in|\cr\noalign{^^|\vskip|^^{leading, see vskip}}
+%3&|\centerline{\bf A SHORT STORY}|\cr\noalign{^^|\centerline|}
+%4&|\vskip 6pt|\cr
+%5&|\centerline{\sl by A. U. Thor}|\cr\noalign{^^{Thor}}
+%6&|\vskip .5cm|\cr
+%7&|Once upon a time, in a distant|\cr
+%8&|  galaxy called \"O\"o\c c,|\cr\noalign{^^|\"|^^|\c|}
+%9&|there lived a computer|\cr
+%10&|named R.~J. Drofnats.|\cr\noalign{^^{Drofnats}}
+%11&||\cr
+%12&|Mr.~Drofnats---or ``R. J.,'' as|\cr
+%13&|he preferred to be called---|\cr
+%14&|was happiest when he was at work|\cr
+%15&|typesetting beautiful documents.|\cr
+%16&|\vskip 1in|\cr
+%17&|\hrule|\cr
+%18&|\vfill\eject|\cr\noalign{^^|\vfill|^^|\eject|}}$$
+%\write16{\ifnum\pageno=\storypage
+%  \else Redefine \string\storypage to be \the\pageno\fi}%
+%(Don't type the numbers at the left of these lines, of course; they are present
+%only for reference.) \ This example is a bit long, and more than a bit silly;
+%but it's no trick for a good typist like you and it will give you some
+%worthwhile experience, so do it. For your own good. And think about what
+%you're typing, as you go; the example introduces a few important features
+%of \TeX\ that you can learn as you're making the file.
+\1用你喜欢的文本编辑器建立一个文件，名字为 |story.tex|,
+它包含下列 18 行文本(不多不少):
+$$\halign{\hbox to\parindent{\hfil\sevenrm#\ \ }&#\hfil\cr
+1&|\hrule|\cr\noalign{}
+2&|\vskip 1in|\cr\noalign{}
+3&|\centerline{\bf A SHORT STORY}|\cr\noalign{}
+4&|\vskip 6pt|\cr
+5&|\centerline{\sl by A. U. Thor}|\cr\noalign{}
+6&|\vskip .5cm|\cr
+7&|Once upon a time, in a distant|\cr
+8&|  galaxy called \"O\"o\c c,|\cr\noalign{}
+9&|there lived a computer|\cr
+10&|named R.~J. Drofnats.|\cr\noalign{}
+11&||\cr
+12&|Mr.~Drofnats---or ``R. J.,'' as|\cr
+13&|he preferred to be called---|\cr
+14&|was happiest when he was at work|\cr
+15&|typesetting beautiful documents.|\cr
+16&|\vskip 1in|\cr
+17&|\hrule|\cr
+18&|\vfill\eject|\cr\noalign{}}$$
+\write16{\ifnum\pageno=\storypage
+  \else Redefine \string\storypage to be \the\pageno\fi}%
+(当然，别键入这些行左边的数字；
+它们只起参照的作用。)
+这个例子有点长，而且还有点无聊；
+对象你这样优秀的排版者没有窍门，并且它将为你提供宝贵的经验，所以要完成它。%
+为了自己!
+键入时想一想；随着你键入这个文件，这个例子出现了你可能已经掌握的几个 \TeX\ 的%
+重要特征。
+
+%Here is a brief explanation of what you have just typed: Lines 1 and~17
+%put a horizontal ^{rule} (a thin line) across the page. Lines 2 and~16
+%skip past one inch of space; `|\vskip|' means ``vertical skip,'' and this
+%extra space will separate the horizontal rules from the rest of the copy.
+%Lines 3 and~5 produce the title and the author name, centered, in boldface
+%and in slanted type. Lines 4 and~6 put extra white space between those
+%lines and their successors. \ (We shall discuss units of measure like
+%`|6pt|' and `|.5cm|' in Chapter~10.)
+这里对你刚刚键入的内容做一个简要的解释：
+第 1 和 17 行放了一根贯穿整页的水平线(细\hbox{线)。}%
+第 2 和 16 行跳过了一英寸的空白；`|\vskip|'表示``垂直跳跃'',
+并且这个额外的空白将把水平线与文档的其它内容分开。%
+第 3 和 5 行生成了题目和作者的名字，居中且用 bold 字体和用 slanted 字体。%
+第 4 和 6 行在相应行和随后的行之间放上空白。%
+(我们将在第十章讨论象`|6pt|'和`|.5cm|'这样的测量单位。
+
+%The main bulk of the story appears on lines 7--15, and it consists of
+%two ^{paragraphs}. The fact that line~11 is blank informs \TeX\ that
+%^^{blank line} ^^{empty line}
+%line~10 is the end of the first paragraph; and the `|\vskip|' on line~16
+%implies that the second paragraph ends on line~15, because vertical
+%skips don't appear in paragraphs. Incidentally, this example seems
+%to be quite full of \TeX\ commands; but it is atypical in that respect,
+%because it is so short and because it is supposed to be teaching things.
+%Messy constructions like |\vskip| and |\centerline| can be expected at the
+%very beginning of a manuscript, unless you're using a canned format, but
+%they don't last long; most of the time you will find yourself typing
+%straight text, with relatively few control sequences.
+本 story 的主体在第 7--15 行，并且它包含两个段落。%
+第 11 行是一个空行就告诉 \TeX, 第 10 行是第一个段落的最后一行；
+还有，第 16 行的`|\vskip|'意味着第二段到第 15 行结束，
+因为垂直跳跃不出现在段落中。%
+顺便说一下，本例子看起来含有丰富的 \TeX\ 命令；
+但是在那方面它不是典型的，因为它太短以及被用来做教学。%
+象 |\vskip| 和|\centerline|这样的结构可能应该放在文稿的开头，除非你在用一个%
+刻板的格式，但是它们不会太多；
+在大部分的时间你都在键入规整的文本以及相对少量的控制系列。
+
+%And now comes the good news, if you haven't used computer typesetting
+%before:  You don't have to worry about where to break lines in a paragraph
+%(i.e., where to stop at the right margin and to begin a new line), because
+%\TeX\ will do that for you. Your manuscript file can contain long lines or
+%short lines, or both; it doesn't matter. This is especially helpful when
+%you make changes, since you don't have to retype anything except the words
+%that changed. {\sl Every time you begin a new line in your manuscript file
+%it is essentially the same as typing a space.} When \TeX\ has read an
+%entire paragraph---in this case lines 7 to~11---it will try to break up
+%the text so that each line of output, except the last, contains about the
+%same amount of copy; and it will hyphenate words if necessary to keep the
+%spacing consistent, but only as a last resort.
+\1现在，如果你以前不曾用过计算机排版，那么你有福了：
+在一个段落中，你不必关心在什么地方断行(即在右边的哪里结束本行并重新开始一行),
+因为 \TeX\ 将替你做。%
+你的文稿文件可以包含长行和/或短行；这不是问题。%
+当你修改时这特别有用，因为除了单词外你不必改动任何东\hbox{西。}%
+{\KT{10}在你的文稿中，每个新行本质上相相当于一个空格}。
+当 \TeX\ 读完整段时——在本例中就是第 7 到 11 行——它将设法把文本断开，
+使得除最后一行外的每行输出包含同样多的材料；
+并且为了保持间距的一致性，在有必要的地方加入连字符，但这只是最后一招。
+
+%Line 8 contains the strange concoction
+%\begintt
+%\"O\"o\c c
+%\endtt
+%and you already know that |\"| stands for an ^{umlaut} accent. The
+%|\c| stands for a ``^{cedilla},'' so you will get `\"O\"o\c c' as the
+%name of that distant galaxy.
+第 8 行含有怪怪的东西
+\begintt
+\"O\"o\c c
+\endtt
+并且你已经知道，|\"| 表示一个变音的重音。%
+|\c|表示一个``变音符号'', 所以你得到了`\"O\"o\c c'来作为那个遥远银河的名字。
+
+%The remaining text is simply a review of the conventions that we discussed
+%long ago for dashes and quotation marks, except that the `|~|' signs in
+%lines 10 and~12 are a new wrinkle. These are called {\sl ^{ties}}, because
+%they tie words together; i.e., \TeX\ is supposed to treat `|~|' as a
+%normal space but not to break between lines there.
+%A good typist will use ties within names, as shown in our
+%example; further discussion of ties appears in Chapter~14. ^^{tilde}
+剩下的文本就是以前我们讨论过的破折号和引号的用法，只有在第 10 和 12 行的%
+`|~|'符号是个的波纹号。%
+它们称为{\KT{10}带子}, 因为它们的单词绑在一起；
+即 \TeX\ 把`|~|'看作正常的空格，但是不能在那里断行。%
+好的排版应该在名字之间用带子，就象我们的例子一样；
+关于带子更多的讨论见第十四章。
+
+%Finally, line~18 tells \TeX\ to `^|\vfill|', i.e., to fill the rest of
+%the page with white space; and to `^|\eject|' the page, i.e., to send it
+%to the output file.
+最后，第 18 行告诉 \TeX\ 要`|\vfill|', 即，用空白把本页其余的部分填满；
+接着`|\eject|'本页\hbox{面，} 即把它送到输出文件。
+
+%\smallskip Now you're ready for Experiment~2: Get \TeX\ going again.
+%This time when the machine says `|**|' you should answer `|story|', since
+%that is the name of the file where your input resides. \ (The file
+%could also be called by its full name `|story.tex|', but \TeX\ automatically
+%supplies the suffix `|.tex|' if no suffix has been specified.)
+%^^{file names}
+\smallskip 现在进行第二次实战：
+再次运行 \TeX。%
+这次当计算机出现`|**|'时，你应该键入`|stroy|',
+因为那是你的输入资料所在的文件的名字。%
+(文件也可以用它的全名`|story.tex|', 但是如果后缀没有给出，
+\TeX\ 将自动加上后缀`|.tex|'。)
+
+%You might wonder why the first prompt was `^|**|', while the subsequent
+%ones are `^|*|'; the reason is simply that the first thing you type to
+%\TeX\ is slightly different from the rest: If the first character of your
+%response to `|**|' is not a backslash, \TeX\ automatically inserts
+%`^|\input|'. Thus you can usually run \TeX\ by merely naming your input
+%file. \ (Previous \TeX\ systems required you to start by typing `|\input
+%story|' instead of `|story|', and you can still do that; but most \TeX\
+%users prefer to put all of their commands into a file instead of typing
+%them online, so \TeX\ now spares them the nuisance of starting out with
+%|\input| each time.) \ Recall that in Experiment~1 you typed `|\relax|';
+%that started with a backslash, so |\input| was not implied.
+你可能想知道为什么第一个提示符是`|**|', 而后面的是`|*|';
+原因很简单，你所键入到 \TeX\ 的第一个东西与其余的略有不同：
+如果在`|**|'后你键入的第一个字符不是反斜线，那么 \TeX\ 将自动插入`|\input|'。%
+因此，通常只要命名了输入文件，你就可以运行 \TeX\ 了。%
+(目前的 \TeX\ 系统要求键入`|\input story|'而不是`|story|'来开始处理，
+并且你仍然可以那样做；
+但是大多数 \TeX\ 用户喜欢把它们所有的命令都放在一个文件中，而不是逐行键入，
+所有现在 \TeX\ 不需要每次开始都键入 |\input| 来惹人厌烦。)
+回想一下，在第一次实战中，你键入了`|\relax|', 它以反斜线开头，
+所以 |\input| 没有暗中插入。
+
+%\danger There's actually another difference between `|**|' and `|*|': If the
+%first character after |**| is an ^{ampersand} (\thinspace`|&|'\thinspace),
+%\TeX\ will replace its memory with a precomputed ^{format file} before
+%proceeding. Thus, for example, you can type `|&plain \input story|' or
+%even `|&plain story|' in response to `|**|', if you are running some
+%version of \TeX\ that might not have the plain format preloaded.
+%^^{preloaded formats}
+\danger 实际上在`|**|'和`|*|'之间有另外一个差别：
+如果 |**| 后的第一个字符是 ampersand~(\thinspace`|&|'\thinspace),
+\TeX\ 将在处理之前用预编译的格式文件来替换其内存。%
+于是，比如，你可以在`|**|'后键入`|&plain \input story|'或仅仅是`|&plain story|',
+如果你正在运行没有预载入的 plain 格式的某些 \TeX\ 版本。
+
+%\danger Incidentally, many systems allow you to invoke \TeX\ by typing a
+%one-liner like `|tex story|' instead of waiting for the `|**|'; similarly,
+%`|tex \relax|' works for Experiment~1, and `|tex &plain story|' loads the
+%plain format before inputting the |story| file.  You might want to try
+%this, to see if it works on your computer, or you might ask somebody if
+%there's a similar shortcut.
+\danger \1顺便说一下，很多系统都允许你通过在命令行键入象`|tex story|'这样的命令%
+来调用 \TeX, 而不用等`|**|';
+类似地，`|tex \relax|'就是实战一，`|tex &plain story|'在输入 |story| 文件前%
+载入了 plain 格式。
+你可能想试试，看看它在你的计算机上是否可行，或者你可能会问别人是否有一个%
+类似的快捷方法。
+
+%As \TeX\ begins to read your story file, it types `|(story.tex|', possibly
+%with a version number for more precise identification, depending on your
+%local operating system. Then it types `|[1]|', meaning that page~1 is done;
+%and `|)|', meaning that the file has been entirely input.
+随着 \TeX\ 开始读入你的 story 文件，它在终端输出了`|(story.tex|',
+可能会有精确识别的版本号，这依赖于你的操作系统。%
+接着，它输出了`|[1]|', 意思是第 1 页处理完毕；
+接着是`|)|', 意味着文件被全部读入了。
+
+%\TeX\ will now prompt you with `|*|', because the file did not contain
+%`^|\end|'. Enter |\end| into the computer now, and you should get a file
+%|story.dvi| containing a typeset version of Thor's story. As in Experiment~1,
+%you can proceed to convert |story.dvi| into hardcopy; go ahead and do that now.
+%The typeset output won't be shown here, but you can see the results by
+%doing the experiment personally. Please do so before reading on.
+\TeX\ 现在又用`|*|'提示你了，因为文件中不包含`|\end|'。%
+现在输入 |\end|, 就得到一个文件 |story.dvi|, 它包含 Thor 的 story 排版后的结果。%
+就象在实战一中一样，你可以把 |story.dvi| 打印出来；现在去做吧。%
+这里没有给出排版输出，但是你可以通过亲自实战得到结果。%
+请在继续之前完成它。
+
+%\exercise Statistics show that only 7.43 of 10 people who read this manual
+%actually type the |story.tex| file as recommended, but that those people
+%learn \TeX\ best. So why don't you join them?
+%\answer Laziness and/or obstinacy.
+\exercise 统计表明，在读本手册的人中，10 个中有 7.43 个实际上按照建议键入了%
+~|story.tex| 文件，但是那些人掌握 \TeX\ 却最好。%
+为何你不想变成他们那样？
+\answer 懒惰和/或固执。
+
+%\exercise Look closely at the output of Experiment~2, and compare it to
+%|story.tex|\thinspace: If you followed the instructions carefully, you
+%will notice a typographical error. What is it, and why did it sneak in?
+%\answer There's an unwanted space after `called---', because (as the book
+%says) \TeX\ treats the end of a line as if it were a blank space. That
+%blank space is usually what you want, except when a line ends with a
+%hyphen or a dash; so you should {\sc WATCH OUT} for lines that end with
+%hyphens or dashes.
+\exercise 仔细观察实战二的输出，把它与 |story.tex| 相比较：
+如果你认真阅读了用法说明，你会发现一个排版错误。%
+它是什么？为什么它会偷偷出现在那里？
+\answer 在 `called---' 之后有个多余空格，
+这是因为（如同本书所说）\TeX\ 将行尾符视为空格符。
+这样的空白通常是你所需的，除非某行以连字符或横线符结尾；
+因此你应当{\bf 留意}以连字符或横线符结尾的行。
+
+%With Experiment 2 under your belt, you know how to make a document from a
+%file. The remaining experiments in this chapter are intended to help you
+%cope with the inevitable anomalies that you will run into later; we will
+%intentionally do things that will cause \TeX\ to ``squeak.''
+现在，你知道怎样从一个文件得到文档了。%
+本章剩下的实战要帮助你应付后面运行中不可避免的异常情况；
+我们将有意用一些方法使 \TeX\ ``难受得只叫''。
+
+%But before going on, it's best to fix the error revealed by the previous
+%output (see exercise 6.2): Line~13 of the |story.tex| file should be changed to
+%\begintt
+%he preferred to be called---% error has been fixed!
+%\endtt
+%The `|%|' sign here ^^{percent} is a feature of plain \TeX\ that we haven't
+%discussed before: It effectively terminates a line of your input file,
+%without introducing the blank space that \TeX\ ordinarily inserts when
+%moving to the next line of input. Furthermore, \TeX\ ignores everything
+%that you type following a |%|, up to the end of that line in the file;
+%you can therefore put ^{comments} into your manuscript, knowing that the
+%comments are for your eyes only.
+但是在继续之前先把前面输出的错误纠正过来(见 exercise 6.2):
+文件 story.tex 的第 13 行应当改为
+\begintt
+he preferred to be called---% error has been fixed!
+\endtt
+这里的`|%|'%
+号是 plain \TeX\ 中我们以前没讨论过的特征：
+它使得输入文件的行有效地终止而不引入换行时 \TeX\ 通常要插入的空格。%
+还有，\TeX\ 将忽略掉 |%| 后的任何内容，直到文件的那行的结尾，
+这样就可以在文稿中加入注释，这些注释只是为了阅读方便。
+
+%Experiment 3 will be to make \TeX\ work harder, by asking it to set the
+%story in narrower and narrower columns. Here's how: After starting the
+%program, type
+%\begintt
+%\hsize=4in \input story
+%\endtt
+%in response to the `|**|'. This means, ``Set the story in a 4-inch column.''
+%More precisely, ^|\hsize| is a primitive of \TeX\ that specifies the
+%horizontal size, i.e., the width of each normal line in the output when a
+%paragraph is being typeset; and ^|\input| is a primitive that causes \TeX\
+%to read the specified file. Thus, you are instructing the machine to
+%change the normal setting of\/ |\hsize| that was defined by plain \TeX, and
+%then to process |story.tex| under this modification.
+实战三将让 \TeX\ 处理更吃力，这是通过要求它把 story 放在越来越窄的栏中。%
+如下操作：
+启动程序后，在`|**|'后键入
+\begintt
+\hsize=4in \input story
+\endtt
+\1这意味着``把 story 放在 4 英寸的栏中''。%
+更准确地说，|\hsize| 是 \TeX\ 的一个原始控制系列，它给出了水平宽度，
+即当排版段落时输出中每个正常行的宽度；
+还有，|\input| 也是一个原始控制系列，它使 \TeX\ 读入给定的文件。%
+于是，你告诉计算机改变由 plain \TeX\ 定义的 |\hsize| 的正常设置，
+并且在这种修改后的设置下处理 |story.tex|。
+
+%\TeX\ should respond by typing something like `|(story.tex [1])|' as
+%before, followed by `|*|'. Now you should type
+%\begintt
+%\hsize=3in \input story
+%\endtt
+%and, after \TeX\ says `|(story.tex [2])|' asking for more, type three more lines
+%\begintt
+%\hsize=2.5in \input story
+%\hsize=2in \input story
+%\end
+%\endtt
+%to complete this four-page experiment.
+如前 \TeX\ 输出类似`|(story.tex [1])|'后，接着出现`|*|'。%
+现在你应该键入
+\begintt
+\hsize=3in \input story
+\endtt
+接着，\TeX\ 输出`|(story.tex [2])|'后又出现`|*|', 键入下面三行
+\begintt
+\hsize=2.5in \input story
+\hsize=2in \input story
+\end
+\endtt
+这就完成了这个四页的实战。
+
+%Don't be alarmed when \TeX\ screams `|Overfull| |\hbox|' several times as
+%it works at the 2-inch size; that's what was supposed to go wrong during
+%Experiment~3. There simply is no good way to break the given
+%paragraphs into lines that are exactly two inches wide, without making
+%the spaces between words come out too large or too small. Plain \TeX\
+%has been set up to ensure rather strict tolerances on all of the lines it
+%produces:
+%\begindisplay
+%\hbox spread-1em{You don't get spaces between words narrower than this,\ and}\cr
+%\hbox spread+1.679895em{you don't get spaces between words wider than this.}\cr
+%\enddisplay
+%If there's no way to meet these restrictions, you get an ^{overfull box}.
+%And with the overfull box you also get (1)~a warning message, printed
+%on your terminal, and (2)~a big black bar inserted at the right of the
+%offending box, in your output. \ (Look at page~4 of the output from
+%Experiment~3; the overfull boxes should stick out like sore thumbs.
+%On the other hand, pages 1--3 should be perfect.)
+在处理 2-inch 宽度时，\TeX\ 会发出几次`|Overfull| |\hbox|'警告，别慌；
+这就是在实战三中设定的问题。%
+在把给定的段落分解为正好 2 英寸宽度时，如果不允许单词间的间距太大或太小，
+是没有简单的好办法的。%
+Plain \TeX\ 已经对所有行设置了一个相当严格的公差，由它得到
+\begindisplay
+%\hbox spread-1em{你所得到的字间距不能比它 窄,}\cr
+%\hbox spread+1.679895em{也不能比它 宽。}\cr
+\hbox spread-1em{you don't get spaces between words narrower than this,\ and}\cr
+\hbox spread+1.679895em{you don't get spaces between words wider than this.}\cr
+\enddisplay
+如果没有办法满足这些限制，就得到了一个溢出的盒子。%
+对于这个溢出的盒子，还出现 (1) 警告信息，出现在终端上，和 (2) 在溢出盒子的右边%
+插入一个大黑块，出现在输出结果中。%
+(看看实战三输出的第四页；溢出的盒子象大拇指一样伸出来。
+另一方面，第一到三页就很漂亮。)
+
+%Of course you don't want overfull boxes in your output, so \TeX\ provides
+%several ways to remove them; that will be the subject of our Experiment~4.
+%But first let's look more closely at the results of Experiment~3, since
+%\TeX\ reported some potentially valuable information when it was forced
+%to make those boxes too full; you should learn how to read this data:
+%\begintt
+%Overfull \hbox (0.98807pt too wide) in paragraph at lines 7--11
+%\tenrm tant galaxy called []O^^?o^^Xc, there lived||
+%Overfull \hbox (0.4325pt too wide) in paragraph at lines 7--11
+%\tenrm a com-puter named R. J. Drof-nats. ||
+%Overfull \hbox (5.32132pt too wide) in paragraph at lines 12--16
+%\tenrm he pre-ferred to be called---was hap-||
+%\endtt
+%Each overfull box is correlated with its location in your input file
+%(e.g., the first two were generated when processing the paragraph on
+%lines 7--11 of |story.tex|), and you also learn by how much the copy
+%sticks out (e.g., 0.98807 points).
+当然，你不想在输出中有溢出的盒子，所有 \TeX\ 给出几种方法来去掉它们；
+这就是我们实战四的主题。%
+但是首先要仔细观察实战三的结果，因为当 \TeX\ 被迫使用溢出的盒子时，
+给出了一些有价值的信息；你应该知道怎样分析这些数据：
+\begintt
+Overfull \hbox (0.98807pt too wide) in paragraph at lines 7--11
+\tenrm tant galaxy called []O^^?o^^Xc, there lived||
+Overfull \hbox (0.4325pt too wide) in paragraph at lines 7--11
+\tenrm a com-puter named R. J. Drof-nats. ||
+Overfull \hbox (5.32132pt too wide) in paragraph at lines 12--16
+\tenrm he pre-ferred to be called---was hap-||
+\endtt
+每个溢出的盒子都与输入文件中的相应位置有关(比如，当处理 |story.tex| 的第 7--11~%
+行时出现前两个警告), 并且还可以知道伸出了多少宽度(比如，0.98807 points)。
+
+%Notice that \TeX\ also shows the contents of the overfull boxes in
+%abbreviated form. For example, the last one has the words `he preferred
+%to be called---was hap-', set in font |\tenrm| (10-point roman type);
+%the first one has a somewhat curious rendering of `\"O\"o\c c', because the
+%accents appear in strange places within that font. In general, when you
+%see `^|[]|' in one of these messages, it stands either for
+%the paragraph indentation or for some sort of complex construction;
+%in this particular case it stands for an umlaut that has been raised
+%up to cover an `O'.
+\1注意，\TeX\ 还用简略的形式给出了溢出的盒子的内容。%
+例如，最后一个警告有这样的信息：`he preferred
+to be called---was hap-', 设定字体为 |\tenrm| (10-point roman 字体);
+第一个所给出的内容是有些古怪的`\"O\"o\c c'的表述，
+因为重音出现在字体的奇怪的地方。%
+一般地，当你在这些信息中发现`|[]|'时，就表示段落缩进或某些复杂的指令；
+在这种特殊情况下，它表示一个`O'上的重音符号。
+
+%\dangerexercise Can you explain the `\|' that appears after
+%`|lived|' in that message?
+%\answer It represents the heavy bar that shows up in
+%your output. \ (This bar wouldn't be present if\/ ^|\overfullrule| had been
+%set to |0pt|, nor is it present in an underfull box.)
+\dangerexercise 请解释一下出现在那个信息中`|lived|'后面的那个`\|'。
+\answer 它表示出现在你的输出中的宽竖线。%
+（此竖线在设定 ^|\overfullrule| 为 |0pt| 时不会出现，在未满盒子中也不会出现。）
+
+%\ddangerexercise Why is there a space before the `\|' in `|Drof-nats.
+%|\|'\thinspace?
+%\answer This is the ^|\parfillskip| space that ends the paragraph.
+%In plain \TeX\ the parfillskip is zero when the last line of the paragraph
+%is full; hence no space actually appears before the rule in the output
+%of Experiment~3. But all hskips show up as spaces in an overfull box
+%message, even if they're zero.
+\ddangerexercise 为什么在`|Drof-nats. |\|'中的`\|'前有一个空格？
+\answer 这是结束段落的 ^|\parfillskip| 间距。
+在 plain \TeX\ 中，当段落最后一行已填满时 parfillskip 等于零；
+从而在实战三的输出的标尺之前实际上没有空白。
+但是在过满盒子的信息中，所有水平间距都显示为空格，即使它们等于零。
+
+%You don't have to take out pencil and paper in order to write down the
+%overfull box messages that you get before they disappear from view, since
+%\TeX\ always writes a ``^{transcript}'' or ``^{log file}'' that records what
+%happened during each session. For example, you should now have a file
+%called |story.log| containing the transcript of Experiment~3, as well
+%as a file called |texput.log| containing the transcript of Experiment~1. \
+%(The transcript of Experiment~2 was probably overwritten when you did
+%number~3.) \ Take a look at |story.log| now; you will see that the overfull
+%box messages are accompanied not only by the abbreviated box contents,
+%but also by some strange-looking data about hboxes and glue and kerns and
+%such things. This data gives a precise description of what's in that
+%overfull box; \TeX\ wizards will find such
+%listings important, if they are called upon to diagnose some mysterious
+%error, and you too may want to understand \TeX's internal code some day.
+你不必在溢出盒子的信息在屏幕上消失前在纸上记下这些信息，因为 \TeX\ 总是%
+把它们写成记录或``log 文件'', 它们记下了每个活动期间所发生的事情。%
+例如，现在你有一个文件叫 |story.log|, 它包含实战三的记录，以及文件%
+~|texput.log|, 它包含实战一的记录。%
+(当你进行实战三时，实战二的记录可能已经被覆盖掉了。)
+现在看一下 |story.log|; 就会看到伴随溢出盒子的信息的不但有简略的盒子的内容，
+而且有某些与 hbox 和 glue 以及 kern 等等有关的奇怪的信息。%
+这些资料给出了溢出盒子的精确描述；
+在\TeX\ 奇才们被请求诊断某些不可理解的错误时，将发现这些罗列信息的重要性，
+并且你可能也有一天想要懂得 \TeX\ 的内部代码。
+
+%The abbreviated forms of overfull boxes show the hyphenations that
+%\TeX\ tried before it resorted to overfilling. The ^{hyphenation} algorithm,
+%which is described in Appendix~H\null, is excellent but not perfect; for
+%example, you can see from the messages in |story.log| that \TeX\ finds the
+%hyphen in `pre-ferred', and it can even hyphenate `Drof-nats'. Yet it
+%discovers no hyphen in `galaxy', and every once in
+%a~while an overfull box problem can be cured simply by giving \TeX\ a hint
+%about how to hyphenate some word more completely. \ (We will see later that
+%there are two ways to do this, either by inserting ^{discretionary hyphens}
+%each time as in `\hbox{|gal\-axy|}', or by saying
+%`\hbox{|\hyphenation{gal-axy}|}' once at the beginning of your manuscript.)
+溢出盒子的简略形式给出了 \TeX\ 在溢出之前在连字化方面的尝试。%
+连字算法阐述在附录 H, 它是优秀的但并不完美；
+例如，从 |story.log| 的信息中你可以看到，\TeX\ 找到了`pre-ferred'中的连字，
+并且它可以把`Drof-nats'连字化。%
+但是它发现`galaxy'中没有连字符，有时候，简单地通过给 \TeX\ %
+一个线索，让它知道怎样更完整地把某些单词连字化，可以解决盒子的溢出问题。%
+(后面我们将看到，有两种方法来实现这个功能：象在`\hbox{|gal\-axy|}'中每次%
+插入任意连字符，或者通过在文稿开始声明一次`\hbox{|\hyphenation{gal-axy}|}'。)
+
+%In the present example, hyphenation is not a problem, since \TeX\ found
+%and tried all the hyphens that could possibly have helped. The only way to
+%get rid of the overfull boxes is to change the tolerance, i.e., to allow
+%wider spaces between words. Indeed, the tolerance that plain \TeX\ uses
+%for wide lines is completely inappropriate for 2-inch columns; such narrow
+%columns simply can't be achieved without loosening the constraints, unless
+%you rewrite the copy to fit.
+在当前的例子中，连字符不是一个问题，因为 \TeX\ 找到并尝试了所有可能有用的%
+连字符。%
+解决盒子溢出的唯一方法是改变公差，即在单词之间允许更大的间距。%
+的确，plain \TeX\ 对宽行设定的公差与 2-inch 的栏完全不相称；
+不放松这些限制，这么窄的栏就不能完成任务，除非你为适应它而重新改写文稿。
+
+%\TeX\ assigns a numerical value called ``^{badness}'' to each line that
+%it sets, in order to assess the quality of the spacing. The exact rules
+%for badness are different for different fonts, and they will be discussed
+%in Chapter~14; but here is the way badness works for the roman font
+%of plain \TeX:
+%\begindisplay \hbadness10000
+%\hbox spread-.666667em{The badness of this line is 100.}&
+%  \quad(very tight)\cr
+%\hbox spread-.333333em{The badness of this line is 12.}&
+%  \quad(somewhat tight)\cr
+%\hbox{The badness of this line is 0.}&
+%  \quad(perfect)\cr
+%\hbox spread.5em{The badness of this line is 12.}&
+%  \quad(somewhat loose)\cr
+%%\hbox spread 1em{The badness of this line is 100.}&
+%% \quad(loose)\cr % then "looser"
+%\hbox spread 1.259921em{The badness of this line is 200.}&
+%  \quad(loose)\cr
+%%\hbox spread 1.713em{The badness of this line is 500.}&
+%% \quad(bad)\cr % then "worse"
+%\hbox spread 2.155em{The badness of this line is 1000.}&
+%  \quad(bad)\cr
+%\hbox spread 3.684em{The badness of this line is 5000.}& % actually 4995!
+%  \quad(awful)\cr
+%\enddisplay
+%Plain \TeX\ normally stipulates that no line's badness should exceed 200;
+%but in our case, the task would be impossible since
+%\begindisplay \hbadness 10000
+%`\hbox to 2in{tant galaxy called \"O\"o\c c, there}'\hskip 3em
+%  has badness 1521;\cr
+%`\hbox to 2in{he preferred to be called---was}'\hskip 3em
+%  has badness 568.\cr
+%\enddisplay
+%So we turn now to Experiment~4, in which spacing variations that are
+%more appropriate to narrow columns will be used.
+为了评估间距的品质，\TeX\ 为它设置的每行规定了一个数值叫做``丑度''。%
+``丑度''的严格规则因字体不同而不同，它们将在第十四章中讨论；
+\1但是，这里给出了 plain \TeX\ 中 roman 字体的丑度的情况：
+\begindisplay \hbadness10000
+\hbox spread-.666667em{The badness of this line is 100.}&
+  \quad(太紧)\cr
+\hbox spread-.333333em{The badness of this line is 12.}&
+  \quad(有点紧)\cr
+\hbox{The badness of this line is 0.}&
+  \quad(正好)\cr
+\hbox spread.5em{The badness of this line is 12.}&
+  \quad(有点松散)\cr
+%\hbox spread 1em{The badness of this line is 100.}&
+% \quad(loose)\cr % then "looser"
+\hbox spread 1.259921em{The badness of this line is 200.}&
+  \quad(松散)\cr
+%\hbox spread 1.713em{The badness of this line is 500.}&
+% \quad(bad)\cr % then "worse"
+\hbox spread 2.155em{The badness of this line is 1000.}&
+  \quad(难看)\cr
+\hbox spread 3.684em{The badness of this line is 5000.}& % actually 4995!
+  \quad(丑陋)\cr
+\enddisplay
+Plain \TeX\ 一般规定，行的丑度不可大于 200;
+但是在现在的情形下，因为
+\begindisplay \hbadness 10000
+`\hbox to 2in{tant galaxy called \"O\"o\c c, there}'\hskip 3em
+  的丑度为 1521;\cr
+`\hbox to 2in{he preferred to be called---was}'\hskip 3em
+  的丑度为 568.\cr
+\enddisplay
+所以无法满足要求。%
+因此我们现在进行实战四，其中对窄栏采用更适当的间距的变化。
+
+%Run \TeX\ again, and begin this time by saying
+%\begintt
+%\hsize=2in \tolerance=1600 \input story
+%\endtt
+%so that lines with badness up to 1600 will be tolerated. Hurray! There are
+%^^|\tolerance|
+%no overfull boxes this time. \ (But you do get a message about an {\sl
+%underfull\/} box, since \TeX\ reports all boxes whose badness exceeds
+%a certain threshold called ^|\hbadness|; plain \TeX\ sets |\hbadness=1000|.) \
+%^^{underfull box}
+%Now make \TeX\ work still harder by trying
+%\begintt
+%\hsize=1.5in \input story
+%\endtt
+%(thus leaving the tolerance at 1600 but making the ^{column width} still
+%^^{measure, see hsize}
+%skimpier). Alas, overfull boxes return; so try typing
+%\begintt
+%\tolerance=10000 \input story
+%\endtt
+%in order to see what happens. \TeX\ treats 10000 as if it were ``infinite''
+%tolerance, allowing arbitrarily wide space; thus, a tolerance of 10000 will
+%{\sl never\/} produce an overfull box, unless something strange occurs like
+%an unhyphenatable word that is wider than the column itself.
+再次运行 \TeX, 这次在开头键入
+\begintt
+\hsize=2in \tolerance=1600 \input story
+\endtt
+使得要容许的丑度放宽到 1600。%
+万岁! 这次没有盒子溢出了。%
+(但是你却得到一个{\KT{10}松散}的盒子，因为如果盒子的丑度超过%
+一个叫 |\hbadness| 的阈值，\TeX\ 也给出警告；
+plain \TeX\ 设置 |\hbadness=1000|。)
+现在键入
+\begintt
+\hsize=1.5in \input story
+\endtt
+让 \TeX\ 更难处理，
+(这样就是保持容许度为 1600 而栏的宽度更窄)。%
+唉，盒子又溢出了；
+为了看看出现什么问题，那么再试试
+\begintt
+\tolerance=10000 \input story
+\endtt
+\TeX\ 把 10000 看作``无穷大''的容许度，允许任意宽的间距；
+因此，容许度为 10000 将{\KT{10}永远不}出现盒子溢出，除非比栏自己的宽度%
+还宽且无连字化的单词出现。
+
+%The underfull box that \TeX\ produces in the 1.5-inch case is really bad;
+%with such narrow limits, an occasional wide space is unavoidable. But try
+%\begintt
+%\raggedright \input story
+%\endtt
+%for a change. \ ^^|\raggedright|(This tells \TeX\ not to worry about keeping
+%the right margin straight, and to keep the spacing uniform within each line.) \
+%Finally, type
+%\begintt
+%\hsize=.75in \input story
+%\endtt
+%followed by `|\end|', to complete Experiment 4. This makes the columns
+%almost impossibly narrow.
+在 1.5-inch 情形下，\TeX\ 出现的松散盒子实在难看；
+在这么窄的极限下，偶尔出现宽间距是不可避免的。%
+而思路一变，试试
+\begintt
+\raggedright \input story
+\endtt
+(它告诉 \TeX\ 不用对齐右页边，且在每行中保持间距一致。)
+最后，键入
+\begintt
+\hsize=.75in \input story
+\endtt
+再接着键入`|\end|'以结束实战四。%
+这使得栏变得出奇地窄。
+
+%\danger The output from this experiment will give you some feeling for the
+%problem of ^{breaking a paragraph} into approximately equal lines. When the
+%lines are relatively wide, \TeX\ will almost always find a good solution.
+%But otherwise you will have to figure out some compromise, and several
+%options are possible. Suppose you want to ensure that no lines have
+%badness exceeding~500. Then you could set |\tolerance| to some high
+%number, and |\hbadness=500|; \TeX\ would not produce overfull boxes, but
+%it would warn you about the underfull ones. Or you could set
+%|\tolerance=500|; then \TeX\ might produce overfull boxes. If you really
+%want to take corrective action, the second alternative is better, because
+%you can look at an overfull box to see how much sticks out; it becomes
+%graphically clear what remedies are possible.  On the other hand, if you
+%don't have time to fix bad spacing---if you just want to know how bad it
+%is---then the first alternative is better, although it may require more
+%computer time.
+\danger \1在把段落分成大致相等的行这个问题上，本实战的输出结果会让你有所体会。%
+当行相对宽时，\TeX\ 几乎总能找到好的解决方法。%
+否则你必须给出一些折衷的方案，可能有几种可选择的方法。%
+假设你要保证行的丑度不超过 500。%
+那么你可以把 |\tolerance| 设为较大的值，以及 |\hbadness=100|;
+\TeX\ 不出现溢出的盒子，但是会对松散的盒子发出警告。%
+或者你设置 |\tolerance=500|; 那么 \TeX\ 可能出现溢出的盒\hbox{子。}%
+如果你真希望起到提示纠正的作用，第二个办法更好，因为你可以看到溢出的盒子%
+伸出了多少；
+对可能的补救就一目了然了。%
+另一方面，如果你没有时间来处理这些难看的间距——如果你只想看看%
+它难看在哪里——那么第一种方法更好，只是会花费计算机更多的时间。
+
+%\dangerexercise When |\raggedright| has been specified, badness reflects
+%the amount of space at the right margin, instead of the spacing between
+%words. Devise an experiment by which you can easily determine what
+%badness \TeX\ assigns to each line, when the |story| is set ragged-right
+%in 1.5-inch columns.
+%\answer Run \TeX\ with \hbox{|\hsize=1.5in|} \hbox{|\tolerance=10000|}
+%\hbox{|\raggedright|} \hbox{|\hbadness=-1|} and then |\input story|. \TeX\ will
+%report the badness of all lines (except the final lines of paragraphs, where
+%fill glue makes the badness zero).
+\dangerexercise 当设定为 |\raggedright| 后，丑度反映的是右页边的空白的量，
+而不是单词间的间距。%
+设计一个方法，在 |story| 设置为 1.5-inch 栏且左对齐时，
+通过它可以很容易得到 \TeX\ 给每行计算出的丑度。%
+\answer 运行 \TeX ，接着依次输入 \hbox{|\hsize=1.5in|} \hbox{|\tolerance=10000|}
+\hbox{|\raggedright|} \hbox{|\hbadness=-1|}，然后 |\input story|。
+\TeX\ 将报告各行的劣度（段落的最后一行除外，因为 fill 粘连将使得劣度为零）。
+
+%\danger A parameter called ^|\hfuzz| allows you to ignore boxes that are only
+%slightly overfull. For example, if you say |\hfuzz=1pt|, a box must stick
+%out more than one point before it is considered erroneous. Plain \TeX\
+%sets |\hfuzz=0.1pt|.
+\danger 有一个叫 |\hfuzz| 的参数，它允许不理会那些只略微溢出的盒子。%
+例如，如果设置 |\hfuzz=1pt|,
+那么只有超出部分大于 1 point 的盒子才被认为是不正确的。%
+Plain \TeX\ 的设置是 |\hfuzz=0.1pt|。
+
+%\ddangerexercise Inspection of the output from Experiment~4, especially
+%page~3, shows that with narrow columns it would be better to allow white
+%space to appear before and after a dash, whenever other spaces in the
+%same line are being stretched. Define a ^|\dash| macro that does this.
+%\answer |\def\extraspace{\nobreak \hskip 0pt plus .15em\relax}|\parbreak
+%|\def\dash{\unskip\extraspace---\extraspace}|\par\nobreak\smallskip\noindent
+%(If you try this with the story at 2-inch and 1.5-inch sizes, you will
+%notice a substantial improvement. The |\unskip| allows people to leave a
+%space before typing |\dash|.  \TeX\ will try to hyphenate before |\dash|,
+%but not before `|---|'; cf.\ Appendix~H\null. The ^|\relax| at the end of
+%|\extraspace| is a precaution in case the next word is `|minus|'.)
+\ddangerexercise 仔细观察实战四的输出，特别是第三页，可以发现，在窄栏情况下，
+只要同一行的其它间距变大，在破折号前后允许出现空白效果会更好。%
+定义一个叫 |\dash| 的宏来实现本要求。
+\answer |\def\extraspace{\nobreak \hskip 0pt plus .15em\relax}|\parbreak
+|\def\dash{\unskip\extraspace---\extraspace}|\par\nobreak\smallskip\noindent
+（如果在 2-inch 和 1.5-inch 宽度中测试 story 文档，你会注意到实质性的改善。
+|\unskip| 允许人们在键入 |\dash| 之前留出空格。
+\TeX\ 将试图在 |\dash| 之前连字化，但不会在 `|---|' 之前；参考附录 H。
+|\extraspace| 定义末尾的 ^|\relax| 用于预防下一个单词是 `|minus|' 的情形。）
+
+%You were warned that this is a long chapter. But take heart: There's only
+%one more experiment to do, and then you will know enough about \TeX\ to
+%run it fearlessly by yourself forever after. The only thing you are still
+%missing is some information about how to cope with ^{error messages}---i.e.,
+%not just with warnings about things like overfull boxes, but with cases
+%where \TeX\ actually stops and asks you what to do next.
+已经提醒过你：本章很长。%
+但是要记住：还只有一个实战，以后在运行 \TeX\ 时你就胸有成竹了。%
+你还不知道怎样处理错误信息——即，不仅仅是象盒子溢出这样的警告，
+而是 \TeX\ 停下来要求你干预的情况。
+
+%Error messages can be terrifying when you aren't prepared for them;
+%but they can be fun when you have the right attitude. Just remember that
+%you really haven't hurt the computer's feelings, and that nobody will
+%hold the errors against you. Then you'll find that running \TeX\ might
+%actually be a creative experience instead of something to dread.
+当你没有思想准备时，错误信息可能有些可怕；
+但是当你端正了态度后，它们可能还很有意思。%
+只是要记住，你其实别怨计算机，而且没人用这些错误来攻击你。%
+接下来你会发现，运行 \TeX\ 实际上可能是一次创造体验，而不是可怕的老虎。
+
+%The first step in Experiment 5 is to plant two intentional mistakes in the
+%|story.tex| file. Change line~3 to
+%\begintt
+%\centerline{\bf A SHORT \ERROR STORY}
+%\endtt
+%and change `|\vskip|' to `|\vship|' on line~2.
+实战五的第一步是在文件 |story.tex| 中故意放两个错误。%
+把第 3 行改为
+\begintt
+\centerline{\bf A SHORT \ERROR STORY}
+\endtt
+并且把第 2 行的`|\vskip|'改为`|\vship|'。
+
+%Now run \TeX\ again; but instead of `|story|' type `|sorry|'. The computer
+%should respond by saying that it can't find file |sorry.tex|, and it will
+%ask you to try again. Just hit \<return> this time; you'll see
+%that you had better give the name of a real file. So type `|story|' and
+%wait for \TeX\ to find one of the {\sl faux pas\/} in that file.
+再次运行 \TeX; 但是不键入`|story|', 而键入`|sorry|'。%
+计算机就回答说它找不到文件 |sorry.tex|,
+并且它会要求你再尝试一下。%
+这次，只单击 \<return>;
+将看到你最好给出一个真实文件的名字。%
+因此，键入`|story|'并等 \TeX\ 找到那个文件中的{\KT{10}过失}中的一个。
+
+%Ah yes, the machine will soon stop,\footnote*{Some installations of \TeX\ do
+%not allow interaction. In such cases all you can do is look at the error
+%messages in your log file, where they will appear together with the ``help''
+%information.} after typing something like this:
+%\begintt
+%! Undefined control sequence.
+%l.2 \vship
+%           1in
+%?
+%\endtt
+%\write16{\ifnum\pageno=\vshippage
+%  \else Redefine \string\vshippage to be \the\pageno\fi}%
+%\TeX\ begins its error messages with `|!|', and it shows what it was
+%reading at the time of the error by displaying two lines of context. The
+%top line of the pair (in this case `|\vship|'\thinspace) shows what \TeX\
+%has looked at so far, and where it came from (`|l.2|', i.e., line number~2);
+%the bottom line (in this case `|1in|'\thinspace) shows what \TeX\ has yet
+%to read.
+\1噢，计算机很快停下来，(注：某些 \TeX\ 的安装不支持交互模式。%
+在这种情况下，你只能在 log 文件中查看错误信息，在那里，这些错误信息和``help''%
+信息一起出现。)
+输出如下信息：
+\begintt
+! Undefined control sequence.
+l.2 \vship
+           1in
+?
+\endtt
+\def\storypage{24} % listing of story.tex
+\write16{\ifnum\pageno=\vshippage
+  \else Redefine \string\vshippage to be \the\pageno\fi}%
+\TeX\ 以`|!|'开始错误信息，并且它通过给出两行上下文来提示错误出现时的内容。%
+上面一行(在本例是`|\vship|'\thinspace)给出了 \TeX\ 目前读的内容，并且告诉了它的%
+位置(`|l.2|',即第 2 行);
+下面一行(本例中的`|1in|'\thinspace)是 \TeX\ 将要读入的内容。
+
+%The `^|?|'\ that appears after the context display means that \TeX\ wants
+%advice about what to do next. If you've never seen an error message before,
+%or if you've forgotten what sort of response is expected, you can type
+%`|?|'\ now (go ahead and try it!); \TeX\ will respond as follows:
+%\begintt
+%Type <return> to proceed, S to scroll future error messages,
+%R to run without stopping, Q to run quietly,
+%I to insert something, E to edit your file,
+%1 or ... or 9 to ignore the next 1 to 9 tokens of input,
+%H for help, X to quit.
+%\endtt
+%This is your menu of options. You may choose to continue in various ways:
+在显示的上下文后面出现的`|?|'意味着 \TeX\ 要求给出下一步怎样做。%
+如果你以前没有见过错误信息，或者你忘记应该用什么来应答，现在你可以键入`|?|'%
+(继续来试试吧!);
+\TeX\ 将给出下列信息：
+\begintt
+Type <return> to proceed, S to scroll future error messages,
+R to run without stopping, Q to run quietly,
+I to insert something, E to edit your file,
+1 or ... or 9 to ignore the next 1 to 9 tokens of input,
+H for help, X to quit.
+\endtt
+这是供你选择的清单。%
+你可以用各种方法来选择进行运行：
+
+%\smallskip\item{1.}
+%Simply type \<return>. \TeX\ will resume its processing, after
+%attempting to recover from the error as best it can.
+\smallskip\item{1.}
+直接键入 \<return>. 在尽可能修复错误后，\TeX\ 将恢复运行。
+
+%\smallbreak\item{2.} Type `|S|'. \TeX\ will proceed without
+%pausing for instructions if further errors arise. Subsequent error messages
+%will flash by on your terminal, possibly faster than you can read them, and
+%they will appear in your log file where you can scrutinize them at your
+%leisure. Thus, `|S|' is sort of like typing \<return> to every message.
+\smallbreak\item{2.} 键入`|S|'。如果还有错误出现，\TeX\ 将直接运行，不再提示。%
+随后的错误信息将在你的屏幕上闪过，快到你来不及看它们，
+而且它们将出现在你的 log 文件中，在那里你可以静下心来细细查看。%
+所以，`|S|'就象对每个错误都键入 \<return>。
+
+%\smallbreak\item{3.} Type `|R|'. This is like `|S|' but even stronger,
+%since it tells \TeX\ not to stop for any reason, not even if a file name
+%can't be found.
+\smallbreak\item{3.} 键入`|R|'。这类似于`|S|', 但是更强大，因为它告诉 \TeX,
+不管什么原因都不停止，即使文件名都找不见。
+
+%\smallbreak\item{4.} Type `|Q|'. This is like `|R|' but even more so,
+%since it tells \TeX\ not only to proceed without stopping but also to
+%suppress all further output to your terminal. It is a fast, but somewhat
+%reckless, way to proceed (intended for running \TeX\ with no operator in
+%attendance).
+\smallbreak\item{4.} 键入`|Q|'。它类似于`|R|', 但还要强大，
+因为它不但告诉 \TeX\ 无停顿地运行，而且不再在屏幕上输出信息。%
+它是一种快速但不考虑后果的运行方式(就是放任 \TeX\ 去运行而不进行任何干预)。
+
+%\smallbreak\item{5.} Type `|I|', followed by some text that you want to
+%insert. \TeX\ will read this line of text before encountering what it
+%would ordinarily see next. Lines inserted in this way are not assumed to
+%end with a blank space. ^^{inserting text online}
+%^^{online interaction, see interaction} ^^{interacting with TeX}
+\smallbreak\item{5.} 键入`|I|', 后面跟一些你要插入的文本。%
+\TeX\ 将首先读入此行再继续读入原来要读入的内\hbox{容。}%
+用这种方法插入的行不以空格为结尾。
+
+%\smallbreak\item{6.} Type a small number (less than 100). \TeX\ will
+%delete this many characters and control sequences from whatever it is
+%about to read next, and it will pause again to give you another chance to
+%look things over.  ^^{deleting tokens}
+\smallbreak\item{6.} \1键入一个数(小于 100)。%
+\TeX\ 将从接下来读入的字符和控制系列中删除这么多字节，
+并且做完后它会再停下来等待干预。
+
+%\smallbreak\item{7.} Type `|H|'. This is what you should do now and whenever
+%you are faced with an error message that you haven't seen for a~while. \TeX\
+%has two messages built in for each perceived error: a formal one and an
+%informal one. The formal message is printed first (e.g., `|! Undefined
+%control sequence.|'\thinspace); the informal one is printed if you request
+%more help by typing `|H|', and it also appears in your log file if you
+%are scrolling error messages. The informal message tries to complement the
+%formal one by explaining what \TeX\ thinks the trouble is, and often
+%by suggesting a strategy for recouping your losses.^^{help messages}
+\smallbreak\item{7.} 键入`|H|'。这就是你现在所做的事情，对你暂时没搞清楚%
+的任何错误信息都可以使用。%
+对发现的每个错误，\TeX\ 都给出两个信息：正式的和非正式的。
+正式的信息首先输出(比如，`|! Undefined
+control sequence.|'\thinspace); 如果你键入`|H|'请求更多帮助，非正式的信息才输出，
+而且，如果错误信息翻滚过去了，你还可以在 log 文件中查看。%
+非正式的信息尝试着给出 \TeX\ 所认为的问题所在来补充正式的信息，
+并且通常为修补错误而提出一个方法。
+
+%\smallbreak\item{8.} Type `|X|'. This stands for ``exit.'' It causes \TeX\
+%to stop working on your job, after putting the finishing touches on your
+%|log| file and on any pages that have already been output to your |dvi|
+%file.  The current (incomplete) page will not be output.
+\smallbreak\item{8.} 键入`|X|'。它表示要``exit''。%
+在把已完成的相关任务写入 |log| 文件和已输出的页面后，它把 \TeX\ 终止。%
+当前(未完成的)页面不产生输出。
+
+%\smallbreak\item{9.} Type `|E|'. This is like `|X|', but it also prepares
+%the computer to edit the file that \TeX\ is currently reading, at the
+%current position, so that you can conveniently make a change before
+%trying again.
+\smallbreak\item{9.} 键入`|E|'。它类似于`|X|', 但是它还告诉计算机对当前文件进行%
+编辑，位置就是当前停止的位置，这样你就可以很方便修改后再次运行。
+
+%\smallbreak\noindent
+%After you type `|H|' (or `|h|', which also works), you'll get a message
+%that tries to explain that the control sequence just read by \TeX\
+%(i.e., |\vship|) has never been assigned a meaning, and that you should
+%either insert the correct control sequence or you should go on as if the
+%offending one had not appeared.
+\smallbreak\noindent
+当你键入`|H|'(或者`|h|')后，就得到一个提示，它尝试着解释说，
+\TeX\ 刚刚读入的控制系列(即，|\vship|)没有给出定义，
+并且你要么插入一个正确的控制系列，要么直接继续，就象这个讨厌的东西没有出现过一样。
+
+%In this case, therefore, your best bet is to type
+%\begintt
+%I\vskip
+%\endtt
+%(and \<return>), with no space after the `|I|'; this effectively replaces
+%|\vship| by |\vskip|. \ (Do it.)
+在本情形下，你最好的选择是键入
+\begintt
+I\vskip
+\endtt
+(并且 \<return>), 注意，在`|I|'后面没有空格；
+这就把 |\vship| 替换成了 |\vskip|。(试试吧!)
+
+%If you had simply typed \<return> instead of
+%inserting anything, \TeX\ would have gone ahead and read `|1in|', which
+%it would have regarded as part of a paragraph to be typeset. Alternatively,
+%you could have typed `|3|'\thinspace; that would have deleted
+%`|1in|' from \TeX's input. Or you could have typed `|X|' or `|E|' in
+%order to correct the spelling error in your file. But it's usually
+%best to try to detect as many errors as you can, each time you run \TeX,
+%since that increases your productivity while decreasing your computer bills.
+%Chapter~27 explains more about the art of steering \TeX\ through
+%troubled text.
+如果你直接键入 \<return> 而不是其它选项，那么 \TeX\ 将继续运行并读入`|1in|',
+它将被看作要排版的段落的一部分。%
+你也可以键入`|3|'\thinspace; 它将从 \TeX\ 的输入中删除掉`|1in|'。%
+另外你也可以键入`|X|'或`|E|'以改正文件中的拼写错误。%
+但是一般最好是每次运行 \TeX\ 时检出尽可能多的错误，这样可以提高效率和减少成本。%
+第二十七章阐述了引导 \TeX\ 处理这些出问题的文本的更多\hbox{技术。}
+
+%\dangerexercise What would have happened if you had typed `|5|' after
+%the |\vship| error?
+%\answer \TeX\ would have deleted five tokens: |1|, |i|, |n|, \],
+%|\centerline|.  (The space was at the end of line~2, the |\centerline| at the
+%beginning of line~3.)
+\dangerexercise 如果你在 |\vship| 这个错误后键入`|5|', 会出现什么情况？
+\answer \TeX\ 将删除五个记号：|1|、|i|、|n|、\] 和 |\centerline|。%
+（空格在第 2 行的行尾，而 |\centerline| 在第 3 行的开头。）
+
+%\danger You can control the level of interaction by giving commands
+%in your file as well as online: The \TeX\ primitives ^|\scrollmode|,
+%^|\nonstopmode|, and ^|\batchmode| correspond respectively to typing
+%`|S|', `|R|', or `|Q|' in response to an error message, and
+%^|\errorstopmode| puts you back into the normal level of interaction. \
+%(Such changes are global, whether or not they appear inside a group.) \
+%Furthermore, many installations have implemented a way to ^{interrupt}
+%\TeX\ while it is running; such an interruption causes the program to
+%revert to |\errorstopmode|, after which it pauses and waits for
+%further instructions.
+\danger 通过在文件中以及在交互时给定命令，你可以控制交互的等级：
+\TeX\ 的原始 |\scrollmode|、|\nonstopmode| 以及 |\batchmode|
+分别对应于对错误信息键入 `|S|'、`|R|' 或 `|Q|'，
+而且 |\errorstopmode| 转换回正常的交互等级。%
+（这样的改变是全局的，不管它们是否出现在组中。）
+还有，很多已安装好的系统已经设置了 \TeX\ 运行时中断它的方法；
+\1这样的中断使程序转换回 |\errorstopmode|，在此处 \TeX\ 停下来等待干预。
+
+%What happens next in Experiment 5? \TeX\ will hiccup on the other bug that
+%we planted in the file. This time, however, the error message is more
+%elaborate, since the context appears on six lines instead of two:
+%\begintt
+%! Undefined control sequence.
+%<argument> \bf A SHORT \ERROR
+%                              STORY
+%\centerline #1->\line {\hss #1
+%                              \hss }
+%l.3 \centerline{\bf A SHORT \ERROR STORY}
+%|null
+%?
+%\endtt
+%You get multiline error messages like this when the error is detected
+%while \TeX\ is processing some higher-level commands---in this case,
+%while it is trying to carry out |\centerline|, which is not a primitive
+%operation (it is defined in plain \TeX). At first, such error
+%messages will appear to be complete nonsense to you, because much of what
+%you see is low-level \TeX\ code that you never wrote. But you can overcome
+%this hangup by getting a feeling for the way \TeX\ operates.
+实战五接下来会出现什么呢？
+\TeX\ 将被噎在我们故意设置的另一个缺陷上。%
+但是这次，错误信息更详细，因为出现了 6 行而不是两行：
+\begintt
+! Undefined control sequence.
+<argument> \bf A SHORT \ERROR
+                              STORY
+\centerline #1->\line {\hss #1
+                              \hss }
+l.3 \centerline{\bf A SHORT \ERROR STORY}
+|null
+?
+\endtt
+当 \TeX\ 在处理某些高级命令而检测到的错误时，你就会得到类似的多行错误信息%
+——在本例中，它正在处理非原始的定义 |\centerline|(它定义在 plain \TeX\ 中)。%
+首先，这样的错误信息对你毫无用处，因为你所看到的是不曾写过的低级 \TeX\ 代码。%
+但是通过体会 \TeX\ 的运作方式，你会处理好这个错误。
+
+%First notice that the context information always appears in pairs of lines.
+%As before, the top line shows what \TeX\ has just read (\thinspace
+%`|\bf A SHORT \ERROR|'\thinspace), then comes what it is about to read
+%(\thinspace`|STORY|'\thinspace). The next pair of lines shows the context
+%of the first two; it indicates what \TeX\ was doing just before it began to
+%read the others. In this case, we see that \TeX\ has just read `|#1|', which
+%is a special code that tells the machine to ``read the first ^{argument} that
+%is governed by the current control sequence''; i.e., ``now read the stuff that
+%^|\centerline| is supposed to center on a line.'' The definition in Appendix~B
+%says that |\centerline|, when applied to some text, is supposed to be carried
+%out by sticking that text in place of the `|#1|' in `|\line{\hss#1\hss}|'.
+%So \TeX\ is in the midst of this expansion of\/ |\centerline|, as well as being
+%in the midst of the text that is to be centered.
+首先注意到，上下文的内容总出现在两行中。%
+象以前一样，上一行表示 \TeX\ 刚刚读入的(\thinspace
+`|\bf A SHORT \ERROR|'\thinspace), 接着出现的是将要读入的%
+(\thinspace`|STORY|'\thinspace)。
+接下来的两行是上面两行的上下文；
+它表明，在开始读入上面两行前 \TeX\ 所做的事情。%
+在本例我们看到，\TeX\ 刚刚读入`|#1|', 它是一个特殊代码，来告诉计算机%
+``读入由当前控制系列处理的第一个参量'';
+即``现在读入 |\centerline| 要居中的行的内容''。%
+在附录 B 中的定义声明，当应用到某些文本时，|\centerline| 要做的是用那些文本来%
+代替`|\line{\hss#1\hss}|'中的`|#1|'。%
+所以 \TeX\ 运行到了 |\centerline| 的展开代码的中间代码，即要居中的文本的内容。
+
+%\looseness-1
+%The bottom line shows how far \TeX\ has gotten until now in the |story| file.
+%\ (Actually the bottom line is blank in this example; what appears to be
+%the bottom line is really the first of two lines of context, and it
+%indicates that \TeX\ has read everything including the `|}|' in line~3 of
+%the file.) \ Thus, the context in this error message gives us a glimpse of
+%how \TeX\ went about its business. First, it saw |\centerline| at the
+%beginning of line~3. Then it looked at the definition of\/ |\centerline| and
+%noticed that |\centerline| takes an ``argument,'' i.e., that |\centerline|
+%applies to the next character or control sequence or group that follows.
+%So \TeX\ read~on, and filed `|\bf A SHORT \ERROR STORY|' away as the
+%argument to |\centerline|.  Then it began to read the expansion, as
+%defined in Appendix~B\null.  When it reached the |#1|, it began to read
+%the argument it had saved.  And when it reached |\ERROR|, it complained
+%about an undefined control sequence.
+\looseness-1
+底部的行表示到现在为止 \TeX\ 得到的文件 |story| 中的进度。%
+(实际上，本例的底行是空的；
+出现在底行的实际上是第一个两行的上下文，并且它表明 \TeX\ 已经读入包括`|}|'的文件的%
+第 3 行的所有内容。)
+因此，在本错误信息中的内容让我们一览 \TeX\ 的处理方式。%
+首先，它遇见第 3 行开头的 |\centerline|。%
+接着它得到 |\centerline| 的定义，并注意到 |\centerline| 有一个``参量'',
+即，|\centerline| 要应用在跟着的下一个字符或者控制系列，或者组上。%
+因此 \TeX\ 继续读入，把`|\bf A SHORT \ERROR STORY|'提出来作为 |\centerline| 的参量。%
+接着它开始展开定义，正如附录 B 所定义的一样。%
+当它读到 |#1|, 就开始读入存储的参量。%
+并且当遇到 |\ERROR| 时就给出未定义的控制系列这个错误信息。
+
+%\dangerexercise Why didn't \TeX\ complain about |\ERROR| being undefined
+%when |\ERROR| was first encountered, i.e., before reading `|STORY}|' on line~3?
+%\answer A control sequence like |\centerline| might well define a control
+%sequence like |\ERROR| before telling \TeX\ to look at |#1|. Therefore
+%\TeX\ doesn't interpret control sequences when it scans an argument.
+\dangerexercise \1为什么 \TeX\ 第一次遇到 |\ERROR| 时(即在读第 3 行的`|STORY|'之前)%
+不认为它是一个未定义的控制\hbox{系列呢？}
+\answer 类似 |\centerline| 的控制系列很可能%
+在让 \TeX\ 查看 |#1| 之前就定义了类似 |\ERROR| 的控制系列。
+\TeX\ 在扫描参量时并不解释其中的控制系列。
+
+%When you get a multiline error message like this, the best clues about the
+%source of the trouble are usually on the bottom line (since that is what
+%you typed) and on the top line (since that is what triggered the error
+%message). Somewhere in there you can usually spot the problem.
+当你看到类似的错误信息时，找到问题根源的最好思路通常是底行(因为它是你键入的内\hbox{容)}%
+和顶行(因为那里是错误发生的地方)。%
+在那里的某个地方你通常可以发现问题。
+
+%Where should you go from here? If you type `|H|' now, you'll just get
+%the same help message about undefined control sequences that you saw
+%before. If you respond by typing \<return>, \TeX\ will go
+%on and finish the run, producing output virtually identical to that in
+%Experiment~2. In other words, the conventional responses won't teach you
+%anything new. So type `|E|' now; this terminates the run and prepares
+%the way for you to fix the erroneous file. \ (On some systems, \TeX\ will
+%actually start up the standard text editor, and you'll be positioned at
+%the right place to delete `|\ERROR|'. On other systems, \TeX\ will simply
+%tell you to edit line~3 of file |story.tex|.) ^^{editing}
+现在你该怎么办？
+如果现在键入`|H|', 得到的是与你以前看到的一样的关于未定义控制系列的帮助信息。%
+如果键入 \<return>, \TeX\ 将继续运行，得到与实战二相同的输出结果。%
+换句话说，一般的干预没什么新的东西了。%
+那么，键入`|E|'; 它将终止运行并打开有错误的文件。%
+(在某些系统上，\TeX\ 实际上启动一个标准的文本编辑器，
+并且定位在要删除`|\ERROR|'的地方。%
+在其它系统上，\TeX\ 将直接告诉你编辑文件 |story.tex| 的第 3 行。
+
+%When you edit |story.tex| again, you'll notice that line~2 still contains
+%|\vship|; the fact that you told \TeX\ to insert |\vskip| doesn't mean
+%that your file has changed in any way. In general, you should correct all
+%errors in the input file that were spotted by \TeX\ during a run; the
+%log file provides a handy way to remember what those errors were.
+当你再次编辑 |story.tex| 时，会注意到第 2 行包含的还是 |\vship|;
+事实上，你要 \TeX\ 插入 |\vskip| 并不意味着文件有任何改变。%
+一般地，在运行时，你应该改正 \TeX\ 发现的所有错误；
+log 文件为记录那些出现错误提供了一种方便的方法。
+
+%\smallskip
+%Well, this has indeed been a long chapter, so let's summarize what has
+%been accomplished. By doing the five experiments you have learned at first
+%hand (1)~how to get a job printed via \TeX; (2)~how to make a file that
+%contains a complete \TeX\ manuscript; (3)~how to change the plain \TeX\
+%format to achieve columns with different widths; and (4)~how to avoid
+%panic when \TeX\ issues stern~warnings.
+\smallskip
+好了，本章的确比较长，那么我们总结一下。%
+通过上面的五个实战，你已经直接掌握了：
+(1). 怎样通过 \TeX\ 输出一个的文稿；
+(2). 怎样制作包含这个 \TeX\ 文稿的文件；
+(3). 怎样改变 plain \TeX\ 的格式以得到不同宽度的栏；
+(4). 当 \TeX\ 给出警告时怎样有条不紊地修正。
+
+%So you could now stop reading this book and go on to print a bunch of
+%documents. It is better, however, to continue bearing with the author
+%(after perhaps taking another rest), since you're just at the threshold
+%of being able to do a lot more. And you ought to read Chapter~7
+%at least, because it warns you about certain symbols that you must not
+%type unless you want \TeX\ to do something special. While reading the
+%remaining chapters it will, of course, be best for you to continue making
+%trial runs, using experiments of your own design.
+那么，你现在可以不再阅读本书，并且可输出很多文档了。%
+但是最好继续下去，因为你正处在深造的关头。%
+而且至少你应该读读第七章，
+因为它给出了不必键入的一些符号，除非你想要 \TeX\ 做某些特殊的事情。%
+当阅读剩下的章节时，当然最好做一些实战练习，你自己去设计\hbox{实验吧。}
+
+%\ddanger If you use \TeX\ format packages designed by others, your
+%error messages may involve many inscrutable two-line levels of macro
+%context. By setting ^|\errorcontextlines||=0| at the beginning of your file,
+%you can reduce the amount of information that is reported;
+%\TeX\ will show only the top and bottom pairs of context lines
+%together with up to |\errorcontextlines| additional two-line items. \ (If
+%anything has thereby been omitted, you'll also see `|...|'.) \ Chances
+%are good that you can spot the source of an error even when most of a
+%large context has been suppressed; if not, you can say
+%`|I\errorcontextlines=100\oops|' and try again. \ (That will usually
+%give you an undefined control sequence error and plenty of context.) \
+%Plain \TeX\ sets |\errorcontextlines=5|.
+\ddanger 如果你使用别人设计的 \TeX\ 格式包，
+错误信息可能包括许多不可预测的双行的宏的内容。
+通过在你的文件开头设置 |\errorcontextlines||=0|，可以减少输出的信息的量；
+\TeX\ 将只输出最上面两行和最下面两行内容，
+以及与 |\errorcontextlines| 有关的附加的两行内容。
+（如果因此忽略了一些内容，你还会看到 `|...|'。）
+如果当大量错误信息被去掉时仍能找到错误所在，就太幸运了；
+否则，你可以键入 `|I\errorcontextlines=100\oops|' 并且再次运行。%
+（它一般给出了未定义控制系列的错误和大量上下文。）
+
+\endchapter
+
+What we have to learn to do we learn by doing.
+\author ^{ARISTOTLE}, {\sl Ethica Nicomachea\/} II (c.~325 B.C.)
+
+\bigskip
+
+He may run who reads.
+\author ^{HABAKKUK} 2\thinspace:\thinspace2 (c.~600 B.C.) % RSV
+\smallskip
+He that runs may read.
+\author WILLIAM ^{COWPER}, {\sl Tirocinium\/} (1785)
+
+\vfill\eject\byebye

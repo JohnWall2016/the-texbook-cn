@@ -1,0 +1,396 @@
+% -*- coding: utf-8 -*-
+
+\input macros
+
+%\beginchapter Chapter 25. Summary of\\Horizontal Mode
+\beginchapter Chapter 25. 水平模式总结
+
+\origpageno=285
+
+%^^{horizontal mode}
+%Continuing the survey that was begun in Chapter 24, let us investigate
+%exactly what \TeX's digestive processes can do, when \TeX\ is building
+%lists in horizontal mode or in restricted horizontal mode.
+\1我们继续从第 24 章开始的总结；现在讨论 \TeX\
+在水平模式和受限水平模式下构建列表时，它的消化过程可以做的事情。
+
+%\ninepoint
+%\def\\{\smallbreak\textindent{$\bull$}}
+%\medbreak
+%\centerline{$*\qquad*\qquad*$}
+%\medskip\noindent
+%Three asterisks, just like those that appear here, can be found near the
+%end of Chapter~24.
+%Everything preceding the three asterisks in that chapter applies to
+%horizontal mode as well as to vertical mode, so we need not repeat
+%all those rules. In particular, Chapter~24 explains assignment commands,
+%and it tells how kerns, penalties, marks, insertions, adjustments,
+%and ``whatsits'' are put into horizontal lists. Our present goal
+%is to consider the commands that have an intrinsically horizontal
+%flavor, in the sense that they behave differently in horizontal
+%mode than they do in vertical or math modes.
+\ninepoint
+\def\\{\smallbreak\textindent{$\bull$}}
+\medbreak
+\centerline{$*\qquad*\qquad*$}
+\medskip\noindent
+类似这样的三个星号在第 24 章快结束时可以找到。
+在第 24 章中，在三个星号前面的所有内容都既适用于水平模式，也适用于垂直模式，
+因此我们就毋需重复那些规则了。
+特别地，第 24 章讨论了赋值命令，并且讨论了紧排、惩罚、标记、插入项、
+调整和``无名''是如何放入水平列中的。
+我们当前的目标是讨论本质上属于水平模式的命令，
+即在水平模式下与在垂直和数学模式下表现不同的命令。
+
+%One of the things characteristic of horizontal mode is the ``^{space
+%factor},'' which modifies the width of spaces as described in Chapter~12.
+%If a command changes the value of\/ ^|\spacefactor|, that fact is
+%specifically noted here. The space factor is initially set to~1000, when
+%\TeX\ begins to form a horizontal list, except in the case of\/ |\valign| and
+%|\noalign| when the space factor of the outer list continues inside the
+%inner one.
+水平模式一个特有的东西是``间距因子'', 它象第十二章讨论的那样来修改间距的宽度。%
+如果要用命令改变 |\spacefactor| 的值，那么就要特别注意一下。%
+当 \TeX\ 开始形成水平列时，间距因子最初设定为 1000,
+但是在 |\valign| 和 |\noalign| 时，外层列的间距因子会延续到内层来。
+
+%\\^|\hskip|\<glue>, ^|\hfil|, ^|\hfill|, ^|\hss|, ^|\hfilneg|.\enskip
+%A glue item is appended to the current horizontal list.
+\\^|\hskip|\<glue>, ^|\hfil|, ^|\hfill|, ^|\hss|, ^|\hfilneg|.\enskip
+把一个粘连项目追加到当前列。
+
+%\\\<leaders>\<box or rule>\<horizontal skip>.\enskip
+%Here ^\<horizontal skip> refers to one of the five glue-appending commands
+%just mentioned; the formal syntax for \<leaders> and for \<box or rule> is
+%given in Chapter~24. A glue item that produces ^{leaders} is appended.
+\\\<leaders>\<box or rule>\<horizontal skip>.\enskip
+这里的 \<horizontal skip> 指的是刚刚讨论的五个追加粘连的命令；
+\<leaders> 和 \<box or rule> 的正式语法见第二十四章。%
+生成指引线的粘连项目要追加到当前列。
+
+%\\^\<space token>.\enskip
+%Spaces append glue to the current list; the exact amount of glue depends on
+%|\spacefactor|, the current font, and the |\spaceskip| and |\xspaceskip|
+%parameters, as described in Chapter~12.
+\\^\<space token>.\enskip
+空白把粘连追加到当前列；
+粘连的具体量与 |\spacefactor|, 当前字体，|\spaceskip| 和 |\xspaceskip| 有关，
+见第十二章的讨论。
+
+%\\|\|\].\enskip ^^{control space}
+%A control-space command appends glue to the current list, using the same amount
+%that a \<space token> inserts when the space factor is 1000.
+\\|\|\].\enskip ^^{control space}
+控制空格命令把粘连追加到当前列，
+粘连的大小与间距因子为 1000 时 \<space token> 所插入粘连的大小相同。
+
+%\\^\<box>.\enskip
+%The box is constructed, and if the result is void nothing happens.
+%Otherwise the new box is appended to the current list, and
+%the space factor is~set~to~1000.
+\\^\<box>.\enskip
+构造这个盒子，并且如果所得到的是置空的就什么也不会出现。%
+否则，把新盒子追加到当前列，并且把间距因子设置为 1000。
+
+%\\^|\raise|\<dimen>\<box>, ^|\lower|\<dimen>\<box>.\enskip
+%This acts just like an unadorned \<box> command, except that the new box
+%being appended to the horizontal list is also shifted up or down by the
+%specified amount.
+\\^|\raise|\<dimen>\<box>, ^|\lower|\<dimen>\<box>.\enskip
+它与普通的 \<box> 命令是一样的，
+但是追加到水平列的新盒子还要向上或向下平移所给定的量。
+
+%\\^|\unhbox|\<8-bit number>, ^|\unhcopy|\<8-bit number>.\enskip
+%If the specified box register is void, nothing happens. Otherwise that
+%register must contain an hbox. The horizontal list inside that box is
+%appended to the current horizontal list, without changing it in any way.
+%The value of\/ |\spacefactor| is not affected. The box register becomes void
+%after |\unhbox|, but it remains unchanged by |\unhcopy|.
+\\^|\unhbox|\<8-bit number>, ^|\unhcopy|\<8-bit number>.\enskip
+如果给定的盒子寄存器是置空的，那么什么也不出现。%
+否则，寄存器必须包含一个 hbox。%
+在此盒子中的水平列要追加到当前水平列，而不做任何改变。%
+|\spacefactor| 的值不受影响。%
+在 |\unhbox| 后此盒子寄存器变成置空的，在 |\unhcopy| 后它保持不变。
+
+%\\\<vertical rule>.\enskip
+%The specified ^{rule} is appended to the current list, and the |\spacefactor|
+%is set to 1000.
+\\\<vertical rule>.\enskip
+把给定的标尺追加到当前列，并且把 |\spacefactor| 设置为 1000。
+
+%\\^|\valign|\<box specification>|{|\<alignment material>|}|.\enskip
+%The ^\<alignment material> consists of a preamble followed by zero or more
+%columns to be aligned; see Chapter~22. \TeX\ enters a new level of grouping,
+%represented by the `|{|' and `|}|', within which changes to ^|\tabskip|
+%will be confined.  The alignment material can also contain optional
+%occurrences of `|\noalign|\<filler>|{|\<horizontal mode material>|}|'
+%between columns; this adds another level of grouping.  \TeX\ operates in
+%restricted horizontal mode while it works on the material in ^|\noalign|
+%\vadjust{\eject}% squeeze another line onto page 285, we need it on page 286!
+%groups and when it appends columns of the \hbox{alignment}; the resulting
+%internal horizontal list will be appended to the enclosing horizontal list
+%after the alignment is completed. The value of\/ |\spacefactor| at the time
+%of the |\valign| is used at the beginning of the internal horizontal list,
+%and the final value of\/ |\spacefactor| is carried to the enclosing
+%horizontal list when the alignment is completed.  The space factor is set
+%to 1000 after each column; hence it affects the results only in |\noalign|
+%groups.  \TeX\ also enters an additional level of grouping when it works
+%on each individual entry of the alignment, during which time it acts in
+%internal vertical mode; the individual entries will be vboxed as part of
+%the final alignment.
+%%No room for the following redundant remarks:
+%%  The commands |\noalign|, |\omit|, |\span|, |\cr|,
+%%|\crcr|, and |&| (where |&| denotes an explicit or implicit character of
+%%category~4) are intercepted by the alignment process, en route to \TeX's
+%%stomach, so they will not appear as commands in the stomach unless \TeX\
+%%has lost track of what alignment they belong to.
+\\^|\valign|\<box specification>|{|\<alignment material>|}|.\enskip
+\<alignment material> 由导言后面跟零个或更多个要对齐的栏组成；
+见第二十二章。%
+ \TeX\ 进入由`|{|'和`|}|'表示的一个新层次的编组，
+其中对 |\tabskip| 的修改是受到限制的。%
+对齐的内容还可以包含栏之间的`|\noalign|\<filler>|{|\<horizontal mode material>|}|';
+这增加了另一个层次的编组。%
+当处理 |\noalign| 组中的内容并且当追加对齐的栏时， \TeX\ 处于受限水平模式中；
+\1在对齐结束后，所得到的不变水平列将追加到封装的水平列。%
+在 |\valign| 中 |\spacefactor| 的值使用的是内部水平列开始时的值，
+当对齐结束后，~|\spacefactor| 最后的值要送到封装的水平列。%
+在每栏结束后，间距因子就设置为 1000;
+因此它只影响在 |\noalign| 组中的结果。%
+当处理对齐的每个栏时， \TeX\ 还要进入更深层的编组，
+此时它处在内部垂直模式；
+各个单元都是作为最后对齐的一部分而放在 vbox 中。
+
+%\\^|\indent|.\enskip
+%An empty box of width ^|\parindent| is appended to the current list, and
+%the space factor is set to 1000.
+\\^|\indent|.\enskip
+把宽度为 |\parindent| 的空盒子追加到当前列，
+并且把间距因子设置为 1000。
+
+%\\^|\noindent|.\enskip
+%This command has no effect in horizontal modes.
+\\^|\noindent|.\enskip
+此命令在水平模式下没有什么作用。
+
+%\\^|\par|.\enskip
+%The primitive |\par| command, also called ^|\endgraf| in plain \TeX,
+%does nothing in restricted horizontal mode. But it terminates horizontal
+%mode: The current list is finished off by doing ^|\unskip| ^|\penalty10000|
+%^^|\parfillskip|
+%|\hskip\parfillskip|, then it is broken into lines as explained in Chapter~14,
+%and \TeX\ returns to the enclosing vertical or internal vertical mode.
+%The lines of the paragraph are appended to the enclosing vertical list,
+%interspersed with interline glue and interline penalties, and with
+%the ^{migration} of vertical material that was in the horizontal list.
+%Then \TeX\ exercises the page builder.
+\\^|\par|.\enskip
+原始命令 |\par|, 在 plain \TeX\ 中也称为 |\endgraf|,
+它在受限水平模式下什么也不做。%
+但是它终止当前水平模式：当前列通过
+命令 |\unskip| |\penalty10000| |\hskip\parfillskip| 来完成，
+接着，它如第十四章讨论的那样分段为行，
+并且 \TeX\ 回到封装的垂直或内部垂直模式。%
+把段落的行追加到封装的垂直列，其间插入行间粘连和行间惩罚，并且把水平列中%
+的垂直内容转移出来。%
+接着 \TeX\ 进行页面构建。
+
+%\\|{|.\enskip
+%A character token of category 1, or a control sequence like~|\bgroup|
+%that has been |\let| equal to such a character token, causes \TeX\ to
+%start a new level of ^{grouping}. When such a group ends---with `|}|'---\TeX\
+%will undo the effects of non-global assignments without leaving whatever
+%mode it is in at that time.
+\\|{|.\enskip
+类别码为 1 的字符记号，或者用 |\let| 使得它与这种字符记号相等的控制序列，
+比如 |\bgroup|，将让 \TeX\ 开始一个新层级的^{编组}。
+当这样的编组用 `|}|' 结束后，\TeX\ 将撤消所有的非全局赋值，并且保持其目前的模式不变。
+
+%\\Some commands are incompatible with horizontal mode because they are
+%intrinsically vertical. When the following commands appear in unrestricted
+%horizontal mode, they cause \TeX\ to conclude the current paragraph:
+%^^{paragraph end, implied}
+%\beginsyntax
+%<vertical command>\is^|\unvbox|\alt^|\unvcopy|\alt^|\halign|\alt^|\hrule|
+%  \alt^|\vskip|\alt^|\vfil|\alt^|\vfill|\alt^|\vss|\alt^|\vfilneg|%
+%  \alt^|\end|\alt^|\dump|
+%\endsyntax
+%The appearance of a \<vertical command> in restricted horizontal mode is
+%forbidden, but in regular horizontal mode it causes \TeX\ to insert the
+%token \cstok{par} into the input; after reading and expanding this \cstok{par}
+%token, \TeX\ will see the \<vertical command> token again. \ (The current
+%meaning of the control sequence ^|\par| will be used; \cstok{par} might no
+%longer stand for \TeX's |\par| primitive.)
+\\某些命令与水平模式不相容，因为它们在本质上是垂直模式的。%
+当下列命令出现在非受限水平模式中时，会使 \TeX\ 结束当前段落：
+\beginsyntax
+<vertical command>\is^|\unvbox|\alt^|\unvcopy|\alt^|\halign|\alt^|\hrule|
+  \alt^|\vskip|\alt^|\vfil|\alt^|\vfill|\alt^|\vss|\alt^|\vfilneg|%
+  \alt^|\end|\alt^|\dump|
+\endsyntax
+在受限水平模式下，不允许出现一个 \<vertical command>,
+但是在正常水平模式下，这会使得 \TeX\ 把记号 \cstok{par} 插入到输入中；
+在读入和展开这个 \cstok{par} 后， \TeX\ 就再次遇见了 \<vertical command> 记号。%
+(要用到控制系列 |\par| 当前的意思；
+\cstok{par} 可能不再表示 \TeX\ 的原始命令 |\par|。)
+
+%\\\<letter>, \<otherchar>, \kern-1pt^|\char|\<8-bit number>, \<chardef token>,
+%\kern-1pt^|\noboundary|.\enskip
+%The most common commands of all are the character commands that tell
+%\TeX\ to append a character to the current horizontal
+%list, using the current font.
+%If two or more commands of this type occur in succession, \TeX\ processes
+%them all as a unit, converting to ligatures and/or
+%inserting kerns as directed by the font information. \ (Ligatures and
+%kerns may be influenced by invisible ``boundary'' characters at the left
+%and right, unless |\noboundary| appears.) \ Each character
+%command adjusts ^|\spacefactor|, using
+%the ^|\sfcode| table as described in Chapter~12.
+%In unrestricted horizontal mode, a
+%`|\discretionary{}{}{}|' item is appended after a character whose code is
+%the ^|\hyphenchar| of its font, or after a ligature formed from a sequence
+%that ends with such a character. ^^|\discretionary|
+\\\<letter>, \<otherchar>, \kern-1pt^|\char|\<8-bit number>, \<chardef token>,
+\kern-1pt^|\noboundary|.\enskip
+所有命令中最常用的字符命令，它把一个当前字体的字符追加到当前水平列。
+如果两个或多个这种命令连续出现，\TeX\ 就把它们看作一个整体，
+按照字体中的信息将它们连写和/或插入紧排。（如果 |\noboundary| 不出现的话，
+连写和紧排可能会受字符左右两边看不见的``边界''的影响。）
+每个字符命令都用第 12 章讨论的 |\sfcode| 表调整 |\spacefactor|。
+在非受限水平模式中，在当前字体的 |\hyphenchar| 的字符后面，
+或者在以这个字符结尾的序列所形成的连写后面。要添加 `|\discretionary{}{}{}|' 项。
+
+%\\^|\accent|\<8-bit number>\<optional assignments>.
+%Here ^\<optional assignments> stands for zero or more \<assignment>
+%commands other than ^|\setbox|.
+%If the assignments are not followed by a \<character>, where
+%\<character> stands for any of the commands just discussed in the previous
+%paragraph, \TeX\ treats |\accent| as if it were |\char|, except that
+%the space factor is set to 1000. Otherwise the character that follows
+%the assignment is accented by the character that corresponds to the
+%\<8-bit number>. \ (The purpose of the intervening assignments is to
+%allow the accenter and accentee to be in different fonts.) \ If the
+%accent must be moved up or down, it is put into an hbox that is
+%raised or lowered. Then the accent is effectively superposed on the
+%character by means of kerns, in such a way that the width of the accent
+%does not influence the width of the resulting horizontal list.
+%Finally, \TeX\ sets |\spacefactor=1000|.
+\\^|\accent|\<8-bit number>\<optional assignments>.
+这里的 \<optional assignments> 表示零个或多个不为 ^|\setbox| 的 \<assignment> 命令。
+如果紧随赋值之后的不是一个 \<character>，
+其中 \<character> 表示前一个段落刚刚讨论的任何命令，
+那么 \TeX\ 把 |\accent| 当成 |\char| 来处理，但是间距因子为 1000。
+\1否则，跟在赋值后面的字符就被对应于 \<8-bit number> 的字符加上重音。%
+（中间可以有赋值，目的在于允许所加的重音符和被加重音的字符为不同的字体。）
+如果这个重音必须向上或向下移动，那么就把它放在一个 hbox 中来升降。
+这样重音就通过调整间距的方式叠放在字符上，按照这种方法，
+重音的宽度不会影响所得到的水平列的宽度。
+最后，\TeX\ 设置 |\spacefactor=1000|。
+
+%\\^|\/|.\enskip
+%If the last item on the current list is a character or ligature, an
+%explicit kern for its ^{italic correction} is appended.
+\\^|\/|.\enskip
+如果当前列上的最后一个项目是字符或连写，则会追加倾斜校正所需的显式紧排。
+
+%\\^|\discretionary|\<general text>\<general text>\<general text>.\enskip
+%The three general texts are processed in restricted horizontal mode. They
+%should contain only fixed-width things; hence they aren't really very
+%general in this case. More precisely, the horizontal list formed by each
+%discretionary general text must consist only of characters, ligatures,
+%kerns, boxes, and rules; there should be no glue or penalty items, etc.
+%This command appends a discretionary item to the current list; see
+%Chapter~14 for the meaning of a discretionary item. The space factor is
+%not changed.
+\\^|\discretionary|\<general text>\<general text>\<general text>.\enskip
+这三个通用文本在受限水平模式下来处理。它们只包含宽度固定的内容；
+因此，在这种情况下它们不真那么通用。更准确地说，
+由任意可断点的通用文本形成的水平列只能包含字符、连写、紧排、盒子和标尺；
+不应该有粘连或惩罚项等。这个命令把一个任意可断点项目追加到当前列；
+见第 14 章任意可断点的含义的讨论。它不改变间距因子。
+
+%\\^|\-|.\enskip
+%This ``discretionary hyphen'' command is defined in Appendix H.
+\\^|\-|.\enskip
+这个``任意连字符''命令在附录 H 中给出定义。
+
+%\\^|\setlanguage|\<number>.\enskip
+%See the conclusion of Appendix H.
+\\^|\setlanguage|\<number>.\enskip
+见附录 H 的结果。
+
+%\\|$|.\enskip
+%A ``^{math shift}'' character causes \TeX\ to enter math mode or display math
+%mode in the following way:
+%\TeX\ looks at the following token without expanding it. If that token
+%is a~|$| and if \TeX\ is currently in unrestricted horizontal mode,
+%then \TeX\ breaks the current paragraph into lines as explained above
+%(unless the current list is empty), returns to the enclosing vertical
+%mode or internal vertical mode, calculates values like |\prevgraf|
+%and |\displaywidth| and |\predisplaysize|, enters a new level of grouping,
+%inserts the |\everydisplay| tokens into the input, exercises the page
+%builder, processes `\<math mode material>|$$|' in display math mode, puts
+%the display into the enclosing vertical list as explained in Chapter~19
+%(letting vertical material ^{migrate}), exercises the page builder again,
+%increases |\prevgraf| by~3, and resumes horizontal mode again, with an
+%empty list and with the space factor equal to~1000. \ (You got that?) \
+%Otherwise \TeX\ puts the looked-at token back into the
+%input, enters a new level of grouping, inserts the |\everymath| tokens,
+%and processes `\<math mode material>|$|'; the math mode material
+%is converted to a horizontal list and appended to the current list,
+%surrounded by ``math-on'' and ``math-off'' items, and the space factor
+%is set to~1000. One consequence of these rules is that `|$$|' in
+%restricted horizontal mode simply yields an empty math formula.
+\\|$|.\enskip
+``数学转换''符使 \TeX\ 按下列方式进入数学模式或陈列数学模式：
+ \TeX\ 遇见下列记号而不展开它们。%
+如果此记号是一个 |$| 并且 \TeX\ 目前处在非受限水平模式中，
+那么 \TeX\ 象上面讨论的那样把当前段落分为行(除非当前列是空的),
+再返回封装的垂直模式或内部垂直模式，计算象 |\prevdepth|,
+|\displaywidth| 和 |\predisplaysize| 的值，进入新一层次的编组，
+把记号 |\everydisplay| 插入到输入中，进行页面构建，在陈列数学模式下处理%
+`\<math mode material>|$$|', 象第十九章讨论的那样把此陈列公式放在%
+封装的垂直列中(把垂直内容转移处理),
+再次进行页面构建，把 |\prevgraf| 增加 3, 并且再回到水平模式，
+开始一个空列并且设置间距因子为 1000。%
+(你看懂了吗")
+否则， \TeX\ 就把所读入的记号放回输入，进入一个新层次的编组，
+插入记号 |\everymath|, 并且处理`\<math mode material>|$|';
+这个数学模式的内容被转换为一个水平列并且追加到当前列，
+两边放上``math-on''项目和``math-off''项目，
+并且把间距因子设置为 1000。%
+这些规则的一个后果就是，在受限水平模式下的`|$$|'直接得到一个空数学公式。
+
+%\\None of the above: If any other primitive command of \TeX\ occurs
+%in horizontal mode, an error message will be given, and \TeX\ will try
+%to recover in a reasonable way. For example, if a superscript or
+%subscript symbol appears, or if any other inherently mathematical
+%command is given, \TeX\ will try to insert a `|$|' just before the
+%offending token; this will enter math mode.
+%%No room for the following redundant remarks:
+%%On the other hand if a totally
+%%misplaced token like |\endcsname| or |\omit| or |\eqno| or |#| appears
+%%in horizontal mode, \TeX\ will simply ignore it, after reporting
+%%the error. You might enjoy trying to type some really stupid input,
+%%just to see what happens. \ (Say `|\tracingall|' first, as explained
+%%in Chapter~27, in order to get maximum information.)
+\\除上面的以外：如果任何其它 \TeX\ 的原始命令出现在水平模式中，
+那么就给出错误信息，
+并且 \TeX\ 试着按照合理的方式修复它。%
+例如，如果出现了上标或下标，或者出现了其它数学特有的命令，
+那么 \TeX\ 就试着在这个讨厌的记号紧前面插入一个`|$|';
+它就进入了数学模式。
+
+\endchapter
+
+\strut{\rm Otherwise.} %
+  You may reduce all\/ \kern.5pt{\rm Verticals} into\/ {\rm Horizontals}.
+\author JOSEPH ^{MOXON}, {\sl A Tutor to Astronomie and Geographie\/} (1659)
+
+\bigskip
+
+\strut\tt!~You can't use `\bslash moveleft' in horizontal mode.
+\author \TeX\ (1982)
+
+\vfill\eject\byebye

@@ -1,0 +1,997 @@
+% -*- coding: utf-8 -*-
+
+\input macros
+
+%\beginchapter Chapter 21. Making Boxes
+\beginchapter Chapter 21. 盒子制作
+
+\origpageno=221
+
+%In Chapters 11 and 12 we discussed the principles of boxes and glue, and by now
+%we have seen many applications of those concepts. You can get by in most cases
+%with the boxes that \TeX\ manufactures automatically with its paragraph
+%builder, its page builder, and its math formula processor; but if you want to
+%do nonstandard things, you have the option of making boxes by yourself.
+%For example, Chapter~14 points out that you can keep something from being
+%hyphenated or split between lines if you enclose it in an ^|\hbox|;
+%Chapter~19 points out that |\hbox| allows you to get ordinary text into
+%a displayed equation. ^^|\vbox|
+\1在第十一和第十二章，我们讨论了盒子和粘连的法则，并且现在我们已经看到这些概念的%
+很多应用。%
+在大多数情况下，用 \TeX\ 自动生成的盒子来断行，分页和处理数学公式就可以了；
+但是如果要满足特殊的要求，就得自己来制作盒子。%
+例如，第十四章指出，如果把某些内容放在 |\hbox| 中，它就可以不被连字化或裂分；
+第十九章指出，在陈列方程中可以用 |\hbox| 来得到普通文本。
+
+%\danger The purpose of the present chapter is to nail down whatever details
+%about boxes haven't been covered yet. Fortunately, there isn't much more
+%to discuss; we have already mentioned most of the rules, so this chapter is
+%fairly short. In fact, the previous chapters have dealt with almost
+%everything except the rules about rules.
+\danger 本章的目的在于还未讨论的盒子的其它细节。%
+幸运的是，没有太多的东西要讨论；
+我们已经讨论过大多数规则了，
+因此本章相当短。%
+实际上，前面的章已经把除了标尺的规则外的几乎所有东西都讨论了。
+
+%\danger To make a ^{rule box} (i.e., a solid ^{black rectangle}), you
+%type `^|\hrule|' in vertical mode or `^|\vrule|' in horizontal mode,
+%followed by any or all of the specifications `^|width|\<dimen>',
+%`^|height|\<dimen>', `^|depth|\<dimen>', in any order. For example, if
+%\begintt
+%\vrule height4pt width3pt depth2pt
+%\endtt
+%appears in the middle of a paragraph, \TeX\ will typeset the black box
+%`\thinspace\vrule height4pt width3pt depth2pt\thinspace'. If you
+%specify a dimension twice, the second specification overrules the first.
+%If you leave a dimension unspecified, you get the following by default:
+%$$\halign{\indent#\hfil&\qquad\hfil#\hfil&\qquad\hfil#\hfil\cr
+%&|\hrule|&|\vrule|\cr
+%width&\tt*&$0.4\pt$\cr
+%height&$0.4\pt$&\tt*\cr
+%depth&$0.0\pt$&\tt*\cr}$$
+%Here `{\tt*}' means that the actual dimension depends on the context;
+%the rule will extend to the boundary of the smallest box or alignment
+%that encloses it.
+\danger 为了制作一个标尺盒子(即，全黑四方形),
+可以在垂直模式下输入`|\hrule|'或者在水平模式下输入`|\vrule|',
+其后跟部分或全部属性`^|width|\<dimen>',
+`^|height|\<dimen>', `^|depth|\<dimen>', 它们可以用任意次序。%
+例如，如果
+\begintt
+\vrule height4pt width3pt depth2pt
+\endtt
+出现在段落中间， \TeX\ 就输出黑盒子`\thinspace\vrule height4pt width3pt depth2pt\thinspace'。%
+如果一个尺寸给出了两次，那么第二次就冲掉了第一次的值。%
+如果某个尺寸没有给定，得到的就是下列默认值：
+$$\halign{\indent#\hfil&\qquad\hfil#\hfil&\qquad\hfil#\hfil\cr
+&|\hrule|&|\vrule|\cr
+width&\tt*&$0.4\pt$\cr
+height&$0.4\pt$&\tt*\cr
+depth&$0.0\pt$&\tt*\cr}$$
+这里`{\tt*}'的意思是实际尺寸与上下文有关；
+标尺要延伸到最小的盒子边界，或者与封装它的盒子对齐。
+
+\hrule
+
+%\danger For example, the author typed `|\hrule|' just before typing this
+%paragraph, and you can see what happened: A horizontal rule, $0.4\pt$
+%thick, was extended across the page, because the vertical box that
+%encloses it turned out to be just that wide. \ (In fact, the
+%vertical box that encloses it is the page itself.) \ Another example
+%appears immediately after this paragraph, where you can see the result
+%of
+%\begintt
+%\hrule width5cm height1pt \vskip1pt \hrule width6cm
+%\endtt
+%\TeX\ does not put ^{interline glue} between rule boxes and their neighbors
+%in a vertical list, so these two rules are exactly $1\pt$ apart.
+\danger 例如，在输入本段之前作者输入了`|\hrule|',
+并且你可以看到所出现的东西：一条水平线，厚度为，~$0.4\pt$,
+横贯页面，这是因为封装它的垂直盒子就是这么宽。%
+(实际上，封装它的盒子是页面自己。)
+另一个例子在本段落紧后面，在那里你可以看到
+\begintt
+\hrule width5cm height1pt \vskip1pt \hrule width6cm
+\endtt
+的结果。%
+在垂直列中， \TeX\ 不在标尺盒子和它们的邻近的行之间插入行间粘连，
+因此这两个标尺正好分开 $1\pt$。
+
+\hrule width5cm height1pt \vskip1pt \hrule width6cm
+
+%\dangerexercise B. L. ^{User} didn't want one of his horizontal rules to
+%touch the left margin, so he put it in a box and moved it right, like this:
+%\begintt
+%\moveright 1in \vbox{\hrule width3in}
+%\endtt
+%^^|\moveright|
+%But he found that this produced more space above and below the rule
+%than when he had simply said `|\hrule width 4in|' with no |\vbox|.
+%Why did \TeX\ insert more space, and what should he have done to
+%avoid it?
+%\answer The interline skip is added for vboxes, but not for rules; he
+%forgot to say ^|\nointerlineskip|, before and after the |\moveright|
+%construction.
+\dangerexercise 笨笨要插入一个水平标尺，但是不希望它挨着左页边，
+因此就把它放在一个盒子里，并且把盒子向右移，如下：
+\begintt
+\moveright 1in \vbox{\hrule width3in}
+\endtt
+但是他发现，相比不用 |\vbox| 而直接用 `|\hrule width 4in|' 得到的标尺，
+这样得到的结果在上下都有更多的间距。为什么 \TeX\ 插入了更多的间距，
+怎样做才能避免？
+\answer 因为 vbox 会被加上行间粘连，但标尺却不会；
+他忘记在 |\moveright| 结构的前后写上 ^|\nointerlineskip|。
+
+%\danger If you specify all three dimensions of a rule, there's no essential
+%difference between |\hrule| and |\vrule|, since both will produce exactly
+%the same black box. But you must call it an |\hrule| if you want to put
+%it in a vertical list, and you must call it a |\vrule| if you want to put
+%it in a horizontal list, regardless of whether it actually looks like
+%a horizontal rule or a vertical rule or neither. If you say |\vrule| in
+%vertical mode, \TeX\ starts a new paragraph; if you say |\hrule| in
+%horizontal mode, \TeX\ stops the current paragraph and returns to
+%vertical mode.
+\danger \1如果给出了一个标尺的所有三个尺寸，那么在 |\hrule| 和 |\vrule| 之间%
+没有什么本质的不同，因为它们得到完全一样的黑盒子。%
+但是要把它放在垂直列中就必须用 |\hrule|,
+放在水平列中必须用 |\vrule|, 而不管它看起来象一个水平标尺，还是垂直标尺，或者都不象。%
+如果在垂直模式下输入 |\vrule|,  \TeX\ 就另起一段；
+如果在水平模式下输入 |\hrule|,  \TeX\ 就停止当前段落并且返回垂直模式。
+
+%\danger The dimensions of a rule can be negative; for example, here's
+%a rule whose height is $3\pt$ and whose depth is $-2\pt$:
+%`\thinspace\vrule height3pt depth-2pt width1in\thinspace'.
+%However, a rule is invisible unless its height plus depth is positive
+%and its width is positive. A rule whose width is negative cannot be
+%seen, but it acts like a ^{backspace} when it appears in a horizontal list.
+\danger 标尺的尺寸可以是负值；
+例如，后面的标尺高度为 $3\pt$，深度为 $-2\pt$：
+`\thinspace\vrule height3pt depth-2pt width1in\thinspace'。
+但是，只有高度加深度为正并且宽度为正时，此标尺才是可见的。
+宽度为负的标尺不可见，但是当出现在水平列中时，它实际上就像后退一格一样。
+
+%\dangerexercise Explain how the author probably obtained the rule
+%`\thinspace\vrule height3pt depth-2pt width1in\thinspace' in the
+%previous paragraph. [{\sl Hint:\/} It's one inch long.]
+%\answer |\vrule height3pt depth-2pt width1in|. Notice that it was necessary
+%to call it a |\vrule| since it appeared in horizontal mode.
+\dangerexercise 看看作者怎样才能得到前一段落的标尺
+`\thinspace\vrule height3pt depth-2pt width1in\thinspace'。
+[{\KT{9}提示}：其长度为一英寸。]
+\answer |\vrule height3pt depth-2pt width1in|。
+注意必须使用 |\vrule|，因为它出现在水平模式中。
+
+%\ddanger Now let's summarize all of the ways there are to specify boxes
+%explicitly to \TeX. \ (1)~A character by itself makes a character box, in
+%horizontal mode; this character is taken from the current font. \
+%(2)~The commands |\hrule| and |\vrule| make rule boxes, as just explained.
+%\ (3)~Otherwise you can make hboxes and vboxes, which fall under the
+%generic term ^\<box>. A \<box> has one of the following seven forms:
+%$$\halign{\indent#\hfil&\quad(see Chapter #)\hfil\cr
+%^|\hbox|\<box specification>|{|\<horizontal material>|}|&12\cr
+%^|\vbox|\<box specification>|{|\<vertical material>|}|&12\cr
+%^|\vtop|\<box specification>|{|\<vertical material>|}|&12\cr
+%^|\box|\<register number>&15\cr
+%^|\copy|\<register number>&15\cr
+%^|\vsplit|\<register number>|to|\<dimen>&15\cr
+%^|\lastbox|&21\cr}$$
+%Here a ^\<box specification> is either `^|to|\<dimen>' or
+%`^|spread|\<dimen>' or empty; this governs the setting of glue in
+%the horizontal or vertical lists inside the box, as explained in
+%Chapter~12. A \<register number> is between 0 and 255; after you say
+%|\box|, that register becomes void, but after |\copy| the register
+%is unchanged, as explained in Chapter~15. The |\vsplit| operation
+%is also explained in Chapter~15. In math modes an additional
+%type of box is available:
+%^|\vcenter|\<box specification>|{|\<vertical material>|}| (see Chapter~17).
+\ddanger 现在我们总结一下 \TeX\ 中所有直接给出盒子的方法。%
+(1). 在水平模式下，字符自己制作出字符盒子；
+此字符是从当前字体中取得的。%
+(2). 命令 |\hrule| 和 |\vrule| 制作出标尺盒子，就象刚刚讨论的那样。%
+(3). 另外，你可以自己制作 hbox 和 vbox, 它们都属于一般条件 \<box> 的一种。%
+\<box> 有下面七种形式：
+$$\halign{\indent#\hfil&\quad(见第 # 章)\hfil\cr
+^|\hbox|\<box specification>|{|\<horizontal material>|}|&12\cr
+^|\vbox|\<box specification>|{|\<vertical material>|}|&12\cr
+^|\vtop|\<box specification>|{|\<vertical material>|}|&12\cr
+^|\box|\<register number>&15\cr
+^|\copy|\<register number>&15\cr
+^|\vsplit|\<register number>|to|\<dimen>&15\cr
+^|\lastbox|&21\cr}$$
+在这里， \<box specification> 为`^|to|\<dimen>', `^|spread|\<dimen>'或是空的；
+它控制着盒子中水平或垂直列中的粘连是多少，就象第十二章讨论的那样。%
+\<register number> 在 0 和 255 之间；
+在使用 |\box| 之后，此寄存器被置空，
+但是使用 |\copy| 后，寄存器不变，就象第十五章讨论的那样。%
+命令 |\vsplit| 也在第十五章讨论过了。%
+在数学模式下，还可以用另外一种盒子：
+|\vcenter|\<box specification>|{|\<vertical material>|}|~(见第十七章)。
+
+%\ddanger The bottom line of the table above refers to ^|\lastbox|,
+%a primitive operation that hasn't been mentioned before. If the last item
+%on the current horizontal list or vertical list is an hbox or vbox, it
+%is removed from the list and it becomes the |\lastbox|; otherwise
+%|\lastbox| is void.  This operation is allowed in ^{internal vertical
+%mode}, horizontal mode, and restricted horizontal mode, but you cannot use
+%it to take a box from the current page in vertical mode. In math modes,
+%|\lastbox| is always void. At the beginning of a paragraph,
+%`|{\setbox0=\lastbox}|' removes the ^{indentation box}.
+\ddanger 上面表中的最后一行给出了 |\lastbox|,
+它是一个以前没有讨论过的原始命令。%
+如果在当前水平列或垂直列中的最后一个项目是一个 hbox 或 vbox,
+就把它从此列中删去，并且把它变成 |\lastbox|;
+否则，|\lastbox| 是置空的。%
+这个命令允许出现在内部垂直模式，水平模式和受限水平模式，
+但是不能用它代替垂直模式下来自当前页面的盒子。%
+在数学模式下，|\lastbox| 总是置空的。%
+在段落的开头，`|{\setbox0=\lastbox}|'就把段落缩进的盒子去掉了。
+
+%\ddanger The operation ^|\unskip| is something like |\lastbox|, except that
+%it applies to glue instead of to boxes. If the last thing on the current list
+%is a glue item (or ^{leaders}, as explained below), it is removed. You
+%can't remove glue from the current page by using |\unskip| in vertical
+%mode, but you can say `|\vskip-|^|\lastskip|', which has almost
+%the same effect.
+\ddanger 命令 |\unskip| 基本上同 |\lastbox| 一样，只是它应用在粘连上而不是盒子上。%
+如果当前列上的最后一项是一个粘连项目(或者指引线，下面要讨论它), 就去掉它。%
+在垂直模式下，不能用 |\unskip| 从当前页面去掉粘连，
+但是可以用`|\vskip-|^|\lastskip|', 这样得到的效果基本一样。
+
+%\ddanger Chapters 24 to 26 present summaries of all \TeX's operations
+%in all modes, and when those summaries mention a `\<box>' they mean one
+%of the seven possibilities just listed. For example, you can say
+%`|\setbox|\<register number>|=|\<box>' in any mode, and you can say
+%`|\moveright|\<dimen>\<box>' in vertical modes. But you can't say
+%`|\setbox|\<register number>|=C|' or `|\moveright|\<dimen>|\hrule|';
+%if you try either of these, \TeX\ will complain that a \<box> was
+%supposed to be present. Characters and rules are so special, they
+%aren't regarded as \<box>es.
+\ddanger \1第 24 至 26 章总结了所有模式下 \TeX\ 的所有命令，
+并且这些总结中所提到的 `\<box>' 都是刚才列出的七种的某个。
+例如，在任何模式下，都可以使用 `|\setbox|\<register number>|=|\<box>'，
+并可在垂直模式下使用 `|\moveright|\<dimen>\<box>'。
+但是要使用 `|\setbox|\<register number>|=C|' 或
+`|\moveright|\<dimen>|\hrule|' 却不行；那样 \TeX\ 会抱怨说 \<box> 应该已存在才行。
+字符和标尺太特殊，它们不被看作 \<box>。
+
+%\ddangerexercise Define a control sequence |\boxit| so that
+%`|\boxit{|\<box>|}|' yields the given box surrounded by 3~points of space and
+%by ruled lines on all four sides.
+%$$\def\boxit#1{\vbox{\hrule\hbox{\vrule\kern3pt
+%      \vbox{\kern3pt#1\kern3pt}\kern3pt\vrule}\hrule}}
+%\setbox4=\vbox{\hsize 23pc \noindent \strut For example, the sentence you
+%are now reading was typeset as part of the displayed formula
+%|$$\boxit{\boxit{\box4}}$$|, where box~4 was created by typing
+%`|\setbox4=\vbox{\hsize 23pc \noindent \strut For example,
+%the sentence you are now reading ... \strut}|'.\strut}
+%\boxit{\boxit{\box4}}$$
+%\answer |\def\boxit#1{\vbox{\hrule\hbox{\vrule\kern3pt|\parbreak
+%        |      \vbox{\kern3pt#1\kern3pt}\kern3pt\vrule}\hrule}}|\par
+%\smallskip\noindent
+%(The resulting box does not have the baseline of the original one;
+%you have to work a little bit harder to get that.)
+\ddangerexercise 定义一个控制系列 |\boxit|，使得 `|\boxit{|\<box>|}|'
+把所给定的盒子在四周用双线条（线条间距为 $3\pt$）框起来。
+$$\def\boxit#1{\vbox{\hrule\hbox{\vrule\kern3pt
+      \vbox{\kern3pt#1\kern3pt}\kern3pt\vrule}\hrule}}
+\setbox4=\vbox{\hsize 23pc \noindent \strut
+例如，现在你看到的语句就是陈列公式 |$$\boxit{\boxit{\box4}}$$| 的一部分，
+其中 |\box4| 是这样生成的：`|\setbox4=\vbox{\hsize 23pc \noindent \strut
+例如，现在你看到的语句……
+\strut}|'。\strut}
+\boxit{\boxit{\box4}}$$
+\answer |\def\boxit#1{\vbox{\hrule\hbox{\vrule\kern3pt|\parbreak
+        |      \vbox{\kern3pt#1\kern3pt}\kern3pt\vrule}\hrule}}|\par
+\smallskip\noindent
+（结果盒子的基线和原来盒子的不同；要得到相同的基线你需要多付出点努力。）
+
+%\danger Let's look also at what can go inside a box. An hbox contains
+%a horizontal list; a vbox contains a vertical list. Both kinds of lists
+%are made up primarily of things like boxes, glue, kerns, and penalties,
+%as we have seen in Chapters 14 and~15. But you can also include some
+%special things that we haven't discussed yet, namely ``leaders''
+%and ``whatsits.'' Our goal in the rest of this chapter will be to
+%study how to make use of such exotic items.
+\danger 现在我们再看看盒子中可以放什么。%
+一个 hbox 包含一个水平列；一个 vbox 包含一个垂直列。%
+两种列最终都是由象盒子，粘连，紧排和惩罚这样的东西组成，
+就象我们已经在第十四和十五章讨论过的那样。%
+但是，还可以包括某些我们还未讨论过的特殊的东西，即``指引线''和``无名''。%
+在本章剩下的部分，我们就看看怎样来利用这些奇特的项目。
+
+%\danger The dots you see before your eyes here
+%\xleaders\hbox to 6pt{$\hss\cdot\hss$}\hfil\
+%are called {\sl^{leaders}\/}\break
+%because they lead your eyes across the page; such things are often
+%used in indexes or tables of contents. The general idea is to repeat a
+%box as many times as necessary to fill up some given space. \TeX\ treats
+%leaders as a special case of glue; no, wait, it's the other way
+%around: \TeX\ treats glue as a special case of leaders. Ordinary glue
+%fills space with nothing, while leaders fill space with any
+%desired thing. In horizontal mode you can say
+%\begindisplay
+%^|\leaders|\<box or rule>|\hskip|\<glue>
+%\enddisplay
+%and the effect will be the same as if you had said just `|\hskip|\<glue>',
+%except that the space will be occupied by copies of the specified
+%\<box or rule>. The glue stretches or shrinks in the usual way. For example,
+%\begintt
+%\def\leaderfill{\leaders\hbox to 1em{\hss.\hss}\hfill}
+%\line{Alpha\leaderfill Omega}
+%\line{The Beginning\leaderfill The Ending}
+%\endtt
+%will produce the following two lines:
+%$$\vbox{
+%\def\leaderfill{\leaders\hbox to 1em{\hss.\hss}\hfill}
+%\line{Alpha\leaderfill Omega}
+%\line{The Beginning\leaderfill The Ending}
+%}$$
+%Here `|\hbox to 1em{\hss.\hss}|' specifies a box one em wide, with a
+%period in its center; the control sequence |\leaderfill| then causes this
+%box to be replicated when filling space in the |\line| box. \ (Plain \TeX's
+%^|\line| macro makes an hbox whose width is the |\hsize|.)
+\danger 在你眼前的一系列圆点 \xleaders\hbox to 6pt{$\hss\cdot\hss$}\hfil\
+被称为{\KT{9}指引线}，\hskip-.5em\break
+因为它们把你的视线从页面一边指引到另一边；这样的东西经常出现在索引和目录中。
+一般思路是把一个盒子重复到填满所给定的空间这么多次。
+\TeX\ 把指引线看作一种特殊的粘连；不，等一下，还有另一种说法：
+\TeX\ 把粘连看作一种特殊的指引线。普通粘连用空白充满空间，
+而指引线是用任何想用的东西充满空间。在水平模式下，可以使用
+\begindisplay
+^|\leaders|\<box or rule>|\hskip|\<glue>
+\enddisplay
+它的效果与只使用 `|\hskip|\<glue>' 一样，除了在空间中被重复的是给定的
+\<box or rule> 之外。粘连的伸缩与平常一样。例如，
+\begintt
+\def\leaderfill{\leaders\hbox to 1em{\hss.\hss}\hfill}
+\line{Alpha\leaderfill Omega}
+\line{The Beginning\leaderfill The Ending}
+\endtt
+将得到下面两行：
+$$\vbox{
+\def\leaderfill{\leaders\hbox to 1em{\hss.\hss}\hfill}
+\line{Alpha\leaderfill Omega}
+\line{The Beginning\leaderfill The Ending}
+}$$
+这里的 `|\hbox to 1em{\hss.\hss}|' 给出了宽度为一个 em 的盒子，
+句点在盒子的中央；因此当在盒子 |\line| 要充满空间时，
+控制系列 |\leaderfill| 就重复此盒子。（Plain \TeX\ 的宏 |\line|
+生成的是一个宽度为 |\hsize| 的 hbox。）
+
+%\danger Notice that the ^{dots} in the two example lines appear exactly
+%above each other. This is not a coincidence; it's a consequence of the
+%fact that the |\leaders| operation acts something like a window that lets
+%you see part of an infinite row of boxes. If the words `Alpha' and `Omega'
+%are replaced by longer words, the number of dots might be different
+%but the ones that you see will be in the same places as before. The infinitely
+%replicated boxes are lined up so that they touch each other, and so that,
+%if you could see them all, one of them would have the same reference point as
+%the smallest enclosing box. Thus, |\leaders| will put a box flush with the
+%left edge of an enclosing box, if you start the leaders there; but you
+%won't get a box flush right unless the width of the enclosing box is
+%exactly divisible by the width of the repeated box. If~the repeated box
+%has width~$w$, and if the space to be filled is at least~$2w$, then you
+%will always see at least one copy of the box; but if the space is less
+%than~$2w$ the box may not appear, because boxes in the infinite
+%row are typeset only when their entire width falls into the available space.
+\danger \1注意：在这两个例子中，看起来圆点上下正好对齐了。%
+这不是巧合；其原因是，命令 |\leaders| 的作用象一个窗格一样，你所看到的只是%
+无限格盒子的一部分。%
+如果单词`Alpha'和`Omega'被长的单词代替，圆点的数目会少，但是能看到的圆点的位置却不变。%
+无限重复的盒子排列起来使得它们互相对齐，
+并且如果它们都能被可见的话，它们之一作为最小的封装盒子都有同样的参考点。%
+因此，|\leaders| 把盒子按所封装盒子的左边界对齐，如果从那里开始指引线的话；
+但是不能得到右对齐的盒子，除非封装盒子的宽度与重复后盒子的宽度正好整除。%
+如果重复后盒子的宽度为 $w$, 并且要充满的空间至少为 $2w$, 那么总是可以至少看见一个盒子；
+但是如果空间小于 $2w$, 盒子可能显不出来，
+因为在无限列中，只有当盒子的整个宽度完全落在可用空间中时才把盒子排版出来。
+
+%\ddanger When leaders are isolated from each other, you might not
+%want them to be aligned as just described, so \TeX\ also provides
+%for ^{nonaligned leaders}. In this case a box of width~$w$ will be
+%copied $q$~times when the space to be filled is at least~$qw$ and
+%less than $(q+1)w$; furthermore, the results will be centered in the
+%available space. There are two kinds of nonaligned leaders in \TeX,
+%namely ^|\cleaders| (centered leaders) and ^|\xleaders| (expanded
+%leaders). Centered leaders pack the boxes tightly next to each other
+%leaving equal amounts of blank space at the left and right; expanded
+%leaders distribute the extra space equally between the $q+1$ positions
+%adjacent to the $q$~boxes. For example, let's suppose that a $10\pt$-wide
+%box is being used in leaders that are supposed to fill $56\pt$ of space.
+%Five copies of the box will be used; |\cleaders| will produce $3\pt$ of
+%space, then the five boxes, then another $3\pt$ of space. But
+%|\xleaders| will produce $1\pt$ of space, then the first box, then
+%another $1\pt$ of space, then the second box, \dots, then the fifth box,
+%and $1\pt$ of space.
+\ddanger 当指引线互相独立时，你可能不希望它们象刚才讨论的那样互相对齐，
+因此， \TeX\ 还提供了非对齐的指引线。%
+在这种情况下，当要被充满空间大于 $qw$ 且小于 $(q+1)w$ 时，宽度为 $w$ 的盒子%
+就重复 $q$ 次；
+还有，所得到的结果在此空间中将居中。%
+在 \TeX\ 中有两种非对齐的指引线，即 |\cleaders|~(居中指引线)和 |\xleaders|~%
+(伸开的指引线)。%
+居中的指引线把盒子紧挨着排列，在左右两头留出相等的空白；
+伸开的指引线把空白平均放在 $q$ 个盒子两边的 $q+1$ 个接口处。%
+例如，假设用于指引线的盒子为 $10\pt$ 宽，要充满 $56\pt$ 的空间。%
+因此要用五次盒子；
+~|\cleaders| 得到的是 $3\pt$ 的空白，接着是五个盒子，再接下来是 $3\pt$ 的空白。%
+但是 |\xleaders| 得到的是 $1\pt$ 的空白，接着是第一个盒子，接下来又是 $1\pt$ 空白，
+再接下来是第二个盒子，$\ldots$, 接着是第五个盒子和 $1\pt$ 的空白。
+
+%\ddangerexercise Suppose that a $10\pt$-wide box is to fill $38\pt$ of
+%space starting $91\pt$ from the left of its enclosing box. How many
+%copies of the box will be produced by |\leaders|, |\cleaders|, and
+%|\xleaders|? Where will the boxes be positioned, relative to the
+%left edge of the enclosing box, in each of the three cases?
+%\answer |\leaders|: two boxes starting at $100\pt$, $110\pt$.\par
+%|\cleaders|: three boxes starting at $95\pt$, $105\pt$, $115\pt$.\par
+%|\xleaders|: three boxes starting at $93\pt$, $105\pt$, $117\pt$.
+\ddangerexercise 假设有一个 $10\pt$ 宽的盒子，要充满 $38\pt$ 的空间，
+此空间从它的封装盒子左边界的 $91\pt$ 处开始。那么，
+用 |\leaders|、|\cleaders| 和 |\xleaders| 各得到多少个盒子？
+在每种情况下，相对于封装盒子的左边界，盒子被放在什么地方？
+\answer |\leaders|：两个盒子，分别从 $100\pt$ 和 $110\pt$ 处开始。\par
+|\cleaders|：三个盒子，分别从 $95\pt$、$105\pt$、$115\pt$ 处开始。\par
+|\xleaders|：三个盒子，分别从 $93\pt$、$105\pt$、$117\pt$ 处开始。
+
+%\ddangerexercise Assuming that the `|.|'\ in the |\leaderfill| macro on the
+%previous page is only $0.2\em$ wide, there is $0.4\em$ of blank space
+%at both sides of the one-em box. Therefore the |\leaders| construction
+%will leave between $0.4\em$ and $1.4\em$ of blank space between the
+%periods and the text at either end. Redefine |\leaderfill| so that
+%the amount of blank space at either end will be between $0.1\em$ and
+%$1.1\em$, but the leaders on adjacent lines will still be aligned
+%with each other.
+%\answer |\def\leaderfill{\kern-0.3em\leaders\hbox to 1em{\hss.\hss}%|\parbreak
+%        |    \hskip0.6em plus1fill \kern-0.3em }|
+\ddangerexercise 假定在前面的宏 |\leaderfill| 中，`|.|' 只有 $0.2\em$ 宽，
+在 $1\em$ 的盒子中，两边各有 $0.4\em$ 的空白。因此，|\leaders| 所得到的结果中，
+句点和两端文本之间的空白在 $0.4\em$ 到 $1.4\em$ 之间。重新定义 |\leaderfill|，
+使得在两端的空白在 $0.1\em$ 到 $1.1\em$ 之间，但是相邻的指引线行仍然要对齐。
+\answer |\def\leaderfill{\kern-0.3em\leaders\hbox to 1em{\hss.\hss}%|\parbreak
+        |    \hskip0.6em plus1fill \kern-0.3em }|
+
+%\danger Instead of giving a \<box> in the leaders construction, you can
+%give a \<rule>, which means either |\hrule| or |\vrule|, followed
+%by optional ^|height|, ^|width|, and ^|depth| specifications as
+%usual. The rule will then be made as wide as the corresponding~\<glue>.
+%This is a case where |\hrule| makes sense in horizontal mode, because
+%it gives a ^{horizontal rule in text}. For example, if the
+%|\leaderfill| macro in our earlier illustration is changed to
+%\begintt
+%\def\leaderfill{ \leaders\hrule\hfill\ }
+%\endtt
+%then the results look like this:
+%$$\vbox{
+%\def\leaderfill{ \leaders\hrule\hfill\ }
+%\line{Alpha\leaderfill Omega}
+%\line{The Beginning\leaderfill The Ending}
+%}$$
+%When a rule is used instead of a box, it fills the space completely, so
+%there's no difference between |\leaders|, |\cleaders|, and |\xleaders|.
+\danger 在指引线的构造中，~\<box> 可用 \<rule> 来代替，它可用 |\hrule| 或 |\vrule|,
+后面象通常那样可跟着 |height|, |width| 和 |depth| 这些量。%
+这样得到的标尺与相应的 \<glue> 一样宽。%
+在此，~|\hrule| 在水平模式下是可用的，
+因为它给出的是文本中的水平标尺。%
+\1例如，如果把我们前面例子中的宏 |\leaderfill| 变成
+\begintt
+\def\leaderfill{ \leaders\hrule\hfill\ }
+\endtt
+那么所得到的结果就是
+$$\vbox{
+\def\leaderfill{ \leaders\hrule\hfill\ }
+\line{Alpha\leaderfill Omega}
+\line{The Beginning\leaderfill The Ending}
+}$$
+当用标尺代替盒子时，它要把空间全部充满，
+因此 |\leaders|, |\cleaders| 和 |\xleaders| 之间没有差别。
+
+%\ddangerexercise What does |\leaders\vrule\hfill| produce?
+%\answer Since no |height| or |depth| specification follows the |\vrule|,
+%the height and depth are `|*|'; i.e., the rule extends to the smallest
+%enclosing box. This usually makes a heavy black band, which is too
+%horrible to demonstrate here. However, it does work if you know that the
+%enclosing box is sufficiently small; and |\leaders\vrule\vfill| works fine in
+%vertical mode.
+\ddangerexercise |\leaders\vrule\hfill| 得到的是什么？
+\answer 由于 |\vrule| 后面没有指定 |height| 或 |depth|，其高度和深度都为 `|*|'；
+即标尺扩展到最小的封装盒子。这通常得到一个粗黑的绷带，
+我们不在这里展示这么难看的东西。然而，如果你知道封装盒子足够小，它还是可用的；
+而在竖直模式中 |\leaders\vrule\vfill| 很好用。
+
+%\ddanger Leaders work in vertical mode as well as in horizontal mode. In this
+%case vertical glue (e.g., |\vskip|\<glue> or |\vfill|) is used instead of
+%horizontal glue, and |\leaders| produces boxes that are aligned so that the
+%top of each repeated box has the same vertical position as the top
+%of the smallest enclosing box, plus a multiple of the height-plus-depth
+%of the repeated box. No interlineskip glue is placed between boxes in
+%vertical leaders; the boxes are just stacked right on top of each other.
+\ddanger 指引线也可以用在垂直模式下，就象在水平模式下一样。%
+在这种情况下，垂直粘连(比如，|\vskip|\<glue> 或 |\vfill|)用来代替水平粘连，
+并且 |\leaders| 得到的盒子是这样对齐的：
+每个所重复盒子的顶部与最小封装盒子的顶部处于同一垂直地点，再加上若干个所重复盒子%
+的深度加高度。%
+在垂直指引线中，不插入行间粘连；
+盒子正好互相堆在顶部。
+
+%\ddanger If you specify horizontal leaders with a box whose width isn't
+%positive, or if you specify vertical leaders with a box whose
+%height-plus-depth isn't positive, \TeX\ silently ignores the leaders
+%and produces ordinary glue instead.
+\ddanger 如果所给水平指引线的盒子宽度不是正值，或者垂直指引线的盒子的深度加高度%
+不是正值，那么 \TeX\ 就暗中忽略掉此指引线，并且转而生成一个普通的粘连。
+
+%\ddangerexercise Explain how you can end a paragraph with a rule that
+%is at least $10\pt$ long and extends all the way to the right
+%margin, like this:
+%\null\nobreak\leaders\hrule\hskip10pt plus1filll\ \par
+%\answer For example, say
+%\begintt
+%\null\nobreak\leaders\hrule\hskip10pt plus1filll\ \par
+%\endtt
+%The `|\|\]' provides extra glue that is wiped out by the implied |\unskip|
+%at the end of every paragraph (see Chapter~14), and the `|\null\nobreak|'
+%makes sure that the leaders do not disappear at a line break; `^|filll|'
+%overtakes the ^|\parfillskip| glue.
+\ddangerexercise 看看怎样用一个标尺来结束一个段落，
+此标尺最少为 $10\pt$ 长，且在任何情况下都要延伸到右边界，像这样：
+\null\nobreak\leaders\hrule\hskip10pt plus1filll\ \par
+\answer 比如这样写：
+\begintt
+\null\nobreak\leaders\hrule\hskip10pt plus1filll\ \par
+\endtt
+`|\|\]' 提供额外的粘连，它被每个段落末尾（见第 14 章）都有的隐式 |\unskip| 去掉；
+`|\null\nobreak|' 确保指引线不会在断行处消失；
+`^|filll|' 覆盖掉 ^|\parfillskip| 粘连。
+
+%\ddanger Horizontal leaders differ slightly from horizontal glue, because
+%they have height and depth when \TeX\ calculates the size of the enclosing
+%box (even though the number of replications might be zero).  Similarly,
+%vertical leaders have width.
+\ddanger 水平指引线与水平粘连略有不同，
+因为当计算封装盒子的尺寸时，水平指引线有高度和深度(即使它们使用的次数为零)。%
+类似地，垂直指引线也有宽度。
+
+%\ddangerexercise Demonstrate how to produce the following `\TeX ture'
+%$$\hbox to 2.5in{\cleaders\vbox to .5in{\cleaders\hbox{\TeX}\vfil}\hfil}$$
+%by using vertical leaders inside of horizontal leaders. \ (The \TeX\ logo
+%has been put into a rectangular box, and copies of this box have been packed
+%together tightly.) ^^{TeX logo}
+%\answer |$$\hbox to 2.5in{\cleaders|\parbreak
+%        |    \vbox to .5in{\cleaders\hbox{\TeX}\vfil}\hfil}$$|
+\ddangerexercise 通过在水平指引线中使用垂直指引线，
+看看怎样得到下列 `\TeX\ 网'：
+$$\hbox to 2.5in{\cleaders\vbox to .5in{\cleaders\hbox{\TeX}\vfil}\hfil}$$
+（把 \TeX\ 标志放在矩形盒子中，再紧堆在一起。）
+\answer |$$\hbox to 2.5in{\cleaders|\parbreak
+        |    \vbox to .5in{\cleaders\hbox{\TeX}\vfil}\hfil}$$|
+
+%\ddangerexercise Use vertical leaders to solve exercise 20.\punishexno.
+%\answer We assume that a strut is $12\pt$ tall, and that 50 lines
+%fit on a page:
+%\begintt
+%\setbox0=\hbox{\strut I must not talk in class.}
+%\null\cleaders\copy0\vskip600pt\vfill\eject % 50 times on page 1;
+%\null\cleaders\box0\vskip600pt\bye % 50 more on page 2.
+%\endtt
+%The ^|\null| keeps glue (and leaders) from disappearing at the top of
+%the page.
+\ddangerexercise 用垂直指引线解出练习 20.\punishexno 。
+\answer 我们假定支架为 $12\pt$ 高，且 50 行文本能放在一页中：
+\begintt
+\setbox0=\hbox{\strut I must not talk in class.}
+\null\cleaders\copy0\vskip600pt\vfill\eject % 50 times on page 1;
+\null\cleaders\box0\vskip600pt\bye % 50 more on page 2.
+\endtt
+^|\null| 确保在页面顶部的粘连（以及指引线）不会消失。
+
+%\danger The ^|\overbrace| and ^|\underbrace| macros of plain \TeX\ are
+%constructed by combining characters with rules. Font ^|cmex10| contains
+%four symbols $\bracelu\;\braceld\;\bracerd\;\braceru$, each of which has
+%depth zero and height equal to the thickness of a rule that joins them
+%properly. Therefore it's easy to define ^|\upbracefill| and ^|\downbracefill|
+%macros so that you can obtain, e.g., ^^{braces}
+%\begindisplay
+%\vbox{\kern4pt
+%  \hbox to 100pt{\downbracefill}\hbox to 50pt{\upbracefill}
+%  }
+%\enddisplay
+%by saying `|\hbox to 100pt{\downbracefill}\hbox to 50pt{\upbracefill}|'
+%in vertical mode. Details of those macro definitions appear in Appendix~B.
+\danger Plain \TeX\ 的宏 |\overbrace| 和 |\underbrace|
+是通过连接字符和标尺构建出来的。
+字体 |cmex10| 中有四个符号 $\bracelu\;\braceld\;\bracerd\;\braceru$，
+它们的深度为零，高度正好等于连接它们的标尺的厚度。
+因此很容易定义 |\upbracefill| 和 |\downbracefill|，
+使得在垂直模式下通过
+`|\hbox to 100pt{\downbracefill}|\allowbreak|\hbox to 50pt{\upbracefill}|'%
+就得到下面的花括号：
+\begindisplay
+\vbox{\kern4pt
+  \hbox to 100pt{\downbracefill}\hbox to 50pt{\upbracefill}
+  }
+\enddisplay
+\1这些宏的详细定义见附录~B。
+
+%\ddanger The definition of\/ ^|\overrightarrow| in Appendix B is more complex
+%than that of\/ |\overbrace|, because it involves a box instead of a rule. The
+%fonts of plain \TeX\ are designed so that symbols like $\leftarrow$ and
+%$\to$ can be extended with ^{minus signs}; similarly, $\Leftarrow$ and
+%^^{arrows}
+%$\Rightarrow$ can be extended with ^{equals signs}. However, you can't
+%simply put the characters next to each other, because that leaves
+%gaps (`${\leftarrow}{-}{-}$' and `${\Leftarrow}{=}{=}$'); it is necessary
+%to backspace a little between characters. An additional complication
+%arises because the extension line in a long arrow might need to be some
+%non-integer number of minus signs long. To solve this problem, the
+%^|\rightarrowfill| macro in Appendix~B uses |\cleaders| with a repeatable
+%box consisting of the middle 10 units of a minus sign, where one unit
+%is ${1\over18}\em$. The leaders are preceded and followed by $-$ and~$\to$;
+%there's enough backspacing to compensate for up to 5~units of extra space,
+%fore and aft, that |\cleaders| might leave blank. In this way a macro is
+%obtained such that
+%\begintt
+%\hbox to 100pt{\rightarrowfill}
+%\endtt
+%yields `\hbox to 100pt{\rightarrowfill}'.
+\ddanger 附录 B 中 |\overrightarrow| 的定义比 |\overbrace| 更复杂，
+因为它用到的是盒子而不是标尺。%
+所设计的 plain \TeX\ 字体要使得象 $\leftarrow$ 和 $\to$ 这样的符号可以用减号来%
+加长；类似地，~$\Leftarrow$ 和 $\Rightarrow$ 要用等号来加长。%
+但是，不能把它们简单地依次放在一起，因为那样会留下空隙%
+(`${\leftarrow}{-}{-}$'和`${\Leftarrow}{=}{=}$');
+必须在字符之间退回一点点。%
+更复杂的情况出现在加长的箭头所要的长度不是减号长度的整数倍。%
+为了解决这个问题，附录 B 中的宏 |\rightarrowfill| 使用了 |\cleaders| 和%
+一个要重复的盒子，此盒子由减号的中间 10 个单位组成，其中一个单位是%
+~${1\over18}\em$。%
+指引线放在前面，接着是 $-$ 和 $\to$;
+所退回的长度足以填补前后大约 $5$ 个单位的额外空间，这样 |\cleaders| 就不会%
+留下空白了。%
+用这种方法，下列宏
+\begintt
+\hbox to 100pt{\rightarrowfill}
+\endtt
+得到的就是`\hbox to 100pt{\rightarrowfill}'。
+
+%\ddanger Now we know all about leaders. What about ^{whatsits}? Well,
+%whatsits have been provided as a general mechanism by which important
+%special printing applications can be handled as extensions to \TeX\null.
+%It's possible for system wizards to modify the \TeX\ program, without
+%changing too much of the code, so that new features can be accommodated
+%at high speed instead of encoding them in macros. The author hopes that
+%such extensions will not be made very often, because he doesn't want
+%incompatible pseudo-\TeX\ systems to proliferate; yet he realizes that
+%certain special books deserve a special treatment. Whatsits make it
+%possible to incorporate new things into boxes without bending the existing
+%conventions too much. But they make applications less portable from
+%one machine to another.
+\ddanger 现在我们知道了指引线。%
+那么什么是无名呢？嗯，无名是作为一个一般方法而给出的，
+通过它可以把 \TeX\ 扩展到应用于处理重要的特殊输出。%
+它使得系统高手可以修改 \TeX\ 程序，而不用改变太多代码，
+这样可以很快适应新的方法，而不是编写宏。%
+作者希望不要经常进行这样的扩展，因为所要的不是越来越不兼容的赝 \TeX\ 系统；
+他还认识到，某些特殊的方面应当特殊对待。%
+无名使得可以把新东西加入到盒子中而不需要太多地改变已有的约定。%
+但是它们使得应用程序更难从一台机器移植到另一台上。
+
+%\ddanger Two kinds of whatsits are defined as part of all \TeX\
+%implementations.  They aren't really ^{extensions to \TeX}, but
+%they are coded as if they were, so that they provide a model of how
+%other extensions could be made. The first of these is connected with
+%output to text files, and it involves the \TeX\ primitive commands
+%^|\openout|, ^|\closeout|, ^|\write|, and ^|\immediate|. The second is
+%connected with special instructions that can be transmitted to
+%printing devices, via \TeX's ^|\special| command.
+\ddanger 作为整个 \TeX\ 系统的一部分，定义了两种无名。%
+它们其实不是 \TeX\ 的扩展，但是就得这样分类，这样就为可能出现的扩展提供了一个模型。%
+第一个与输出到文本文件有关，它包括 \TeX\ 原始命令%
+~|\openout|, ^|\closeout|, ^|\write| 和 |\immediate|。%
+第二个与特殊指令有关，它可以把特殊指令通过 \TeX\ 的命令 |\special| 传送给输出设备。
+
+%\ddanger The ability to write text files that can later be input by other
+%programs (including \TeX) makes it possible to take care of tables of
+%contents, indexes, and many other things. You can say
+%`|\openout|\<number>|=|\<file name>' and `|\closeout|\<number>' by analogy
+%with the |\openin| and |\closein| commands of Chapter~20; the
+%\<number> must be between 0 and~15. The filename is usually extended with
+%`^|.tex|' if it has no extension. There is a |\write| command that writes
+%one line to a file, analogous to the |\read| command that reads one line;
+%you say
+%\begindisplay
+%|\write|\<number>|{|\<token list>|}|
+%\enddisplay
+%and the material goes out to the file that corresponds to the given stream
+%number.  If the \<number> is negative or greater than~15, or if the
+%specified stream has no file open for output, the output goes to the
+%user's ^{log file}, and to the ^{terminal} unless the number is negative.
+%Plain \TeX\ has a ^|\newwrite| command that allocates output stream numbers
+%from 0 to~15. Output streams are completely independent of input streams.
+\ddanger 写入所得到的文本文件可以在以后作为其它程序(包括 \TeX)的输入文件，
+因此这个功能使得 \TeX\ 可以完成目录，索引和其它别的工作。%
+象第二十章的命令 |\openin| 和 |\closein| 那样，可以用的命令有%
+`|\openout|\<number>|=|\<file name>'和`|\closeout|\<number>';
+\<number> 必须在 0 和 15 之间。%
+如果文件名没有扩展名，通常就添加上`|.tex|'。%
+有一个 |\write| 命令，它把一行写入文件中，类似于命令 |\read| 读入一行；
+使用
+\begindisplay
+|\write|\<number>|{|\<token list>|}|
+\enddisplay
+并且内容就输出到对应于给定输出流编号的文件中。%
+如果 \<number> 为负值或者大于 15, 或者所给出的输出流没有为输出而打开的文件，
+那么就输出到用户的 log 文件中，如果编号不是负值，还输出到终端上。%
+\1Plain \TeX\ 用命令 |\newwrite| 来分配从 0 到 15 的输出流编号。%
+输出流完全独立于输入流。
+
+%\ddanger However, the output actually takes place in a delayed fashion;
+%the |\openout|, |\closeout|, and |\write| commands that you give are not
+%performed when \TeX\ sees them. Instead, \TeX\ puts these commands into
+%whatsit items, and places them into the current horizontal
+%or vertical or math list that is being built. No actual output will occur
+%until this whatsit is eventually shipped out to the |dvi| file, as part
+%of a larger box. The reason for this delay is that |\write| is often
+%used to make an index or table of contents, and the exact page on which
+%a particular item will appear is generally unknown when the |\write|
+%instruction occurs in mid-paragraph. \TeX\ is usually working ahead,
+%reading an entire paragraph before breaking it into lines, and accumulating
+%more than enough lines to fill a page before deciding what goes on
+%the page, as explained in Chapters 14 and~15. Therefore a deferred writing
+%mechanism is the only safe way to ensure the validity of page number
+%references.
+\ddanger 然而，输出实际上是以延迟的方式进行的；
+在 \TeX\ 遇见你给出的 |\openout|, |\closeout| 和 |\write| 命令时，它并不执行。%
+而是 \TeX\ 把这些命令放在无名项目中，并且把它们放在正在构建的水平列，
+垂直列或数学列中。%
+直到最后这些无名作为一个更大盒子的一部分而被送到 |dvi| 文件时，
+才有实际的输出。%
+这种延迟的原因是，~|\write| 经常用在制作索引和目录，
+而在 |\write| 指令出现在段落中间的时候，一般并不知道要在哪个页面放这些特殊的项目。%
+ \TeX\ 通常超前运行，在断行之前要读入整个段落，在分页之前要收集的行比需要的要多，
+就象在第十四和十五章中讨论的那样。%
+因此，为了确保所引用的页码的准确性，唯一的方法是采用延迟写入机制。
+
+%\ddanger The \<token list> of a |\write| command is first stored in a
+%whatsit without performing any macro expansion; the macro expansion takes
+%place later, when \TeX\ is in the middle of a ^|\shipout| operation. For
+%example, suppose that some paragraph in your document contains the text
+%\begintt
+%... For \write\inx{example: \the\count0}example, suppose ...
+%\endtt
+%Then the horizontal list for the paragraph will have a whatsit just before
+%the word `|example|', and just after the interword space following~`|For|'.
+%This whatsit item contains the unexpanded token list
+%`|example: \the\count0|'. It sits dormant while the paragraph is being
+%broken into lines and put on the current page. Let's suppose that
+%this word `|example|' (or some hyphenated initial part of it, like
+%`|ex-|') is shipped out on page~256. Then \TeX\ will write the line
+%\begintt
+%example: 256
+%\endtt
+%on output stream |\inx|, because the `|\the\count0|' will be expanded
+%at that time. Of course, |\write| commands are usually generated by
+%macros; they are rarely typed explicitly in mid-paragraph.
+\ddanger 命令 |\write| 的 \<token list> 首先存储在一个无名项目中，而不进行宏展开；
+稍后，当 \TeX\ 处在 |\shipout| 执行过程时，再进行宏展开。%
+例如，假定在文稿中的某些段落中间有以下文本：
+\begintt
+... For \write\inx{example: \the\count0}example, suppose ...
+\endtt
+那么段落的水平列将在单词`|example|'紧前面，`|For|'后面空格紧后面有一个无名项目。%
+这个无名项目包含未展开的记号列`|example: \the\count0|'。%
+当段落断行并且放在当前页面时，它处在休眠状态。%
+让我们假设此单词`|example|'(或者它的某些连字的前半部分，象`|ex-|')被输送%
+到第 256 页。%
+那么 \TeX\ 将把行
+\begintt
+example: 256
+\endtt
+写入到输出流 |\inx|, 因为此时`|\the\count0|'将被展开。%
+当然，命令 |\write| 通常由宏来调用；它们很少直接出现在段落中间。
+
+%\ddanger \TeX\ defers |\openout| and |\closeout| commands by putting them
+%into whatsits too; thus, the relative order of output commands will be
+%preserved, unless boxes are shipped out in some other order due to
+%insertions or such things.
+\ddanger  \TeX\ 也通过把命令 |\openout| 和 |\closeout| 放在无名项目中%
+而延迟它们；
+因此，输出命令的相对顺序将保留下来，除非由于插入或其它此类东西把盒子按其它次序%
+输送出去了。
+
+%\ddanger Sometimes you don't want \TeX\ to defer a |\write| or
+%|\openout| or |\closeout|. You could say, e.g., `|\shipout\hbox{\write...}|',
+%but that would put an unwanted empty page in your |dvi| file. So \TeX\ has
+%another feature that gets around this problem: If you type `^|\immediate|'
+%just before |\write| or |\openout| or |\closeout|, the operation will
+%be performed immediately, and no whatsit will be made. For example,
+%\begintt
+%\immediate\write16{Goodbye}
+%\endtt
+%prints `|Goodbye|' on your terminal. Without the |\immediate|, you wouldn't
+%see the `|Goodbye|' until the current list was output. \ (In fact, you
+%might never see it; or you may see it more than once, if the
+%current list goes into a box that was copied.) \ An `|\immediate\write16|'
+%differs from ^|\message| in that |\write| prints the text on a line by itself;
+%the results of several |\message| commands might appear on the same line,
+%separated by spaces.
+\ddanger 有时候不希望 \TeX\ 延迟 |\write|, |\openout| 或者 |\closeout|。%
+那么可以用，比如，`|\shipout\hbox|\allowbreak|{\write...}|',
+但是它将会在你的 |dvi| 文件中产生一个不想要的空页。%
+因此， \TeX\ 用另一种方法来绕过这个问题：
+如果在 |\write|, |\openout| 或 |\closeout| 的紧前面加上`|\immediate|',
+那么命令将立即被执行，并且不生成无名项目。%
+例如，
+\begintt
+\immediate\write16{Goodbye}
+\endtt
+在你的终端上输出`|Goodbye|'。%
+在没有 |\immediate| 时，在当前列输出之前，你不会看到`|Goodbye|'。%
+(实际上，可能你永远看不到它；或者不止一次看到它，只要%
+当前列被送到被拷贝的盒子中就是这样。)
+`|\immediate\write16|'与 |\message| 不同，|\write| 把文本单独放在一行，
+\1而几个 |\message| 命令得到的结果出现在同一行，中间用空格隔开。
+
+%\ddanger The \<token list> of a |\write| ought to be rather short, since
+%it makes one line of output. Some implementations of \TeX\ are unable to
+%write long lines; if you want to write a lot of stuff, just give
+%several |\write| commands. Alternatively, you can set \TeX's ^|\newlinechar|
+%parameter to the ASCII code number of some character that you want to
+%stand for ``begin a new line''; then \TeX\ will begin a new line whenever it
+%would ordinarily output that character to a file.
+%For example, one way to output two lines to the terminal
+%in a single |\write| command is to say
+%\begintt
+%\newlinechar=`\^^J
+%\immediate\write16{Two^^Jlines.}
+%\endtt
+%Each |\write| command produces output in the form that \TeX\ always uses
+%to display ^{token lists symbolically}: Characters represent
+%themselves (except that you get duplicated characters like |##| for macro
+%parameter characters^^{hash}); unexpandable control sequence tokens
+%produce their names, preceded by the ^|\escapechar| and followed by a
+%space (unless the name is an active character or a control sequence formed
+%from a single nonletter).
+\ddanger |\write| 的 \<token list> 应当相当短，因为它只输出一行。%
+ \TeX\ 的某些命令不能输出长的行；
+如果要输出很多东西，就用几个 |\write| 命令。%
+另外，也可以把 \TeX\ 的 |\newlinechar| 参数设置为某些字符的 ASCII 代码数，
+用它们来表示``回车换行'';
+这样，只要它正常把此字符输出到文件中， \TeX\ 就开始一个新行。%
+例如，在一个 |\write| 命令中输出两行，可以用
+\begintt
+\newlinechar=`\^^J
+\immediate\write16{Two^^Jlines.}
+\endtt
+每个 |\write| 命令生成的输出总是采用 \TeX\ 用符号显示记号列的方法：
+字符得到的是它自己(除了对宏参数字符 |##| 得到的是两个字符);
+不能展开的控制系列得到的是其名字，其前面是 |\escapechar|, 后面是一个空格%
+(除非名字是活动符，或者控制系列是单个非字母)。
+
+%\ddanger \TeX\ ignores |\write|, |\openout|, and |\closeout| whatsits that
+%appear within boxes governed by ^{leaders}. If you are upset about this,
+%you shouldn't be.
+\ddanger  \TeX\ 将忽略掉出现在由指引线控制的盒子中的无名项目 |\write|, |\openout|~%
+和 |\closeout|。要想违反是不行的。
+
+%\ddanger Since the \<token list> of a deferred |\write| is expanded at a
+%fairly random time (when |\shipout| occurs), you should be careful about
+%what control sequences it is allowed to contain. The techniques of Chapter~20
+%for controlling macro expansion often come in handy with respect to |\write|.
+\ddanger 因为延迟 |\write| 的 \<token list> 在相当随意的时间进行展开%
+(当执行 |\shipout| 时), 因此对允许包含它的控制系列要小心。%
+第二十章的宏展开的方法使处理 |\write| 更容易。
+
+%\ddangerexercise Suppose that you want to |\write| a token list that
+%involves a macro |\chapno|, containing the current chapter number, as well as
+%`|\the\count0|' which refers to the current page. You want |\chapno| to
+%be expanded immediately, because it might change before the token list
+%is written; but you want |\the\count0| to be expanded at the time of
+%|\shipout|. How can you manage this?
+%\answer |{\let|\stretch|\the=0\edef|\stretch|\next|\stretch
+%|{\write|\stretch|\cont|\stretch|{|\<token list>|}}\next|\stretch|}| will
+%expand everything but |\the| when the |\write| command is given.
+\ddangerexercise 假设要 |\write| 一个记号列，它由一个包含当前章节编号的宏
+|\chapno|，以及对应于当前页的 `|\the\count0|' 组成。你希望 |\chapno| 立即展开，
+因为在记号列输出之前它可能会改变；但希望在 |\shipout| 时才展开|\the\count0|。
+怎样编写它？
+\answer |{\let|\stretch|\the=0\edef|\stretch|\next|\stretch
+|{\write|\stretch|\cont|\stretch|{|\<token list>|}}\next|\stretch|}|
+将展开除 |\the| 之外的任何东西，当 |\write| 命令给出时。
+
+%\ddanger Now let's wrap up our study of boxes by considering one more feature.
+%The command `^|\special||{|\<token list>|}|' can be given in any
+%mode. Like |\write|, it puts its token list into a whatsit; and like
+%|\message|, it expands the token list immediately. This token list will be
+%output to the |dvi| file with the other typesetting commands that
+%\TeX\ produces. Therefore it is implicitly associated with a particular
+%position on the page, namely the reference point that would have been present
+%if a box of height, depth, and width zero had appeared in place of the
+%whatsit. The \<token list> in a |\special| command should consist of a
+%keyword followed if necessary by a space and appropriate arguments. For example,
+%\begintt
+%\special{halftone pic1}
+%\endtt
+%might mean that a ^{picture} on file |pic1| should be inserted ^^{halftones}
+%on the current page, with its reference point at the current position.
+%\TeX\ doesn't look at the token list to see if it makes any sense; the
+%list is simply copied to the output. However, you should be careful not to
+%make the list too long, or you might overflow \TeX's string memory.
+%The |\special| command enables you to make use of special equipment that
+%might be available to you, e.g., for printing books in glorious
+%\TeX ni^{color}.
+\ddanger 现在，我们回来再讨论盒子，它还有一个特征。%
+命令`^|\special||{|\<token list>|}|'可以在任何模式下使用。%
+象 |\write| 一样，它也把记号列放在无名项目中；
+并且象 |\message| 一样把记号列立即展开。%
+这个记号列与 \TeX\ 产生的其它排版命令一起输出到 |\dvi| 文件中。%
+因此，它暗中对应于页面的一个特殊位置，即就象代替无名项目的是一个高度，深度和%
+宽度都是零的盒子时的基准点。%
+在 |\special| 命令中的 \<token list> 由关键词组成，在必要时要跟上一个空格%
+或相应的参量。%
+例如，
+\begintt
+\special{halftone pic1}
+\endtt
+就意味着文件 |pic1| 中的图像要插入到当前页面，其基准点在当前位置。%
+ \TeX\ 不理会记号列的意思；
+只把它拷贝到输出中。%
+但是，不要用过长的记号列，否则 \TeX\ 的字符串内存可能会溢出。%
+\1可以把命令 |\special| 用在可用的特殊设备上，比如，用来漂亮的颜色了打印书籍。
+
+%\ddanger Software programs that convert |dvi| files to printed or
+%displayed output should be able to fail gracefully when they don't
+%recognize your special keywords. Thus, |\special| operations should
+%never do anything that changes the current position. Whenever you use
+%|\special|, you are taking a chance that your output file will not be
+%printable on all output devices, because all |\special| functions are
+%extensions to \TeX. However, the author anticipates that certain standards
+%for common graphic operations will emerge in the \TeX\ user community,
+%after careful experiments have been made by different groups of people;
+%then there will be a chance for some uniformity in the use of
+%|\special| extensions.
+\ddanger 把 |dvi| 文件转换为打印或显示输出的软件可能因为不认识你的特殊关键词%
+而转换失败。因此，命令 |\special| 不能完成改变当前位置的工作。%
+只要用到 |\special|, 就意味着你的输出文件并不能在所有输出设备上打印，
+因为所有的 |\special| 函数都是 \TeX\ 的扩展。%
+但是，作者希望在 \TeX\ 用户协会中形成某些公共图形命令的标准，
+它可以由各方面的人通过详细的实验后制订出来；
+这样，在使用 |\special| 扩展时就可以有某些规则了。
+
+%\ddanger \TeX\ will report the badness of glue setting in a box if
+%you ask for the numeric quantity
+%^|\badness| after making a box. For example, you might say
+%\begintt
+%\setbox0=\line{\trialtexta}
+%\ifnum\badness>250 \setbox0=\line{\trialtextb}\fi
+%\endtt
+%The badness is between 0 and 10000
+%unless the box is overfull, when |\badness=1000000|.
+\ddanger 在制作盒子后可得到 |\badness| 的数值， \TeX\ 会给出设置在盒子中%
+粘连的丑度。例如，可以使用
+\begintt
+\setbox0=\line{\trialtexta}
+\ifnum\badness>250 \setbox0=\line{\trialtextb}\fi
+\endtt
+badness 在 0 和 10000 之间，如果盒子溢出了，那么 |\badness=1000000|。
+
+\endchapter
+
+If age or weaknes doe prohibyte bloudletting,
+you must use boxing.
+\author PHILIP ^{BARROUGH}, {\sl The Methode of Phisicke\/} (1583) % page 6
+
+\bigskip
+
+The only thing that never looks right is a rule.
+There is not in existence a page with a rule on it
+that cannot be instantly and obviously improved
+by taking the rule out.
+% "Even dashes, cherished as they are by authors who cannot punctuate,
+% spoil a page. They are generally merely ignorant substitutes for colons."
+\author GEORGE BERNARD ^{SHAW}, in {\sl The Dolphin\/} (1940) % v4.1 p81
+
+\vfill\eject\byebye

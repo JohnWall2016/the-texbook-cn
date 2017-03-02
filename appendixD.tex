@@ -1,0 +1,2357 @@
+% -*- coding: utf-8 -*-
+
+\input macros
+
+%\beginchapter Appendix D. Dirty Tricks
+\beginchapter Appendix D. 诡计多端
+
+\TeX\ was designed to do the ordinary tasks of typesetting: to make paragraphs
+and pages. But the underlying mechanisms that facilitate ordinary
+typesetting---e.g., boxes, glue, penalties, and macros---are extremely
+versatile; hence people have discovered sneaky ways to coerce \TeX\ into
+doing tricks quite different from what its author originally had in mind.
+Such clever constructions are not generally regarded as examples of
+``high \TeX''; but many of them have turned out to be useful and
+instructive, worthy of being known (at least by a few wizards). The purpose
+of this appendix is to introduce crafty and/or courageous readers
+to the nether world of \TeX arcana.
+
+\ninepoint\medskip
+\setbox0=\hbox spread-6\fontdimen4\font % that removes all the shrinkability
+ {\strut Please don't read this material until you've}
+\setbox1=\hbox to\wd0{\strut had plenty of experience with plain \TeX.}
+\line{\leaders\hbox{\dbend\kern2pt}\hfil\vtop{\box0\box1}}
+\nointerlineskip
+\noindent\strut After you have read and understood the secrets below, you'll
+know all sorts of devious combinations of \TeX\ commands,
+and you will often be tempted to write inscrutable macros. Always remember,
+however, that there's usually a simpler and better way to do something
+than the first way that pops into your head. You may not have to
+resort to any subterfuge at all, since \TeX\ is able to do lots of things
+in a straightforward way. Try for simple solutions first.
+
+%\subsection Macro madness. If you need to write complicated ^{macros}, you'll
+%need to be familiar with the fine points in Chapter~20. \TeX's control
+%sequences are divided into two main categories, ``expandable'' and
+%``unexpandable''; the former category includes all macros and |\if...\fi|
+%tests, as well as special operations like |\the| and |\input|, while the
+%latter category includes the primitive commands listed in Chapter~24.
+%The expansion of expandable tokens takes place in \TeX's ``^{mouth},''
+%but primitive commands (including assignments) are done in \TeX's
+%``^{stomach}.'' One important consequence of this structure is that
+%it is impossible to redefine a control sequence or to advance a register
+%while \TeX\ is expanding the token list of, say, a |\message| or |\write|
+%command; assignment operations are done only when \TeX\ is building a
+%vertical or horizontal or math list.
+\subsection 疯狂的宏. If you need to write complicated ^{macros}, you'll
+need to be familiar with the fine points in Chapter~20. \TeX's control
+sequences are divided into two main categories, ``expandable'' and
+``unexpandable''; the former category includes all macros and |\if...\fi|
+tests, as well as special operations like |\the| and |\input|, while the
+latter category includes the primitive commands listed in Chapter~24.
+The expansion of expandable tokens takes place in \TeX's ``^{mouth},''
+but primitive commands (including assignments) are done in \TeX's
+``^{stomach}.'' One important consequence of this structure is that
+it is impossible to redefine a control sequence or to advance a register
+while \TeX\ is expanding the token list of, say, a |\message| or |\write|
+command; assignment operations are done only when \TeX\ is building a
+vertical or horizontal or math list.
+
+For example, it's possible to put |\n| asterisks into a paragraph,
+by saying simply `|{|^|\loop||\ifnum\n>0 *\advance\n-1 \repeat}|'.
+But it's much more difficult to define a
+control sequence |\asts| to consist of exactly |\n| consecutive asterisks.
+If\/ |\n| were known to be at most~5, say, it would be possible to write
+\begintt
+\edef\asts{\ifcase\n\or*\or**\or***\or****\or*****\else\bad\fi}
+\endtt
+since \TeX\ handles |\ifcase| in its mouth. But for general |\n| it would
+be impossible to use a construction like
+`|\edef\asts{\loop\ifnum\n>0 *\advance\n-1 \repeat}|', since |\n| doesn't change
+during an ^|\edef|. A more elaborate program is needed; e.g.,
+\begintt
+{\xdef\asts{}
+  \loop\ifnum\n>0 \xdef\asts{\asts*}\advance\n-1 \repeat}
+\endtt
+And here's another solution (which is faster, because ^{token list registers}
+can be expanded more quickly than macros, using ^|\the|):
+\begintt
+\newcount\m \newtoks\t \m=\n \t={}
+\loop \ifnum\m>0 \t=\expandafter{\the\t *} \advance\m-1 \repeat
+\edef\asts{\the\t}
+\endtt
+
+However, both of these solutions have a running time proportional to the
+square of\/~|\n|. There's a much quicker way to do the job:
+\begintt
+\begingroup\aftergroup\edef\aftergroup\asts\aftergroup{
+\loop \ifnum\n>0 \aftergroup*\advance\n-1 \repeat
+\aftergroup}\endgroup
+\endtt
+Get it? The ^|\aftergroup| commands cause a whole list of other tokens to be
+saved up for after the group! This method has only one flaw, namely
+that it takes up |\n| cells of space on \TeX's ^{input stack} and |\n|
+more on \TeX's ^{save stack}; hence a special version of \TeX\ may be
+required when |\n| is larger than 150 or~so.
+
+(Incidentally, there's a completely different way to put |\n| asterisks
+into a paragraph, namely to say `|\setbox0=\hbox{*}|%
+^|\cleaders|^|\copy||0\hskip\n\wd0|'. This may seem to be the fastest
+solution of all; but actually it is not so fast, when all things are
+considered, since it generates four bytes of ^|dvi| output per asterisk,
+compared to only one byte per asterisk in the other methods. Input/output
+time takes longer than computation time, both in \TeX\ itself and in
+the later stages of the printing process.)
+
+The problem just solved may seem like a rather special application; after
+all, who needs a control sequence that contains a variable number of
+asterisks? But the same principles apply in other similar cases,
+e.g., when you want to construct a variable-length ^|\parshape|
+specification. Similarly, many of the ``toy problems'' solved below are
+meant to illustrate paradigms that can be used in real-life situations.
+
+The precise rules for expansion are explained in Chapter~20; and the
+best way to get familiar with \TeX's expansion mechanism is to watch it
+in action, looking at the log file when |\tracingmacros=2| and
+|\tracingcommands=2|. One of the important ways to change the normal
+order of expansion is to use ^|\expandafter|; the construction
+\begintt
+\expandafter\a\b
+\endtt
+causes |\b| to be expanded first, then~|\a|.
+And since |\expandafter| is itself expandable, the construction
+\begintt
+\expandafter\expandafter\expandafter\a\expandafter\b\c
+\endtt
+causes |\c| to be expanded first, then |\b|, then |\a|. \ (The next step,
+\begintt
+\expandafter\expandafter\expandafter\expandafter
+ \expandafter\expandafter\expandafter\a
+ \expandafter\expandafter\expandafter\b\expandafter\c\d
+\endtt
+is probably too lengthy to be of any use.)
+
+It's possible to make good use of\/ |\expandafter\a\b| even when |\a|
+isn't expandable. For example, the token list assignment
+`|\t=\expandafter{\the\t|~|*}|' in the example on the previous page
+was able to invade territory where expansion is normally suppressed,
+by expanding after a left brace. Similarly,
+\begintt
+\t=\expandafter{\expandafter*\the\t}
+\endtt
+would have worked; and ^^|\uppercase|
+\begintt
+\uppercase\expandafter{\romannumeral\n}
+\endtt
+yields the value of register |\n| in ^{uppercase roman numerals}.
+^^{roman numerals, uppercase}
+
+Here's a more interesting example: Recall that ^|\fontdimen||1| is the
+amount of ``^{slant} per point'' of a font; hence, for example,
+`^|\the||\fontdimen1\tenit|' expands to `{\tt\the\fontdimen1\tenit}',
+where the characters `|pt|' are of category~12. After the macro definitions
+\begintt
+{\catcode`p=12 \catcode`t=12 \gdef\\#1pt{#1}}
+\let\getfactor=\\
+\def\kslant#1{\kern\expandafter\getfactor\the\fontdimen1#1\ht0}
+\endtt
+one can write, e.g., `|\kslant\tenit|' and this will expand to
+`|\kern0.25\ht0|'. If the boundary of\/ |\box0| is considered to be
+slanted by 0.25 horizontal units per vertical unit, this kern measures
+the horizontal distance by which the top edge of the box is skewed with
+respect to an edge at the baseline. All of the computation of\/
+|\kslant| is done in \TeX's mouth; thus, the mouth can do some rather
+complicated things even though it cannot assign new values. \ (Incidentally,
+an indirect method was used here to define the control sequence ^|\getfactor|
+when the character~|t| had category~12, since control words normally consist
+only of letters. The alternative construction
+\begintt
+{\catcode`p=12 \catcode`t=12
+  \csname expandafter\endcsname\gdef
+  \csname getfactor\endcsname#1pt{#1}}
+\endtt
+would also have worked, since ^|\csname| and ^|\endcsname| don't
+contain `|p|' or `|t|'!)
+
+The mechanism by which \TeX\ determines the ^{arguments} of a macro
+can be applied in unexpected ways. Suppose, for example, that |\t|~is
+a token list register that contains some text; we wish to determine if
+at least one asterisk (|*|$_{12}$) appears in that text. Here's
+one way to do it:
+\begintt
+\newif\ifresult % for the result of a computed test
+\def\atest#1{\expandafter\a\the#1*\atest\a}
+\long\def\a#1*#2#3\a{\ifx\atest#2\resultfalse\else\resulttrue\fi}
+\endtt
+^^|\long|^^|\newif|
+Now after `|\atest\t|', the control sequence |\ifresult|
+will be |\iftrue| or |\iffalse|, depending on whether or not |\t|~contains
+an asterisk. \ (Do you see why?) \ And here's a slightly more elegant way
+to do the same thing, using ^|\futurelet| to look ahead:
+\begintt
+\def\btest#1{\expandafter\b\the#1*\bb}
+\long\def\b#1*{\futurelet\next\bb}
+\long\def\bb#1\bb{\ifx\bb\next\resultfalse\else\resulttrue\fi}
+\endtt
+In both cases the solution works if\/ |\t| contains control sequence tokens
+as well as character tokens, provided that the special control sequences
+|\atest|, |\a|, and |\bb| don't appear. Notice, however, that an asterisk
+is ``hidden'' if it appears within a ^{group}~|{...}|; the test is limited
+to asterisks at nesting level zero. A token list register is always balanced
+with respect to grouping, so there is no danger of the test leading
+to error messages concerning missing braces or extra braces.
+
+We can apply the ideas in the preceding paragraph to solve a problem
+related to generalized math formatting: ^^{displays, non-centered}
+The goal is to set \TeX\ up so that the respective constructions
+`\thinspace|$$|$\,\alpha\,$|$$|\thinspace', ^^{dollar dollar}
+`\thinspace|$$|$\,\alpha\,$^|\eqno|$\,\beta\,$|$$|\thinspace', and
+`\thinspace|$$|$\,\alpha\,$^|\leqno|$\,\beta\,$|$$|\thinspace' will cause
+a macro |$$\generaldisplay$$| to be invoked, with |\eq| defined to be $\alpha$;
+^^{communication between macros}
+furthermore, the test |\ifeqno| should be true when an equation
+number~$\beta$ is present, and |\ifleqno| should be true in the case
+of\/ |\leqno|. When $\beta$ is present, it should be stored in~|\eqn|.
+Here $\alpha$~and~$\beta$ are arbitrary balanced token lists that don't
+contain either |\eqno| or |\leqno| at nesting level zero. The
+following macros do the required maneuvers:
+\begintt
+\newif\ifeqno \newif\ifleqno \everydisplay{\displaysetup}
+\def\displaysetup#1$${\displaytest#1\eqno\eqno\displaytest}
+\def\displaytest#1\eqno#2\eqno#3\displaytest{%
+  \if!#3!\ldisplaytest#1\leqno\leqno\ldisplaytest
+  \else\eqnotrue\leqnofalse\def\eqn{#2}\def\eq{#1}\fi
+  \generaldisplay$$}
+\def\ldisplaytest#1\leqno#2\leqno#3\ldisplaytest{\def\eq{#1}%
+  \if!#3!\eqnofalse\else\eqnotrue\leqnotrue\def\eqn{#2}\fi}
+\endtt
+An examination of the three cases
+|$$|$\,\alpha\,$|$$|,
+|$$|$\,\alpha$|\eqno|$\,\beta\,$|$$|,
+|$$|$\,\alpha$|\leqno|$\,\beta\,$|$$| shows that the correct actions will
+ensue. Parameter |#3| in the tests `|\if!#3!|' will be either empty or
+|\eqno| or |\leqno|; thus, the condition will be false (and the second
+`|!|' will be skipped) unless |#3| is empty.
+
+Returning to the problem of |*|'s in |\t|, suppose that it's
+necessary to consider |*|'s at all levels of nesting. Then a slower
+routine must be used:
+\begintt
+\def\ctest#1{\resultfalse\expandafter\c\the#1\ctest}
+\def\c{\afterassignment\cc\let\next= }
+\def\cc{\ifx\next\ctest \let\next\relax
+  \else\ifx\next*\resulttrue\fi\let\next\c\fi \next}
+\endtt
+Here ^|\afterassignment| has been used to retain control after a
+non-future ^|\let|; the `|= |' ensures that exactly one token is ^^{equals}
+swallowed per use of\/~|\c|. This routine could be modified in an obvious
+way to count the total number of |*|'s and/or tokens in~|\t|. Notice the
+`|\let\next|' instructions in~|\cc|; it should be clear why the alternative
+\begintt
+\def\cc{\ifx\next\ctest\else\ifx\next*\resulttrue\fi\c\fi}
+\endtt
+would not work. \ (The latter |\c| would always swallow a `|\fi|'.)
+
+^{Space tokens} are sometimes anomalous, so they deserve special care. The
+following macro ^|\futurenonspacelet| behaves essentially like
+|\futurelet| except that it discards any implicit or explicit space tokens
+that intervene before a nonspace is scanned:
+\begintt
+\def\futurenonspacelet#1{\def\cs{#1}%
+  \afterassignment\stepone\let\nexttoken= }
+\def\\{\let\stoken= } \\ % now \stoken is a space token
+\def\stepone{\expandafter\futurelet\cs\steptwo}
+\def\steptwo{\expandafter\ifx\cs\stoken\let\next=\stepthree
+  \else\let\next=\nexttoken\fi \next}
+\def\stepthree{\afterassignment\stepone\let\next= }
+\endtt
+An operation like |\futurenonspacelet| is useful, for example,
+when implementing macros that have a variable number of arguments.
+
+Notice that `|\def\stepthree#1{\stepone}|' would not work here, because of
+\TeX's rule that a \]$_{10}$ token is bypassed if it would otherwise be treated
+as an ^{undelimited} ^{argument}. Because of this rule it is
+difficult to distinguish explicit space tokens from implicit ones.
+The situation is surprisingly complex, because it's possible to
+use ^|\uppercase| to create ``^{funny space}'' tokens like |*|$_{10}$;
+^^|\uccode| for example, the commands
+\begintt
+\uccode` =`* \uppercase{\uppercase{\def\fspace{ }\let\ftoken= } }
+\endtt
+make |\fspace| a macro that expands to a funny space, and they make
+|\ftoken| an implicit funny space. \ (The tests ^|\if||\fspace*|,
+|\if\ftoken*|, ^|\ifcat||\fspace\stoken|, and |\ifcat\ftoken\stoken|
+will all be true, assuming that |*| has category~12; but if |*| has
+category~10, |\if\fspace*| will be false, because \TeX\ normalizes
+all newly created space tokens to \]$_{10}$, as explained in Chapter~8.) \
+Since the various forms of space tokens are almost identical in
+^^|\noexpand|^^|\escapechar|^^|\string|
+behavior, there's no point in dwelling on the details.\footnote\dag{The
+following little program is for \TeX\ exegetes who insist on
+learning the whole story: Macro |\stest| decides whether or not
+the first token of a given token list register
+is a \<space token> as defined in Chapter~24. If so, the macro
+decides whether or not the token is ``funny,'' i.e., whether or not
+the character code is different from an ASCII \<space>; the macro
+also decides whether a space token is explicit or implicit.
+\begintt|global|displayindent=0pt|global|displaywidth=|hsize
+\newif\ifspace \newif\iffunny \newif\ifexplicit
+\def\stest#1{\expandafter\s\the#1! \stest}
+\def\s{\funnyfalse \global\explicitfalse \futurelet\next\ss}
+\def\ss{\ifcat\noexpand\next\stoken \spacetrue
+   \ifx\next\stoken \let\next=\sss \else\let\next=\ssss \fi
+  \else \let\next=\sssss \fi \next}
+\long\def\sss#1 #2\stest{\def\next{#1}%
+  \ifx\next\empty \global\explicittrue \fi}
+\long\def\ssss#1#2\stest{\funnytrue {\uccode`#1=`~
+  \uppercase{\ifcat\noexpand#1}\noexpand~% active funny space
+  \else \escapechar=\if*#1`?\else`*\fi
+    \if#1\string#1\global\explicittrue\fi \fi}}
+\long\def\sssss#1\stest{\spacefalse}
+\endtt}
+
+\smallbreak
+The argument to ^|\write| is expanded when a |\shipout| occurs, but
+sometimes expansion isn't desired. Here's a macro (suggested by Todd
+^{Allen}) that suppresses all expansion, by inserting ^|\noexpand| before
+each control sequence or ^{active character}. The macro assumes that
+|~|~is an active character, and that the tokens being written
+do not include implicit spaces or braces. Funny spaces are changed
+to ordinary ones.
+\begintt
+\long\def\unexpandedwrite#1#2{\def\finwrite{\write#1}%
+  {\aftergroup\finwrite\aftergroup{\sanitize#2\endsanity}}}
+\def\sanitize{\futurelet\next\sanswitch}
+\def\sanswitch{\ifx\next\endsanity
+  \else\ifcat\noexpand\next\stoken\aftergroup\space\let\next=\eat
+   \else\ifcat\noexpand\next\bgroup\aftergroup{\let\next=\eat
+    \else\ifcat\noexpand\next\egroup\aftergroup}\let\next=\eat
+     \else\let\next=\copytoken\fi\fi\fi\fi \next}
+\def\eat{\afterassignment\sanitize \let\next= }
+\long\def\copytoken#1{\ifcat\noexpand#1\relax\aftergroup\noexpand
+  \else\ifcat\noexpand#1\noexpand~\aftergroup\noexpand\fi\fi
+  \aftergroup#1\sanitize}
+\def\endsanity\endsanity{}
+\endtt
+As before, the heavy use of\/ ^|\aftergroup| in |\unexpandedwrite| means
+that parameter |#2| should not include more than about 150~tokens.
+
+%\subsection List macros. The next several macros we shall discuss can be
+%used to maintain lists of information in the form ^^{backslash backslash}
+%\begindisplay
+%|\\{|\<item$_1$>|}\\{|\<item$_2$>|}| $\ldots$ |\\{|\<item$_n$>|}|
+%\enddisplay
+%where each \<item> is a balanced list of tokens. A parameterless control
+%sequence whose replacement text has this form may be called a {\sl ^{list
+%macro}}. The empty list macro has $n=0$ and it is called ^|\empty|.
+\subsection 列表宏. The next several macros we shall discuss can be
+used to maintain lists of information in the form ^^{backslash backslash}
+\begindisplay
+|\\{|\<item$_1$>|}\\{|\<item$_2$>|}| $\ldots$ |\\{|\<item$_n$>|}|
+\enddisplay
+where each \<item> is a balanced list of tokens. A parameterless control
+sequence whose replacement text has this form may be called a {\sl ^{list
+macro}}. The empty list macro has $n=0$ and it is called ^|\empty|.
+
+It's easy to add new items at either end of a list macro, and to
+concatenate list macros, for example as follows: ^^|\toksdef| ^^|\long|
+\begintt
+\toksdef\ta=0 \toksdef\tb=2 % token list registers for temp use
+\long\def\leftappenditem#1\to#2{\ta={\\{#1}}\tb=\expandafter{#2}%
+  \edef#2{\the\ta\the\tb}}
+\long\def\rightappenditem#1\to#2{\ta={\\{#1}}\tb=\expandafter{#2}%
+  \edef#2{\the\tb\the\ta}}
+\def\concatenate#1=#2&#3{\ta=\expandafter{#2}\tb=\expandafter{#3}%
+  \edef#1{\the\ta\the\tb}}
+\endtt
+Conversely, the left item of a list can be removed and placed in a
+control sequence by the |\lop| macro defined in the following curious way:
+\begintt
+\def\lop#1\to#2{\expandafter\lopoff#1\lopoff#1#2}
+\long\def\lopoff\\#1#2\lopoff#3#4{\def#4{#1}\def#3{#2}}
+\endtt
+For example, if\/ |\l| expands to the list `|\\{a\b}\\{c}\\{{d}}|', the
+macro invocation |\lop\l\to\z| makes |\l| expand to `|\\{c}\\{{d}}|'
+and |\z|~expand to `|a\b|'. The |\lop| operation should be used only when
+|\l|~is nonempty, otherwise an error will occur; to test if\/ |\l|~is
+empty, one simply says `|\ifx\l\empty|'.
+
+The programming details of the |\lop| macro indicate why individual
+items have been enclosed in |{...}| ^{groups}. A simpler kind of list,
+in which grouping is omitted and an extra |\\| appears at the end,
+suffices for many purposes; one could define, for instance,
+\begintt
+\long\def\lopoff\\#1\\#2\lopoff#3#4{\def#4{#1}\def#3{\\#2}}
+\endtt
+and the results would be almost the same as before. In this case an empty
+list macro expands to `|\\|'. However, the new |\lop| resulting from this
+new |\lopoff| macro also removes a pair
+of braces, if the leftmost item happens to be a group; extra braces are
+included in our general scheme to prevent such anomalies.
+
+So far the examples we've considered haven't revealed why the |\\|'s
+appear in the general scheme; it appears that grouping by itself
+should be enough. But in fact, the |\\| separators are enormously
+useful, because we can define |\\| to be any desired one-argument macro,
+and then we can {\sl execute\/} the list! For example, here's a
+way to count the number of items: ^^{hash hash}
+\begintt
+\def\cardinality#1\to#2{#2=0 \long\def\\##1{\advance#2 by1 }#1}
+\endtt
+(Parameter |#2| is supposed to be the name of a count register.) \
+And here's a way to take a list macro and center all its items
+on individual lines within a |\vbox|:
+\begintt
+\def\centerlist#1{\def\\##1{\relax##1\cr}%
+  \vbox{\halign{\hfil##\hfil\cr#1}}}
+\endtt
+A particular item can be selected by its position number from the left:
+\begintt
+\def\select#1\of#2\to#3{\def#3{\outofrange}%
+  \long\def\\##1{\advance#1-1 \ifnum#1=0 \def#3{##1}\fi}#2}
+\endtt
+(Here |#1| is a count register, |#2| is a list macro, and |#3| is a
+control sequence.) \ And so on; hundreds of other applications can
+be imagined.\footnote\dag{The concept of a list macro is strongly related
+to the concept of a list procedure in a programming language;
+see {\sl Communications of the ACM\/ \bf7} (1964), 280.}
+
+\TeX\ does all of the preceding operations efficiently, in the sense
+that the running time will be proportional to the length of the list
+macro involved. It's natural to ask if the rightmost item can be
+removed with equal efficiency, since the final item of a list is
+somewhat hard to isolate. There is apparently no way to delete the
+$n$th item of an $n$-item list in order~$n$ steps, maintaining
+complete generality, unless the ^|\aftergroup| trick (by which
+we created a macro that expands to $n$~asterisks) is used; and the
+|\aftergroup| trick is somewhat unattractive in the list application,
+because the list might be quite long.\footnote\ddag{The interested reader may
+enjoy constructing a macro that removes the $k$th item of an $n$-item list
+macro~|\l| in $O(n\log n)$ steps, given $k$ and~|\l|,
+without using |\aftergroup|.} However, if we restrict list items to
+unexpandable tokens, it turns out to be possible to remove the
+^^|\xyzzy| rightmost item quite efficiently:
+\begintt
+\def\deleterightmost#1{\edef#1{\expandafter\xyzzy#1\xyzzy}}
+\long\def\xyzzy\\#1#2{\ifx#2\xyzzy\yzzyx
+  \else\noexpand\\{#1}\fi\xyzzy#2}
+\long\def\yzzyx#1\xyzzy\xyzzy{\fi}
+\endtt
+Careful study of this example shows that \TeX's ^{mouth} is capable of
+doing ^{recursive} operations, given sufficiently tricky macros.
+
+The contents of a ^|\count| register can easily be converted to decimal
+and stored in a control sequence; for example, if\/ |\n| is a register,
+`|\edef\csn{\the\n}|' puts its value into~|\csn|. Conversely, a value
+from |\csn| can be put back into |\n| by saying simply `|\n=\csn|'.
+There's usually no point in doing this transformation just to minimize
+the usage of\/ |\count| registers, since \TeX\ has 256 of them; but a
+decimal representation like the expansion of\/ |\csn| can be stored in a
+list macro, and that might be useful in some applications. Incidentally,
+there's a neat way to test if such a control-sequence-number is zero:
+`^|\if||0\csn|\<true text>|\else|\<false text>|\fi|' works because
+extra digits of a nonzero number will be ignored with the \<true text>.
+
+A technique something like list macros can be used to maintain
+unordered sets of control sequences. In this case it's
+convenient to leave off the braces; for example,
+\begintt
+\def\l{\\\alpha\\\beta\\\gamma}
+\endtt
+defines a ``^{set macro}'' |\l| that represents the control
+sequences $\{\,\hbox{|\alpha|},\hbox{|\beta|},\hbox{|\gamma|}\,\}$.
+A straightforward construction tests whether a given control sequence
+is in the set:
+\begintt
+\def\ismember#1\of#2{\resultfalse\def\given{#1}%
+  \def\\##1{\def\next{##1}\ifx\next\given\resulttrue\fi}#2}
+\endtt
+And an efficient but not-so-straightforward construction removes all
+occurrences of control sequences that are
+|\ifx|-equivalent to a given control sequence:
+\begintt
+\def\remequivalent#1\from#2{\let\given=#1%
+  \ifx#2\empty\else\edef#2{\expandafter\plugh#2\plugh}\fi}
+\def\plugh\\#1#2{\ifx#1\given\else\noexpand\\\noexpand#1\fi
+  \ifx#2\plugh\hgulp\fi\plugh#2}
+\def\hgulp\fi\plugh\plugh{\fi}
+\endtt
+
+%\subsection Verbatim listing. ^^{Verbatim}
+%Plain \TeX\ includes a macro called
+%^|\dospecials| that is essentially a set macro, representing the set
+%of all characters that have a special category code. \ (The control
+%sequence ^|\do| plays the r\^ole of\/ |\\| in the discussion above.) \
+%Therefore it's easy to change all of the special characters to
+%category~12~(other):
+%\begintt
+%\def\uncatcodespecials{\def\do##1{\catcode`##1=12 }\dospecials}
+%\endtt
+%This works even when the set of special characters has been changed,
+%provided that |\dospecials| has been updated to represent the current set.
+\subsection 逐字呈现. ^^{Verbatim}
+Plain \TeX\ includes a macro called
+^|\dospecials| that is essentially a set macro, representing the set
+of all characters that have a special category code. \ (The control
+sequence ^|\do| plays the r\^ole of\/ |\\| in the discussion above.) \
+Therefore it's easy to change all of the special characters to
+category~12~(other):
+\begintt
+\def\uncatcodespecials{\def\do##1{\catcode`##1=12 }\dospecials}
+\endtt
+This works even when the set of special characters has been changed,
+provided that |\dospecials| has been updated to represent the current set.
+
+The operation |\uncatcodespecials| just defined is important, of course,
+when \TeX's automatic features need to be temporarily disabled. Let's
+suppose that we want to create a listing of some computer file,
+reproducing the characters and the spacing exactly as they appear in the
+file. To make the problem more interesting, let's also print line
+numbers in front of each line, as in the listing of |story.tex| on
+page~\storypage. To make the problem simpler, let's assume that the file
+contains only standard ASCII printing characters: no tab marks or
+form feeds or such things. Our goal is to devise a |\listing| macro
+such that, e.g., `|\listing{story}|' will insert a listing of
+the |story.tex| file into a manuscript, after which \TeX's normal
+conventions will be restored. The listing should be in ^|\tt| type.
+A macro of the following form meets the desired specifications:
+\begintt
+\def\listing#1{\par\begingroup\setupverbatim\input#1 \endgroup}
+\endtt
+Notice that the ^|\endgroup| command here will nicely ``turn off'' all
+the weird things that ^|\setupverbatim| turns on. Notice also that the
+commands `|\input#1 \endgroup|' will not be listed verbatim, even though
+they follow |\setupverbatim|, since they entered \TeX's reading mechanism
+when the |\listing| macro was expanded (i.e., before the verbatim business
+was actually set up).
+
+But what should |\setupverbatim| do? Well, it ought to include
+^|\obeylines|, since this automatically inserts a ^|\par| at the end of
+each line that is input; it ought to include ^|\uncatcodespecials|, so
+that special characters print as themselves; and it ought to include
+^|\obeyspaces|, so that each space counts. But we need to look carefully
+at each of these things to see exactly what they do: \
+(1)~Plain \TeX's |\obeylines| macro changes the ^|\catcode| of |^^M|
+to |\active|, and then it says `|\let^^M=\par|'. Since |^^M| is placed
+at the end of each line, this effectively ends each line with |\par|;
+however, |\obeylines| doesn't say `|\def^^M{\par}|', so we must make
+any desired changes to |\par| before invoking |\obeylines|. \
+(2)~The |\uncatcodespecials| operation changes a space to category~12;
+but the |\tt| font has the character `\]' in the \<space> position,
+so we don't really want \]$_{12}$. \
+(3)~The |\obeyspaces| macro in Appendix~B merely changes the \<space>
+character to category~13; ^{active character} \]$_{13}$ has been
+defined to be the same as ^|\space|, a macro that expands to \]$_{10}$.
+This is usually what is desired; for example, it means that spaces in
+constructions like `|\hbox to 10 pt {...}|' won't cause any trouble.
+But in our application it has an undesirable effect, because it
+produces spaces that are affected by the ^{space factor}. To defeat this
+feature, it's necessary either to say ^|\frenchspacing| or to
+redefine \]$_{13}$ to be the same as |\|\]. ^^{control space}
+The latter alternative is better, because the former will discard spaces
+at the beginning of each line.
+
+The |\setupverbatim| macro should also take care of putting a line
+number into the position of the paragraph indentation. We can take care
+of this by introducing a counter variable and using ^|\everypar|, as follows:
+\begintt
+\newcount\lineno % the number of file lines listed
+\def\setupverbatim{\tt \lineno=0
+  \obeylines \uncatcodespecials \obeyspaces
+  \everypar{\advance\lineno by1 \llap{\sevenrm\the\lineno\ \ }}}
+{\obeyspaces\global\let =\ } % let active space = control space
+\endtt
+^^|\llap|
+In theory, this seems like it ought to work; but in practice, it fails
+in two ways. One rather obvious failure---at least, it becomes obvious
+when the macro is tested---is that all the empty lines of the file
+are omitted. The reason is that the |\par| command at the end of an empty
+line doesn't start up a new paragraph, because it occurs in vertical mode.
+The other failure is not as obvious, because it occurs much less often:
+The |\tt| fonts contain ^{ligatures} for Spanish punctuation, so the
+sequences |?||`| and~|!||`| will be printed as {\tt?`} and~{\tt!`}
+respectively.  Both of these defects can be cured by inserting
+\begintt
+\def\par{\leavevmode\endgraf} \catcode`\`=\active
+\endtt
+before |\obeylines| in the |\setupverbatim| macro, and by defining |`|$_{13}$
+as follows:
+\begintt
+{\catcode`\`=\active \gdef`{\relax\lq}}
+\endtt
+A similar scheme could be used to produce verbatim listings in other fonts;
+but more characters would have to be made active, in order to break
+ligatures and to compensate for ASCII characters that aren't present.
+
+\def\uncatcodespecials{\def\do##1{\catcode`##1=12 }\dospecials}
+\def\verbatim{\begingroup\tt\uncatcodespecials\obeyspaces\doverbatim}
+\newcount\balance
+{\catcode`<=1 \catcode`>=2 \catcode`\{=12 \catcode`\}=12
+  \gdef\doverbatim{<\balance=1\verbatimloop>
+  \gdef\verbatimloop#1<\def\next<#1\verbatimloop>%
+    \if#1{\advance\balance by1
+    \else\if#1}\advance\balance by-1
+     \ifnum\balance=0\let\next=\endgroup\fi\fi\fi\next>>
+Instead of listing a file verbatim, you might want to define a
+|\verbatim| macro such that `|\verbatim{$this$|{\tt\ is }|{\it!}}|'
+yields `\verbatim{$this$ is {\it!}}'. It's somewhat dangerous to change
+^{category codes}, because \TeX\ stamps the category on each character
+when that character is first read from a file. Thus, if\/ |\verbatim|
+were defined by a construction of the form
+|\long\def\verbatim#1{|\<something>|}|, argument~|#1| would already be
+converted to a list of tokens when \<something> starts; |\catcode| changes
+would not affect the argument.  The alternative is to change category
+codes before scanning the argument to |\verbatim|:
+\begintt
+\def\verbatim{\begingroup\tt\uncatcodespecials
+  \obeyspaces\doverbatim}
+\newcount\balance
+{\catcode`<=1 \catcode`>=2 \catcode`\{=12 \catcode`\}=12
+  \gdef\doverbatim{<\balance=1\verbatimloop>
+  \gdef\verbatimloop#1<\def\next<#1\verbatimloop>%
+    \if#1{\advance\balance by1
+    \else\if#1}\advance\balance by-1
+     \ifnum\balance=0\let\next=\endgroup\fi\fi\fi\next>>
+\endtt
+This works; but it's slow, and it allows verbatim setting only of text
+that has balanced braces. It would not be suitable for typesetting
+the examples in a book like {\sl The \TeX book}. \ (Appendix~E contains
+the verbatim macros that were actually used.) \ Note also that if this
+|\verbatim{...}| macro appears in the argument to another macro
+like |\centerline|, it will fail because the category codes can no longer be
+changed.  The ^|\footnote| macro in Appendix~B is careful to avoid
+scanning its argument prematurely; it uses ^|\bgroup| and ^|\egroup| in a
+somewhat tricky way, so that category code changes are permitted inside
+plain \TeX\ footnotes.
+
+On the other hand, there is a fairly fast way to convert a token list
+to an almost-verbatim transcript:
+\begintt
+\long\def\verbatim#1{\def\next{#1}%
+  {\tt\frenchspacing\expandafter\strip\meaning\next}}
+\def\strip#1>{}
+\endtt
+Tokens are stripped off in this construction since, for example,
+^|\meaning||\next| might be `\def\next{$this$ is {\it!}}%
+\expandafter|\meaning\next|'. Notice that a space will be inserted after
+the control word |\it|, but no space might actually have occurred there in
+the argument to |\verbatim|; such information has been irretrievably lost.
+
+One of the problems with verbatim mode is that it's hard to stop;
+if we turn off all of \TeX's normal control capabilities, we end up
+``painting ourselves into a corner'' and reaching a point of no return.
+The |\listing| macro was able to solve this problem because the end of
+a file brings an old token list back to life. Another solution would be
+to specify a certain number of lines, after which verbatim mode should
+end. Otherwise it's necessary to put some constraint on the text,
+i.e., to make certain texts unprintable in verbatim mode. For example,
+here's an approach that typesets everything between |\beginverbatim| and
+|\endverbatim|, assuming only that the control sequence |\endverbatim|
+does not need to be set:
+\begintt
+\def\beginverbatim{\par\begingroup\setupverbatim\doverbatim}
+{\catcode`\||=0 \catcode`\\=12 % || is temporary escape character
+  ||obeylines||gdef||doverbatim^^M#1\endverbatim{#1||endgroup}}
+\endtt
+This construction assumes that |\beginverbatim| appears at the end of a
+line in the manuscript file.  Argument |#1| will be read entirely into
+\TeX's memory before anything happens, so the total amount of verbatim
+material had better not be too voluminous. Incidentally, it isn't
+necessary to say that this macro is ^|\long|, because the |\par|'s
+inserted by ^|\obeylines| are really |^^M|'s.
+
+Another approach is to keep one character untouchable. For example,
+it's possible to define things so that `|\verbatim|\<char>\<text>\<char>'
+will typeset the \<text> verbatim, where the \<text> is not supposed
+to contain any occurrences of the repeated delimiter \<char>:
+\begintt
+\def\verbatim{\begingroup\setupverbatim\doverbatim}
+\def\doverbatim#1{\def\next##1#1{##1\endgroup}\next}
+\endtt
+
+%\subsection Selective loading of macros. Some interesting problems arise
+%when a computer system acquires a large library of macro files. For
+%example, suppose that a file |macs.tex| contains the lines
+%\begintt
+%\let\italcorr=\/
+%\def\/{\unskip\italcorr}
+%\endtt
+%because somebody thought it would be nice to allow an optional space
+%before \TeX's primitive ^|\/| command. That's fine, except if |macs.tex|
+%is input twice; for example, two other macro files might both say
+%^|\input|~|macs|. When those lines are processed the second time,
+%|\italcorr| will be |\let| equal to a macro that expands to
+%`|\unskip\italcorr|',
+%and you can guess what will happen: \TeX\ will get into an infinite loop,
+%stoppable only by ^{interrupt}ing the program manually.
+%^^{recursion, infinite}
+\subsection 可选的宏载入. Some interesting problems arise
+when a computer system acquires a large library of macro files. For
+example, suppose that a file |macs.tex| contains the lines
+\begintt
+\let\italcorr=\/
+\def\/{\unskip\italcorr}
+\endtt
+because somebody thought it would be nice to allow an optional space
+before \TeX's primitive ^|\/| command. That's fine, except if |macs.tex|
+is input twice; for example, two other macro files might both say
+^|\input|~|macs|. When those lines are processed the second time,
+|\italcorr| will be |\let| equal to a macro that expands to
+`|\unskip\italcorr|',
+and you can guess what will happen: \TeX\ will get into an infinite loop,
+stoppable only by ^{interrupt}ing the program manually.
+^^{recursion, infinite}
+
+Fortunately there's an easy way to prevent this problem, by placing
+a suitable interlock near the beginning of every macro file that
+might introduce such anomalies:
+\begintt
+\ifx\macsisloaded\relax\endinput\else\let\macsisloaded=\relax\fi
+\endtt
+Then |\macsisloaded| will be undefined at the time of the first~|\ifx|,
+but the file will not be read twice. A different control sequence
+should, of course, be used for each file.
+
+Another difficulty with large sets of macros is that they take up space.
+It would be nice to preload every macro that every \TeX\ user has ever
+dreamed up; but there might not be enough room,
+because \TeX's memory capacity is finite. You might find it necessary
+to hold back and to load only the macros that are really needed.
+
+How much memory ^{space} ^^{efficiency} does a macro require?
+Well, there are four kinds of memory involved: token memory,
+name memory, string memory, and character memory. \ (If any of these
+becomes too full, it will be necessary to increase what \TeX\ calls the
+macro memory size, the hash size, the number of strings, and/or the
+pool size, respectively; see Chapter~27.) \ The token memory is
+most important; a macro takes one cell of token memory for each token
+in its definition, including the `|{|' and the `|}|'. For example,
+the comparatively short definition
+\begintt
+\def\example#1\two{\four}
+\endtt
+takes five tokens: |#1|, \cstok{two}, |{|$_1$, \cstok{four}, and |}|$_2$.
+Each control sequence also takes up one cell of name memory, one cell
+of string memory, and as many cells of character memory as there are
+characters in the name (seven in the case of\/ |\example|). Character
+memory is comparatively cheap; four characters, or in some cases five,
+will fit in the same number of bits as a single cell of token memory,
+inside the machine. Therefore you don't save much by choosing short
+macro names.
+
+\TeX\ will tell you how close you come to exceeding its current
+memory capacity if you say ^|\tracingstats||=1|. For example, one of the
+runs that the author made while testing galley proofs of this appendix
+reported the following statistics:
+\begintt
+Here is how much of TeX's memory you used:
+ 209 strings out of 1685
+ 1659 string characters out of 17636
+ 27618 words of memory out of 52821
+ 1172 multiletter control sequences out of 2500
+\endtt
+Consequently there was plenty of room for more macros: $52821-27618=
+25203$ unused cells of main memory, $2500-1172=1328$ of name memory,
+$1685-209=1476$ of string memory, and $17636-1659=15977$ of character memory.
+But a fairly large \TeX\ was being used, and only the macros of
+Appendices B and~E were loaded; in other circumstances it might have
+been necessary to conserve space.
+
+One obvious way to keep from loading too many macros is to keep
+the macro files short and to |\input| only the ones that you need.
+But short files can be a nuisance; sometimes there's a better way.
+For example, let's suppose that a file contains five optional classes
+of macros called |A|, |B|, |C|, |D|,~|E|, and that a typical user
+will probably want only at most two or three of these five; let's
+design a |\load| macro so that, for example,
+`|\load{macs}{AC}|'
+will load file |macs.tex| including options |A| and |C| but not options
+|B|, |D|, or |E|. The following |\load| macro converts its second argument
+into a set~macro called |\options|:
+\begintt
+\def\load#1#2{\let\options=\empty \addoptions#2\end \input#1 }
+\def\addoptions#1{\ifx#1\end \let\next=\relax
+  \else\let\\=\relax\edef\options{\options\\#1}%
+   \let\next=\addoptions \fi \next}
+\endtt
+Inside the file |macs.tex|, a portion of code that should be loaded only
+under option~|B|, say, can be enclosed by `|\ifoption B ... \fi|', where
+|\ifoption| is defined thus:
+\begintt
+\def\ifoption#1{\def\\##1{\if##1#1\resulttrue\fi}%
+  \resultfalse \options \ifresult}
+\endtt
+(This is a simple application of ideas presented earlier in this appendix.)
+
+However, the |\ifoption...\fi| scheme isn't very robust, because it requires
+all of the macros in the optional part to be well nested with
+respect to |\if...| and |\fi|; a macro like |\ifoption| itself couldn't
+easily be defined in such a place! There's a better scheme that also
+runs faster, based on ^{category code} changes. This idea (due to
+Max ^{D\'\i az}) requires that the leftmost nonblank character on each
+line be either `|\|' or~`|{|'; it's usually easy to arrange this.
+Furthermore, one other symbol, say |~|, is reserved. Then the text
+material that is to be loaded only under option~|B| is preceded by
+the line `|\beginoption|~|B|' and followed by a line that says
+`|~endoptionalcode|'. The ^|\catcode| for~|~| is set to~14 (comment
+character), hence the |~endoptionalcode| line will have no effect if
+code is not being skipped. The |\beginoption| macro works like this:
+\begintt
+\def\beginoption#1{\ifoption#1\else\begingroup\swapcategories\fi}
+\def\swapcategories{\catcode`\\=14 \catcode`\{=14 \catcode`\~=0 }
+\let\endoptionalcode=\endgroup
+\catcode`\~=14
+\endtt
+Once the categories have been swapped, all lines will be skipped at high speed
+until the control sequence |~endoptionalcode| is encountered; then
+everything will be restored to its former state. Under this scheme,
+material that should be loaded only under both options |B| and~|D|
+can be prefaced by both `|\beginoption|~|B|' and `|\beginoption|~|D|';
+material that should be loaded under either option~|B| or option~|D|
+(or both) can be prefaced by
+\begintt
+\beginoption B
+~oroption D
+\endtt
+if we define |\oroption#1| to be an abbreviation for
+`|\ifoption#1\endgroup\fi|'.
+
+Another kind of selective loading is sometimes appropriate, based on
+whether or not a particular control sequence is defined. In this
+scheme, if the control sequence is undefined, it should remain
+undefined and it should take up no space whatever in \TeX's memory.
+There's a slick way to do this, namely to say
+\begintt
+\ifx\cs\undefined ... \fi
+\endtt
+(assuming that ^|\undefined| has never been defined). \TeX\ does not
+put undefined control sequences into its internal tables if they follow
+^|\ifx| or if they are encountered while skipping ^{conditional text}.
+You can use this idea, for example, to prepare a bibliography for a paper,
+by reading a suitably arranged bibliography file; only the entries
+that correspond to defined control sequences will be loaded.
+
+%\subsection Brace hacks. Several of \TeX's operations depend on
+%^{grouping}, and you'll want to know exactly what this means if
+%you try to do certain tricky things. For example, plain \TeX's
+%control sequences ^|\bgroup| and ^|\egroup| are ``^{implicit braces}''
+%because they have been defined by
+%\begintt
+%\let\bgroup={  \let\egroup=}
+%\endtt
+%This means that you can include them in the replacement texts of
+%definitions without worrying about how they nest; for example, the
+%macros
+%\begintt
+%\def\beginbox{\setbox0=\hbox\bgroup}
+%\def\endbox{\egroup\copy0 }
+%\endtt
+%allow you to make a box between |\beginbox| and |\endbox|; the behavior
+%is almost the same as
+%\begintt
+%\def\beginbox#1\endbox{\setbox0=\hbox{#1}\copy0 }
+%\endtt
+%but different in three important ways: (1)~The first alternative allows
+%category codes to change inside the box. (2)~The first alternative
+%is faster, because it doesn't need to scan the box contents both as an
+%argument and as a sequence of actual commands. (3)~The first alternative
+%takes less memory space, because no argument needs to be stored.
+%Thus, the first alternative is usually superior.
+\subsection 花括号技巧. Several of \TeX's operations depend on
+^{grouping}, and you'll want to know exactly what this means if
+you try to do certain tricky things. For example, plain \TeX's
+control sequences ^|\bgroup| and ^|\egroup| are ``^{implicit braces}''
+because they have been defined by
+\begintt
+\let\bgroup={  \let\egroup=}
+\endtt
+This means that you can include them in the replacement texts of
+definitions without worrying about how they nest; for example, the
+macros
+\begintt
+\def\beginbox{\setbox0=\hbox\bgroup}
+\def\endbox{\egroup\copy0 }
+\endtt
+allow you to make a box between |\beginbox| and |\endbox|; the behavior
+is almost the same as
+\begintt
+\def\beginbox#1\endbox{\setbox0=\hbox{#1}\copy0 }
+\endtt
+but different in three important ways: (1)~The first alternative allows
+category codes to change inside the box. (2)~The first alternative
+is faster, because it doesn't need to scan the box contents both as an
+argument and as a sequence of actual commands. (3)~The first alternative
+takes less memory space, because no argument needs to be stored.
+Thus, the first alternative is usually superior.
+
+For the purposes of this discussion we shall assume that only `|{|'
+has category~1 and that only `|}|' has category~2, although any
+characters can actually be used as group delimiters. ^^{braces}
+Group nesting is crucial during two of \TeX's main activities:
+(a)~when \TeX\ is scanning a ^\<balanced text>, e.g., when \TeX\ is
+forming the replacement text of a macro, a parameter, or a token list
+variable; (b)~when \TeX\ must determine whether the token
+|&|~or ^|\span| ^^{ampersand}
+or ^|\cr| or~^|\crcr| is the end of an entry within an ^{alignment}.
+
+\TeX's mouth has two internal counting mechanisms to deal with nesting:
+The ``master counter'' goes up by~1 for each |{|$_1$ scanned by
+\TeX, and down by~1 for each~|}|$_2$; the ``balance counter'' is
+similar, but it is affected only by explicit |{|$_1$ and |}|$_2$ tokens
+that are actually contributed to a token list that is being formed.
+The master counter decreases by~1 when \TeX\ evaluates the
+^{alphabetic constant} |`{|, and it increases by~1 when \TeX\ evaluates
+|`}|, hence the net change is zero when such constants are evaluated.
+As a consequence of these rules, certain constructions produce
+the following effects:
+$$\halign{\indent\hfil#\hfil&\quad\hfil#\hfil&
+  \quad\hfil#\hfil&\qquad\hfil#\hfil&\quad\hfil#\hfil\cr
+&\it Master counter change\span\omit&\it Balance counter change\span\omit\cr
+\it Input&\it expanded&\it unexpanded&\it expanded&\it unexpanded\cr
+|{|&1&1&1&1\cr
+|\bgroup|&0&0&0&0\cr
+|\iffalse{\fi|&1&1&0&1\cr
+|\ifnum0=`{\fi|&0&1&0&1\cr}$$
+The last two cases produce no begin-group tokens when expanded, but they
+do affect the master counter as shown. Thus, for example,
+\begintt
+\def\eegroup{\ifnum0=`{\fi}}
+\endtt
+makes |\eegroup| behave rather like |\egroup|, but the expansion of\/
+|\eegroup| also decreases the master counter.
+
+Alignment processing uses only the master counter, not the balance counter.
+An alignment entry ends with the first |&|~or |\span| or |\cr| or~|\crcr|
+that appears when the master counter has the value that was present
+in the counter at the beginning of the entry. Thus, for example,
+the curious construction
+\begintt
+\halign{\show\par#\relax\cr
+  \global\let\par=\cr
+  {\global\let\par=\cr}\cr
+  \par}
+\endtt
+causes \TeX\ to perform three |\show| instructions, in which the
+respective values of\/ |\par| shown are |\par|, |\relax|, and~|\cr|.
+Similarly, each template in the preamble to an alignment ends with
+the first |&| or |\cr| or |\crcr| that appears at the master counter level
+that was in effect at the beginning of the entry; hence |&|~and |\cr| and
+|\crcr| tokens can appear within a template of an alignment, if they
+are hidden by braces (e.g., if they appear in a definition).
+
+These facts allow us to draw two somewhat surprising conclusions: (1)~If
+an alignment entry has the form `$\,\alpha\,$^|\iffalse||{\fi|$\,\beta\,$%
+|\iffalse}\fi|$\,\gamma\,$', it's possible for $\beta$ to include
+|&|~and~|\cr| tokens that aren't local to a group.\footnote*{The
+token list $\alpha$ should not be empty, however, because \TeX\ expands
+the first token of an alignment entry before looking at the template,
+in order to see if the entry begins with |\noalign| or |\omit|. The master
+counter value that is considered to be present at the beginning of an
+entry is the value in the counter just after the ``$u$~part'' of the
+template has been entirely read.} (2)~The construction
+\begintt
+{\span\iffalse}\fi
+\endtt
+appearing in a preamble contributes `|{|' to the template without
+any net change to the master counter; thus, it's very much like
+|\bgroup|, except that it produces |{|$_1$ explicitly.
+If you understand (1) and~(2), you'll agree that the present appendix
+deserves its name.
+
+%\def\pmb#1{\setbox0=\hbox{#1}%
+%  \kern-.025em\copy0\kern-\wd0\kern.05em\copy0
+%  \kern-\wd0\kern-.025em\raise.0433em\box0 }
+%\subsection Box maneuvers. ^^{Box maneuvers}
+%Let's turn now from syntax to semantics,
+%i.e., from \TeX's mouth to its gastro-intestinal tract. Sometimes an odd
+%symbol is needed in boldface type, but it's available only in a normal
+%weight. In such cases you can sometimes get by with ``^{poor man's bold},''
+%obtained by overprinting the normal weight symbol with slight offsets.
+%The following macro typesets its argument three times in three
+%slightly different places, equidistant from each other; but the result
+%takes up just as much space as if\/ |\pmb| had been simply |\hbox|:
+%\begintt
+%\def\pmb#1{\setbox0=\hbox{#1}%
+%  \kern-.025em\copy0\kern-\wd0
+%  \kern.05em\copy0\kern-\wd0
+%  \kern-.025em\raise.0433em\box0 }
+%\endtt
+%For example, `|\pmb{$\infty$}|' yields `\pmb{$\infty$}'. The results
+%are somewhat \pmb{fuzzy}, and they certainly are no match for the
+%real thing if it's available; but poor man's bold is better than nothing,
+%and once in a~while you can get away with it.
+\def\pmb#1{\setbox0=\hbox{#1}%
+  \kern-.025em\copy0\kern-\wd0\kern.05em\copy0
+  \kern-\wd0\kern-.025em\raise.0433em\box0 }
+\subsection 操纵盒子. ^^{Box maneuvers}
+Let's turn now from syntax to semantics,
+i.e., from \TeX's mouth to its gastro-intestinal tract. Sometimes an odd
+symbol is needed in boldface type, but it's available only in a normal
+weight. In such cases you can sometimes get by with ``^{poor man's bold},''
+obtained by overprinting the normal weight symbol with slight offsets.
+The following macro typesets its argument three times in three
+slightly different places, equidistant from each other; but the result
+takes up just as much space as if\/ |\pmb| had been simply |\hbox|:
+\begintt
+\def\pmb#1{\setbox0=\hbox{#1}%
+  \kern-.025em\copy0\kern-\wd0
+  \kern.05em\copy0\kern-\wd0
+  \kern-.025em\raise.0433em\box0 }
+\endtt
+For example, `|\pmb{$\infty$}|' yields `\pmb{$\infty$}'. The results
+are somewhat \pmb{fuzzy}, and they certainly are no match for the
+real thing if it's available; but poor man's bold is better than nothing,
+and once in a~while you can get away with it.
+
+When you put something into a box register, you don't need to put
+the contents of that register into your document. Thus, you can write
+macros that do experiments behind the scenes, trying different
+possibilities before making a commitment to a particular decision.
+For example, suppose you are typesetting a text in two languages, and
+you would like to choose the column widths so that the same number of
+lines is obtained in both cases. For example, the following texts
+balance perfectly when the first column is $157.1875\pt$ wide and the
+second column is $166.8125\pt$ wide; but the second column would be
+one line longer than the first if they were both $162\pt$ wide:
+^^{Alice} ^^{Bill}
+\medskip
+\hrule
+\smallskip
+\begingroup
+\eightpoint
+\tolerance=9999
+\hbadness=2300
+\finalhyphendemerits=3000000
+\doublehyphendemerits=1000000
+\parskip=1pt
+\parindent=1.5em
+\frenchspacing
+
+\def\firstcol{ % from Surreal Numbers, pp. 46--47
+\item{A.}\strut The creative part is really more interesting than the
+deductive part. Instead of concentrating just on finding good
+answers to questions, it's more important to learn how to find
+good questions!
+
+\item{B.} You've got something there. I wish our teachers would
+give us problems like, ``Find something interesting about $x$,''
+instead of ``Prove $x$.''
+
+\item{A.}Exactly. But teachers are so conservative, they'd be
+afraid of scaring off the ``grind'' type of students who
+obediently and mechanically do all the homework. Besides, they
+wouldn't like the extra work of grading the answers to
+nondirected questions.
+
+\item{}The traditional way is to put off all creative aspects
+until the last part of graduate school. For seventeen or more
+years, a student is taught exams\-man\-ship, then suddenly after
+passing enough exams in graduate school he's told to do
+something original.
+}
+\def\\#1{\raise.5pt\hbox{$\scriptscriptstyle
+    \ifx#1`\langle\!\langle\else\rangle\!\rangle\fi$}% Spanish quote marks
+  \ifx#1`\nobreak\hskip0pt \fi} % allow hyphenation
+%\showhyphens{\\`Demuestre\\' \\`apisonadora\\' \\`Encuentren\\'}
+\def\secondcol{ % from N\'umeros Surreales, pp. 39--40
+\item{A.} \strut La parte creativa es mucho mejor que la deductiva.
+En vez de concentrarse en buscar buenas respuestas a ciertas
+cuestiones es m\'as importante aprender a proponerse buenas
+preguntas.
+
+\item{B.} Me parece una buena ocurrencia. Me gustar\'\i a
+que los profesores propusieran problemas del estilo de
+\\`Encuentren algo interesante sobre $x$\\' en vez de
+\\`Demuestre que $x\ldots\,$\\'.
+
+\item{A.} Exactamente. Pero los profesores son tan conservadores
+que temer\'\i an espantar al tipo de estudiante \\`apisonadora\\'
+que hace lo que le proponen para casa, obe\-dien\-te\-mente y de forma
+mec\'anica. Adem\'as, no creo que les gustase el trabajo adicional
+de calificar respuestas a preguntas abiertas.
+
+\item{}La forma tradicional es dejar la parte creativa para los cursos
+altos. Durante diecisiete a\~nos o m\'as se ense\~na al es\-tu\-diante a
+aprobar, luego de golpe, cerca de la graduaci\'on, se le pide que haga
+algo original.
+}
+\newif\iffail \newdimen\doublewidth \newdimen\delheight
+\newcount\n
+\newdimen\trialwidth \newdimen\lowwidth \newdimen\highwidth
+\wlog{Beginning the binary search for balanced columns:}
+\def\balancetwocols{\lowwidth=10em % the lowest feasible \trialwidth
+  \highwidth=\doublewidth \advance\highwidth-10em % the highest ditto
+  {\n=1 \hbadness=10000 \hfuzz=\maxdimen
+    \loop \maketrial
+    \wlog{trial \the\n, \the\trialwidth: (\the\ht0,\the\ht2)}
+    \testfailure \iffail \preparenewtrial \repeat}
+  \maketrial} % now under/overfull boxes will be shown
+\def\maketrial{%
+  \trialwidth=.5\lowwidth \advance\trialwidth by.5\highwidth
+  \setbox0=\vbox{\hsize=\trialwidth \firstcol}
+  \setbox2=\vbox{\hsize=\doublewidth
+    \advance\hsize-\trialwidth \secondcol}}
+\def\testfailure{\dimen0=\ht0 \advance\dimen0-\ht2
+  \ifnum\dimen0<0 \dimen0=-\dimen0 \fi
+  \ifdim\dimen0>\delheight \ifnum\n=10 \failfalse\else\failtrue\fi
+  \else\failfalse\fi}
+\def\preparenewtrial{\ifdim\ht0>\ht2 \global\lowwidth=\trialwidth
+  \else\global\highwidth=\trialwidth\fi \advance\n by1 }
+\doublewidth=27pc \delheight=0pt
+\balancetwocols
+\line{\box0\hfil\box2}
+\endgroup
+\smallskip
+\hrule
+\medskip
+Some implementations of \TeX\ display the output as you are running,
+so that you can choose column widths interactively until a suitable
+balance is obtained. It's fun to play with such systems, but it's also
+possible to ask \TeX\ to compute the column widths automatically. The
+following code tries up to ten times to find a solution in which the
+natural heights of the two columns are different by less than
+a given value, |\delheight|. The macros |\firstcol| and
+|\secondcol| are supposed to generate the columns, and the sum
+of column widths is supposed to be |\doublewidth|.
+\beginlines
+|\newdimen\doublewidth \newdimen\delheight \newif\iffail \newcount\n|
+|\newdimen\trialwidth \newdimen\lowwidth \newdimen\highwidth|
+|\def\balancetwocols{\lowwidth=10em % lower bound on \trialwidth|
+|  \highwidth=\doublewidth \advance\highwidth-10em % upper bound|
+|  {\n=1 \hbadness=10000 \hfuzz=\maxdimen % disable warnings|
+|    \loop \maketrial \testfailure \iffail \preparenewtrial \repeat}|
+|  \maketrial} % now under/overfull boxes will be shown|
+|\def\maketrial{\trialwidth=.5\lowwidth \advance\trialwidth by.5\highwidth|
+|  \setbox0=\vbox{\hsize=\trialwidth \firstcol}|
+|  \setbox2=\vbox{\hsize=\doublewidth\advance\hsize-\trialwidth\secondcol}}|
+|\def\testfailure{\dimen0=\ht0 \advance\dimen0-\ht2|
+|  \ifnum\dimen0<0 \dimen0=-\dimen0 \fi|
+|  \ifdim\dimen0>\delheight \ifnum\n=10 \failfalse\else\failtrue\fi|
+|  \else\failfalse\fi}|
+|\def\preparenewtrial{\ifdim\ht0>\ht2 \global\lowwidth=\trialwidth|
+|  \else\global\highwidth=\trialwidth\fi \advance\n by1 }|
+\endlines
+Neither column will be less than 10~ems wide.  This code does a ``^{binary
+search},'' assuming that a column will not increase in height when it is
+made wider. If no solution is found in 10~trials, there probably is no way
+to obtain the desired balance, because a tiny increase in the width of the
+taller column will make it shorter than the other one.  The values of\/
+^|\hbadness| and ^|\hfuzz| are made infinite during the trial settings,
+because warning messages that relate to unused boxes are irrelevant; after
+a solution is found, it is computed again, so that any relevant warnings
+will be issued.
+
+When a box has been put into a box register, you can change its
+height, width, or depth by assigning a new value to the |\ht|, |\wd|,
+or |\dp|. Such assignments don't change anything inside the box;
+in particular, they don't affect the setting of the glue.
+
+But changes to a box's dimensions can be confusing if you don't understand
+exactly how \TeX\ deals with boxes in lists. The rules are stated in
+Chapter~12, but it may be helpful to restate them here in a different way.
+Given a box and the location of its reference point, \TeX\ assigns
+locations to interior boxes as follows:  \ (1)~If the box is an hbox,
+\TeX\ starts at the reference point and walks through the horizontal list
+inside. When the list contains a box, \TeX\ puts the reference point of
+the enclosed box at the current position, and moves right by the width of
+that box.  When the list contains glue or kerning, etc., \TeX\ moves right
+by the appropriate amount. \ (2)~If the box is a vbox, \TeX\ starts at the
+upper left corner (i.e., \TeX\ first moves up from the reference point, by
+the height of the box) and walks through the vertical list inside. When
+the list contains a box, \TeX\ puts the upper left corner of that
+box at the current position; i.e., \TeX\ moves down by the height of that
+box, then puts the box's reference point at the current position, then
+moves down by the depth of the box. When the list contains glue or
+kerning, etc., \TeX\ moves down by the appropriate amount.
+
+As a consequence of these rules, we can work out what happens when
+the dimensions of a box are changed. Let |\delta| be a \<dimen>
+register, and let |\h| and |\hh| specify horizontal lists that
+don't depend on |\box0|. Consider the following macro:
+\begintt
+\newdimen\temp \newdimen\delta
+\def\twohboxes#1{\setbox1=\hbox{\h \copy0 \hh}
+  \temp=#10 \advance\temp by \delta #10=\temp
+  \setbox2=\hbox{\h \copy0 \hh}}
+\endtt
+For example, |\twohboxes\wd| makes two hboxes, |\box1| and |\box2|,
+that are identical except that the width of\/ |\box0| has been
+increased by $\delta$ in |\box2|. What difference does this make?
+There are several cases, depending on whether |#1| is |\wd|, |\ht|,
+or |\dp|, and depending on whether |\box0| is an hbox or a vbox.
+\ {\it Case~1}, |\twohboxes\wd|: The material from |\hh| is
+moved right by $\delta$ in |\box2|, compared to its position
+in |\box1|. Also |\wd2| is $\delta$ more than~|\wd1|.
+\ {\it Case~2}, |\twohboxes\ht|: If\/ |\box0| is an hbox, everything
+remains in the same position; but if\/ |\box0| is a vbox, everything
+in |\copy0| moves up by $\delta$. Also |\ht2| may differ from |\ht1|.
+\ {\it Case~3}, |\twohboxes\dp|: Everything remains in the
+same position, but |\dp2| may differ from |\dp1|.
+
+Similarly, we can work out the changes when box dimensions are
+changed for boxes within vertical lists. In this case we shall
+ignore the influence of interline glue by defining |\twovboxes| as follows:
+\begintt
+\def\twovboxes#1{
+  \setbox1=\vbox{\v\nointerlineskip\copy0\nointerlineskip\vv}
+  \temp=#10 \advance\temp by \delta #10=\temp
+  \setbox2=\vbox{\v\nointerlineskip\copy0\nointerlineskip\vv}}
+\endtt
+What is the difference between |\box1| and |\box2| now?
+\ {\it Case~1}, |\twovboxes\wd|: Everything remains in the same
+position, but |\wd2| may differ from |\wd1|.
+\ {\it Case~2}, |\twovboxes\ht|: If\/ |\box0| is an hbox, everything
+in |\v| moves up by~$\delta$ in |\box2|, compared to
+the corresponding positions in |\box1|, if we make the reference
+points of the two boxes identical; but if\/ |\box0| is a vbox,
+everything in it moves up by~$\delta$, together with the material
+in |\v|. Also, |\ht2| is $\delta$~more than |\ht1|.
+\ {\it Case~3}, |\twovboxes\dp|:
+If\/ |\vv| is empty, |\dp2| is $\delta$~more than~|\dp1|, and
+nothing else changes. Otherwise everything in |\v| and in |\copy0|
+moves up by~$\delta$, and |\ht2| is $\delta$ more than~|\ht1|.
+%\ (If you don't believe it, try it.)
+
+\newdimen\unit
+\def\point#1 #2 {\rlap{\kern#1\unit
+    \raise#2\unit\hbox{$
+      \scriptstyle\bullet\;(#1,#2)$}}}
+\unit=\baselineskip
+\setbox0=\vtop{\hrule
+  \hbox{\vrule height10\unit depth9.4\unit \kern2\unit
+    \hbox{\unit=\baselineskip
+      \point 0 0 % Alioth (Epsilon Urs\ae\ Majoris), magnitude 1.79
+      \point 0 8 % Dubhe (Alpha Urs\ae\ Majoris),    magnitude 1.81
+      \point 0 -8 % Alkaid(Eta Urs\ae\ Majoris),     magnitude 1.87
+      \point -1 -2.5 % Mizar (Zeta Urs\ae\ Majoris), magnitude 2.26
+      \point 4 7 % Merak (Beta Urs\ae\ Majoris),     magnitude 2.37
+      \point 4 2 % Phekda (Gamma Urs\ae\ Majoris),   magnitude 2.44
+      \point 1 1.5 % Megrez (Delta Urs\ae\ Majoris), magnitude 3.30
+      }%        Sources: Atlas of the Universe; Astronomy Data Book
+    \kern7\unit \vrule}\hrule}
+\dp0=0pt
+\dimen@=240pt
+\parshape=21
+\z@\hsize \z@\hsize
+\z@\dimen@ \z@\dimen@ \z@\dimen@ \z@\dimen@ \z@\dimen@ \z@\dimen@
+\z@\dimen@ \z@\dimen@ \z@\dimen@ \z@\dimen@ \z@\dimen@ \z@\dimen@
+\z@\dimen@ \z@\dimen@ \z@\dimen@ \z@\dimen@ \z@\dimen@ \z@\dimen@
+\z@\hsize
+\TeX\ is designed to put boxes together either horizontally
+or vertically, not diagonally. But that's not a serious
+limitation, because the use of negative spacing makes it
+possible to put things anywhere on a page. ^^{Ursa Major}
+^^{points with arbitrary coordinates} ^^{coordinates}
+\vadjust{\kern-\ht0\kern-2pt\rightline{\box0}\kern2pt}%
+For example, the seven points in the diagram at the right of this
+paragraph were typeset by saying simply
+\begintt|hsize=|displaywidth
+\hbox{\unit=\baselineskip
+  \point 0 0
+  \point 0 8
+  \point 0 -8
+  \point -1 -2.5
+  \point 4 7
+  \point 4 2
+  \point 1 1.5
+  }
+\endtt
+{\count0=\prevgraf \advance\count0 by7 \prevgraf=\count0}%
+The |\point| macro makes a box of width zero; hence the individual |\point|
+specifications can be given in any order, and there's no restriction on
+the coordinates:
+\begintt|hsize=|displaywidth
+\newdimen\unit
+\def\point#1 #2 {\rlap{\kern#1\unit
+    \raise#2\unit\hbox{$
+      \scriptstyle\bullet\;(#1,#2)$}}}
+\endtt
+^^|\kern|{\count0=\prevgraf \advance\count0 by3 \prevgraf=\count0}%
+If the |\point| specifications are not enclosed in an ^|\hbox|---i.e., if
+they occur in vertical mode---a similar construction can be used. In
+this case |\point| should create a box whose height and depth are zero:
+\begintt
+\def\point#1 #2 {\vbox to0pt{\kern-#2\unit
+    \hbox{\kern#1\unit$\scriptstyle\bullet\;(#1,#2)$}\vss}
+  \nointerlineskip}
+\endtt
+(The ^|\nointerlineskip| is necessary to prevent interline glue from
+messing things up.)
+
+\begingroup
+\let\qc=\manual
+\catcode`\ =9 \endlinechar=-1 % ignore all spaces (temporarily)
+\newcount\dir \newdimen\y \newdimen\w
+\newif\ifvisible \let\B=\visibletrue \let\W=\visiblefalse
+\newbox\NE \newbox\NW \newbox\SE \newbox\SW \newbox\NS \newbox\EW
+\setbox\SW=\hbox{\qc a} \setbox\NW=\hbox{\qc b}
+\setbox\NE=\hbox{\qc c} \setbox\SE=\hbox{\qc d}
+\w=\wd\SW \dimen0=\fontdimen8\qc
+\setbox\EW=\hbox{\kern-\dp\SW \vrule height\dimen0 width\wd\SW} \wd\EW=\w
+\setbox\NS=\hbox{\vrule height\ht\SW depth\dp\SW width\dimen0}  \wd\NS=\w
+\def\L{\ifcase\dir \dy+\NW \or\dx-\SW \or\dy-\SE \or\dx+\NE\dd-4\fi \dd+1}
+\def\S{\ifcase\dir \dx+\EW \or \dy+\NS \or \dx-\EW \or \dy-\NS \fi}
+\def\R{\ifcase\dir \dy-\SW\dd+4 \or\dx+\SE \or\dy+\NE \or\dx-\NW\fi \dd-1}
+\def\T{\ifcase\dir\kern-\w\dd+2\or\ey-\dd+2\or\kern\w\dd-2\or\ey+\dd-2\fi}
+\edef\dd#1#2{\global\advance\dir#1#2\space}
+\def\dx#1#2{\ifvisible\raise\y\copy#2 \if#1-\kern-2\w\fi\else\kern#1\w\fi}
+\def\dy#1#2{\ifvisible\raise\y\copy#2 \kern-\w \fi \global\advance\y#1\w}
+\def\ey#1{\global\advance\y#1\w}
+\def\path#1{\hbox{\B \dir=0 \y=0pt #1}}
+\catcode`\ =10 \endlinechar='15 % resume normal spacing conventions
+
+If you enjoy fooling around making pictures, instead of typesetting
+ordinary text, \TeX\ will be a source of endless frustration/amusement
+for you, because almost anything is possible if you have suitable fonts.
+For example, suppose you have a font |\qc| that contains four ^{quarter
+circles}:
+\begindisplay
+\def\\#1{\kern\dp#1\copy#1\kern-\dp#1}
+\tt a = \\\SW \qquad b = \\\NW \qquad c = \\\NE \qquad d = \\\SE
+\enddisplay
+Each of these characters has the same height, the same width, and the same
+depth; the width and the height-plus-depth are equal to the diameter of
+the corresponding full circle. Furthermore, the reference point of each
+character is in a somewhat peculiar place: Each quarter arc has a
+horizontal endpoint such that the lower edge of the curve is at the
+baseline, and a vertical endpoint such that the left edge is directly
+above or below the reference point. This convention makes it possible to
+guarantee perfect alignment between these characters and rules that meet
+them at the endpoints; the thickness of such rules should be
+^|\fontdimen||8\qc|.
+
+Given those characters, it's possible to devise macros |\path|, |\L|,
+^^{turtle commands}
+|\R|, |\S|, and~|\T| such that ^|\path||{|$\langle$any string of\/ |\L|'s, |\R|'s,
+|\S|'s, and |\T|'s$\rangle$|}| produces a path that starts traveling East,
+but it turns left for each~|\L|, right for each~|\R|, goes straight
+for each~|\S|, and turns backward for each~|\T|. Thus, for example,
+%|\path{\S\T\R\R\R\L\S\T\R\R\R\L}| yields `\kern\dp\SW
+%\smash{\path{\S\T\R\R\R\L\S\T\R\R\R\L}}\kern-\dp\SW',
+|\path{\L\T\S\T\R\L\T\S\T\R}| yields `\kern\dp\SW
+\smash{\path{\L\T\S\T\R\L\T\S\T\R}}\kern-\dp\SW', and you
+can also get the following effects:
+\def\sm#1{\smash{$\vcenter{#1}$}}%
+\begindisplay
+\noalign{\kern5pt}
+|\path{\L\R\S\R\S\R\S\S\R\R}|\kern30pt
+  \sm{\path{\L\R\S\R\S\R\S\S\R\R}}\cr
+\noalign{\kern16pt}
+|\path{\R\R\R\R\T\S\S\L\L\L\L\L\S\S}|\kern47pt
+  \sm{\path{\R\R\R\R\T\S\S\L\L\L\L\L\S\S}}\cr
+\noalign{\kern16pt}
+|\def\X{\L\T\L\L\T\L\L\T} \path{\X\X\X\X}|\kern20pt
+  \sm{\def\X{\L\T\L\L\T\L\L\T} \path{\X\X\X\X}}\cr
+\noalign{\kern10pt}
+%|\path{\S\S\S\S\L\R\R\L\S\R\R\L\R\R\L\S\S\S\L\R\R\L\R\R}|\kern20pt
+%  \sm{\path{\S\S\S\S\L\R\R\L\S\R\R\L\R\R\L\S\S\S\L\R\R\L\R\R}}\cr
+\enddisplay
+Furthermore, there are operations |\B| and |\W| that make the path
+black (visible) and white (invisible), respectively:
+\begindisplay \openup1pt
+\noalign{\kern14pt}
+|\path{\R\R\S|\cr
+|  \W\S\S\S\R\R|\cr
+|  \B\R\R\S\R\S\R\S\S\S\R\S\S\S\S\S\R\S\R|
+ \kern100pt\raise4pt\hbox{\sm{\path{\R\R\S
+  \W\S\S\S\R\R
+  \B\R\R\S\R\S\R\S\S\S\R\S\S\S\S\S\R\S\R
+  \W\R\R\R\S\L\S
+  \B\L\S\S\S\S}}}\cr
+|  \W\R\R\R\S\L\S|\cr
+|  \B\L\S\S\S\S}|\cr
+\noalign{\kern15pt}
+\enddisplay
+(It may be necessary to put kerns before and after the path, since the
+box produced by |\path| may not be as wide as the actual path itself.)
+
+The |\path| macros work differently from |\point|, since the boxes need
+not have zero width in this application:
+\beginlines
+^|\catcode||`\ =9 |^|\endlinechar||=-1 % ignore all spaces (temporarily)|
+|\newcount\dir \newdimen\y \newdimen\w|
+|\newif\ifvisible \let\B=\visibletrue \let\W=\visiblefalse|
+|\newbox\NE \newbox\NW \newbox\SE \newbox\SW \newbox\NS \newbox\EW|
+|\setbox\SW=\hbox{\qc a} \setbox\NW=\hbox{\qc b}|
+|\setbox\NE=\hbox{\qc c} \setbox\SE=\hbox{\qc d}|
+|\w=\wd\SW \dimen0=\fontdimen8\qc|
+|\setbox\EW=\hbox{\kern-\dp\SW \vrule height\dimen0 width\wd\SW} \wd\EW=\w|
+|\setbox\NS=\hbox{\vrule height\ht\SW depth\dp\SW width\dimen0}  \wd\NS=\w|
+|\def\L{\ifcase|%
+  |\dir \dy+\NW \or\dx-\SW \or\dy-\SE \or\dx+\NE\dd-4\fi \dd+1}|\kern-2pt
+|\def\S{\ifcase\dir \dx+\EW \or \dy+\NS \or \dx-\EW \or \dy-\NS \fi}|
+|\def\R{\ifcase|%
+  |\dir \dy-\SW\dd+4 \or\dx+\SE \or\dy+\NE \or\dx-\NW\fi \dd-1}|\kern-2pt
+|\def\T{|^|\ifcase|%
+  |\dir\kern-\w\dd+2\or\ey-\dd+2\or\kern\w\dd-2\or\ey+\dd-2\fi}|\kern-2pt
+\goodbreak
+|\edef\dd#1#2{\global\advance\dir#1#2\space}|
+|\def\dx#1#2|%
+  |{\ifvisible\raise\y\copy#2 \if#1-\kern-2\w\fi\else\kern#1\w\fi}|\kern-2pt
+|\def\dy#1#2{\ifvisible\raise\y\copy#2 \kern-\w \fi \global\advance\y#1\w}|
+|\def\ey#1{\global\advance\y#1\w}|
+|\def\path#1{\hbox{\B \dir=0 \y=0pt #1}}|
+|\catcode`\ =10 |^|\endlinechar||=`\^^M % resume normal spacing conventions|
+\smallskip
+|\newcount\n % the current order in the \dragon and \nogard macros|
+|\def\dragon{\ifnum\n>0{\advance\n-1 \dragon\L\nogard}\fi}|
+|\def\nogard{\ifnum\n>0{\advance\n-1 \dragon\R\nogard}\fi}|
+\endlines
+(The last three lines are not part of the |\path| macros, but they can
+be used as an interesting test case. To get the famous ``^{dragon curve}''
+of order~9, all you have to say is `|\path{\dir=3 \n=9 \dragon}|'.)^^{recursion}
+\endgroup
+
+\smallbreak
+Let's turn now to another box-oriented problem. The ^|\listing| macro
+discussed earlier in this appendix was restricted to listing files
+that contain only visible ASCII characters. Sometimes it's desirable to
+deal with ASCII ^\<tab> marks too, where a \<tab> is equivalent to
+1~or~2~or $\cdots$ or~8 spaces (whatever is necessary to make the
+current line length a multiple of~8). How can this be done?
+
+We shall assume that files can contain a special symbol that \TeX\ will
+input as character number~9, the ASCII \<tab> code; some implementations
+can't actually do this. If a file contains the three symbols |^^I|, plain
+\TeX\ will normally input them as a single character, number~9; but in a
+verbatim listing of the file we naturally want such symbols to print as
+themselves, i.e., as |^^I|.
+
+The following construction redefines |\setupverbatim| so that the previous
+|\listing| macro will work with \<tab> characters. The idea is to keep the
+line-so-far in an hbox, which can be ``measured'' in order to find out how
+many characters have appeared since the beginning of the line or since the
+most recent \<tab>.
+\begintt
+\def\setupverbatim{\tt \lineno=0
+  \def\par{\leavevmode\egroup\box0\endgraf}
+  \obeylines \uncatcodespecials \obeyspaces
+  \catcode`\`=\active \catcode`\^^I=\active
+  \everypar{\advance\lineno by1
+    \llap{\sevenrm\the\lineno\ \ }\startbox}}
+\newdimen\w \setbox0=\hbox{\tt\space} \w=8\wd0 % tab amount
+\def\startbox{\setbox0=\hbox\bgroup}
+{\catcode`\^^I=\active
+  \gdef^^I{\leavevmode\egroup
+    \dimen0=\wd0 % the width so far, or since the previous tab
+    \divide\dimen0 by\w
+    \multiply\dimen0 by\w % compute previous multiple of \w
+    \advance\dimen0 by\w  % advance to next multiple of \w
+    \wd0=\dimen0 \box0 \startbox}}
+\endtt
+^^|\divide|^^|\multiply|
+(The new things in |\setupverbatim| are the `|\egroup\box0|' in the
+redefinition of\/ |\par|; the `|\catcode`\^^I=\active|'; and the
+`|\startbox|' in |\everypar|.) \ The |\settabs| and~|\+| macros of
+Appendix~B provide another example of how tab operations can be simulated
+by boxing and unboxing.
+
+\smallbreak
+\def\beginvrulealign{\setbox0=\vbox\bgroup}
+\def\endvrulealign{\egroup % now \box0 holds the alignment}
+  \setbox0=\vbox{\setbox2=\hbox{\vrule height\ht0 depth\dp0 width0pt}
+    \unvbox0 \setbox0=\lastbox % now \box0 is the bottom row
+    \nointerlineskip \copy0 % put it back
+    \global\setbox1=\hbox{}
+    \setbox4=\hbox{\unhbox0
+      \loop \skip0=\lastskip \unskip % remove tabskip glue
+       \advance\skip0 by-.4pt % rules are .4pt wide
+       \divide\skip0 by 2
+       \global\setbox1=\hbox{\hskip\skip0\vrule\hskip\skip0
+         \unhbox2\unhbox1}%
+       \setbox2=\lastbox % remove alignment entry
+       \ifhbox2 \setbox2=\hbox{\kern\wd2}\repeat}}%
+  \hbox{\rlap{\box0}\box1}}
+\setbox8=\vbox{
+\beginvrulealign
+\tabskip=10pt
+\halign{&\strut#\hfil\cr
+These&    after\cr
+vertical& the\cr
+rules&    alignment\cr
+were&     was\cr
+inserted& completed!\cr}
+\endvrulealign
+}
+Chapter 22 explains how to put vertical ^{rules in tables} by considering the
+rules to be separate columns. There's also another way, provided that
+the rules extend all the way from the top of the table to the bottom.
+For example,
+\begindisplay
+|\beginvrulealign|\cr
+|\tabskip=10pt|\cr
+|\halign{&\strut#\hfil\cr|\cr
+|These&    after\cr|\cr
+|vertical& the\cr|\kern70pt yields\qquad\smash{$\vcenter{\box8}$}\cr
+|rules&    alignment\cr|\cr
+|were&     was\cr|\cr
+|inserted& completed!\cr}|\cr
+|\endvrulealign|\cr
+\enddisplay
+The magic macros in this case examine the bottom row of the
+^{alignment}, which consists of alternating ^{tabskip glue} and boxes;
+each item of tabskip glue in that bottom row will be bisected by
+a vertical rule. Here's how:
+\beginlines
+|\def\beginvrulealign{\setbox0=\vbox\bgroup}|
+|\def\endvrulealign{\egroup % now \box0 holds the entire alignment|
+|  \setbox0=\vbox{\setbox2=\hbox{\vrule height\ht0 depth\dp0 width0pt}|
+|    |^|\unvbox||0 \setbox0=\lastbox % now \box0 is the bottom row|
+|    \nointerlineskip \copy0 % put it back|
+|    \global\setbox1=\hbox{} % initialize box that will contain rules|
+|    \setbox4=\hbox{\unhbox0 % now open up the bottom row|
+|      \loop \skip0=|^|\lastskip|| |^|\unskip|| % remove tabskip glue|
+|       \advance\skip0 by-.4pt % rules are .4pt wide|
+|       \divide\skip0 by 2|
+|       \global\setbox1=\hbox{\hskip\skip0\vrule\hskip\skip0|
+|         \unhbox2\unhbox1}%|
+|       \setbox2=|^|\lastbox|| % remove alignment entry|
+|       \ifhbox2 \setbox2=\hbox{\kern\wd2}\repeat}}%|
+|  \hbox{\rlap{\box0}\box1}} % superimpose the alignment on the rules|
+\endlines
+This method works with all alignments created by ^|\halign||{...}|. For
+alignments created by, say, |\halign to100pt{...}|, the method works
+only if the bottom row of the alignment contains all of the columns,
+and only if `|\box1|' is replaced by `|\hbox to100pt{\unhbox1}|'
+at the end of\/ |\endvrulealign|.
+
+%\begingroup
+%\eightpoint
+%\hyphenpenalty10000 \exhyphenpenalty10000 \pretolerance10000 % no hyphens
+%\newbox\dbox \setbox\dbox=\hbox to .4em{\hss.\hss} % dot box for leaders
+%\newskip\rrskipb \rrskipb=.5em plus3em % ragged right space before break
+%\newskip\rrskipa \rrskipa=-.17em plus-3em minus.11em % ditto, after
+%\newskip\rlskipa \rlskipa=0pt plus3em % ragged left space after break
+%\newskip\rlskipb \rlskipb=.33em plus-3em minus .11em % ditto, before
+%\newskip\lskip \lskip=3.3\wd\dbox plus1fil minus.3\wd\dbox % for leaders
+%\newskip\lskipa \lskipa=-2.67em plus-3em minus.11em % after leaders
+%\mathchardef\rlpen=1000 \mathchardef\leadpen=600 % constants used
+%\def\rrspace{\nobreak\hskip\rrskipb\penalty0\hskip\rrskipa}
+%\def\rlspace{\penalty\rlpen\hskip\rlskipb\vadjust{}\nobreak\hskip\rlskipa}
+%\uccode`~=` \uppercase{
+%  \def\:{\nobreak\hskip\rrskipb \penalty\leadpen \hskip\rrskipa
+%    \vadjust{}\nobreak\leaders\copy\dbox\hskip\lskip
+%    \kern3em \penalty\leadpen \hskip\lskipa
+%    \vadjust{}\nobreak\hskip\rlskipa \let~=\rlspace}
+%  \everypar{\hangindent=1.5em \hangafter=1 \let~=\rrspace}}
+%\parindent=0pt
+%\parfillskip=0pt
+%\obeyspaces
+%\def\text{ACM Symposium on Theory of Computing, Eighth Annual (Hershey, %
+%Pa., 1976)\:1879, 4813, 5414, 6918, 6936, 6937, 6946, 6951, %
+%6970, 7619, 9605, 10148, 11676, 11687, 11692, 11710, 13869}
+%\catcode`\ =10
+%\def\test#1 {\vbox{\hsize=#1em\hrule\strut\text\strut\par\hrule}}
+%\global\setbox5=\test 12.5
+%\global\setbox7=\test 17.5
+%%\global\setbox9=\test 22.5
+%\global\setbox9=\test 30
+%\endgroup
+%\subsection Paragraph maneuvers. Chapter 14 promised that Appendix D would
+%present an example where ^{ragged right} and ^{ragged left} setting
+%occur in the same paragraph. The following interesting example was
+%suggested by the ``^{Key Index}'' in {\sl ^{Mathematical Reviews}},
+%^^{index macros} where the entries consist of a possibly long title
+%followed by dot ^{leaders} followed by a possibly long list of
+%review numbers. If the title doesn't fit on one line, it should be set
+%ragged right, with hanging indentation on all lines after the first;
+%if the references don't all fit on one line, they should be set
+%ragged left. For example, given the input
+%\begintt
+%ACM Symposium on Theory of Computing, Eighth Annual (Hershey, %
+%Pa., 1976)\:1879, 4813, 5414, 6918, 6936, 6937, 6946, 6951, %
+%6970, 7619, 9605, 10148, 11676, 11687, 11692, 11710, 13869
+%\endtt
+%the following three types of output are desired, depending on the
+%column width:
+%\begindisplay
+%\box5&\box7\cr
+%\noalign{\vskip6pt}
+%\box9\span\cr
+%\enddisplay
+%Notice that the dot leaders are treated in three different ways, depending
+%on which works out best: They may occur at the left of the first line after
+%the title, or they may appear at the end of the last line of the title
+%(in which case they stop well before the right margin), or they may occur
+%in the middle of a line. Furthermore, the ragged-right lines are supposed
+%to end at least $0.5\em$ from the right margin. Our goal is to achieve
+%all this as a special case of \TeX's general paragraphing method. The
+%simple approach of Appendix~B won't work, because |\raggedright| is
+%achieved there by adjusting ^|\rightskip|; \TeX\ uses the same |\rightskip|
+%value in all lines of a paragraph.
+\begingroup
+\eightpoint
+\hyphenpenalty10000 \exhyphenpenalty10000 \pretolerance10000 % no hyphens
+\newbox\dbox \setbox\dbox=\hbox to .4em{\hss.\hss} % dot box for leaders
+\newskip\rrskipb \rrskipb=.5em plus3em % ragged right space before break
+\newskip\rrskipa \rrskipa=-.17em plus-3em minus.11em % ditto, after
+\newskip\rlskipa \rlskipa=0pt plus3em % ragged left space after break
+\newskip\rlskipb \rlskipb=.33em plus-3em minus .11em % ditto, before
+\newskip\lskip \lskip=3.3\wd\dbox plus1fil minus.3\wd\dbox % for leaders
+\newskip\lskipa \lskipa=-2.67em plus-3em minus.11em % after leaders
+\mathchardef\rlpen=1000 \mathchardef\leadpen=600 % constants used
+\def\rrspace{\nobreak\hskip\rrskipb\penalty0\hskip\rrskipa}
+\def\rlspace{\penalty\rlpen\hskip\rlskipb\vadjust{}\nobreak\hskip\rlskipa}
+\uccode`~=` \uppercase{
+  \def\:{\nobreak\hskip\rrskipb \penalty\leadpen \hskip\rrskipa
+    \vadjust{}\nobreak\leaders\copy\dbox\hskip\lskip
+    \kern3em \penalty\leadpen \hskip\lskipa
+    \vadjust{}\nobreak\hskip\rlskipa \let~=\rlspace}
+  \everypar{\hangindent=1.5em \hangafter=1 \let~=\rrspace}}
+\parindent=0pt
+\parfillskip=0pt
+\obeyspaces
+\def\text{ACM Symposium on Theory of Computing, Eighth Annual (Hershey, %
+Pa., 1976)\:1879, 4813, 5414, 6918, 6936, 6937, 6946, 6951, %
+6970, 7619, 9605, 10148, 11676, 11687, 11692, 11710, 13869}
+\catcode`\ =10
+\def\test#1 {\vbox{\hsize=#1em\hrule\strut\text\strut\par\hrule}}
+\global\setbox5=\test 12.5
+\global\setbox7=\test 17.5
+%\global\setbox9=\test 22.5
+\global\setbox9=\test 30
+\endgroup
+\subsection 操纵段落. Chapter 14 promised that Appendix D would
+present an example where ^{ragged right} and ^{ragged left} setting
+occur in the same paragraph. The following interesting example was
+suggested by the ``^{Key Index}'' in {\sl ^{Mathematical Reviews}},
+^^{index macros} where the entries consist of a possibly long title
+followed by dot ^{leaders} followed by a possibly long list of
+review numbers. If the title doesn't fit on one line, it should be set
+ragged right, with hanging indentation on all lines after the first;
+if the references don't all fit on one line, they should be set
+ragged left. For example, given the input
+\begintt
+ACM Symposium on Theory of Computing, Eighth Annual (Hershey, %
+Pa., 1976)\:1879, 4813, 5414, 6918, 6936, 6937, 6946, 6951, %
+6970, 7619, 9605, 10148, 11676, 11687, 11692, 11710, 13869
+\endtt
+the following three types of output are desired, depending on the
+column width:
+\begindisplay
+\box5&\box7\cr
+\noalign{\vskip6pt}
+\box9\span\cr
+\enddisplay
+Notice that the dot leaders are treated in three different ways, depending
+on which works out best: They may occur at the left of the first line after
+the title, or they may appear at the end of the last line of the title
+(in which case they stop well before the right margin), or they may occur
+in the middle of a line. Furthermore, the ragged-right lines are supposed
+to end at least $0.5\em$ from the right margin. Our goal is to achieve
+all this as a special case of \TeX's general paragraphing method. The
+simple approach of Appendix~B won't work, because |\raggedright| is
+achieved there by adjusting ^|\rightskip|; \TeX\ uses the same |\rightskip|
+value in all lines of a paragraph.
+
+The solution to this problem requires an understanding of the ^{line-breaking}
+algorithm; it depends on how demerits are calculated, and on how items
+are removed at the breakpoints, so the reader should review Chapter~14
+until those concepts are firmly understood. Basically, we need to
+specify a sequence of box/glue/penalty items for the spaces in the
+title portion, another sequence for the spaces in the reference portion,
+and another sequence for the dot leaders. In the title portion of each
+index entry, interword spaces can be represented by the sequence
+\begintt
+\penalty10000 \hskip.5em plus3em \penalty0
+\hskip-.17em plus-3em minus.11em
+\endtt
+Thus, there is a stretchability of $3\em$ if a line break occurs
+at the |\penalty0|; otherwise the net interword space will be $.33\em$,
+shrinkable to $.22\em$. This gives ragged right margins. The interword
+spaces in the reference portion are designed to produce ragged left margins
+and to minimize the number of lines devoted to references:
+\begintt
+\penalty1000 \hskip.33em plus-3em minus.11em
+\vadjust{}\penalty10000 \hskip0pt plus3em
+\endtt
+The ^|\vadjust||{}| does nothing, but it doesn't disappear at a line break.
+Thus, if a break occurs at the |\penalty1000|, the following line will
+begin with stretchability $3\em$; but if no break occurs, the net space
+will be $.33\em$ minus $.11\em$. Finally, the transition between title
+and references can be specified by
+\begintt
+\penalty10000 \hskip.5em plus3em \penalty600
+\hskip-.17em plus-3em minus.11em
+\vadjust{}\penalty10000
+\leaders\copy\dbox\hskip3.3\wd\dbox plus1fil minus.3\wd\dbox
+\kern3em \penalty600 \hskip-2.67em plus-3em minus.11em
+\vadjust{}\penalty10000 \hskip0pt plus3em
+\endtt
+(Quite a mouthful.) \
+This long sequence of penalty and glue items begins rather like the interword
+spaces in the first part, and it ends rather like the interword spaces in
+the last part. It has two permissible breakpoints, namely at the
+`|\penalty600|' items. The first breakpoint causes the leaders to
+appear at the beginning of a line; the second causes them to appear
+at the end, but 3~ems away. The leader width will always be at least
+three times the width of\/ |\dbox|, so at least two copies of\/ |\dbox|
+will always appear. Here is the actual \TeX\ code that can be used
+to set up the desired behavior:
+\beginlines
+|\hyphenpenalty10000 \exhyphenpenalty10000 |^|\pretolerance||10000 % no hyphens|
+^|\newbox||\dbox \setbox\dbox=\hbox to .4em{\hss.\hss} % dot box for leaders|
+^|\newskip||\rrskipb \rrskipb=.5em plus3em % ragged right space before break|
+|\newskip\rrskipa \rrskipa=-.17em plus-3em minus.11em % ditto, after|
+|\newskip\rlskipa \rlskipa=0pt plus3em % ragged left space after break|
+|\newskip\rlskipb \rlskipb=.33em plus-3em minus .11em % ditto, before|
+|\newskip\lskip \lskip=3.3\wd\dbox plus1fil minus.3\wd\dbox % for leaders|
+|\newskip\lskipa \lskipa=-2.67em plus-3em minus.11em % after leaders|
+^|\mathchardef||\rlpen=1000 \mathchardef\leadpen=600 % constants used|
+|\def\rrspace{|^|\nobreak||\hskip\rrskipb\penalty0\hskip\rrskipa}|
+|\def\rlspace{|%
+  |\penalty\rlpen\hskip\rlskipb\vadjust{}\nobreak\hskip\rlskipa}|\kern-2pt
+|\uccode`~=` \uppercase{|
+|  \def\:{\nobreak\hskip\rrskipb \penalty\leadpen \hskip\rrskipa|
+|    \vadjust{}\nobreak\leaders\copy\dbox\hskip\lskip|
+|    \kern3em \penalty\leadpen \hskip\lskipa|
+|    \vadjust{}\nobreak\hskip\rlskipa \let~=\rlspace}|
+|  \everypar{\hangindent=1.5em \hangafter=1 \let~=\rrspace}}|
+|\uccode`~=0 |^|\parindent||=0pt |^|\parfillskip||=0pt |^|\obeyspaces|
+\endlines
+Putting the interword glue into |\skip| registers saves a great deal
+of time and memory space when \TeX\ works with such paragraphs;
+`|\hskip|\<explicit glue>' occupies six cells of \TeX's ^{box memory},
+but `|\hskip|\<skip register>' occupies only two. ^^{efficiency}
+Notice the tricky use of\/ ^|\uppercase| here to convert |~|$_{13}$ into
+\]$_{13}$; ^^{active spaces} ``random'' ^{active characters} can be
+obtained in a similar way.
+
+\medbreak
+Let's turn now to a much simpler problem: {\sl^{hanging punctuation}}.
+\medskip
+\setbox0=\vbox{\vfil
+\hyphenpenalty=10000
+\eightpoint
+\hsize=14pc
+\newdimen\commahang \setbox0=\hbox{,} \commahang=\wd0
+\newdimen\periodhang \setbox0=\hbox{.} \periodhang=\wd0
+\newdimen\quotehang \setbox0=\hbox{`} \quotehang=\wd0
+\newdimen\qquotehang \setbox0=\hbox{``} \qquotehang=\wd0
+\newskip\zzz \def\allowhyphens{\nobreak\hskip\zzz}
+\def\lqq{``} \def\rqq{''} \def\pnt{.}
+\def\comma{,\kern-\commahang\kern\commahang}
+\def\period{.\kern-\periodhang\kern\periodhang}
+\def\rquote{'\kern-\quotehang\kern\quotehang}
+\def\lquote{\ifhmode\kern\quotehang\vadjust{}\else\leavevmode\fi
+  \kern-\quotehang`\allowhyphens}
+\catcode`,=\active \let,=\comma
+\catcode`.=\active \let.=\period
+\catcode`'=\active \def'{\futurelet\next\rqtest}
+\catcode``=\active \def`{\futurelet\next\lqtest}
+\def\rqtest{\ifx\next'\let\next=\rquotes\else\let\next=\rquote\fi\next}
+\def\lqtest{\ifx\next`\let\next=\lquotes\else\let\next=\lquote\fi\next}
+\def\rquotes'{\rqq\kern-\qquotehang\kern\qquotehang}
+\def\lquotes`{\ifhmode\kern\qquotehang\vadjust{}\else\leavevmode\fi
+  \kern-\qquotehang\lqq\allowhyphens}
+\parindent=0pt
+``What is hanging punctuation?'' asked Alice, with a puzzled frown.
+`Well, y'know, actually,' answered Bill, `I'd rather demonstrate it than
+explain it.' ``Oh, now I see.  Commas, periods, and quotes are allowed to
+stick out into the margins, if they occur next to a line break.'' `Yeah, I
+guess.' ``Really! But why do all your remarks have single quotes, while
+mine are double?'' `I haven't the foggiest; it's weird. Ask the author of
+this crazy book.'
+}\setbox2=\vsplit0 to.5\ht0 \line{\box2\hfil\box0}
+\medskip\noindent
+Each comma in Alice and Bill's demonstration paragraph
+was represented inside of \TeX\ by
+the sequence of three items `|,\kern-\commahang|^|\kern||\commahang|',
+and there were similar replacements for periods and for closing quotes;
+opening quotes were represented by the longer sequence
+\begintt
+\kern\qquotehang\vadjust{}\kern-\qquotehang``\allowhyphens
+\endtt
+where ^|\allowhyphens| allows the following word to be ^{hyphenate}d.
+This construction works because kerns disappear into ^{line breaks} in the
+proper way; the relevant rules from Chapter~14 are: (1)~A line break can
+occur at a kern that is immediately followed by glue. (2)~Consecutive
+glue, kern, and penalty items disappear at a break.
+
+To set \TeX\ up for hanging punctuation, you can say
+\beginlines
+|\newdimen\commahang      \setbox0=\hbox{,}      \commahang=\wd0|
+|\newdimen\periodhang     \setbox0=\hbox{.}      \periodhang=\wd0|
+|\newdimen\quotehang      \setbox0=\hbox{`}      \quotehang=\wd0|
+|\newdimen\qquotehang     \setbox0=\hbox{``}     \qquotehang=\wd0|
+|\newskip\zzz \def\allowhyphens{\nobreak\hskip\zzz}|
+|\def\lqq{``} \def\rqq{''} \def\pnt{.}|
+|\def\comma{,\kern-\commahang\kern\commahang}|
+|\def\period{.\kern-\periodhang\kern\periodhang}|
+|\def\rquote{'\kern-\quotehang\kern\quotehang}|
+|\def\lquote{\ifhmode\kern\quotehang\vadjust{}\else\leavevmode\fi|
+|  \kern-\quotehang`\allowhyphens}|
+|\catcode`,=\active \let,=\comma \catcode`.=\active \let.=\period|
+|\catcode`'=\active \def'{\futurelet\next\rqtest}|
+|\catcode``=\active \def`{\futurelet\next\lqtest}|
+|\def\rqtest{\ifx\next'\let\next=\rquotes\else\let\next=\rquote\fi\next}|
+|\def\lqtest{\ifx\next`\let\next=\lquotes\else\let\next=\lquote\fi\next}|
+|\def\rquotes'{\rqq\kern-\qquotehang\kern\qquotehang}|
+|\def\lquotes`{\ifhmode\kern\qquotehang\vadjust{}\else\leavevmode\fi|
+|  \kern-\qquotehang\lqq\allowhyphens}|
+\endlines
+Notice that the macros need to do their own checking for ligatures, and
+they also take appropriate actions when a paragraph begins with an opening
+quote.  Since |\kern| does not affect the ^{space factor}, hanging
+punctuation doesn't affect \TeX's spacing conventions within a line.
+Partially hanging punctuation can be obtained by decreasing the amounts of\/
+|\commahang|, etc.  The macros ^|\pnt|, ^|\lq|, and ^|\rq| should be used
+in constants; for example, a dimension of $6.5\,$in must be written
+`|6\pnt5in|' when hanging punctuation is in effect, and
+`|\catcode\lq,=12|' makes commas inactive again. A special font with
+zero-width ^|\hyphenchar| should be used for ``hanging hyphenation.''
+
+%\medbreak
+%And now for our next trick, let's consider an application to short footnotes.
+%^^{footnotes, short} The footnotes at the bottom of this page%
+%\footnote{$^1$}{First footnote.}$^,$%
+%\footnote{$^2$}{Second footnote. (Every once in a~while a long
+%  footnote might occur, just to make things difficult.)}$^,$%
+%\footnote{$^3$}{Third footnote.}$^,$%
+%\footnote{$^4$}{Fourth footnote.}$^,$%
+%\footnote{$^5$}{Fifth footnote. (This is incredibly boring,
+%  but it's just an example.)}$^,$%
+%\footnote{$^6$}{Another.}$^,$%
+%\footnote{$^7$}{And another.}$^,$%
+%\footnote{$^8$}{Ho hum.}$^,$%
+%\footnote{$^9$}{Umpteenth footnote.}$^,$%
+%\footnote{$^{10}$}{Oodles of them.}
+%look funny, because most of them are quite short. When a document has lots
+%of footnotes, and when most of them take up only a small part of a line,
+%the output routine ought to reformat them in some more appropriate way.
+\medbreak
+And now for our next trick, let's consider an application to short footnotes.
+^^{footnotes, short} The footnotes at the bottom of this page%
+\footnote{$^1$}{First footnote.}$^,$%
+\footnote{$^2$}{Second footnote. (Every once in a~while a long
+  footnote might occur, just to make things difficult.)}$^,$%
+\footnote{$^3$}{Third footnote.}$^,$%
+\footnote{$^4$}{Fourth footnote.}$^,$%
+\footnote{$^5$}{Fifth footnote. (This is incredibly boring,
+  but it's just an example.)}$^,$%
+\footnote{$^6$}{Another.}$^,$%
+\footnote{$^7$}{And another.}$^,$%
+\footnote{$^8$}{Ho hum.}$^,$%
+\footnote{$^9$}{Umpteenth footnote.}$^,$%
+\footnote{$^{10}$}{Oodles of them.}
+look funny, because most of them are quite short. When a document has lots
+of footnotes, and when most of them take up only a small part of a line,
+the output routine ought to reformat them in some more appropriate way.
+\vfill\supereject
+
+\newcount\footno
+For example, one approach would be to typeset the footnotes in narrow
+columns and to put, say, three columns of footnotes at the bottom of
+each page. The ten example footnotes might then look like this:
+\medskip
+\begingroup
+\def\vfootnote#1{\insert\footins{
+    \eightpoint \hsize=9pc \parindent=1pc
+    \leftskip=0pt \raggedright \pretolerance=10000
+    \interlinepenalty=\interfootnotelinepenalty
+    \floatingpenalty=20000
+    \splittopskip=\ht\strutbox \splitmaxdepth=\dp\strutbox
+    \global\advance\footno by 1
+    \item{$^{\the\footno}$}\strut#1\strut\par\allowbreak}}
+\output={\showboxbreadth=9999 \showboxdepth=1
+  %\nonstopmode \showbox\footins \errorstopmode
+  \rigidbalance\footins 3 7pt
+  \global\setbox1=\lastbox
+  \unvbox255}
+\footno=0
+\vfootnote{First footnote.}
+\vfootnote{Second footnote. (Every once in a~while a long
+  footnote might occur, just to make things difficult.)}
+\vfootnote{Third footnote.}
+\vfootnote{Fourth footnote.}
+\vfootnote{Fifth footnote.
+  (This is incredibly boring, but it's just an example.)}
+\vfootnote{Another.}
+\vfootnote{And another.}
+\vfootnote{Ho hum.}
+\vfootnote{Umpteenth footnote.}
+\vfootnote{Oodles of them.}
+\newcount\k \newdimen\h
+\def\rigidbalance#1#2 #3 {\setbox0=\box#1 \k=#2 \h=#3
+  \line{\splittopskip=\h \vbadness=10000 \hfilneg
+  \valign{##\vfil\cr\dosplits}}}
+\def\dosplits{\ifnum\k>0 \noalign{\hfil}\splitoff
+  \global\advance\k-1\cr\dosplits\fi}
+\def\splitoff{\dimen0=\ht0 \divide\dimen0 by\k \advance\dimen0 by\h
+  \vsplit0 to \dimen0 }
+\eject
+\box1\endgroup
+\medskip\noindent
+In this case, the footnotes could be generated by
+\begindisplay
+|\insert\footins{\eightpoint \hsize=9pc \parindent=1pc|\cr
+|  \leftskip=0pt |^|\raggedright|| \pretolerance=10000|\cr
+|  \hyphenpenalty=10000 \exhyphenpenalty=10000|\cr
+|  \interlinepenalty=\interfootnotelinepenalty|\cr
+|  \floatingpenalty=20000|\cr
+|  \splittopskip=\ht\strutbox \splitmaxdepth=\dp\strutbox|\cr
+|  \item{$^{\the\footno}$}\strut|\<text of footnote>^|\strut|\cr
+|  \par|^|\allowbreak||}|\cr
+\enddisplay
+and |\count\footins| would be set to 333 so that each footnote line
+would be considered to occupy about one third of a line on the page.
+The output routine would then see a |\box\footins| that looks like
+this:
+\begindisplay
+|\vbox(142.0+2.0)x108.0|\cr
+|.\hbox(7.0+2.0)x108.0, glue set 42.23425fil []|\cr
+|.\penalty 0|\cr
+|.\hbox(7.0+2.0)x108.0, glue set 0.29266 []|\cr
+|.\penalty 250|\cr
+|.\glue(\baselineskip) 1.44444|\cr
+|.\hbox(5.55556+1.55556)x96.0, glue set 0.8693, shifted 12.0 []|\cr
+|.\penalty 100|\cr
+|.\glue(\baselineskip) 1.88889|\cr
+|.\hbox(5.55556+1.55556)x96.0, glue set 0.92438, shifted 12.0 []|\cr
+\qquad\vdots\cr
+|.\hbox(7.0+2.0)x108.0, glue set 18.56308fil []|\cr
+|.\penalty 0|\cr
+|.\hbox(7.0+2.0)x108.0, glue set 36.92476fil []|\cr
+|.\penalty 0|\cr
+\enddisplay
+The individual footnotes each end with `|\penalty 0|'; footnotes that
+take up more than one line have larger penalties between the lines,
+and interline glue appears there too.
+
+How should the output routine break such a box up into three roughly
+equal pieces? Notice that the contents of the box are completely rigid,
+i.e, there is no glue that can stretch or shrink. Furthermore, we can
+assume that the contents of the box are regular, i.e., that the
+inter-baseline distances are all the same. In such circumstances
+a fairly simple ^{balancing} routine can be used to trisect the box.
+
+Let's consider a more general problem: Suppose that a rigid vbox is given,
+$n$~lines tall, where adjacent baselines are $b$~units apart. Suppose
+also that the top baseline is $h$~units from the top of the
+vbox, where $0<h<b$. \ (In our footnote example, $b=9\pt$ and $h=7\pt$;
+in the standard settings of plain \TeX, $b=12\pt$ and $h=10\pt$. We might
+as well work the problem for general $b$ and $h$.) \ It follows that
+the height of the vbox is $H=h+b(n-1)=bn+h-b$.
+
+If $n$ lines are to be distributed evenly into $k$ columns, the first
+column should contain $\lceil n/k\rceil$ lines. \ (This denotes the
+smallest integer greater than or equal to $n/k$.) \ For example,
+our application to footnotes has $n=16$ and $k=3$, hence the first
+column should contain 6~lines. After forming the first column,
+we have reduced the problem to $n=10$ and $k=2$, so two 5-line
+columns will complete the operation. \ (Notice that it is better
+to divide 16 into $6+5+5$ instead of $6+6+4$.) \ Once we have
+found the first column, it's always possible to reduce the $k$-column
+problem to a $(k-1)$-column problem, so we need only concentrate
+on finding the first column.
+
+Let $m=\lceil n/k\rceil$. The height of the given box is $bn+h-b$,
+and the height of the first column should be $bm+h-b$; hence
+we want to do a ^|\vsplit| to that height. However, it isn't
+necessary to calculate $bm+h-b$ exactly, since a bit of
+arithmetic proves that
+\begindisplay
+$\displaystyle bm+h-b\;<\;{bn+h-b\over k}+h\;<\;b(m+1)+h-b.$
+\enddisplay
+Therefore it suffices to |\vsplit| to height $H'=H/k+h$; under the
+assumptions of rigidity, and assuming that a valid break is possible
+after each line, |\vsplit| to $H'$ will split after the maximum
+number of lines that yield a box of height $\le H'$. \ (We have
+observed that $m$~lines produce a box of height~$<H'$ while
+$m+1$~lines produce a box of height~$>H'$.) \ The following \TeX\ code
+does this:
+\beginlines
+|\newcount\k \newdimen\h % registers used by the \rigidbalance routine|
+|\def\rigidbalance#1#2 #3 {\setbox0=\box#1 \k=#2 \h=#3|
+|  \line{\splittopskip=\h \vbadness=10000 \hfilneg|
+|    \valign{##\vfil\cr\dosplits}}}|
+|\def\dosplits{\ifnum\k>0 \noalign{\hfil}\splitoff|
+|  \global\advance\k-1\cr\dosplits\fi}|
+|\def\splitoff{\dimen0=\ht0|
+|  |^|\divide||\dimen0 by\k \advance\dimen0 by\h|
+|  \vsplit0 to \dimen0 }|
+\endlines
+This code is interesting on a number of counts. First, notice that
+the calculation does not depend on~$b$, only on~$h$ and the height of
+the given box; hence |\rigidbalance| has three parameters: a box register
+number, the number of columns~$k$, and the top baseline height~$h$.
+The routine splits the given vbox into $k$~nearly equal pieces and
+justifies the result in a |\line|. The value of\/ ^|\splittopskip| is
+set to~$h$ so that subsequent vboxes will satisfy the ground rules of the
+original vbox, as the problem is reduced from~$k$ to~$k-1$. Each column will
+be preceded by ^|\hfil|, hence ^|\hfilneg| is used to cancel the |\hfil|
+before the first column. A ^|\valign| is used to align all of the columns
+at the top. Notice that the preamble to this |\valign| is
+quite simple; and the body of the |\valign| is generated by a ^{recursive
+macro} |\dosplits| that produces the $k$~columns. The value of\/
+^|\vbadness| is set to~10000 because each |\vsplit| operation
+will produce an ^{underfull} vbox whose badness is 10000.
+
+In our application to footnotes, the |\output| routine can reformat
+the contents of\/ |\box\footins| by saying, for example,
+\begintt
+\rigidbalance\footins 3 7pt
+\setbox\footins=\lastbox
+\endtt
+since ^|\lastbox| will be the result of\/ |\rigidbalance|.
+
+%This solution to the problem of short footnotes might result in
+%^{club lines} or ^{widow lines}, since the balancing routine we have
+%described simply trisects the total number of lines. For example,
+%if the tenth footnote of our example had not been present,
+%the fifteen remaining lines would have been split $5+5+5$;
+%the second column would have been headed by the lonely
+%word `{\eightrm difficult.)}', and the third column would have
+%started with `{\eightrm just an example.)}'. The rigid balancing
+%procedure could be replaced by one that allows ^{ragged-bottom}
+%columns, but there's also another approach: The entire set of footnotes
+%could be combined into a single paragraph, with generous spacing
+%between the individual items. For example, the ten footnotes we
+%have been considering might appear as follows:
+This solution to the problem of short footnotes might result in
+^{club lines} or ^{widow lines}, since the balancing routine we have
+described simply trisects the total number of lines. For example,
+if the tenth footnote of our example had not been present,
+the fifteen remaining lines would have been split $5+5+5$;
+the second column would have been headed by the lonely
+word `{\eightrm difficult.)}', and the third column would have
+started with `{\eightrm just an example.)}'. The rigid balancing
+procedure could be replaced by one that allows ^{ragged-bottom}
+columns, but there's also another approach: The entire set of footnotes
+could be combined into a single paragraph, with generous spacing
+between the individual items. For example, the ten footnotes we
+have been considering might appear as follows:
+%\medskip
+%\begingroup
+%{\catcode`p=12 \catcode`t=12 \gdef\\#1pt{#1}}
+%\let\getfactor=\\
+%\eightpoint
+%\newskip\footglue \footglue=1.5em plus.3em minus.3em
+%\newdimen\footnotebaselineskip \footnotebaselineskip=10pt
+%\dimen0=\footnotebaselineskip \multiply\dimen0 by 1024
+%\divide \dimen0 by \hsize \multiply\dimen0 by 64
+%\xdef\fudgefactor{\expandafter\getfactor\the\dimen0 }
+%\def\vfootnote#1{\insert\footins{\floatingpenalty=20000
+%  \global\advance\footno by 1
+%  \eightpoint \setbox0=\hbox{%
+%    $^{\the\footno}$#1\penalty-10\hskip\footglue}
+%  \dp0=0pt \ht0=\fudgefactor\wd0 \box0}}
+%\output={\showboxbreadth=9999 \showboxdepth=1
+%  \nonstopmode \showbox\footins \errorstopmode
+%  \global\setbox1=\vbox{\makefootnoteparagraph}
+%  \unvbox255}
+%\footno=0
+%\vfootnote{First footnote.}
+%\vfootnote{Second footnote. (Every once in a~while a long
+%  footnote might occur, just to make things difficult.)}
+%\vfootnote{Third footnote.}
+%\vfootnote{Fourth footnote.}
+%\vfootnote{Fifth footnote.
+%  (This is incredibly boring, but it's just an example.)}
+%\vfootnote{Another.}
+%\vfootnote{And another.}
+%\vfootnote{Ho hum.}
+%\vfootnote{Umpteenth footnote.}
+%\vfootnote{Oodles of them.}
+%%\def\makefootnoteparagraph{\unvbox\footins \makehboxofhboxes
+%% \showboxbreadth=9999 \showboxdepth=1
+%% \nonstopmode \showbox0 \errorstopmode
+%%  \setbox0=\hbox{\unhbox0 \removehboxes}
+%% \showboxbreadth=30
+%% \nonstopmode \showbox0 \errorstopmode
+%%  \baselineskip=10pt\noindent\unhbox0 }
+%%\def\makehboxofhboxes{\setbox0=\hbox{}
+%%  \loop\setbox2=\lastbox
+%%  \ifhbox2 \setbox0=\hbox{\box2\unhbox0}\repeat}
+%%\def\removehboxes{\setbox0=\lastbox
+%%  \ifhbox0{\removehboxes}\unhbox0 \fi}
+%\def\makefootnoteparagraph{\unvbox\footins
+% \baselineskip=\footnotebaselineskip \removehboxes}
+%\def\removehboxes{\unskip\setbox0=\lastbox
+% \ifhbox0{\removehboxes}\unhbox0 \else\noindent \fi}
+%\eject
+%\box1\endgroup
+%\medskip
+\medskip
+\begingroup
+{\catcode`p=12 \catcode`t=12 \gdef\\#1pt{#1}}
+\let\getfactor=\\
+\eightpoint
+\newskip\footglue \footglue=1.5em plus.3em minus.3em
+\newdimen\footnotebaselineskip \footnotebaselineskip=10pt
+\dimen0=\footnotebaselineskip \multiply\dimen0 by 1024
+\divide \dimen0 by \hsize \multiply\dimen0 by 64
+\xdef\fudgefactor{\expandafter\getfactor\the\dimen0 }
+\def\vfootnote#1{\insert\footins{\floatingpenalty=20000
+  \global\advance\footno by 1
+  \eightpoint \setbox0=\hbox{%
+    $^{\the\footno}$#1\penalty-10\hskip\footglue}
+  \dp0=0pt \ht0=\fudgefactor\wd0 \box0}}
+\output={\showboxbreadth=9999 \showboxdepth=1
+  %\nonstopmode \showbox\footins \errorstopmode
+  \global\setbox1=\vbox{\makefootnoteparagraph}
+  \unvbox255}
+\footno=0
+\vfootnote{First footnote.}
+\vfootnote{Second footnote. (Every once in a~while a long
+  footnote might occur, just to make things difficult.)}
+\vfootnote{Third footnote.}
+\vfootnote{Fourth footnote.}
+\vfootnote{Fifth footnote.
+  (This is incredibly boring, but it's just an example.)}
+\vfootnote{Another.}
+\vfootnote{And another.}
+\vfootnote{Ho hum.}
+\vfootnote{Umpteenth footnote.}
+\vfootnote{Oodles of them.}
+\def\makefootnoteparagraph{\unvbox\footins \makehboxofhboxes
+ \showboxbreadth=9999 \showboxdepth=1
+ %\nonstopmode \showbox0 \errorstopmode
+  \setbox0=\hbox{\unhbox0 \removehboxes}
+ \showboxbreadth=30
+ %\nonstopmode \showbox0 \errorstopmode
+  \baselineskip=10pt\noindent\unhbox0 }
+\def\makehboxofhboxes{\setbox0=\hbox{}
+  \loop\setbox2=\lastbox
+  \ifhbox2 \setbox0=\hbox{\box2\unhbox0}\repeat}
+\def\removehboxes{\setbox0=\lastbox
+  \ifhbox0{\removehboxes}\unhbox0 \fi}
+\eject
+\box1\endgroup
+\medskip
+
+It would be possible to take the contents of\/ |\box\footins| shown
+previously and to reformat everything into a paragraph, but such an operation
+would be needlessly complicated. If footnotes are to be paragraphed by the
+output routine, it's better simply to prepare them in unjustified
+hboxes. Each of these hboxes will be unboxed later, so we are free to play
+with their heights, widths, and depths. It's convenient to set the
+depth to zero and the height to an estimate of how much a particular
+footnote will contribute to the final paragraph. For example, if
+a footnote takes up exactly half of the |\hsize|, and if the final
+footnote is going to be set with |\baselineskip=10pt|, then the
+height of the footnote hbox should be set to $5\pt$. By letting
+|\count\footins=1000|, we'll have a pretty good estimate of the size
+of the final footnote paragraph. In other words, the following
+insertion scheme is suggested:
+\begindisplay
+|\insert\footins{\floatingpenalty=20000|\cr
+|  \eightpoint \setbox0=\hbox{%|\cr
+|    $^{\the\footno}$|\<text of footnote>|\penalty-10\hskip\footglue}|\cr
+|  \dp0=0pt \ht0=\fudgefactor\wd0 \box0}|\cr
+\enddisplay
+The penalty of $-10$ tends to favor line breaks between footnotes;
+|\footglue| is the amount of glue between footnotes in the final
+footnote paragraph; and |\fudgefactor| is the ratio of\/ |\baselineskip|
+to |\hsize| in that paragraph. The author defined the necessary quantities
+as follows in his experiments:
+\begintt
+\eightpoint \newskip\footglue \footglue=1.5em plus.3em minus.3em
+\newdimen\footnotebaselineskip \footnotebaselineskip=10pt
+\dimen0=\footnotebaselineskip \multiply\dimen0 by 1024
+\divide \dimen0 by \hsize \multiply\dimen0 by 64
+\xdef\fudgefactor{\expandafter\getfactor\the\dimen0 }
+\endtt
+^^|\multiply| ^^|\divide| ^^|sp|
+(The computation of\/ |\fudgefactor| uses the fact that $1\pt=1024\times64\,$sp,
+and it assumes that the |\footnotebaselineskip| is less than $16\pt$.)
+
+Inside the output routine, |\box\footins| will now be a vbox of hboxes, and the
+height of this vbox will be an estimate of the height of the final paragraph.
+For example, our ten footnotes produce
+\begintt
+\vbox(34.48158+0.0)x386.4221
+.\hbox(2.00175+0.0)x70.68285 []
+.\hbox(10.94359+0.0)x386.4221 []
+.\hbox(2.09749+0.0)x74.06345 []
+.\hbox(2.2077+0.0)x77.95517 []
+.\hbox(7.6296+0.0)x269.40376 []
+.\hbox(1.40851+0.0)x49.73532 []
+.\hbox(1.87659+0.0)x66.26334 []
+.\hbox(1.38826+0.0)x49.02003 []
+.\hbox(2.67213+0.0)x94.35402 []
+.\hbox(2.25597+0.0)x79.65926 []
+\endtt
+and the height of $34.48158\pt$ corresponds to an estimate of about
+three and a~half lines. \ (\TeX's page builder has also added |\skip\footins|
+when estimating the total contribution due to footnotes.)
+
+The reformatting of\/ |\box\footins| takes
+place in three stages. First the vbox of hboxes is changed to an hbox
+of hboxes, so that we obtain, e.g.,
+\begindisplay
+|\hbox(10.94359+0.0)x1217.5593|\cr
+|.\hbox(2.00175+0.0)x70.68285 []|\cr
+\qquad\vdots\cr
+|.\hbox(2.25597+0.0)x79.65926 []|\cr
+\enddisplay
+(the same contents as before, but strung in a horizontal row instead of
+a vertical column). Then the inner hboxes are unboxed, and we obtain
+\begintt
+\hbox(6.68999+2.0)x1217.5593
+.\mathon
+.\hbox(3.86665+0.0)x4.16661, shifted -2.82333 []
+.\mathoff
+.\eightrm F
+.etc.
+\endtt
+Finally the outer hbox is unboxed, and the horizontal list inside it
+is converted into a paragraph. Here is the actual \TeX\ code:
+\beginlines
+|\def\makefootnoteparagraph{\unvbox\footins \makehboxofhboxes|
+|  \setbox0=\hbox{\unhbox0 \removehboxes}|
+|  \baselineskip=\footnotebaselineskip\noindent\unhbox0\par}|
+|\def\makehboxofhboxes{\setbox0=\hbox{}|
+|  \loop\setbox2=\lastbox \ifhbox2 \setbox0=\hbox{\box2\unhbox0}\repeat}|
+|\def\removehboxes{\setbox0=\lastbox|
+|  \ifhbox0{\removehboxes}\unhbox0 \fi}|
+\endlines
+^^|\unhbox|^^|\unvbox|
+The |\removehboxes| operation is especially noteworthy, because it uses
+\TeX's ^{save stack} to hold all of the hboxes before unboxing them. Each
+level of recursion in this routine uses one cell of input stack space and
+three cells of save stack space; thus, it is generally safe to do more than
+100 footnotes without exceeding \TeX's capacity. The |\makehboxofhboxes|
+routine is not as efficient; \TeX\ doesn't allow a vbox to be unboxed
+in horizontal mode, or vice versa, hence the trick of\/ |\removehboxes|
+cannot be used. This means that the running time is proportional to~$n^2$,
+if there are $n$~footnotes, because the time to make or unmake a box is
+proportional to the number of items in the top-level list inside.
+However, the constant of proportionality is small, so there is no
+need to resort to a more complicated scheme that would be asymptotically faster.
+Indeed, the |\lastbox| operation itself has a running time approximately
+equal to $a+mb$, where $m$~is the number of items ^^{efficiency} on the
+list preceding the box that is removed; hence |\removehboxes| has a
+running time of order $n^2$ as well. But the constant~$b$ is so small that
+for practical purposes it's possible to think of\/ |\lastbox| as almost
+instantaneous. Note, however, that it would be a mistake to bypass the
+|\removehboxes| operation by saying `|\setbox0=\hbox{\unhbox2\unhbox0}|'
+in |\makehboxofhboxes|; that would make the top-level list inside |\box0| too
+long for efficient unboxing.
+
+%\subsection Communication with output routines. It would be possible to
+%write an entire book about \TeX\ output routines; but the present
+%appendix is already too long, so it will suffice to mention only one
+%or two sneaky tricks that a person might not readily think~of. \ (Appendix~E
+%gives some less sneaky examples.)
+\subsection 与输出例程交流. It would be possible to
+write an entire book about \TeX\ output routines; but the present
+appendix is already too long, so it will suffice to mention only one
+or two sneaky tricks that a person might not readily think~of. \ (Appendix~E
+gives some less sneaky examples.)
+
+Sometimes an output routine needs to know why it was invoked, so there's
+a problem of communicating information from the rest of the program.
+\TeX\ provides general |\mark| operations, but marks don't always yield
+the right sorts of clues. Then there's ^|\outputpenalty|, which can be
+tested to see what penalty occurred at a breakpoint; any penalty of
+$-10000$, $-10001$, $-10002$, or less,
+forces the output routine to act, hence different penalty values
+can be used to pass different messages. \ (When the output routine puts
+material back on the list of contributions, it need not restore the
+penalty at the breakpoint.) \ If output has been forced by a
+highly negative value of\/ |\outputpenalty|, the output routine can
+use |\vbox{\unvcopy255}| to discover how full the page-so-far actually is.
+Underfull and overfull boxes are not reported when |\box255| is
+packaged for use by the output routine, so there's no harm in ejecting
+a page prematurely if you want to pass a signal. \ (Set
+^|\holdinginserts| positive to pass a signal when the contents of\/
+|\box255| will be sent back through the page builder again, if any
+insertions are present.)
+
+Perhaps the dirtiest trick of all is to communicate with the output
+routine via the {\sl depth\/} of\/ |\box255|. For example, suppose that
+you want to know whether or not the current page ends with the last
+line of a paragraph. If each paragraph ends with `|\specialstrut|', where
+|\specialstrut| is like ^|\strut| but $1\,$sp deeper, then |\dp255|
+will have a recognizable value if a page ends simultaneously
+with a paragraph. \ (Of course, ^|\maxdepth| must be suitably large; plain
+\TeX\ takes |\maxdepth=4pt|, while struts are normally $3.5\pt$ deep, so
+there's no problem.) \ A distance of~$1000\,$sp is invisible to the
+naked eye, so a variety of messages can be passed in this way.
+
+If the value of\/ ^|\vsize| is very small, \TeX\ will construct paragraphs
+as usual but it will send them to the output routine one line at a time.
+In this way the output routine could attach marginal notes, etc., based
+on what occurs in the line. Paragraphs that have been rebuilt in this
+way can also be sent back from the output routine to the page builder;
+normal page breaks will then be found, if\/ |\vsize| has been restored.
+
+An output routine can also write notes on a file, based on what occurs in
+a manuscript. A two-pass system can be devised where \TeX\ simply gathers
+information during the first pass; the actual typesetting can be done during
+the second pass, using |\read| to recover information that was written
+during the first.
+
+%\subsection Syntax checking. Suppose you want to run a manuscript through
+%\TeX\ just to check for errors, without getting any output. Is there a
+%way to make \TeX\ run significantly faster while doing this? Yes; here's how:
+%(1)~Say `|\font|^|\dummy||=dummy|'\kern1pt; your system should include a
+%file |dummy.tfm| that defines a font with no characters (but with
+%enough |\fontdimen| parameters to qualify as a math symbol font).
+%(2)~Set all the font identifiers you are using equal to |\dummy|. For
+%example, |\let\tenrm=\dummy|, |\let\tenbf=\dummy|, \dots, |\textfont0=\dummy|,
+%etc. (3)~Say `|\dummy|' to select the dummy font (since plain \TeX\ may
+%have selected the real |\tenrm|).  (4)~Set ^|\tracinglostchars||=0|, so that
+%\TeX\ won't complain when characters aren't present in the dummy font. (5)~Set
+%\begintt
+%\output={\setbox0=\box255\deadcycles=0}
+%\endtt
+%^^|\deadcycles|
+%so that nothing will be shipped out, yet \TeX\ will not think that your
+%output routine is flaky. (6)~Say ^|\newtoks||\output|, so that no other
+%output routine will be defined. (7)~Say ^|\frenchspacing| so that \TeX\
+%will not have to do space factor calculations. (8)~Say
+%^|\hbadness||=10000| so that underfull boxes will not be reported.
+%(9)~And if you want to disable |\write| commands, use the following
+%trick due to Frank ^{Yellin}:
+%\begintt
+%\let\immediate=\relax \def\write#1#{{\afterassignment}\toks0=}
+%\endtt
+%These changes usually make \TeX\ run more than four times as fast.
+%^^|\afterassignment|
+\subsection 语法检查. Suppose you want to run a manuscript through
+\TeX\ just to check for errors, without getting any output. Is there a
+way to make \TeX\ run significantly faster while doing this? Yes; here's how:
+(1)~Say `|\font|^|\dummy||=dummy|'\kern1pt; your system should include a
+file |dummy.tfm| that defines a font with no characters (but with
+enough |\fontdimen| parameters to qualify as a math symbol font).
+(2)~Set all the font identifiers you are using equal to |\dummy|. For
+example, |\let\tenrm=\dummy|, |\let\tenbf=\dummy|, \dots, |\textfont0=\dummy|,
+etc. (3)~Say `|\dummy|' to select the dummy font (since plain \TeX\ may
+have selected the real |\tenrm|).  (4)~Set ^|\tracinglostchars||=0|, so that
+\TeX\ won't complain when characters aren't present in the dummy font. (5)~Set
+\begintt
+\output={\setbox0=\box255\deadcycles=0}
+\endtt
+^^|\deadcycles|
+so that nothing will be shipped out, yet \TeX\ will not think that your
+output routine is flaky. (6)~Say ^|\newtoks||\output|, so that no other
+output routine will be defined. (7)~Say ^|\frenchspacing| so that \TeX\
+will not have to do space factor calculations. (8)~Say
+^|\hbadness||=10000| so that underfull boxes will not be reported.
+(9)~And if you want to disable |\write| commands, use the following
+trick due to Frank ^{Yellin}:
+\begintt
+\let\immediate=\relax \def\write#1#{{\afterassignment}\toks0=}
+\endtt
+These changes usually make \TeX\ run more than four times as fast.
+^^|\afterassignment|
+
+\endchapter
+
+^{Wolfe}, who had moved around the desk and into his chair,
+^^{Hombert, Humbert} put up a palm at him: ``Please, Mr.~Hombert.
+I think it is always advisable to take a short-cut when it is feasible.\rlap{''}
+\author REX ^{STOUT}, {\sl The Rubber Band\/} (1936)
+
+\bigskip
+
+``My dear ^{Watson}, try a little analysis yourself,\rlap{''}
+said he, ^^{Holmes} with a touch of impatience.
+``You know my methods. Apply them,
+and it will be instructive to compare results.\rlap{''}
+\author CONAN ^{DOYLE}, {\sl The Sign of the Four\/} (1890)
+
+%\eject
+\eject\byebye

@@ -1,0 +1,263 @@
+% -*- coding: utf-8 -*-
+
+%% standalone subfiles
+
+\let\byebye = \relax
+\csname loaded\endcsname
+\let\loaded = \endinput
+\let\byebye = \bye
+
+%% macros for The TeXbook
+
+\input manmac
+
+%% compatable with manmac.tex
+
+\catcode `\^=7
+
+%% font definitions
+
+\def\song{SimSun}
+\def\hei{SimHei}
+\def\kai{KaiTi}
+\def\fang{FangSong}
+\def\yuan{YouYuan:embolden=3;extend=0.8}
+%\def\yuan{FZY3JW--GB1-0:embolden=3;extend=0.95}
+%
+\input xeCJK-base
+\xeCJKenablechecksingle
+\normalspacedchars{-}
+%
+\def\letfont{\let\CJKfont}
+\font\zhtenrm="\song" at 10pt
+\let\CJKfont\zhtenrm
+%
+\def\setecfont#1#2#3#4{
+  \expandafter\font\csname en#1\endcsname = #2 at #4pt
+  \expandafter\font\csname zh#1\endcsname = "#3" at #4pt
+  \expandafter\def\csname#1\endcsname{\csname en#1\endcsname\expandafter\letfont\csname zh#1\endcsname}
+}
+
+\setecfont{titlefont}{cmssdc10}{\yuan}{40}
+%
+\setecfont{tenrm}{cmr10}{\song}{10}
+\setecfont{ninerm}{cmr9}{\song}{9}
+\setecfont{eightrm}{cmr8}{\song}{8}
+\setecfont{sevenrm}{cmr7}{\song}{7}
+\setecfont{sixrm}{cmr6}{\song}{6}
+\setecfont{fiverm}{cmr5}{\song}{5}
+%
+\setecfont{tenbf}{cmbx10}{\hei}{10}
+\setecfont{ninebf}{cmbx9}{\hei}{9}
+\setecfont{eightbf}{cmbx8}{\hei}{8}
+\setecfont{sevenbf}{cmbx7}{\hei}{7}
+\setecfont{sixbf}{cmbx6}{\hei}{6}
+\setecfont{fivebf}{cmbx5}{\hei}{5}
+%
+\setecfont{tentt}{cmtt10}{\fang}{10}
+\setecfont{ninett}{cmtt9}{\fang}{9}
+\setecfont{eighttt}{cmtt8}{\fang}{8}
+\setecfont{seventt}{cmtt7}{\fang}{7}
+\setecfont{sixtt}{cmtt6}{\fang}{6}
+\setecfont{fivett}{cmtt5}{\fang}{5}
+%
+\setecfont{tensl}{cmsl10}{\kai}{10}
+\setecfont{ninesl}{cmsl9}{\kai}{9}
+\setecfont{eightsl}{cmsl8}{\kai}{8}
+\setecfont{sevensl}{cmsl7}{\kai}{7}
+\setecfont{sixsl}{cmsl6}{\kai}{6}
+\setecfont{fivesl}{cmsl5}{\kai}{5}
+%
+\setecfont{tenit}{cmti10}{\kai}{10}
+\setecfont{nineit}{cmti9}{\kai}{9}
+\setecfont{eightit}{cmti8}{\kai}{8}
+\setecfont{sevenit}{cmti7}{\kai}{7}
+\setecfont{sixit}{cmti6}{\kai}{6}
+\setecfont{fiveit}{cmti5}{\kai}{5}
+
+\def\ST#1{\font\tempfont="\song" at #1pt\letfont\tempfont}
+\def\HT#1{\font\tempfont="\hei" at #1pt\letfont\tempfont}
+\def\KT#1{\font\tempfont="\kai" at #1pt\letfont\tempfont}
+\def\FS#1{\font\tempfont="\fang" at #1pt\letfont\tempfont}
+\def\YY#1{\font\tempfont="\yuan" at #1pt\letfont\tempfont}
+
+%% some redefinition of manmac.tex
+
+\font\titlefonta=cmssdc10 at 20pt
+
+\def\tenpoint{\def\rm{\fam0\tenrm}%
+  \textfont0=\tenrm \scriptfont0=\sevenrm \scriptscriptfont0=\fiverm
+  \textfont1=\teni \scriptfont1=\seveni \scriptscriptfont1=\fivei
+  \textfont2=\tensy \scriptfont2=\sevensy \scriptscriptfont2=\fivesy
+  \textfont3=\tenex \scriptfont3=\tenex \scriptscriptfont3=\tenex
+  \def\it{\fam\itfam\tenit}%
+  \textfont\itfam=\tenit
+  \def\sl{\fam\slfam\tensl}%
+  \textfont\slfam=\tensl
+  \def\bf{\fam\bffam\tenbf}%
+  \textfont\bffam=\tenbf \scriptfont\bffam=\sevenbf
+   \scriptscriptfont\bffam=\fivebf
+  \def\tt{\fam\ttfam\tentt}%
+  \textfont\ttfam=\tentt
+  \tt \ttglue=.5em plus.25em minus.15em
+  \normalbaselineskip=15pt
+  \def\MF{{\manual META}\-{\manual FONT}}%
+  \let\sc=\eightrm
+  \let\big=\tenbig
+  \setbox\strutbox=\hbox{\vrule height8.5pt depth3.5pt width\z@}%
+  \normalbaselines\rm}
+%
+\def\ninepoint{\def\rm{\fam0\ninerm}%
+  \textfont0=\ninerm \scriptfont0=\sixrm \scriptscriptfont0=\fiverm
+  \textfont1=\ninei \scriptfont1=\sixi \scriptscriptfont1=\fivei
+  \textfont2=\ninesy \scriptfont2=\sixsy \scriptscriptfont2=\fivesy
+  \textfont3=\tenex \scriptfont3=\tenex \scriptscriptfont3=\tenex
+  \def\it{\fam\itfam\nineit}%
+  \textfont\itfam=\nineit
+  \def\sl{\fam\slfam\ninesl}%
+  \textfont\slfam=\ninesl
+  \def\bf{\fam\bffam\ninebf}%
+  \textfont\bffam=\ninebf \scriptfont\bffam=\sixbf
+   \scriptscriptfont\bffam=\fivebf
+  \def\tt{\fam\ttfam\ninett}%
+  \textfont\ttfam=\ninett
+  \tt \ttglue=.5em plus.25em minus.15em
+  \normalbaselineskip=14pt
+  \def\MF{{\manual hijk}\-{\manual lmnj}}%
+  \let\sc=\sevenrm
+  \let\big=\ninebig
+  \setbox\strutbox=\hbox{\vrule height8pt depth3pt width\z@}%
+  \normalbaselines\rm
+  \ST{9}}
+%
+\def\eightpoint{\def\rm{\fam0\eightrm}%
+  \textfont0=\eightrm \scriptfont0=\sixrm \scriptscriptfont0=\fiverm
+  \textfont1=\eighti \scriptfont1=\sixi \scriptscriptfont1=\fivei
+  \textfont2=\eightsy \scriptfont2=\sixsy \scriptscriptfont2=\fivesy
+  \textfont3=\tenex \scriptfont3=\tenex \scriptscriptfont3=\tenex
+  \def\it{\fam\itfam\eightit}%
+  \textfont\itfam=\eightit
+  \def\sl{\fam\slfam\eightsl}%
+  \textfont\slfam=\eightsl
+  \def\bf{\fam\bffam\eightbf}%
+  \textfont\bffam=\eightbf \scriptfont\bffam=\sixbf
+   \scriptscriptfont\bffam=\fivebf
+  \def\tt{\fam\ttfam\eighttt}%
+  \textfont\ttfam=\eighttt
+  \tt \ttglue=.5em plus.25em minus.15em
+  \normalbaselineskip=12pt
+  \def\MF{{\manual opqr}\-{\manual stuq}}%
+  \let\sc=\sixrm
+  \let\big=\eightbig
+  \setbox\strutbox=\hbox{\vrule height7pt depth2pt width\z@}%
+  \normalbaselines\rm}
+
+\def\leftheadline{\hbox to \pagewidth{%
+    \vbox to 10pt{}% strut to position the baseline
+    {\tenbf\folio}\hfil% folio to left of text
+    \rhead% running head flush left
+    }}
+\def\rightheadline{\hbox to \pagewidth{%
+    \vbox to 10pt{}% strut to position the baseline
+    \rhead% running head flush right
+    \hfil{\tenbf\folio}% folio to right of text
+    }}
+
+\def\beginchapter#1 #2#3. #4\par{\global\exno=0
+  \subsecno=0
+  \def\chapno{#2#3}
+%  \ifodd\pageno
+%    \errmessage{You had too much text on that last page; I'm backing up}
+%    \advance\pageno by-1 \fi
+  \titlepage
+  \def\\{ } % \\'s in the title will be treated as spaces
+  \message{#1 #2#3:} % show the chapter title on the terminal
+  \bookmark{1}{#2#3. #4}
+  \def\MF{{\manual 89:;<=>:}} % slant the logo
+  \xdef\rhead{#2#3: #4\unskip}
+  {\def\TeX{T\kern-.2em\lower.5ex\hbox{E}\kern-.06em X}
+    \def\MF{{\vbox to30pt{}\manual ()*+,-.*}}
+    \def\\{#3}
+    \ifx\empty\\ \rightline{\inchhigh #2\kern-.04em}
+    \else\rightline{\inchhigh #2\kern-.06em#3\kern-.04em}\fi
+    \vskip 1.75pc
+    \baselineskip 36pt \lineskiplimit \titlelsl \lineskip 12pt
+    \let\\=\cr % now the \\'s are line dividers
+    \halign{\line{\titlefont\hfil##}\\#4\unskip\\}
+    \vskip 4pc
+    \special{pdf:image width 348pt height 0in depth 348pt (artwork/#1\chapno.png)}
+    \vfill\eject} % output the chapter title page
+  \tenpoint}
+
+\outer\def\subsection#1. {\medbreak\advance\subsecno by 1
+  \bookmark{2}{\the\subsecno. #1}
+  \noindent{\bf \the\subsecno.\enspace#1.\enspace}}
+
+\def\beginlines{\par\begingroup\baselineskip=12pt\nobreak\medskip\parindent\z@ \obeylines
+  \hrule\kern1pt\nobreak \everypar{\strut}}
+
+\def\pdfdestx#1{%
+  \special{pdf:dest (#1) [@thispage /FitH @ypos]}%
+}
+\def\pdflinkx#1#2{%
+  \special{pdf:bann << /Type/Annot/Subtype/Link  /Border [0 0 0] /A << /S/GoTo/D (#1) >> >>}%
+  \special{pdf:bc [0 0 1]}#2\special{pdf:ec}%
+  \special{pdf:eann}%
+}
+\def\pdfexno#1#2{\pdfdestx{ex-#1-#2}\pdflinkx{ans-#1-#2}{#1.#2}}
+\def\pdfansno#1#2{\pdfdestx{ans-#1-#2}\pdflinkx{ex-#1-#2}{#1.#2.}}
+
+\outer\def\exercise{\medbreak
+  \global\advance\exno by 1
+  \noindent\llap{\manual\char'170\rm\kern.15em}% triangle in margin
+  {\ninebf 练习~\bf\pdfexno{\chapno}{\the\exno}}\par\nobreak\noindent}
+\def\dexercise{\global\advance\exno by 1
+  \llap{\manual\char'170\rm\kern.15em}% triangle in indented space
+  {\eightbf 练习~\bf\pdfexno{\chapno}{\the\exno}}\hfil\break}
+
+\def\ansno#1.#2:{\medbreak\noindent
+  \hbox to\parindent{\bf\hss\pdfansno{#1}{#2}\enspace}\ignorespaces}
+
+%\let\oldanswer = \answer
+%\outer\def\answer{\par\noindent\hbox to\parindent{\ninebf 答案\hfil\quad}\ninepoint}
+
+\proofmodefalse % this should be false when making camera-ready copy
+
+\def\frac#1/#2{\leavevmode\kern.1em
+  \raise.5ex\hbox{\the\scriptfont0 #1}\kern-.1em
+  /\kern-.15em\lower.25ex\hbox{\the\scriptfont0 #2}}
+
+%% from old bookall.tex
+\baselineskip=14pt
+\lineskip=2pt
+\tenpoint
+
+%% paper dimensions
+
+\pdfpagewidth=7in \pdfpageheight=10in
+
+%% pdf bookmarks
+
+\def\gbmark#1{\special{pdf: out 1 << /Title <FEFF#1> /Dest [ @thispage /FitH @ypos ] >>}}
+
+\special{pdf: docview << /PageMode /UseOutlines >>}
+\def\bookmark#1#2{%
+  \begingroup%
+  \def\linebreak{}\def\TeX{TeX}\def\noindent{}\def\\{}\def\hfil{}\def\quad{}%
+  \special{pdf:out #1 << /Title (#2) /Dest [ @thispage /FitH @ypos ] >>}%
+  \endgroup%
+}
+
+%% add original page numbers
+
+\newcount\origpageno
+
+\def\strutdepth{\dp\strutbox}
+\def\1{\strut\vadjust{\kern-\strutdepth\pagenotext}%
+  \pdfdestx{page\the\origpageno}\global\advance\origpageno by 1}
+\def\pagenotext{\vtop to \strutdepth{
+  \baselineskip\strutdepth\vss\llap{\tt[\the\origpageno]\qquad}\null}}
+
+%% compatable with manmac.tex
+
+\catcode `\^=13

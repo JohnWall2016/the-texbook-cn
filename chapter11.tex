@@ -1,0 +1,660 @@
+% -*- coding: utf-8 -*-
+
+\input macros
+
+%\beginchapter Chapter 11. Boxes
+\beginchapter Chapter 11. 盒子
+
+\origpageno=63
+
+%\TeX\ makes complicated pages by starting with simple individual characters
+%and putting them together in larger units, and putting these together in still
+%larger units, and so on. Conceptually, it's a big paste-up job. The \TeX nical
+%terms used to describe such page construction are {\sl ^{boxes}\/} and
+%{\sl ^{glue}}.
+\1在制作复杂页面时，\TeX\ 首先把简单的单个字符放在一起生成一个大的单元，
+然后再把大的单元放在一起生成更大的单元，等等。%
+在概念上，这就是一个繁重的粘连工作。%
+用来描写这样的页面构造的 \TeX\ 术语是{\KT{10}盒子}%
+和{\KT{10}粘连}。
+
+%Boxes in \TeX\ are two-dimensional things with a rectangular shape, having
+%three associated measurements called {\sl^{height}}, {\sl^{width}}, and
+%{\sl^{depth}}.  Here is a picture of a typical box, showing its so-called
+%^{reference point} and ^{baseline}:
+\TeX\ 中的盒子是长方形的二维对象，
+有三个相应的尺寸，叫做{\KT{10}高度，宽度}和{\KT{10}深度}。%
+下面是一个标准盒子的样子，其中给出了它的所谓基准点和基线：
+
+%{\eightpoint
+%\setbox0=\hbox{$\uparrow$}
+%\setbox1=\hbox to \wd0{$\hss\mid\hss$} % with luck, they'll line up
+%\setbox2=\vbox{\copy0
+%  \nointerlineskip \kern-.5pt \copy1
+%  \nointerlineskip \kern-.5pt \copy1
+%  \moveleft 1em\hbox{height}
+%  \copy1 \nointerlineskip \kern-.5pt
+%  \copy1 \nointerlineskip \kern-.5pt
+%  \hbox{$\downarrow$}
+%  \kern.2pt}
+%\setbox3=\vbox{\kern.2pt\copy0
+%  \moveleft 1em\hbox{depth}
+%  \hbox{$\downarrow$}
+%  \kern0pt}
+%\setbox4=\vtop{\kern-3pt % this cancels the null text above the samplebox
+%  \hbox{\samplebox{\ht2}{\ht3}{6em}{}%
+%    \kern-6em
+%    \raise3pt\hbox to 6em{\hss Baseline\hss}}
+%  \kern3pt
+%  \arrows{6em}{width}}
+%\medskip\indent
+%\setbox0=\hbox{$\vcenter{}$}% \ht0 is the axis height
+%\lower\ht0\hbox{Reference point$-$\kern-.2em$\rightarrow$\kern2pt}%
+%\raise\ht2\box4
+%\kern1.5em
+%\raise\ht2\vtop{\kern0pt\box2\nointerlineskip\box3}}
+{\eightpoint
+\setbox0=\hbox{$\uparrow$}
+\setbox1=\hbox to \wd0{$\hss\mid\hss$} % with luck, they'll line up
+\setbox2=\vbox{\copy0
+  \nointerlineskip \kern-.5pt \copy1
+  \nointerlineskip \kern-.5pt \copy1
+  \moveleft 1em\hbox{height}
+  \copy1 \nointerlineskip \kern-.5pt
+  \copy1 \nointerlineskip \kern-.5pt
+  \hbox{$\downarrow$}
+  \kern.2pt}
+\setbox3=\vbox{\kern.2pt\copy0
+  \moveleft 1em\hbox{depth}
+  \hbox{$\downarrow$}
+  \kern0pt}
+\setbox4=\vtop{\kern-3pt % this cancels the null text above the samplebox
+  \hbox{\samplebox{\ht2}{\ht3}{6em}{}%
+    \kern-6em
+    \raise3pt\hbox to 6em{\hss Baseline\hss}}
+  \kern3pt
+  \arrows{6em}{width}}
+\medskip\indent
+\setbox0=\hbox{$\vcenter{}$}% \ht0 is the axis height
+\lower\ht0\hbox{Reference point$-$\kern-.2em$\rightarrow$\kern2pt}%
+\raise\ht2\box4
+\kern1.5em
+\raise\ht2\vtop{\kern0pt\box2\nointerlineskip\box3}}
+
+%\medskip\noindent
+%From \TeX's viewpoint, a single character from a font is a box; it's one
+%of the simplest kinds of boxes. The font designer has decided what the
+%height, width, and depth of the character are, and what the symbol will
+%look like when it is in the box; \TeX\ uses these dimensions to paste
+%boxes together, and ultimately to determine the locations of the reference
+%points for all characters on a page.  In plain \TeX's |\rm| font (|cmr10|), for
+%example, the letter `h' has a height of 6.9444 points, a width of 5.5555
+%points, and a depth of zero; the letter `g' has a height of 4.3055
+%points, a width of 5 points, and a depth of 1.9444 points. Only certain
+%special characters like parentheses have height plus depth actually equal
+%to 10 points, although ^|cmr10| is said to be a ``10-point'' font. You needn't
+%bother to learn these measurements yourself, but it's good to be aware of
+%the fact that \TeX\ deals with such information; then you can better
+%understand what the computer does to your manuscript.
+\medskip\noindent
+在 \TeX\ 看来，来自字体非单个字符就是一个盒子；
+它是一种最简单的盒子。%
+字体的设计者已经给出了字符的高度，宽度和深度，以及它在盒子中的形状；
+\TeX\ 利用这些尺寸把盒子粘连在一起，并且最后确定页面中所有字符的基准点的位置。%
+例如，在 plain \TeX\ 的 |\rm| 字体(|cmr10|)中，字母`h'的高度是 6.944 points,
+宽度为 5.5555 points, 深度为零；
+字母`g'的高度为 4.3055 points, 宽度为 5 points, 深度为 1.9444 points。%
+虽然 |cmr10| 叫做``10-point''字体，却只有象圆括号这样的特殊字符的高度加深度%
+正好等于 10 points。%
+实际上你并不需要知道这些尺寸，但是知道了这些 \TeX\ 处理的内容是有益的；
+这样就能更好地理解计算机是怎样处理你的文稿的。
+
+%The character shape need not fit inside the boundaries of its box. For example,
+%some characters that are used to build up larger math symbols like matrix
+%brackets intentionally protrude a little bit, so that they overlap
+%properly with the rest of the symbol. Slanted letters frequently extend a
+%little to the right of the box, as if the box were skewed right at the top
+%and left at the bottom, keeping its baseline fixed. For example, compare
+%the letter `g' in the |cmr10| and ^|cmsl10| fonts (|\rm| and |\sl|):
+%\begindisplay
+%\vbox to 40pt{\ifproofmode\hrule\vfill
+%  \hsize=2.5in \baselineskip 6pt \fiverm\noindent
+%  (A figure will be inserted here; too bad you can't see it now.
+%  It shows two g's, as claimed.)
+%  \vfill\hrule\fi}
+%\enddisplay
+%In both cases \TeX\ thinks that the box is 5 points wide, so both letters get
+%exactly the same treatment. \TeX\ doesn't have any idea where the ink will
+%go---only the output device knows this. But the slanted letters will be
+%spaced properly in spite of \TeX's lack of knowledge, because the baselines
+%will match up.
+字符形状不需要处在盒子的边界内。%
+例如，有些字符被用来构建更大的数学符号，象矩阵的括号就有意突出来一点，
+这样就能与其它符号适当地重叠起来。%
+Slanted 字母常常超出盒子的右边界，就象盒子在顶部向右倾，在底部向左倾，而基线保持%
+不动一样。%
+例如，比较 |cmr10| 和 |cmsl10| 字体(|\rm| 和 |\sl|)中的字母`g':
+\medskip
+\font\cmrgg=cmr10 at 30pt
+\font\cmslgg=cmsl10 at 30pt
+\centerline{cmr10 \hskip 30pt cmsl10}
+\smallskip
+\centerline{{\vrule\cmrgg g\vrule\hskip-16pt\vrule height0.2pt depth0.2pt
+width80pt\hskip-16pt\vrule\cmslgg g\vrule}\rlap{\hskip 10pt放大了 3 倍}}
+\medskip
+\noindent
+在两种情况下，\TeX\ 都认为盒子的宽度是 5 points, 所以两个字母正好采用同样的处理方式。%
+\TeX\ 不考虑形状如何——只有输出设备知道形状。%
+但是因为基线是知道的，所以尽管 \TeX\ 没什么别的信息，slanted 字母也能放在适当位置上。
+
+%Actually the font designer also tells \TeX\ one other thing, the so-called
+%{\sl^{italic correction}\/}: A number is specified for each character,
+%telling roughly how far that character extends to the right of its box
+%boundary, plus a little to spare. For example,
+%the italic correction for `g' in |cmr10| is $0.1389\pt$, while in |cmsl10|
+%it is $0.8565\pt$. Chapter~4 points out that this correction is added to the
+%normal width if you type `^|\/|' just after the character. You should remember
+%to use |\/| when shifting from a slanted font to an unslanted one, especially
+%in cases like
+%\begintt
+%the so-called {\sl italic correction\/}:
+%\endtt
+%since no space intervenes here to compensate for the loss of slant.
+\1实际上，字体设计者也要告诉 \TeX\ 一个信息，就所谓的{\sl 倾斜校正}：
+对每个字符要规定一个数字，大概说明字符要伸出其右边界多少，再加上一点富余量。%
+例如，在 |cmr10| 中字母`g'的倾斜校正为 $0.1389\pt$, 而在 |cmsl10| 中为 $0.8565\pt$。%
+第四章指出，如果你在字符紧后面输入了`|\/|', 那么这个修正就要加到正常宽度上。%
+当从倾斜字体转到非倾斜字体时记住要用 |\/|, 特别是在像
+\begintt
+the so-called {\sl italic correction\/}:
+\endtt
+的情况，因为这里没有插入的空格去弥补 slant 的占用。
+
+%\smallbreak
+%\TeX\ also deals with another simple kind of box, which might be called
+%a~``^{black box},'' namely, a rectangle like
+%`\thinspace \vrule width 4pt height 6pt depth 1.5pt \thinspace'
+%that is to be entirely filled with ink at printing time. You can specify any
+%height, width, and depth you like for such boxes---but they had better not have
+%too much area, or the printer might get upset. \ (Printers generally
+%prefer white space to black space.)
+\smallbreak
+\TeX\ 处理的另外一种简单的盒子可以称为``黑色盒子'', 即象%
+`\thinspace \vrule width 4pt height 6pt depth 1.5pt \thinspace'%
+这样的长方形，在打印时要完全上色。%
+对这样的盒子，你可以给出任意高度，宽度和深度——但是最好别太大，
+否则打印墨可能耗尽。%
+(打印时最好使用白色格子而不是黑色的。)
+
+%Usually these black boxes are made very skinny, so that they appear as
+%horizontal lines or vertical lines. Printers traditionally call such lines
+%``^{horizontal rules}'' and ``^{vertical rules},'' so the terms \TeX\ uses
+%to stand for black boxes are ^|\hrule| and ^|\vrule|. Even when the box is
+%square, as in `\thinspace\bull\thinspace', you must call it either an~|\hrule|
+%or a~|\vrule|.  We shall discuss the use of ^{rule boxes} in greater
+%detail later.  \ (See Chapter~21.)
+通常这些黑色盒子被定得很细，使得看起来象水平直线或垂直直线。%
+传统上打印机将其称为``水平标尺''和``垂直标尺'',
+因此在 \TeX\ 中表示这些黑色盒子的术语为 |\hrule| 和 |\vrule|。%
+即使盒子是方的，就象`\thinspace\bull\thinspace'一样，你也得称其为 |\hrule| 或%
+~|\vrule|。%
+后面我们将更详细讨论标尺盒子的用法。%
+(见第二十一章。)
+
+%\smallbreak
+%Everything on a page that has been typeset by \TeX\ is made up of simple
+%character boxes or rule boxes, pasted together in combination. \TeX\
+%pastes boxes together in two ways, either {\sl horizontally\/} or {\sl
+%vertically}.  When \TeX\ builds a ^{horizontal list} of boxes, it lines
+%them up so that their reference points appear in the same horizontal row;
+%therefore the baselines of adjacent characters will match up as they
+%should. Similarly, when \TeX\ builds a ^{vertical list} of boxes, it lines
+%them up so that their reference points appear in the same vertical column.
+\smallbreak
+\TeX\ 所排版的所有页面上的内容都由简单的字符盒子或标尺盒子组成，
+在组合时粘连在一起。%
+\TeX\ 用两种方法把盒子粘连在一起，{\KT{10}在水平方向上}或者{\KT{10}在垂直方向上}。%
+当 \TeX\ 建立了一个盒子的水平列时，
+就把它们对齐，使得其基准点在同一水平行上；
+从而相邻字符的基线按部就班地匹配好。%
+类似地，当 \TeX\ 建立了盒子的垂直列时，
+也要对齐它们，使得其基准点在同一垂直列上。
+
+%% Here are some macros for making blank boxes
+%\def\dolist{\afterassignment\dodolist\let\next= }
+%\def\dodolist{\ifx\next\endlist \let\next\relax
+%  \else \\\let\next\dolist \fi
+%  \next}
+%\def\endlist{\endlist}
+%\def\\{\expandafter\if\space\next\ \else \setbox0=\hbox{\next}\maketypebox\fi}
+%\def\demobox#1{\setbox0=\hbox{\dolist#1\endlist}%
+%  \copy0\kern-\wd0\makelightbox}
+% Here are some macros for making blank boxes
+\def\dolist{\afterassignment\dodolist\let\next= }
+\def\dodolist{\ifx\next\endlist \let\next\relax
+  \else \\\let\next\dolist \fi
+  \next}
+\def\endlist{\endlist}
+\def\\{\expandafter\if\space\next\ \else \setbox0=\hbox{\next}\maketypebox\fi}
+\def\demobox#1{\setbox0=\hbox{\dolist#1\endlist}%
+  \copy0\kern-\wd0\makelightbox}
+
+%Let's take a look at what \TeX\ does behind the scenes, by comparing the
+%computer's methods with what you would do if you were setting metal type
+%by hand. In the time-tested traditional method, you choose the letters that
+%you~need out of a type case---the uppercase letters are in the ^{upper
+%case}---and you put them into a ``^{composing stick}.'' When a line is
+%complete, you adjust the spacing and transfer the result to the ``chase,''
+%where it joins the other rows of type. Eventually you lock the type up
+%tightly by adjusting external wedges called ``quoins.'' This isn't much
+%different from what \TeX\ does, except that different words are used; when
+%\TeX\ locks up a line, it creates what is called an ``^{hbox}''
+%(^{horizontal box}), because the components of the line are pieced
+%together horizontally. You can give an instruction like
+%\begintt
+%\hbox{A line of type.}
+%\endtt
+%in a \TeX\ manuscript; this tells the computer to take boxes for the appropriate
+%letters in the current font and to lock them up in an hbox. As far as \TeX\ is
+%concerned, the letter `A' is a box
+%`\thinspace\setbox0\hbox{A}\maketypebox\thinspace'
+%and the letter `p' is a box
+%`\thinspace\setbox0\hbox{p}\maketypebox\thinspace'.
+%So the given instruction causes \TeX\ to form the hbox
+%\begindisplay
+%\demobox{A line of type.}
+%\enddisplay
+%representing `A line of type.' The hboxes for individual lines of type are
+%eventually joined together by putting them into a ``^{vbox}'' (^{vertical
+%box}). For example, you can say
+%\begintt
+%\vbox{\hbox{Two lines}\hbox{of type.}}
+%\endtt
+%and \TeX\ will convert this into
+%\begindisplay%
+%  \setbox0=\vbox{\hbox{\demobox{Two lines}}\hbox{\demobox{of type.}}}
+%$\vcenter{\hbox{\makelightbox\kern-\wd0\box0}}$\qquad
+%  i.e.,\qquad$\vcenter{\vbox{\hbox{Two lines}\hbox{of type.}}}$
+%\enddisplay
+%The principal difference between \TeX's method and the old way is that metal
+%types are generally cast so that each character has the same height and
+%depth; this makes it easy to line them up by hand. \TeX's types have
+%variable height and depth, because the computer has no trouble lining
+%characters up by their baselines, and because the extra information about
+%height and depth helps in the positioning of accents and mathematical
+%symbols.
+通过对比计算机的方法和手工排版来看看在幕后 \TeX\ 是怎样工作的。%
+在久经考验的传统方法中，首先从铅字格中选好需要的字母——大写字母在上面的格中——%
+并且把它们放在``组合盘''中。%
+当完成一行时，要调整好间距并且把它放在与其它排好的行合并起来的``钢框''内。%
+最后，通过调整外面的楔子把版锁紧，即``楔紧''。%
+这与 \TeX\ 所做的大同小异，只不过称呼不同；
+当 \TeX\ 锁好一行后，就得到一个所谓的``hbox''(水平盒子),
+因为行的各个部分是水平连接在一起的。%
+在 \TeX\ 的文稿中，你可以给出象
+\begintt
+\hbox{A line of type.}
+\endtt
+这样的指令；
+它告诉计算机把当前字体的相应字母放在盒子中，并且把它们锁在一个 hbox 中。
+对 \TeX\ 而言，字母`A'是一个盒子`\thinspace\setbox0\hbox{A}\maketypebox\thinspace',
+字母`p'是一个盒子`\thinspace\setbox0\hbox{p}\maketypebox\thinspace'。
+\1所以所给的指令使 \TeX\ 去制作一个盒子
+\begindisplay
+\demobox{A line of type.}
+\enddisplay
+来表示`A line of type'。%
+排版得到的各个行的 hbox 最后放在一个``vbox''(垂直盒子)中来合并起来。%
+例如，你可以输入
+\begintt
+\vbox{\hbox{Two lines}\hbox{of type.}}
+\endtt
+\TeX\ 将把它转变为
+\begindisplay%
+  \setbox0=\vbox{\hbox{\demobox{Two lines}}\hbox{\demobox{of type.}}}
+$\vcenter{\hbox{\makelightbox\kern-\wd0\box0}}$\qquad
+  i.e.,\qquad$\vcenter{\vbox{\hbox{Two lines}\hbox{of type.}}}$
+\enddisplay
+\TeX\ 方法和老方法的主要差别是，铅字排版一般是铸件，使得每个字符的高度和宽度相同；
+这使得容易手工对齐。%
+\TeX\ 排版中，字符高度和深度各不相同，因为用基线对齐时不会产生影响，
+并且因为与高度和深度有关的特殊信息有利于对重音和数学符号的定位。
+
+%Another important difference between \TeX\ setting and hand setting is, of
+%course, that \TeX\ will choose line divisions automatically; you don't
+%have to insert ^|\hbox| and ^|\vbox| instructions unless you want to
+%retain complete control over where each letter goes. On the other hand,
+%if you do use |\hbox| and |\vbox|, you can make \TeX\ do almost everything
+%that Ben ^{Franklin} could do in his printer's shop. You're only giving
+%up the ability to make the letters come out charmingly crooked or badly
+%inked; for such effects you need to make a new font. \ (And of course you
+%lose the tactile and olfactory sensations, and the thrill of
+%doing everything by yourself. \TeX\ will never completely replace the
+%good~old~ways.)
+当然， \TeX\ 排版和手工排版的另一个重要差别是，
+\TeX\ 自动生成分开的行；
+你不必插入 |\hbox| 和 |\vbox| 指令，除非要完全控制每个字母的位置。%
+另一方面，如果的确使用了 |\hbox| 和 |\vbox|, 那么你可以完成 Ben {Franklin} 在%
+他的印刷厂中所做的任何工作。%
+你正在放弃的仅仅是龙飞凤舞的墨水字母；要得到这样的效果就需要新的字体。%
+(当然你还失去了触觉和嗅觉，以及亲自操刀的快感。%
+\TeX\ 将从不完全替代老的方法。)
+
+%A page of text like the one you're reading is itself a box, in \TeX's view:
+%It is a largish box made from a vertical list of smaller boxes representing
+%the lines of text. Each line of text, in turn, is a box made from a
+%horizontal list of boxes representing the individual characters. In more
+%complicated situations, involving mathematical formulas and/or complex
+%tables, you can have boxes within boxes within boxes $\ldots$ to any level.
+%But even these complicated situations arise from horizontal or vertical lists
+%of boxes pasted together in a simple way; all that you and \TeX\ have to
+%worry about is one list of boxes at a time. In fact, when you're typing
+%straight text, you don't have to think about boxes at all, since \TeX\ will
+%automatically take responsibility for assembling the character boxes into
+%words and the words into lines and the lines into pages. You need to be
+%aware of the box concept only when you want to do something out of the
+%ordinary, e.g., when you want to center a heading.
+在 \TeX\ 看来，你正在看的这页本身就是一个盒子：
+它是从表示每行文本的更小的盒子的垂直列制作的相当大的盒子。%
+依次地，每行文本是表示各个字符的盒子的水平列制作的盒子。%
+在包括数学公式和/或复杂表格的更复杂的情形，可以盒子套盒子套盒子 $\ldots$ 到任意多层。%
+但是，即使是这样复杂的情形也是按照简单的方法从粘连在一起盒子的水平或垂直列得到；
+每次你和 \TeX\ 所必须关心的所有东西就是一个盒子列。%
+实际上，当排版一个简单文本时，根本不必考虑盒子，
+因为 \TeX\ 会自动负责把字符变成单词，把单词变成行，把行变成页的工作。%
+只有当你要做一些非普通的排版——比如把标题居中——时，
+才需要盒子的知识
+
+%\danger From the standpoint of \TeX's digestive processes, a manuscript
+%comes in as a sequence of tokens, and the tokens are to be transformed into
+%a sequence of boxes. Each token of input is essentially an instruction or
+%a piece of an instruction; for example, the token `|A|$_{11}$' normally means,
+%``put a character box for the letter |A| at the end of the current hbox,
+%using the current font''; the token `\cstok{vskip}' normally means, ``skip
+%vertically in the current vbox by the \<dimen> specified in the
+%following tokens.''
+\danger 从 \TeX\ 消化过程来看，文稿按照一系列记号进去，
+并且记号被转换为一系列盒子。%
+每个输入的记号本质上是一个指令或者一批指令；
+\1例如，记号`|A|$_{11}$'的正常意思是，``用当前字体，把字母 |A| 的字符盒子放在%
+当前盒子的最后'';
+记号`\cstok{vskip}'的正常意思是，``在当前盒子中%
+垂直跳过下一个记号给出的 \<dimen>''。
+
+%\danger The height, width, or depth of a box might be negative, in which
+%case it is a ``^{shadow box}'' that is somewhat hard to draw. \TeX\ doesn't
+%balk at ^{negative dimensions}; it just does arithmetic as usual. For example,
+%the combined width of two adjacent boxes is the sum of their widths, whether
+%or not the widths are positive.  A font designer can declare a character's
+%width to be negative, in which case the character acts like a ^{backspace}. \
+%(Languages that read from right to left could be
+%handled in this way, but only to a limited extent, since \TeX's line-breaking
+%^^{Hebrew} ^^{Arabic}
+%algorithm is based on the assumption that words don't have negative widths.)
+\danger 盒子的高度，宽度或深度可能是负值，
+这时它是有些难画出的``隐性盒子''。%
+\TeX\ 不因负尺寸而出现问题；
+仅仅是按照通常的算法进行处理。%
+例如，两个相邻盒子的组合宽度是它们的宽度之和，
+而不管它们的宽度是不是正值。%
+字体设计者可以把一个字符的宽度声明为负值，这时，字符实际上与一个退格一样。%
+(对从右到左的语言使用本方法来处理，但是也有一定限度，
+因为 \TeX\ 的断行算法是基于单词的宽度不是负值的假定的。)
+
+%\danger \TeX\ can raise or lower the individual boxes
+%in a horizontal list; such adjustments take care of mathematical
+%subscripts and superscripts, as well as the heights of accents and a few
+%other things. For example, here is a way to make a box that contains
+%the \TeX\ logo, putting it into \TeX's internal register |\box0|:
+%\begintt
+%\setbox0=\hbox{T\kern-.1667em\lower.5ex\hbox{E}\kern-.125em X}
+%\endtt
+%^^|\setbox|
+%Here `^|\kern||-.1667em|' means to insert blank space of $-.1667$ ems in the
+%current font, i.e., to back up a bit; and `^|\lower||.5ex|' means that
+%the box |\hbox{E}| is to be lowered by half of the current x-height, thus
+%offsetting that box with respect to the others. Instead of
+%`|\lower.5ex|' one could also say `^|\raise||-.5ex|'. Chapters 12 and~21
+%discuss the details of how to construct boxes for special effects;
+%our goal in the present chapter is merely to get a taste of the
+%possibilities.
+\danger 在水平列中，\TeX\ 可以升高或降低各个盒子；
+这样的调整照顾到了数学中的上下标，以及重音的高度和其它几种情况。%
+例如，这里是设定包含 \TeX\ 标识的盒子的方法，把它放在了 \TeX\ 的内部寄存器 |\box0| 中：
+\begintt
+\setbox0=\hbox{T\kern-.1667em\lower.5ex\hbox{E}\kern-.125em X}
+\endtt
+这里的`|\kern||-.1667em|'就是插入当前字体的一个 $-.1667em$ 的空格，即，
+退回一点；
+还有，`|\lower||.5ex|'就是盒子 |\hbox{E}| 被降低当前的 x 的高度的一半，
+因此此盒子相对于其它盒子就偏移了。%
+不用`|\lower.5ex|', 也可以用`|\raise||-.5ex|'。%
+第十二章和第二十一章详细讨论了怎样得到特殊效果的盒子；
+本章的目标仅仅是牛刀小试。
+
+%\danger \TeX\ will exhibit the contents of any ^{box register}, if you
+%ask it to. For example, if you type `^|\showbox||0|' after setting
+%|\box0| to the \TeX\ logo as above, your ^{log file} will contain
+%the following mumbo jumbo: ^^{TeX logo}
+%\begintt
+%\hbox(6.83331+2.15277)x18.6108
+%.\tenrm T
+%.\kern -1.66702
+%.\hbox(6.83331+0.0)x6.80557, shifted 2.15277
+%..\tenrm E
+%.\kern -1.25
+%.\tenrm X
+%\endtt
+%^^{diagnostic format} ^^{internal box-and-glue representation} ^^{box displays}
+%The first line means that |\box0| is an hbox whose height, depth, and width
+%are respectively $6.83331\pt$, $2.15277\pt$, and $18.6108\pt$.
+%Subsequent lines beginning with `|.|'\ indicate that they are {\sl inside\/}
+%of a box. The first thing in this particular box is the letter~|T| in
+%font |\tenrm|; then comes a kern. The next item is an hbox that contains
+%only the letter~|E|; this box has the height, depth, and width of an |E|, and
+%it has been shifted downward by $2.15277\pt$ (thereby accounting for
+%the depth of the larger box).
+\danger 如果要问盒子寄存器的内容，\TeX\ 将给出。%
+例如，如果在如上对 \TeX\ 的标识设置完毕 |\box0| 后，你输入`|\showbox||0|',
+那么 log 文件将包含下列叽哩咕噜的东西：
+\begintt
+\hbox(6.83331+2.15277)x18.6108
+.\tenrm T
+.\kern -1.66702
+.\hbox(6.83331+0.0)x6.80557, shifted 2.15277
+..\tenrm E
+.\kern -1.25
+.\tenrm X
+\endtt
+第一行表示 |\box0| 是一个 hbox, 其高度，深度和宽度分别为%
+~$6.83331\pt$, $2.15277\pt$ 和 $18.6108\pt$。%
+后面的行以`|.|'开头表明它们是盒子中的内容。%
+在这个特殊盒子中，首先是 |\tenrm| 字体的字母 |T|;
+接着是一个紧排命令。%
+下一项是只包含字母 |E| 的 hbox;
+这个盒子的高度，深度和宽度与 |E| 一样，
+并且它向下移动了 $2.15277\pt$(因此得到了更大的盒子深度)。
+
+%\dangerexercise Why are there two dots in the `|..\tenrm E|' line here?
+%\answer This |E| is inside a box that's inside a box.
+\dangerexercise 为什么在`|..\tenrm E|'这行开头有两个点？
+\answer |E| 所在的盒子在另一个盒子里面。
+
+%\danger Such displays of box contents will be discussed further in
+%Chapters 12 and~17.
+%They are used primarily for diagnostic purposes, when you are trying to figure
+%out exactly what \TeX\ thinks it's doing. The main reason for bringing them
+%up in the present chapter is simply to provide a glimpse of how \TeX\ represents
+%boxes in its guts. A computer program doesn't really move boxes around; it
+%fiddles with lists of representations of boxes.
+\danger 这样的盒子内容表示在第十二和第十七章中将进一步讨论。%
+当你试图精确地解决 \TeX\ 所处理的情况时，它们主要用于查找错误。%
+把它们在本章进行讨论的主要原因是为了领会一下 \TeX\ 是怎样在读入时表示盒子的。%
+\1计算机程序并不真正把盒子弄来弄去；
+它处理的是盒子的表示列表。
+
+%\dangerexercise By running \TeX, figure out how it actually handles italic
+%corrections to characters: How are the corrections represented inside a box?
+%\answer The idea is to construct a box and to look inside. For example,
+%\begintt
+%\setbox0=\hbox{\sl g\/} \showbox0
+%\endtt
+%reveals that |\/| is implemented by placing a kern after the character.
+%Further experiment shows that this kern is inserted even when the italic
+%correction is zero.
+\dangerexercise 通过运行 \TeX ，弄明白它实际上是如何处理字符的倾斜校正的：
+在盒子中倾斜校正如何表示？
+\answer 想法是构造一个盒子并查看盒子里面的东西。例如，
+\begintt
+\setbox0=\hbox{\sl g\/} \showbox0
+\endtt
+显示 |\/| 是通过在字符后插入一个紧排来实现的。
+进一步的试验显示即使倾斜校正为零该紧排也会被插入。
+
+%\dangerexercise The ``opposite'' of \TeX's logo---namely,
+%T\kern+.1667em\raise.5ex\hbox{E}\kern+.125em X---is produced by
+%\begintt
+%\setbox1=\hbox{T\kern+.1667em\raise.5ex\hbox{E}\kern+.125em X}
+%\endtt
+%What would |\showbox1| show now? \ (Try to guess, without running the machine.)
+%\answer The height, depth, and width of the enclosing box should be just large
+%enough to enclose all of the contents, so the result is:
+%\begintt
+%\hbox(8.98608+0.0)x24.44484
+%.\tenrm T
+%.\kern 1.66702
+%.\hbox(6.83331+0.0)x6.80557, shifted -2.15277
+%..\tenrm E
+%.\kern 1.25
+%.\tenrm X
+%\endtt
+%(You probably predicted a height of |8.9861|; \TeX's internal calculations are
+%in |sp|, not |pt|/100000, so the rounding in the fifth decimal place is not
+%readily predictable.)
+\dangerexercise ``反向''的 \TeX\ 标识——即
+T\kern+.1667em\raise.5ex\hbox{E}\kern+.125em X——由下列得到
+\begintt
+\setbox1=\hbox{T\kern+.1667em\raise.5ex\hbox{E}\kern+.125em X}
+\endtt
+现在的问题是 |\showbox1| 会显示什么？（不运行 \TeX ，先猜猜看。）
+\answer 外围盒子的高度、深度和宽度应该正好足以放下全部内容，因此结果为：
+\begintt
+\hbox(8.98608+0.0)x24.44484
+.\tenrm T
+.\kern 1.66702
+.\hbox(6.83331+0.0)x6.80557, shifted -2.15277
+..\tenrm E
+.\kern 1.25
+.\tenrm X
+\endtt
+（你也许预测高度会是 |8.9861|；但 \TeX\ 内部的计算是以 |sp| 而非 |pt|/100000 为单位的，
+因此四舍五入得到的小数点后第五位并不容易预测。）
+
+%\dangerexercise Why do you think the author of \TeX\ didn't make boxes more
+%symmetrical between horizontal and vertical, by allowing reference points
+%to be inside the boundary instead of insisting that the reference point
+%must appear at the left edge of each box?
+%\answer No applications of such symmetrical boxes to English-language
+%printing were apparent; it seemed pointless to carry extra generality
+%as useless baggage that would rarely if ever be used, merely for the sake of
+%symmetry. In other words, the author wore a computer science cap instead
+%of a mathematician's mantle on the day that \TeX's boxes were born.
+%Time will tell whether or not this was a fundamental error!
+\dangerexercise 想想为什么 \TeX\ 的作者不把盒子在水平和垂直上设定得更对称一些，
+这只需允许基准点在边界内部而不是坚持把它放在每个盒子的左边界上？
+\answer 显然这种对称的盒子在英语排印中没有任何用处；
+仅为了对称性，而带上很少用到的多余特性的包袱，这看起来是毫无意义的。
+换言之，作者是从计算机科学家而非数学家的角度设计 \TeX\ 的盒子的。
+时间将告诉我们这是不是一个根本性的错误！
+
+%\ddangerexercise Construct a |\demobox| macro for use in writing manuals
+%like this, so that an author can write `|\demobox{Tough exercise.}|'
+%in order to typeset `\thinspace\demobox{Tough exercise.}\thinspace'.
+%\answer The following solution is based on a general |\makeblankbox|
+%macro that prints the edges of a box using rules of given thickness
+%outside and inside that box; the box dimensions are those of\/ |\box0|.\par
+%|\def\dolist{\afterassignment\dodolist\let\next= }|\parbreak
+%|\def\dodolist{\ifx\next\endlist \let\next\relax|\parbreak
+%|  \else \\\let\next\dolist \fi|\parbreak
+%|  \next}|\par
+%|\def\endlist{\endlist}|\par
+%|\def\hidehrule#1#2{\kern-#1%|\parbreak
+%|  \hrule height#1 depth#2 \kern-#2 }|\par
+%|\def\hidevrule#1#2{\kern-#1{\dimen0=#1|\parbreak
+%|    \advance\dimen0 by#2\vrule width\dimen0}\kern-#2 }|\par
+%|\def\makeblankbox#1#2{\hbox{\lower\dp0\vbox{\hidehrule{#1}{#2}%|\parbreak
+%|    \kern-#1 % overlap the rules at the corners|\parbreak
+%|    \hbox to \wd0{\hidevrule{#1}{#2}%|\parbreak
+%|      \raise\ht0\vbox to #1{}% set the vrule height|\parbreak
+%|      \lower\dp0\vtop to #1{}% set the vrule depth|\parbreak
+%|      \hfil\hidevrule{#2}{#1}}%|\parbreak
+%|    \kern-#1\hidehrule{#2}{#1}}}}|\par
+%|\def\maketypebox{\makeblankbox{0pt}{1pt}}|\par
+%|\def\makelightbox{\makeblankbox{.2pt}{.2pt}}|\par
+%|\def\\{\if\space\next\ % assume that \next is unexpandable|\parbreak
+%| \else \setbox0=\hbox{\next}\maketypebox\fi}|\par
+%|\def\demobox#1{\setbox0=\hbox{\dolist#1\endlist}%|\parbreak
+%|  \leavevmode\copy0\kern-\wd0\makelightbox}|\par
+\ddangerexercise 构造一个编写本手册时能用到的宏 |\demobox|，让作者可以用%
+`|\demobox{Tough exercise.}|' 排版出 `\thinspace\demobox{Tough exercise.}\thinspace'。
+\answer 下面的解答基于一般的 |\makeblankbox| 宏，
+该宏利用盒子内外指定厚度的标尺打印出盒子的边界；
+盒子的尺寸就是 |\box0| 的尺寸。\par
+|\def\dolist{\afterassignment\dodolist\let\next= }|\parbreak
+|\def\dodolist{\ifx\next\endlist \let\next\relax|\parbreak
+|  \else \\\let\next\dolist \fi|\parbreak
+|  \next}|\par
+|\def\endlist{\endlist}|\par
+|\def\hidehrule#1#2{\kern-#1%|\parbreak
+|  \hrule height#1 depth#2 \kern-#2 }|\par
+|\def\hidevrule#1#2{\kern-#1{\dimen0=#1|\parbreak
+|    \advance\dimen0 by#2\vrule width\dimen0}\kern-#2 }|\par
+|\def\makeblankbox#1#2{\hbox{\lower\dp0\vbox{\hidehrule{#1}{#2}%|\parbreak
+|    \kern-#1 % overlap the rules at the corners|\parbreak
+|    \hbox to \wd0{\hidevrule{#1}{#2}%|\parbreak
+|      \raise\ht0\vbox to #1{}% set the vrule height|\parbreak
+|      \lower\dp0\vtop to #1{}% set the vrule depth|\parbreak
+|      \hfil\hidevrule{#2}{#1}}%|\parbreak
+|    \kern-#1\hidehrule{#2}{#1}}}}|\par
+|\def\maketypebox{\makeblankbox{0pt}{1pt}}|\par
+|\def\makelightbox{\makeblankbox{.2pt}{.2pt}}|\par
+|\def\\{\if\space\next\ % assume that \next is unexpandable|\parbreak
+| \else \setbox0=\hbox{\next}\maketypebox\fi}|\par
+|\def\demobox#1{\setbox0=\hbox{\dolist#1\endlist}%|\parbreak
+|  \leavevmode\copy0\kern-\wd0\makelightbox}|\par
+
+%\def\frac#1/#2{\leavevmode\kern.1em
+%  \raise.5ex\hbox{\the\scriptfont0 #1}\kern-.1em
+%  /\kern-.15em\lower.25ex\hbox{\the\scriptfont0 #2}}
+\def\frac#1/#2{\leavevmode\kern.1em
+  \raise.5ex\hbox{\the\scriptfont0 #1}\kern-.1em
+  /\kern-.15em\lower.25ex\hbox{\the\scriptfont0 #2}}
+
+%\ddangerexercise Construct a |\frac| macro such that `|\frac1/2|' yields
+%`\frac1/2'. \checkequals\fracexno\exno
+%\answer |\def\frac#1/#2{\leavevmode\kern.1em|\parbreak
+%|\raise.5ex\hbox{\the\scriptfont0 #1}\kern-.1em|\parbreak
+%|/\kern-.15em\lower.25ex\hbox{\the\scriptfont0 #2}}|
+\ddangerexercise 构造一个宏 |\frac|，
+使得`|\frac1/2|'得到的是`\frac1/2'。%\checkequals\fracexno\exno
+\answer |\def\frac#1/#2{\leavevmode\kern.1em|\parbreak
+|\raise.5ex\hbox{\the\scriptfont0 #1}\kern-.1em|\parbreak
+|/\kern-.15em\lower.25ex\hbox{\the\scriptfont0 #2}}|
+
+\endchapter
+
+I have several boxes in my memory
+in which I will keep them all very safe,
+% he's talking about "instructions"
+there shall not a one of them be lost.
+\author IZAAK ^{WALTON}, {\sl The Compleat Angler\/} (1653) % beginning Chap12
+% in 1654 and subsequent editions, this quote comes in Chap17
+% the 1653 spelling agrees with 20th century conventions in this passage!
+
+\bigskip
+
+How very little does the amateur, dwelling at home at ease,
+comprehend the labours and perils of the author.
+\author R. L. ^{STEVENSON} and L. ^{OSBOURNE}, {\sl The Wrong Box\/} (1889)
+
+\vfill\eject\byebye

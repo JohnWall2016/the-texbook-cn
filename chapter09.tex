@@ -1,0 +1,490 @@
+% -*- coding: utf-8 -*-
+
+\input macros
+
+%\beginchapter Chapter 9. \TeX's\\Roman Fonts
+\beginchapter Chapter 9. 罗马字体
+
+\origpageno=51
+
+%When you're typing a manuscript for \TeX, you need to know what symbols
+%are available. The plain \TeX\ format of Appendix~B is based on the
+%Computer Modern fonts, which provide the characters needed to typeset a
+%wide variety of documents. It's time now to discuss what a person can do
+%with plain \TeX\ when typing straight text. We've already touched on some of
+%the slightly subtle things---for example, dashes and quotation marks
+%were considered in Chapter~2, and certain kinds of accents appeared in the
+%examples of Chapters 3 and~6. The purpose of this chapter is to give a
+%more systematic summary of the possibilities, by putting all the facts
+%together.
+\1当你输入 \TeX\ 文稿时，你需要知道有哪些可用的符号。%
+附录 B 的 plain \TeX\ 格式使用的基本字体是 Computer Modern 字体，
+它可用于多种文档。%
+现在来看看当直接输入文本时 plain \TeX\ 可用干些什么。%
+我们已经遇到过一些有点微妙的问题——例如，在第二章讨论的破折号和引号，
+在第三和第六章出现的一些重音符。%
+本章的目的是通过汇总所有的情况，得到更系统的总结。
+
+%Let's begin with the rules for the normal roman font (|\rm| or |\tenrm|);
+%plain \TeX\ will use this font for everything unless you specify
+%otherwise. Most of the ordinary symbols that you need are readily available
+%and you can type them in the ordinary way: There's nothing special about
+%\begindisplay \openup1pt
+%the ^{letters} |A| to |Z| and |a| to |z|\cr
+%the ^{digits} |0| to |9|\cr
+%common ^{punctuation} marks |: ; ! ? ( ) [ ] ` ' - * / . , @|\cr
+%\enddisplay
+%except that \TeX\ recognizes certain combinations as ^{ligatures}:
+%$$\openup1pt\halign{\indent#\hfil\cr
+%|ff| yields ff\thinspace;$\!$\quad |fi| yields fi\thinspace;$\!$\quad
+%|fl| yields fl\thinspace;$\!$\quad
+%|ffi| yields ffi\thinspace;$\!$\quad |ffl| yields ffl\thinspace;\cr
+%|``| yields``\thinspace;\qquad |''| yields ''\thinspace;\qquad
+%|!||`| yields !`\thinspace;\qquad |?||`| yields ?`\thinspace;\cr
+%|--| yields --\thinspace;\qquad |---| yields ---\thinspace.\cr}$$
+%^^{Spanish ligatures}
+%You can also type |+| and |=|, to get the corresponding
+%symbols + and~=; but it's much better to use such characters
+%only in math mode, i.e., enclosed between two |$| signs, since that tells
+%\TeX\ to insert the proper spacing for mathematics. Math mode is
+%explained later; for now, it's just a good idea to remember that formulas
+%and text should be segregated. A non-mathematical hyphen and a non-mathematical
+%slash should be specified by typing `|-|' and `|/|' outside of mathematics
+%mode, but subtraction and division should be specified by typing `|-|' and
+%`|/|' between |$|~signs.
+%^^{Colon}
+%^^{Semicolon}
+%^^{Exclamation point}^^{Shriek, see exclamation point}
+%^^{Question mark}
+%^^{Parentheses}
+%^^{Brackets}
+%^^{Apostrophe} ^^{Reverse apostrophe}
+%^^{Hamza, see apostrophe} ^^{Ain, see reverse apostrophe}
+%^^{Hyphen} ^^{Dash}
+%^^{Asterisk}
+%^^{At sign}
+%^^{Virgule, see slash}
+%^^{Solidus, see slash}
+%^^{Shilling sign, see slash}
+%^^{Slash}
+%^^{Period} ^^{Full stop, see period}
+%^^{Comma}
+%^^{Plus sign}
+%^^{Equals sign}
+首先以正常的 roman 字体(|\rm| 或 |\tenrm|)的规则开始；
+如果你不给出字体，那么 plain \TeX\ 将在所有情况下使用本字体。%
+你需要的大部分普通符号都容易得到，并且你可以正常地输入它\hbox{们：}
+对于
+\begindisplay \openup1pt
+字母 |A| 到 |Z| 和 |a| 到 |z|\cr
+数字 |0| to |9|\cr
+一般的标点符号 |: ; ! ? ( ) [ ] ` ' - * / . , @|\cr
+\enddisplay
+没有什么特别之处，但是 \TeX\ 将把下列组合视为^{连写}：
+$$\openup1pt\halign{\indent#\hfil\hbox{ 得到 }&#\hfil&
+&\qquad#\hfil\hbox{ 得到 }&#\hfil\cr
+|ff|&ff;&|ffi|&ffi;&|``|&``\thinspace;&|!||`|&!`\thinspace;\cr
+|fi|&fi;&|ffl|&ffl;&|''|&''\thinspace;&|?||`|&?`.\cr
+|fl|&fl;&|--|&--\thinspace;&|---|&---\thinspace;\cr}$$
+还可以输入 |+| 和 |=| 来得到相应的符号 + 和 =;
+但是只在数学模式中使用它们更好一些，即用两个 |$| 把它们夹起来，
+因为这会告诉 \TeX\ 要插入适当的数学间距。%
+数学模式在后面讨论；
+现在，只需要记住公式和文本要隔开。%
+非数学的连字符和斜线应该在数学环境外输入为`|-|'和`|/|',
+而减号和除号应该是 |$| 号之间输入`|-|'和`|/|'。%
+
+%The previous paragraph covers 80 of the 94 visible characters of standard
+%ASCII; so your keyboard probably contains at least 14 more symbols, and
+%you should learn to watch out for the remaining ones, since they are special.
+%Four of these are pre\"empted by plain \TeX; if your manuscript requires
+%the symbols
+%\begintt
+%$    #    %    &
+%\endtt
+%^^{dollar sign} ^^{sharp sign, see hash mark} ^^{number sign, see hash mark}
+%^^{hash mark} ^^{percent sign} ^^{ampersand}
+%you should remember to type them as
+%\begintt
+%\$   \#   \%   \&
+%\endtt
+%respectively. Plain \TeX\ also reserves the six symbols
+%\begintt
+%\    {    }    ^    _    ~
+%\endtt
+%^^{backslash} ^^{braces} ^^{curly braces, see braces} ^^{hat, see circumflex}
+%^^{circumflex} ^^{underline} ^^{tilde}
+%but you probably don't mind losing these, since they don't appear in
+%normal copy. Braces and backslashes are available via control sequences
+%in math mode.
+前一段讨论了标准 ASCII 的 94 个可见字符中的 80 个；
+因此，你的键盘可能还包含至少 14 个符号，
+并且对剩下的符号你应当小心，因为它们是特殊符号。%
+它们中的四个被 plain \TeX\ 预先占用了；
+如果你的文稿需要下列符号：
+\begintt
+$    #    %    &
+\endtt
+那么你应该分别这样输入它们：
+\begintt
+\$   \#   \%   \&
+\endtt
+Plain \TeX\ 还保留了六个符号：
+\begintt
+\    {    }    ^    _    ~
+\endtt
+但是你可能并不在乎失去它们，因为一般的文档不需要它们。%
+在数学模式中，通过控制系列可以使用括号和反斜线。
+
+%\goodbreak
+%There are four remaining special characters in the standard ASCII set:
+%\begintt
+%"    ||    <    >
+%\endtt
+%Again, you don't really want them when you're typesetting text. \ (Double-quote
+%marks should be replaced either by |``| or by |''|; vertical
+%lines and relation signs are needed only in math mode.)
+%^^{double-quote mark} ^^{vertical line, see norm} ^^{norm symbol}
+%^^{less than sign} ^^{greater than sign}
+\goodbreak
+\1在标准 ASCII 集中，还有四个剩下的特殊符号：
+\begintt
+"    ||    <    >
+\endtt
+当你排版文本时，并不真正要用它们。%
+(双引号可以用 |``| 或 |''| 来代替；
+竖线和关系号只在数学模式下用到。)
+
+%Scholarly publications in English often refer to other languages, so
+%plain \TeX\ makes it possible to typeset the most commonly used ^{accents}:
+%$$\halign{\indent\hbox to 50pt{#\hfil}&\hbox to 35pt{#\hfil}&#\hfil\cr
+%\it\negthinspace Type&\it to get\cr
+%\noalign{\smallskip}
+%|\`o|&\`o&(grave accent)\cr
+%|\'o|&\'o&(acute accent)\cr
+%|\^o|&\^o&(circumflex or ``hat'')\cr
+%|\"o|&\"o&(umlaut or dieresis)\cr
+%|\~o|&\~o&(tilde or ``squiggle'')\cr
+%|\=o|&\=o&(macron or ``bar'')\cr
+%|\.o|&\.o&(dot accent)\cr
+%|\u o|&\u o&(breve accent)\cr
+%|\v o|&\v o&(h\'a\v cek or ``check'')\cr
+%|\H o|&\H o&(long Hungarian umlaut)\cr
+%|\t oo|&\t oo&(tie-after accent)\cr}$$
+%^^|\`| ^^{grave accent}
+%^^|\'| ^^{acute accent}
+%^^{esc hat} ^^{circumflex accent} ^^{hat accent}
+%^^|\"| ^^{umlaut accent} ^^{dieresis}
+%^^{esc tilde} ^^{tilde accent} ^^{squiggle accent}
+%^^|\=| ^^{macron accent} ^^{bar accent}
+%^^|\.| ^^{dot accent}
+%^^|\v| ^^{h\'a\v cek accent} ^^{check accent}
+%^^|\u| ^^{breve accent}
+%^^|\H| ^^{Hungarian umlaut}
+%^^|\t| ^^{tie-after accent}
+%^^{embellished letters, see accents}
+%Within the font, such accents are designed to appear at the right height
+%for the letter `o'; but you can use them over any letter, and \TeX\ will
+%raise an accent that is supposed to be taller. Notice that spaces are needed
+%in the last four cases, to separate the control sequences from the letters
+%that follow. You could, however, type `|\H{o}|' in order to avoid putting a
+%space in the midst of a word.
+英文的学术出版物通常要用到其它语言，
+所以 plain \TeX\ 可以排版最常用的重音符：
+$$\halign{\indent\hbox to 50pt{#\hfil}&\hbox to 35pt{#\hfil}&#\hfil\cr
+\it\negthinspace \hbox{输入}&\it \hbox{得到}\cr
+\noalign{\smallskip}
+|\`o|&\`o&(grave accent)\cr
+|\'o|&\'o&(acute accent)\cr
+|\^o|&\^o&(circumflex or ``hat'')\cr
+|\"o|&\"o&(umlaut or dieresis)\cr
+|\~o|&\~o&(tilde or ``squiggle'')\cr
+|\=o|&\=o&(macron or ``bar'')\cr
+|\.o|&\.o&(dot accent)\cr
+|\u o|&\u o&(breve accent)\cr
+|\v o|&\v o&(h\'a\v cek or ``check'')\cr
+|\H o|&\H o&(long Hungarian umlaut)\cr
+|\t oo|&\t oo&(tie-after accent)\cr}$$
+在字体内，这样的重音符在设计上是正好出现在字母`o'的高度；
+但是可以在任意字母上使用它们，
+并且字母变高时 \TeX\ 会自动升高重音符。%
+注意，在后四种情况，分开控制系列和后面字母的空格是必须的。%
+但是，为了避免在单词中间出现空格，应该输入`|\H{o}|'。
+
+%\medbreak
+%Plain \TeX\ also provides three accents that go underneath:
+%$$\halign{\indent\hbox to 50pt{#\hfil}&\hbox to 35pt{#\hfil}&#\hfil\cr
+%\it\negthinspace Type&\it to get\cr
+%\noalign{\smallskip}
+%|\c o|&\c o&(cedilla accent)\cr
+%|\d o|&\d o&(dot-under accent)\cr
+%|\b o|&\b o&(bar-under accent)\cr}$$
+%^^|\c| ^^{cedilla accent}
+%^^|\d| ^^{dot-under accent} ^^{emphatics, see dot-under}
+%^^|\b| ^^{bar-under accent}
+%And there are a few special letters:
+%$$\halign{\indent\hbox to 50pt{#\hfil}&\hbox to 35pt{#\hfil}&#\hfil\cr
+%\it\negthinspace Type&\it to get\cr
+%\noalign{\smallskip}
+%|\oe,\OE|&\oe,\thinspace\OE&(French ligature OE)\cr
+%|\ae,\AE|&\ae,\thinspace\AE&(Latin ligature and Scandinavian letter AE)\cr
+%|\aa,\AA|&\aa,\thinspace\AA&(Scandinavian A-with-circle)\cr
+%|\o,\O|&\o,\thinspace\O&(Scandinavian O-with-slash)\cr
+%|\l,\L|&\l,\thinspace\L&(Polish suppressed-L)\cr
+%|\ss|&\ss&(German ``es-zet'' or sharp S)\cr}$$
+%^^{Scandinavian letters} ^^{sharp S} ^^{es-zet} ^^{German} ^^{Polish}
+%^^{Norwegian} ^^{Danish} ^^{Swedish} ^^{suppressed-L}
+%^^{diphthongs, see \ae, \oe}
+%The |\rm| font contains also the ^{dotless letters} `\i' and `\j',
+%which you can obtain by typing `^|\i|' and `^|\j|'. These are needed because
+%`i' and `j' should lose their dots when they gain an accent. For example,
+%the right way to obtain `m\=\i n\u us' is to type \hbox{`|m\=\i n\u us|'}
+%or `|m\={\i}n\u{u}s|'.
+\medbreak
+Plain \TeX\ 还给出了出现在下面的三个重音符：
+$$\halign{\indent\hbox to 100pt{#\hfil}&\hbox to 35pt{#\hfil}&#\hfil\cr
+\it\negthinspace\hbox{输入}&\it \hbox{得到}\cr
+\noalign{\smallskip}
+|\c o|&\c o&(cedilla accent)\cr
+|\d o|&\d o&(dot-under accent)\cr
+|\d {\hbox{国}}|&\d {\hbox{国}}&(dot-under accent)\cr
+|\b o|&\b o&(bar-under accent)\cr}$$
+还有几个特殊的字母：
+$$\halign{\indent\hbox to 50pt{#\hfil}&\hbox to 35pt{#\hfil}&#\hfil\cr
+\it\negthinspace \hbox{输入}&\it \hbox{得到}\cr
+\noalign{\smallskip}
+|\oe,\OE|&\oe,\thinspace\OE&(French ligature OE)\cr
+|\ae,\AE|&\ae,\thinspace\AE&(Latin and Scandinavian ligature AE)\cr
+|\aa,\AA|&\aa,\thinspace\AA&(Scandinavian A-with-circle)\cr
+|\o,\O|&\o,\thinspace\O&(Scandinavian O-with-slash)\cr
+|\l,\L|&\l,\thinspace\L&(Polish suppressed-L)\cr
+|\ss|&\ss&(German ``es-zet'' or sharp S)\cr}$$
+|rm| 字体还包含无点字母`\i'和`\j', 你可以用`|\i|'和`|\j|'来得到它们。%
+这是有用的，因为当`i'和`j'得到重音符时应该去掉上面的点。%
+\1例如，得到`m\=\i n\u us'的正确方法是输入\hbox{`|m\=\i n\u us|'}%
+或`|m\={\i}n|\allowbreak|\u{u}s|'。
+
+%This completes our summary of the |\rm| font. Exactly the same conventions
+%apply to |\bf|, |\sl|, and |\it|, so you don't have to do things differently
+%when you're using a different typeface. For example, |\bf\"o| yields
+%{\bf\"o} and |\it\&| yields {\it\&}.  Isn't that nice?
+这就完成了我们对 |\rm| 字体的总结。%
+确切地说，同样的约定对 |\bf|,|\sl| 和 |\it| 也可以，
+所以当使用不同字体时，不必用不同的方法。%
+例如，|\bf\"o| 得到的是 {\bf\"o}, |\it\&| 得到的是 {\it\&}。%
+奇妙吧？
+
+%\danger However, |\tt| is slightly different. You will be glad to know that
+%|ff|, |fi|, and so on are not treated as ligatures when you're using
+%^{typewriter type}; nor do you get ligatures from dashes and quote marks.
+%That's fine, because ordinary dashes and ordinary double-quotes are
+%appropriate when you're trying to imitate a typewriter. Most of the
+%accents are available too. But |\H|, |\.|, |\l|, and |\L| cannot be
+%used---the typewriter font contains other symbols in their place.
+%Indeed, you are suddenly allowed to type |"|, \|, |<|, and |>|;
+%^^{doublequote} ^^{vertical line} ^^{less than sign} ^^{greater than sign}
+%see Appendix~F\null. All of the letters, spaces, and other symbols in
+%|\tt| have the same width.
+\danger 但是，|\tt| 稍有不同。%
+当你使用 typewriter 字体时，乐意见到 |ff|, |fi| 等等不被当做连写来处理；
+也不会从破折号和引号得到连写。
+这很好，因为当你模仿打字机时，普通破折号和普通双引号比较合适。%
+大部分重音符也可以使用。%
+但是 |\H|, |\.|, |\l| 和 |\L| 不能使用——typewriter 字体在这些地方%
+对应于其它符号。%
+当前，你忽然可以输入 |"|, \|, |<| 和 |>| 了；
+见附录 F。%
+在 |\tt| 中，所有的字母，空格和其它符号的宽度相同。
+
+%\exercise What's the non-naive way to type `na\"\i ve'\thinspace?
+%\answer |na\"\i ve| or |na{\"\i}ve| or |na\"{\i}ve|.
+\exercise 用非正常的方式输入`na\"\i ve'。
+\answer |na\"\i ve| 或 |na{\"\i}ve| 或 |na\"{\i}ve|。
+
+%\exercise List some English words that contain accented letters.
+%\answer Belov\`ed prot\'eg\'e; r\^ole co\"ordinator; souffl\'es, cr\^epes,
+%p\^at\'es, etc.
+\exercise 列出包含重音字母的一些英语单词。
+\answer Belov\`ed prot\'eg\'e；r\^ole co\"ordinator；souffl\'es，cr\^epes，
+p\^at\'es，等等。
+
+%\exercise How would you type `\AE sop's \OE uvres en fran\c cais'\thinspace?
+%\answer |\AE sop's \OE uvres en fran\c cais|.
+\exercise 怎样输入`\AE sop's \OE uvres en fran\c cais'\thinspace?
+\answer |\AE sop's \OE uvres en fran\c cais|。
+
+%\exercise Explain what to type in order to get this sentence:
+%{\sl Commentarii Academi\ae\ scientiarum imperialis petropolitan\ae\/}
+%became {\sl Akademi\t\i a Nauk SSSR, Doklady}.
+%\answer |{\sl Commentarii Academi\ae\ scientiarum imperialis|\hfil\break
+%|petropolitan\ae\/} became {\sl Akademi\t\i a Nauk SSSR, Doklady}.|
+\exercise 为了得到下列句子，看看应该输入什么？
+{\sl Commentarii Academi\ae\ scientiarum imperialis petropolitan\ae\/} is now
+{\sl Akademi\t\i a Nauk SSSR, Doklady}.
+\answer |{\sl Commentarii Academi\ae\ scientiarum imperialis|\hfil\break
+|petropolitan\ae\/} became {\sl Akademi\t\i a Nauk SSSR, Doklady}.|
+
+%\exercise And how would you specify the names
+%Ernesto ^{Ces\`aro},
+%P\'al ^{Erd\H os},
+%\O ystein ^{Ore},
+%Stanis\l aw \'Swierczkowski, ^^{Swiercz...}
+%Serge\u\i\ \t Iur'ev, ^^{Iur'ev}
+%Mu\d hammad ibn M\^us\^a ^{al-Khw\^arizm\^\i}?
+%\answer |Ernesto Ces\`aro,
+%P\'al Erd\H os,
+%\O ystein Ore,
+%Stanis\l aw \'Swier%|\break|czkowski,
+%Serge\u\i\ \t Iur'ev,
+%Mu\d hammad ibn M\^us\^a al-Khw\^arizm\^\i.|
+\exercise 如何得到下列这些名字：
+Ernesto {Ces\`aro},
+P\'al {Erd\H os},
+\O ystein {Ore},
+Stanis\l aw \'Swierczkowski,
+Serge\u\i\ \t Iur'ev,
+Mu\d hammad ibn M\^us\^a {al-Khw\^arizm\^\i}\thinspace ？
+\answer |Ernesto Ces\`aro,
+P\'al Erd\H os,
+\O ystein Ore,
+Stanis\l aw \'Swier%|\break|czkowski,
+Serge\u\i\ \t Iur'ev,
+Mu\d hammad ibn M\^us\^a al-Khw\^arizm\^\i.|
+
+%\dangerexercise Devise a way to typeset {\tt P\'al Erd{\bf\H{\tt o}}s}
+%in typewriter type.
+%\answer The proper umlaut is |\H|, which isn't available in |\tt|, so
+%it's necessary to borrow the accent from another font. For example,
+%\hbox{|{\tt P\'al Erd{\bf\H{\tt o}}s}|} uses a bold accent, which
+%is suitably dark.
+\dangerexercise 设计一种方法，用打字机字体排版 {\tt P\'al Erd{\bf\H{\tt o}}s}。
+\answer 合适的变音是 |\H|，但它在 |\tt| 中不可用，
+因此需要从另一个字体中借用重音符。比如
+$$\hbox{|{\tt P\'al Erd{\bf\H{\tt o}}s}|}$$ 使用粗体重音符，它的黑度适合。
+
+%The following symbols come out looking exactly the same whether you are using
+%|\rm|, |\sl|, |\bf|, |\it|, or |\tt|:
+%$$\halign{\indent#\hfil\ &\hfil#\hfil&#\hfil\cr
+%\it\negthinspace Type&\it to get\cr
+%\noalign{\smallskip}
+%|\dag|&\dag&(dagger or obelisk)\cr
+%|\ddag|&\ddag&(double dagger or diesis)\cr
+%|\S|&\S&(section number sign)\cr
+%|\P|&\P&(paragraph sign or pilcrow)\cr}$$
+%^^{dagger} ^^{double dagger} ^^{obelisk} ^^{obelus, see obelisk} ^^{diesis}
+%^^{section number sign} ^^{paragraph sign} ^^{pilcrow, see paragraph sign}
+%(They appear in just one style because plain \TeX\ gets them from the
+%math symbols font. Lots of other symbols are needed for mathematics;
+%we shall study them later. See Appendix~B for a few more non-math symbols.)
+不管你使用 |\rm|, |\sl|, |\bf|, |\it| 或 |\tt|, 下列符号都是一样的：
+$$\halign{\indent#\hfil\ &\hfil#\hfil&#\hfil\cr
+\it\negthinspace\hbox{输入}&\it\hbox{得到}\cr
+\noalign{\smallskip}
+|\dag|&\dag&(dagger or obelisk)\cr
+|\ddag|&\ddag&(double dagger or diesis)\cr
+|\S|&\S&(section number sign)\cr
+|\P|&\P&(paragraph sign or pilcrow)\cr}$$
+(它们仅仅以一种字体出现，因为 plain \TeX\ 是从数学符号中得到它们的。%
+数学上需要许多其它符号；
+我们将在后面讨论它们。%
+附录 B 还有几个非数学符号。)
+
+%\exercise In plain \TeX's italic font, the `\$' sign comes out as
+%`{\it\$}\thinspace'.
+%^^{dollar sign} ^^{British pound sign} ^^{pound sterling} ^^{sterling}
+%This gives you a way to refer to pounds sterling, but you might want an
+%italic dollar sign. Can you think of a way to typeset a reference to
+%the book {\it Europe on {\sl\$}15.00 a day}\thinspace?
+%\answer |{\it Europe on {\sl\$}15.00 a day\/}|
+\exercise \1在 plain \TeX\ 的 italic 字体中，
+`\$'得到的是`{\it\$}\thinspace'。%
+这是得到英镑符号的一种方法，但是你可能要一个 italic 美元符号。%
+你能想出怎样排版书名 {\it Europe on {\sl\$}15.00 a day} 吗？
+
+%\ddanger Appendix B shows that plain \TeX\ handles most of the accents
+%by using \TeX's ^|\accent| primitive. For example, |\'#1| is equivalent
+%to |{\accent19 #1}|, where |#1| is the argument being accented.
+%The general rule is that |\accent|\<number> puts
+%an accent over the next character; the \<number> tells where that accent
+%appears in the current font. The accent is assumed to be properly
+%positioned for a character whose height equals the ^{x-height} of the
+%current font; taller or shorter characters cause the accent to be raised
+%or lowered, taking due account of the slantedness of the fonts of accenter
+%and accentee. The width of the final construction is the width of the
+%character being accented, regardless of the width of the accent.
+%Mode-independent commands like font changes may appear between the accent
+%number and the character to be accented, but grouping operations must not
+%intervene.  If it turns out that no suitable character is present, the
+%accent will appear by itself as if you had said |\char|\<number> instead
+%of\/ |\accent|\<number>.  For example, |\'{}| produces \'{}.
+\ddanger 附录 B 表明，plain \TeX\ 用原始控制系列 |\accent| 来处理大多数重音符。%
+例如，|\'#1| 等价于 |{\accent19 #1}|, 这里的 |#1| 是要加上重音的参量。%
+一般规则是，|\accent|\<number> 把重音加在下一个字符上；
+\<number> 给出了当前字体中本重音出现的位置。%
+假定了重音正好放在当前字体中高度为 x 的高度的字符上；
+更高或更矮的字符会使重音符升高或降低，
+而且还要考虑重音符和字符的字体的倾斜问题。%
+最后输出字符的宽度是字符的宽度，与重音符的宽度无关。%
+象字体变换这样不依赖于模式的命令可以在重音符和字符之间出现，
+但是编组不能交叉。%
+如果没有合适的字符，那么出现的是重音符自己，相当于 |\char|\<number>,
+而不是 |\accent|\<number>。%
+例如，|\'{}| 得到的是 \'{}。
+
+%\ddangerexercise Why do you think plain \TeX\ defines |\'#1| to be
+%`|{\accent19 #1}|' instead of simply letting |\'| be an abbreviation
+%for `|\accent19 |'\thinspace? \ (Why the extra
+%braces, and why the argument |#1|?)
+%\answer The extra braces keep font changes local. An argument makes the
+%use of\/ |\'| more consistent with the use of other accents like |\d|, which
+%are manufactured from other characters without using the |\accent|
+%primitive.
+\ddangerexercise 想想为什么 plain \TeX\ 把 |\'#1| 定义为`|{\accent19 #1}|',
+而不是直接用 |\'| 来代替`|\accent19 |'\thinspace?
+(为什么有一个额外的括号？为什么有参量 |#1|?)
+
+%\ddanger It's important to remember that these conventions we have discussed
+%for accents and special letters are not built into \TeX\ itself; they belong
+%only to the plain \TeX\ format, which uses the Computer Modern fonts. Quite
+%different conventions will be appropriate when other fonts are involved;
+%format designers should provide rules for how to obtain accents and
+%special characters in their particular systems. Plain \TeX\ works well
+%enough when accents are infrequent, but the conventions of this chapter
+%are by no means recommended for large-scale applications of \TeX\ to
+%other languages. For example, a well-designed \TeX\ font for ^{French}
+%might well treat accents as ligatures, so that one could |e'crire
+%de cette manie`re nai"ve en franc/ais| without backslashes. (See the
+%remarks about Norwegian in Chapter~8.)
+%^^{foreign languages}
+\ddanger 重要的是记住，我们所讨论的重音和特殊字符的约定不是 \TeX\ 自带的；
+它们只属于 plain \TeX\ 格式，
+而本格式使用的是 Computer Modern 字体。%
+当涉及其它字体时，相应的约定差别很大；
+格式设计者应该在它们的特殊系统内提供得到重音和特殊字符的方法。%
+Plain \TeX\ 对不经常使用的重音也处理得很好，
+但是本章的约定无法推荐给其它语言的 \TeX\ 的大范围应用。
+例如，法语中设计得比较好的 \TeX\ 字体是把重音当做连写，
+因此可以不用反斜线就得到 |e'crire de cette manie`re nai"ve en franc/ais|。%
+（见第 8 章关于挪威语的讨论。）
+
+\endchapter
+
+Let's doo't after the high Roman fashion.
+\author WILLIAM ^{SHAKESPEARE}, {\sl The Tragedie of %
+  Anthony and Cleopatra\/} (1606) % Act IV, Scene 13, line 87
+
+\bigskip
+
+English is a straightforward, frank, honest, open-hearted, no-nonsense language,
+which has little truck with such devilish devious devices as accents;
+indeed U.S. editors and printers are often thrown into a dither
+when a foreign word insinuates itself into the language.
+However there is one word on which Americans seem to have closed ranks,
+printing it confidently, courageously, and almost invariably
+complete with accent---the cheese presented to us as M\"unster.
+\smallskip
+Unfortunately, ^{Munster} doesn't take an accent.
+\author WAVERLEY ^{ROOT}, in the {\sl International Herald Tribune\/} (1982)
+  % Tuesday 18 May 82 page 8
+
+\vfill\eject\byebye

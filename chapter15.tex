@@ -1,0 +1,2026 @@
+% -*- coding: utf-8 -*-
+
+\input macros
+
+%\beginchapter Chapter 15. How \TeX\ Makes\\Lines into Pages
+\beginchapter Chapter 15. 组行为页
+
+\origpageno=109
+
+%\tracingpages=1
+%\TeX\ attempts to choose desirable places to divide your document into
+%individual pages, and its technique for doing this usually works pretty
+%well. But the problem of ^{page make-up} is considerably more difficult
+%than the problem of line breaking that we considered in the previous chapter,
+%because pages often have much less flexibility than lines do. If the
+%vertical glue on a page has little or no ability to stretch or to shrink,
+%\TeX\ usually has no choice about where to start a new page; conversely, if
+%there is too much variability in the glue, the result will look bad because
+%different pages will be too irregular. Therefore if you are fussy about the
+%appearance of pages, you can expect to do some rewriting of the manuscript
+%until you achieve an appropriate balance, or you might need to fiddle
+%with the ^|\looseness| as described in Chapter~14; no automated system will
+%be able to do this as well as you.
+\tracingpages=1
+\1\TeX\ 尝试着在适当的位置把文档分为各个页面，
+并且其此项技术一般效果很好。%
+但是，构建页面的问题比我们前一章讨论的断行问题更难，
+因为页面一般比行的伸缩性更小。%
+如果一个页面的垂直粘连只有很少或没有伸缩性，
+那么 \TeX\ 一般只能按部就班地换页；
+反过来，如果粘连上有很多变化，又会因为不同页面之间不一致而使得结果很糟糕。%
+因此，如果你对页面的外观比较挑剔，就要做一些修改，直到得到满意的效果为止，
+或者可能要用到第十四章讨论过的 |\looseness|;
+没有比你更自动的方法来完成此任务了。
+
+%Mathematical papers that contain a lot of displayed equations have an
+%advantage in this regard, because the glue that surrounds a display tends to
+%be quite flexible. \TeX\ also gets valuable room to maneuver when you
+%have occasion to use ^|\smallskip| or ^|\medskip| or ^|\bigskip| spacing
+%between certain paragraphs. For example, consider a page that contains
+%a dozen or so exercises, and suppose that there is $3\pt$ of additional
+%space between exercises, where this space can stretch to $4\pt$ or
+%shrink to $2\pt$. Then there is a chance to squeeze an extra line on the page,
+%or to open up the page by removing one line, in order to avoid splitting
+%an exercise between pages. Similarly, it is possible to use flexible
+%glue in special publications like membership rosters or company telephone
+%directories, so that individual entries need not be split between columns
+%or pages, yet every column appears to be the same height.
+有很多陈列公式的数学文章在这方面有优势，
+因为陈列公式周围的粘连比较灵活。%
+当在某些段落之间使用 |\smallskip|, |\medskip| 或 |\bigskip| 间距时，
+ \TeX\ 还得到可机动的宝贵空间。%
+例如，看看包含大约一打练习的页面，
+并且设定练习之间有 $3\pt$ 的额外间距，
+其中此间距可伸长 $4\pt$ 或收缩 $2\pt$。%
+那么，为了避免把一个练习分在两个页面上，就可以在一个页面上挤出一行或去掉一行。%
+类似地，在会员花名册或公司电话簿等特殊出版物中，可以灵活使用粘连，
+使得各个单个单位不需要分在两栏或两页上，而且每栏的高度还一致。
+
+%For ordinary purposes you will probably find that \TeX's automatic method
+%of page breaking is satisfactory. And when it occasionally gives
+%unpleasant results, you can force the machine to break at your favorite
+%place by typing `^|\eject|'. But be careful: |\eject| will cause \TeX\ to
+%stretch the page out, if necessary, so that the top and bottom baselines
+%agree with those on other pages. If you want to eject a short page,
+%filling it with blank space at the bottom, type `|\vfill\eject|' instead.
+对普通用户而言， \TeX\ 的自动分页方法就满足了。%
+并且当所得到的是不好的结果时，可以通过`|\eject|'强制 \TeX\ 在所要求的地方分页。%
+但是要注意，如果需要的话，|\eject| 将使 \TeX\ 伸长以充满页\hbox{面，}
+使得此页面的底部和顶部基线与其它页面一致。%
+如果要 eject 得到一个短的页面，在底部用空白把它充满，就要用`|\vfill\eject|'。
+
+%\danger If you say `|\eject|' in the middle of a paragraph, the paragraph
+%will end first, as if you typed `|\par\eject|'. But Chapter~14 mentions
+%that you can say `^|\vadjust||{\eject}|' in mid-paragraph, if you want to
+%force a page break after whatever line contains your current position
+%when the full paragraph is eventually broken up into lines; the rest of the
+%paragraph will go on the following page.
+\danger 如果在段落中间给出`|\eject|', 段落将首先被结束，就象键入`|\par\eject|'一样。%
+但在第十四章提\hbox{到，} 如果要在整个段落断行完毕后在包含当前位置的行后面强制分页，
+可以在段落中间使用`|\vadjust||{\eject}|';
+此段剩下的行将放在下一页。
+
+%\danger To prevent a page break, you can say `^|\nobreak|' in vertical
+%mode, just as |\nobreak| in horizontal mode prevents breaks between lines.
+%For example, it is wise to say |\nobreak| between the title of a subsection
+%and the first line of text in that subsection. But |\nobreak| does not
+%cancel the effect of other commands like |\eject| that tell \TeX\ to
+%break; it only inhibits a break at glue that immediately follows. You
+%should become familiar with \TeX's rules for line breaks and page breaks
+%if you want to maintain fine control over everything. The remainder of
+%this chapter is devoted to the intimate details of page breaking.
+\danger 为了禁止分页，可以在垂直模式下输入`|\nobreak|',
+就象在水平模式下用 |\nobreak| 禁止断行一样。%
+例如，在小节的题目和它的第一行文本之间加上 |\nobreak| 是明智之举。%
+但是 |\nobreak| 不能抵消掉象 |\eject| 这样的其它分页命令；
+它只禁止在后面紧跟的粘连处分页。%
+如果要有效地控制所有东西，就必须熟悉 \TeX\ 的断行和分页规则。%
+本章剩下的内容就来讨论分页的细节。
+
+%\ninepoint
+%\danger \TeX\ breaks lists of lines into pages by computing badness ratings
+%and penalties, more or less as it does when breaking paragraphs into lines.
+%But pages are made up one at a time and removed from \TeX's memory; there is
+%no looking ahead to see how one page break will affect the next one.
+%In other words, \TeX\ uses a special method to find the optimum
+%breakpoints for the lines in an entire paragraph, but it doesn't attempt
+%to find the optimum breakpoints for the pages in an entire document. The
+%computer doesn't have enough high-speed memory capacity to remember the
+%contents of several pages, so \TeX\ simply chooses each page break as best
+%it can, by a process of ``local'' rather than ``global'' optimization.
+\ninepoint
+\danger \1\TeX\ 通过计算丑度和惩罚把行的列表分页，
+这或多或少类似于分段成行。%
+但是一次只生成一个页面，并且完成后从 \TeX\ 的内存中要清除掉；
+不能往前看看本分页怎样影响前一个页面。%
+换句话说， \TeX\ 用一种特殊的方法在一整段中找出行的最佳断点，
+但是不能在整个文档中找到页面的最佳断点。%
+计算机没有足够的高速内存来存储好几页的内容，
+所有 \TeX\ 直接通过一种``局部''方法来尽力选择每个页面得到，
+而不是用``整体''优化方法。
+
+%\tracingpages=0
+%\danger Let's look now at the details of \TeX's page-making process.
+%Everything you contribute to the pages of your document is placed on
+%the {\sl ^{main vertical list}}, which is the sequence of items that
+%\TeX\ has accumulated while in vertical mode. Each item in a ^{vertical
+%list} is one of the following types of things:\enddanger
+\tracingpages=0
+\danger 现在来看看 \TeX\ 构建页面的细节。%
+所有输入到文档页面东西都放在{\KT{10}主垂直列}中，
+它是 \TeX\ 在垂直模式下积累起来的项目序列。%
+在垂直列中的每个项目是下列某种东西：
+\enddanger
+
+%\smallskip
+%\item\bull a box (an hbox or vbox or rule);
+\smallskip
+\item\bull 一个盒子(一个 hbox 或 vbox 或标尺);
+
+%\item\bull a ``^{whatsit}'' (something special to be explained later);
+\item\bull 一个``无名''(后面要解释的特殊东西);
+
+%\item\bull a ^{mark} (another thing that will be explained later);
+\item\bull 一个标记(后面要解释的另一种东西);
+
+%\item\bull an ^{insertion} (yet another thing that we will get to);
+\item\bull 一个插入(仍然是我们将得到的另一种东西);
+
+%\item\bull a glob of ^{glue} (or ^|\leaders|, as we will see later);
+\item\bull 一个粘连团(或者 |\leaders|, 我们后面将会看到);
+
+%\item\bull a ^{kern} (something like glue that doesn't stretch or shrink);
+\item\bull 一个紧排(象粘连，但不能伸缩);
+
+%\item\bull a ^{penalty} (representing the undesirability of breaking here).
+\item\bull 一个惩罚(表示此处分页的不良度)
+
+%\smallskip\noindent
+%The last three types (glue, kern, and penalty items) are called ^{discardable},
+%for the same reason that we called them discardable in horizontal lists.
+%You might want to compare these specifications with the analogous rules
+%for the horizontal case, found in Chapter~14; it turns out that vertical
+%lists are just like horizontal ones except that character boxes, discretionary
+%breaks, ^|\vadjust| items, and math shifts cannot appear in vertical lists.
+%Chapter~12 exhibits a typical vertical list in \TeX's internal box-and-glue
+%representation.
+\smallskip\noindent
+最后三种（粘连，紧排和惩罚项）称为可弃的，理由与水平列中的可弃性一样。
+如果要把这些说明与第十四章中水平情况下类似的规则作比较；
+就发现垂直列很象水平列，除了字符盒子，任意可断点，
+|\vadjust| 项和数学转换不能出现在垂直列之外。
+第十二章列出了用 \TeX\ 的内部盒子和粘连表示的一个典型垂直列。
+
+%\danger Page breaks can occur only at certain places within a vertical list.
+%The permissible breakpoints are exactly the same as in the horizontal case,
+%namely\enddanger
+\danger 分页只能出现在垂直列中的某个地方。合法的断点与水平情况下正好一样，即：
+\enddanger
+
+%\smallskip
+%\item{a)} at glue, provided that this glue is immediately preceded by a
+%non-discardable item (i.e., by a box, whatsit, mark, or insertion);
+\smallskip
+\item{a)} 在粘连处，如果在此粘连前面是一个非可弃项目（即盒子、无名、标记或者插入项）；
+
+%\smallskip
+%\item{b)} at a kern, provided that this kern is immediately followed by glue;
+\smallskip
+\item{b)} 在紧排处，如果此紧排后面直接跟着粘连；
+
+%\smallskip
+%\item{c)} at a penalty (which might have been inserted automatically in a
+%paragraph).
+\smallskip
+\item{c)} 在惩罚处（它可能已经直接被插入到段落中了）。
+
+%\smallskip\noindent
+%Interline glue is usually inserted automatically between the boxes of a
+%vertical list, as explained in Chapter~12, so there is usually a valid
+%breakpoint between boxes.
+\smallskip\noindent
+就像第~12~章中讨论的那样，行间粘连一般自动插入到垂直列的盒子之间，
+所以在盒子之间一般有一个可用的断点。
+
+%\danger As in horizontal lists, each potential breakpoint has an
+%associated penalty, which is high for undesirable breakpoints and negative
+%for desirable ones. The penalty is zero at glue and kern breaks, so it is
+%nonzero only at explicit penalty breaks.  If you say `^|\penalty||-100|'
+%between two paragraphs, you are indicating that \TeX\ should try to break
+%here because the penalty is negative; a bonus of 100 points for breaking
+%at this place will essentially cancel up to 100 units of badness that
+%might be necessary to achieve such a break. A penalty of 10000 or more is
+%so large that it inhibits breaking; a penalty of $-10000$ or less is so
+%small that it forces breaking.
+\danger 就象在水平列中一样，某个可能的断点有一个相应的惩罚，
+对不好的断点它的值就高，对好的断点就是负的。%
+在粘连和紧排处的断点的惩罚是零，
+所以只有在明确的惩罚处的断点是非零的。%
+如果在两个段落之间给出`|\penalty-100|', 就告诉了 \TeX\ 应该在此处分页，
+因为惩罚是负值；
+此处断点的 100 点积分本质上可以抵消必须在此处分页时的 100 单位的丑度。%
+10000 以上的惩罚大得足以禁止分页；
+小于 -10000 的惩罚小到足以强制分页。
+
+%\danger Plain \TeX\ provides several control sequences that help to
+%control page breaks. For example, ^|\smallbreak|, ^|\medbreak|, and
+%^|\bigbreak| specify increasingly desirable places to break, having
+%respective penalties of $-50$, $-100$, and~$-200$; furthermore, they will
+%insert a ^|\smallskip|, ^|\medskip|, or ^|\bigskip| of space,
+%respectively, if a break is not taken. However, |\smallbreak|,
+%|\medbreak|, and |\bigbreak| do not increase existing glue unnecessarily;
+%for example, if you say |\smallbreak| just after a displayed
+%equation, you won't get a |\smallskip| of space in addition to the glue that
+%already follows a display. Therefore these commands can conveniently
+%be used before and after the statements of ^{theorems}, in a format for
+%mathematical papers. In the present manual the author has used a macro
+%that puts |\medbreak| before and after every dangerous-bend paragraph;
+%|\medbreak\medbreak| is equivalent to a single |\medbreak|, so you don't
+%see two medskips when one such paragraph ends and another one~begins.
+\danger \1Plain \TeX\ 提供了几个控制分页的控制系列。%
+例如，|\smallbreak|, |\medbreak| 和 |\bigbreak| 给出了越来越强的分页倾向，
+其惩罚分别为 $-50$, ~$-100$, ~$-200$;
+还有，如果它没有导致分页，就分别插入 |\smallskip|, |\medskip| 或 |\bigskip|的行间距。%
+但是，|\smallbreak|, |\medbreak| 和 |\bigbreak| 不在原有的粘连上添加不必要的粘连；
+例如，如果在陈列方程后面添加 |\samllbreak|, 那么除了来自陈列方程的粘连外，
+不会得到 |\smallskip| 的行间距。%
+因此，在数学论文中，这些命令可以很方便地在定理的陈述前后使用。%
+在本手册中，作者在每个危险标识段落前后都放了 |\medbreak|;
+|\medbreak\medbreak| 等价于一个 |\medbreak|,
+所以当这样的段落在一个结束而另一个接着开始时不会得到两个 medskip。
+
+%\danger The ^|\goodbreak| macro is an abbreviation for `|\par\penalty-500|'.
+%This is a good thing to insert in your manuscript when proofreading, if
+%you are willing to stretch some page a little bit extra in order to improve the
+%following one. Later on if you make another change so that this |\goodbreak|
+%command does not appear near the bottom of a page, it will have no effect;
+%thus it is not as drastic as |\eject|.
+\danger 宏 |\goodbreak| 的定义为`|\par\penalty-500|'。%
+在校对时，如果希望把某些页面略微伸长一点来改善其后的页面排版，
+把它插入到文稿中就可以了。%
+稍后，如果改变后这个 |\goodbreak| 命令并不出现在页面底部，
+那么它就不起作用了；
+因此它不如 |eject| 强制性大。
+
+%\danger The most interesting macro that plain \TeX\ provides for page make-up
+%is called ^|\filbreak|. It means, roughly, ``Break the page here and fill the
+%bottom with blank space, unless there is room for more
+%copy that is itself followed by |\filbreak|.'' Thus if you put |\filbreak|
+%at the end of every paragraph, and if your paragraphs aren't too long,
+%every page break will occur between paragraphs, and \TeX\ will fit as many
+%paragraphs as possible on each page. The precise meaning of\/ |\filbreak|~is
+%\begintt
+%\vfil\penalty-200\vfilneg
+%\endtt
+%according to Appendix B\null; and this simple combination of \TeX's primitives
+%produces the desired result: If a break is taken at the |\penalty-200|,
+%the preceding |\vfil| will fill the bottom of the page with blank space,
+%and the ^|\vfilneg| will be discarded after the break; but if no break
+%is taken at the penalty, the |\vfil| and |\vfilneg| will cancel each other
+%and have no effect.
+\danger Plain \TeX\ 提供的构建页面的最有效的宏叫做 |\filbreak|。%
+严格讲，它的意思是，``在此处分页，并且用空白填满到底部，
+除非下面还可以再放下带 |\filbreak| 的下一个对象''。%
+因此，如果在每个段落的结尾都放上 |\filbreak|,
+并且你的段落不是太长，那么分页正好出现在段落之间，
+并且 \TeX\ 在每个页面放尽可能多的段落。%
+按照附录 B, |\filbreak| 的确切意思是：
+\begintt
+\vfil\penalty-200\vfilneg
+\endtt
+并且这个 \TeX\ 原始控制系列的简单组合得到了所要的结果：
+如果在 |\penalty-200| 处取了断点，那么前面的 |\vfil| 就用空白填满到底部，
+并且断点后的 |\vfilneg| 将被忽略；
+但是如果没有在惩罚处取断点，那么 |\vfil| 和 |\vfilneg| 将互相抵消而%
+没有任何影响。
+
+%\danger Plain \TeX\ also provides a ^|\raggedbottom| command, which is a
+%vertical analog of\/ ^|\raggedright|: It tells \TeX\ to permit a small
+%amount of variability in the bottom margins on different pages, in order
+%to make the other spacing uniform.
+\danger Plain \TeX\ 还提供了一个命令叫 |\raggedbottom|,
+它类似于 |\raggedright|:
+允许 \TeX\ 在不同页面留不同的小空白，以保证其它的行间距是一致的。
+
+%\ddanger We saw in Chapter 14 that breakpoints for paragraphs are chosen
+%by computing ``demerits'' for each line and summing them over all lines.
+%The situation for pages is simpler because each page is considered separately.
+%\TeX\ figures the ``^{cost}'' of a page break by using the following formula:
+%\begindisplay
+%$\displaystyle{c=\cases{
+%  p,&if $b<\infty$ and $p\le-10000$ and $q<10000$;\cr
+%  b+p+q,&if $b<10000$ and $-10000<p<10000$ and $q<10000$;\cr
+%  100000,&if $b=10000$ and $-10000<p<10000$ and $q<10000$;\cr
+%  \infty,&if ($b=\infty$ or $q\ge10000$) and $p<10000$.\cr}}$
+%\enddisplay
+%Here $b$ is the ^{badness} of the page that would be formed if a break
+%were chosen here; $p$~is the penalty associated with the current
+%breakpoint; and $q$~is `^|\insertpenalties|', the sum of all penalties for
+%split insertions on the page, as explained below. Vertical badness is
+%computed by the same rules as horizontal badness; it is an integer between
+%0 and~10000, inclusive, except when the box is overfull, when it
+%is~$\infty$ (infinity).
+%^^{infinite badness}
+\ddanger 在第十四章我们看到，段落的断点是通过计算每行的``缺陷''并把所有%
+行的缺陷加起来而确定的。%
+页面的方法更简单，因为每个页面单独来考虑。%
+通过下列公式 \TeX\ 计算出分页的``成本'':
+\begindisplay
+$\displaystyle{c=\cases{
+  p,&if $b<\infty$ and $p\le-10000$ and $q<10000$;\cr
+  b+p+q,&if $b<10000$ and $-10000<p<10000$ and $q<10000$;\cr
+  100000,&if $b=10000$ and $-10000<p<10000$ and $q<10000$;\cr
+  \infty,&if ($b=\infty$ or $q\ge10000$) and $p<10000$.\cr}}$
+\enddisplay
+其中，$b$ 是在此处分页所生成页面的丑度；$p$ 是当前断点的相应惩罚；
+而 $q$ 是 `|\insertpenalties|'，即页面上把插入盒子分开时的所有惩罚的和，
+其解释在后面。垂直丑度的计算规则与水平丑度一样；
+它是 $0$ 和 $10000$ 这个范围的整数，但是当盒子溢出时它是 $\infty$（无限大）。
+
+%\ddanger When a page is completed, it is removed from the main vertical
+%list and passed to an ``^{output routine},'' as we will see later; so its
+%boxes and glue eventually disappear from \TeX's memory. The remainder of
+%the main vertical list exists in two parts:  First comes the ``^{current
+%page},'' which contains all the material that \TeX\ has considered so far
+%as a candidate for the next page to be broken off; then there are
+%``^{recent contributions},'' i.e., items that will be moved to the current
+%page as soon as \TeX\ finds it convenient to do so. If you say
+%^|\showlists|, \TeX\ will display the contents of the current page and the
+%recent contributions, if any, on your log file. \ (The example in
+%Chapter~13 doesn't show any such lists because they were both empty in
+%that case. Chapter~24 explains more about \TeX's timing.)
+\ddanger \1当完成一个页面时，把它从主垂直列中清除并且送到``输出例行程序'',
+这个我们将在后面看到；
+所以其盒子和粘连最后都从 \TeX\ 的内存中清除了。%
+主垂直列剩下的东西存在在两个部分中：
+首先是来自``当前页面'', 它包含迄今为止 \TeX\ 为分出下一页所考虑的所有内容；
+接着是``备选内容'', 即一旦 \TeX\ 发现可行就放入当前页面的那些项目。%
+如果使用 |\showlists|,  \TeX\ 将显示当前页面的内容和备选内容，
+或者放在 log 文件中。%
+(第十三章的例子没有给出这些列表，因为在那种情况下填满都是空的。%
+第二十四章更多地讨论了 \TeX\ 的时机选择。)
+
+%\ddanger Whenever \TeX\ is moving an item from the top of the ``recent
+%contributions'' to the bottom of the ``current page,'' it discards a
+%^{discardable item} (glue, kern, or penalty) if the current page does not
+%contain any boxes. This is how glue disappears at a page break. Otherwise
+%if a discardable item is a legitimate breakpoint, \TeX\ calculates the
+%cost~$c$ of breaking at this point, using the formula that we have just
+%discussed. If the resulting~$c$ is less than or equal to the smallest cost
+%seen so far on the current page, \TeX\ remembers the current
+%breakpoint as the best so far. And if $c=\infty$ or if $p\le-10000$, \TeX\
+%seizes the initiative and breaks the page at the best remembered
+%breakpoint.  Any material on the current page following that best
+%breakpoint is moved back onto the list of recent contributions, where it
+%will be considered again; thus the ``current page'' typically gets more
+%than one page's worth of material before the breakpoint is chosen.
+\ddanger 只要 \TeX\ 把一个项目从``备选内容''的顶部移到``当前页面''的底部，
+那么如果当前页面不包含任何盒子，那么它就忽略掉可弃项目(粘连，紧排或惩罚)。%
+这就是粘连在分页处消失的方法。%
+否则，如果可弃项目是一个合理断点，那么 \TeX\ 就用前面上面给出的公式计算在此断点%
+的成本 $c$。%
+如果所得到的 $c$ 小于等于迄今为止当前页面的其它成本，那么 \TeX\ 就把当前断点%
+记为迄今为止最佳断点。%
+并且如果 $c=\infty$ 或者 $p\le-10000$,  \TeX\ 就主动出击，在所记住的最佳断点处分页。%
+当前页面上最佳断点后面的任何东西都移回备选内容列，
+它们会被再次处理；
+因此，在断点选定前``当前页面''一般得到比一个页面更多的内容。
+
+%\ddanger This procedure may seem mysterious until you see it in action.
+%Fortunately, there is a convenient way to watch it;
+%you can set ^|\tracingpages||=1|, thereby instructing \TeX\ to put its
+%page-cost calculations into your log file. For example, here is what
+%appeared on the log file when the author used |\tracingpages=1| at the
+%beginning of the present chapter:
+%\begintt
+%%% goal height=528.0, max depth=2.2
+%% t=10.0 g=528.0 b=10000 p=150 c=100000#
+%% t=22.0 g=528.0 b=10000 p=0 c=100000#
+%% t=34.0 g=528.0 b=10000 p=0 c=100000#
+%|kern-3pt
+%|qquad|hbox|bgroup|rm|vdots|quad(25 similar lines are being omitted here)|egroup
+%% t=346.0 plus 2.0 g=528.0 b=10000 p=0 c=100000#
+%% t=358.0 plus 2.0 g=528.0 b=10000 p=150 c=100000#
+%% t=370.02223 plus 2.0 g=528.0 b=10000 p=-100 c=100000#
+%% t=398.0 plus 5.0 minus 2.0 g=528.0 b=10000 p=0 c=100000#
+%% t=409.0 plus 5.0 minus 2.0 g=528.0 b=10000 p=0 c=100000#
+%% t=420.0 plus 5.0 minus 2.0 g=528.0 b=10000 p=150 c=100000#
+%% t=431.0 plus 5.0 minus 2.0 g=528.0 b=10000 p=-100 c=100000#
+%% t=459.0 plus 8.0 minus 4.0 g=528.0 b=10000 p=0 c=100000#
+%% t=470.0 plus 8.0 minus 4.0 g=528.0 b=10000 p=0 c=100000#
+%% t=481.0 plus 8.0 minus 4.0 g=528.0 b=10000 p=0 c=100000#
+%% t=492.0 plus 8.0 minus 4.0 g=528.0 b=10000 p=0 c=100000#
+%% t=503.0 plus 8.0 minus 4.0 g=528.0 b=3049 p=0 c=3049#
+%% t=514.0 plus 8.0 minus 4.0 g=528.0 b=533 p=150 c=683#
+%% t=525.0 plus 8.0 minus 4.0 g=528.0 b=5 p=-100 c=-95#
+%% t=553.0 plus 11.0 minus 6.0 g=528.0 b=* p=0 c=*
+%\endtt
+%This trace output is admittedly not ``user-friendly'' in appearance, but
+%after all it comes from deep inside \TeX's bowels where things have been
+%reduced to numeric calculations. You can learn to read it with a little
+%practice, but you won't need to do so very often unless you need to
+%plunge into page-breaking for special applications. Here's what it
+%means: The first line, which starts with `|%%|', ^^{percent percent}
+%is written when the first box or insertion enters the current page list;
+%it shows the ``^{goal height}'' and the ``^{max depth}'' that will be
+%used for that page (namely, the current values of\/ ^|\vsize| and
+%^|\maxdepth|). In the present manual we have |\vsize=44pc| and
+%|\maxdepth=2.2pt|; dimensions in the log file are always displayed in
+%points. The subsequent lines, which start with a single `|%|', ^^{percent}
+%are written whenever a legal breakpoint is being moved from the list of
+%recent contributions to the current page list. Every |%|~line shows $t$,
+%which is the total height so far if a page break were to occur,
+%and $g$, which is the goal height; in this example $g$~stays fixed at
+%$528\pt$, but $g$ would have decreased if insertions such as footnotes had
+%occurred on the page. The values of~$t$ are steadily increasing from 10 to
+%22 to~34, etc.; baselines are $12\pt$ apart at the top of the page and
+%$11\pt$ apart at the bottom (where material is set in nine-point type).
+%We are essentially seeing one |%|~line per hbox of text being placed on
+%the current page. However, the |%|~lines are generated by the penalty or
+%glue items that follow the hboxes, not by the boxes themselves. Each
+%|%|~line shows also the badness~$b$, the penalty~$p$, and the cost~$c$
+%associated with a breakpoint; if this cost is the best so far, it is
+%marked with a `|#|' sign, ^^{sharp} meaning that ``this breakpoint will be
+%used for the current page if nothing better comes along.'' Notice that the
+%first 40 or so breaks all have $b=10000$, since they are so bad that \TeX\
+%considers them indistinguishable; in such cases $c=100000$, so \TeX\ simply
+%accumulates material until the page is full enough to
+%have $b<10000$. A penalty of 150 reflects the ^|\clubpenalty| or the
+%^|\widowpenalty| that was inserted as described in Chapter~14.  The three
+%lines that say |p=-100| are the breakpoints between ``dangerous bend''
+%paragraphs; these came from ^|\medbreak| commands.  The notation |b=|^|*| and
+%|c=*| on the final line means that $b$ and~$c$ are infinite; the total
+%height of $553\pt$ cannot be reduced to $528\pt$ by shrinking the
+%available glue. Therefore the page is ejected at the best previous place,
+%which turns out to be a pretty good break: |b=5| and |p=-100| yield a
+%net cost of $-95$.
+\ddanger 在你看到这个程序运转前，可能比较神秘。
+幸运的是，有一个便利的方法来观察它；
+你可以使用 |\tracingpages||=1|，从而告诉 \TeX\ 把页面成本的计算输出到日志文件中。
+例如，当在本章的开头使用 |\tracingpages=1| 时，下面的内容就出现在日志文件中：
+\begintt
+%% goal height=528.0, max depth=2.2
+% t=10.0 g=528.0 b=10000 p=150 c=100000#
+% t=22.0 g=528.0 b=10000 p=0 c=100000#
+% t=34.0 g=528.0 b=10000 p=0 c=100000#
+|kern-3pt
+|qquad|hbox|bgroup|rm|vdots|quad(25 similar lines are being omitted here)|egroup
+% t=346.0 plus 2.0 g=528.0 b=10000 p=0 c=100000#
+% t=358.0 plus 2.0 g=528.0 b=10000 p=150 c=100000#
+% t=370.02223 plus 2.0 g=528.0 b=10000 p=-100 c=100000#
+% t=398.0 plus 5.0 minus 2.0 g=528.0 b=10000 p=0 c=100000#
+% t=409.0 plus 5.0 minus 2.0 g=528.0 b=10000 p=0 c=100000#
+% t=420.0 plus 5.0 minus 2.0 g=528.0 b=10000 p=150 c=100000#
+% t=431.0 plus 5.0 minus 2.0 g=528.0 b=10000 p=-100 c=100000#
+% t=459.0 plus 8.0 minus 4.0 g=528.0 b=10000 p=0 c=100000#
+% t=470.0 plus 8.0 minus 4.0 g=528.0 b=10000 p=0 c=100000#
+% t=481.0 plus 8.0 minus 4.0 g=528.0 b=10000 p=0 c=100000#
+% t=492.0 plus 8.0 minus 4.0 g=528.0 b=10000 p=0 c=100000#
+% t=503.0 plus 8.0 minus 4.0 g=528.0 b=3049 p=0 c=3049#
+% t=514.0 plus 8.0 minus 4.0 g=528.0 b=533 p=150 c=683#
+% t=525.0 plus 8.0 minus 4.0 g=528.0 b=5 p=-100 c=-95#
+% t=553.0 plus 11.0 minus 6.0 g=528.0 b=* p=0 c=*
+\endtt
+\1这个跟踪输出不可否认在外观上不那么``友好'',
+但是毕竟它来自 \TeX\ 的内脏中，所做的事情已经简化为数字计算了。%
+经过一些训练就可以读懂它们，
+不过你不必经常这样做，除非要做特殊的分页。%
+其意思如下：
+第一行以`|%%|'开头，
+当第一个盒子或插入进入当前页面列时写入；
+它显示了此页面将要使用的``目标高度''和``最大深度''(即 |\vsize| 和%
+~|\maxdepth| 的当前值)。%
+在本手册中，|\vsize=44pc| 和 |\maxdepth=2.2pt|;
+log 文件中尺寸的单位是 point。%
+随后的行以单个`|%|'开头，
+只要从备选内容向当前页面列移入合理的断点，就写入。%
+每个 |%| 行显示 $t$~(如果在此分页，它就是迄今为止的总高度)和 $g$~(它是目标高度);
+在本例中，~$g$ 保持固定，为 $528\pt$,
+但是如果诸如脚注这样的插入出现在页面上，~$g$ 应该减小。%
+~$t$ 的值稳定增大，从 $10$ 到 $22$ 到 $34$ 等等；
+在页面顶部基线的间隔为 $12\pt$, 在底部为 $11\pt$(因为文本是 9 point 的字体)。%
+只要一个文本盒子放在当前页面上，就看到一个 |%| 行。%
+但是，|%| 行也可以由 hbox 后的惩罚或粘连项目生成，而不是盒子自身。%
+每个 |%| 行还显示了与断点相应的丑度 $b$, 惩罚 $p$, 和成本 $c$;
+如果这个成本是迄今为止最好的，就用`|#|'来标记，意思是，
+``如果后面没有更好的就把此断点应用于当前页面''。%
+注意，大约前 40 个断点都是 $b=10000$, 这是因为它们糟糕得 \TeX\ 认为无法区分；
+在这种情况下 $c=100000$,
+所以 \TeX\ 直接积累材料，直到页面满到 $b<10000$。%
+惩罚为 150 反映了 |\clubpenalty| 或 |\widowpenalty| 被插入，
+就象第十四章中讨论的那样。%
+含有 |p=-100| 的三个行是``危险''标识段落之间的断点；
+它们来自命令 |\medbreak|。%
+在最后一行的符号 |b=*| 和 |c=*| 意味着 $b$ 和 $c$ 是无限大；
+总高度 $553\pt$ 不能通过收缩可用的粘连而减小到 $528\pt$。%
+因此，页面在最佳的前一个位置结束，
+这就是一个机动好断点：|b=5| 和 |p=-100| 断点净成本为 $-95$。
+
+%\ddangerexercise Suppose the paragraph at the bottom of the example page
+%had been one line shorter; what page break would have been chosen?
+%\answer The last three page-break calculations would have been
+%\begintt
+%% t=503.0 plus 8.0 minus 4.0 g=528.0 b=3049 p=150 c=3199#
+%% t=514.0 plus 8.0 minus 4.0 g=528.0 b=533 p=-100 c=433#
+%% t=542.0 plus 11.0 minus 6.0 g=528.0 b=* p=0 c=*
+%\endtt
+%so the break would have occurred at the same place. The badness would have
+%been~533, but the page would still have looked tolerable. \ (On the other
+%hand if that paragraph had been two lines shorter instead of one,
+%the first two lines of the next ``dangerous bend'' paragraph
+%would have appeared on that page; the natural height $t=531\pt$ would have
+%been able to shrink to $g=528\pt$ because the three ``medskips'' on
+%the page would have had a total shrinkability of $6\pt$. This would certainly
+%have been preferable to a stretched-out page whose badness was~3049; but the
+%author might have seen it and written another sentence or two, so that
+%the paragraph would not have been broken up. After all, this manual is supposed
+%to be an example of good practice.)
+\ddangerexercise 假定例子页面底部的段落减少一行；分页会怎样选定呢？
+\answer 最后三个分页计算将变成
+\begintt
+% t=503.0 plus 8.0 minus 4.0 g=528.0 b=3049 p=150 c=3199#
+% t=514.0 plus 8.0 minus 4.0 g=528.0 b=533 p=-100 c=433#
+% t=542.0 plus 11.0 minus 6.0 g=528.0 b=* p=0 c=*
+\endtt
+因此分页将出现在相同位置。劣度将是 533，但页面看来还是过得去的。%
+（另一方面，如果该段落减少两行而非一行，下一个``险弯''段落的前两行将出现在该页；
+因为页面上三个 ``medskip'' 总共有 $6\pt$ 的可收缩量，
+自然高度 $t=531\pt$ 将可以收缩到 $g=528\pt$。
+这肯定将比伸开的页面略胜一筹，因为那样劣度将为 ~3049；
+但作者也许已经发现这点，并且多写了一两行句子，使得段落不会被一分为二。
+毕竟此手册是希望作为良好实践的示例的。）
+
+%\ddangerexercise The last two ``\kern.5pt|%| lines'' of this example show
+%the natural height of~$t$ jumping by $28\pt$, from 525.0 to~553.0. Explain
+%why there was such a big jump.
+%\answer The next legal break after the beginning of a dangerous bend
+%paragraph occurs $28\pt$ later, because there is $6\pt$ additional space for
+%a |\medskip|, followed by two lines of $11\pt$ each. \TeX\ does not
+%allow breaking between those two lines; the ^|\clubpenalty| is set briefly
+%to 10000 in Appendix~E\null, since the dangerous bend symbol is two lines tall.
+\ddangerexercise 本例子的最后两个``|%| 行''显示自然高度跳过了 $28\pt$，
+从 525.0 到 553.0。看看为什么有这么大的跳跃？
+\answer 下个合法分页点出现在险弯段落开始后的 $28\pt$ 之后，
+因为其中有 $6\pt$ 的 |\medskip| 间距，以及各占 $11\pt$ 的两行。
+\TeX\ 不被允许在这两行间分页；因为险弯符号有两行高，
+在附录 E 中 ^|\clubpenalty| 被直接设定为 10000。
+
+%\ddanger The ^|\maxdepth| parameter tells \TeX\ to raise the bottom box
+%on the page if that box has too much depth, so that the depth of the
+%constructed page will not exceed a specified value. \ (See the discussion of
+%^|\boxmaxdepth| in Chapter~12.) \ In our example |\maxdepth=2.2pt|, and
+%the influence of this parameter can be seen in the line that says
+%`|% t=370.02223|'. Ordinarily $t$~would have been 370.0 at that breakpoint;
+%but the hbox preceding it was unusual because it contained the letter
+%|j| in ^|\tt|, and a 10-point typewriter-style |j| descends $2.22223\pt$
+%below the baseline.  Therefore \TeX\ figured badness as if the hbox were
+%$.02223\pt$ higher and only $2.2\pt$ deep.
+\ddanger 如果页面底部盒子深度过大，参数 |\maxdepth| 告诉 \TeX\ 升高此盒子，
+使得所构建页面的深度不超出所给值。（参见第十二章中 |\boxmaxdepth| 的讨论。）
+在我们的例子中，|\maxdepth=2.2pt|，此参数的影响可以在 `|% t=370.02223|' 行看到。
+一般地，在此断点 $t$ 应该是 370.0；
+但是在它前面的盒子是不寻常的，因为它包含了 |\tt| 字体的字母 |j|，
+而 10 点打字机字体的 |j| 比基线低 $2.22223\pt$。
+因此，\TeX\ 计算丑度时假定该 hbox 的高度多了 $.02223\pt$ 而深度仅为 $2.2\pt$。
+
+%\ddanger Notice that the first ``\kern.5pt|%| line'' of our example says
+%|t=10.0|; this is a consequence of another parameter, called ^|\topskip|.
+%Glue disappears at a page break, but it is desirable to produce pages
+%whose top and bottom baselines occur in predetermined positions, whenever
+%possible; therefore \TeX\ inserts special glue just before the first box
+%on each page.  This special glue is equal to |\topskip|, except that the
+%natural space has been decreased by the height of the first box, or it has
+%been set to zero in lieu of a negative value. For example, if\/
+%|\topskip=20pt plus2pt|, and if the first box on the current page is
+%$13\pt$ tall, \TeX\ inserts `|\vskip7pt plus2pt|' just above that box.
+%Furthermore, if the first box is more than $20\pt$ tall, `|\vskip0pt
+%plus2pt|' is inserted. But this example is atypical, since the |\topskip|
+%glue usually has no stretchability or shrinkability; plain \TeX\ sets
+%|\topskip=10pt|.
+\ddanger 注意，例子中的第一个 |%| 行给出了 |t=10.0|；
+这是另一个参数的结果，它叫做 |\topskip|。粘连在分页时消失了，
+但是只要可以，就希望所得页面的顶基线和底基线出现在预先确定的位置上；
+\1因此 \TeX\ 在每页的第一个盒子前面插入特殊粘连。
+这个特殊粘连等于 |\topskip| ，再减去第一个盒子的高度；
+若所得的自然间距为零时，设定自然间距为零。
+例如，如果 |\topskip=20pt plus2pt|，并且当前页面上第一个盒子的高度为 $13\pt$，
+那么 \TeX\ 仅在盒子上方插入`|\vskip7pt plus2pt|'。
+还有，如果第一个盒子的高度超过 $20\pt$，那么插入`|\vskip0pt plus2pt|'。
+但是这个例子不是典型的，因为一般 |\topskip| 没有伸缩性；
+plain \TeX\ 设置 |\topskip=10pt|。
+
+%\ddangerexercise Assume that |\vsize=528pt|, |\maxdepth=2.2pt|,
+%|\topskip=10pt|, and that no |\insert| commands are being used. \TeX\ will
+%make pages that are $528\pt$ high, and the following two statements will
+%normally be true: (a)~The baseline of the topmost box on the page will be
+%$10\pt$ from the top, i.e., $518\pt$ above the baseline of the page itself.
+%(b)~The baseline of the bottommost box on the page will coincide with the
+%baseline of the page itself. Explain under what circumstances (a) and~(b)
+%will fail.
+%\answer A page always contains at least one box, if there are no
+%insertions, since the legal breakpoints are discarded otherwise.
+%Statement~(a) fails if the height of the topmost box exceeds $10\pt$.
+%Statement~(b) fails if the depth of the bottommost box exceeds $2.2\pt$, or
+%if some glue or kern comes between the bottommost box and the page break
+%(unless that glue or kern exactly cancels the depth of the box).
+\ddangerexercise 假定 |\vsize=528pt|、|\maxdepth=2.2pt|、|\topskip=10pt|，
+且不使用 |\insert| 命令。\TeX\ 将构建高度为 $528\pt$ 的页面，
+并且下列两个陈述一般是正确的：
+(a) 页面最顶部盒子的基线距离顶部 $10\pt$，即比页面本身的基线高 $518\pt$。%
+(b) 页面最底部盒子的基线与页面本身的基线重合。%
+看看在什么情况下 (a) 和 (b) 失效。
+\answer 如果没有插入项，页面总是至少包含一个盒子，因为否则的话合法分页点就会被丢弃。
+陈述 (a) 在最顶部盒子的高度超过 $10\pt$ 时失效。
+陈述 (b) 在最底部盒子的深度超过 $2.2\pt$ 时失效，
+在最底部盒子与分页点之间存在粘连或紧排时也失效%
+（除非该粘连或紧排正好和该盒子的深度抵消）。
+
+%\ddanger Since |\vsize|, |\maxdepth|, and |\topskip| are
+%parameters, you can change them at any time; what happens if you do?
+%Well, \TeX\ salts away the values of\/ |\vsize| and |\maxdepth| when
+%it prints the ``\kern.5pt|%%|~line,'' i.e., when the first box or insertion
+%occurs on the current page; subsequent changes to those two parameters
+%have no effect until the next current page is started. On the other hand,
+%\TeX\ looks at |\topskip| only when the first box is being contributed
+%to the current page. If insertions occur before the first box, the
+%|\topskip| glue before that box is considered to be a valid breakpoint;
+%this is the only case in which a completed page might not contain a box.
+\ddanger 因为 |\vsize|, |\maxdepth| 和 |\topskip| 是参数，
+所以可以在任何时候改变它们；
+如果这样会出现什么结果？
+嗯，当 \TeX\ 输出``|%%| 行''时，即当第一个盒子或插入出现在当前页面时，
+它会记住 |\vsize| 和 |\maxdepth| 的值；
+直到下一页开始对这两个参数的改变才起作用。%
+另一方面，只有当第一个盒子送到当前页面时 \TeX\ 才查看 |\topskip| 的值。%
+如果插入出现在盒子前面，那么此盒子之前的 |\topskip| 粘连就被看作一个可用断点；
+这是整个页面不可能包含盒子的唯一情形。
+
+%\ddanger You can look at the $t$ and $g$ values that are used in page
+%breaking by referring to the \<dimen> values `^|\pagetotal|' and
+%`^|\pagegoal|', respectively.  You can even change them (but let's hope
+%that you know what you are doing).  For example, the command
+%|\pagegoal=500pt| overrides the previously saved value of\/ |\vsize|.
+%Besides |\pagetotal|, which represents the accumulated natural height,
+%\TeX\ maintains the quantities ^|\pagestretch|, ^|\pagefilstretch|,
+%^|\pagefillstretch|, ^|\pagefilllstretch|, ^|\pageshrink|, and
+%^|\pagedepth|.  When the current page contains no boxes, |\pagetotal| and
+%its relatives are zero and |\pagegoal| is $16383.99998\pt$ (\TeX's largest
+%\<dimen>); changing their values has no effect at such times.  The integer
+%$q$ in the formula for page costs is also available for inspection and
+%change; it is called ^|\insertpenalties|.
+\ddanger 在分页中所看到的 $t$ 和 $g$ 的值分别指 \<dimen> 值
+`|\pagetotal|' 和 `|\pagegoal|'。你也可以改变它们（但愿你知道你在做什么）。
+例如，命令 |\pagegoal=500pt| 将取代前面保存的 |\vsize| 的值。
+|\pagetotal| 表示累计的自然高度，除此之外， \TeX\ 还有其它量 |\pagestretch|、
+|\pagefilstretch|、|\pagefillstretch|、|\pagefilllstretch|、|\pageshrink| 和
+|\pagedepth|。如果当前页不包含盒子，那么 |\pagetotal| 及与其相关的量等于零，
+并且 |\pagegoal| 为 $16383.99998\pt$（\TeX\ 的最大尺寸）；
+在这种情况下改变它们的值没有影响。式子中表示页面成本的整数 $q$ 也可用在检验中，
+并且是可改变的；它的名称为 |\insertpenalties|。
+
+%\ddanger Page breaking differs from line breaking in one small respect
+%that deserves mention here: If you say |\eject\eject|, the second |\eject|
+%is ignored, because it is equivalent to |\penalty-10000| and penalties are
+%discarded after a page break. But if you say |\break\break| in a
+%paragraph, the second ^|\break| causes an empty line, because penalties
+%are discarded after a break in a paragraph only if they do not belong to
+%the final sequence of breakpoints. This technicality is unimportant in
+%practice, because |\break\break| isn't a good way to make an empty line;
+%that line will usually be an underfull hbox, since it has only the
+%|\leftskip| and |\rightskip| glue in it.  Similarly, `|\eject\eject|'
+%would not be a good way to make an empty page, even if \TeX\ were to
+%change its rules somehow so that an |\eject| would never be ignored. The
+%best way to eject an ^{empty page} is to say `|\eject\line{}\vfil\eject|',
+%and the best way to create an ^{empty line} is
+%`|\break\hbox{}\hfil\break|'. Both of these avoid underfull boxes.
+\ddanger 值得一提的是，分页与断行在一个小的方面是不同的：
+如果使用 |\eject\eject|, 那么第二个 |\eject| 将被忽略，
+因为它等价于 |\penalty-10000|, 而分页后的惩罚是可弃的。%
+但是如果在段落中使用 |\break\break|, 那么第二个 |\break| 产生一个空行，
+因为只有当惩罚不属于最后的断点序列时，段落中断点后的惩罚才是可弃的。%
+实际上这个技术要点并不重要，因为 |\break\break| 不是产生空行的好办法；
+因为它只包含 |\leftskip| 和 |\rightskip| 这两个粘连，所以得到的是松散的 hbox。%
+类似地，`|\eject\eject|'不是一个生成空页的好方法，
+即使 \TeX\ 改变一下规则使得 |\eject| 不被忽略掉。%
+得到空页的最好方法是`|\eject\line{}\vfil\eject|',
+而生成空行的最好方法是`|\break\hbox{}\hfil\break|'。%
+这两种方法都避免出现松散的盒子。
+
+%\danger You are probably wondering how page numbers and such things
+%get attached to pages. The answer is that \TeX\ allows you to do further
+%processing after each page break has been chosen; a special ``output
+%routine'' goes into action before pages actually receive their final
+%form. Chapter~23 explains how to construct output routines and how to
+%modify the output routine of plain~\TeX.
+\danger \1可能你想知道页码和此类内容是怎样添加到页面上的。%
+答案是，在每个分页选定之后， \TeX\ 允许你做进一步处理；
+在页面得到它们的最终格式前，进入一个特殊的``输出例行程序''。%
+第二十三章讨论了怎样构建输出例行程序以及怎样修改 plain \TeX\ 的输出例行程序。
+
+%\danger Every once in a~while, \TeX\ will produce a really awful-looking
+%page and you will wonder what happened. For example, you might get just
+%one paragraph and a lot of white space, when some of the text on the
+%following page would easily fit into the white space. The reason for such
+%apparently anomalous behavior is almost always that no good page break
+%is possible; even the alternative that looks better to you is quite terrible
+%as far as \TeX\ is concerned! \TeX\ does not distinguish between two
+%choices that both have 10000 units of badness or more, even though some bad
+%breaks do look much worse than others. The solution in such cases is to
+%insert |\eject| or |\vfill\eject| in some acceptable spot, or to
+%revise the manuscript. If this problem arises frequently, however,
+%you probably are using a format that sets overly strict limitations
+%on page format; try looking at the output of\/ |\tracingpages| and
+%modifying some of \TeX's parameters, until you have better luck.
+\danger  \TeX\ 偶尔会生成一个难看的页面，想知道出现什么问题吗？
+例如，你得到的可能只是一个段落和很多空白，而下一页的文本空页却明显能放在这些空白处。%
+这样明显反常的原因几乎都是无法找到好的断点；
+即使对你而言另一种方法很好，而对 \TeX\ 而言却很糟!
+因为 \TeX\ 无法区分两个大于等于 10000 的丑度，即使一个看起来比另一个很糟。%
+在此情况下，解决的方法是在某些可接受的地方插入 |\eject| 或者 |\vfill\eject|,
+或者修订你的文稿。%
+但是如果这个问题经常出现，那么说明你使用的页面格式限制得太严格；
+试着看看 |\tracingpages| 的输出信息，并且修改一些 \TeX\ 的参数，
+这样就可以感觉好一些了。
+
+%\danger The remainder of this chapter is about insertions: things like
+%footnotes and ^{illustrations}, and how they interact with page breaks.
+%Before we discuss the primitive operations by which \TeX\ deals with
+%insertions, we will take a look at the facilities that plain \TeX\ provides
+%at a higher level.
+\danger 本章剩下的内容将讨论插入对象：
+就象脚注和图例这些东西，以及它们与分页之间的互相影响。%
+在我们讨论 \TeX\ 处理插入对象的原始命令之前，先看看 plain \TeX\ 提供的高级工具。
+
+%\danger Illustrations can be inserted in several ways using plain \TeX.
+%The simplest of these is called a ``^{floating topinsert}''; you say
+%\begindisplay
+%^|\topinsert|\<vertical mode material>^|\endinsert|
+%\enddisplay
+%and \TeX\ will attempt to put the vertical mode material at the top of the
+%current page.  If there's no room for such an insertion on this page, \TeX\
+%will insert it at the top of the next page. The \<vertical mode material>
+%can contain embedded paragraphs that temporarily interrupt vertical mode
+%in the usual way; for example:
+%\begintt
+%\topinsert \vskip 2in
+%\hsize=3in \raggedright
+%\noindent{\bf Figure 3.} This is the caption to the
+%third illustration of my paper. I have left two inches
+%of space above the caption so that there will be room
+%to introduce special artwork. \endinsert
+%\endtt
+%The ^{caption} in this example will be set ^{ragged-right} in a 3-inch
+%column at the left of the page. Plain \TeX\ automatically adds a
+%``^{bigskip}'' below each topinsert; this will separate the caption from
+%the text. The effects of\/ |\hsize=3in| and |\raggedright| do not extend
+%past the |\endinsert|, since ^{grouping} is implied.
+\danger 在 plain \TeX\ 中有几种方法可以插入图例。%
+最简单的叫做``顶部浮动插入'';
+命令是
+\begindisplay
+|\topinsert|\<vertical mode material>|\endinsert|
+\enddisplay
+并且 \TeX\ 试着把垂直模式的内容放在当前页面顶部。%
+如果在某个页面顶部没有空间了，
+ \TeX\ 将把它插入到下一个页面顶部。%
+\<vertical mode material> 可包含嵌入的段落(它按通常的方法临时中断垂直模式而得到);
+例如：
+\begintt
+\topinsert \vskip 2in
+\hsize=3in \raggedright
+\noindent{\bf Figure 3.} This is the caption to the
+third illustration of my paper. I have left two inches
+of space above the caption so that there will be room
+to introduce special artwork. \endinsert
+\endtt
+本例的 caption 设置放在页面左边，栏宽为 3 inch, 左对齐。%
+Plain \TeX\ 自动在每个顶部插入下面添加一个``bigskip'';
+它就把标题和文字分开。%
+因为暗含了编组命令，所以 |\hsize=3in| 和 |\raggedright| 的作用不会超出 |\endinsert|。
+
+%\dangerexercise Modify this example so that the caption is moved over next to
+%the right margin, instead of appearing at the left.
+%\answer |\topinsert\vskip2in\rightline{\vbox{\hsize|\stretch|...|\stretch
+%|artwork.}}\endinsert|
+%does the job. But it's slightly more efficient to avoid ^|\rightline| by
+%changing ^|\leftskip| as follows:
+%`|\leftskip=\hsize \advance\leftskip by-3in|'.
+%Then \TeX\ doesn't have to read the text of the caption twice.
+\dangerexercise 修改此例子，使得下一个标题出现在右页边，而不是左页边。
+\answer |\topinsert\vskip2in\rightline{\vbox{\hsize|\stretch|...|\stretch
+|artwork.}}\endinsert| 即可完成任务。
+但如果不用 ^|\rightline|，而是将 ^|\leftskip| 改为
+`|\leftskip=\hsize \advance\leftskip by-3in|' 效率更高。
+这样 \TeX\ 不必两次读取标题文本。
+
+%\danger Similarly, if you say `^|\pageinsert|\stretch\<vertical mode
+%material>\stretch |\endinsert|', the vertical mode material will be
+%justified to the size of a full page (without a bigskip below it);
+%the result will appear on the following page.
+\danger 类似地，如果使用`|\pageinsert|\stretch\<vertical mode
+material>\stretch |\endinsert|', 那么垂直模式的内容将被调整为整个页面的大小%
+(它下面没有 bigskip 了);
+所得到的内容将放在下一页上。
+
+%\danger There's also `^|\midinsert|\stretch\<vertical mode material>\stretch
+%|\endinsert|', which tries first to insert the material in place, wherever
+%you happen to be, in the middle of the current page. If there is enough
+%room, you get the effect of^^|\bigskip|^^|\bigbreak|
+%\begindisplay
+%|\bigskip\vbox{|\<vertical mode material>|}\bigbreak|
+%\enddisplay
+%otherwise the |\midinsert| is effectively converted to a |\topinsert|.
+%There is a slight probability that |\midinsert| will not find the
+%best placement, because \TeX\ is sometimes processing text ahead of the
+%current page. You may want to say `^|\goodbreak|' just before |\midinsert|.
+\danger \1还有`|\midinsert|\stretch\<vertical mode material>\stretch
+|\endinsert|', 它首先把此内容插入其所在的位置，在当前页面中间。%
+如果没有足够的空间，就得到了
+\begindisplay
+|\bigskip\vbox{|\<vertical mode material>|}\bigbreak|
+\enddisplay
+否则，~|\midinsert| 就转换为 |\topinsert|。%
+偶尔 |\midinsert| 无法找到最佳位置，因为 \TeX\ 有时候先于当前页面来处理文本。%
+可能要在 |\midinsert| 前加上`|\goodbreak|'。
+
+%\danger You should use the commands |\topinsert|, |\pageinsert|,
+%|\midinsert| in vertical mode (i.e., between paragraphs), not inside of
+%boxes or other insertions.
+\danger 应该在垂直模式下（即段落之间）使用命令 |\topinsert|、|\pageinsert|、
+|\midinsert|，而不能在盒子或其它插入项中。
+
+%\danger If you have two or more |\topinsert| or |\pageinsert| commands in
+%quick succession, \TeX\ may need to carry them over to several subsequent
+%pages; but they will retain their relative order when they are
+%carried over.  For example, suppose you have pages that are nine inches
+%tall, and suppose you have already specified 4~inches of text for some
+%page, say page~25.  Then suppose you make seven topinserts in a row, of
+%respective sizes $1,2,3,9,3,2,1$ inches; the 9-inch one is actually a
+%|\pageinsert|. What happens?  Well, the first and second will appear at
+%the top of page 25, followed by the 4~inches of copy you have already
+%typed; that copy will immediately be followed by two more inches that you
+%type after the seven inserts.  The third topinsert will appear at the top
+%of page~26, followed by six more inches of text; the fourth will fill
+%page~27; and the remaining three will appear at the top of page~28.
+\danger 如果紧接着有两个或多个 |\topinsert| 或 |\pageinsert| 命令，
+那么 \TeX\ 可能需要把它们顺次放在几个连续的页面上；
+但是当转移时要保留其相对顺序。例如，假定页面的高度为 9 英寸，
+而且在某些页面上已经放了 4 英寸的文本。比如第 25 页。%
+那么，如果一行中有 7 个顶部插入项，大小分别为 $1,2,3,9,3,2,1$ 英寸；
+9 英寸的其实就是 |\pageinsert|。会出现什么情况？
+嗯，第一，第二个出现在第 25 页顶部，接下来是已经输入的 4 英寸文本；
+再接下来是你在 7 个插入项后面输入的文本，有 2 英寸。%
+第三个顶部插入出现在第 26 页顶部，接下来是 6 英寸文本；
+第四个满满地放在第 27 页；剩下的三个放在第 28 页。
+
+%\dangerexercise What would happen in the example just discussed if the final
+%1-inch insertion were a |\midinsert| instead of a |\topinsert|?
+%\answer It would appear on page~25, since it does fit there. A |\midinsert|
+%will jump ahead of other insertions only if it is not carried over to another
+%page; for example, if the second 3-inch insertion were a |\midinsert|, it would
+%not appear on page~26, because it is converted to a |\topinsert| as soon as the
+%|\midinsert| macro notices that the insertion is too big for page~25.
+\dangerexercise 在上面讨论的例子中，如果最后一个 1 英寸的插入项是中间插入项，
+而不是顶部插入项会出现什么结果？
+\answer 它将出现在第 25 页，因为在这里确实能放得下它。
+|\midinsert| 仅在不会转移到另一页时才能跳过其他插入项；
+举个例子，如果第二个 3 英寸的插入项为 |\midinsert|，它将不会出现在第 26 页，
+这是因为，一旦 |\midinsert| 发现此插入项在第 25 页放不下，
+就将它转换为 |\topinsert|。
+
+%\danger At the end of a paper, you probably want to make sure that no
+%insertions are lost; and at the end of a chapter, you probably want to make
+%sure that no insertions float into the following chapter. Plain \TeX\ will
+%flush out all remaining insertions, with blank space filling the bottom of
+%incomplete pages, if you say `|\vfill|^|\supereject|'.
+\danger 在论文的结尾，可能希望确保没有把插入对象丢失掉；
+在章的结尾，可能要确保插入对象不要浮动到下一章。%
+如果使用`|\vfill\supereject|', 那么 plain \TeX\ 将把所有剩下的插入对象%
+排版，用空白把未填满的页面充满。
+
+%\danger Besides illustrations that are inserted at the top of a page,
+%plain \TeX\ will also insert ^{footnotes} at the bottom of a page. The
+%^|\footnote| macro is provided for use within paragraphs;\footnote*{Like
+%this.} for example, the footnote in the present sentence was typed
+%in the following way:
+%\begintt
+%... paragraphs;\footnote*{Like this.} for example, ...
+%\endtt
+%There are two parameters to a |\footnote|; first comes the ^{reference mark},
+%which will appear both in the paragraph\footnote{**}{The author typed
+%`|paragraph\footnote{**}{The author ...}|' here.} and in the footnote itself,
+%and then comes the text of the footnote.\footnote{$^{45}$}{And
+%`|footnote.\footnote{$^{45}$}{And ...}|' here. The footnotes in this manual
+%appear in smaller type, and they are set with hanging indentation;
+%furthermore a smallskip occurs between footnotes on the same page. But
+%in plain \TeX, footnotes are typeset with the normal size of type, with
+%|\textindent| used for the reference mark, and without extra smallskips.
+%The |\textindent| macro is like |\item|, but it omits hanging
+%indentation.}
+%The latter text may be several paragraphs long, and it may contain
+%displayed equations and such things, but it should not involve other
+%^^|\textindent| ^^|\item| % these are in a split footnote, after the split!
+%insertions. \TeX\ will ensure that each footnote occurs at the bottom of
+%the same page as its reference.\footnote\dag{Printers often use the
+%symbols |\dag| (\dag), |\ddag| (\ddag), |\S|~(\S), and |\P|~(\P) as
+%reference marks; sometimes also |$\|\||$| ($\Vert$).
+%You can say, e.g., `|\footnote\dag{...}|'.} A long
+%footnote will be split, if necessary, and continued at the bottom of the
+%following page, as you can see in the ^^|\dag|^^|\ddag|^^|\S|^^|\P|^^|\Vert|
+%somewhat contrived example that appears here. Authors who are interested
+%in good exposition should avoid footnotes whenever possible, since
+%footnotes tend to be ^^{Gibbon} distracting.\footnote\ddag{Yet Gibbon's
+%{\sl Decline and Fall\/} would not have been the same without footnotes.}
+\danger 除了在页面顶部插入图例外，plain \TeX\ 还在页面底部插入脚注。%
+在段落中提供了 |\footnote| 宏来完成任务；\footnote*{Like
+this.}
+例如，在本句中的脚注是如下输入的：
+\begintt
+... paragraphs;\footnote*{Like this.} for example, ...
+\endtt
+一个 |\footnote| 有两个参数；
+第一个是参照标记，它既出现在段落中\footnote{**}{The author typed
+`|paragraph\footnote{**}{The author ...}|' here.}, 也出现在脚注自身中，
+接下来是脚注文字。\footnote{$^{45}$}{And
+`|footnote.\footnote{$^{45}$}{And ...}|' here. The footnotes in this manual
+appear in smaller type, and they are set with hanging indentation;
+furthermore a smallskip occurs between footnotes on the same page. But
+in plain \TeX, footnotes are typeset with the normal size of type, with
+|\textindent| used for the reference mark, and without extra smallskips.
+The |\textindent| macro is like |\item|, but it omits hanging
+indentation.}
+后面的文本可以有几段长，
+并且可以包含陈列方程和此类对象，
+但是不应包含其它插入对象。%
+\1\TeX\ 会确保每个脚注出现在其参照标记所在页面的底部。\footnote\dag{Printers
+often use the
+symbols |\dag| (\dag), |\ddag| (\ddag), |\S|~(\S), and |\P|~(\P) as
+reference marks; sometimes also |$\|\||$| ($\Vert$).
+You can say, e.g., `|\footnote\dag{...}|'.}
+在必要时，长的脚注会被分成两部分，并且续在下一页底部，就象你看到的下面的人为%
+的例子一样。%
+要思路流畅的话应尽可能避免使用脚注，因为脚注会分散注意力。\footnote\ddag{Yet Gibbon's
+{\sl Decline and Fall\/} would not have been the same without footnotes.}
+
+%\danger The |\footnote| macro should be used only in paragraphs or hboxes
+%that are contributed to \TeX's main vertical list; insertions will be lost
+%if they occur inside of boxes that are inside of boxes. Thus, for example,
+%you should not try to put a |\footnote| into a subformula of a math formula.
+%But it's OK to use footnotes within ^|\centerline|, e.g., ^^{Thor}
+%\begintt
+%\centerline{A paper by A. U. Thor%
+%  \footnote*{Supported by NSF.}}
+%\endtt
+%or even on the outer level of a table entry inside an ^|\halign|.
+\danger 宏 |\footnote| 应该只在段落或出现在 \TeX\ 主垂直列的 hbox 中使用；
+如果它们出现在盒子中的盒子中，那么插入对象将丢失。%
+因此，例如，不要把 |\footnote| 放在数学公式的子式中。%
+但是，在 |\centerline| 中使用脚注是可以的，比如，
+\begintt
+\centerline{A paper by A. U. Thor%
+  \footnote*{Supported by NSF.}}
+\endtt
+或者甚至在 |\halign| 中表格单元的外层使用。
+
+%\ddanger Topinserts work fine by themselves, and footnotes work fine by
+%themselves, but complications can arise when you try to mix them in
+%devious ways. For example, if a |\pageinsert| floats to the page that
+%follows a long footnote that had to be broken, both of the held-over
+%insertions may try to force themselves onto the same page, and an overfull
+%vbox may result. Furthermore, insertions cannot appear within insertions,
+%so you can't use |\footnote| within a |\topinsert|.  If you really need a
+%footnote in some caption, there's a ^|\vfootnote| macro that can be used
+%in vertical mode. To use it, you put a reference mark like~`|*|' in the
+%caption, and then you say `|\vfootnote*{The footnote}|' somewhere on the
+%page where you guess that the caption will finally fall.  In such complex
+%circumstances you might want to rethink whether or not you are really
+%using the most appropriate format for the exposition of your ideas.
+\ddanger 只有顶部插入的话可以顺利处理，只有脚注的话也行，
+但是如果用不常用的方法把它们混合起来就复杂了。%
+例如，如果 |\pageinsert| 浮动在页面上，而下面有必须要分开的脚注，
+两个要同步的插入对象可能都要把自己放在同一页面上，
+并且得到应该溢出的页面。%
+还有，插入对象不能出现在插入对象中，
+所以不能在 |\topinsert| 中使用 |\footnote|。%
+如果的确在某些标题上需要一个脚注，那么有一个在垂直模式下使用的宏 |\vfootnote|。%
+在使用时，把象`|*|'这样的参照标记放在标题上，
+并且把`|\vfootnote*{The footnote}|'放在标题最后可能出现的页面上的某处。%
+在这样复杂的情况下，可能要重新考虑是否应该用更适当的方式来表达你的想法。
+
+%\ddanger Chapter 24 explains the exact rules about ^{migration} of
+%vertical-mode material (like footnotes) from horizontal lists to the
+%enclosing vertical list. Insertions, marks, and the results of\/ ^|\vadjust|
+%all migrate in the same fashion.
+\ddanger 第二十四章讨论了(象脚注这些)垂直模式的内容从水平列%
+迁移为封装的垂直列的详细规则。%
+插入对象，标记和 |\vadjust| 的结果都按同样的方式迁移。
+
+%\danger Now let's study the primitives of \TeX\ that are used to construct
+%macros like |\topinsert| and |\footnote|. We are about to enter behind the
+%scenes into a sublanguage of \TeX\ that permits users to do complex
+%manipulations with boxes and glue. Our discussion will be in two parts:
+%First we shall consider \TeX's ``^{registers},'' with which a user can
+%do ^{arithmetic} related to typesetting; and then we shall discuss the insertion
+%items that can appear in horizontal and vertical lists. Our discussion of the
+%first topic (registers) will be marked with single dangerous-bend signs,
+%since registers are of general use in advanced applications of \TeX,
+%whether or not they relate to insertions. But the second topic will be marked
+%with double dangerous-bend signs, since insertions are rather esoteric.
+\danger 现在，讨论构造象 |\topinsert| 和 |\footnote| 这样的宏的 \TeX\ 原始%
+控制系列。%
+我们将学习 \TeX\ 幕后的低级语言，使得用户可以对盒子和粘连做更复杂的处理。%
+我们的讨论分两部分：
+首先我们讨论 \TeX\ 的``寄存器'', 用户可以用它进行排版的相关运算；
+接着是出现在水平和垂直列中的插入项目。%
+第一个主题的讨论(寄存器)用一个``危险''标识来标记，
+因为寄存器在 \TeX\ 的高级应用中是普遍的，
+而不管是否与插入对象有关。%
+而第二个主题用两个``危险''标识标记，因为插入对象是相当深奥的。
+
+%\danger \TeX\ has 256 registers called ^|\count||0| to |\count255|, each capable
+%of containing integers between $-2147483647$ and $+2147483647$, inclusive;
+%^^\<number>
+%i.e., the magnitudes should be less than $2^{31}$. \TeX\ also has 256 registers
+%called ^|\dimen||0| to |\dimen255|, each capable of containing a ^\<dimen>
+%(see Chapter~10). There are another 256 registers called ^|\skip||0| to
+%|\skip255|, each containing ^\<glue> (see Chapter~12); and ^|\muskip||0| to
+%|\muskip255|, each containing ^\<muglue> (see Chapter~18). You can assign
+%new values to these registers by saying
+%\begindisplay
+%|\count|\<number> |=| \<number>\cr
+%|\dimen|\<number> |=| \<dimen>\cr
+%|\skip|\<number> |=| \<glue>\cr
+%|\muskip|\<number> |=| \<muglue>\cr
+%\enddisplay
+%and then you can add or subtract values of the same type by saying^^|\advance|
+%\begindisplay
+%|\advance\count|\<number> |by| \<number>\cr
+%|\advance\dimen|\<number> |by| \<dimen>\cr
+%|\advance\skip|\<number> |by| \<glue>\cr
+%|\advance\muskip|\<number> |by| \<muglue>\cr
+%\enddisplay
+%For example, `|\dimen8=\hsize \advance\dimen8 by 1in|' sets register
+%|\dimen8| to an inch more than the current value of the normal line size.
+\danger \1\TeX\ 有 256 个寄存器，叫做 |\count0| 到 |\count255|，
+每个都可以包含在 $-2147483647$ 和 $+2147483647$ 之间的整数（包括这两个值）；
+即此值应该小于 $2^{31}$。
+\TeX\ 还有 256 个寄存器叫做 |\dimen0| 到 |\dimen255|，
+每个都可以包含一个 \<dimen>（见第十章)。
+还有另外 256 个寄存器叫做 |\skip0| 到 |\skip255|，
+每个都包含 \<glue>（见第十二章）；
+并且还有 |\muskip||0| 到 |\muskip255|，每个都包含 \<muglue>（见第十八章）。
+通过下列方法你可以赋予它们新的值：
+\begindisplay
+|\count|\<number> |=| \<number>\cr
+|\dimen|\<number> |=| \<dimen>\cr
+|\skip|\<number> |=| \<glue>\cr
+|\muskip|\<number> |=| \<muglue>\cr
+\enddisplay
+而且还可以通过下列方法在其上面加上或减去同样类型的值：
+\begindisplay
+|\advance\count|\<number> |by| \<number>\cr
+|\advance\dimen|\<number> |by| \<dimen>\cr
+|\advance\skip|\<number> |by| \<glue>\cr
+|\advance\muskip|\<number> |by| \<muglue>\cr
+\enddisplay
+例如，`|\dimen8=\hsize \advance\dimen8 by 1in|'把寄存器 |\dimen8| 设置%
+为比正常的行的长度多 1 inch。
+
+%\danger If infinite glue components are added, lower order infinities disappear.
+%For example, after the two commands
+%\begintt
+%\skip2 = 0pt plus 2fill minus 3fill
+%\advance\skip2 by 4pt plus 1fil minus 2filll
+%\endtt
+%the value of\/ |\skip2| will be $4\pt$ plus $2\,{\rm fill}$ minus
+%$2\,{\rm filll}$.
+\danger 如果要增加无限大的粘连量，那么低阶无限大就忽略掉了。%
+例如，下列两个命令执行后，
+\begintt
+\skip2 = 0pt plus 2fill minus 3fill
+\advance\skip2 by 4pt plus 1fil minus 2filll
+\endtt
+|\skip2| 的值就是 $4\pt$ plus $2\,{\rm fill}$ minus
+$2\,{\rm filll}$。
+
+%\danger Multiplication and division are possible too, but only by integers.
+%For example, `^|\multiply||\dimen4 by 3|' triples the value of\/ |\dimen4|, and
+%`^|\divide||\skip5 by 2|' cuts in half all three components of the glue that is
+%currently registered in |\skip5|.
+%You shouldn't divide by zero, nor should you multiply by numbers that
+%will make the results exceed the register capacities. Division of a positive
+%integer by a positive integer discards the remainder, and the sign of the
+%result changes if you change the sign of either operand. For example,
+%14~divided by~3 yields~4; $-14$~divided by~3 yields~$-4$;
+%$-14$~divided by~$-3$ yields~4. Dimension values are integer multiples
+%of~^{sp} (scaled points).
+\danger 也可以进行乘除，但是只能用整数。%
+例如，`|\multiply||\dimen4 by 3|'就把 |\dimen4| 的值变成 3 倍，
+`|\divide||\skip5 by 2|'就把当前寄存在 |\skip5| 中的 3 个粘连值减半。%
+不能用零除，也不能使乘法的结果超出寄存器的限制。%
+正整数除以正整数要把余数去掉，
+如果有一个改变了正负号，结果将改变正负号。%
+例如，14 除以 3 得 4;
+~$-14$ 除以 3 得 $-4$;
+~$-14$ 除以 $-3$ 得 4。%
+尺寸的值是 sp (scaled points) 的整数倍。
+
+%\danger You can use any |\count| register in the context of a ^\<number>,
+%any |\dimen| register in the context of a ^\<dimen>, any |\skip| register
+%in the context of ^\<glue>, and any |\muskip| register in the context of
+%^\<muglue>. For example, `|\hskip\skip1|' puts horizontal glue into a
+%list, using the value of\/ |\skip1|; and if\/ |\count5| is 20,
+%the~command `|\advance\dimen20 by\dimen\count5|' is equivalent to
+%`|\multiply\dimen20 by 2|'.
+\danger 可以在 \<number> 的情况下使用任何 |\count| 寄存器，
+在 \<dimen> 的情况下使用任何 |\dimen| 寄存器，
+在 \<glue> 下使用 |\skip| 寄存器，在 \<muglue> 使用 |\muskip| 寄存器。%
+例如，`|\hskip\skip1|'把一个粘连放在列中，其值为 |\skip1| 的值；
+并且如果 |\count5| 等于 20, 那么命令`|\advance\dimen20 by\dimen\count5|'%
+就等于`|\multiply\dimen20 by 2|'。
+
+%\danger A |\dimen| register can be used also in the context of a \<number>,
+%and a |\skip| register can be used as a \<dimen> or a \<number>.
+%\TeX\ converts \<glue> to \<dimen> by omitting the stretch and shrink
+%components, and it converts \<dimen> to \<number> by assuming units
+%of~sp (scaled points). For example, if\/ |\skip1| holds the value
+%$1\pt$ plus~$2\pt$, then `|\dimen1=\skip1|' sets |\dimen1| equal
+%to~$1\pt$; and the commands `|\count2=\dimen1|' or `|\count2=\skip1|' will
+%set |\count2| equal to~65536. These rules also apply to \TeX's internal
+%parameters; for example, `|\dimen2=\baselineskip|' will set |\dimen2| to
+%the natural space component of the current baselineskip glue.
+\danger |\dimen| 寄存器还可以用在 \<number> 情况下，
+|\skip| 寄存器可以用在 \<dimen> 或 \<number>。%
+通过忽略掉伸缩量， \TeX\ 把 \<glue> 变成 \<dimen>;
+通过设定的 sp (scaled points) 单位，把 \<dimen> 变成 \<number>。%
+例如，如果 |\skip1| 的值为 $1\pt$ plus  $2\pt$, 那么`|\dimen1=\skip1|'%
+将把 |\dimen1| 的值设置为 $1\pt$;
+命令`|\count2=\dimen1|'或`|\count2=\skip1|'将把 |\count2| 的值设置为 65536。%
+这些规则也可用于 \TeX\ 的内部参数；
+例如，`|\dimen2=\baselineskip|'将把 |\dimen2| 设置为当前基线间距这个粘连的%
+自然间距量。
+
+%\dangerexercise Test your knowledge of \TeX's registers by stating the
+%results of each of the following commands when they are performed in sequence:
+%\begintt
+%\count1=50   \dimen2=\count1pt   \divide\count1 by 8
+%\skip2=-10pt plus\count1fil minus\dimen2
+%\multiply\skip2 by-\count1  \divide\skip2 by \dimen2  \count6=\skip2
+%\skip1=.5\dimen2 plus\skip2 minus\count\count1fill
+%\multiply\skip2 by\skip1   \advance\skip1 by-\skip2
+%\endtt
+%\answer Set |\count1| to 50,
+%then |\dimen2| to~$50\pt$,
+%then |\count1| to~6,
+%then |\skip2| to~$-10\pt$ plus~$6\,{\rm fil}$ minus~$50\pt$,
+%then |\skip2| to~$60\pt$ plus~$-36\,{\rm fil}$ minus~$-300\pt$,
+%then |\skip2| to~$1\,{\rm sp}$ minus~$-6\,{\rm sp}$,
+%then |\count6| to~1,
+%then |\skip1| to~$25\pt$ plus~$1\,{\rm sp}$ minus~$1\,{\rm fill}$,
+%then |\skip2| to~$25\pt$ minus~$-150\pt$,
+%then |\skip1| to~$0\pt$ plus~$1\,{\rm sp}$ minus~$1\,{\rm fill}$.
+\dangerexercise \1当下列命令依次执行时，给出其结果：
+\begintt
+\count1=50   \dimen2=\count1pt   \divide\count1 by 8
+\skip2=-10pt plus\count1fil minus\dimen2
+\multiply\skip2 by-\count1  \divide\skip2 by \dimen2  \count6=\skip2
+\skip1=.5\dimen2 plus\skip2 minus\count\count1fill
+\multiply\skip2 by\skip1   \advance\skip1 by-\skip2
+\endtt
+\answer 将 |\count1| 设为 50，
+再将 |\dimen2| 设为 $50\pt$，
+再将 |\count1| 设为 6，
+再将 |\skip2| 设为 $-10\pt$ plus~$6\,{\rm fil}$ minus~$50\pt$，
+再将 |\skip2| 设为 $60\pt$ plus~$-36\,{\rm fil}$ minus~$-300\pt$，
+再将 |\skip2| 设为 $1\,{\rm sp}$ minus~$-6\,{\rm sp}$，
+再将 |\count6| 设为 1，
+再将 |\skip1| 设为 $25\pt$ plus~$1\,{\rm sp}$ minus~$1\,{\rm fill}$，
+再将 |\skip2| 设为 $25\pt$ minus~$-150\pt$，
+再将 |\skip1| 设为 $0\pt$ plus~$1\,{\rm sp}$ minus~$1\,{\rm fill}$。
+
+%\dangerexercise What is in |\skip5| after the following three commands have
+%acted?
+%\begintt
+%\skip5=0pt plus 1pt
+%\advance\skip5 by \skip4  \advance\skip5 by -\skip4
+%\endtt
+%\answer If\/ |\skip4| has infinite stretchability, |\skip5| will be zero;
+%otherwise it will be $0\pt$ plus~$1\pt$.
+\dangerexercise 在下列三个命令执行后，|\skip5| 是什么？
+\begintt
+\skip5=0pt plus 1pt
+\advance\skip5 by \skip4  \advance\skip5 by -\skip4
+\endtt
+\answer 如果 |\skip4| 有无限可伸展性，|\skip5| 将为零；
+否则它将为 $0\pt$ plus~$1\pt$。
+
+%\dangerexercise (For mathematicians.) Explain how to ^{round} |\dimen2|
+%to the nearest multiple of\/ |\dimen3|, assuming that |\dimen3| is positive.
+%\answer |\advance\dimen2 by\ifnum\dimen2<0 -\fi.5\dimen3|\parbreak
+%|\divide\dimen2 by\dimen3 \multiply\dimen2 by\dimen3|
+\dangerexercise （给数学家做。）假设 |\dimen3| 大于零，
+怎样得到最接近 |\dimen2| 的 |\dimen3| 的倍数？
+\answer |\advance\dimen2 by\ifnum\dimen2<0 -\fi.5\dimen3|\parbreak
+|\divide\dimen2 by\dimen3 \multiply\dimen2 by\dimen3|
+
+%\danger The registers obey \TeX's ^{group structure}. For example,
+%changes to |\count3| inside |{...}| will not affect the value of
+%|\count3| outside. Therefore \TeX\ effectively has more than 256
+%registers of each type. If you want the effect of a register command
+%to transcend its group, you must say ^|\global| when you change the value.
+\danger 寄存器要遵守 \TeX\ 的组结构。%
+例如，在 |{...}| 中改变 |\count3| 对外面的 |\count3| 没有影响。%
+因此，对每种类型， \TeX\ 的有效寄存器超过 256 个。%
+如果要使寄存器命令延续到组外，必须在改变其值时使用 |\global|。
+
+%\dangerexercise What is in |\count1| after the following sequence of commands?
+%\begintt
+%\count1=5 {\count1=2 \global\advance\count1by\count1
+%  \advance\count1by\count1}
+%\endtt
+%\answer |\count1| takes the values 5, then~2 (the old 5 is saved),
+%then~4 (which is made global), then~8 (and 4~is saved); finally the value~4 is
+%restored, and that is the answer. \ (For further remarks, see the discussion
+%of\/ |\tracingrestores| in Chapter~27.)
+\dangerexercise 在下列一系列命令后 |\count1| 中的值是多少？
+\begintt
+\count1=5 {\count1=2 \global\advance\count1by\count1
+  \advance\count1by\count1}
+\endtt
+\answer |\count1| 的值为5，然后变成 2（原来的 5 被保存起来），
+然后变成 4（此设定是全局的），然后变成 8（4被保存起来）；
+最后恢复的值为 4 ，这就是答案。%
+（在第 27 章讨论 |\tracingrestores| 时有进一步的说明。）
+
+%\danger The first ten |\count| registers, |\count0| through |\count9|,
+%are reserved for a special purpose:
+%\TeX\ displays these ten counts on your terminal whenever outputting
+%a page, and it transmits them to the output file as an identification
+%of that page. The counts are separated by decimal points on your terminal,
+%with trailing `|.0|' patterns suppressed. Thus, for example, if
+%|\count0=5| and |\count2=7| when a page is being shipped out to the
+%^|dvi| file, and if the other count registers are zero, \TeX\ will
+%type `|[5.0.7]|'. Plain \TeX\ uses |\count0| for the page number, and it
+%keeps |\count1| through~|\count9| equal to zero; that is why you see just
+%`^|[1]|' when page~1 is being output. In more complex applications the
+%page numbers can have further structure; ten counts are shipped out so
+%that there will be plenty of identification.
+\danger 前十个 |\count| 寄存器，|\count0| 到 |\count9|, 保留为特殊用途：
+当输出一个页面时， \TeX\ 将把这十个计数显示在终端上，
+并且把它们作为那个页面的识别码传给输出文件。
+在终端上这些计数用小数点隔开，并且去掉后面无用的`|.0|'。%
+因此，例如，如果当页面输出到 |dvi| 文件时 |\count0=5| 和 |\count2=7|,
+并且其它计数寄存器为零， \TeX\ 将显示出`|[5.0.7]|'。%
+Plain \TeX\ 用 |\count0| 表示页码，并且保留 |\count1| 到 |\count9| 等于零；
+这就是第一页输出时所看到的`|[1]|'。%
+在更复杂的应用中，页码可以有更多的结构；
+十个计数都用上就得到许多识别码。
+
+%\danger It's usually desirable to have symbolic names for registers.
+%\TeX\ provides a ^|\countdef| command (similar to |\chardef|,
+%cf.~Chapter~8), which makes it easy to do this: You just say
+%\begintt
+%\countdef\chapno=28
+%\endtt
+%and |\chapno| is henceforth an abbreviation for |\count28|. Similar
+%commands ^|\dimendef|, ^|\skipdef|, and ^|\muskipdef| are available
+%for the other types of numeric registers. After a control sequence
+%has been defined by |\countdef|, it can be used in \TeX\ commands exactly
+%as if it were an integer ^{parameter} like |\tolerance|. Similarly,
+%|\dimendef| effectively creates a new dimension parameter, |\skipdef|
+%effectively creates a new glue parameter, and |\muskipdef| effectively
+%creates a new muglue parameter.
+\danger 一般希望把寄存器符号化。%
+ \TeX\ 提供了一个命令 |\countdef|~(类似于 |\chardef|, 参见第八章),
+用它很容易做到：
+只需要使用
+\begintt
+\countdef\chapno=28
+\endtt
+那么今后 |\chapno| 就定义为 |\count28|。%
+对其它类型的数值寄存器，可以使用类似命令 |\dimendef|, |\skipdef|, |\muskipdef|。%
+在控制系列由 |\countdef| 定义后，就可以在 \TeX\ 的命令中使用它了，
+就象 |\tolerance| 这样的整数参数一样。%
+类似地，|\dimendef| 得到一个新的尺寸参数，
+|\skipdef| 得到一个新的粘连参数，
+|\muskipdef| 得到一个新的 muglue 参数。
+
+%\danger Besides the numerical registers, \TeX\ also has 256 box registers
+%called ^|\box||0| to |\box255|. A~box register gets a value when you say
+%^|\setbox|\<number>|=|^\<box>; for example, `|\setbox3=\hbox{A}|' sets
+%|\box3| to an hbox that contains the single letter~|A|. Several other
+%examples of\/ |\setbox| have already appeared in Chapter~12. Chapter~10
+%points out that `|2\wd3|' is a \<dimen> that represents twice the width
+%of\/ |\box3|; similarly, ^|\ht|\<number> and ^|\dp|\<number> can be used to
+%refer to the height and depth of a given box register. ^^|\wd|
+\danger \1除了数值寄存器以外，\TeX\ 还有 256 个盒子寄存器，从 |\box0| 到 |\box255| 。
+在使用 |\setbox|\<number>|=|\<box> 时，该编号的盒子寄存器就得到一个值；
+例如，`|\setbox3=\hbox{A}|' 把 |\box3| 设置为包含一个字母 |A| 的 hbox。
+|\setbox| 的几个其它例子已经在第 12 章中出现过了。
+第 10 章指出，`|2\wd3|' 是一个尺寸，表示 |\box3| 的宽度的两倍；
+类似地，|\ht|\<number> 和 |\dp|\<number> 可以用来得到给定盒子寄存器的高度和深度。
+
+%\danger Box registers are local to groups just as arithmetic registers are.
+%But there's a big difference between box registers and all the rest: When
+%you use a |\box|, it loses its value. For example, the construction
+%`|\raise2pt\box3|' in a horizontal list not only puts the contents of
+%|\box3| into the list after raising it by~$2\pt$, it also makes |\box3|
+%void. \TeX\ does this for efficiency, since it is desirable to avoid copying
+%the contents of potentially large boxes. If you want to use a box register
+%without wiping out its contents, just say `^|\copy|' instead of `|\box|';
+%for example, `|\raise2pt\copy3|'.
+\danger 就象运算寄存器一样，盒子寄存器对组也是局部的。%
+但是在盒子寄存器和其它寄存器之间有一个大的差别：
+当用到一个盒子时，它就将其值丢弃。%
+例如，在水平列中的构造`|\raise2pt\box3|'不但在把盒子升高 $2\pt$ 后把它放在列中，
+而且把 |\box3| 置空。%
+ \TeX\ 这样做是为了提高效率，因为要避免重复可能出现的大盒子的内容。%
+如果要使用盒子寄存器而不擦掉其内容，只需要使用`|\copy|'而不是`|\box|';
+例如，`|\raise2pt\copy3|'。
+
+%\danger Another way to use a box register is to extract the inside of
+%an hbox by saying `^|\unhbox|'. This annihilates the contents of the
+%register, like `|\box|' does, and it also removes one level of boxing. For
+%example, the commands
+%\begintt
+%\setbox3=\hbox{A} \setbox3=\hbox{\box3 B}
+%\setbox4=\hbox{A} \setbox4=\hbox{\unhbox4 B}
+%\endtt
+%put |\hbox{\hbox{A}B}| into |\box3| and |\hbox{AB}| into |\box4|.
+%Similarly, ^|\unvbox| unwraps a vbox.  If you want to construct a large
+%box by accretion (e.g., a ^{table of contents}), it is best to use
+%|\unhbox| or |\unvbox| as in the |\setbox4| example; otherwise you use
+%more of \TeX's memory space, and you might even obtain boxes inside boxes
+%nested to such a deep level that hardware or software limits are exceeded.
+\danger 使用盒子寄存器的另一种方法是通过使用`|\unhbox|'来把 hbox 的内容提出来。%
+它象`|\box|'那样把寄存器的内容擦掉，并且还去掉了一层盒子。%
+例如，命令
+\begintt
+\setbox3=\hbox{A} \setbox3=\hbox{\box3 B}
+\setbox4=\hbox{A} \setbox4=\hbox{\unhbox4 B}
+\endtt
+把 |\hbox{\hbox{A}B}| 放在 |\box3| 中，把 |\hbox{AB}| 放在 |\box4| 中。%
+类似地，|\unvbox| 解开 vbox。%
+如果要递加地构造一个大盒子(比如目录), 最好使用 |\setbox4| 例子中的 |\unhbox|~%
+或 |\unvbox|;
+否则就要浪费更多的 \TeX\ 内存空间，
+甚至可能得到超出硬件和软件极限的嵌套太深的盒子。
+
+%\danger The operations ^|\unhcopy| and ^|\unvcopy| are related to
+%|\unhbox| and |\unvbox| as |\copy| is to |\box|. \ (But their
+%names are admittedly peculiar.)
+\danger 命令 |\unhcopy| 和 |\unvcopy| 与 |\unhbox| 和 |\unvbox| 的关系%
+类似于 |\copy| 与 |\box|。%
+(但是这种命名的确少见。)
+
+%\danger An unboxing operation ``unsets'' any glue that was set at the box's
+%outer level. For example, consider the sequence of commands
+%\begintt
+%\setbox5=\hbox{A \hbox{B C}} \setbox6=\hbox to 1.05\wd5{\unhcopy5}
+%\endtt
+%This makes |\box6| five percent wider than |\box5|;
+%the glue between |A| and |\hbox{B C}| stretches to
+%make the difference, but the glue inside the inner hbox does not change.
+\danger 去掉盒子的命令同时把盒子外层的任何粘连也去掉了。%
+例如，看看下面一系列命令：
+\begintt
+\setbox5=\hbox{A \hbox{B C}} \setbox6=\hbox to 1.05\wd5{\unhcopy5}
+\endtt
+它使得 |\box6| 的宽度比 |\box5| 大 5 个百分点；
+在 |A| 和 |\hbox{B C}| 之间的粘连伸长来填满，但是里面盒子的内部粘连不变。
+
+%\danger A box register is either ``^{void}'' or it contains an hbox or a vbox.
+%There is a difference between a void register and one that contains an
+%empty box whose height, width, and depth are zero; for example, if\/ |\box3|
+%is void, you can say |\unhbox3| or |\unvbox3| or |\unhcopy3| or |\unvcopy3|,
+%but if\/ |\box3| is equal to |\hbox{}| you can say only |\unhbox3| or
+%|\unhcopy3|. If you say `|\global\setbox3=|\<box>', register |\box3| will
+%become ``globally void'' when it is subsequently used or unboxed.
+\danger 盒子寄存器或者是``置空的'', 或者包含一个 hbox 或 vbox。%
+在置空寄存器和包含一个高度宽度深度都是零的空盒子的寄存器之间有区别；
+例如，如果 |\box3| 是置空的，那么可以使用 |\unhbox3|, 或者 |\unvbox3|,
+或者 |\unhcopy3|, 或者 |\unvcopy3|,
+但是如果 |\box3| 等于 |\hbox{}|, 那么只能使用 |\unhbox3| 或者 |\unhcopy3|。%
+如果使用`|\global\setbox3=|\<box>', 那么当后面要用到或去掉盒子时，
+寄存器 |\box3| 将变成``全局置空的''。
+
+%\dangerexercise What is in register |\box5| after the following commands?
+%\begintt
+%\setbox5=\hbox{A}  \setbox5=\hbox{\copy5\unhbox5\box5\unhcopy5}
+%\endtt
+%\answer |\hbox{\hbox{A}A}|. After `|\unhbox5|', |\box5| is void; |\unhcopy5|
+%yields nothing.
+\dangerexercise 在下列命令执行后，寄存器 |\box5| 里是什么？
+\begintt
+\setbox5=\hbox{A}  \setbox5=\hbox{\copy5\unhbox5\box5\unhcopy5}
+\endtt
+\answer |\hbox{\hbox{A}A}|。在 `|\unhbox5|' 之后 |\box5| 是空的；
+|\unhcopy5| 得不到任何东西。
+
+%\dangerexercise And what's in |\box3| after ^^{grouping with box registers}
+%`|{\global\setbox3=\hbox{A}\setbox3=\hbox{}}|'?\kern-1pt
+%\answer |\hbox{A}|. But after `|{\global\setbox3=\hbox{A}\setbox3=\box3}|',
+%|\box3| will be void.
+\dangerexercise 在下列命令执行后，|\box3| 中是什么？^^{编组中的盒子寄存器}
+\begintt
+{\global\setbox3=\hbox{A}\setbox3=\hbox{}}
+\endtt
+\answer |\hbox{A}|。但如果是在 `|{\global\setbox3=\hbox{A}\setbox3=\box3}|' 之后，
+|\box3| 将为空。
+
+%\danger If you are unsure about how \TeX\ operates on its registers, you can
+%experiment online by using certain `|\show|' commands. For example,
+%\begintt
+%\showthe\count1  \showthe\dimen2  \showthe\skip3
+%\endtt
+%will display the contents of\/ |\count1|, |\dimen2|, and |\skip3|; and
+%`^|\showbox||4|' will display the contents of\/ |\box4|. ^^|\showthe|
+%Box contents will appear only in the log file, unless you say
+%`|\tracingonline=1|'. Plain \TeX\ provides a macro `^|\tracingall|'
+%that turns on every possible mode of interaction, including
+%^|\tracingonline|. The author used these features to check the answers to
+%several of the exercises above.
+\danger \1如果对 \TeX\ 怎样操作其寄存器不确定，可以使用特定的`|\show|'命令%
+进行实时实验。%
+例如，
+\begintt
+\showthe\count1  \showthe\dimen2  \showthe\skip3
+\endtt
+将显示出 |\count1|, |\dimen2| 和 |\skip3| 的内容；
+并且`|\showbox4|'将显示 |\box4| 的内容。%
+盒子的内容只出现在 log 文件中，
+除非使用了`|\tracingonline=1|'。%
+Plain \TeX\ 提供了一个宏`|\tracingall|', 它开启了每个可能的相互作用的模式，
+包括 |\tracingonline|。%
+作者利用这些特性可以验证上面几个练习的答案。
+
+%\danger Large applications of \TeX\ make use of different sets of macros
+%written by different groups of people. Chaos would reign if a register
+%like |\count100|, say, were being used simultaneously for different purposes
+%in different macros. Therefore plain \TeX\ provides an ^{allocation} facility;
+%cooperation will replace confusion if each ^{macro writer} uses these
+%conventions. The idea is to say, e.g., `^|\newcount|' when you want
+%to dedicate a |\count| register to a special purpose. For example, the
+%author designed a macro called `|\exercise|' to format the exercises
+%in this manual, and one of the features of\/ |\exercise| is that it
+%computes the number of the current exercise. The format
+%macros in Appendix~E reserve a |\count| register for this purpose by saying
+%\begintt
+%\newcount\exno
+%\endtt
+%and then the command `|\exno=0|'
+%is used at the beginning of each chapter. Similarly, `|\advance\exno by1|'
+%is used whenever a new exercise comes along, and `|\the\exno|'
+%is used to typeset the current exercise number. The |\newcount| operation
+%assigns a unique count register to its argument |\exno|, and it defines
+%|\exno| with a ^|\countdef| command. All of the other format macros
+%are written without the knowledge of exactly which |\count| register
+%actually corresponds to |\exno|.
+\danger  \TeX\ 的大量应用采用了不同人编写的不同的宏集。%
+如果寄存器——比如说 |\count100|——同时在几个宏中为不同目的而使用，
+那么就会混乱不堪。%
+因此，plain \TeX\ 提供了一个分配工具；
+如果每个宏的编写者使用这些约定，那么冲突就会变成协作。%
+想法是，比如当要为一个特殊目的而使用 |\count| 寄存器\hbox{时，} 使用`|\newcount|'。%
+例如，作者设计了一个叫`|\exercise|'的宏以格式化本手册的练习，
+|\exercise| 的一个特性是要计算出当前练习的编号。%
+在附录 E 中的格式化宏为此目的而预约了一个 |\count| 寄存器，如下：
+\begintt
+\newcount\exno
+\endtt
+并且接下来命令`|\exno=0|'用在每章的开头。%
+类似地，每当出现一个新的练习时，就使用`|\advance\exno by1|',
+并且`|\the\exno|'用在排版当前练习的编号上。%
+|\newcount| 命令给其参量 |\exno| 指定一个独有的计数寄存器，
+并且用 |\countdef| 命令来定义 |\exno|。%
+所有的其它格式化宏不知道哪个 |\count| 寄存器实际上对应于 |\exno|。
+
+%\danger Besides |\newcount|, plain \TeX\ provides ^|\newdimen|,
+%^|\newskip|, ^|\newmuskip|, and ^|\newbox|; there also are ^|\newtoks|,
+%^|\newread|, ^|\newwrite|, ^|\newfam|, and ^|\newinsert|, for
+%features we haven't discussed yet. Appendices~B and~E contain
+%several examples of the proper use of allocation. In the cases of
+%|\newbox|, |\newread|, etc., the allocated number is defined by |\chardef|.
+%For example, if the command `|\newbox\abstract|' is used to define a
+%box register that will contain an abstract, and if the |\newbox| operation
+%decides to allocate |\box45| for this purpose, then it defines the
+%meaning of\/ |\abstract| by saying `|\chardef\abstract=45|'. \TeX\ allows
+%^|\chardef|'d quantities to be used as integers, so that you can say
+%|\box\abstract| and |\copy\abstract|, etc. \ (There is no |\boxdef|
+%command.)
+\danger 除 |\newcount| 之外，plain \TeX\ 还提供了 |\newdimen|、
+|\newskip|、|\newmuskip|、|\newbox|；
+还有 |\newtoks|、|\newread|、|\newwrite|、|\newfam| 和 |\newinsert|，
+这些我们还没有讨论。%
+附录 B 和 E 给出了正确分配寄存器的几个例子。%
+在 |\newbox|, |\newread| 等情况下，被分配的数由 |\chardef| 定义。
+假如命令 `|\newbox\abstract|' 用来定义一个包含摘要的盒子寄存器，
+并且 |\newbox| 要把 |\box45| 分配给它来使用，那么它通过 `|\chardef\abstract=45|'
+来定义 |\abstract| 的含义。%
+\TeX\ 允许把 |\chardef| 的量当整数使用，这样可以使用 |\box\abstract|
+和 |\copy\abstract| 等等。（没有 |\boxdef| 这个命令。）
+
+%\newcount\notenumber
+%\def\clearnotenumber{\notenumber=0\relax}
+%\def\note{\advance\notenumber by1 \footnote{$^{\the\notenumber}$}}
+%\clearnotenumber
+%\dangerexercise Design a |\note| macro that produces footnotes numbered
+%sequentially. For example,\note{First note.} it should produce
+%the footnotes here\note{Second note.} if you type
+%\begintt
+%... example,\note{First note.} it should produce
+%the footnotes here\note{Second note.} if ...
+%\endtt
+%(Use |\newcount| to allocate a |\count| register for the footnotes.)
+%\answer |\newcount\notenumber|\parbreak
+%|\def\clearnotenumber{\notenumber=0\relax}|\parbreak
+%|\def\note{\advance\notenumber by 1|\parbreak
+%|  \footnote{$^{\the\notenumber}$}}|
+\newcount\notenumber
+\def\clearnotenumber{\notenumber=0\relax}
+\def\note{\advance\notenumber by1 \footnote{$^{\the\notenumber}$}}
+\clearnotenumber
+\dangerexercise 设计一个生成编号脚注的宏 |\note|。
+例如\note{First note.}，如果输入下列内容，
+它将生成这两个脚注\note{Second note.}：
+\begintt
+... example,\note{First note.} it should produce
+the footnotes here\note{Second note.} if ...
+\endtt
+（使用 |\newcount| 为脚注分配一个 |\count| 寄存器。）
+\answer |\newcount\notenumber|\parbreak
+|\def\clearnotenumber{\notenumber=0\relax}|\parbreak
+|\def\note{\advance\notenumber by 1|\parbreak
+|  \footnote{$^{\the\notenumber}$}}|
+
+%\danger Sometimes, however, you want to use a register just for temporary
+%storage, and you know that it won't conflict with anybody else's macros.
+%Registers |\count255|, |\dimen255|, |\skip255|, and |\muskip255| are
+%traditionally kept available for such purposes.  Furthermore, plain \TeX\
+%reserves |\dimen0| to |\dimen9|, |\skip0| to |\skip9|, |\muskip0| to
+%|\muskip9|, and |\box0| to |\box9| for ``scratchwork''; these registers
+%are never allocated by the |\new...|\null\ operations.  We have seen that
+%|\count0| through |\count9| are special, and |\box255| also turns out to
+%be special; so those registers should be avoided unless you know what you
+%are doing.
+\danger \1但是有时候，要用寄存器临时储存一下，并且确知不会与其它宏冲突。%
+习惯上把寄存器 |\count255|, |\dimen255|, |\skip255| 和 |\muskip255| 为此保留下来。%
+还有，plain \TeX\ 把 |\dimen0| 到 |\dimen9|, |\skip0| 到 |\skip9|, |\muskip0| 到 %
+|\muskip9| 和 |\box0| 到 |\box9| 保留下来随时使用；
+这些寄存器从来都不被 |\new...|\null 命令分配。%
+我们已经知道，|\count0| 到 |\count9| 是特殊的，并且 |\box255| 也是特殊的；
+所以这些寄存器应该避免使用，除非知道自己在做什么。
+
+%\ddanger Of course any register can be used for short-term purposes inside
+%a group (including |\count0| to |\count9| and |\box255|, and including
+%registers that have been allocated for other purposes), since register
+%changes are local to ^{groups}. However, you should be sure that \TeX\
+%will not output any pages before the group has ended, because output
+%routines might otherwise be invoked at unfortunate times.  \TeX\ is
+%^^{output routines, when invoked}^^{page builder, when exercised}
+%liable to invoke an output routine whenever it tries to move something
+%from the list of recent contributions to the current page, because it
+%might discover a page break with $c=\infty$ then. Here is a list of the
+%times when that can happen: (a)~At the beginning or end of a paragraph,
+%provided that this paragraph is being contributed to the main vertical
+%list. (b)~At the beginning or end of a displayed equation within such a
+%paragraph. (c)~After completing an |\halign| in vertical mode. (d)~After
+%contributing a box or penalty or insertion to the main vertical list.
+%(e)~After an |\output| routine has ended.
+\ddanger 当然，任何寄存器都可以在组中短期使用(包括 |\count0| 到 |\count9|~%
+和 |\box255|, 还有为其它目的而分配的寄存器),
+因为寄存器的变化被限制在组内了。%
+但是，必须确保在组结束之前 \TeX\ 不输出任何页面，
+因为否则输出例行程序会在不合适的时间被调用。%
+只要 \TeX\ 试图从备选内容向当前页面移送东西，就很有可能调用输出例行程序，
+因为接下来它可能发现一个 $c=\infty$ 的分页。%
+下面是可能出现的时间列表：
+(a). 在段落开头或结尾，假如此段落被放在主垂直列了。%
+(b). 在这样的段落中的陈列公式开头或结尾。%
+(c). 在垂直模式下完成一个 |\halign| 后。%
+(d). 把盒子或惩罚或插入对象放在主垂直列后。%
+(e). 在 |\output| 程序结束后。
+
+%\ddanger Now that we are armed with the knowledge of \TeX's flexible
+%registers, we can plunge into the details of insertions. There are 255
+%classes of insertions, |\insert0| to |\insert254|, and they are tied
+%to other registers of the same number. For example, |\insert100| is
+%connected with |\count100|, |\dimen100|, |\skip100|, and |\box100|.
+%Therefore plain \TeX\ provides an allocation function for insertions
+%as it does for registers; Appendix~B includes the command
+%\begintt
+%\newinsert\footins
+%\endtt
+%^^|\newinsert|
+%which defines |\footins| as the number for footnote insertions. Other
+%commands that deal with footnotes refer to |\count\footins|, |\dimen\footins|,
+%and so on. The macros for floating topinserts are similarly prefaced by
+%`|\newinsert\topins|', which defines |\topins| as the number of their
+%class. Each class of insertions is independent, but \TeX\ preserves the
+%order of insertions within a class. It turns out that |\footins| is class~254,
+%and |\topins| is class~253, but the macros do not use such numbers directly.
+\ddanger 现在，借助于 \TeX\ 的灵活的寄存器，可以详细讨论插入对象了。%
+有 255 类插入对象，|\insert0| 到 |\insert254|,
+并且它们与同编号的其它寄存器绑在一起。%
+例如，|\insert100| 与 |\count100|, |\dimen100|, |\skip100| 和 |\box100| 有关。%
+因此，plain \TeX\ 提供了一个插入对象的分配函数，就象对寄存器一样；
+附录 B 包括了命令：
+\begintt
+\newinsert\footins
+\endtt
+它把 |\footins| 定义为脚注插入对象的编号。%
+其它处理脚注的命令指有 |\count\footins|, |\dimen\footins|, 等等。%
+浮动的顶部插入的宏类似地是`|\newinsert\topins|', 它把 |\topins| 定义为其分类的编号。%
+每一类插入对象都是独立的，
+但是 \TeX\ 一类中保持插入对象的次序。%
+这里，|\footins| 是类 254, |\topins| 是类 253,
+但是这些宏不直接使用这样的编号。
+
+%\def\n{\thinspace$n$}
+%\ddanger For our purposes let's consider a particular class of insertions
+%called class $n$; we will then be dealing with \TeX's primitive command
+%^^|\insert|
+%\begindisplay
+%|\insert|\n|{|\<vertical mode material>|}|
+%\enddisplay
+%which puts an insertion
+%item into a horizontal or vertical list. For this class of insertions
+%\begindisplay
+%|\box|\n\ is where the material appears when a page is output;\cr
+%|\count|\n\ is the magnification factor for page breaking;\cr
+%|\dimen|\n\ is the maximum insertion size per page;\cr
+%|\skip|\n\ is the extra space to allocate on a page.\cr
+%\enddisplay
+%For example, material inserted with |\insert100| will
+%eventually appear in |\box100|.
+\def\n{\thinspace$n$}
+\ddanger 为此，我们讨论一种特殊类型的插入对象，叫做类 $n$;
+接着我们将处理 \TeX\ 的原始命令
+\begindisplay
+\ \ \ |\insert|\n|{|\<vertical mode material>|}|
+\enddisplay
+它把插入项目放在水平或垂直列中。%
+对此类插入对象，
+\begindisplay
+|\box|\n\ 是页面输出时要显示的内容；\cr
+|\count|\n\ 是分页的放大因子；\cr
+|\dimen|\n\ 是每页的最大插入尺寸；\cr
+|\skip|\n\ 是在页面上分配的额外空白。\cr
+\enddisplay
+例如，用 |\insert100| 插入的内容最后出现在 |\box100| 中。
+
+%\ddanger Let the natural height plus depth of\/ |\insert|\n\ be $x$; then
+%|\count|\n\ is 1000 times the factor by which $x$~affects the page
+%goal. For example, plain \TeX\ sets |\count\footins=1000|, since
+%there is a one-to-one relationship:
+%A 10-point footnote effectively makes a page $10\pt$ shorter. But if we
+%have an application where footnotes appear in double columns, a count
+%value of 500 would be appropriate. One of the insertion classes in Appendix~E
+%makes marginal notes for proofreading purposes; in that case the
+%count value is zero. No actual magnification is done; |\count|\n\
+%is simply a number used for bookkeeping, when estimating the
+%costs of various page breaks.
+\ddanger \1设 |\insert|\n 的自然高度加深度为 $x$;
+那么 |\count|\n 是 1000 乘以因子，~$x$ 通过它对页面排版起作用。%
+例如，plain \TeX\ 设置 |\count\footins=1000|,
+因为有一个一对一的关系：
+10-point 的脚注会使页面缩短 $10\pt$。%
+但是如果要让脚注出现在双栏中，那么计数值为 500 才合适。%
+在附录 E 中，有一个插入类，添加边注来进行校对；
+在此情形下，计数值为零。%
+实际上没有进行放大；
+在计算各种分页的成本时，|\count|\n 只是作笔记的一个数。
+
+%\ddanger The first footnote on a page requires extra space, since we want
+%to separate the footnotes from the text, and since we want to output a
+%horizontal rule. Plain \TeX\ sets
+%`|\skip\footins=|^|\bigskipamount|'; this means that a bigskip of
+%extra space is assumed to be added by the output routine to any page that
+%contains at least one insertion of class |\footins|.
+\ddanger 页面上第一个脚注要求额外的间距，因为我们要把脚注与正文分开，
+并且要生成一个水平标\hbox{尺。}%
+Plain \TeX\ 设置`|\skip\footins=||\bigskipamount|';
+这意味着，对至少包含一个脚注插入类 |\footins| 的任意页面，
+输出例行程序将添加一个 bigskip 的额外间距。
+
+%\ddanger Sometimes it is desirable to put a maximum limitation on the size
+%of insertions; for example, people usually don't want an entire page to
+%consist of footnotes. Plain \TeX\ sets |\dimen\footins=8in|; this means
+%that |\box\footins| is not supposed to accumulate more than 8~inches of
+%footnotes for any one page.
+\ddanger 有时候希望给插入的大小一个最大限制；
+例如，大家都不希望整个页面都是脚注。%
+Plain \TeX\ 设置 |\dimen\footins=8in|;
+它表示对任何页面，|\box\footins| 不能设定得超过 8 inch 的脚注。
+
+%\ddanger You might want to review the page-breaking algorithm explained
+%at the beginning of this chapter, before reading further.
+%On the other hand, maybe you don't really want to read the rest of
+%this chapter at all, ever.
+\ddanger 在继续学习之前，可能要回顾一下在本章开头讨论的分页算法。%
+另一方面，可能你的确不想再阅读本章剩下的内容了。
+
+%\ddanger Here now is the algorithm that \TeX\ performs when an |\insert|\n\
+%is moved from the ``recent contributions'' to the ``current page.'' \
+%(Remember that such a move does not mean that the insertion will actually take
+%place; the current page will be backed up later, to the breakpoint of
+%least cost, and only the insertions preceding that breakpoint will
+%actually be performed.) \ Let $g$ and $t$ be the current ^|\pagegoal| and
+%^|\pagetotal|; let $q$ be the ^|\insertpenalties| accumulated for the
+%current page; and let $d$ and $z$ be the current ^|\pagedepth| and
+%^|\pageshrink|. \ (The value of~$d$ is at most ^|\maxdepth|; this value
+%has not yet been incorporated into $t$.) \ Finally, let $x$ be the
+%natural height plus depth of the |\insert|\n\ that we are moving to the
+%current page; and let $f$ be the corresponding magnification factor,
+%i.e., |\count|\n\ divided by 1000.
+\ddanger 现在下面是当一个 |\insert|\n 从``备选内容''移到``当前页面''时%
+ \TeX\ 所实行的算法。%
+(记住，这样的移动并不意味着实际上已经插入了；
+当前页面随后将继续增加，直到最低成本的断点，并且只有在断点前面的插入对象%
+才实际被执行。)
+设 $g$ 和 $t$ 是当前 |\pagegoal| 和 |\pagetotal|;
+设 $q$ 是当前页面要积累的 |\insertpenalties|;
+设 $d$ 和 $z$ 为当前的 |\pagedepth| 和 |\pageshrink|。%
+(~$d$ 的值最大为 |\maxdepth|; 这个值仍未与 $t$ 合并。)
+最后，设 $x$ 是要移到当前页面的 |\insert|\n 的自然高度和深度；
+设 $f$ 是相应的放大因子，即 |\count|\n 除以 1000。
+
+%\ninepoint
+%\textindent{\bf Step 1.} If there is no previous |\insert|\n\ on the
+%current page, decrease $g$ by $hf+w$, where $h$ is the current height plus
+%depth of\/ |\box|\n, and where $w$ is the natural space component of
+%|\skip|\n; also include the stretch and shrink components of
+%|\skip|\n\ in the totals for the current page (in particular, this
+%affects~$z$).
+\ninepoint
+\noindent{\bf Step 1.} 如果当前页面上尚没有 |\insert|\n,
+那么 $g$ 将减小 $hf+w$,
+其中 $h$ 是 |\box|\n 的当前高度加深度，
+~$w$ 是 |\skip|\n 的自然间距的量；
+还有要把 |\skip|\n 的伸缩量包括到当前页面的整体中(特别是，它会影响 $z$)。
+
+%\medbreak
+%\textindent{\bf Step 2.} If a previous |\insert|\n\ on the current page
+%has been split, add the parameter called
+%^|\floatingpenalty| to~$q$, and omit Steps 3 and~4.
+\medbreak
+\noindent{\bf Step 2.} 如果当前页面上前面的 |\insert|\n 已经被裂分了，
+就把参数 |\floatingpenalty| 加到 $q$ 上，并且跳过第 3 和 4 步。
+
+%\medbreak
+%\textindent{\bf Step 3.} Test if the current insertion will fit on the page
+%without splitting. This means that it won't make the natural height-plus-depth
+%of\/ |\box|\n\ surpass |\dimen|\n, when it is added to |\box|\n\ together with
+%all previous |\insert|\n\ amounts on the current page; furthermore, it
+%means that either $xf\le0$ or $t+d+xf-z\le g$. If both tests are passed,
+%subtract $xf$ from~$g$ and omit Step~4.
+\medbreak
+\noindent{\bf Step 3.} 检验一下是否当前插入对象可以放在页面上而毋需裂分。%
+这表示，当把 |\box|\n 与当前页面上前面所有的 |\insert|\n 加在一起时，
+|\box|\n 的高度和深度不会超过 |\dimen|\n;
+还有，它意味着 $xf\le0$ 或者 $t+d+xf-z\le g$。%
+如果这两个测试都通过了，就从 $g$ 中减去 $xf$, 并且跳过第 4 步。
+
+%\medbreak
+%\textindent{\bf Step 4.} (The current insertion will be split, at least
+%tentatively; but the split will not actually take place if the least-cost
+%page turns out to have occurred earlier than the present insertion.) \
+%First compute the largest amount~$v$ such that a height plus depth of $v$
+%will not make the total insertions into |\box|\n\ bigger than |\dimen|\n,
+%and such that $t+d+vf\le g$. \ (Notice that $z$ is omitted from the latter
+%formula, but the available shrinkability was considered in Step~3 when we
+%tried to avoid splitting.) \ Then find the least-cost way to split the
+%beginning of the vertical list of the insertion so as to obtain a box of
+%height~$v$.  \ (Use an algorithm just like page-breaking, but without the
+%complexity of insertion; an additional `|\penalty-10000|' item is assumed
+%to be present at the end of the vertical list, to ensure that a legal
+%breakpoint exists.) \ Let $u$ be the natural height plus depth of that
+%least-cost box, and let $r$ be the penalty associated with the optimum
+%breakpoint.  Decrease $g$ by~$uf$, and increase $q$ by~$r$. \ (If
+%|\tracingpages||=1|, the log file should now get a cryptic message that says
+%`|% split|\n\ |to| $v$|,|$u$ |p=|$r$'. For~example,^^{split insertion penalty}
+%\begintt
+%% split254 to 180.2,175.3 p=100
+%\endtt
+%^^{percent split}
+%means that \TeX\ has tried to split an |\insert254| to height $180.2\pt$;
+%the natural height-plus-depth of the best such split is $175.3\pt$,
+%and the penalty for breaking there is~100.)
+\medbreak
+\noindent{\bf Step 4.} (当前插入对象要裂分，至少暂时是这样；
+但是如果最低成本页面出现得比目前的插入对象早，裂分实际上没有发生。)
+首先计算最大量 $v$ 使得 $v$ 的高度加深度不能把总插入对象放在比 |\dimen|\n~%
+还大的 |\box|\n 中，并且使得 $t+d+vf\le g$。
+\1(注意，在后面的公式中 $z$ 将被忽略，
+但是当试着避免裂分时，在第 3 步将用到可用的伸缩性。)
+接着，找到最低成本的方法把插入对象的垂直列开头裂分，移得到高度为 $v$ 的盒子。%
+(利用的是类似于分页的算法，但是没有插入这个复杂的问题；
+一个额外的`|\penalty-10000|'项目设定出现在垂直列结尾，以确保存在合理的断点。)
+设 $u$ 是最低成本的盒子的高度加深度，
+~$r$ 是对应于最佳断点的惩罚。%
+把 $g$ 减小 $uf$, 把 $q$ 增加 $r$。%
+(如果 |\tracingpages||=1|, 那么 log 文件就给出了神秘的信息：
+`|% split|\n\ |to| $v$|,|$u$ |p=|$r$'。%
+例如，
+\begintt
+% split254 to 180.2,175.3 p=100
+\endtt
+表示算法试着把 |\insert254| 裂分为 $180.2\pt$;
+最佳裂分实际上是高度为 $175.3\pt$,
+并且断点的惩罚是 100。)
+
+%\ddanger This algorithm is admittedly complicated, but no simpler mechanism
+%seems to do nearly as much. Notice that penalties of $-10000$ inside
+%insertions will make certain splits very attractive in Step~4, so the
+%user can provide hints about where to break, in difficult situations.
+%The algorithm provides a variety of different behaviors:
+%Floating insertions can be accommodated
+%as a special case of split insertions, by making each floating topinsert
+%start with a small penalty, and by having
+%zero as the associated |\floatingpenalty|; non-floating insertions
+%like footnotes are accommodated by associating larger penalties with
+%split insertions (see Appendix~B).
+\ddanger 这个算法当然是复杂的，但是好像没有这样更简单的了。%
+注意，在第 4 步中，插入对象中的 $-10000$ 的惩罚很可能导致裂分，
+因此在难以处理时，用户可以给出一些断点的提示。%
+算法提供了各种不同的性质：
+通过在每个浮动插入前加入小惩罚并且把相应的 |\floatingpenalty| 设为零，
+浮动插入对象可以变成裂分插入对象的一种特殊情形；
+通过更大的惩罚和裂分插入(见附录 B),
+象脚注这样的非浮动插入对象也可容纳下。
+
+%\ddanger The splitting operation mentioned in Step 4 is also available as
+%a primitive: `^|\vsplit|\<number> |to|\<dimen>' produces a vbox obtained
+%by splitting off a speci\-fied amount of material from a box register.
+%For example,
+%\begintt
+%\setbox200=\vsplit100 to 50pt
+%\endtt
+%sets |\box200| to a vbox whose height is $50\pt$; it goes through the
+%vertical list inside |\box100| (which should be a vbox) and finds the
+%least-cost break assuming a goal height of~$50\pt$, considering badnesses and
+%penalties just as in the case of page-breaking (but with $q=0$). The
+%algorithm uses ^|\splitmaxdepth| instead of\/ ^|\maxdepth| to govern the
+%maximum depth of boxes. Then it prunes the top of\/ |\box100| by removing
+%everything up to and including any ^{discardable} items that immediately
+%follow the optimum breakpoint; and it uses ^|\splittopskip| to insert new
+%glue before the first box inside |\box100|, just as
+%^|\topskip| glue appears at the top of a page. However, if the optimum
+%breakpoint occurs at the end of the vertical list inside |\box100|---a
+%`|\penalty-10000|' item is assumed to be present there---or if all items
+%after the optimum breakpoint are discarded, |\box100| will
+%be void after the |\vsplit|. And if\/ |\box100| was void before the
+%|\vsplit|, both |\box100| and |\box200| will be void afterwards.
+\ddanger 在第 4 步中提到的裂分操作也可以作为一个原始命令使用：
+`|\vsplit|\<number> |to|\<dimen>'通过从盒子寄存器中裂分出给定量的内容%
+而断点一个 vbox。%
+例如，
+\begintt
+\setbox200=\vsplit100 to 50pt
+\endtt
+设置 |\box200| 为高度为 $50\pt$ 的 vbox；
+它在 |\box100|（它应该是一个 vbox）中的整个垂直列中找到目标高度为 $50\pt$
+的最低成本断点，其中的丑度和惩罚与分页一样（只是 $q=0$）。
+此算法使用 |\splitmaxdepth| 来代替 |\maxdepth| 来控制盒子的最大深度。%
+因此，通过去掉直到最佳断点的所有内容，并且把紧跟最佳断点的可弃项目包括进来，
+它就把 |\box100| 的顶部剪去了；
+在 |\box100| 中第一个盒子前，加上新粘连 |\splittopskip|，
+就象出现在页面顶部的粘连 |\topskip| 一样。%
+但是，如果最佳断点出现在 |\box100| 中垂直列的结尾——`|\penalty-10000|'%
+项目假定出现在那里——或者如果最佳断点后的所有项目都是可弃的，
+那么 |\vsplit| 之后 |\box100| 将是置空的。%
+并且如果 |\box100| 在 |\vsplit| 之前是置空的，
+那么 |\box100| 和 |\box200| 此后也是置空的。
+
+%\ddanger \looseness=-1
+%You'd better not change |\box|\n, |\count|\n, |\dimen|\n,
+%or |\skip|\n\ while \TeX\ is contributing insertions to the current page,
+%since \TeX's algorithm assumes that those quantities are static.
+%But you can change ^|\floatingpenalty|, |\splittopskip|, and |\splitmaxdepth|;
+%\TeX\ will use the values that were current just inside the closing right
+%brace of `|\insert|\n|{...}|' when it splits and floats insertions.
+%For example, Appendix~B uses |\floatingpenalty=20000| in footnote
+%insertions, to discourage footnotes that split before others
+%can start, \vadjust{\break}but |\floatingpenalty=0| in floating topinserts.
+%Appendix~B also uses special values of\/ |\splittopskip| and |\splitmaxdepth|,
+%together with ^{struts}, so that split footnotes will be typeset with
+%the same spacing as unsplit ones.
+\ddanger 当 \TeX\ 正在向当前页面输送插入对象时，最好不要改变 |\box|\n, |\count|\n, |\dimen|\n,
+或 |\skip|\n, 因为 \TeX\ 的算法假定这些量是静态的。%
+但是可以改变 |\floatingpenalty|, |\splittopskip| 和 |\splitmaxdepth|;
+当 \TeX\ 裂分或浮动插入对象时，要用到这些值，它们只是在`|\insert|\n|{...}|'%
+的右括号内才是当前值。%
+例如，附录 B 在脚注插入中使用 |\floatingpenalty=20000|,
+以防止脚注在其它插入开始前裂分，但是在浮动顶部插入时 |\floatingpenalty=0|。%
+附录 B 还用到 |\splittopskip| 和 |\splitmaxdepth| 的特殊值，以及支架，
+\1这样裂分的脚注与未裂分脚注的排版间距就一致了。
+
+%\ddanger The |\footnote| macro puts an |\insert| into the horizontal list
+%of a paragraph. After the paragraph has been broken into lines, this
+%insertion will move out into the vertical list just after the line that
+%contained it (see Chapter~14).  Since there is no legal breakpoint between
+%that box (i.e., that line) and the insertion, \TeX\ will put the insertion
+%onto the page that contains the line that contains the insertion.
+\ddanger 宏 |\footnote| 在独立的水平列中放了一个 |\insert|。%
+在段落断行后，这个插入对象就移出来放到包含它的行后面的垂直列中(见第十四章)。%
+因为在那个盒子(即那个行)和插入对象之间没有合理的断点，
+所以 \TeX\ 将把插入对象放在其所对应行所在的页面上。
+
+%\ddangerexercise Study the page-breaking algorithm carefully. Is it
+%possible that a footnote might not appear on the same page as its reference?
+%\answer Yes, in severe circumstances.  (1)~Previous footnotes might
+% have left no room for any more footnotes on the page.
+%(2)~If |\vadjust{\eject}| occurs on the same line as a footnote, before that
+%footnote, the reference will be forcibly detached. (3)~Other |\vadjust|
+%commands on that line could also interpose breakpoints before the insertion.
+\ddangerexercise 仔细研究一下分页算法。脚注与其参照符号可能不出现在同一页面吗？
+\answer 在严峻的情况下是可能的。%
+(1) 上一个脚注也许没给页面其他脚注留下任何空间。%
+(2) 若 |\vadjust{\eject}| 与脚注出现在同一行，且在它之前，参考符号将被强制分开。%
+(3) 该行的其他 |\vadjust| 命令也可能在插入项之前造成分页。
+
+%\ddanger \looseness=-1
+%When the best page break is finally chosen, \TeX\ removes everything after
+%the chosen breakpoint from the bottom of the ``current page,'' and puts it
+%all back at the top of the ``recent contributions.'' The
+%chosen breakpoint itself is placed at the very top of the recent contributions.
+%If it is a penalty item, the value of the penalty is recorded in
+%^|\outputpenalty| and the penalty in the contribution list is changed
+%to $10000$; otherwise |\outputpenalty| is set to 10000.
+%The insertions that remain on the current page are of three kinds: For
+%each class~$n$ there are unsplit insertions, followed possibly by
+%a single split insertion, followed possibly by others. If
+%^|\holdinginserts|$\null>0$, all insertions remain in place (so that
+%they might be contributed again); otherwise they are all removed from
+%the current page list as follows: The unsplit insertions
+%are appended to |\box|\n, with no ^{interline glue} between them. \
+%(^{Struts} should be used, as in the |\vfootnote| macro of
+%Appendix~B\null.) \
+%If a split insertion is present, it is effectively |\vsplit| to the size
+%that was computed previously in Step~4; the top part is treated as an
+%unsplit insertion, and the remainder (if any) is converted to an insertion
+%as if it had not been split. This remainder, followed by any other floating
+%insertions of the same class, is held
+%over in a separate place. \ (They will show up on the ``current page'' if
+%^|\showlists| is used while an ^|\output| routine is active; the total
+%number of such insertions appears in ^|\insertpenalties| during an
+%|\output| routine.) %\
+%Finally, the remaining items before the best break on the current page are put
+%together in a |\vbox| of height~$g$, where $g$ was the |\pagegoal| at the
+%time of the break, using the saved value of\/ ^|\maxdepth|; this box becomes
+%|\box255|. Now the user's ^|\output| ^^|\box255|
+%routine enters \TeX's scanner (see Chapter~23); its duty is to assemble the
+%final pages based on the contents of\/ |\box255| and any insertion boxes
+%that it knows about. The output routine will probably unbox those boxes,
+%so that their glue can be reset; the glue in insertion boxes usually
+%cooperates nicely with the glue on the rest of the page, when it is
+%given a chance. After the |\output| routine is finished, ^{held-over
+%insertion} items are placed first on the list of recent contributions, followed
+%by the vertical list constructed by |\output|, followed by the recent
+%contributions beginning with the page break. \ (Deep breath.) \ You got that?
+\ddanger 当最后选定最佳分页后， \TeX\ 从``当前页面''底部把选定断点后的所有东西%
+都去掉，送回到``备选内容''的顶部。%
+选定的断点本身被放在备选内容的正顶部。%
+如果它是一个惩罚项目，那么惩罚的值就记录在 |\outputpenalty| 中，
+并且备选列中的惩罚被变为 $10000$;
+否则，|\outputpenalty| 被设置为 10000。%
+当前页面剩下的插入对象有三种：
+对每个类 $n$, 有未裂分的插入对象，接着可能是一个裂分的插入对象，再接着是其它的。%
+如果 |\holdinginserts|$\null>0$，那么每个插入对象都保持在适当的位置（使得%
+它们可能被再次输送）；
+否则它们将如下从当前页面列中全部去掉：
+未裂分的插入对象追加到 |\box|\n ，而且它们之间没有行间粘连。%
+（要用到支架，就象在附录 B 中的宏 |\vfootnote| 一样。）
+如果是裂分的插入对象，那么它 |\vsplit| 为前面第 4 步计算的大小；
+上部分被当做未裂分的处理，剩下的(如果还有的话)转换为插入对象，
+就象没有裂分过一样。%
+跟在任意其它同类浮动插入对象后面的这个剩下的对象，继续保持在单独的地方。%
+（如果在 |\output| 例行程序正在执行时使用 |\showlists|, 它们将出现在``当前页面''上；
+在 |\output| 例行程序期间，这样的插入对象的总数出现在 |\insertpenalties| 中。）
+最后，在当前页面断点之前的剩余项目被一起否则高度为 $g$ 的 |\vbox| 中，
+其中 $g$ 是那时断点的 |\pagegoal|, 用到了所保存的 |\maxdepth| 的值；
+这个盒子变成了 |\box255|。%
+现在，用户的 |\output| 例行程序进入了 \TeX\ 扫描（见第~23~章）；
+它的任务是基于 |\box255| 和任意它得到的插入对象盒子的内容来组成最后的页面。%
+输出例行程序可能把这些盒子解开，使得它们的粘连重新设定；
+当凑巧时，在插入对象盒子中的粘连一般与页面其它的粘连能很好地合并。%
+在 |\output| 例行程序结束后，保持的插入项目被首先放在备选内容列上，
+接着是由 |\output| 构建的垂直列，
+接着是以分页开始的备选内容。%
+（深呼吸一下。）你看懂了吗？
+
+\endchapter
+
+Since it is impossible to foresee how [footnotes] will happen to come out
+in the make-up, it is impracticable to number them from 1 up on each page.
+The best way is to number them consecutively throughout an article
+or by chapters in a book.
+\author UNIVERSITY OF ^{CHICAGO} PRESS, {\sl Manual of Style\/} (1910) % p102
+
+\bigskip
+
+Don't use footnotes in your books, Don.
+\author JILL ^{KNUTH} (1962)
+
+\vfill\eject\byebye

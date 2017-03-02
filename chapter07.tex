@@ -1,0 +1,641 @@
+% -*- coding: utf-8 -*-
+
+\input macros
+
+%\beginchapter Chapter 7. How \TeX\ Reads\\What You Type
+\beginchapter Chapter 7. 工作原理
+
+\origpageno=37
+
+%We observed in the previous chapter that an input manuscript is expressed
+%in terms of ``lines,'' but that these lines of input are essentially
+%independent of the lines of output that will appear on the finished pages.
+%Thus you can stop typing a line of input at any place that's convenient for
+%you, as you prepare or edit a file. A few other related rules have also
+%been mentioned:
+\1在上一章我们看到，输入的文稿用``行''的方式来表达，
+但是这些输入的行和最后出现在页面中的行本质上是不同的。%
+因此，当输入或编辑文件时，你可以随心所欲地换行。%
+这里要提出几个相关的规则：
+
+%\medskip
+%\item\bull A $\langle\hbox{return}\rangle$ is like a space.
+\medskip
+\item\bull 一个 $\langle\hbox{return}\rangle$与一个空格类似。
+
+%\smallskip
+%\item\bull Two spaces in a row count as one space.
+\smallskip
+\item\bull 一行中的两个空格看作一个。
+
+%\smallskip
+%\item\bull A blank line denotes the end of a paragraph.
+\smallskip
+\item\bull 一个空行表示一段的结束。
+
+%\medskip
+%\noindent Strictly speaking, these rules are contradictory: A blank line
+%is obtained by typing $\langle\hbox{return}\rangle$ twice in a row,
+%and this is different from typing two spaces in a row. Some day you might want
+%to know the {\sl real\/} rules. In this chapter and the next, we shall study
+%the very first stage in the transition from input to output.
+\medskip
+\noindent 严格说，这些规则是矛盾的：
+在一行内键入两次 $\langle\hbox{return}\rangle$ 就得到一个空行，
+而且这与在一行键入两个空格不同。%
+有一天你可能想了解{\KT{10}真正的}规则。%
+在本章和下一章，我们将讨论从输入到输出的相当初始的阶段。
+
+%\smallskip
+%In the first place, it's wise to have a precise idea of what your keyboard
+%sends to the machine. There are 256 characters that \TeX\ might encounter at
+%each step, in a file or in a line of text typed directly on your terminal. These
+%256~characters are classified into 16 categories numbered 0 to 15:
+%\begindisplay \def\\{\hfill}
+%\hfil\hidewidth\it Category\hidewidth&\it \qquad Meaning\hidewidth\cr
+%\noalign{\smallskip}
+%\\0&Escape character&(|\| in this manual)\cr
+%\\1&Beginning of group&(|{| in this manual)\cr
+%\\2&End of group&(|}| in this manual)\cr
+%\\3&Math shift&(|$| in this manual)\cr
+%\\4&Alignment tab&(|&| in this manual)\cr
+%\\5&End of line&(\<return> in this manual)\cr
+%\\6&Parameter&(|#| in this manual)\cr
+%\\7&Superscript&(|^| in this manual)\cr
+%\\8&Subscript&(|_| in this manual)\cr
+%\\9&Ignored character&(\<null> in this manual)\cr
+%10&Space&(\] in this manual)\cr
+%11&Letter&(|A|, \dots, |Z| and |a|, \dots, |z|)\cr
+%12&Other character&(none of the above or below)\cr
+%13&Active character&(|~| in this manual)\cr
+%14&Comment character&(|%| in this manual)\cr
+%15&Invalid character&(\<delete> in this manual)\cr
+%\enddisplay
+%^^{escape character}
+%^^{begin-group character}
+%^^{end-group character}
+%^^{math mode character}
+%^^{alignment tab}
+%^^{parameter}
+%^^{superscript}
+%^^{subscript}
+%^^{ignored character}
+%^^{space}
+%^^{letter}
+%^^{other character}
+%^^{active character}
+%^^{comment character}
+%^^{invalid character}
+%^^{category codes, table}
+%It's not necessary for you to learn these code numbers; the point is only that
+%\TeX\ responds to 16~different types of characters. At first this manual led
+%you to believe that there were just two types---the escape character and the
+%others---and then you were told about two more types, the grouping
+%symbols |{| and~|}|. In Chapter~6 you learned two more: |~| and~|%|.
+%Now you know that there are really~16. This is the whole truth of the
+%matter; no more types remain to be revealed.  The category code for any
+%character can be changed at any time, but it is usually wise to stick to a
+%^^{reserved character} ^^{special character table} ^^\<null> ^^\<delete>
+%particular scheme.
+\smallskip
+首先，明智之举是对键盘发送到计算机中的准确内容有一个了解。%
+\TeX\ 可能见到的直接从键盘上键入文件或行中的字符有 256 个。%
+这 256 个字符被分为 16 类，数字是从 0 到 15:
+\begindisplay \def\\{\hfill}
+\hfil\hidewidth\it (类)Category\hidewidth&\it \qquad 意义\hidewidth\cr
+\noalign{\smallskip}
+\\0&转义符 &(在本手册为 |\|)\cr
+\\1&组开始&(在本手册为 |{|)\cr
+\\2&组结束&(在本手册为 |}|)\cr
+\\3&数学环境&(在本手册为 |$|)\cr
+\\4&表格对齐&(在本手册为 |&|)\cr
+\\5&换行&(在本手册为 \<return>)\cr
+\\6&参数&(在本手册为 |#|)\cr
+\\7&上标&(在本手册为 |^|)\cr
+\\8&下标&(在本手册为 |_|)\cr
+\\9&可忽略的字符&(在本手册为 \<null>)\cr
+10&空格&(在本手册为 \])\cr
+11&字母&(|A|, \dots, |Z| 和 |a|, \dots, |z|)\cr
+12&其它字符&(不在上下文的其它字符)\cr
+13&活动符&(在本手册为 |~|)\cr
+14&注释符&(在本手册为 |%|)\cr
+15&无用符&(在本手册为 \<delete>)\cr
+\enddisplay
+对你而言，不必掌握这些代码数；
+要点只是 \TeX\ 对 16 类不同字符所做的处理。%
+首先，本手册中出现的只有两种类型——转义符和其它字符——并且接着你%
+再学会两种类型，编组符号 |{| 和 |}|。%
+在第六章，又出现两种：|~| 和 |%|。%
+现在你清楚了，其实有 16 类。%
+这才是问题的全部；
+不会再出现更多类型了。%
+任意字符的类代码可以在任何时候改变，
+但是保持一个特殊的方案通常比较明智。
+
+%The main thing to bear in mind is that each \TeX\ format reserves certain
+%characters for its own special purposes. For example, when you are using plain
+%\TeX\ format (Appendix~B\null), you need to know that the ten characters
+%\begintt
+%\ { } $ & # ^ _ % ~
+%\endtt
+%cannot be used in the ordinary way when you are typing;
+%^^{special characters}
+%^^{backslash}^^{left brace}^^{right brace}^^{dollar sign}^^{ampersand}
+%^^{hash mark}^^{hat}^^{underline}^^{percent}^^{tilde}
+%^^{single-character control sequences}
+%each of them will cause \TeX\ to do something special, as explained elsewhere
+%in this book. If you really need these symbols as part of your manuscript,
+%plain \TeX\ makes it possible for you to type
+%\begindisplay
+%|\$| for \$,\qquad |\%| for \%,\qquad |\&| for \&,\qquad
+%|\#| for \#,\qquad |\_| for \_\thinspace;
+%\enddisplay
+%the |\_| symbol is useful for {\it compound\_identifiers\/} in computer
+%^^{identifiers} ^^{computer programs}
+%programs. In mathematics formulas you can use |\{| and |\}| for $\{$ and
+%$\}$, while ^|\backslash| produces a ^{reverse slash}; for example,
+%\begindisplay
+%`|$\{a \backslash b\}$|'\quad yields\quad`$\{a\backslash b\}$'.
+%\enddisplay
+%Furthermore |\^| produces a circumflex accent (e.g., `|\^e|' yields
+%`\^e'\thinspace); and |\~| yields a tilde accent (e.g., `|\~n|' yields
+%`\~n'\thinspace).
+\1要记住的主要问题是，每个 \TeX\ 格式都为各自的特殊目的而保留一定的字符。%
+例如，当你使用 plain \TeX\ 格式(附录 B)时，就需要知道，下列 10 个字符
+\begintt
+\ { } $ & # ^ _ % ~
+\endtt
+在键入时不能按普通方法使用；
+它们的每个都使 \TeX\ 做某些特殊的事情，在本书的某些地方给出解释。%
+如果你实在需要输出这些字符，plain \TeX\ 提供了下列方法：
+\begindisplay
+|\$| 得到 \$,\qquad |\%| 得到 \%,\qquad |\&| 得到 \&,\qquad
+|\#| 得到 \#,\qquad |\_| 得到 \_\thinspace;
+\enddisplay
+符号 |\_| 用在计算机程序的{\it compound\_identifiers\/}。%
+在数学公式中，可以使用 |\{| 和 |\}| 来得到 $\{$ 和 $\}$,
+而且 |\backslash| 得到一个反斜线；
+例如，
+\begindisplay
+`|$\{a \backslash b\}$|'\quad 得到 \quad`$\{a\backslash b\}$'.
+\enddisplay
+还有，|\^| 得到的是一个 circumflex 重音(比如，`|\^e|'得到的是`\^e'\thinspace);
+并且 |\~| 得到的是一个波浪重音(比如，`|\~n|'得到的是
+`\~n'\thinspace)。
+
+%\exercise What horrible errors appear in the following sentence?
+%^^{Procter} ^^{Gamble}
+%\begintt
+%Procter & Gamble's stock climbed to $2, a 10% gain.
+%\endtt
+%\answer Three forbidden characters were used. One should type
+%\begintt
+%Procter \& Gamble's ... \$2, a 10\% gain.
+%\endtt
+%(Also the facts are wrong.)
+\exercise 在下列句子中，会出现什么讨厌的问题？
+\begintt
+Procter & Gamble's stock climbed to $2, a 10% gain.
+\endtt
+\answer 用到三个特殊字符。应该这样键入
+\begintt
+Procter \& Gamble's ... \$2, a 10\% gain.
+\endtt
+（另外此事实是错误的。）
+
+%\exercise Can you imagine why the designer of plain \TeX\ decided not
+%to make `|\\|' the control sequence for reverse slashes?^^{backslash}
+%\answer Reverse slashes (backslashes) are fairly uncommon in formulas or
+%text, and |\\| is very easy to type; it was therefore felt best not to
+%reserve |\\| for such limited use. Typists can define |\\| to be whatever
+%they want (including |\backslash|).
+\exercise 你能想像一下 plain \TeX\ 的设计者为什么不用`|\\|'这个控制系列代表反斜线吗？
+\answer 反斜线在正文和公式中都很少见到，而 |\\| 又很容易键入；
+因此最好是不用 |\\| 表示这种很少使用的字符。
+排版者可以将 |\\| 定义为他们所需的任何东西（包括 |\backslash|）。
+
+%\danger When \TeX\ reads a line of text from a file, or a line of text that
+%you entered directly on your terminal, it converts that text into a list of
+%``^{tokens}.'' A token is either (a)~a single character with an attached
+%category code, or (b)~a control sequence. For example, if the normal
+%conventions of plain \TeX\ are in force, the text `|{\hskip 36 pt}|' is
+%converted into a list of eight tokens:
+%\begindisplay
+%|{|$_1$\quad\cstok{hskip}\quad|3|$_{12}$\quad|6|$_{12}$\quad
+%  \]$_{10}$\quad|p|$_{11}$\quad|t|$_{11}$\quad|}|$_{2}$
+%\enddisplay
+%The subscripts here are the category codes, as listed earlier: 1 for
+%``beginning of group,'' 12 for ``other character,'' and so on. The
+%\cstok{hskip} doesn't get a subscript, because it represents a control
+%sequence token instead of a character token. Notice that the space after
+%|\hskip| does not get into the token list, because it follows a
+%^{control word}.
+\danger 当 \TeX\ 从文件中读入一行或直接从终端上读入一行时，它把文本转变成一列``记号''。%
+一个记号可以是 (a) 一个指定类代码的单个字符，或者是 (b) 一个控制系列。%
+例如，在 plain \TeX\ 的约定下，文本`|{\hskip 36 pt}|'转变为一个 8 个记号的列：
+\begindisplay
+|{|$_1$\quad\cstok{hskip}\quad|3|$_{12}$\quad|6|$_{12}$\quad
+  \]$_{10}$\quad|p|$_{11}$\quad|t|$_{11}$\quad|}|$_{2}$
+\enddisplay
+这里的下标是如前所述的类代码：
+1 是``组开始'', 12 是``其它字符'', 诸如此类。%
+\cstok{hskip} 没有赋予下标，因为它表示一个控制系列记号而不是一个字符记号。%
+注意，记号列中没有 |\hskip| 后的空格，因为它所跟的是一个控制词。
+
+%\danger It is important to understand the idea of token lists, if you want
+%to gain a thorough understanding of \TeX, and it is convenient to learn
+%the concept by thinking of \TeX\ as if it were a living organism. The
+%individual lines of input in your files are seen only by \TeX's ``eyes''
+%and ``mouth''; but after that text has been gobbled up, it is sent to
+%\TeX's ``stomach'' in the form of a token list, and the digestive processes
+%that do the actual typesetting are based entirely on tokens. As far as the
+%stomach is concerned, the input flows in as a stream of tokens, somewhat
+%as if your \TeX\ manuscript had been typed all on one extremely long line.
+\danger 如果你想对 \TeX\ 有一个完整的理解，那么理解记号列表的思想很重要的，
+把 \TeX\ 的思想看作一个生物体对掌握 \TeX\ 的思想很方便。%
+文件中输入的每个行只能被``眼睛''和``嘴巴''遇见；
+但当文本被吞下后，被按照记号列表的方式送到``胃''里，
+而且处理实际排版的消化过程是完全按照记号来进行的。%
+就胃而言，输入内容就象记号流一样流出，好象你的 \TeX\ 文稿被一起键入在一个很长的行中。
+
+%\danger You should remember two chief things about \TeX's tokens: (1)~A
+%control sequence is considered to be a single object that is no longer
+%composed of a sequence of symbols. Therefore long control sequence names
+%are no harder for \TeX\ to deal with than short ones, after they have been
+%replaced by tokens. Furthermore, spaces are not ignored after control
+%sequences inside a token list; the ignore-space rule applies only in an
+%input file, during the time that strings of characters are being
+%tokenized.  (2)~Once a category code has been attached to a character
+%token, the attachment is permanent. For example, if character `|{|' were
+%suddenly declared to be of category~12 instead of category~1, the
+%characters `|{|$_1$' already inside token lists of \TeX\ would still
+%remain of category 1; only newly made lists would contain `|{|$_{12}$'
+%tokens. In other words, individual characters receive a fixed
+%interpretation as soon as they have been read from a file, based on the
+%category they have at the time of reading. Control sequences are
+%different, since they can change their interpretation at any time.  \TeX's
+%digestive processes always know exactly what a character token signifies,
+%because the category code appears in the token itself; but when the
+%digestive processes encounter a control sequence token, they must look up
+%the current definition of that control sequence in order to figure out
+%what it means.
+\danger \1还记得 \TeX\ 记号的两个主要部分吧：
+(1) 一个控制系列被看作一个单个对象，它不是由一系列符号组成的。%
+因此，当控制系列用记号代替后，\TeX\ 处理长名字与短的是一样的。%
+还有，在记号列表中间的空格不能忽略；因为忽略空格的规则只适用于输入文件，
+在那期间，字符串被变成记号。%
+(2) 一个字符记号只能有一个类代码，这个指定是永久性的。%
+例如，如果字符`|{|'突然被声明为类代码为 12 而不是 1, 已经在 \TeX\ 的记号列表中%
+的字符`|{|$_1$'的类代码仍然是 1; 只有新的列表才包含记号`|{|$_{12}$'。%
+换句话说，一旦某个字符从文件中被读出来，那么它的解释就固定了，
+就是它读入时的类代码。%
+控制系列却不同，因为它们可以在任何时间改变它们的解释。%
+\TeX\ 的消化过程总精确地知道一个字符记号表示什么，
+因为类代码出现在记号自己身上；
+但是当消化过程遇到一个控制系列记号，为了确定它的意思，必须找到控制系列当前的定义。
+
+%\ddangerexercise Some of the category codes 0 to 15 will never appear as
+%subscripts in character tokens, because they disappear in \TeX's mouth.
+%For example, characters of category 0 (escapes) never get to be tokens.
+%Which categories can actually reach \TeX's stomach?
+%\answer 1, 2, 3, 4, 6, 7, 8, 10, 11, 12, 13. ^{Active characters} (type 13)
+%are somewhat special; they behave like control sequences in most cases
+%(e.g., when you say `^|\let||\x=~|' or `^|\ifx||\x~|'), but they behave like
+%character tokens when they appear in the token list of\/ ^|\uppercase|
+%or ^|\lowercase|, and when unexpanded after ^|\if| or ^|\ifcat|.
+\ddangerexercise 0 到 15 中某些类代码从不出现在字符记号的下标上，
+因为它们被 \TeX\ 的嘴吃掉了。%
+例如，类代码为 0 的字符(转义符)从未出现在记号中。%
+哪些类实际出现在 \TeX\ 的胃中？
+\answer 1, 2, 3, 4, 6, 7, 8, 10, 11, 12, 13。
+^{活动符}（第 13 类）有些特殊：
+在多数情形它们很像控制系列（比如你可以用 `^|\let||\x=~|' 或 `^|\ifx||\x~|'），
+但是在 ^|\uppercase| 或 ^|\lowercase| 的记号列中，
+以及在 ^|\if| 或 ^|\ifcat| 后不展开时，它们很像字符记号。
+
+%\ddanger There's a program called ^|INITEX| that is used to install
+%\TeX, starting from scratch; |INITEX| is like \TeX\ except that it can
+%do even more things. It can compress ^{hyphenation} patterns into special
+%tables that facilitate rapid hyphenation, and it can produce ^{format}
+%files like `|plain.fmt|' from `|plain.tex|'.  But |INITEX| needs extra
+%space to carry out such tasks, so it generally has less memory available
+%for typesetting than you would expect to find in a production version of \TeX.
+\ddanger 有一个叫 |INITEX| 的程序，它被用来从最开始来安装 \TeX;
+|INITEX| 类似于 \TeX, 只是它的功能更\hbox{多。}%
+它可以把连字符模式压缩到一个特殊的表中从而使得连字化更快，
+并且它可以从`|plain.tex|'得到类似`|plain.fmt|'的格式文件。%
+但是运行此类任务时，|INITEX| 需要额外的空间，因此，
+在 \TeX\ 的安装后的版本中，一般排版可用的内存比你所预期的要少。
+
+%\ddanger When |INITEX| begins, it knows nothing
+%but \TeX's primitives. All 256~characters are initially of category~12,
+%except that ^\<return> has category~5,
+%^\<space> has category~10, ^\<null> has category~9, ^\<delete> has category~15,
+%the 52 letters |A|$\,\ldots\,$|Z| and |a|$\,\ldots\,$|z| have category~11,
+%|%| and~|\| have the respective categories 14 and~0. ^^{backslash}^^{percent}
+%It follows that |INITEX| is initially incapable of carrying out some of
+%\TeX's primitives that depend on grouping; you can't use |\def| or |\hbox|
+%until there are characters of categories 1 and~2. The format in
+%Appendix~B begins with ^|\catcode| commands to provide characters of the
+%necessary categories; e.g.,
+%\begintt
+%\catcode`\{=1
+%\endtt
+%assigns category 1 to the |{| symbol. The |\catcode| operation is like
+%many other primitives of \TeX\ that we shall study later; by modifying
+%internal quantities like the category codes, you can adapt \TeX\ to a wide
+%variety of applications.
+\ddanger 当 |INITEX| 运行时，它只认识 \TeX\ 的原始控制系列。%
+所有 256 个字符的类代码开始都是 12, 除了 \<return> 的是 5,
+\<space> 的是 10, \<null> 的是 9, \<delete> 的是 15,
+52 个字母 |A|$\,\ldots\,$|Z| 和 |a|$\,\ldots\,$|z| 的是 11,
+|%| 和 |\| 的分别是 14 和 0。%
+由此，|INITEX| 最初不能处理依赖于编组的 \TeX\ 某些原始控制系列；
+在类代码为 1 和 2 的字符出现之前，不能使用 |\def| 或 |\hbox|。%
+以 |\catcode| 开始的附录 B 给出了这些必需的类代码；
+比如，
+\begintt
+\catcode`\{=1
+\endtt
+把符号 |{| 的类代码指定为 1。%
+操作 |\catcode| 类似于我们后面要讨论的许多其它 \TeX\ 的原始控制系列；
+通过修改象类代码这样的内部量，可以使 \TeX\ 的应用相当广泛。
+
+%\ddangerexercise Suppose that the commands
+%\begintt
+%\catcode`\<=1 \catcode`\>=2
+%\endtt
+%appear near the beginning of a group that begins with `|{|'; these
+%specifications instruct \TeX\ to treat |<| and |>| as group delimiters.
+%According to \TeX's rules of locality, the characters |<| and |>| will
+%revert to their previous categories when the ^{group} ends. But should the
+%group end with |}| or~with~|>|\thinspace?
+%\answer It ends with either |>| or |}| or any character of category 2;
+%then the effects of all |\catcode| definitions within the group are wiped
+%out, except those that were ^|\global|. \TeX\ doesn't have any built-in
+%knowledge about how to pair up particular kinds of grouping characters.
+%New category codes take effect as soon as a |\catcode| assignment has been
+%digested. For example,
+%\begintt
+%{\catcode`\>=2 >
+%\endtt
+%is a complete group. But without the space after `|2|' it would not be
+%complete, since \TeX\ would have read the~`|>|' and converted it to a
+%token before knowing what category code was being specified; \TeX\ always
+%reads the token following a constant before evaluating that ^{constant}.
+\ddangerexercise 假定命令
+\begintt
+\catcode`\<=1 \catcode`\>=2
+\endtt
+出现在以`|{|'开始的组的开头；
+这些规定告诉 \TeX\ 把 |<| 和 |>| 看作组的分隔符。%
+按照 \TeX\ 的局部性规则，当组结束时，字符 |<| 和 |>| 的类代码将复原回去。%
+但是组应该以 |}| 还是 |>| 来结束？
+\answer 用 |>| 或者 |}| 或者任何类别码为 2 的字符都可以结束编组；
+然后该编组内部的 |\catcode| 定义的效果将被取消，除非那些用 ^|\global| 定义的。
+\TeX\ 本身并不在乎组开始符和组结束符的类型是否相配。
+|\catcode| 赋值一经消化，新的类别码就立即生效。例如，
+\begintt
+{\catcode`\>=2 >
+\endtt
+是一个完整的编组。但是如果去掉 `|2|' 之后的空格，该编组将是不完整的，
+因为 \TeX\ 在类别码指定之前就已经读入 `|>|' 并将其转化为记号；
+在对^{常数}求值之前 \TeX\ 总是先读取常数之后的那个记号。
+
+%\ddanger Although control sequences are treated as single objects,
+%\TeX\ does provide a way to break them into lists of character tokens:
+%If you write ^|\string||\cs|,
+%where |\cs| is any control sequence, you get the list of characters for that
+%control sequence's name. For example, |\string\TeX| produces four tokens:
+%|\|$_{12}$, |T|$_{12}$, |e|$_{12}$, |X|$_{12}$. Each character in this token
+%list automatically gets category code~12 (``other''),
+%including the ^{backslash} that |\string| inserts to represent an escape
+%character.  However, category~10 will be assigned to the character `\]'
+%(blank ^{space}) if a space character somehow sneaks into the name of a
+%control sequence.
+\ddanger \1虽然控制系列被看作单个对象，但是 \TeX\ 的确提供了一种方法来把它分成一列%
+字符记号：
+如果输入 |\string||\cs|, 其中 |\cs| 是任意控制系列，那么就得到那个控制系列的名字的%
+一个列表。%
+例如，|\string\TeX| 就得到 4 个记号：
+|\|$_{12}$, |T|$_{12}$, |e|$_{12}$, |X|$_{12}$。
+在这个记号列表中的每个字符自动得到类代码 12~(``其它字符''),
+包括表示转义符的反斜线。%
+但是，如果字符空格无缘无故出现在控制系列的名字中，字符`\]'~(空\hbox{格)}的类代码将指定为 10。
+
+%\ddanger Conversely, you can go from a list of character tokens to a
+%control sequence by saying `^|\csname|\<tokens>^|\endcsname|'. The tokens
+%that appear in this construction between |\csname| and |\endcsname| may
+%include other control sequences, as long as those control sequences
+%ultimately expand into characters instead of \TeX\ primitives; the final
+%characters can be of any category, not necessarily letters. For example,
+%`|\csname TeX\endcsname|' is essentially the same as `|\TeX|'; but
+%`|\csname\TeX\endcsname|' is illegal, because |\TeX| expands into tokens
+%containing the ^|\kern| primitive. Furthermore,
+%`|\csname\string\TeX\endcsname|' will produce the unusual control sequence
+%`|\\TeX|', i.e., the token \cstok{\char`\\TeX}, which you can't ordinarily
+%write.
+\ddanger 反过来，用命令`|\csname|\<tokens>|\endcsname|', 可以把一个字符记号列表%
+变成一个控制系列。%
+出现在 |\csname| 和 |\endcsname| 之间的这个指令中的记号可以包括其它控制系列，
+只要这些控制系列最后展开成的是字符而不是 \TeX\ 的原始控制系列；
+最后的字符可以是任意类，不必是字母。%
+例如，`|\csname TeX\endcsname|'本质上和 |\TeX| 是一样的；
+但是`|\csname\TeX\endcsname|'是不合法的，
+因为 |\TeX| 展开为记号时包含原始控制系列 |\kern|。
+还有，`|\csname\string\TeX\endcsname|'就得到一个不常见的控制系列`|\\TeX|', 即，
+记号 \cstok{\char`\\TeX}, 而你不能用一般的方法来定义它。
+
+%\ddangerexercise Experiment with \TeX\ to see what |\string| does when it
+%is followed by an ^{active character} like |~|. \ (Active characters behave
+%like control sequences, but they are not prefixed by an escape.) \ What
+%is an easy way to conduct such experiments online? What control sequence
+%could you put after |\string| to~obtain the single character
+%token~|\|$_{12}$?
+%\answer If you type `|\message{\string~}|' and `|\message{\string\~}|', \TeX\
+%responds with `|~|' and `|\~|', respectively. ^^|\message|
+%To get |\|$_{12}$ from |\string| you therefore need to make backslash an
+%active character. One way to do this is
+%\begintt
+%{\catcode`/=0 \catcode`\\=13 /message{/string\}}
+%\endtt
+%(The ``^{null control sequence}'' that you get when there are no
+%tokens between |\csname| and |\endcsname| is not a solution to this exercise,
+%because |\string| converts it to `|\csname\endcsname|'. There is, however,
+%another solution: If \TeX's ^|\escapechar| parameter---which will be
+%explained in one of the next dangerous bends---is negative or greater
+%than~255, then `|\string\\|' works.)
+\ddangerexercise 用 \TeX\ 做个实验，看看 |string| 后面跟一个象 |~| 的活动符会%
+出现什么情况。(活动符的表现象控制系列，但是前面没有转义符。)
+在行中做这个实验的简单方法是什么？
+为了得到单个字符记号 |\|$_{12}$, |\string|后面应该跟什么？
+\answer 如果你键入 `|\message{\string~}|' 或 `|\message{\string\~}|'，
+\TeX\ 将分别给出 `|~|' 和 `|\~|'。^^|\message|%
+因此要用 |\string| 得到 |\|$_{12}$ 你需要让反斜线变成活动符。其中一种做法是
+\begintt
+{\catcode`/=0 \catcode`\\=13 /message{/string\}}
+\endtt
+（ 当 |\csname| 和 |\endcsname| 之间无任何记号时所得到的``^{空控制系列}''%
+不是此练习的解答，因为 |\string| 将它转换为 `|\csname\endcsname|'。
+然而，确实还有另一个解答：如果 \TeX\ 的 ^|\escapechar| 参数——%
+这会在后面某个险弯处解释——小于零或者大于 255，则 `|\string\\|' 也可以。）
+
+%\ddangerexercise What tokens does
+%`|\expandafter\string\csname a\string\   b\endcsname|' produce?
+%(There are three spaces before the |b|. Chapter~20 explains ^|\expandafter|.)
+%\answer |\|$_{12}$ |a|$_{12}$ |\|$_{12}$ \]$_{10}$ |b|$_{12}$.
+\ddangerexercise `|\expandafter\string\csname a\string\   b\endcsname|'得到什么记号？
+(在 |b| 前面有 3 个空格。第二十章给出了 |\expandafter| 的解释。)
+\answer |\|$_{12}$ |a|$_{12}$ |\|$_{12}$ \]$_{10}$ |b|$_{12}$。
+
+%\ddangerexercise When |\csname| is used to define a control sequence for
+%the first time, that control sequence is made equivalent to |\relax|
+%until it is redefined. Use this fact to design a macro |\ifundefined#1|
+%such that, for example,
+%\begindisplay
+%|\ifundefined{TeX}|\<true text>|\else|\<false text>|\fi|
+%\enddisplay
+%expands to the \<true text> if\/ |\TeX| hasn't previously been defined,
+%or if\/ |\TeX| has been |\let| equal to |\relax|; it should expand
+%to the \<false text> otherwise. ^^|\ifundefined|
+%\answer |\def\ifundefined#1{\expandafter\ifx\csname#1\endcsname\relax}|%
+%\hfil\break Note that a control sequence like this must be used with care;
+%it cannot be included in ^{conditional} text, because the |\ifx| will not
+%be seen when |\ifundefined| isn't expanded.
+\ddangerexercise 当 |\csname| 用来第一次定义控制系列时，
+那个控制系列在重新被定义前，等价于 |\relax|。%
+利用这个结果来设计一个宏 |\ifundefined#1|~, 比如，使得
+\begindisplay
+|\ifundefined{TeX}|\<true text>|\else|\<false text>|\fi|
+\enddisplay
+它在 |\TeX| 没有被定义，或者被 |\let| 等于 |\relax| 时展开为 \<true text>;
+其它时候展开为 \<false text>。
+\answer |\def\ifundefined#1{\expandafter\ifx\csname#1\endcsname\relax}|%
+\hfil\break 注意像这样的控制系列必须小心使用；
+它不能包含在^{条件}文本中，因为在 |\ifundefined| 被展开之前看不到 |\ifx|。
+
+%\ddanger In the examples so far, |\string| has converted control sequences
+%into lists of tokens that begin with |\|$_{12}$. But this backslash token isn't
+%really hardwired into \TeX; there's a parameter called ^|\escapechar| that
+%specifies what character should be used when control sequences are output
+%as text. The value of\/ |\escapechar| is normally \TeX's internal code for
+%backslash, but it can be changed if another convention is desired.
+\ddanger 在到现在的例子中，|\string| 把控制系列转变为以 |\|$_{12}$ 开头的记号列表。%
+但是这个反斜线记号没有真正连接到 \TeX\ 中；
+有一个叫 |\escapechar| 的参数，它规定了控制系列输出为文本时所使用的字符。%
+|\escapechar| 的值正常情况下是反斜线的 \TeX\ 内部代码，但是如果需要其它约定，
+可以改变它。
+
+%\ddanger \TeX\ has two other token-producing operations similar to the
+%|\string| command. If you write ^|\number|\<number>, you get the decimal
+%equivalent of the \<number>; and if you write ^|\romannumeral|\<number>,
+%you get the number expressed in lowercase ^{roman numerals}. For example,
+%`|\romannumeral24|' produces `|xxiv|', a list of four tokens each having
+%category~12. The |\number| operation is redundant when it is applied
+%to an explicit constant (e.g., `|\number24|' produces `|24|'); but it does
+%suppress leading zeros, and it can also be used with numbers that are in
+%\TeX's internal registers or parameters. For example, `|\number-0015|'
+%produces `|-15|'; and if register |\count5| holds the value 316, then
+%`|\number\count5|' produces `|316|'.
+\ddanger 除了 |\string| 命令之外，\TeX\ 还有另外两个生成记号的命令。
+如果你输入 |\number|\<number>，那么就得到等于 \<number> 的小数；
+而如果你输入 |\romannumeral|\<number>，就得到用小写罗马数字表示的数。
+\1例如，`|\romannumeral24|' 得到的是 `|xxiv|'；
+在这四个记号中，每个的类别码都是~12。
+当用在显示常数时，|\number| 操作是多余的（比如，`|\number24|' 得到了 `|24|'）;
+但是，它却去掉了开头的零，并且还可以用在 \TeX\ 内部寄存器或参数中的数字。%
+例如，`|\number-0015|' 得到了 `|-15|'；
+并且如果寄存器 |\count5| 的值为 316，那么`|\number\count5|' 得到了 `|316|'。
+
+%\ddanger The twin operations ^|\uppercase||{|\<token list>|}| and
+%^|\lowercase||{|\<token list>|}| go through a given token list and convert
+%all of the character tokens to their ``uppercase'' or ``lowercase''
+%equivalents. Here's how: Each of the 256 possible characters
+%has two associated values called the ^|\uccode| and the ^|\lccode|; these values
+%are changeable just as a |\catcode| is. Conversion to uppercase means
+%that a character is replaced by its |\uccode| value, unless the |\uccode|
+%value is zero (when no change is made). Conversion to lowercase is
+%similar, using the |\lccode|. The category codes aren't changed. When
+%^|INITEX| begins, all |\uccode| and |\lccode| values are zero except that
+%the ^{letters} |a| to~|z| and |A| to~|Z| have |\uccode| values |A| to~|Z|
+%and |\lccode| values |a| to~|z|.
+\ddanger 配对操作 |\uppercase||{|\<token list>|}| 和 |\lowercase||{|\<token list>|}|~%
+处理一个给定的记号列表，并把它们的所有字符转换到相应的``大写''或``小写''字符。%
+如下：256 个可能的字符都有两个相伴的\hbox{值，} 叫做 |\uccode| 和 |\lccode|;
+这些值象 |\catcode| 一样是可以改变的。
+转变到大写意味着用 |\uccode| 值来代替字符，否则 |\uccode| 的值就是零(当不改变时)。%
+转变到小写类似，使用的是 |\lccode|。%
+类代码不能改\hbox{变。}%
+当 |INITEX| 运行时，所有 |\uccode| 和 |\lccode| 的值都是零，
+除了字母 |a| 到 |z| 的 |\uccode| 为 |A| 到 |Z| 和 |A| 到 |Z| 的%
+~|\lccode| 值为 |a| 到 |z|。
+
+%\ddanger \TeX\ performs the  |\uppercase| and |\lowercase| transformations
+%in its stomach, but the |\string| and |\number| and |\romannumeral|
+%and |\csname| operations are carried out en route to the stomach (like
+%macro expansion), as explained in Chapter~20.
+\ddanger \TeX\ 在胃中完成 |\uppercase| 和 |\lowercase| 的变换，
+但是 |\string|, |\number|, |\romannumeral| 和 |\csname| 操作在到胃的路上就完成了%
+(就象宏的展开), 这些解释在第二十章。
+
+%\ddangerexercise What token list results from
+%`|\uppercase{a\lowercase{bC}}|'\thinspace?
+%\answer First |\uppercase| produces `|A\lowercase{BC}|'; then you get `|Abc|'.
+\ddangerexercise `|\uppercase{a\lowercase{bC}}|'得到是记号列表是什么？
+\answer 首先 |\uppercase| 生成 `|A\lowercase{BC}|'，然后你得到 `|Abc|'。
+
+%\ddangerexercise \TeX\ has an internal integer parameter called ^|\year| that is
+%set equal to the current year number at the beginning of every job. Explain how
+%to use |\year|, together with |\romannumeral| and |\uppercase|, to
+%print a copyright notice like \year=1986
+%`\copyright\ \uppercase\expandafter{\romannumeral\year}'
+%for all jobs run in \number\year.
+%\answer `\thinspace|\copyright\ \uppercase\expandafter{\romannumeral\year}|%
+%\thinspace'. \ (This is admittedly tricky; the `^|\expandafter|' expands
+%the token after the `|{|', not the token after the group.)
+\ddangerexercise \TeX\ 有一个内部整数参数叫做 |\year|,
+它等于任务开始时当前年的数字。%
+看看怎样用 |\year| 以及 |\romannumeral| 和 |\uppercase| 对所有运行在\number\year 的%
+任务给出后面的版权表示：\year=1986
+`\copyright\ \uppercase\expandafter{\romannumeral\year}'。
+\answer `\thinspace|\copyright\ \uppercase\expandafter{\romannumeral\year}|\thinspace'。%
+（这的确有些技巧性；`^|\expandafter|' 展开 `|{|' 后面的那个记号，而不是编组后面的那个记号。）
+
+%\ddangerexercise Define a control sequence |\appendroman| with three parameters
+%such that |\appendroman#1#2#3| defines control sequence |#1| to
+%expand to a control sequence whose name is the name of control sequence
+%|#2| followed by the value of the positive integer |#3| expressed in roman
+%numerals.  For example, suppose |\count20| equals 30; then
+%`|\appendroman\a\TeX{\count20}|' should have the same effect as
+%`|\def\a{\TeXxxx}|'.^^{tricky macros}
+%\answer (We assume that parameter |#2| is not simply an active character,
+%and that ^|\escapechar| is between 0 and~255.)
+%\begintt
+%\def\gobble#1{} % remove one token
+%\def\appendroman#1#2#3{\expandafter\def\expandafter#1\expandafter
+%  {\csname\expandafter\gobble\string#2\romannumeral#3\endcsname}}
+%\endtt
+\ddangerexercise 定义三参数控制系列 |\appendroman|，使得 |\appendroman#1#2#3|
+定义一个控制系列 |#1|，它展开后就是名字为整数参数为 |#3| 的控制系列 |#2| 的名字，
+这个整数参数用罗马数字来表示。例如，假定 |\count20| 等于 30；
+那么 `|\appendroman\a\TeX{\count20}|' 与 `|\def\a{\TeXxxx}|'有同样的效果。
+\answer （我们假定参数 |#2| 不是一个活动符，且 ^|\escapechar| 在 0 和 255 之间。）
+\begintt
+\def\gobble#1{} % remove one token
+\def\appendroman#1#2#3{\expandafter\def\expandafter#1\expandafter
+  {\csname\expandafter\gobble\string#2\romannumeral#3\endcsname}}
+\endtt
+
+\endchapter
+
+Some bookes are to bee tasted,
+others to bee swallowed,
+and some few to bee chewed and disgested.
+\author FRANCIS ^{BACON}, {\sl Essayes\/} (1597) % p2 of orig edition
+
+\bigskip
+
+`Tis the good reader that makes the good book.
+\author RALPH WALDO ^{EMERSON}, {\sl Society \& Solitude\/} (1870) % Success
+
+\vfill\eject\byebye

@@ -1,0 +1,684 @@
+% -*- coding: utf-8 -*-
+
+\input macros
+
+%\beginchapter Chapter 26. Summary of\\Math Mode
+\beginchapter Chapter 26. 数学模式总结
+
+\origpageno=289
+
+%^^{math mode}
+%To conclude the survey that was begun in Chapter 24, let us investigate
+%exactly what \TeX's digestive processes can do when \TeX\ is building
+%lists in math mode or in display math mode.
+\1为了完成在第二十四章开始的汇总，我们来讨论在数学模式或陈列数学模式下 \TeX\ %
+构建列时 \TeX\ 所用到的命令。
+
+%\ninepoint
+%\def\\{\smallbreak\textindent{$\bull$}}
+%\medbreak
+%\centerline{$*\qquad*\qquad*$}
+%\medskip\noindent
+%Three asterisks, just like those that appear here, can be found near the
+%end of Chapter~24.
+%Everything preceding the three asterisks in that chapter applies to
+%math mode as well as to vertical mode, so we need not repeat
+%all those rules. In particular, Chapter~24 explains assignment commands,
+%and it tells how kerns, penalties, marks, insertions, adjustments,
+%and ``whatsits'' are put into math lists. Our present goal
+%is to consider the commands that have an intrinsically mathematical
+%flavor, in the sense that they behave differently in math
+%mode than they do in vertical or horizontal modes.
+\ninepoint
+\def\\{\smallbreak\textindent{$\bull$}}
+\medbreak
+\centerline{$*\qquad*\qquad*$}
+\medskip\noindent
+刚刚出现的三个星号可以在第 24 章结尾附近找到。
+在那章的三个星号前面出现的所有内容对数学模式和垂直模式都是一样的，
+因此我们毋需重复所有这些规则。
+特别是，第 24 章讨论了赋值命令，并且给出了紧排、惩罚、标记、插入项、
+调整和``无名''是怎样放到数学列中的。
+我们现在的目的是讨论数学模式固有的命令，
+在这个意义上它们在数学模式下与在垂直或水平模式下的性质不同。
+
+%Math lists are somewhat different from \TeX's other lists because they
+%contain three-pronged ``^{atoms}'' (see Chapter~17). Atoms come in thirteen
+%flavors: Ord, Op, Bin, Rel, Open, Close, Punct, Inner, Over, Under, Acc,
+%Rad, and Vcent. Each atom contains three ``^{fields}'' called its ^{nucleus},
+%^{superscript}, and ^{subscript}; and each field is either empty or is filled
+%with a math symbol, a box, or a subsidiary math list. Math symbols, in turn,
+%have two components: a family number and a position number.
+数学列与 \TeX\ 的其它列有点不同，
+因为它们包含三叉``原子''(见第十七章)。%
+原子分为十三类：Ord, Op, Bin, Rel, Open, Close, Punct, Inner, Over, Under, Acc,
+Rad 和 Vcent。%
+每个原子包含三个``区域'', 即它的核，上标和下标；
+每个区域是空的，或者由一个数学符号，一个盒子或一个辅助数学列组成。%
+数学符号依次有两个要素：一个族编号和一个位置代码。
+
+%It's convenient to introduce a few more rules of syntax, in order to specify
+%what goes into a math list:
+%\beginsyntax
+%<character>\is<letter>\alt<otherchar>\alt^|\char|<8-bit number>\alt%
+%    <chardef token>
+%<math character>\is^|\mathchar|<15-bit number>\alt<mathchardef token>
+%  \alt|\delimiter|<27-bit number>
+%<math symbol>\is<character>\alt<math character>
+%<math field>\is<filler><math symbol>\alt<filler>|{|<math mode material>|}|
+%<delim>\is<filler>^|\delimiter|<27-bit number>
+%  \alt<filler><letter>\alt<filler><otherchar>
+%\endsyntax
+%We have already seen the concept of \<character> in Chapter~25.
+%Indeed, characters are \TeX's staple food: The vast majority of all
+%commands that reach \TeX's digestive processes in horizontal mode are instances
+%of the \<character> command, which specifies a number between 0 and~255 that
+%causes \TeX\ to typeset the corresponding character in the current font.
+%When \TeX\ is in math mode or display math mode, a \<character> command
+%takes on added significance: It specifies a number between 0 and~$32767=
+%2^{15}-1$. This is done by replacing the character number by its
+%^|\mathcode| value. If the
+%|\mathcode| value turns out to be $32768=\null$\hex{8000}, however,
+%the \<character>
+%is replaced by an ^{active character} token having the original character
+%code (0 to~255); \TeX\ forgets the original \<character> and expands this
+%active character according to the rules of Chapter~20.
+为了说清楚数学列，要再引入几个语法规则：
+\beginsyntax
+<character>\is<letter>\alt<otherchar>\alt^|\char|<8-bit number>\alt%
+    <chardef token>
+<math character>\is^|\mathchar|<15-bit number>\alt<mathchardef token>
+  \alt|\delimiter|<27-bit number>
+<math symbol>\is<character>\alt<math character>
+<math field>\is<math symbol>\alt<filler>|{|<math mode material>|}|
+<delim>\is<filler>^|\delimiter|<27-bit number>
+  \alt<filler><letter>\alt<filler><otherchar>
+\endsyntax
+我们已经知道第二十五章中 \<character> 的定义。%
+的确，字符是 \TeX\ 的主要内容：
+在水平模式下 \TeX\ 消化过程所处理的所有命令的绝大部分是 \<character> 命令，
+它给出了 0 到 255 之间的一个数字，告诉 \TeX\ 把当前字体中相应的字符进行排版。%
+当 \TeX\ 处在数学模式或陈列数学模式中时，
+\<character> 命令还有更多的意思：
+它给出了 0 到 $32767=2^{15}-1$ 之间的一个数字。%
+这是用字符的 |\mathcode| 值代替字符代码而完成的。%
+但是如果 |\mathcode| 值是 $32768=\null$\hex{8000},
+那么此 \<character> 就被原来的字符代码(0 到 255)的一个活动符来代替；
+ \TeX\ 将忘掉原来的 \<character>, 并且按照第二十章的规则来展开此活动符。
+
+%A \<math character> defines a 15-bit number either by specifying it
+%directly with ^|\mathchar| or in a previous ^|\mathchardef|, or by
+%specifying a 27-bit |\delimiter| value; in the latter case, the least
+%significant 12~bits are discarded.
+一个 \<math character> 通过直接用 |\mathchar| 或者以前的 |\mathchardef| 对应到%
+一个 15 位数字上，或者对应到一个 27 位数字的 |\delimiter|上；
+在后一种情况下，最不要紧的 12 位数字要被扔掉。
+
+%It follows that every \<math symbol>, as defined by the syntax above,
+%specifies a 15-bit number, i.e., a number between 0 and~32767.
+%Such a number can be represented in the form $4096c+256f+a$, where
+%$0\le c<8$, $0\le f<16$, and $0\le a<256$. If $c=7$, \TeX\ changes $c$~to~0;
+%and in this case if the current
+%value of\/ ^|\fam| is between 0 and~15, \TeX\ also replaces $f$~by~|\fam|.
+%This procedure yields, in all cases, a class number~$c$ between 0~and~6,
+%a family number~$f$ between 0~and~15, and a position number~$a$ between
+%0 and~255. \ (\TeX\ initializes the value of\/ |\fam| by implicitly
+%putting the assignment `|\fam=-1|' at the very beginning of\/ |\everymath|
+%and |\everydisplay|. Thus, the substitution of\/ |\fam| for~$f$ will occur
+%only if the user has explicitly changed~|\fam| within the formula.)
+接着，按照上面语法的定义，每个 \<math symbol> 给出了一个 15 位数字，
+即 0 到 32767 之间的一个数字。这样的数字可以用 $4096c+256f+a$ 的格式表示，
+其中 $0\le c<8$，$0\le f<16$ 且 $0\le a<256$。如果 $c=7$，
+那么 \TeX\ 把 $c$ 变成 0；并且此时如果 |\fam| 的当前值在 0 到 15 之间，
+那么 \TeX\ 还要用 |\fam| 来代替 $f$。
+\1在所有情况下，这个过程得到的类编号 $c$ 都在 0 到 6，
+族编号 $f$ 在 0 到 15，位置编号 $a$ 在 0 到 255。%
+（在 |\everymath| 和 |\everydisplay| 的开始处，\TeX\ 都暗中给出赋值 `|\fam=-1|'
+以给出 |\fam| 的初始值。这样，只有用户在公式中明确改变 |\fam| 时，
+才出现 $f$ 的 |\fam| 改变。）
+
+%A \<math field> is used to specify the nucleus, superscript, or subscript
+%of an atom. When a \<math field> is a \<math symbol>, the $f$ and~$a$
+%numbers of that symbol go into the atomic field. Otherwise the \<math field>
+%begins with a~`|{|', which causes \TeX\ to enter a new level
+%of grouping and to begin a new math list; the ensuing \<math mode material>
+%is terminated by a~`|}|', at which point the group ends and the resulting
+%math list goes into the atomic field. If the math list turns out to be
+%simply a single Ord atom without subscripts or superscripts,
+%or an Acc whose nucleus is an Ord, the
+%enclosing braces are effectively removed.
+\<math field> 是用来给出原子的核，上标和下标的。%
+当 \<math field> 是一个 \<math symbol> 时，此符号的 $f$ 和 $a$ 的编号就放%
+在原子区域中。%
+否则，此 \<math field> 以`|{|'开始，这使得 \TeX\ 进入一个新层次的编组并开始一个新%
+的数学列；
+接下来的 \<math mode material> 以`|}|'来结束，
+此时组也结束，并且所得到的数学列放在这个原子区域中。%
+如果发现此数学列是一个简单的单个 Ord 原子而没有上下标，后者是核为 Ord 的一个 Acc,
+那么要把封装所用的大括号去掉。
+
+%A \<delim> is used to define both a ``small character'' $a$ in family~$f$
+%and a ``large character''~$b$ in family~$g$, where $0\le a,b\le255$
+%and $0\le f,g\le15$; these character codes are used to construct variable-size
+%^{delimiters}, as explained in Appendix~G\null. If the \<delim> is given
+%explicitly in terms of a 27-bit number, the desired codes are obtained
+%by interpreting that number as
+%$c\cdot2^{24}+f\cdot2^{20}+a\cdot2^{12}+g\cdot2^8+b$, ignoring the value
+%of~$c$. Otherwise the delimiter is specified as a \<letter> or
+%\<otherchar> token, and the 24-bit ^|\delcode| value of that character is
+%interpreted as $f\cdot2^{20}+a\cdot2^{12}+g\cdot2^8+b$.
+\<delim> 是用来定义 $f$ 族中的``小字符''~$a$ 和 $g$ 族中的``大字符''~$b$ 的，
+其中 $0\le a, b\le255$ 并且 $0\le f,g\le15$;
+这些字符代码是用来构造可变大小的分界符的，见附录 G 的讨论。%
+如果此 \<delim> 由 27 位数字明确给出，那么要得到的代码，就要把这个数字拆解为%
+~$c\cdot2^{24}+f\cdot2^{20}+a\cdot2^{12}+g\cdot2^8+b$, 并且忽略掉 $c$ 的值。%
+否则，此分界符由一个 \<letter> 或 \<otherchar> 记号给出，
+并且此字符的 24 位 |\delcode| 值解释为 $f\cdot2^{20}+a\cdot2^{12}+g\cdot2^8+b$。
+
+%\smallskip
+%Now let's study the individual commands as \TeX\ obeys them in math mode,
+%considering first the ones that have analogs in vertical and/or horizontal
+%mode:
+\smallskip
+现在我们来讨论 \TeX\ 在数学模式下使用的各个命令，
+首先讨论的是与垂直和/或水平模式可类比的命令。
+
+%\\^|\hskip|\<glue>, ^|\hfil|, ^|\hfill|, ^|\hss|, ^|\hfilneg|,
+%^|\mskip|\<muglue>.\enskip
+%A glue item is appended to the current math list.
+\\^|\hskip|\<glue>, ^|\hfil|, ^|\hfill|, ^|\hss|, ^|\hfilneg|,
+^|\mskip|\<muglue>.\enskip
+把一个粘连项目追加到当前数学列。
+
+%\\\<leaders>\<box or rule>\<horizontal skip>.\enskip
+%Here ^\<horizontal skip> refers to one of the first five glue-appending
+%commands just mentioned; the formal syntax for \<leaders> and
+%for \<box or rule> is given in Chapter~24. A glue item that produces
+%^{leaders} is appended to the current list.
+\\\<leaders>\<box or rule>\<mathematical skip>.\enskip\kern-.18pt
+这里的 \<mathematical skip> 指的是刚刚提到的六个追加粘连的命令；
+\<leaders> 和 \<box or rule> 的正式语法见第二十四章。%
+由指引线生成的粘连项目要追加到当前列。
+
+%\\^|\nonscript|. A special glue item of width zero is appended; it will
+%have the effect of cancelling the following item on the list, if that item
+%is glue and if the |\nonscript| is eventually typeset in ``script style''
+%or in ``scriptscript style.''
+\\^|\nonscript|. 一个宽度为零的特殊粘连项目被追加到当前列；
+如果它后面的项目是粘连或者如果 |\nonscript| 最终被排在``标号样式''或``小标号样式''中，%
+那么它就抵消了此列中的这个项目。
+
+%\\^|\noboundary|. This command is redundant and therefore has no
+%effect; boundary ligatures are automatically disabled in math modes.
+\\^|\noboundary|. 这个命令是多余的，因此没什么用；
+在数学模式中，边界带子是自动无效的。
+
+%\\^\<space token>.\enskip
+%Spaces have no effect in math modes.
+\\^\<space token>.\enskip
+在数学模式中空格没有输出结果。
+
+%\\|\|\].\enskip ^^{control space}
+%A control-space command appends glue to the current list, using the same amount
+%that a \<space token> inserts in horizontal mode when the space factor is 1000.
+\\|\|\].\enskip ^^{control space}
+命令控制空格把粘连追加到当前列，其大小与间距因子为 1000 时，在水平模式下%
+~\<space token> 所插入的量是一样的。
+
+%\\^\<box>.\enskip
+%The box is constructed, and if the result is void nothing happens.
+%Otherwise a new Ord atom is appended to the current math list, and the
+%box becomes its nucleus.
+\\^\<box>.\enskip
+构造这个盒子，当所得到的盒子为空时什么也不生成。%
+否则，把新的 Ord 原子追加到当前数学列，并且此盒子变成它的核。
+
+%\\^|\raise|\<dimen>\<box>, ^|\lower|\<dimen>\<box>.\enskip
+%This acts just like an unadorned \<box> command, except that the new box
+%being put into the nucleus is also shifted up or down by the specified amount.
+\\^|\raise|\<dimen>\<box>, ^|\lower|\<dimen>\<box>.\enskip
+它与一个普通的 \<box> 命令是一样的，但是放这个核的新盒子要向上或向下%
+移动给定的量。
+
+%\\^|\vcenter|\stretch\<box specification>\stretch
+%|{|\<vertical mode material>|}|.\enskip
+%A vbox is formed as if `|\vcenter|' had been `|\vbox|'. Then a new
+%^{Vcent} atom is appended to the current math list, and the box becomes
+%its nucleus.
+\\^|\vcenter|\stretch\<box specification>\stretch
+|{|\<vertical mode material>|}|.\enskip
+就像 `|\vcenter|' 是 `|\vbox|' 一样生成一个 vbox。
+接着，把一个新的 ^{Vcent} 原子追加到当前数学列，且这个盒子变成它的核。
+
+%\\\<vertical rule>.\enskip
+%A ^{rule} is appended to the current list (not as an atom).
+\\\<vertical rule>.\enskip
+\1把一个标尺追加到当前列(不看作一个原子)。
+
+%\\^|\halign|\<box specification>|{|\<alignment material>|}|.\enskip
+%This command is allowed only in display math mode, and only when the current
+%math list is empty. The alignment is carried out exactly as if it were done in
+%the enclosing vertical mode (see Chapter~24), except that the lines are shifted
+%right by the ^|\displayindent|. The closing `|}|' may be followed by
+%optional \<assignment> commands other than ^|\setbox|,
+%after which `|$$|'~must conclude
+%the display. \TeX\ will insert the ^|\abovedisplayskip| and
+%^|\belowdisplayskip| glue before and after the result of the alignment.
+\\^|\halign|\<box specification>|{|\<alignment material>|}|.\enskip
+这个命令只允许出现在陈列数学模式中，并且只有在当前数学列为空时才可以。%
+这个对齐看作与封装垂直模式中那样来处理(见第二十四章), 只是这些行要向右%
+缩进 |\displayindent|。%
+闭符号`|}|'后面可能要跟可选的 \<assignment> 命令，其后必须以`|$$|'结束此%
+陈列公式。%
+在所得到的对齐前后， \TeX\ 要插入粘连 |\abovedisplayskip| 和 |\belowdisplayskip|。
+
+%\\^|\indent|.\enskip
+%An empty box of width ^|\parindent| is appended to the current list, as the
+%nucleus of a new Ord atom.
+\\^|\indent|.\enskip
+宽度为 |\parindent| 的空盒子作为一个新 Ord 原子的核而被追加到当前列。
+
+%\\^|\noindent|.\enskip
+%This command has no effect in math modes.
+\\^|\noindent|.\enskip
+这个命令在数学模式下没用。
+
+%\\|{|\<math mode material>|}|.\enskip
+%A character token of category 1, or a control sequence like~|\bgroup|
+%that has been |\let| equal to such a character token, causes \TeX\ to
+%start a new level of ^{grouping} and also to begin work on a new
+%math list. When such a group ends---with `|}|'---\TeX\
+%uses the resulting math list as the nucleus of a new Ord atom that
+%is appended to the current list. If the resulting math list is a
+%single Acc atom, however (i.e., an accented quantity),
+%that atom itself is appended.
+\\|{|\<math mode material>|}|.\enskip
+一个类代码为 1 的字符记号，或者被 |\let| 为这样的字符记号的控制系列，
+比如象 |\bgroup|, 它使得 \TeX\ 开始一个新层次的编组，并且还要开始建立%
+一个新的数学列。%
+当这样的组以`|}|'结束时， \TeX\ 把所得到的数学列当作一个新的 Ord 原子的核，
+并且此原子被追加到当前列。%
+如果所得到的数学列是一单个 Acc 原子，无论如何(即，不管重音的长度如何),
+要把此原子自己追加到当前列。
+
+%\\\<math symbol>.\enskip
+%(This is the most common command in math mode; see the syntax near the
+%beginning of this chapter.) \ A math symbol determines three values,
+%$c$,~$f$, and~$a$, as explained earlier. \TeX\ appends an atom to the current
+%list, where the atom is of type Ord, Op, Bin, Rel, Open, Close, or Punct,
+%according as the value of~$c$ is 0,~1, 2, 3, 4, 5, or~6. The nucleus of
+%this atom is the math symbol defined by $f$ and~$a$.
+\\\<math symbol>.\enskip
+(这是数学模式中最普遍的命令；见本章邻近开头的语法。)
+如前讨论，每个数学符号给出三个值，$c$, $f$ 和 $a$。%
+ \TeX\ 把一个原子追加到当前列，
+其中原子的类型为 Ord, Op, Bin, Rel, Open, Close 或 Punct,
+相应的 $c$ 的值为 0, 1, 2, 3, 4, 5 或 6。%
+此原子的核是由 $f$ 和 $a$ 定义的数学符号。
+
+%\\^\<math atom>\<math field>.\enskip
+%A \<math atom> command is any of the following:
+%\begindisplay
+%|\mathord|\alt|\mathop|\alt|\mathbin|\alt|\mathrel|\alt|\mathopen|\cr
+%\qquad\alt|\mathclose|\alt|\mathpunct|\alt|\mathinner|%
+%  \alt|\underline|\alt|\overline|\cr
+%\enddisplay
+%\TeX\ processes the \<math field>, then appends a new atom of the
+%specified type to the current list; the nucleus of this atom contains
+%the specified field.
+\\^\<math atom>\<math field>.\enskip
+命令 \<math atom> 是下列任一个：
+\begindisplay
+|\mathord|\alt|\mathop|\alt|\mathbin|\alt|\mathrel|\alt|\mathopen|\cr
+\qquad\alt|\mathclose|\alt|\mathpunct|\alt|\mathinner|
+  \alt|\underline|\alt|\overline|\cr
+\enddisplay
+ \TeX\ 先处理此 \<math field>, 接着把所确定类型的一个新原子追加到当前列；
+此原子的核包含了所确定的域。
+
+%\\^|\mathaccent|\<15-bit number>\<math field>.\enskip
+%\TeX\ converts the \<15-bit number> into $c$, $f$, and~$a$ as it does
+%with any |\mathchar|. Then it processes the \<math field> and appends a
+%new Acc atom to the current list. The nucleus of this atom contains
+%the specified field; the accent character in this atom contains $(a,f)$.
+\\^|\mathaccent|\<15-bit number>\<math field>.\enskip
+当 \TeX\ 处理任何 |\mathchar| 时，都把 \<15-bit number> 转换为 $c$, $f$ 和 $a$。%
+接着再处理 \<math field> 并且把一个新的 Acc 原子追加到当前列。%
+此原子的核包含了所确定的域；
+在此原子中加重音的字符有自己的 $(a,f)$。
+
+%\\^|\radical|\<27-bit number>\<math field>.\enskip
+%\TeX\ converts the \<27-bit number> into $a$, $f$, $b$, and~$g$ as it does
+%with any |\delimiter|. Then it processes the \<math field> and appends a
+%new Rad atom to the current list. The nucleus of this atom contains
+%the specified field; the delimiter field in this atom contains
+%$(a,f)$ and $(b,g)$.
+\\^|\radical|\<27-bit number>\<math field>.\enskip
+当 \TeX\ 处理任何 |\delimiter| 时，都把这个 \<27-bit number> 转换为 $a$, $f$,
+$b$ 和 $g$。%
+接着它处理这个 \<math field> 并且把一个新的 Rad 原子追加到当前列。%
+此原子的核包含了所确定的域；
+此原子中的分界符这个域有自己的 $(a, f)$ 值和 $(b, g)$ 值。
+
+%\\^\<superscript>\<math field>.\enskip
+%A \<superscript> command is an explicit or implicit character token of
+%category~7.  If the current list does not end with an atom, a new Ord atom
+%with all fields empty is appended; thus the current list will end with an
+%atom, in~all cases.  The superscript field of this atom should be empty; it
+%is made nonempty by changing it to the result of the specified \<math field>.
+\\^\<superscript>\<math field>.\enskip
+\<superscript> 命令是类代码为 7 的显式或隐式字符记号。%
+如果当前列不是用一个原子结束，那么将把所有域都为空的一个新的 Ord 原子追加上；
+因此在所有情况下，当前列都是以一个原子结束。%
+此原子的上标域应该是空的；
+当把它变成所给定 \<math field> 的结果后，它就是非空的。
+
+%\\^\<subscript>\<math field>.\enskip
+%A \<subscript> command is an explicit or implicit character token of
+%category~8.  It acts just like a \<superscript> command, except, of course,
+%that it affects the subscript field instead of the superscript field.
+\\^\<subscript>\<math field>.\enskip
+\<subscript> 命令是类代码为 8 的显式或隐式字符记号。%
+它与 \<superscript> 命令基本上是一样的，当然其中要用下标域来代替上标域。
+
+%\\^|\displaylimits|, ^|\limits|, ^|\nolimits|.\enskip These commands are
+%allowed only if the current list ends with an Op atom. They modify a
+%special field in that Op atom, specifying what conventions should be used
+%with respect to limits.  The normal value of that field is |\displaylimits|.
+\\^|\displaylimits|, ^|\limits|, ^|\nolimits|.\enskip
+\1只有当当前列以一个 Op 原子结尾时才能用这些命令。%
+它们修改此 Op 原子中的一个特殊域，以确定上下限采取什么样的约定。%
+此域的正常值是 |\displaylimits|。
+
+%\\^|\/|.\enskip
+%A kern of width zero is appended to the current list. \ (This will have the
+%effect of adding the italic correction to the previous character, if the
+%italic correction wouldn't normally have been added.)
+\\^|\/|.\enskip
+把一个宽度为零的紧排追加到当前列。%
+（如果前一个字符的倾斜校正没有被正确添加，它就给补加上。）
+
+%\\^|\discretionary|\<general text>\<general text>\<general text>.
+%This command is treated just as in horizontal mode (see Chapter~25), but the
+%third \<general text> must produce an empty list.
+\\^|\discretionary|\<general text>\<general text>\<general text>.
+这个命令与水平模式中的处理方式一样(见第二十五章),
+但是第三个 \<general text> 必须得到一个空列。
+
+%\\^|\-|.\enskip
+%This command is usually equivalent to `|\discretionary{-}{}{}|';
+%the `|-|' is therefore interpreted as a ^{hyphen}, not as a minus sign.
+%\ (See Appendix~H.)
+\\^|\-|.\enskip
+这个命令一般等价于`|\discretionary{-}{}{}|';
+因此这个`|-|'要当作连字符而不是减号。 (见附录 H。)
+
+%\def\s{\hskip0pt plus1pt}
+%\\^|\mathchoice|\s
+%$\langle$filler$\rangle$\s|{|\s$\langle$math mode material$\rangle$\s|}|\s
+%$\langle$filler$\rangle$\s|{|\s$\langle$math mode material$\rangle$\s|}|\break
+%$\langle$filler$\rangle$|{|$\langle$math mode material$\rangle$|}|
+%$\langle$filler$\rangle$|{|$\langle$math mode material$\rangle$|}|.
+%Four math lists, which are defined as in the
+%second alternative of a \<math field>, are
+%recorded in a ``choice item'' that is appended to the current list.
+\\^|\mathchoice|$\langle$general text$\rangle$$\langle$general
+text$\rangle$$\langle$general text$\rangle$$\langle$general text$\rangle$.
+这四个通用文本的每个都被看作子公式(即，象 \<math field> 的定义中的第二个选项)。%
+用这种方法定义的四个数学列被记录在一个``选择项目''中，把此项目追加到当前列。
+
+%\\^|\displaystyle|, ^|\textstyle|, ^|\scriptstyle|,
+%^|\scriptscriptstyle|.\enskip A style-change item that corresponds to the
+%specified style is appended to the current list.
+\\^|\displaystyle|, ^|\textstyle|, ^|\scriptstyle|,
+^|\scriptscriptstyle|.\enskip
+与所确定字体相对应的项目被追加到当前列。
+
+%\\^|\left|\<delim>\<math mode material>^|\right|\<delim>.\enskip
+%\TeX\ begins a new group, and processes the \<math mode material>
+%by starting out with a new math list that begins with a left boundary
+%item containing the first delimiter. This group must be terminated by
+%`|\right|', at which time the internal math list is completed with a
+%right boundary item containing the second delimiter. Then \TeX\
+%appends an Inner atom to the current list; the nucleus of this atom
+%contains the internal math list.
+\\^|\left|\<delim>\<math mode material>^|\right|\<delim>.\enskip
+ \TeX\ 开始一个新的组，并且把 \<math mode material> 放在以第一个分界符%
+为左边界的一个新数学列中。%
+这个组以 `|\right|' 结束，此时内部数学列以第二个分界符为右边界而全部完成。%
+接着 \TeX\ 把一个 Inner 原子追加到当前列；
+此原子的核包含了这个内部数学列。
+
+%\\\<generalized fraction command>.\enskip
+%This command takes one of six forms:
+%\begindisplay
+%^|\over|\alt^|\atop|\alt^|\above|\<dimen>\cr
+%\qquad\alt^|\overwithdelims|\<delim>\<delim>\cr
+%\qquad\alt^|\atopwithdelims|\<delim>\<delim>\cr
+%\qquad\alt^|\abovewithdelims|\<delim>\<delim>\<dimen>\cr
+%\enddisplay
+%(See Chapter 17.) \ When \TeX\ sees a \<generalized fraction command> it
+%takes the entire current list and puts it into the numerator field of a
+%generalized fraction item. The denominator field of this new item is
+%temporarily empty; the left and right delimiter fields are set equal
+%to the specified delimiter codes. \TeX\ saves this generalized fraction
+%item in a special place associated with the current level of math mode
+%processing. \ (There should be no other generalized fraction item in
+%that special place, because constructions like `|a\over b\over c|' are
+%illegal.) \ Then \TeX\ makes the current list empty and continues to
+%process commands in math mode. Later on, when the current level of math
+%mode is completed (either by coming to a~`|$|' or a~`|}|' or a~|\right|,
+%depending on the nature of the current group), the current list will be
+%moved into the denominator field of the generalized fraction item that
+%was saved; then that item, all by itself, will take the place of the
+%entire list. However, in the special case that the current list began
+%with |\left| and will end with |\right|, the boundary items will be
+%extracted from the numerator and denominator of the generalized fraction,
+%and the final list will consist of three items: left boundary,
+%generalized fraction, right boundary. \ (If you want to watch the process
+%by which math lists are built, you might find it helpful to type `^|\showlists|'
+%while \TeX\ is processing the denominator of a generalized fraction.)
+\\\<generalized fraction command>.\enskip
+这个命令来自下面六个形式中的一个：
+\begindisplay
+^|\over|\alt^|\atop|\alt^|\above|\<dimen>\cr
+\qquad\alt^|\overwithdelims|\<delim>\<delim>\cr
+\qquad\alt^|\atopwithdelims|\<delim>\<delim>\cr
+\qquad\alt^|\abovewithdelims|\<delim>\<delim>\<dimen>\cr
+\enddisplay
+(见第十七章。) 当 \TeX\ 遇见 \<generalized fraction command> 命令时，
+它把整个当前列取出并且放在一个广义分数项目的分子域中。%
+这个新项目的分母域暂时为空；
+左右分界符域设置为所给定的分界符的代码。%
+ \TeX\ 把这个广义分数项目保存在与当前所处理的数学模式的层次相应的一个特殊地方。%
+(在此特殊地方，不应该有其它广义分数项目，因为象 `|a\over b\over c|' 这样的%
+命令是非法的。)
+接着 \TeX\ 把当前列变成空的，并且继续在数学模式下处理指令。%
+稍后，当数学模式的当前层次完成后(出现一个`|$|', `|}|'或者 |\right|,
+这与当前组的性质有关), 当前列将被移到所保存的广义分数项目的分母域中；
+接着这个项目把自己整个变成一个完整的列。%
+但是，在当前列以 |\left| 开始且以 |\right| 结束的特殊情形下，
+边界项目将会从广义分数的分子和分母中提取处理，
+并且最后的列由三个项目组成：左边界，广义分数，右边界。%
+(如果你要查看数学列构建的过程，\1可以在 \TeX\ 处理广义分数的分母时%
+声明`^|\showlists|'。)
+
+%\\^\<eqno>\<math mode material>|$|.\enskip
+%Here \<eqno> stands for either ^|\eqno| or ^|\leqno|; these commands
+%are allowed only in display math mode. Upon reading \<eqno>, \TeX\
+%enters a new level of grouping, inserts the ^|\everymath| tokens,
+%and enters non-display math mode to put the \<math mode material>
+%into a math list. When that math list is completed, \TeX\ converts it
+%to a horizontal list and puts the result into a box that will be used
+%as the equation number of the current display. The closing |$|~token
+%will be put back into the input, where it will terminate the display.
+\\^\<eqno>\<math mode material>|$|.\enskip
+这里的 \<eqno> 表示 |\eqno| 或者 |\leqno|;
+这些命令只允许出现在陈列数学模式中。%
+碰到 \<eqno> 后， \TeX\ 进入一新层次的编组，插入记号 |\everymath|,
+并且进入非陈列数学模式以把 \<math mode material> 放到数学列中。%
+当此数学列结束时， \TeX\ 把它转换为水平列，并且把结果放在一个盒子中，
+此盒子就是当前陈列公式的方程编号。%
+闭记号 |$| 将被放回到输入中中止陈列公式的地方。
+
+%\\|$|.\enskip
+%If \TeX\ is in display math mode, it reads one more token, which must
+%also be~|$|. In either case, the math-shift command terminates the current
+%level of math mode processing and ends the current group, which should
+%have begun with either~|$| or~\<eqno>.  Once the math list is finished, it
+%is converted into a horizontal list as explained in Appendix~G\null. \TeX\
+%scans \<one optional space> after completing a displayed formula; this is
+%usually the implicit space at the end of a line in the input file.
+\\|$|.\enskip
+如果 \TeX\ 处于陈列数学模式中，它还要再读入一个记号，并且必须还是 |$|。
+在任一情况下，这个数学切换命令都终止正在处理的数学模式的当前层次，
+并且结束当前编组（此编组应该是用 |$| 或者 \<eqno> 开始的）。
+数学列一旦结束了，就被转换到水平列中，就像附录 G 中讨论的那样。
+在结束陈列公式后，\TeX\ 扫描 \<one optional space>；
+这个空格通常是输入文件中的行尾符。
+
+%\\^|\unhbox|\<8-bit number>, ^|\unhcopy|\<8-bit number>.\enskip
+%The specified box register must be void. Nothing happens.
+\\^|\unhbox|\<8-bit number>, ^|\unhcopy|\<8-bit number>.\enskip
+所给定的盒子寄存器必须是空的。
+【译注：否则报错``Incompatible list can't be unboxed.''】不发生任何事情。
+
+%\\None of the above: If any other primitive command of \TeX\ occurs in
+%math mode, an error message will be given, and \TeX\ will try to recover
+%in a reasonable way. For example, if a |\par| command appears, or if any
+%other inherently non-mathematical command is given, \TeX\ will try to
+%insert a `|$|' just before the offending token; this will lead out of math
+%mode. On the other hand if a totally misplaced token like |\endcsname| or
+%|\omit| or |#| appears in math mode, \TeX\ will simply ignore it, after
+%reporting the error. You might enjoy trying to type some really stupid
+%input, just to see what happens. \ (Say `|\tracingall|' first, as
+%explained in Chapter~27, in order to get maximum information.)
+\\除上面的以外：如果任何其它的 \TeX\ 原始命令出现在数学模式中，
+就给出错误信息，并且 \TeX\ 试着用一种合理的方法来修复它。%
+例如，如果出现了命令 |\par|, 或者是其它非数学的命令，
+那么 \TeX\ 就试着在这样的记号紧前面插入一个`|$|';
+这就退出了数学模式。%
+在另一方面，如果象 |\endcsname|, |\omit| 或 |#| 这些完全不能出现在数学模式%
+中的记号， \TeX\ 就在给出错误信息后直接忽略掉它。%
+可能你喜欢输入一些的确错误的命令来看看会出现上面情况。
+(为了得到最全的信息，象第二十七章讨论的那样，首先要声明`|\tracingall|'。)
+
+%\ddangerexercise ^{Powers of ten}: The whole \TeX\ language has now been
+%summarized completely. To~demonstrate how much you know, name all of the ways
+%you can think of in which the numbers 10, ^^{Derek, Bo} 100, 1000, 10000,
+%and 100000 have special significance to \TeX.
+%\answer Radix 10 notation is used for numeric constants and for the output
+%of numeric data. The first 10 |\count| registers are displayed at each
+%|\shipout|, and their values are recorded on the |dvi| file at such times.
+%% Also, TeX was first implemented on a DEC-10.
+%% The \catcode for <space> is 10.
+%% My birthday is January 10.
+%% Can this all be just a coincidence?
+%A box whose glue has stretched or shrunk to its stated stretchability
+%or shrinkability has badness 100; this badness value separates ``loose''
+%boxes from ``very loose'' or ``underfull'' ones. \TeX\ will scroll up
+%to 100 errors in a single paragraph before giving up (see Chapter~27).
+%The normal values of\/ |\spacefactor| and |\mag| are 1000. A~|\prevdepth|
+%value of $-1000\pt$ suppresses interline glue. The badness rating of a
+%box is at most 10000, except that the |\badness| of
+%an overfull box is 1000000.  |INITEX| initializes |\tolerance| to
+%10000, thereby making all line breaks feasible. Penalties of 10000 or more
+%prohibit breaks; penalties of $-10000$ or less make breaks mandatory. The
+%cost of a page break is 100000, if the badness is 10000 and if the
+%associated penalties are less than 10000 in magnitude (see Chapter~15).
+\ddangerexercise ^{10 的幂}：整个 \TeX\ 语言已经总结完毕。
+为了看看你掌握了多少，请你指出数字 10、100、1000、10000 和 100000 对于
+\TeX\ 在哪些地方有特殊意思。
+\answer 10 进制表示法用于数值常数和数值数据的输出。每次|\shipout|
+时将显示最前面 10 个 |\count| 寄存器的值，并将它们记录到 |dvi| 文件中。
+% Also, TeX was first implemented on a DEC-10.
+% The \catcode for <space> is 10.
+% My birthday is January 10.
+% Can this all be just a coincidence?
+如果一个盒子的粘连伸缩到它的可伸长量或可收缩量，该盒子的劣度将为 100；
+此劣度值将``松散''盒子与``空荡''或``未满''盒子隔开。
+在单个段落中，\TeX\ 在放弃之前至多忽略 100 个错误（将第 27 章）。
+|\spacefactor| 和 |\mag| 的常规值为 1000。
+等于 $-1000\pt$ 的 |\prevdepth| 值将取消行间粘连。
+盒子劣度的计算值最大为 10000，只有过满盒子的 |\badness| 才为 1000000。
+|INITEX| 将 |\tolerance| 初始化为 10000，因而各种断行都是可能的。
+大于或等于 10000 的惩罚值阻止断行，而小于或等于 $-10000$ 的惩罚只强制断行。
+如果劣度为 10000，且所附加惩罚的绝对值小于 10000，
+则分页的代价为 100000（见第 15 章）。
+
+%\ddangerexercise ^{Powers of two}: Name all of the ways
+%you can think of in which the numbers 8, 16, 32, 64, 128, 256, \dots\
+%have special significance to \TeX.
+%\answer \TeX\ allows constants to be expressed in radix 8 (octal)
+%or radix~16 (hexadecimal) notation, and it uses hexadecimal notation to
+%display |\char| and |\mathchar| codes. There are 16 families for math
+%fonts, 16 input streams for |\read|, 16 output streams for |\write|.
+%A |\catcode| value must be less than~16. The notation |^^?|, |^^@|,
+%|^^A| specifies characters whose codes differ by~64
+%from the codes of |?|, |@|, |A|; this convention applies only to
+%characters with ASCII codes less than~128. There are 256 possible characters,
+%hence 256 entries in each of the |\catcode|, |\mathcode|,
+%|\lccode|, |\uccode|, |\sfcode|, and |\delcode| tables. All
+%|\lccode|, |\uccode|, and |\char| values
+%must be less than~256. A font has at most 256 characters. There are
+%256~|\box| registers, 256~|\count| registers, 256~|\dimen| registers,
+%256~|\skip| registers, 256~|\muskip| registers, 256~|\toks| registers,
+%256~hyphenation tables.
+%The ``at size'' of a font must be less than~$2048\pt$, i.e.,~$2^{11}\pt$.
+%Math delimiters are encoded by multiplying the math~code of the ``small
+%character'' by~$2^{12}$. The magnitude of
+%a~\<dimen> value must be less than~$16384\pt$, i.e.,~$2^{14}\pt$;
+%similarly, the \<factor> in a~\<fil dimen> must be less than~$2^{14}$.
+%A~|\mathchar| or |\spacefactor| or |\sfcode| value must be less than~$2^{15}$;
+%a~|\mathcode| or |\mag| value must be less than or equal to~$2^{15}$,
+%and $2^{15}$ denotes an ``active'' math character. There
+%are $2^{16}\rm\,sp$ per~pt. A~|\delcode| value
+%must be less than~$2^{24}$; a~|\delimiter|, less than $2^{27}$.
+%The |\end| command sometimes contributes
+%a penalty of $-2^{30}$ to the current page. A~\<dimen> must be less than
+%$2^{30}\rm\,sp$ in absolute value; a~\<number> must be
+%less than $2^{31}$ in absolute value.
+\ddangerexercise ^{2 的幂}：请你指出数字 8、16、32、64、128、256、\dots
+对于 \TeX\ 在哪些地方有特殊意思。
+\answer \TeX\ 允许用 8 进制或 16 进制表示常数，
+而且用 16 进制显示 |\char| 和 |\mathchar| 编码。一共有 16 族数学字体，
+16 个用于 |\read| 的输入流，16 个用于 |\write| 的输出流。
+|\catcode| 值必须小于 16。
+|^^?|、|^^@|、|^^A| 分别表示与 |?|、|@|、|A| 的编码相差 64 的字符；
+这种表示法仅用于 ASCII 码小于 128 的字符。
+一共有 256 个可能的字符，因此 |\catcode|、|\mathcode|、
+|\lccode|、|\uccode|、|\sfcode| 和 |\delcode| 表格各有 256 个条目。
+|\lccode|、|\uccode| 和 |\char| 的值必须小于 256。
+一个字体最多有 256 个字符。
+一共有 256 个 |\box| 寄存器，256 个 |\count| 寄存器，
+256 个 |\dimen| 寄存器，256 个 |\skip| 寄存器，256 个 |\muskip| 寄存器，
+256 个 |\toks| 寄存器，256 个连字表。
+字体的 ``at'' 尺寸必须小于 $2048\pt$，即 $2^{11}\pt$。
+数学定界符的编码需要将``小型字符'' 的数学码乘以$2^{12}$。
+\<dimen> 的绝对值必须小于 $16384\pt$，即 $2^{14}\pt$；
+类似地，\<fil dimen> 中的 \<factor> 必须小于 $2^{14}$。
+|\mathchar| 或 |\spacefactor| 或 |\sfcode| 的值必须小于 $2^{15}$；
+|\mathcode| 或 |\mag| 的值必须小于或等于 $2^{15}$，
+而 $2^{15}$ 表示``活动的''数学字符。每 pt 等于 $2^{16}\rm\,sp$。
+|\delcode| 值必须小于 $2^{24}$；而 |\delimiter| 值必须小于 $2^{27}$。
+|\end| 命令有时候添加 $-2^{30}$ 的惩罚值给当前页面。
+\<dimen> 的绝对值必须小于 $2^{30}\rm\,sp$；
+\<number> 的绝对值必须小于 $2^{31}$。
+
+\endchapter
+
+Mathematics is known in the trade as {\rm difficult,} or {\rm penalty, copy}
+because it is slower, more difficult, and more expensive to set in type
+than any other kind of copy normally occurring in books and journals.
+\author UNIVERSITY OF ^{CHICAGO} PRESS, {\sl A Manual of Style\/} %
+  (1969) % 12th edition, page 295
+
+\bigskip
+
+The tale of Math is a complex one,
+and it resists both a simple plot summary
+and a concise statement of its meaning.
+\author PATRICK K. ^{FORD}, {\sl The Mabinogi\/} (1977) % p89
+   % from his introduction to "Math Son of Mathonwy"
+
+\vfill\eject\byebye

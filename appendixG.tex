@@ -1,0 +1,523 @@
+% -*- coding: utf-8 -*-
+
+\input macros
+
+%\beginchapter Appendix G. Generating Boxes\\from Formulas
+\beginchapter Appendix G. 公式的盒子
+
+\ninepoint
+People who define new math fonts and/or macros sometimes need to know
+exactly how \TeX\ manipulates the constituents of formulas. The purpose
+of this appendix is to explain the precise positioning rules by which
+\TeX\ converts a math list into a horizontal list. \ (It is a good idea
+to review the introduction to ^{math lists} in Chapter~17 before
+reading further; ``double dangerous bends'' are implied throughout
+this appendix.)
+
+\TeX\ relies on lots of parameters when it typesets formulas, and you have
+the option of changing any or all of them. But of course you will want to
+know what each parameter means, before you change it. Therefore each rule
+below is numbered, and a table appears at the end to show which rules
+depend on which parameters.
+
+The most important parameters appear in the ^{symbol fonts} (family~2) and
+the ^{extension fonts} (family~3). \TeX\ will not typeset a formula unless
+^|\textfont||2|, ^|\scriptfont||2|, and ^|\scriptscriptfont||2| each contain
+at least 22~^|\fontdimen| parameters. For brevity we shall call these parameters
+$\sigma_1$ to $\sigma_{22}$, where the parameter is taken from
+|\textfont2| if the current style is display or text ($D$ or $D'$ or $T$
+or $T'$), from |\scriptfont2| if the current style is $S$ or $S'$, and from
+|\scriptscriptfont2| otherwise. Similarly, the three fonts in family~3
+must each have at least 13~|\fontdimen| parameters, and we will denote
+them by $\xi_1$ to $\xi_{13}$. The notation $\xi_9$, for example, stands for
+the ninth parameter of\/ |\scriptfont3|, if \TeX\ is typesetting something
+in |\scriptstyle|.
+
+A math list is a sequence of items of the various kinds listed in Chapter~17,
+and \TeX\ typesets a formula by converting a math list to a horizontal
+list. When such typesetting begins, \TeX\ has two other pieces of
+information in addition to the math list itself. \ (a)~The starting style
+tells what style should be used for the math list, unless another style
+is specified by a style item. For example, the starting style for a
+displayed formula is $D$, but for an equation in the text or an equation
+number it is $T$; and for a subformula it can be any one of the eight
+^{styles} defined in Chapter~17. We shall use $C$ to stand for the current
+style, and we shall say that the math list is being typeset in style~$C$.
+\ (b)~The typesetting is done either with or without penalties. Formulas
+in the text of a paragraph are converted to horizontal lists in which
+additional penalty items are inserted after binary operations and relations,
+in order to aid in line breaking. Such penalties are not inserted in
+other cases, because they would serve no useful function.
+
+The eight styles are considered to be $D>D'>T>T'>S>S'>\it SS>SS'$, in
+decreasing order. Thus, $C\le S$ means that the current style is $S$,
+$S'$, $\it SS$, or~$\it SS'$.  Style $C'$ means the current style with a
+prime added if one isn't there; for example, we have $C'=T'$ if and only
+if $C=T$ or $C=T'$.  Style~$C\mathord\uparrow$ is the superscript style
+for $C$; this means style~$S$ if $C$~is $D$ or~$T$, style~$S'$ if $C$~is
+$D'$ or $T'$, style~$\it SS$ if $C$~is $S$ or $\it SS$, and style~$\it
+SS'$ if $C$~is $S'$ or $\it SS'$.  Finally, style~$C\mathord\downarrow$ is
+the subscript style, which is~$(C\mathord\uparrow)'$.
+
+Chapter 17 stated that the most important components of math lists are
+called atoms, and that each atom has three fields called its nucleus,
+subscript, and superscript.  We frequently need to execute a subroutine
+called ``Set box~$x$ to the so-and-so field in style such-and-such.'' This
+means (a)~if the specified field is empty, $x$~is set equal to a null box;
+(b)~if the field contains a symbol, $x$~is set to an hbox containing that
+symbol in the appropriate size, and the ^{italic correction} for the
+character is included in the width of the box; (c)~if the field contains a
+math list or horizontal list, $x$~is set to an hbox containing the result
+of typesetting that list with the specified starting style. In case~(c),
+the glue is set with no stretching or shrinking, and an additional level
+of hboxing is omitted if it turns out to be redundant.
+
+Another subroutine sets box $x$ to a specified variable ^{delimiter},
+having a specified minimum height plus depth.  This means that a search is
+conducted as follows: The delimiter is defined by two symbols, a ``small
+character''~$a$ in family~$f$ and a ``large character''~$b$ in family~$g$.
+The search looks first at character $a$ in scriptscriptfont~$f$, if $C\le
+\it SS$; then it looks at $a$ in scriptfont~$f$, if $C\le S$; then it looks at
+$a$ in textfont~$f$.  If nothing suitable is found from $a$ and~$f$, the
+larger alternative $b$ and $g$ is examined in the same way.  Either
+$(a,f)$ or $(b,g)$ may be $(0,0)$, which means that the corresponding part
+of the search is to be bypassed.  When looking at a character in a
+font, the search stops immediately if that character has sufficient height
+plus depth, or if the character is ^{extensible}; furthermore, if the
+character does not stop the search, but if it has a ^{successor} in the
+font, the successor is looked at next. \ (See the \MF\ manual or the
+^^{METAFONT}
+system documentation of |tfm| files for further information about
+successors and extensible characters.) \ If the search runs all the way to
+completion without finding a suitable character, the one with greatest
+height plus depth is chosen. If no characters at all were found (either
+because $a=f=b=g=0$ or because the characters did not exist in the fonts),
+$x$~is set to an empty box whose width is ^|\nulldelimiterspace|.  If an
+extensible character was found, $x$~is set to a vbox containing enough
+pieces to build up a character of sufficient size; the height of this vbox
+is the height of the topmost piece, and the width is the width of the
+repeatable piece. ^^{built-up characters} Otherwise
+$x$~is set to an hbox containing the character that was found; the italic
+correction of the character is included in the width of this box.
+
+There's also a subroutine that ``reboxes'' a given box to a given~width.
+If the box doesn't already have the desired width, \TeX\ unpackages it
+(unless it was a vbox), then adds a kern for an italic correction if one was
+implied, and inserts ^|\hss| glue at both left and right; the resulting
+horizontal list is packaged into an hbox.  This process is used, for
+example, to give a common width to the numerator and denominator of a
+fraction; it centers whichever is smaller, unless infinite glue is present
+in addition to the newly added |\hss|.
+
+If $x$ is a box, we shall use the abbreviations $h(x)$, $d(x)$, and $w(x)$ for
+its height, depth, and width, respectively.
+
+Here now are the rules for typesetting a given math list in starting
+style~$C$. The process applies from left to right, translating each
+item in turn. Two passes are made over the list;
+most of the work is done by the first pass, which compiles individual
+translations of the math items. We shall consider this part of the
+task first:
+
+\def\rule#1.{\smallskip\textindent{\bf#1.}\ignorespaces}
+\rule 1. If the current item is a rule or discretionary or penalty or
+``whatsit'' or boundary item, simply leave it unchanged and move to the
+next item.
+
+\rule 2. If the current item is glue or a kern, translate it as follows:
+If it is glue from ^|\nonscript|, check if the immediately following item
+is glue or a kern; and if so, remove that item if $C\le S$. Otherwise, if the
+current item is from ^|\mskip| or ^|\mkern|, convert from |mu| to absolute
+units by multiplying each finite dimension by ${1\over18}\sigma_6$. Then
+move on to the next item.
+
+\rule 3. If the current item is a style change, set $C$ to the specified
+style. Delete the current item from the list and move on to the next.
+
+\rule 4. If the current item is a four-way choice, it contains four math
+lists for the four main styles. Replace it by the math list that corresponds
+to the current style $C$, then move to the first unprocessed item.
+
+\rule 5. If the current item is a Bin atom, and if this was the first atom
+in the list, or if the most recent previous atom was Bin, Op, Rel, Open,
+or Punct, change the current Bin to Ord and continue with Rule~14.
+Otherwise continue with Rule~17.
+
+\rule 6. If the current item is a Rel or Close or Punct atom, and if the most
+recent previous atom was Bin, change that previous Bin to Ord. Continue
+with Rule~17.
+
+\rule 7. If the current item is an Open or Inner atom, go directly to Rule~17.
+
+\rule 8. If the current item is a Vcent atom (from ^|\vcenter|), let its
+nucleus be a vbox of height-plus-depth~$v$. Change the height to
+${1\over2}v+a$ and the depth to ${1\over2}v-a$, where $a$~is the
+axis height, $\sigma_{22}$. Change this atom to type Ord and continue
+with Rule~17.
+
+\rule 9. If the current item is an Over atom (from ^|\overline|), set
+box~$x$ to the nucleus in style $C'$. Then replace the nucleus by a vbox
+containing kern~$\theta$, hrule of~height~$\theta$, kern~$3\theta$,
+and box~$x$, from top to bottom, where $\theta=\xi_8$ is the ^{default
+rule thickness}. \ (This puts a rule over the nucleus, with $3\theta$ clearance,
+and with $\theta$~units of extra white space assumed to be present above
+the rule.) \ Continue with Rule~16.
+
+\rule 10. If the current item is an Under atom (from ^|\underline|), set
+box~$x$ to the nucleus in style $C$. Then replace the nucleus by a vtop
+made from box~$x$, kern~$3\theta$, and hrule of~height~$\theta$,
+where $\theta=\xi_8$ is the default rule thickness; and add $\theta$ to the
+depth of the box. \ (This puts a rule under the nucleus, with $3\theta$
+clearance, and with $\theta$~units of extra white space assumed to be
+present below the rule.) \ Continue with Rule~16.
+
+\rule 11. If the current item is a Rad atom (from ^|\radical|, e.g.,
+^|\sqrt|), set box~$x$ to the nucleus in style $C'$. Let $\theta=\xi_8$;
+and let $\varphi=\sigma_5$ if $C>T$, otherwise $\varphi=\theta$.
+Set $\psi=\theta+{1\over4}\vert\varphi\vert$; this is the minimum
+clearance that will be allowed between box~$x$ and the rule that will go
+above it. Set box~$y$ to a variable delimiter for this radical atom, having
+height plus depth $h(x)+d(x)+\psi+\theta$ or more. Then set $\theta\leftarrow
+h(y)$; this is the thickness of the rule to be used in the radical
+construction. \ (Note that the font designer specifies the thickness of
+the rule by making it the height of the radical character; the baseline
+of the character should be precisely at the bottom of the rule.) \
+If $d(y)>h(x)+d(x)+\psi$, increase $\psi$ by half of the excess; i.e.,
+set $\psi\leftarrow{1\over2}\bigl(\psi+d(y)-h(x)-d(x)\bigr)$. Construct
+a vbox consisting of kern~$\theta$, hrule of~height~$\theta$, kern~$\psi$,
+and box~$x$, from top to bottom. The nucleus of the radical atom is now
+replaced by box~$y$ raised by $h(x)+\psi$, followed by the new vbox.
+Continue with Rule~16.
+
+\rule 12. If the current item is an Acc atom (from ^|\mathaccent|), just
+go to Rule~16 if the accent character doesn't exist in the current size.
+Otherwise set box~$x$ to the nucleus in style $C'$, and set $u$ to the
+width of this box.  If the nucleus is not a single character, let $s=0$;
+otherwise set $s$ to the kern amount for the nucleus followed by the
+^|\skewchar| of its font.  If the accent character has a successor in its
+font whose width is $\le u$, change it to the successor and repeat this
+sentence.  Now set $\delta\leftarrow \min\bigl(h(x),\chi\bigr)$, where
+$\chi$ is |\fontdimen5| (the ^{x-height}) in the accent font.  If the
+nucleus is a single character, replace box~$x$ by a box containing the
+nucleus together with the superscript and subscript of the Acc atom, in
+style~$C$, and make the sub/superscripts of the Acc atom empty; also
+increase $\delta$ by the difference between the new and old values
+of~$h(x)$. Put the accent into a new box~$y$, including the italic
+correction.  Let~$z$ be a vbox consisting of: box~$y$ moved right
+$s+{1\over2}\bigl(u-w(y)\bigr)$, kern $-\delta$, and box~$x$. If
+$h(z)<h(x)$, add a kern of $h(x)-h(z)$ above box~$y$ and set $h(z)\gets
+h(x)$. Finally set $w(z)\gets w(x)$, replace the nucleus of the Acc atom
+by box~$z$, and continue with Rule~16.
+
+\rule 13. If the current item is an Op atom, mark this atom as having
+limits if it has been marked with ^|\limits|, or if it has been marked
+with ^|\displaylimits| and $C>T$.  If the nucleus is not a symbol, set
+$\delta\leftarrow0$ and go to Rule~13a. Otherwise if $C>T$ and if the
+nucleus symbol has a successor in its font, move to the successor. \ (This
+is where operators like $\sum$ and $\int$ change to a larger size in
+display styles.) \ Put the symbol into a new box~$x$, in the current size,
+and set $\delta$ to the italic correction for the character; include $\delta$
+in the width of box~$x$ if and only if limits are to be set or
+there is no subscript. Shift box~$x$ down by ${1\over2}\bigl(h(x)-d(x)\bigr)
+-a$, where $a=\sigma_{22}$, so that the operator character is centered
+vertically on the axis; this shifted box becomes the nucleus of the Op atom.
+
+\rule 13a. If limits are not to be typeset for this Op atom, go to
+Rule~17; otherwise the limits are attached as follows:
+Set box~$x$ to the superscript field in style $C\mathord\uparrow$; set box~$y$
+to the nucleus field in style~$C$; and set box~$z$ to the subscript field
+in style $C\mathord\downarrow$. Rebox all three of these boxes to width
+$\max\bigl(w(x),w(y),w(z)\bigr)$.  If the superscript field was not empty,
+attach box~$x$ above box~$y$, separated by a kern of size
+$\max\bigl(\xi_9,\xi_{11}-d(x)\bigr)$, and shift box~$x$ right by
+${1\over2}\delta$; also put a kern of size~$\xi_{13}$ above box~$x$.
+If the subscript field was not empty,
+attach box~$z$ below box~$y$, separated by a kern of size
+$\max\bigl(\xi_{10},\xi_{12}-h(z)\bigr)$, and shift box~$z$ left by
+${1\over2}\delta$; also put a kern of size~$\xi_{13}$ below box~$z$.
+The resulting vbox becomes the nucleus of the current Op atom; move to
+the next item.
+
+\rule 14. If the current item is an Ord atom, go directly to Rule~17 unless
+all of the following are true: The nucleus is a symbol; the subscript
+and superscript are both empty; the very next item in the math list is an
+atom of type Ord, Op, Bin, Rel, Open, Close, or Punct; and the nucleus of the
+next item is a symbol whose family is the same as the family in the present
+Ord atom. In such cases the present symbol is marked as a text symbol.
+If the font information shows a ligature between this symbol and the
+following one, using the specified family and the current size, then
+insert the ligature character and continue as specified by the font;
+in this process, two characters may collapse into a single Ord
+text symbol, and/or new Ord text characters may appear. If the font information
+shows a kern between the current symbol and the next, insert a kern item
+following the current atom.
+As soon as an Ord atom has been fully processed for ligatures and kerns,
+go to Rule~17.
+
+\rule 15. If the current item is a generalized fraction (and it had better
+be, because that's the only possibility left if Rules 1--14 don't apply),
+let $\theta$ be the thickness of the bar line and let $(\lambda,\rho)$ be
+the left and right delimiters. \ If this fraction was generated by
+^|\over| or ^|\overwithdelims|, then $\theta=\xi_8$; if it was generated by
+^|\atop| or ^|\atopwithdelims|, $\theta=0$; otherwise it was generated by
+^|\above| or ^|\abovewithdelims|, and a specific value of~$\theta$ was
+given at that time. The values of $\lambda$ and $\rho$ are null unless
+the fraction is ``with delims.''
+
+\rule 15a. Put the numerator into box~$x$, using style $T$ or $T'$ if
+$C$~is $D$ or $D'$, otherwise using style $C\mathord\uparrow$.
+Put the denominator into box~$z$, using style $T'$ if
+$C>T$, otherwise using $C\mathord\downarrow$.
+If $w(x)<w(z)$, rebox $x$ to width~$w(z)$;
+if $w(z)<w(x)$, rebox $z$ to width~$w(x)$.
+
+\rule 15b. If $C>T$, set $u\leftarrow\sigma_8$ and $v\leftarrow\sigma_{11}$.
+Otherwise set $u\leftarrow\sigma_9$ or $\sigma_{10}$, according as $\theta\ne0$
+or $\theta=0$, and set $v\leftarrow\sigma_{12}$. \ (The fraction will be
+typeset with its numerator shifted up by an amount~$u$ with respect to
+the current baseline, and with the denominator shifted down by~$v$,
+unless the boxes are unusually large.)
+
+\rule 15c. If $\theta=0$ (|\atop|), the numerator and denominator are
+combined as follows: Set $\varphi\leftarrow7\xi_8$ or
+$3\xi_8$, according as $C>T$ or $C\le T$; $\varphi$ is the minimum
+clearance that will be tolerated between numerator and denominator.
+Let $\psi=\bigl(u-d(x)\bigr)-\bigl(h(z)-v\bigr)$ be the actual clearance
+that would be obtained with the current values of $u$ and~$v$; if
+$\psi<\varphi$, add ${1\over2}(\varphi-\psi)$ to both $u$ and~$v$.
+Then construct a vbox of height $h(x)+u$ and depth $d(z)+v$, consisting
+of box~$x$ followed by an appropriate kern followed by box~$z$.
+
+\rule 15d. If $\theta\ne0$ (|\over|), the numerator and denominator are
+combined as follows: Set $\varphi\leftarrow3\theta$ or $\theta$, according
+as $C>T$ or $C\le T$; $\varphi$ is the minimum clearance that will be
+tolerated between numerator or denominator and the bar line.  Let
+$a=\sigma_{22}$ be the current axis height; the middle of the bar line
+will be placed at this height.  If
+$\bigl(u-d(x)\bigr)-(a+{1\over2}\theta)<\varphi$, increase~$u$ by the
+difference between these quantities; and if $(a-{1\over2}\theta)-
+\bigl(h(z)-v\bigr)<\varphi$, increase~$v$ by the difference. Finally
+construct a vbox of height $h(x)+u$ and depth $d(z)+v$, consisting of
+box~$x$ followed by a kern followed by an hrule of height~$\theta$
+followed by another kern followed by box~$z$, where the kerns are figured
+so that the bottom of the hrule occurs at $a-{1\over2}\theta$ above the
+baseline.
+
+\rule 15e. Enclose the vbox that was constructed in Rule 15c or 15d by
+delimiters whose height plus depth is at least $\sigma_{20}$, if $C>T$, and at
+least $\sigma_{21}$ otherwise. Shift the delimiters up or down so that they are
+vertically centered with respect to the axis. Replace the generalized
+fraction by an Inner atom whose nucleus is the resulting sequence of three boxes
+(left delimiter, vbox, right delimiter).
+
+\bigbreak\noindent
+Rules 1--15 account for the preliminary processing of math list items;
+but we still haven't specified how subscripts and superscripts are to be
+typeset. Therefore some of those rules lead to the following post-process:
+
+\rule 16. Change the current item to an Ord atom, and continue with Rule~17.
+
+\rule 17. If the nucleus of the current item is a math list, replace it by
+a box obtained by typesetting that list in the current style.  Then if the
+nucleus is not simply a symbol, go on to Rule~18.  Otherwise we are in the
+common case that a math symbol is to be translated to its horizontal-list
+equivalent: Convert the symbol to a character box for the specified family
+in the current size. If the symbol was not marked by Rule~14 above as a
+text symbol, or if\/ |\fontdimen| parameter number~2 of its font is zero, set
+$\delta$ to the italic correction; otherwise set $\delta$ to zero. If
+$\delta$ is nonzero and if the subscript field of the current atom is
+empty, insert a kern of width~$\delta$ after the character box, and set
+$\delta$ to zero. Continue with Rule~18.
+
+\rule 18. (The remaining task for the current atom is to attach a possible
+subscript and superscript.) \ If both subscript and superscript fields
+are empty, move to the next item. Otherwise continue with the following
+subrules:
+
+\rule 18a. If the translation of the nucleus is a character box, possibly
+followed by a kern, set $u$ and~$v$ equal to zero; otherwise set
+$u\leftarrow h-q$ and $v\leftarrow d+r$, where $h$ and~$d$ are the height
+and depth of the translated nucleus, and where $q$ and~$r$ are the values
+of $\sigma_{18}$ and $\sigma_{19}$ in the font corresponding to styles
+$C\mathord\uparrow$ and~$C\mathord\downarrow$.  \ (The quantities $u$
+and~$v$ represent minimum amounts by which the superscript and subscript
+will be shifted up and down; these preliminary values of $u$ and~$v$ may
+be increased later.)
+
+\rule 18b. If the superscript field is empty (so that there is a subscript
+only), set box~$x$ to the subscript in style~$C\mathord\downarrow$, and add
+^|\scriptspace| to $w(x)$. Append this box to the translation of the
+current item, shifting it down by $\max\bigl(v,\sigma_{16},h(x)-{4\over5}
+\vert\sigma_5\vert\bigr)$, and move to the next item. \ (The idea is
+to make sure that the subscript is shifted by at least~$v$ and by at
+least $\sigma_{16}$; furthermore, the top of the subscript should not extend
+above $4\over5$~of the current x-height.)
+
+\rule 18c. Set box~$x$ to the superscript field in style~$C\mathord\uparrow$,
+and add |\scriptspace| to~$w(x)$. Then set $u\leftarrow\max\bigl(u,p,
+d(x)+{1\over4}\vert\sigma_5\vert\bigr)$, where $p=\sigma_{13}$ if $C=D$,
+$p=\sigma_{15}$ if $C=C'$, and $p=\sigma_{14}$ otherwise; this gives a
+tentative position for the superscript.
+
+\rule 18d. If the subscript field is empty (so that there is a
+superscript only), append box~$x$ to the translation of the current atom,
+shifting it up by $u$, and move to the next item. Otherwise (i.e.,
+both subscript and superscript are present), set box~$y$ to the
+subscript in style~$C\mathord\downarrow$, add |\scriptspace| to~$w(y)$,
+and set $v\leftarrow\max(v,\sigma_{17})$.
+
+\rule 18e. (The remaining task is to position a joint
+subscript/superscript combination.) \ Let $\theta=\xi_8$ be the default
+rule thickness.  If $\bigl(u-d(x)\bigr)-\bigl(h(y)-v\bigr)\ge4\theta$, go
+to Rule~18f. \ (This means that the white space between subscript and
+superscript is at least $4\theta$.) \ Otherwise reset $v$ so that
+$\bigl(u-d(x)\bigr)-\bigl(h(y)-v\bigr)=4\theta$. Let $\psi={4\over5}
+\vert\sigma_5\vert-\bigl(u-d(x)\bigr)$. If $\psi>0$, increase $u$
+by~$\psi$ and decrease $v$ by~$\psi$. \ (This means that the bottom of the
+superscript will be at least as high above the baseline as $4\over5$ of
+the x-height.)
+
+\rule 18f. Finally, let $\delta$ be zero unless it was set to a nonzero
+value by Rules 13 or 17. \ (This is the amount of horizontal displacement
+between subscript and superscript.) Make a vbox of height $h(x)+u$ and
+depth $d(y)+v$, consisting of box~$x$ shifted right by~$\delta$, followed
+by an appropriate kern, followed by box~$y$. Append this vbox to the
+translation of the current item and move to the next.
+
+\bigbreak\noindent
+After the entire math list has been processed by Rules 1--18, \TeX\ looks
+at the last atom (if there was one), and changes its type from
+Bin to Ord (if it was of type Bin). Then the following rule is performed:
+
+\rule 19. If the math list begins and ends with boundary items, compute
+the maximum height~$h$ and depth~$d$ of the boxes in the translation of
+the math list that was made on the first pass, taking into account the
+fact that some boxes may be raised or lowered. Let $a=\sigma_{22}$ be the
+axis height, and let $\delta=\max(h-a,d+a)$ be the amount by which the
+formula extends away from the axis. Replace the boundary items by
+delimiters whose height plus depth is at least $\max(\lfloor\delta/500\rfloor
+f,2\delta-l)$, where $f$ is the ^|\delimiterfactor|
+and $l$ is the ^|\delimitershortfall|.  Shift the delimiters up or down so
+that they are vertically centered with respect to the axis. Change the left
+boundary item to an Open atom and the right boundary item to
+a Close atom. \ (All of the calculations in this step are done with
+$C$ equal to the starting style of the math list; style items in the
+middle of the list do not affect the style of the right boundary item.)
+
+\medbreak \rule 20. Rules 1--19 convert the math list into a sequence of
+items in which the only remaining atoms are of types Ord, Op, Bin, Rel,
+Open, Close, Punct, and Inner. After that conversion is complete, a second pass
+is made through the entire list, replacing all of the atoms by the boxes
+and kerns in their translations. Furthermore, additional inter-element
+spacing is inserted just before each atom except the first, based on the
+type of that atom and the preceding one.  Inter-element spacing is defined
+by the three parameters ^|\thinmuskip|, ^|\medmuskip|, and
+^|\thickmuskip|; the |mu| units are converted to absolute units as in
+Rule~2 above.  Chapter~18 has a chart that defines the inter-element
+spacing, some of which is ^|\nonscript|, i.e., it is inserted only in
+styles $>S$.  The list might also contain style items, which are removed
+during the second pass; they are used to change the current style just as
+in the the first pass, so that both passes have the same value of~$C$ when
+they work on any particular atom.
+
+\rule 21. Besides the inter-element spacing, penalties are placed after
+the translation of each atom of type Bin or Rel, if the math list was part
+of a paragraph.  The penalty after a Bin is ^|\binoppenalty|, and the
+penalty after a Rel is ^|\relpenalty|. However, the penalty is not
+inserted after the final item in the entire list, or if it has a numeric
+value~$\ge10000$, or if the very next item in the list is already a
+penalty item, or after a Rel atom that is immediately followed by another
+Rel atom.
+
+\rule 22. After all of the preceding actions have been performed, the math
+list has been totally converted to a horizontal list. If the result is
+being inserted into a larger horizontal list, in horizontal mode or
+restricted horizontal mode, it is enclosed by ``^{math-on}'' and
+``^{math-off}'' items that each record the current value of\/
+^|\mathsurround|.  Or if this list is a displayed formula, it
+is processed further as explained in Chapter~19.
+
+\medbreak
+\def\\{\kern1pt}
+\noindent{\bf Summary of parameter usage.} \ Here is the promised index
+that refers to everything affected by the mysterious parameters
+in the symbol fonts. Careful study of the rules allows you to get the
+best results by appropriately setting the parameters for new fonts
+that you may wish to use in mathematical typesetting. Each font parameter
+has an external name that is used in supporting software packages;
+for example, $\sigma_{14}$ is generally referred to as `sup2' and $\xi_8$ as
+`default\_\\ rule\_thickness'. These external names are indicated in the table.
+$$\vbox{
+\halign to\hsize{$#\hfil$\tabskip10pt plus 10pt minus 3pt&
+#\hfil&$\rm#\hfil$\quad&
+$#\hfil$&#\hfil&$\rm#\hfil$\tabskip0pt\cr
+\omit\span\omit\it Parameter&\omit\it Used in\hfil&
+\omit\span\omit\it Parameter&\omit\it Used in\hfil\cr
+\noalign{\medskip\hrule\smallskip}
+\sigma_2&space&17&
+\sigma_{17}&sub2&18d\cr
+\sigma_5&x\_\\height&11, 18b, 18c, 18e&
+\sigma_{18}&sup\_drop&18a\cr
+\sigma_6&quad&2, 20&
+\sigma_{19}&sub\_drop&18a\cr
+\sigma_8&num1&15b&
+\sigma_{20}&delim1&15e\cr
+\sigma_9&num2&15b&
+\sigma_{21}&delim2&15e\cr
+\sigma_{10}&num3&15b&
+\sigma_{22}&axis\_\\height&8, 13, 15d, 19\cr
+\sigma_{11}&denom1&15b&
+\xi_8&default\_\\rule\_thickness&9, 10, 11, 15, 15c, 18e\cr
+\sigma_{12}&denom2&15b&
+\xi_9&big\_op\_\\spacing1&13a\cr
+\sigma_{13}&sup1&18c&
+\xi_{10}&big\_op\_\\spacing2&13a\cr
+\sigma_{14}&sup2&18c&
+\xi_{11}&big\_op\_\\spacing3&13a\cr
+\sigma_{15}&sup3&18c&
+\xi_{12}&big\_op\_\\spacing4&13a\cr
+\sigma_{16}&sub1&18b&
+\xi_{13}&big\_op\_\\spacing5&13a\cr
+\noalign{\smallskip\hrule\medskip}}}$$
+Besides the symbol and extension fonts (families 2 and~3), the
+rules above also refer to parameters in other families:
+Rule~17 uses |\fontdimen| parameter~2 (space) to determine whether to insert
+an italic correction between adjacent letters, and Rule~12 uses parameter~5
+(x\_\\height) to position an accent character. Several non-font parameters
+also affect mathematical typesetting:
+dimension parameters
+ \hbox{|\delimitershortfall|} (Rule~19),
+ \hbox{|\nulldelimiterspace|} (in
+the construction of variable delimiters for Rules 11, 15e,~19),
+ \hbox{|\mathsurround|} (Rule~22),
+and
+ \hbox{|\scriptspace|} (Rules 18bcd);
+integer parameters
+ \hbox{|\delimiterfactor|} (Rule~19),
+ \hbox{|\binoppenalty|} (Rule~21),
+and
+ \hbox{|\relpenalty|} (Rule~21);
+muglue parameters
+ \hbox{|\thinmuskip|},
+ \hbox{|\medmuskip|,} and
+ \hbox{|\thickmuskip|}
+(Rule~20).
+
+\endchapter
+
+Woe to the author who always wants to teach!\/
+% Mais malheur a` l'auteur qui veut toujours instruire!
+The secret of being a bore is to tell everything.
+% Le secret d'ennuyer est celui de tout dire.
+\author ^{VOLTAIRE}, {\sl De la Nature de l'Homme\/} (1737)
+% 6th discours en vers sur l'homme
+
+\bigskip
+
+Very few Compositors are fond of Algebra,
+and rather chuse to be employed upon plain work.
+\author PHILIP ^{LUCKOMBE}, {\sl The History and Art of Printing\/} (1770)
+  % page 472
+
+%\eject
+\eject\byebye

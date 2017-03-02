@@ -1,0 +1,2231 @@
+% -*- coding: utf-8 -*-
+
+\input macros
+
+%\beginchapter Chapter 14. How \TeX\ Breaks\\Paragraphs into\\Lines
+\beginchapter Chapter 14. 分段为行
+
+\origpageno=91
+
+%One of a typesetting system's chief duties is to take a long sequence of words
+%and to break it up into individual lines of the appropriate size.
+%For example, every paragraph of this manual has been broken into lines
+%that are 29~picas wide, but the author didn't have to worry about such
+%details when he composed the manuscript. \TeX\ chooses breakpoints
+%in an interesting way that considers each paragraph in its entirety; the
+%closing words of a paragraph can actually influence the appearance of the
+%first line. As a result, the spacing between words is as uniform as
+%possible, and the computer is able to reduce the number of times that
+%words must be hyphenated or formulas must be split between lines.
+%^^{H\&J, see hyphenation, line breaking, setting glue}
+%^^{justification, see setting glue, line breaking}
+%^^{quad left, see flush left}
+%^^{quad right, see flush right}
+%^^{quad middle, see :break}
+\1排版系统的一个主要任务就是把一长列单词分割成适当长度的各个行。%
+例如，本手册的每段被分为 29pc 宽度的行，
+但是当输入文稿时，作者却不用去理会这些细节。%
+ \TeX\ 把每段看作一个整体，用一种有趣的方法来选择出断点；
+实际上，段落的最后一个单词也能对第一行的排版产生影响。%
+结果是，单词之间的间距尽可能一致，并且计算机要尽量避免把单词或公式放在不同行。
+
+%The experiments of Chapter 6 have already illustrated the general ideas:
+%We discussed the notion of ``badness,'' and we ran into ``overfull'' and
+%``underfull'' boxes in difficult situations. We also observed that different
+%settings of \TeX's ^|\tolerance| parameter
+%will produce different effects; a higher tolerance
+%means that wider spaces are acceptable.
+第六章的实战遇见说明了一般的思想：
+我们讨论了``丑度''这个概念，并且在不同情况下得到了``溢出''%
+和``松散''的盒子。%
+我们还看到，设置不同的 \TeX\ 的 |\tolerance| 的参数将得到不同的结果；
+容许度越高，容许的间距越大。
+
+%\TeX\ will find the absolutely best way to typeset any given paragraph,
+%according to its ideas of minimum badness. But such ``badness'' doesn't
+%account for everything, and if you rely entirely on
+%an automatic scheme you will occasionally encounter line breaks that are
+%not really the best on psychological grounds; this is inevitable, because
+%computers don't understand things the way people~do (at least not yet).
+%Therefore you'll sometimes want to tell the machine that certain places
+%are not good breakpoints. Conversely, you will sometimes want to force a
+%break at a particular spot. \TeX\ provides a convenient way to avoid
+%psychologically bad breaks, so that you will be able to obtain results of
+%the finest quality by simply giving a few hints to the machine.
+遵循最小化丑度的思想， \TeX\ 要找到排版任意段落的最好方法。%
+但是，这样的``丑度''没有考虑到所有问题，而且如果完全依靠自动排版，
+常常会见到在感觉上并不真是最好的断行；
+这是不可避免的，因为计算机不能理解人类做事的方式（至少现在还没有）。
+因此，有时候要告诉计算机，有些地方不能插入断点。%
+反过来，有时要在一个特殊点强制插入断点。%
+ \TeX\ 给出了一个便捷的方法来避免感觉上不好的断行，因此，
+通过直接给计算机几个提示，就可以得到最好的结果。
+
+%``^{Ties}''---denoted by `|~|' in plain \TeX---are the key to
+%successful line breaking. ^^{auxiliary space, see tie} ^^{tilde}
+%Once you learn how to insert them, you will have graduated from the ranks
+%of ordinary \TeX nical typists to the select group of Distinguished
+%\TeX nicians. And it's really not difficult to train yourself to
+%insert occasional ties, almost without thinking, as you type a manuscript.
+%^^{line breaks, avoiding} ^^{breaks, avoiding bad}
+``带子''——在 plain \TeX\ 用`|~|'表示——是得到圆满断行的关键。%
+一旦学会了怎样插入它，你就从一般排版者晋升到中级排版专家了。%
+而且，当输入文稿时，几乎不用思考，就可以轻松插入一般的带子。
+
+\ddanger {\bf 译注：在处理中文时，这样定义的带子没有什么用处。
+在 CCT 和 CJK 中都已经把 |~| 重新定义为一个可伸缩的粘连，
+用在中文和英文之间。具体定义为：}
+\begintt
+\global\def~{\hskip 0.25em plus 0.125em minus 0.08em\ignorespaces}
+\endtt
+{\bf 但是，在 XeTeX 中无需重新定义 |~|，
+因为 xeCJK 宏包可以自动处理中英文的间距。}
+
+%When you type |~| it's the same as typing a space, except that \TeX\
+%won't break a line at this space. Furthermore, you shouldn't leave
+%any blanks next to the |~|, since they will count as additional spaces.
+%If you put |~| at the very end of a line in your input file, you'll get a
+%wider space than you want, because the \<return> that follows the |~|
+%produces an extra space.
+当输入 |~| 时，它与输入空格一样，只是 \TeX\ 不在此空格断行而已。%
+还有，不要在 |~| 后面留下空白，因为会把它们看作额外的空格。%
+如果在输入文件的每行的结尾都放上 |~|,
+就会得到比更预想更宽的间距，因为 |~| 后面的 \<return> 得到了一个额外空格。
+
+%We have already observed in Chapter~12 that it's generally a good idea to
+%type |~| after an abbreviation that does not come at the end of a sentence.
+%Ties also belong in several other places:
+在第十二章我们已经看到，不在句子结尾出现的略语后面加上 |~| 一般都不错。%
+在下面几个其它地方也要加上带子：
+
+%\smallskip
+%\item\bull In references to named parts of a document:
+%$$\halign{#\hfil&\hskip 80pt#\hfil\cr
+%|Chapter~12|&|Theorem~1.2|\cr
+%|Appendix~A|&|Table~\hbox{B-8}|\cr
+%|Figure~3|&|Lemmas 5 and~6|\cr}$$
+\smallskip
+\item\bull 文档中涉及到命名的部分：
+$$\halign{#\hfil&\hskip 80pt#\hfil\cr
+|Chapter~12|&|Theorem~1.2|\cr
+|Appendix~A|&|Table~\hbox{B-8}|\cr
+|Figure~3|&|Lemmas 5 and~6|\cr}$$
+
+%\noindent(No |~| appears after `|Lemmas|' in the final example, since there's
+%no harm in having `5~and~6' at the beginning of a line. The use of\/ |\hbox|
+%is explained below.)
+\noindent(在最后的例子中，`|Lemmas|'后面没有添加 |~|, 因为`5~and~6'出现%
+在行首是可以接受的。%
+|\hbox| 的使用在下面讨论。)
+
+%\smallbreak
+%\item\bull Between a person's forenames and between multiple surnames:
+%$$\halign{#\hfil&\hskip 40pt#\hfil\cr
+%|Donald~E. Knuth|&|Luis~I. Trabb~Pardo|\cr
+%|Bartel~Leendert van~der~Waerden|&|Charles~XII|\cr}$$
+\smallbreak
+\item\bull \1在人名之间和多个姓之间：
+$$\halign{#\hfil&\hskip 40pt#\hfil\cr
+|Donald~E. Knuth|&|Luis~I. Trabb~Pardo|\cr
+|Bartel~Leendert van~der~Waerden|&|Charles~XII|\cr}$$
+
+%^^{Knuth} ^^{Trabb Pardo} ^^{van der Waerden} ^^{Charles XII}
+%\noindent
+%Note that it is sometimes better to hyphenate a name than to break it
+%between words; e.g., `Don-' and `ald~E.~Knuth' is more tolerable
+%than `Donald' and `E.~Knuth'. The previous rule can be regarded as a
+%special case of this one, since we may think of `Chapter~12' as a
+%compound name; another example is `|register~X|'. Sometimes a name is
+%so long that we dare not tie it all together, lest there be no way to
+%break the line: ^^{Vall\'ee Poussin}
+%\begintt
+%Charles Louis Xavier~Joseph de~la Vall\'ee~Poussin.
+%\endtt
+\noindent
+注意有时将名字连字化比在单词之间断开要好；
+比如，`Don-'和`ald~E. ~Knuth' 比 `Donald' 和 `E.~Knuth' 的回旋余地要大。%
+前一个规则可以看作此规则的特殊情形，因为可以把 `Chapter~12' 看作复合名字；
+另一个例子是 `|register~X|'。
+有时候，名字太长，使得我们不敢把它们绑在一起，免得无法断行。
+\begintt
+Charles Louis Xavier~Joseph de~la Vall\'ee~Poussin.
+\endtt
+
+%\item\bull Between math symbols in apposition with nouns:
+%$$\halign{#\hfil\cr
+%|dimension~$d$       width~$w$       function~$f(x)$|\cr
+%|string~$s$ of length~$l$|\cr}$$
+\item\bull 在数学符合与其名称之间：
+$$\halign{#\hfil\cr
+|dimension~$d$       width~$w$       function~$f(x)$|\cr
+|string~$s$ of length~$l$|\cr}$$
+
+%\noindent However, the last example should be compared with
+%\begintt
+%string~$s$ of length $l$~or more.
+%\endtt
+\noindent 但是，最后一个例子可以与下列情况比较一下：
+\begintt
+string~$s$ of length $l$~or more.
+\endtt
+
+%\item\bull Between symbols in series:
+%$$\halign{#\hfil\cr
+%|1,~2, or~3|\cr
+%|$a$,~$b$, and~$c$.|\cr
+%|1,~2, \dots,~$n$.|\cr}$$
+\item\bull 在一列符号之间：
+$$\halign{#\hfil\cr
+|1,~2, or~3|\cr
+|$a$,~$b$, and~$c$.|\cr
+|1,~2, \dots,~$n$.|\cr}$$
+
+%\item\bull When a symbol is a tightly bound object of a preposition:
+%$$\halign{#\hfil\cr
+%|of~$x$|\cr
+%|from 0 to~1|\cr
+%|increase $z$ by~1|\cr
+%|in common with~$m$.|\cr}$$
+\item\bull 当符号与前面的内容密切相关时：
+$$\halign{#\hfil\cr
+|of~$x$|\cr
+|from 0 to~1|\cr
+|increase $z$ by~1|\cr
+|in common with~$m$.|\cr}$$
+
+%\noindent The rule does not, however, apply to compound objects:
+%\begintt
+%of $u$~and~$v$.
+%\endtt
+\noindent 但是此规则不要应用在复合对象上：
+\begintt
+of $u$~and~$v$.
+\endtt
+
+%\item\bull When mathematical phrases are rendered in words:
+%$$\halign{#\hfil&\hskip20pt#\hfil&\hskip20pt#\hfil\cr
+%|equals~$n$|&|less than~$\epsilon$|&|(given~$X$)|\cr
+%|mod~2|&|modulo~$p^e$|&|for all large~$n$|\cr}$$
+\item\bull 当数学惯用语出现在句子中时：
+$$\halign{#\hfil&\hskip20pt#\hfil&\hskip20pt#\hfil\cr
+|equals~$n$|&|less than~$\epsilon$|&|(given~$X$)|\cr
+|mod~2|&|modulo~$p^e$|&|for all large~$n$|\cr}$$
+
+%\noindent Compare `|is~15|' with `|is 15~times the height|'.
+\noindent 比较一下`|is~15|'和`|is 15~times the height|'。
+
+%\medbreak
+%\item\bull When cases are being enumerated within a paragraph:
+%^^{enumerated cases within a paragraph}
+%$$\halign{#\hfil\cr
+%|(b)~Show that $f(x)$ is (1)~continuous; (2)~bounded.|\cr}$$
+\medbreak
+\item\bull 当在段落中列举各种情况时：
+$$\halign{#\hfil\cr
+|(b)~Show that $f(x)$ is (1)~continuous; (2)~bounded.|\cr}$$
+
+%\noindent It would be nice to boil all of these rules down to one or two
+%simple principles, and~it would be even nicer if the rules could be
+%automated so that keyboarding could be done without them; but subtle
+%semantic considerations seem to be involved. Therefore it's best to use
+%your own judgment with respect to ties. The computer needs your help.
+\noindent 把所有这些规则提炼为一到两个简单的原理就好了，
+而且如果可以自动遵守规则而不需要键盘输入就更好了；
+但是其中出现了很多敏感的语义问题。%
+\1因此，在带子上最好你自己去取舍。%
+计算机需要你的帮助。
+
+%A tie keeps \TeX\ from breaking at a space, but sometimes you want to
+%prevent the machine from breaking at a ^{hyphen} or a ^{dash}. This can be
+%done by using ^|\hbox|, because \TeX\ will not split up the contents of a
+%box; boxes are indecomposable units, once they have been constructed.  We
+%have already illustrated this principle in the `|Table~\hbox{B-8}|'
+%example considered earlier.  Another example occurs when you are typing
+%the page numbers in a ^{bibliographic reference}: It doesn't look good to
+%put \hbox{`22.'} on a line by itself, so you can type `|\hbox{13--22}.|'
+%to prohibit breaking `\hbox{13--22}.' On the other hand, \TeX\ doesn't
+%often choose line breaks at hyphens, so you needn't bother to insert
+%|\hbox| commands unless you need to correct a bad break that \TeX\ has
+%already made on a previous run.
+带子可以防止 \TeX\ 在空格处断行，但是有时候要阻止计算机在连字或破折号处断行。
+这时要使用 |\hbox|, 因为 \TeX\ 不会分割盒子的内容；
+盒子一旦构建出来，就是不可分割的单位。%
+我们已经在早先讨论的`|Table~\hbox{B-8}|'中的例子说明过这个原理。%
+另一个例子出现在输入参考文献的页码上：
+在一行上只有 \hbox{`22.'} 不好看，因此可以通过输入`|\hbox{13--22}.|'来禁止%
+其断开`\hbox{13--22}'。%
+另一方面， \TeX\ 并不经常在连字处断行，所以不必插入 |\hbox| 命令，
+除非要修正 \TeX\ 在前面处理中插入的不正确的断行。
+
+%\exercise Here are some phrases culled from previous chapters of this
+%manual. How do you think the author typed them?
+%\begindisplay
+%(cf.~Chapter~12).\cr
+%Chapters 12 and~21.\cr
+%line~16 of Chapter~6's {\tt story}\cr
+%lines 7 to~11\cr
+%lines 2,~3, 4, and~5.\cr
+%(2)~a big black bar\cr
+%All 256~characters are initially of category~12,\cr
+%letter~{\tt x} in family~1.\cr
+%the factor~$f$, where $n$~is 1000~times~$f$.\cr
+%\enddisplay
+%\answer|(cf.~Chapter~12).|\parbreak
+%|Chapters 12 and~21.|\parbreak
+%|line~16 of Chapter~6's {\tt story}|\parbreak
+%|lines 7 to~11|\parbreak
+%|lines 2,~3, 4, and~5.|\parbreak
+%|(2)~a big black bar|\parbreak
+%|All 256~characters are initially of category~12,|\parbreak
+%|letter~{\tt x} in family~1.|\parbreak
+%|the factor~$f$, where $n$~is 1000~times~$f$.|
+\exercise 下面这些短语是从本手册(英文版)的前面各章精选出来的。%
+想想作者是怎样输入它们的？
+\begindisplay
+(cf.~Chapter~12).\cr
+Chapters 12 and~21.\cr
+line~16 of Chapter~6's {\tt story}\cr
+lines 7 to~11\cr
+lines 2,~3, 4, and~5.\cr
+(2)~a big black bar\cr
+All 256~characters are initially of category~12,\cr
+letter~{\tt x} in family~1.\cr
+the factor~$f$, where $n$~is 1000~times~$f$.\cr
+\enddisplay
+\answer|(cf.~Chapter~12).|\parbreak
+|Chapters 12 and~21.|\parbreak
+|line~16 of Chapter~6's {\tt story}|\parbreak
+|lines 7 to~11|\parbreak
+|lines 2,~3, 4, and~5.|\parbreak
+|(2)~a big black bar|\parbreak
+|All 256~characters are initially of category~12,|\parbreak
+|letter~{\tt x} in family~1.|\parbreak
+|the factor~$f$, where $n$~is 1000~times~$f$.|
+
+%\exercise How would you type the phrase `for all $n$ greater than
+%$n_0$'\thinspace?
+%\answer `|for all $n$~greater than~$n_0$|' avoids distracting breaks.
+\exercise 怎样输入短语`for all $n$ greater than
+$n_0$'\thinspace ？
+\answer `|for all $n$~greater than~$n_0$|' 避免令人迷惑的断行。
+
+%\exercise And how would you type `exercise 4.3.2--15'\thinspace?
+%\answer `|exercise \hbox{4.3.2--15}|' guarantees that there is no break
+%after the ^{en-dash}. But this precaution is rarely necessary, so
+%`|exercise 4.3.2--15|' is an acceptable answer. No |~| is needed;
+%`\hbox{4.3.2--15}' is so long that it causes no offense
+%at the beginning of a line.
+\exercise 怎样输入`exercise 4.3.2--15'\thinspace ？
+\answer `|exercise \hbox{4.3.2--15}|' 保证不会^{连接号}之后断行。
+但此预防措施不太有必要，因此 `|exercise 4.3.2--15|' 也是可接受的答案。
+没必要用 |~|；`\hbox{4.3.2--15}' 足够长，它在行首出现也无不合适。
+
+%\exercise Why is it better to type `|Chapter~12|' than to type
+%`|\hbox{Chapter 12}|'\thinspace?
+%\answer The space you get from |~| will stretch or shrink with the
+%other spaces in the same line, but the space inside an hbox has
+%a fixed width since that glue has already been set once and for all.
+%Furthermore the first alternative permits the word Chap-\break
+%ter to be ^{hyphenate}d.
+\exercise 为什么输入`|Chapter~12|'比输入`|\hbox{Chapter 12}|'好？
+\answer 从 |~| 得到的空白将与同一行的其他空白同时伸缩，
+但 hbox 中的空白是固定宽度的，因为该粘连已经被一劳永逸地设定了。
+另外，第一种方法允许单词 Chap-\break
+ter 被^{连字化}。
+
+%\dangerexercise \TeX\ will sometimes break a math formula after an
+%equals sign. How can you stop the computer from breaking the formula
+%`$x=0$'\thinspace?
+%\answer `|\hbox{$x=0$}|' is unbreakable, and we will see later that
+%`|${x=0}$|' cannot be broken. Both of these solutions set the glue
+%surrounding the equals sign to some fixed value, but such glue normally
+%wants to stretch; furthermore, the |\hbox| solution might include undesirable
+%blank space at the beginning or end of a line, if\/ ^|\mathsurround| is
+%nonzero. A third solution `|$x=\nobreak0$|' avoids both defects.
+\dangerexercise  \TeX\ 有时候在数学公式的等号后面断行。%
+如何禁止它在公式`$x=0$'中断行？
+\answer `|\hbox{$x=0$}|' 是无法断开的，
+稍后你会看到 `|${x=0}$|' 也是无法断开的。
+这两个解法都将等号两边的粘连设定为固定值，但是这种粘连通常是需要伸展的；
+此外，如果 ^|\mathsurround| 不为零，
+|\hbox| 的解法可能会在行首或行尾包含无法忍受的多余空白。
+第三种解法 `|$x=\nobreak0$|' 避免了上述缺点。
+
+%\ddangerexercise Explain how you could instruct \TeX\ not to make any
+%breaks after explicit hyphens and dashes. \ (This is useful in
+%lengthy ^{bibliographies}.)
+%\answer |\exhyphenpenalty=10000| prohibits all such breaks, according
+%to the rules found later in this chapter. Similarly, |\hyphenpenalty=10000|
+%prevents breaks after implicit (discretionary) hyphens.
+\ddangerexercise 想想怎样禁止 \TeX\ 在显式连字符和横线符后面断行。%
+（这在长的参考书目中很有用。）
+\answer 依据本章稍后要介绍的规则，|\exhyphenpenalty=10000| 将禁止在这些位置断行。
+类似地，|\hyphenpenalty=10000| 将禁止在隐式（自定）连字符后断行。
+
+%Sometimes you want to permit a line break after a `/' just as if it were
+%a hyphen. For this purpose plain \TeX\ allows you to say `^|\slash|';
+%for example, `|input\slash output|' produces `input\slash output' with
+%an optional break.
+有时候，要允许在`/'后面断行，就象它是一个连字符一样。%
+为此，plain \TeX\ 给出了`|\slash|';
+例如，`|input\slash output|'得到的就是`input\slash output', 并且中间可以断行。
+
+%{\hbadness=10000
+%If you want to force \TeX\ to break between lines at a certain point in
+%^^{line breaks, forcing} ^^{breaks, forcing good}
+%the middle of a paragraph, just say `^|\break|'. However, that might cause the
+%line to be really ^^{underfull}spaced out.\break
+%If you want \TeX\ to fill up the right-hand part of a line
+%with blank space just before a forced line break,\hfil\break
+%without indenting the next line, say `|\hfil\break|'.\par}
+{\hbadness=10000
+\1如果要在段落中间的某个点强制断行，只需要输入`|\break|'。%
+但是，这可能导致此行的字间 距 太 大 了 。\break%
+如果希望 \TeX\ 在强制断行前用空白把行右边的部分充满，\hfil\break
+并且不在下一行缩进，
+将使用`|\hfil\break|'。\par
+}
+
+%\danger You may have several consecutive lines of input
+%for which you want the output to appear line-for-line in the same way.
+%One solution is to type `|\par|' at the end of each input line; but that's
+%somewhat of a nuisance, so plain \TeX\ provides the abbreviation
+%`^|\obeylines|', which causes each end-of-line in the input to be
+%like |\par|. After you say |\obeylines| you will get one line of
+%output per line of input, unless an input line ends with `|%|' or
+%unless it is so long that it must be broken. For example, you
+%probably want to use |\obeylines| if you are typesetting a ^{poem}.
+%Be sure to enclose |\obeylines| in a group, unless you want this
+%``poetry mode'' to continue to the end of your document.
+%\begintt
+%{\obeylines\smallskip
+%Roses are red,
+%\quad Violets are blue;
+%Rhymes can be typeset
+%\quad With boxes and glue.
+%\smallskip}
+%\endtt
+\danger 如果连续输入的几行要照样逐行输出，
+解决之道是在每行的结尾添加`|\par|';
+但有时比较麻烦，因此 plain \TeX\ 给出一个简写命令`|\obeylines|',
+它的效果与每行后面输入 |\par| 是一样的。%
+在使用 |\obeylines| 后，每行就输出一行，除非输入行以`|%|'结尾或太长必须断行。%
+例如，如果要输入诗，可能要用到 |\obeylines|。%
+一定要把 |\obeylines| 放在组中，否则这种``诗歌模式''会延续到文档结束。
+\begintt
+{\obeylines\smallskip
+Roses are red,
+\quad Violets are blue;
+Rhymes can be typeset
+\quad With boxes and glue.
+\smallskip}
+\endtt
+
+%\dangerexercise Explain the uses of\/ ^|\quad| in this poem. What would
+%have happened if `|\quad|' had been replaced by `^|\indent|' in both places?
+%\answer The second and fourth lines are indented by an additional ``quad''
+%of space, i.e., by one extra em in the current type style.
+%\ (The control sequence |\quad| does an ^|\hskip|; when \TeX\ is in
+%vertical mode, |\hskip| begins a new paragraph and puts glue after the
+%indentation.) \ If\/ |\indent| had been used instead, those lines wouldn't
+%have been indented any more than the first and third, because |\indent| is
+%implicit at the beginning of every paragraph.  Double indentation on the
+%second and fourth lines could have been achieved by `|\indent\indent|'.
+\dangerexercise 解释一下这首诗中 |\quad| 的作用。%
+如果所有`|\quad|'被`|\indent|'代替会出现什么情况？
+\answer 第二和第四行的缩进将会增加 ``quad'' 的额外空白，
+即当前字体的 1 em 的额外空白。%
+（控制系列 |\quad| 生成一个 ^|\hskip|；
+当 \TeX\ 处于垂直模式时，|\hskip| 开始一个新段落，并将粘连放在缩进之后。）
+如果改用 |\indent|，这两行的缩进将和第一和第三行一样多，
+因为在每个段落的开始处 |\indent| 都是隐含的。
+在第二和第四行的双倍缩进可以用 `|\indent\indent|' 达到。
+
+%Roughly speaking, \TeX\ breaks paragraphs into lines in the following way:
+%Breakpoints are inserted between words or after hyphens so as to produce lines
+%whose badnesses do not exceed the current ^|\tolerance|. If there's no
+%way to insert such breakpoints, an ^{overfull box} is set. Otherwise the
+%breakpoints are chosen so that the paragraph is mathematically optimal, i.e.,
+%best possible, in
+%the sense that it has no more ``^{demerits}'' than you could obtain by any
+%other sequence of breakpoints. Demerits are based on the badnesses of
+%individual lines and on the existence of such things as consecutive lines
+%that end with hyphens, or tight lines that occur next to loose ones.
+严格讲， \TeX\ 是用如下方法分段成行的：
+断点要插入单词之间或连字符后面，使得所得到的行的丑度不超出当前的 |\tolerance|。%
+如果无法这样插入断点，就设置一个溢出的盒子。%
+否则，所选择的断点要使得段落在数学上是最优的，即，在所有可选择的断点序列中%
+尽可能使缺陷最少。%
+缺陷要考虑各个行的丑度，连续两行都以连字符结束这种情况存在与否，
+或者紧密的行后面跟着一个松散的行。
+
+%\danger But the informal description of line breaking in the previous
+%paragraph is an oversimplification of what really happens. The remainder
+%of this chapter explains the details precisely, for people who want to
+%apply \TeX\ in nonstandard ways. \TeX's line-breaking algorithm
+%has proved to be general enough to handle a surprising variety of
+%different applications; this, in fact, is probably the most interesting
+%aspect of the whole \TeX\ system. However, every paragraph from now on
+%until the end of the chapter is prefaced by at least one dangerous bend
+%sign, so you may want to learn the following material in easy stages
+%instead of all at once.
+\danger 但是，前一段落中断行的通俗描述比实际出现的东西太过简单了。%
+本章剩下的部分就精确地讨论其细节，这是为了在非标准方式下使用 \TeX\ 的人们。%
+已经证明， \TeX\ 的断行算法一般足以处理惊人数量的不同类型的应用问题；
+实际上这可能是 \TeX\ 最有意义的方面。%
+但是，从现在开始的每段前面至少有一个危险标识，所有可能要先学习初级阶段的内容，
+而不是现在开始学下面的内容。
+
+%\ninepoint
+%\danger Before the lines have been broken, a paragraph inside of \TeX\
+%is actually a {\sl ^{horizontal list}}, i.e., a sequence of items that
+%\TeX\ has gathered while in horizontal mode. We have been saying
+%informally that a horizontal list consists of boxes and glue; the truth
+%is that boxes and glue aren't the whole story. Each item in a horizontal
+%list is one of the following types of things:\enddanger
+\ninepoint
+\danger 在分割成行之前， \TeX\ 中的段落实际上是一个{\KT{10}水平列}，
+即， \TeX\ 在水平模式下收集起来的一系列项目。
+我们已经通俗地说过，水平列由盒子和粘连组成；
+其实盒子和粘连并不是所有的东西。
+\1水平列中的每个项目都是下列一种东西：\enddanger
+
+%\smallskip
+%\item\bull a box (a character or ligature or rule or hbox or vbox);
+\smallskip
+\item\bull 一个盒子(字符，带子，标尺，hbox, 或者 vbox);
+
+%\item\bull a ^{discretionary break} (to be explained momentarily);
+%^^{break, discretionary}
+\item\bull 一个任意可断点(马上就要解释);
+
+%\item\bull a ``^{whatsit}'' (something special to be explained later);
+\item\bull 一个``无名''(后面要讨论的某种特殊的东西);
+
+%\item\bull vertical material (from ^|\mark| or ^|\vadjust| or ^|\insert|);
+\item\bull 垂直上的东西(来自 |\mark|, |\vadjust| 或者 |\insert|);
+
+%\item\bull a glob of ^{glue} (or ^|\leaders|, as we will see later);
+\item\bull 一个粘连团(或者 |\leaders|, 我们后面将会看到);
+
+%\item\bull a ^{kern} (something like glue that doesn't stretch or shrink);
+\item\bull 一个紧排(类似于粘连，但是不能伸缩);
+
+%\item\bull a ^{penalty} (representing the undesirability of breaking here);
+\item\bull 一个惩罚 (用来表示此处断行的不适合度);
+
+%\item\bull ``^{math-on}'' (beginning a formula) or ``^{math-off}'' (ending a
+%  formula).
+\item\bull ``公式开始''或者``公式结束''。
+
+%\smallskip\noindent
+%The last four types (glue, kern, penalty, and math items)
+%are called {\sl ^{discardable}}, since they
+%may change or disappear at a line break; the first four types are
+%called non-discardable, since they always remain intact. Many of the
+%things that can appear in horizontal lists have not been touched on yet
+%in this manual, but it isn't necessary to understand them in order to
+%understand line breaking. Sooner or later you'll learn how each of the
+%gismos listed above can infiltrate a horizontal list; and if you want to
+%get a thorough understanding of \TeX's internal processes, you can always
+%use ^|\showlists| with various features of the language, in
+%order to see exactly what \TeX\ is doing.
+\smallskip\noindent
+最后四项(粘连，紧排，惩罚和数学项目)称为{\KT{10}可弃的},
+因为在断行处它们可能要改变或消失；
+前四项称为不可弃的，因为它们总是原封不动的。%
+许多出现在水平列中的东西在本手册中都没有触及，
+但是讨论断行也不需要学习它们。%
+早晚你会知道上面所列的新东西要掺杂在水平列中；
+而且如果要对 \TeX\ 的整个内部过程有一个全面的认识，
+总可以用 |\showlists| 以及各种语言特性来看看 \TeX\ 正在干什么。
+
+%\danger A discretionary break consists of three sequences of characters
+%called the {\sl pre-break}, {\sl post-break}, and {\sl no-break\/}
+%texts. The idea is that if a line break occurs here, the ^{pre-break text}
+%will appear at the end of the current line and the ^{post-break text} will
+%occur at the beginning of the next line; but if no break occurs, the
+%^{no-break text} will appear in the current line. Users can specify
+%^^|\discretionary|
+%discretionary breaks in complete generality by writing
+%\begindisplay
+%|\discretionary{|\<pre-break text>|}{|\<post-break text>|}{|\<no-break text>|}|
+%\enddisplay
+%where the three texts consist entirely of characters, boxes, and kerns.
+%For example, \TeX\ can hyphenate the word
+%`difficult' between the f's, even though this requires breaking the
+%`ffi' ligature into `f-' followed by an `fi' ligature, if the horizontal
+%list contains
+%\begintt
+%di\discretionary{f-}{fi}{ffi}cult.
+%\endtt
+%Fortunately you need not type such a mess yourself; \TeX's hyphenation algorithm
+%works behind the scenes, taking ^{ligatures} apart and putting them
+%into discretionary breaks when necessary.
+\danger 一个任意可断点由三个系列的字符组成，
+叫做 {\sl pre-break}，{\sl post-break} 和 {\sl no-break\/} 文本。
+原理是，如果可断点出现在此处，那么 pre-break 文本出现在当前行的结尾，
+post-break 文本出现在下一行的开头；
+但是如果没有出现可断点，那么 no-break 文本将出现在当前行。
+通过给出
+\begindisplay
+|\discretionary{|\<pre-break text>|}{|\<post-break text>|}{|\<no-break text>|}|
+\enddisplay
+用户可以完全普遍地给出任意可断点，其中的三个文本完全由字符、盒子和紧排组成。
+例如，如果水平列包含
+\begintt
+di\discretionary{f-}{fi}{ffi}cult,
+\endtt
+那么 \TeX\ 可以在单词 `difficult' 的两个 `f' 之间添加连字符，
+即使它使得 `ffi' 这个连写被分割成 `f-' 和 `fi' 这个连写。
+幸好，你不需要输入这些繁杂的东西；\TeX\ 的连字算法在幕后运行，
+在必要时会把连写分开并在它们中间放上任意可断点。
+
+%\danger The most common case of a discretionary break is a simple
+%discretionary hyphen
+%\begintt
+%\discretionary{-}{}{}
+%\endtt
+%for which \TeX\ accepts the abbreviation `^|\-|'. The next most common case is
+%\begintt
+%\discretionary{}{}{}
+%\endtt
+%(an ``^{empty discretionary}''), which \TeX\ automatically inserts after
+%`|-|' and after every ligature that ends with `|-|'. In the case of plain
+%\TeX, empty discretionaries are therefore inserted after ^{hyphens} and
+%^{dashes}. \ (Each font has an associated ^|\hyphenchar|, which we can
+%assume for simplicity is equal to `|-|'.)
+\danger 最常用的任意可断点就是简单的任意连字
+\begintt
+\discretionary{-}{}{}
+\endtt
+对此 \TeX\ 也允许省略写法`|\-|'。%
+下一个最常用的是
+\begintt
+\discretionary{}{}{}
+\endtt
+(一个``空任意可断点''), 这时 \TeX\ 自动在`|-|'后和每个以`|-|'结束的连写后%
+插入任意可断点。%
+对于 plain \TeX, 空任意可断点会插入在连字符和破折号后。%
+某种字体都有一个相应的 |\hyphenchar|, 我们可以直接把它假定为`|-|'。)
+
+%\danger When \TeX\ ^{hyphenates} words, it simply inserts discretionary
+%breaks into the horizontal list. For example, the words `|discretionary
+%hyphens|' are transformed into the equivalent of
+%\begintt
+%dis\-cre\-tionary hy\-phens
+%\endtt
+%if hyphenation becomes necessary. But \TeX\ doesn't apply its hyphenation
+%algorithm to any word that already contains a discretionary break;
+%therefore you can use explicit discretionaries to override \TeX's automatic
+%method, in an emergency.
+\danger \1当 \TeX\ 把单词连字化时，它直接把任意可断点插入到水平列中。%
+例如，如果需要连字化，单词`|discretionary hyphens|'就被转换成
+\begintt
+dis\-cre\-tionary hy\-phens
+\endtt
+但是 \TeX\ 并不把连字算法应用到任何已经包含一个任意可断点的单词上；
+因此，在紧急情况下，可以用明确给出的任意可断点来覆盖掉 \TeX\ 自动生成的可断点。
+
+%\dangerexercise Before 1998, some ^{German} words changed their spelling
+%when split between lines. For example, `backen' became `bak-ken'
+%and `Bettuch' sometimes became `Bett-tuch'.
+%How can you instruct \TeX\ to produce such effects?
+%\answer |ba\ck/en| and |Be\ttt/uch|, where the macros |\ck/| and |\ttt/|
+%are defined by
+%\begintt
+%\def\ck/{\discretionary{k-}{k}{ck}}
+%\def\ttt/{tt\discretionary{-}{t}{}}
+%\endtt
+%The English word `eighteen' might deserve similar treatment.
+%\TeX's hyphenation algorithm will not make such spelling changes automatically.
+\dangerexercise 在 1998 年之前，有些^{德语}单词在分割到两行时要改变它们的拼写。%
+例如，`backen'变成`bak-ken'，`Bettuch'变成`Bett-tuch'。%
+怎样才能令 \TeX\ 这样做？
+\answer |ba\ck/en| 和 |Be\ttt/uch|，其中宏 |\ck/| 和 |\ttt/| 定义为
+\begintt
+\def\ck/{\discretionary{k-}{k}{ck}}
+\def\ttt/{tt\discretionary{-}{t}{}}
+\endtt
+英语单词 `eighteen' 也许需要类似的处理。
+\TeX\ 的连字算法不会自动作这种拼写改变。
+
+%\danger In order to save time, \TeX\ tries first to break a paragraph
+%into lines without inserting any discretionary hyphens. This first pass
+%will succeed if a sequence of breakpoints is found for which none
+%of the resulting lines has a badness exceeding the current value of
+%^|\pretolerance|. If the first pass fails, the method of Appendix~H is
+%used to hyphenate each word of the paragraph by inserting discretionary
+%breaks into the horizontal list, and a second attempt is
+%made using ^|\tolerance| instead of\/ |\pretolerance|. When the lines
+%are fairly wide, as they are in this manual, experiments show that
+%the first pass succeeds more than 90\% of the time, and that fewer than
+%2~words per paragraph need to be subjected to the hyphenation algorithm,
+%on the average. But when the lines are very narrow the
+%first pass usually fails rather quickly. Plain \TeX\ sets |\pretolerance=100|
+%and |\tolerance=200| as the default values. If you make |\pretolerance=10000|,
+%the first pass will essentially always succeed, so hyphenations will not
+%be tried (and the spacing may be terrible); on the other hand if you make
+%|\pretolerance=-1|, \TeX\ will omit the first pass and will try to
+%hyphenate immediately.
+\danger 为了节约时间， \TeX\ 首先要在不插入任何连字符的情况下分段为行。%
+如果所找到的一系列断点所得到的行的丑度没有超出 |\pretolerance| 的值，
+那么这第一次就通过了。%
+如果第一次没通过，就利用附录 H 的方法，通过把任意可断点插入水平列而把段落中的%
+每个单词都连字化，并且在第二次尝试时使用 |\tolerance| 而不是 |\pretolerance|。%
+当行相当宽时，比如象本手册一样，实验表明，90\% 的时候都可以一次通过，
+并且平均每段很少超过两个单词要用到连字算法。%
+但是当行非常窄时，第一次一般都很快失败了。%
+Plain \TeX\ 的默认值是 |\pretolerance=100| 和 |\tolerance=200|。%
+如果 |\pretolerance=10000|, 第一次一般都顺利通过，所以不会用到连字算法(并且间距%
+可能宽得可怕);
+另一方面，如果 |\pretolerance=-1|,  \TeX\ 就跳过第一次，直接使用连字。
+
+%\danger Line breaks can occur only in certain places within a horizontal
+%list. Roughly speaking, they occur between words and after hyphens, but in
+%actuality they are permitted in the following five cases:\enddanger
+\danger 断行只出现在水平列的某些地方。%
+严格讲，出现在单词之间和连字符后面，
+但是实际上，下列五种情况是允许的：\enddanger
+
+%\smallskip
+%\item{a)} at glue, provided that this glue is immediately preceded by a
+%non-discardable item, and that it is not part of a math formula (i.e., not
+%between math-on and math-off). A break ``at glue'' occurs at the left edge
+%of the glue space.
+\smallskip
+\item{a)} 在粘连处，只要这个粘连前面为一个不可弃项目，
+并且它不是数学公式的一部分（即不在公式开始和结束之间）。
+``在粘连处''的断点出现在粘连间距的左边。
+
+%\smallskip
+%\item{b)} at a kern, provided that this kern is immediately followed by
+%glue, and that it is not part of a math formula.
+\smallskip
+\item{b)} 在紧排处，只要这个紧排后面直接跟的是粘连，并且它不是数学公式的一部分。
+
+%\smallskip
+%\item{c)} at a math-off that is immediately followed by glue.
+\smallskip
+\item{c)} 在数学模式结束处，其后紧接着的是粘连。
+
+%\smallskip
+%\item{d)} at a penalty (which might have been inserted automatically in a
+%formula).
+\smallskip
+\item{d)} 在惩罚处（在公式中，它可以被自动插入）。
+
+%\smallskip
+%\item{e)} at a discretionary break.
+\smallskip
+\item{e)} 在任意可断点。
+
+%\smallskip\noindent
+%Notice that if two globs of glue occur next to each other, the second one
+%will never be selected as a breakpoint, since it is preceded by glue (which
+%is discardable).
+\smallskip\noindent
+注意，如果两个粘连依次出现，那么第二个从不被选作断点，
+因为它前面也是个粘连（它是可弃的）。
+
+%\danger Each potential breakpoint has an associated ``penalty,'' which
+%represents the ``aesthetic cost'' of breaking at that place. In cases
+%(a), (b),~(c), the penalty is zero; in case~(d) an explicit penalty
+%has been specified; and in case~(e) the penalty is the current value of
+%^|\hyphenpenalty| if the pre-break text is nonempty, or the current value of
+%^|\exhyphenpenalty| if the pre-break text is empty.
+%Plain \TeX\ sets |\hyphenpenalty=50| and |\exhyphenpenalty=50|.
+\danger 每个潜在断点都有严格相应的``惩罚''，它表示此处断点的``美学值''。
+对 (a)、(b)、(c)，惩罚是零；
+对 (d)，就是给出的惩罚；
+对 (e)，如果 pre-break 文本非空，那么惩罚是 |\hyphenpenalty| 的当前值，
+或者如果 pre-break 文本是空的，那么就是 |\exhyphenpenalty| 的当前值。
+Plain \TeX\ 设置 |\hyphenpenalty=50| 和 |\exhyphenpenalty=50|。
+
+%\danger For example, if you say `^|\penalty| |100|' at some point in a
+%paragraph, that position will be a legitimate place to break between
+%lines, but a penalty of 100 will be charged. If you say `\hbox{|\penalty-100|}'
+%you are telling \TeX\ that this is a rather good place to break, because
+%a negative penalty is really a ``^{bonus}''; a line that ends with a bonus
+%might even have ``merits'' (negative demerits).
+\danger \1例如，如果在段落的某处给出`|\penalty 100|',
+那么此处就是断行的合理位置，但是要符合惩罚为 100。%
+如果给出`\hbox{|\penalty-100|}', 就告诉了 \TeX\ 这是断行的相当好的地方，
+因为负的惩罚实际上是一个``奖励''；
+以奖励结尾的行可能还有``优点''（负的缺陷）。
+
+%\danger Any penalty that is 10000 or more is considered to be so large
+%^^{infinite penalty} that \TeX\ will never break there. At the other
+%extreme, any penalty that is $-10000$ or less is considered to be so small
+%that \TeX\ will always break there.  The ^|\nobreak| macro of plain \TeX\
+%is simply an abbreviation for `|\penalty10000|', because this prohibits a
+%line break. A tie in plain \TeX\ is equivalent to `|\nobreak\|\]';
+%there will be no break at the glue represented by |\|\] in this
+%case, because glue is never a legal breakpoint when it is preceded by a
+%discardable item like a penalty.
+\danger 任何大于等于 10000 的惩罚都被看作大得不在此断行。
+在另一个极端下，任何小于等于 $-10000$ 的惩罚都被看作小得总在此断行。
+plain \TeX\ 的宏 |\nobreak| 的直接定义就是`|\penalty10000|'，
+因为它禁止在此处断行。Plain \TeX\ 中的带子等价于`|\nobreak\|\]'；
+在这种情况下，在由 |\|\] 表示的粘连处不断行，
+因为当粘连前面为一个像惩罚这样的可弃项目时，它就不是一个合理的断点。
+
+%\dangerexercise Guess how the ^|\break| macro is defined in plain \TeX.
+%\answer |\def\break{\penalty-10000 }|
+\dangerexercise 想想看在 plain \TeX\ 中宏 |\break| 的定义是什么。
+\answer |\def\break{\penalty-10000 }|
+
+%\dangerexercise What happens if you say |\nobreak\break| or
+%|\break\nobreak|?
+%\answer You get a forced break as if\/ |\nobreak| were not present, because
+%|\break| cannot be cancelled by another penalty. In general if you
+%have two penalties in a row, their combined effect is the same as a single
+%penalty whose value is the minimum of the two original values, unless
+%both of those values force breaks. \ (You get two breaks from
+%|\break\break|; the second one creates an empty line.)
+\dangerexercise 当给出 |\nobreak\break| 或 |\break\nobreak| 时，
+将出现什么情况？
+\answer 你将会得到一个强制断行，仿佛 |\nobreak| 不存在一样，
+因为 |\break| 不能被任何惩罚取消。
+一般地，如果有两个惩罚在一起，它们合起来的效果等同于惩罚值较小的那个，
+除非两者都为强制断行。%
+（用 |\break\break| 你将得到两个断行；第二个造成一个空行。）
+
+%\danger When a line break actually does occur, \TeX\ removes all discardable
+%items that follow the break, until coming to something non-discardable,
+%or until coming to another chosen breakpoint. For example, a sequence of
+%glue and penalty items will vanish as a unit, if no boxes intervene,
+%unless the optimum breakpoint sequence includes one or more of the penalties.
+%Math-on and math-off items act essentially as kerns that contribute the spacing
+%specified by ^|\mathsurround|; such spacing will disappear into the line
+%break if a formula comes at the very end or the very beginning of a line,
+%because of the way the rules have been formulated above.
+\danger 当断行实际出现时，\TeX\ 将去掉此断点后的所有可弃项目，
+直到遇见不可弃项目或者遇见另一个选定的断点。
+例如，如果中间没有插入盒子，那么一系列粘连和惩罚将一起消失，
+除非合适的断点系列包括了一个或多个惩罚。
+数学模式开始和结束其实是作为紧排而给出由 |\mathsurround| 规定的间距；
+这样的间距在公式出现的行首和行尾时将消失在断行中了，
+这是源于上面罗列的规则。
+
+%\ddanger The ^{badness} of a line is an integer that is approximately 100
+%times the cube of the ratio by which the glue inside the line must stretch
+%or shrink to make an hbox of the required size. For example, if the line
+%has a total shrinkability of 10 points, and if the glue is being
+%compressed by a total of 9 points, the badness is computed to be~73 (since
+%$100\times(9/10)^3=72.9$); similarly, a line that stretches by twice its
+%total stretchability has a badness of 800.  But if the badness obtained by
+%this method turns out to be more than 10000, the value 10000 is used.  \
+%$\bigl($See the discussion of ``^{glue set ratio}''~$r$ and ``^{glue set
+%order}''~$i$ in Chapter~12; if $i\ne0$, there is infinite stretchability or
+%shrinkability, so the badness is zero, otherwise the badness is
+%approximately $\min(100r^3,10000)$.$\bigr)$ \ Overfull boxes are
+%considered to be infinitely bad; they are avoided whenever possible.
+%^^{infinite badness}
+\ddanger 行的丑度是一个整数，近似等于 100 乘以一个比值的立方，
+这个比值就是为了得到所要求尺寸的 hbox, 行中的粘连必须伸缩的比例。%
+例如，如果行的总收缩能力是 10 points, 并且粘连被总共压缩了 9 points,
+那么丑度计算出的值是 73~(因为 $100\times(9/10)^3=72.9$);
+类似地，行的伸长为其总伸长能力的两倍，那么前丑度为 800。%
+但是如果这样得到的丑度大于 10000, 那么就把它取为 10000。%
+~(参见第十二章中``粘连调整比例''~$r$ 和``粘连调整阶次''~$i$ 的讨论；
+如果 $i\ne0$, 那么伸缩能力是无限大，因此丑度是零，
+否则丑度近似等于 $\min(100r^3,10000)$。)~%
+溢出的盒子被看作无限糟糕；所以要尽可能避免它们。
+
+%\ddanger A line whose badness is 13 or more has a glue set ratio exceeding
+%50\%. We call such a line {\sl ^{tight}\/} if its glue had to shrink,
+%{\sl ^{loose}\/} if its glue had to stretch, and {\sl ^{very loose}\/}
+%if it had to stretch so much that the badness is 100 or more. But if the
+%badness is 12 or less we say that the line is {\sl ^{decent}}. Two
+%adjacent lines are said to be {\sl {visually incompatible}\/} if their
+%classifications are not adjacent, i.e., if a tight line is next to a
+%loose or very loose line, or if a decent line is next to a very loose one.
+\ddanger 丑度大于等于 13 的行的粘连调整比例超过 50\%。%
+如果其粘连要收缩，我们将认为此行{\KT{10}太紧},
+如果要伸长，此行就{\KT{10}松散},
+如果伸长时丑度超过 100, 它就{\KT{10}空荡}了。%
+但是，如果丑度小于等于 12, 就认为此行{\KT{10}适中}。%
+如果相邻两行的分类却不相近，即，太紧的行后面跟着一个松散或空荡的\hbox{行，}
+或者一个适中的行后面是一个空荡的行，那么它们就称为%
+{\KT{10}无视觉美感的}。
+
+%\ddanger \TeX\ rates each potential sequence of breakpoints by totalling
+%up {\sl ^{demerits}\/} that are assessed to individual lines. The goal
+%is to choose breakpoints that yield the fewest total demerits. Suppose that a
+%line has badness~$b$, and suppose that the penalty~$p$ is associated with
+%the breakpoint at the end of this line. As stated above, \TeX\ will not
+%even consider such a line if $p\ge10000$, or if $b$~exceeds the current
+%tolerance or pretolerance. Otherwise the demerits of such a line are
+%defined by the formula
+%\begindisplay
+%$\displaystyle{d=\cases{
+%  (l+b)^2+p^2,&if $0\le p<10000$;\cr
+%  (l+b)^2-p^2,&if $-10000<p<0$;\cr
+%  (l+b)^2,&if $p\le-10000$.\cr}}$
+%\enddisplay
+%Here $l$ is the current value of\/ ^|\linepenalty|, a parameter that can be
+%increased if you want \TeX\ to try harder to keep all paragraphs to the
+%minimum number of lines; plain \TeX\ sets |\linepenalty=10|. For example,
+%a line with badness~20 ending at glue will have $(10+20)^2=900$ demerits,
+%if $l=10$, since there's no penalty for a break at glue. Minimizing the
+%total demerits of a paragraph is roughly the same as minimizing the
+%sum of the squares of the badnesses and penalties; this usually means
+%that the maximum badness of any individual line is also minimized, over
+%all sequences of breakpoints.
+\ddanger  \TeX\ 用各个行中出现的总{\KT{10}缺陷}来把每个可能的断点系列排序。%
+目的是要选择总缺陷最少的断点系列。%
+假定一个行的丑度为 $b$, 再假定在行尾的相应于断点的惩罚是 $p$。%
+\1如上所述，如果 $p\ge10000$, 或者 $b$ 超出当前的容许误差或预先的容许误差，
+那么 \TeX\ 就不计及此行。%
+否则，此行的缺陷由下列公式进行计算：
+\begindisplay
+$\displaystyle{d=\cases{
+  (l+b)^2+p^2,&if $0\le p<10000$;\cr
+  (l+b)^2-p^2,&if $-10000<p<0$;\cr
+  (l+b)^2,&if $p\le-10000$.\cr}}$
+\enddisplay
+这里的 $l$ 是 |\linepenalty| 的当前值，
+如果要把所有段落都压缩到最小的行数，就可以增大此参数；
+plain \TeX\ 设置 |\linepenalty=10|。%
+例如，如果 $l=10$, 那么以粘连结尾的丑度为 $20$ 的行的缺陷为%
+~$(10+20)^2=900$, 这是因为对粘连处的断点没有惩罚。%
+把段落的总缺陷最小化粗略地讲就是把丑度和惩罚的平方和变成最小；
+这通常意味着在整个断点系列中，各个行的最大丑度也是最小的。
+
+%\ddangerexercise The formula for demerits has a strange discontinuity: It
+%seems more reasonable at first to define $d=(l+b)^2-10000^2$, in the
+%case $p\le-10000$. Can you account for this apparent discrepancy?
+%\answer Breaks are forced when $p\le-10000$, so there's no point in
+%subtracting a large constant whose effect on the total demerits is
+%known {\sl a priori}, especially when that might cause arithmetic overflow.
+\ddangerexercise 缺陷公式有一个奇怪的不连续性：
+当 $p\le-10000$ 时，好像定义为 $d=(l+b)^2-10000^2$ 更好。%
+你能给出这个明显差异的理由吗？
+\answer 当 $p\le-10000$ 时强制断行，
+因此没必要减去对总缺陷的影响{\sl 可以预知}的大常数，
+尤其在它可能导致算术计算溢出时。
+
+%\ddanger Additional demerits are assessed based on pairs of adjacent lines.
+%If two consecutive lines are visually incompatible, in the sense explained
+%a minute ago, the current value of\/ ^|\adjdemerits| is added to~$d$. If two
+%consecutive lines end with discretionary breaks, the ^|\doublehyphendemerits|
+%are added. And if the second-last line of the entire paragraph ends with
+%a discretionary, the ^|\finalhyphendemerits| are added. Plain \TeX\ sets
+%up the values |\adjdemerits=10000|, |\doublehyphendemerits=10000|,
+%and |\finalhyphendemerits=5000|. Demerits are in units of
+%``badness squared,'' so the demerit-oriented parameters need to be rather
+%large if they are to have much effect; but tolerances and
+%penalties are given in the same units as badness.
+\ddanger 其它的缺陷来自相邻行的配对。%
+如果两个紧接的行无视觉美感，如前面刚讨论过的那样，那么 |\adjdemerits| 的当前值%
+被加到 $d$ 上。%
+如果两个紧接的行以任意可断点为结尾，那么要加上 |\doublehyphendemerits|。%
+如果整段的倒数第二行以任意可断点结尾，就加上 |\finalhyphendemerits|。%
+~Plain \TeX\ 的设置是 |\adjdemerits=10000|, |\doublehyphendemerits=10000|,
+|\finalhyphendemerits=|\break|5000|。%
+缺陷的单位是``丑度的平方'', 所以如果缺陷的因素有很多，
+那么把缺陷定性的参数就要相当大；
+但是，容许误差和惩罚与丑度的单位是一样的。
+
+%\ddanger If you set ^|\tracingparagraphs||=1|, your log file will contain a
+%summary of \TeX's line-breaking calculations, so you can watch the tradeoffs
+%that occur when parameters like |\linepenalty| and |\hyphenpenalty| and
+%|\adjdemerits| are twiddled. The line-break data looks pretty scary at first,
+%but you can learn to read it with a little practice; this, in fact, is the
+%best way to get a solid understanding of line breaking. Here is the
+%trace that results from the second paragraph of the |story| file in
+%Chapter~6, when |\hsize=2.5in| and |\tolerance=1000|:
+%\begindisplay
+%|[]\tenrm Mr. Drofnats---or ``R. J.,'' as he pre-|\cr
+%|@\discretionary via @@0 b=0 p=50 d=2600|\cr
+%|@@1: line 1.2- t=2600 -> @@0|\cr
+%|ferred to be called---was hap-pi-est when |\cr
+%|@ via @@1 b=131 p=0 d=29881|\cr
+%|@@2: line 2.0 t=32481 -> @@1|\cr
+%|he|\cr
+%|@ via @@1 b=25 p=0 d=1225|\cr
+%|@@3: line 2.3 t=3825 -> @@1|\cr
+%|was at work type-set-ting beau-ti-ful doc-|\cr
+%|@\discretionary via @@2 b=1 p=50 d=12621|\cr
+%|@\discretionary via @@3 b=291 p=50 d=103101|\cr
+%|@@4: line 3.2- t=45102 -> @@2|\cr
+%|u-|\cr
+%|@\discretionary via @@3 b=44 p=50 d=15416|\cr
+%|@@5: line 3.1- t=19241 -> @@3|\cr
+%|ments.|\cr
+%|@\par via @@4 b=0 p=-10000 d=5100|\cr
+%|@\par via @@5 b=0 p=-10000 d=5100|\cr
+%|@@6: line 4.2- t=24341 -> @@5|\cr
+%\enddisplay
+%Lines that begin with `|@@|' ^^{atsign atsign} represent {\sl^{feasible
+%breakpoints}}, i.e., breakpoints that can be reached without any badness
+%exceeding the tolerance. Feasible breakpoints are numbered consecutively,
+%starting with |@@1|; the beginning of the paragraph is considered to be
+%feasible too, and it is number |@@0|. Lines that begin with `|@|' but
+%not `|@@|' are candidate ways to reach the feasible breakpoint that
+%follows; \TeX\ will select only the best candidate, when there is a choice.
+%Lines that do not begin with `|@|' indicate how far \TeX\ has gotten in the
+%paragraph. Thus, for example, we find `|@@2: line 2.0 t=32481 -> @@1|'
+%after `|...hap-pi-est when|' and before `|he|', so we know that feasible
+%breakpoint~|@@2| occurs at the space between the words |when| and |he|.
+%The notation `|line 2.0|' means that this feasible break comes at the end
+%of line~2, and that this line will be very loose. \ (The suffixes
+%|.0|, |.1|, |.2|, |.3| stand respectively for very loose, loose, decent,
+%and tight.) \ A hyphen is suffixed to the line number if that line
+%ends with a discretionary break, or if it is the final line of the
+%paragraph; for example, `|line 1.2-|' is a decent line that was hyphenated.
+%The notation `|t=32481|' means that the total demerits from the beginning
+%of the paragraph to~|@@2| are 32481, and `|-> @@1|' means that the best
+%way to get to |@@2| is to come from |@@1|. On the preceding line of trace
+%data we see the calculations for a typeset line to this point from |@@1|:
+%The badness is~131, the penalty is~0, hence there are 29881 demerits.
+%Similarly, breakpoint |@@3| presents an alternative for the second line of
+%the paragraph, obtained by breaking between `|he|' and `|was|'; this one
+%makes the second line tight, and it has only 3825 demerits when the
+%demerits of line~1 are added, so it appears that |@@3| will work much
+%better than |@@2|. However, the next feasible breakpoint (|@@4|) occurs
+%after `|doc-|', and the line from |@@2| to~|@@4| has only 12621 demerits,
+%while the line from |@@3| to~|@@4| has a whopping 103101; therefore
+%the best way to get from |@@0| to~|@@4| is via~|@@2|. If we regard
+%demerits as distances, \TeX\ is finding the ``^{shortest paths}'' from
+%|@@0| to each feasible breakpoint (using a variant of a well-known
+%algorithm for shortest paths in an acyclic graph). Finally the end of
+%the paragraph comes at breakpoint |@@6|, and the shortest path from
+%|@@0| to~|@@6| represents the best sequence of breakpoints. Following
+%the arrows back from~|@@6|, we deduce that~the best breaks in this
+%particular paragraph go through |@@5|, |@@3|, and~|@@1|.
+\ddanger 如果设置 |\tracingparagraphs||=1|, 那么 log 文件就包含了 \TeX\ %
+断行运算的总结，
+所以当摆弄象 |\linepenalty|, |\hyphenpenalty| 和 |\adjdemerits| 这些参数时，
+就可以看到所出现的不同折衷方案。%
+断行信息初看起来会有些不知所措，但是经过一点训练后将可以看懂了；
+实际上，这是真正理解断行的最好方法。%
+下面是第六章的 |story| 的第二段的跟踪结果，其中 |\hsize=2.5in| 和 |\tolerance=1000|:
+\begindisplay
+|[]\tenrm Mr. Drofnats---or ``R. J.,'' as he pre-|\cr
+|@\discretionary via @@0 b=0 p=50 d=2600|\cr
+|@@1: line 1.2- t=2600 -> @@0|\cr
+|ferred to be called---was hap-pi-est when |\cr
+|@ via @@1 b=131 p=0 d=29881|\cr
+|@@2: line 2.0 t=32481 -> @@1|\cr
+|he|\cr
+|@ via @@1 b=25 p=0 d=1225|\cr
+|@@3: line 2.3 t=3825 -> @@1|\cr
+|was at work type-set-ting beau-ti-ful doc-|\cr
+|@\discretionary via @@2 b=1 p=50 d=12621|\cr
+|@\discretionary via @@3 b=291 p=50 d=103101|\cr
+|@@4: line 3.2- t=45102 -> @@2|\cr
+|u-|\cr
+|@\discretionary via @@3 b=44 p=50 d=15416|\cr
+|@@5: line 3.1- t=19241 -> @@3|\cr
+|ments.|\cr
+|@\par via @@4 b=0 p=-10000 d=5100|\cr
+|@\par via @@5 b=0 p=-10000 d=5100|\cr
+|@@6: line 4.2- t=24341 -> @@5|\cr
+\enddisplay
+\1以`|@@|'开头的行表示{\KT{10}适宜的}断点，即，
+得到这些断点时没有任何超出容许误差的丑度。%
+适宜的断点从 |@@1| 开始连续编号；
+段落的开头也被看作是适宜的，编号为 |@@0|。%
+以`|@|'而不是以`|@@|'开头的行是接下来得到适宜断点的候选方法；
+当要做出选择时， \TeX\ 将选择最好的候选方法。%
+不以`|@|'开头的行表示 \TeX\ 在本段进行到什么地方了。%
+因此，例如，我们看到在`|...hap-pi-est when|'后面和`|he|'前面有%
+`|@@2: line 2.0 t=32481 -> @@1|',
+那么我们就知道了适宜断点 |@@2| 出现在单词 |when| 和 |he| 之间的空格上。%
+符号`|line 2.0|'表示此适宜断点出现在第二行的结尾，并且此行是空荡。%
+后缀 |.0|, |.1|, |.2|, |.3| 分别表示空荡，松散，适中和太紧。)
+如果行以任意可断点结尾，或者此行是段落的最后一行，那么在行号后面跟一个连字符；
+例如，`|line 1.2-|'是连字化的一个适中的行。%
+符号`|t=32481|'表示从段落开头到 |@@2| 的总缺陷是 32481,
+还有，`|-> @@1|' 表示得到 |@@2| 的最好方法是来自 |@@1|。%
+在跟踪信息的前一行，我们看到计算行从 |@@1| 到此点的排版结果为：
+丑度为 131, 惩罚为 0, 因此缺陷为 29881。%
+类似地，断点 |@@3| 给出了本段第二行的另一种方法，其断点在`|he|'和`|was|'之间；
+它得到的第二行太紧，并且当加到第一行上时缺陷只是 3825,
+所以看起来 |@@3| 比 |@@2| 更好。%
+但是，下一个适宜断点(|@@4|)出现在`|doc-|'后面，从 |@@2| 到 |@@4| 的行%
+的缺陷只是 12621,
+而从 |@@3| 到 |@@4| 的行的缺陷大到 103101;
+因此，从 |@@0| 到 |@@4| 的最好方法是通过 |@@2|。%
+如果我们把缺陷看作距离，那么 \TeX\ 要找到从 |@@0| 到每个适宜断点的%
+``最短路径''(所用的是在非循环图中求最短路径的著名算法的变形)。%
+最后，段落的结尾处在断点 |@@6|, 并且从 |@@0| 到 |@@6| 的最短路径代表了%
+断点的最佳系列。%
+从 |@@6| 沿着箭头往回，我们就推导出在这个特殊段落中的最好断点是%
+~|@@5|, |@@3|, |@@1|。
+
+%\ddangerexercise Explain why there are 29881 demerits from |@@1| to |@@2|,
+%and 12621 demerits from~|@@2| to~|@@4|.
+%\answer $(10+131)^2+0^2+10000=29881$ and $(10+1)^2+50^2+10000=12621$.
+%In both cases the ^|\adjdemerits| were added because the lines were
+%visually incompatible (decent, then very loose, then decent); plain
+%\TeX's values for ^|\linepenalty| and |\adjdemerits| were used.
+\ddangerexercise 解释一下为什么从 |@@1| 到 |@@2| 的缺陷是 29881，
+从 |@@2| 到 |@@4| 的缺陷是 12621。
+\answer $(10+131)^2+0^2+10000=29881$ 以及 $(10+1)^2+50^2+10000=12621$。
+在两种情形中 ^|\adjdemerits| 都被加进来，
+因为文本行是无视觉美感的（先是适中行，再是空荡行，再是适中行）；
+这里使用 plain \TeX\ 的 ^|\linepenalty| 和 |\adjdemerits| 的值。
+
+%\ddanger If `|b=*|' ^^|*| appears in such trace data, it means that an
+%infeasible breakpoint had to be chosen because there was no feasible
+%way to keep total demerits small.
+\ddanger 如果在这样的跟踪信息中出现了`|b=*|', 那么它表示必须选择一个不适宜的断点，
+因为没有适宜的方法使得整体缺陷很小。
+
+%\danger We still haven't discussed the special trick that allows the
+%final line of a paragraph to be shorter than the others. Just before
+%\TeX\ begins to choose breakpoints, it does two important things: \
+%(1)~If the final item of the current horizontal list is glue,
+%^^|\unskip|
+%that glue is discarded. \ (The reason is that a blank space
+%often gets into a token list just before ^|\par| or just before |$$|,
+%and this blank space should not be part of the paragraph.) \ (2)~Three more
+%items are put at the end of the current horizontal list: |\penalty10000|
+%(which prohibits a line break); |\hskip\parfillskip| (which adds
+%``^{finishing glue}'' to the paragraph); and |\penalty-10000| (which
+%forces the final break). Plain \TeX\ sets ^|\parfillskip||=0pt plus1fil|,
+%so that the last line of each paragraph will be filled with white space
+%if necessary; but other settings of\/ |\parfillskip| are appropriate in
+%special applications. For example, the present paragraph ends flush with
+%the right margin, because it was typeset with |\parfillskip=0pt|;
+%the author didn't have to rewrite any of the text in order to make this
+%possible, since a long paragraph generally allows so much flexibility that
+%a line break can be forced at almost any point. You can have some fun
+%playing with paragraphs, because the algorithm for line breaking
+%occasionally appears to be clairvoyant. Just write paragraphs
+%that are long enough.\parfillskip=0pt
+%% the \danger macro makes this \parfillskip local!
+\danger 我们还没有讨论使段落的最后一行比其它行短的特殊技巧。%
+就在 \TeX\ 开始选择断点之前，它要做两个很重要的事情：
+(1). 如果当前水平列的最后一个项目是粘连，就扔掉此粘连。%
+\1(原因是空格通常正好在 |\par| 之前或 |$$| 之前进入记号列中，
+并且此空格不被看作段落的一部分。)
+(2) 还有三个项目要放在当前水平列的结尾：|\penalty10000|(禁止断行);
+|\hskip\parfillskip|(把``最后的粘连''放在段中);
+|\penalty-10000|(强制最后的断行)。%
+Plain \TeX\ 设置 |\parfillskip||=0pt plus1fil|,
+因此每段的最后一行在需要时用空白充满；
+但是在其它特殊应用中，设置其它的 |\parfillskip| 也是应该的。%
+例如，当前段的结尾是右对齐，因为它按照 |\parfillskip=0pt| 来排版；
+这样的结果不需要修改什么，
+因为长的段落一般可以有很大的弹性，使得在所有地方都可以断行。
+你可以在段落中玩些花样，因为断行的算法通常好像是千里眼。%
+只要输入足够长的段落即可。\parfillskip=0pt
+% the \danger macro makes this \parfillskip local!
+
+%\dangerexercise Ben ^{User} decided to say `|\hfilneg\par|' at the end of
+%a paragraph, intending that the negative stretchability of\/ ^|\hfilneg|
+%would cancel with the |\parfillskip| of plain \TeX\null. Why didn't his
+%bright idea work? ^^{paragraph, ending}
+%\answer Because \TeX\ discards a glue item that occurs just before
+%|\par|. Ben should have said, e.g., `|\hfilneg\ \par|'.
+\dangerexercise 用户 Ben 要在段落结尾处添加上`|\hfilneg\par|'，
+其思路是，|\hfilneg| 的负伸缩性将与 plain \TeX\ 的 |\parfillskip| 抵消。%
+为什么这个聪明的想法不对？
+\answer 因为 \TeX\ 丢弃就在 |\par| 之前的那个粘连项，
+Ben 应该键入 `|\hfilneg\ \par|'。
+
+%\dangerexercise How can you set |\parfillskip| so that the last line
+%of a paragraph has exactly as much white space at the right as the
+%first line has indentation at the left?\nobreak\hskip\parindent\hfilneg\
+%\answer Just say |\parfillskip|\stretch|=|\stretch|\parindent|. Of course,
+%\TeX\ will not be able to find appropriate line breaks unless each
+%paragraph is sufficiently long or sufficiently lucky; but with an
+%appropriate text, your output will be immaculately
+%symmetrical.{\parfillskip=\parindent\par}
+\dangerexercise 应该如何设置 |\parfillskip|，才能使得段落最后一行%
+右边的空白与段落第一行左边的缩进空白恰好一样大小%
+\hbox{？\hskip-.5em}\nobreak\hskip\parindent\hfilneg\
+\answer 键入 |\parfillskip|\stretch|=|\stretch|\parindent| 就可以。
+当然，除非每个段落够长或运气够好，
+\TeX\ 将无法找到合适断行点；
+但对适当的文本，其输出将是完美对称的。%
+{\parfillskip=\parindent\par}
+
+%\ddangerexercise Since \TeX\ reads an entire paragraph before it makes
+%any decisions about line breaks, the computer's memory capacity might
+%^^{capacity exceeded} be exceeded if you are typesetting the works of some
+%^^{Joyce, James} ^{philosopher} or modernistic novelist who writes
+%200-line paragraphs. Suggest a way to cope with such authors.
+%\answer Assuming that the author is deceased and/or set in his or her
+%ways, the remedy is to insert `|{\parfillskip=0pt\par\parskip=0pt\noindent}|'
+%in random places, after each 50 lines or so of text. \ (Every space
+%between words is usually a feasible breakpoint, when you get sufficiently
+%far from the beginning of a paragraph.)
+\ddangerexercise 因为 \TeX\ 在确定断行之前要读入整个段，
+所以，如果要排版一段有 200 行哲学著作或现代小说，计算机的内存可能会溢出。%
+想个办法来应付它。
+\answer 假设作者已经去世或/且固执己见，
+补救方法是在每 50 行左右的随机位置插入
+`|{\parfillskip=0pt\par\parskip=0pt\noindent}|'。%
+（离段落开始位置足够远的单词之间的空白通常是可行的断点。）
+
+%\danger \TeX\ has two parameters called ^|\leftskip| and ^|\rightskip| that
+%specify glue to be inserted at the left and right of every line in a
+%paragraph; this glue is taken into account when badnesses and demerits are
+%computed.  Plain \TeX\ normally keeps |\leftskip| and |\rightskip| zero,
+%but it has a `^|\narrower|' macro that increases both of their values by
+%the current ^|\parindent|. You may want to use |\narrower| when ^{quoting}
+%lengthy passages from a book.
+%\begintt
+%{\narrower\smallskip\noindent
+%This paragraph will have narrower lines than
+%the surrounding paragraphs do, because it
+%uses the ``narrower'' feature of plain \TeX.
+%The former margins will be restored after
+%this group ends.\smallskip}
+%\endtt
+%(Try it.) \ The second `^|\smallskip|' in this example ends the paragraph.
+%It's important to end the paragraph before ending the group, for otherwise
+%the effect of\/ |\narrower| will disappear before \TeX\ begins to choose
+%line breaks.
+\danger  \TeX\ 提供了 |\leftskip| 和 |\rightskip| 这两个参数，
+用来给出段落中每行左右插入的粘连；
+当计算丑度和缺陷时，要考虑这个粘连。%
+Plain \TeX\ 一般设置 |\leftskip| 和 |\rightskip| 为零，
+但是有一个叫`|\narrower|'的宏，把它们的值增加为当前的 |\parindent|。%
+当引用书中的大段内容时可能要用到 |\narrower|。
+\begintt
+{\narrower\smallskip\noindent
+This paragraph will have narrower lines than
+the surrounding paragraphs do, because it
+uses the ``narrower'' feature of plain \TeX.
+The former margins will be restored after
+this group ends.\smallskip}
+\endtt
+(试试看。)
+本例中的第二个`|smallskip|'结束了本段。%
+重要的是在结束组之前要结束段，否则 |\narrower| 会在 \TeX\ 确定断行之前失效。
+
+%\dangerexercise When an entire paragraph is typeset in ^{italic} or ^{slanted}
+%type, it sometimes appears to be offset on the page with respect to
+%other paragraphs. Explain how you could use |\leftskip| and |\rightskip|
+%to shift all lines of a paragraph left by $1\pt$.
+%\answer |{\leftskip=-1pt \rightskip=1pt| \<text> |\par}|\par
+%\nobreak\medskip\noindent
+%(This applies to a full paragraph; if you want to correct only
+%isolated lines, you have to do it by hand.)
+\dangerexercise 当用意大利体或斜体排版整个段落时，
+有时候此段落会相对于其它段落在页面上有一个偏移。%
+利用 |\leftskip| 和 |\rightskip| 把某段落的所有行向左移 $1\pt$。
+\answer |{\leftskip=-1pt \rightskip=1pt| \<text> |\par}|\par
+\nobreak\medskip\noindent
+（这应用到整个段落；如果你只想修正某些行，你得特别处理。）
+
+%\dangerexercise The ^|\centerline|, ^|\leftline|, ^|\rightline|, and ^|\line|
+%macros of plain \TeX\ don't take |\leftskip| and |\rightskip| into
+%account. How could you make them do so?
+%\answer `|\def\line#1{\hbox to\hsize{\hskip\leftskip#1\hskip\rightskip}}|'
+%is the only change needed. \ (Incidentally,
+%^{displayed equations} don't take account of\/ |\leftskip| and |\rightskip|
+%either; it's more difficult to change that, because so many variations
+%are possible.)
+\dangerexercise \1Plain \TeX\ 中的宏 |\centerline|，|\leftline|，|\rightline|
+和 |\line| 都没有考虑 |\leftskip| 和 |\rightskip|。%
+怎样才能把它们算进去？
+\answer `|\def\line#1{\hbox to \hsize{\hskip\leftskip#1\hskip\rightskip}}|' ，
+而其他定义都无需修改。%
+（顺便说一下，^{陈列公式}也没有把 |\leftskip| 和 |\rightskip| 考虑进去；
+因为有太多可能的变化，要修改它将会困难得多。）
+
+%\ddanger If you suspect that ^|\raggedright| setting is accomplished by
+%some appropriate manipulation of\/ |\rightskip|, you are correct. But some
+%care is necessary. For example, a person can
+%set |\rightskip=0pt plus1fil|, and every
+%line will be filled with space at the right. But this isn't a particularly
+%good way to make ragged-right margins, because the infinite stretchability
+%will assign zero badness to lines that are very short.
+%To do a decent job of ragged-right setting, the trick is to set
+%|\rightskip| so that it will stretch enough to make line breaks possible,
+%yet not too much, because short lines should be considered bad. Furthermore
+%the spaces between words should be fixed so that they do not stretch
+%or shrink. \ (See the definition of\/ |\raggedright| in Appendix~B\null.) \
+%It would also be possible to allow a little variability in the interword
+%glue, so that the right margin would not be quite so ragged but the
+%paragraphs would still have an informal appearance.
+\ddanger 如果猜到了 |\raggedright| 就是用 |\rightskip| 做的处理，那么你对了。%
+但是有些要注意的。%
+例如，可以设置 |\rightskip=0pt plus1fil|, 并且每行的右边都用空白填满。%
+但是，这不是左对齐的很好的方法，因为无限的伸长能力会把很短的行的丑度变成零。%
+为了让左对齐更好，技巧是把 |\rightskip| 的伸长设置得可断行即可，
+但不能太大，这样短行就被看作糟糕的了。%
+还有，单词之间的间距应该固定，让它们不要伸缩。%
+(见附录 B 中 |\raggedright| 的定义。)
+也还可以允许单词之间的粘连略微变化，这样右边界不是那么太参差不齐，
+而段落还是不齐的样子。
+
+%\danger \TeX\ looks at the parameters that affect
+%line breaking only when it is breaking lines. For example, you shouldn't
+%try to change the ^|\hyphenpenalty| in the middle of a paragraph,
+%if you want \TeX\ to penalize the hyphens in one word more than it does in
+%another word. The relevant values of
+%|\hyphenpenalty|, |\rightskip|, |\hsize|, and so on,
+%are the ones that are current at the end of the paragraph.
+%On the other hand, the width of indentation that you get
+%implicitly at the beginning of a paragraph or when you say `^|\indent|'
+%is determined by the value of\/ ^|\parindent| at the time the
+%indentation is contributed to the current horizontal list,
+%not by its value at the end of the paragraph. Similarly, penalties
+%that are inserted into math formulas within a paragraph are based
+%on the values of\/ ^|\binoppenalty| and ^|\relpenalty| that are current
+%at the end of each particular formula. Appendix~D contains an example
+%that shows how to have both ragged-right and ragged-left margins within
+%a single paragraph, without using |\leftskip| or |\rightskip|.
+\danger 只有在断行时 \TeX\ 才用到影响断行的参数。%
+例如，如果要 \TeX\ 把这个词而不是那个词连字化，那么不能在段落中间改变%
+~|\hyphenpenalty|。%
+|\hyphenpenalty|, |\rightskip|, |\hsize| 等等相应的值是它们在段尾的当前值。%
+另一方面，段落开头或你给出`|\indent|'时得到的缩进宽度由 |\parindent| 的值确定，
+在缩进读入当前水平列时就确定了，而不是在段尾。%
+类似地，插入段落中的数学公式的惩罚是在每个公式结尾处 |\binoppenalty|~%
+和 |\relpenalty| 的当前值。%
+附录 D 给出了一个例子，不用 |\leftskip| 或 |\rightskip|,
+而在一个段落中既有左对齐，也有右对齐。
+
+%\varunit=0.989pt % getting ready to make circular insert
+%% \varunit=1.078pt was used with amr5: it had more letterspacing
+%\setbox0=\vtop{\null
+%\baselineskip6\varunit
+%\parfillskip0pt
+%\parshape 19
+%-18.25\varunit 36.50\varunit
+%-30.74\varunit 61.48\varunit
+%-38.54\varunit 77.07\varunit
+%-44.19\varunit 88.39\varunit
+%-48.47\varunit 96.93\varunit
+%-51.70\varunit 103.40\varunit
+%-54.08\varunit 108.17\varunit
+%-55.72\varunit 111.45\varunit
+%-56.68\varunit 113.37\varunit
+%-57.00\varunit 114.00\varunit
+%-56.68\varunit 113.37\varunit
+%-55.72\varunit 111.45\varunit
+%-54.08\varunit 108.17\varunit
+%-51.70\varunit 103.40\varunit
+%-48.47\varunit 96.93\varunit
+%-44.19\varunit 88.39\varunit
+%-38.54\varunit 77.07\varunit
+%-30.74\varunit 61.48\varunit
+%-18.25\varunit 36.50\varunit
+%\fiverm
+%\frenchspacing
+%\noindent
+%\hbadness 6000
+%\tolerance 9999
+%\pretolerance 0
+%\hyphenation{iso-peri-met-ric}
+%The area of a circle is a mean proportional
+%between any two regular and similar polygons of which one
+%circumscribes it and the other is isoperimetric with it.
+%In addition, the area of the circle is less than that of any
+%circumscribed polygon and greater than that of any
+%isoperimetric polygon. And further, of these
+%circumscribed polygons, the one that has the greater number of sides
+%has a smaller area than the one that has a lesser number;
+%but, on the other hand, the isoperimetric polygon that
+%has the greater number of sides is the larger.
+%\hbox to 36.50\varunit{\hss[Galileo,\thinspace1638]\hss}
+%}
+\varunit=0.989pt % getting ready to make circular insert
+% \varunit=1.078pt was used with amr5: it had more letterspacing
+\setbox0=\vtop{\null
+\baselineskip6\varunit
+\parfillskip0pt
+\parshape 19
+-18.25\varunit 36.50\varunit
+-30.74\varunit 61.48\varunit
+-38.54\varunit 77.07\varunit
+-44.19\varunit 88.39\varunit
+-48.47\varunit 96.93\varunit
+-51.70\varunit 103.40\varunit
+-54.08\varunit 108.17\varunit
+-55.72\varunit 111.45\varunit
+-56.68\varunit 113.37\varunit
+-57.00\varunit 114.00\varunit
+-56.68\varunit 113.37\varunit
+-55.72\varunit 111.45\varunit
+-54.08\varunit 108.17\varunit
+-51.70\varunit 103.40\varunit
+-48.47\varunit 96.93\varunit
+-44.19\varunit 88.39\varunit
+-38.54\varunit 77.07\varunit
+-30.74\varunit 61.48\varunit
+-18.25\varunit 36.50\varunit
+\fiverm
+\frenchspacing
+\noindent
+\hbadness 6000
+\tolerance 9999
+\pretolerance 0
+\hyphenation{iso-peri-met-ric}
+\hyphenation{poly-gons}
+The area of a circle is a mean proportional
+between any two regular and similar polygons of which one
+circumscribes it and the other is isoperimetric with it.
+In addition, the area of the circle is less than that of any
+circumscribed polygon and greater than that of any
+isoperimetric polygon. And further, of these
+circumscribed polygons, the one that has the greater number of sides
+has a smaller area than the one that has a lesser number;
+but, on the other hand, the isoperimetric polygon that
+has the greater number of sides is the larger.
+\hbox to 36.50\varunit{\hss[Galileo,\thinspace1638]\hss}
+}
+
+%\danger
+%\parshape 16
+%3pc 26pc
+%3pc 26pc
+%0pc 24.69pc
+%0pc 23.51pc
+%0pc 22.73pc
+%0pc 22.20pc
+%0pc 21.85pc
+%0pc 21.65pc
+%0pc 21.58pc
+%0pc 21.65pc
+%0pc 21.85pc
+%0pc 22.20pc
+%0pc 22.73pc
+%0pc 23.51pc
+%0pc 24.69pc
+%0pc 29pc
+%\vadjust{\moveright 28pc\vbox to 0pt{\vskip88pt\vskip-60\varunit
+%  \vskip-3pt\box0\vss}}%
+%\strut It's possible to control the length of lines in a much more general
+%way, if simple changes to |\leftskip| and |\rightskip| aren't
+%flexible enough for your purposes. For example, a semicircular
+%^{hole} has been cut out of the present paragraph, in order to make
+%room for a circular illustration that contains some of ^{Galileo}'s
+%immortal words about ^{circle}s; all of the line breaks in this paragraph
+%and in the circular quotation were found by \TeX's line-breaking
+%algorithm. You can specify an essentially arbitrary paragraph
+%shape by saying ^|\parshape||=|\<number>, where the \<number> is
+%a positive integer $n$, followed by $2n$ \<dimen> specifications.
+%In general, `|\parshape=|$n$ $i_1$~$l_1$ $i_2$~$l_2$ $\ldots$ $i_n$~$l_n$'
+%specifies a paragraph whose first $n$ lines will have lengths
+%$l_1$, $l_2$, \dots,~$l_n$, respectively, and they will be
+%indented from the left margin by the respective amounts
+%$i_1$, $i_2$, \dots,~$i_n$. If the paragraph has fewer than
+%$n$ lines, the additional specifications will be ignored;
+%if it has more than $n$ lines, the specifications for line $n$ will
+%be repeated ad infinitum. You can cancel the effect of a previously
+%specified |\parshape| by saying `|\parshape=0|'.\parfillskip0pt
+% ^^{illustrations, fitting copy around}
+\danger
+\parshape 10
+3pc 22.4pc
+3pc 21pc
+0pc 23pc
+0pc 22.4pc
+0pc 22pc
+0pc 22pc
+0pc 22.4pc
+0pc 23pc
+0pc 24pc
+0pc 25.4pc
+\vadjust{\moveright 28pc\vbox to 0pt{\vskip88pt\vskip-85\varunit
+  \vskip-3pt\box0\vss}}%
+\strut 如果直接改变 |\leftskip| 和 |\rightskip| 还不能随心所欲，
+就可以用更一般的方法来控制行的长度。%
+例如，为了给包含 Galileo 不朽名言的圆形图解留下地方，
+当前段落被切掉一个半圆的洞；
+本段和圆形区域的所有断行都遵循了 \TeX\ 的断行算法。%
+通过 |\parshape||=|\<number>, 你可以得到完全任意的段落形状，
+其中 \<number> 是正整数 $n$, 后面跟着 $2n$ \<dimen> 参数。%
+一般地，`|\parshape=|$n$ $i_1$~$l_1$ $i_2$~$l_2$ $\ldots$ $i_n$~$l_n$'~%
+给出这样的段落，其前 $n$ 行的长度分别为 $l_1$, $l_2$, \dots,~$l_n$,
+并且在左边界缩进的量分别为 $i_1$, $i_2$, \dots,~$i_n$。%
+如果段落的行不够 $n$ 行，剩下的参数将忽略掉；
+如果超过 $n$ 行，第 $n$ 行的参数将重复到最后。%
+要取消前面给出的 |\parshape| 用`|\parshape=0|'。\parfillskip0pt
+
+%\ddangerexercise Typeset the following ^{Pascal}ian quotation in
+%the shape of an isosceles ^{triangle}:
+%``I turn, in the following treatises, to various uses of those
+%    triangles whose generator is unity. But I leave out many more
+%    than I include; it is extraordinary how fertile in properties
+%    this triangle is. Everyone can try his hand.''
+%\answer The author's best solution is based on a variable |\dimen|
+%register |\x|:
+%\begintt
+%\setbox1=\hbox{I}
+%\setbox0=\vbox{\parshape=11 -0\x0\x -1\x2\x -2\x4\x -3\x6\x
+%   -4\x8\x -5\x10\x -6\x12\x -7\x14\x -8\x16\x -9\x18\x -10\x20\x
+%  \ifdim \x>2em \rightskip=-\wd1
+%  \else \frenchspacing \rightskip=-\wd1 plus1pt minus1pt
+%   \leftskip=0pt plus 1pt minus1pt \fi
+%  \parfillskip=0pt \tolerance=1000 \noindent I turn, ... hand.}
+%\centerline{\hbox to \wd1{\box0\hss}}
+%\endtt
+%Satisfactory results are obtained with font |cmr10| when |\x| is set to
+%$8.9\pt$, $13.4\pt$, $18.1\pt$, $22.6\pt$, $32.6\pt$, and $47.2\pt$,
+%yielding triangles that are respectively 11,~9, 8, 7, 6, and~5 lines tall.
+\ddangerexercise 把 Pascal 的下列话排版在等腰^{三角形}中：\1
+``I turn, in the following treatises, to various uses of those
+    triangles whose generator is unity. But I leave out many more
+    than I include; it is extraordinary how fertile in properties
+    this triangle is. Everyone can try his hand.''
+\answer 作者的最佳解法基于 |\dimen| 寄存器变量 |\x|：
+\begintt
+\setbox1=\hbox{I}
+\setbox0=\vbox{\parshape=11 -0\x0\x -1\x2\x -2\x4\x -3\x6\x
+   -4\x8\x -5\x10\x -6\x12\x -7\x14\x -8\x16\x -9\x18\x -10\x20\x
+  \ifdim \x>2em \rightskip=-\wd1
+  \else \frenchspacing \rightskip=-\wd1 plus1pt minus1pt
+   \leftskip=0pt plus 1pt minus1pt \fi
+  \parfillskip=0pt \tolerance=1000 \noindent I turn, ... hand.}
+\centerline{\hbox to \wd1{\box0\hss}}
+\endtt
+用 |cmr10| 字体，设定 |\x| 等于 $8.9\pt$、$13.4\pt$、$18.1\pt$、
+$22.6\pt$、$32.6\pt$ 和 $47.2\pt$ 时都能得到满意的结果，
+此时分别得到高度为 11、9、8、7、6 和 5 行的三角形。
+
+%\danger You probably won't need unusual parshapes very often. But there's
+%a special case that occurs rather frequently, so \TeX\ provides a special
+%abbreviation for~it in terms of two parameters called ^|\hangindent| and
+%^|\hangafter|. The command `|\hangindent=|\<dimen>' specifies a so-called
+%^{hanging indentation}, and the command `|\hangafter=|\<number>' specifies
+%the duration of that indentation. Let $x$ and $n$ be the respective values
+%of\/ |\hangindent| and |\hangafter|, and let $h$ be the value of\/
+%^|\hsize|; then if $n\ge0$, hanging indentation will occur on lines $n+1$,
+%$n+2$, $\ldots$ of the paragraph, but if $n<0$ it will occur on lines
+%1,~2, \dots,~$\vert n\vert$. Hanging indentation means that lines will be
+%of width $h-\vert x\vert$ instead of their normal width~$h$; if $x\ge0$,
+%the lines will be indented at the left margin, otherwise they will be
+%indented at the right margin. For example, the ``dangerous bend''
+%paragraphs of this manual have a hanging indentation of 3~picas that lasts
+%for two lines; they were set with |\hangindent=3pc| and |\hangafter=-2|.
+\danger 可能不常用到特殊的段落形状。%
+但是，有一个相当频繁出现的情况，所以 \TeX\ 为它提供了一种特殊的定义，
+用两个参数 |\hangindent| 和 |\hangafter| 来表示。%
+命令`|\hangindent=|\<dimen>'给出了所谓的悬挂缩进，
+命令`|\hangafter=|\<number>'给出此缩进的范围。%
+设 $x$ 和 $n$ 分别为 |\hangindent| 和 |\hangafter| 的值，
+~$h$ 是 |\hsize| 的值；
+那么，如果 $n\ge0$, 悬挂缩进将出现在段落的第 $n+1$,
+$n+2$, $\ldots$ 行，
+但是如果 $n<0$, 它就出现在第 1,~2, \dots,~$\vert n\vert$ 行。%
+悬挂缩进的意思是，行的宽度为 $h-\vert x\vert$, 而不是其正常宽度 $h$;
+如果 $x\ge0$, 行就在左边界缩进，否则在右边界缩进。%
+例如，本手册的``危险''标识段就有一个 3 picas 的悬挂缩进，持续 2 行；
+它们的设置为 |\hangindent=3pc| 和 |\hangafter=-2|。
+
+%\danger Plain \TeX\ uses hanging indentation in its `^|\item|' macro, which
+%produces a paragraph in which every line has the same indentation as a
+%normal |\indent|. Furthermore, |\item| takes a parameter that is placed
+%into the position of the indentation on the first line. Another macro called
+%`^|\itemitem|' does the same thing but with double indentation.
+%For example, suppose you type
+%\begintt
+%\item{1.} This is the first of several cases that are being
+%enumerated, with hanging indentation applied to entire paragraphs.
+%\itemitem{a)} This is the first subcase.
+%\itemitem{b)} And this is the second subcase. Notice
+%that subcases have twice as much hanging indentation.
+%\item{2.} The second case is similar.
+%\endtt
+%{\let\par=\endgraf Then you get the following output:
+%\medskip
+%\item{1.} This is the first of several cases that are being
+%enumerated, with hanging indentation applied to entire paragraphs.
+%\itemitem{a)} This is the first subcase.
+%\itemitem{b)} And this is the second subcase. Notice
+%that subcases have twice as much hanging indentation.
+%\item{2.} The second case is similar.
+%\medskip}\noindent\hangindent0pt
+%(Indentations in plain \TeX\ are not actually as dramatic as those
+%displayed here; Appendix~B
+%says `|\parindent=20pt|', but this manual has been set with
+%|\parindent=36pt|.) \ It is customary to put ^|\medskip| before and after
+%a group of itemized paragraphs, and to say |\noindent|
+%before any closing remarks that apply to all of the cases.
+%^^{enumerated cases in separate paragraphs}
+%Blank lines are not needed before |\item| or |\itemitem|, since those macros
+%begin with |\par|.
+\danger Plain \TeX\ 在其`|\item|'宏中用到悬挂缩进，
+所得的段落中，每行的缩进都是一个正常 |\indent|。%
+还有， \TeX\ 把一个参数放在第一行缩进的位置上。%
+另一个叫 `|\itemitem|' 的宏是一样的，只是缩进了两个。%
+例如，假定输入的是
+\begintt
+\item{1.} This is the first of several cases that are being
+enumerated, with hanging indentation applied to entire paragraphs.
+\itemitem{a)} This is the first subcase.
+\itemitem{b)} And this is the second subcase. Notice
+that subcases have twice as much hanging indentation.
+\item{2.} The second case is similar.
+\endtt
+{\let\par=\endgraf 那么就得到下面的输出结果：
+\medskip
+\item{1.} This is the first of several cases that are being
+enumerated, with hanging indentation applied to entire paragraphs.
+\itemitem{a)} This is the first subcase.
+\itemitem{b)} And this is the second subcase. Notice
+that subcases have twice as much hanging indentation.
+\item{2.} The second case is similar.
+\medskip}\noindent\hangindent0pt
+（Plain \TeX\ 中的缩进实际上不如这里展示的好看；
+附录 B 中`|\parindent=20pt|'，而本手册中 |\parindent=36pt|。）
+习惯上在编号段落组前后要加上 ^|\medskip|，
+并且在编号项目结束语前要加 |\noindent|。%
+在 |\item| 或 |\itemitem| 前不需要空行，因为这些宏是以 |\par| 开头的。
+
+%\dangerexercise Suppose one of the enumerated cases continues for two
+%or more paragraphs. How can you use |\item| to get hanging indentation
+%on the subsequent paragraphs?
+%\answer |\item{}| at the beginning of each paragraph that wants hanging
+%indentation.
+\dangerexercise 假定编号项目的长度为两段以上。
+怎样使用 |\item| 才能在后续的段落中得到悬挂缩进？
+\answer 在需要悬挂缩进的每个段落的开始处写上 |\item{}|。
+
+%\dangerexercise Explain how to make a ``^{bullet}ed'' item that says `$\bullet$'
+%instead of `1.'.
+%\answer |\item{$\bullet$}|
+\dangerexercise 如果要用``$\bullet$''代替``1.'', 怎样做？
+\answer |\item{$\bullet$}|
+
+%\ddangerexercise The `|\item|' macro doesn't alter the right-hand margin. How
+%could you indent at both sides?
+%\answer Either change |\hsize| or |\rightskip|. The trick is to change it back
+%again at the end of a paragraph. Here's one way, without grouping:
+%\begintt
+%\let\endgraf=\par \edef\restorehsize{\hsize=\the\hsize}
+%\def\par{\endgraf \restorehsize \let\par=\endgraf}
+%\advance\hsize by-\parindent
+%\endtt
+\ddangerexercise \1宏`|\item|'不能改变右边界。%
+怎样才能在两边都缩进？
+\answer 改变 |\hsize| 或者 |\rightskip|。
+诀窍是在段落结束处重新改回来。下面是一种无需编组的方法：
+\begintt
+\let\endgraf=\par \edef\restorehsize{\hsize=\the\hsize}
+\def\par{\endgraf \restorehsize \let\par=\endgraf}
+\advance\hsize by-\parindent
+\endtt
+
+%\ddangerexercise Explain how you could specify a hanging indentation
+%of $-2$ ems (i.e., the lines should project into the left margin),
+%after the first two lines of a paragraph.
+%\answer |\dimen0=\hsize \advance\dimen0 by 2em|\parbreak
+%|\parshape=3 0pt\hsize 0pt\hsize -2em\dimen0|
+\ddangerexercise 怎样在第二行以后给出 $-2$ em 的悬挂缩进(即行要凸出左边界)?
+\answer |\dimen0=\hsize \advance\dimen0 by 2em|\parbreak
+|\parshape=3 0pt\hsize 0pt\hsize -2em\dimen0|
+
+%\danger If\/ |\parshape| and hanging indentation have both been specified,
+%|\parshape| takes precedence and |\hangindent| is ignored. You get the
+%normal paragraph shape, in which every line width is |\hsize|, when
+%|\parshape=0|, |\hangindent=0pt|, and |\hangafter=1|. \TeX\ automatically
+%restores these normal values at the end of every paragraph, and (by
+%local definitions) whenever it enters internal vertical mode. For example,
+%hanging indentation that might be present outside of a ^|\vbox| construction
+%won't occur inside that vbox, unless you ask for it inside.
+%^^{paragraph shape reset} ^^{hanging indentation reset}
+\danger 如果 |\parshape| 和悬挂缩进同时给出，
+那么 \TeX\ 执行 |\parshape| 而忽略掉 |\hangindent|。
+当 |\parshape=0|、|\hangindent=0pt| 且 |\hangafter=1| 时，
+所得到的是正常的段落形状，其中每行的宽度都是 |\hsize|。
+\TeX\ 在每个段落结束时自动复原这些量的正常值；
+并且在进入内部垂直模式时也通过局部定义将它们改为正常值。
+例如，在 |\vbox| 构建之外出现的悬挂缩进不会出现在 vbox 内部，除非在内部给出它了。
+
+%\ddangerexercise Suppose you want to leave room at the right margin for
+%a rectangular illustration that takes up 15 lines, and you expect that
+%three paragraphs will go by before you have typeset enough text to get
+%past that illustration. Suggest a good way to do this without trial and error,
+%given the fact that \TeX\ resets hanging indentation.
+%\answer The three paragraphs can be combined into a single paragraph, if
+%you use `|\hfil\vadjust{\vskip\parskip}\break\indent|' instead of
+%`|\par|' after the first two.  Then of course you say, e.g.,
+%|\hangindent=-50pt \hangafter=-15|. \ (The same idea can be applied in
+%connection with |\looseness|, if you want \TeX\ to make one of three
+%paragraphs looser but if you don't want to choose which one it will be.
+%However, long paragraphs fill \TeX's memory; please use restraint.) \
+%See also the next exercise.
+\ddangerexercise 假定要在右边留下一个 15 行的长方形图示区，
+并且预计此图示区左边会有三个段落。
+在 \TeX\ 会重置悬挂缩进这个前提下，
+设计一种无需反复试验即可完成此任务的好方法。
+\answer 如果在前两个段落后用 `|\hfil\vadjust{\vskip\parskip}\break\indent|'
+代替 `|\par|'，这三个段落就会合并为一个段落。
+从而你可以像这样写 |\hangindent=-50pt \hangafter=-15|。
+（同样的想法也可和 |\looseness| 一起用，
+如果你想让 \TeX\ 三个段落的其中一个变松散点，而不想自己选择某个段落。
+然而，长段落将填满 \TeX\ 的内存，请克制使用。）%
+还可以参阅下一个练习。
+
+%\ddanger If ^{displayed equations} occur in a paragraph that has a nonstandard
+%shape, \TeX\ always assumes that the display takes up exactly three lines.
+%For example, a paragraph that has four lines of text, then a display, then
+%two more lines of text, is considered to be $4+3+2=9$ lines long; the
+%displayed equation will be indented and centered using the paragraph shape
+%information appropriate to line~6.
+\ddanger 如果陈列方程出现在非标准形状的段落中， \TeX\ 总假定陈列方程占据 3 行。%
+例如，一个段落有 4 行文本，接着是一个陈列方程，接着又是两行文本，
+那么其长度将被看作 $4+3+2=9$ 行；
+陈列方程将按照第六行的段落形状来缩进和居中。
+
+%\ddanger \TeX\ has an internal integer variable called ^|\prevgraf| that
+%records the number of lines in the most recent paragraph that has been
+%completed or partially completed. You can use |\prevgraf| in the context of
+%a \<number>, and you can set |\prevgraf| to any desired nonnegative value
+%if you want to make \TeX\ think that it is in some particular part of the
+%current paragraph shape. For example, let's consider again a paragraph
+%that contains four lines plus a display plus two more lines. When \TeX\
+%starts the paragraph, it sets |\prevgraf=0|; when it starts the display,
+%|\prevgraf| will be~4; when it finishes the display, |\prevgraf| will
+%be~7; and when it ends the paragraph, |\prevgraf| will be~9. If the
+%display is actually one line taller than usual, you could set
+%|\prevgraf=8| at the beginning of the two final lines; then \TeX\ will
+%think that a 10-line paragraph is being made. The value of\/ |\prevgraf|
+%affects line breaking only when \TeX\ is dealing with nonstandard
+%|\parshape| or |\hangindent|.
+\ddanger  \TeX\ 有一个内部整数变量叫做 |\prevgraf|, 它记录了已完成或已部分完成%
+的最近一个段落的行数。%
+你可以把 |\prevgraf| 当做一个 \<number> 使用，并且如果想要 \TeX\ 认为自己%
+是在当前段落形状的某些特殊地方，可以把 |\prevgraf| 设定为任意非负整数。%
+例如，再次看看 4 行文本，一个陈列公式，~2 行文本的段落。%
+当 \TeX\ 开始此段落时，它设置 |\prevgraf=0|; 当完成陈列公式时，
+|\prevgraf| 是 7; 并且在完成段落时是 9。%
+如果陈列公式实际上比通常要高一行，那么在最后两行开始前可以设置 |\prevgraf=8|;
+那么 \TeX\ 将认为此段落为 10 行。%
+只有当 \TeX\ 处理非标准的 |\parshape| 或 |\hangindent| 时，
+|\prevgraf| 的值从起作用。
+
+%\edef\lastex{\chapno.\the\exno}
+%\ddangerexercise Solve exercise \lastex\ using |\prevgraf|.
+%\answer Use |\hangcarryover| between paragraphs, defined as follows:
+%\begintt
+%\def\hangcarryover{\edef\next{\hangafter=\the\hangafter
+%    \hangindent=\the\hangindent}
+%  \par\next
+%  \edef\next{\prevgraf=\the\prevgraf}
+%  \indent\next}
+%\endtt
+\edef\lastex{\chapno.\the\exno}
+\ddangerexercise 利用 |\prevgraf| 重新解答 \lastex。
+\answer 在段落之间使用如下定义的 |\hangcarryover| 宏：
+\begintt
+\def\hangcarryover{\edef\next{\hangafter=\the\hangafter
+    \hangindent=\the\hangindent}
+  \par\next
+  \edef\next{\prevgraf=\the\prevgraf}
+  \indent\next}
+\endtt
+
+%\ddanger You are probably convinced by now that \TeX's line-breaking algorithm
+%has plenty of bells and whistles, perhaps even too many.
+%But there's one more feature,
+%called ``looseness''; some day you might find yourself needing it,
+%when you are fine-tuning the pages of a book. If you set |\looseness=1|,
+%\TeX\ will try to make the current paragraph one line longer than its
+%optimum length, provided that there is a way to choose such breakpoints
+%without exceeding the tolerance you have specified for the badnesses
+%of individual lines. Similarly, if you set |\looseness=2|, \TeX\ will
+%try to make the paragraph two lines longer; and |\looseness=-1| causes an
+%attempt to make it shorter. The general idea is that \TeX\ first finds
+%breakpoints as usual; then if the optimum breakpoints produce
+%$n$~lines, and if the current ^|\looseness| is~$l$, \TeX\ will choose
+%the final breakpoints so as to make the final number of lines as close
+%as possible to $n+l$ without exceeding the current tolerance. Furthermore,
+%the final breakpoints will have fewest total demerits, considering all ways
+%to achieve the same number of~lines.
+\ddanger 现在你可能认为 \TeX\ 的断行算法还有很多法宝，甚至更多。%
+但是还只有一个，叫做``松散度(looseness)'';
+当要微调书的页数时，有一天可能要用到它。
+如果设 |\looseness=1|,  \TeX\ 将试着把当前段落的行数比最佳行数增加一行，
+倘若可以在不超出所要求的各个行的丑度的容许误差下选出这样的断点的话。%
+类似地，如果设置 |\looseness=2|,  \TeX\ 就试着增加两行；
+如果 |\looseness=-1|, 就试着变\hbox{短。}%
+\1一般思路是， \TeX\ 首先按照通常方法找到断点，
+接着如果最佳断点得到的行数是 $n$, 并且如果 |\looseness| 是 $1$,
+为了在不超出当前容许误差的情况下尽可能使行数接近 $n+1$,  \TeX\ 将选择最后的断点。%
+还有，最后的断点的总缺陷最少，再从剩下的得到同样数目的行。
+
+%\ddanger For example, you can set |\looseness=1| if you want to avoid
+%a lonely ``^{club line}'' or ``^{widow line}'' on some page that does not
+%have sufficiently flexible glue, or if you want the total number of
+%lines in some two-column document to come out to be an even number.
+%It's usually best to choose a paragraph that is already pretty ``full,''
+%i.e., one whose last line doesn't have much white space, since such
+%paragraphs can generally be loosened without much harm. You might
+%also want to insert a ^{tie} between the last two words of that paragraph,
+%so that the loosened version will not end with only one ``^{widow word}'' on the
+%^^{orphans, see widow words}
+%line; this tie will cover your tracks, so that people will find it hard to
+%detect the fact that you have tampered with the spacing. On the other
+%hand, \TeX\ can take almost any sufficiently long paragraph and stretch
+%it a bit, without substantial harm; the present paragraph is, in fact,
+%one line looser than \hbox{its optimum length}.\looseness=1
+\ddanger 例如，如果要避免在某些不好调整的页面上产生孤行，或者如果%
+要在某些双栏文档中得到的行总数为偶数，可以设置 |\looseness=1|。%
+通常最好选择已经相当``满''的段落，即最后一行的空白比较少，
+因为把这样的段落松散化没有不利的后果。%
+可能还要在最后那个段落的两个单词之间添加带子，这样才能避免在松散后的文档%
+中最后一行出现孤词；
+这个带子就去掉了你篡改间距的痕迹。%
+另一方面， \TeX\ 几乎可以把所有的长段落伸长一点而无害；
+实际上，当前段落就比其最佳长度\hbox{多一行。}\looseness=1
+
+%\ddanger \TeX\ resets the looseness to zero at the same time as it resets
+%|\hangindent|, |\hangafter|, and |\parshape|.
+\ddanger 当 \TeX\ 重新设置 |\hangindent|, |\hangafter| 和 |\parshape| 的同时，
+就把松散度设置为零。
+
+%\ddangerexercise Explain what \TeX\ will do if you set |\looseness=-1000|.
+%\answer It will set the current paragraph in the minimum number of lines
+%that can be achieved without violating the tolerance; and, given that
+%number of lines, it will break them optimally. \ (However, nonzero
+%looseness makes \TeX\ work harder, so this is not recommended if you
+%don't want to pay for the extra computation. You can achieve almost the
+%same result much more efficiently by setting ^|\linepenalty||=100|, say.)
+\ddangerexercise 如果设置 |\looseness=-1000| 会出现什么情况？
+\answer 它会将当前段落设为不超过容许度条件下的最小行数；
+而且在给定的行数下，会用最佳的方式断行。%
+（然而，非零的松散度将会让 \TeX\ 费力运行，
+因此不推荐在无法接受多余计算时使用。
+你可以用效率高得多的方式得到几乎相同的结果，比如设定 ^|\linepenalty||=100|。）
+
+%\danger Just before switching to horizontal mode to begin scanning a
+%paragraph, \TeX\ inserts the glue specified by ^|\parskip| into the vertical
+%list that will contain the paragraph, unless that vertical list is empty so
+%far. For example, `|\parskip=3pt|' will cause 3~points of extra space
+%to be placed between paragraphs. Plain \TeX\ sets |\parskip=0pt plus1pt|;
+%this gives a little stretchability, but no extra space.
+\danger 就在转到水平模式开始读入段落前，
+ \TeX\ 把由 |\parskip| 给出的粘连插入将包含此段落的垂直列\hbox{中，}
+除非迄今为止此垂直列还是空的。%
+例如，`|\parskip=3pt|'就把 3 points 的额外间距插入段落之间。%
+Plain \TeX\ 设置 |\parskip=0pt plus1pt|; 有一点伸长能力，但是没有额外间距。
+
+%\danger After line breaking is complete, \TeX\ appends the lines to the
+%current vertical list that encloses the current paragraph, inserting
+%interline glue as explained in Chapter~12; this interline glue will
+%depend on the values of\/ ^|\baselineskip|, ^|\lineskip|, and ^|\lineskiplimit|
+%that are currently in force. \TeX\ will also insert penalties into
+%the vertical list, just before each glob of ^{interline glue}, in order to
+%help control page breaks that might have to be made later. For example, a
+%special penalty will be assessed for breaking a page between the first two
+%lines of a paragraph, or just before the last line, so that ``club'' or
+%``widow'' lines that are detached from the rest of a paragraph will not
+%appear all alone on a page unless the alternative is worse.
+\danger 在断行完成后， \TeX\ 把行追加到封装当前段落的当前垂直列中，
+像第十二章讨论的那样插入行间粘连；
+这个行间粘连来自当前起作用的 |\baselineskip|, |\lineskip| 和 |\lineskiplimit| 的值。%
+为了有利于后面可能出现的控制断页，就在每个行间粘连团前要把惩罚插入垂直列。%
+例如，如果允许，对在段落的前两行之间或最后一行之前的断页，插入特殊的惩罚，
+就可以避免在一个页面上出现与本段落其余行隔开的孤行。
+
+%\danger Here's how interline penalties are calculated: \TeX\ has just
+%chosen the breakpoints for some paragraph, or for some partial paragraph
+%that precedes a displayed equation; and $n$~lines have been formed.
+%The penalty between lines $j$ and $j+1$, given a value of $j$ in the
+%range $1\le j<n$, is the value of\/ ^|\interlinepenalty| plus
+%additional charges made in special cases: The ^|\clubpenalty| is
+%added if $j=1$, i.e., just after the first line; then the
+%^|\displaywidowpenalty| or the ^|\widowpenalty| is added if $j=n-1$,
+%i.e., just before the last line, depending on whether or not
+%the current lines immediately precede a display; and finally the
+%^|\brokenpenalty| is added, if the $j$th line ended at a discretionary break.
+%(Plain \TeX\ sets |\clubpenalty=150|, |\widowpenalty=150|,
+%|\displaywidowpenalty=50|, and |\brokenpenalty=100|; the value of\/
+%|\interlinepenalty| is normally zero, but it is increased to 100 within
+%^{footnotes}, so that long footnotes will tend not to be broken between
+%pages.)
+\danger 下面是行间惩罚的计算方法：
+假定 \TeX\ 给某个段落或陈列方程前的部分段落选定了一些断点，并分为 $n$ 行。
+在第 $j$ 和 $j+1$（$j$ 的取值为 $1\le j<n$）行之间的惩罚等于
+|\interlinepenalty| 的值加上特殊情况下的额外量：
+如果 $j=1$, 即在第一行后，加上 |\clubpenalty|；
+如果 $j=n-1$, 即在最后一行前，根据当前行是否为陈列方程的前面一行，
+加上 |\displaywidowpenalty| 或 |\widowpenalty|；
+最后，如果第 $j$ 行以任意可断点结尾，加上 |\brokenpenalty|。%
+（Plain \TeX\ 设置 |\clubpenalty=150|、|\widowpenalty=150|、
+|\displaywidowpenalty=50| 以及 |\brokenpenalty=100|；
+\1|而 \interlinepenalty| 在正常时是零，在脚注中增加到 100，
+这样长的脚注就不会在页面之间断开。）
+
+%\dangerexercise Consider a five-line paragraph in which the second and fourth
+%lines end with hyphens. What penalties does  plain \TeX\ put between the lines?
+%\answer 150, 100, 0, 250. \ (When the total penalty is zero, as between lines
+%3 and~4 in this case, no penalty is actually inserted.)
+\dangerexercise 看看一个五行的段落，其中第二和第四行以连字符结尾。%
+那么 plain \TeX\ 在行间放置的惩罚值将是多少？
+\answer 150、100、0、250。（当全部惩罚值为零时，
+比如在第 3 行和第 4 行之间，实际上不会插入惩罚项。）
+
+%\dangerexercise What penalty goes between the lines of a two-line paragraph?
+%\answer |\interlinepenalty| plus |\clubpenalty| plus |\widowpenalty| (and
+%also plus |\brokenpenalty|, if the first line ends with a discretionary break).
+\dangerexercise 对于只有两行的段落，行间的惩罚值是多少？
+\answer |\interlinepenalty| 加 |\clubpenalty| 加 |\widowpenalty|%
+（如果第一行以自定断点结尾，还要加上 |\brokenpenalty|）。
+
+%\ddanger If you say ^|\vadjust||{|\<vertical list>|}| within a paragraph,
+%\TeX\ will insert the specified internal vertical list into the vertical
+%list that encloses the paragraph, immediately after whatever line
+%contained the position of the |\vadjust|. For example, you can say
+%`|\vadjust{\kern1pt}|' to increase the amount of space between lines of a
+%paragraph if those lines would otherwise come out too close together.  \ (The
+%\vadjust{\vskip1pt}author
+%did it in the previous line, just to illustrate what happens.) \ Also,
+%if you want to make sure that a page break will occur immediately after a
+%certain line, you can say `|\vadjust{\eject}|' ^^|\eject| anywhere in that line.
+\ddanger 如果在段落中给出 |\vadjust||{|\<vertical list>|}|,
+那么 \TeX\ 将把给出的内部垂直列插入到封装本段落的垂直列中，
+直接插入在包含 |\vadjust| 的位置的任意行后面。%
+例如，如果行看起来太紧，使用`|\vadjust{\kern1pt}|'就可以增\vadjust{\vskip1pt}加本段落的行间距。%
+(为了说明它，作者在前一行使用了它。)
+还有，如果要确保断页在某行后面出现，就可以在此行的任意处使用`|\vadjust{\eject}|'。
+
+%\ddanger Later chapters discuss |\insert| and |\mark| commands that are
+%relevant to \TeX's page builder. If such commands appear within a
+%paragraph, they are removed from whatever horizontal lines contain them
+%and placed into the enclosing vertical list, together with other vertical
+%material from |\vadjust| commands that might be present. In the final
+%vertical list, each horizontal line of text is an hbox that is immediately
+%preceded by interline glue and immediately followed by vertical material
+%that has ``^{migrate}d out'' from that line (with left to right order
+%preserved, if there are several instances of vertical material); then
+%comes the interline penalty, if it is nonzero. Inserted vertical material
+%does not influence the ^{interline glue}.
+\ddanger 后面的章节将讨论命令 |\insert| 和 |\mark|，它们与 \TeX\ 的页面构建有关。
+如果这样的命令出现在段落中，它们将会从包含它们的水平列中提出来，
+与可能出现的来自命令 |\vadjust| 的其它垂直指令放在封装的垂直列中。
+在最后的垂直列中，文本的每个水平列是一个 hbox，它前面是行间粘连，
+后面是在从行中提出来的垂直指令（如果有几个垂直指令，要保持从左到右的顺序）；
+接下来是行间惩罚，如果它不等于零。插入的垂直指令不影响行间粘连。
+
+%\ddangerexercise Design a |\marginalstar| macro ^^{marginal notes}
+%that can be used anywhere in a paragraph. It should use |\vadjust| to
+%place an asterisk in the margin just to the left of the line where
+%|\marginalstar| occurs.
+%\answer The tricky part is to avoid ``opening up'' the paragraph by
+%adding anything to its height; yet this star is to be contributed after
+%a line having an unknown depth, because the depth of the line depends
+%on details of line breaking that aren't known until afterwards.
+%The following solution uses ^|\strut|, and assumes that the line containing
+%the marginal star does not have depth exceeding ^|\dp||\strutbox|, the
+%depth of a ^|\strut|.
+%\begintt
+%\def\strutdepth{\dp\strutbox}
+%\def\marginalstar{\strut\vadjust{\kern-\strutdepth\specialstar}}
+%\endtt
+%Here |\specialstar| is a box of height zero and depth |\strutdepth|,
+%and it puts an asterisk in the left margin:
+%\begintt
+%\def\specialstar{\vtop to \strutdepth{
+%    \baselineskip\strutdepth
+%    \vss\llap{* }\null}}
+%\endtt
+\ddangerexercise 设计一个可以在段落任何地方中使用的宏 |\marginalstar|。^^{旁注}
+当 |\marginalstar| 出现时，它利用 |\vadjust| 在行边界的左侧放一个星号。
+\answer 棘手之处在于，避免添加任何东西到段落高度而使段落被``撑开''；
+另外该星号将放在深度未知的行之后，因为行的深度依赖于断行方式，到后来才能知道。
+下面的解法使用 ^|\strut|，
+并假定旁注星号所在行的深度不超过 ^|\dp||\strutbox|，即 ^|\strut| 的深度。
+\begintt
+\def\strutdepth{\dp\strutbox}
+\def\marginalstar{\strut\vadjust{\kern-\strutdepth\specialstar}}
+\endtt
+这里 |\specialstar| 是一个高度为零，深度为 |\strutdepth| 的盒子，
+并且它将星号放在左边界：
+\begintt
+\def\specialstar{\vtop to \strutdepth{
+    \baselineskip\strutdepth
+    \vss\llap{* }\null}}
+\endtt
+
+%\ddanger When \TeX\ enters ^{horizontal mode}, it will interrupt its normal
+%scanning to read tokens that were predefined by the command
+%^|\everypar||={|\<token list>|}|. For example, suppose you have said
+%`|\everypar={A}|'. If you type `|B|' in vertical mode, \TeX\ will shift
+%to horizontal mode (after contributing ^|\parskip| glue to the current
+%page), and a horizontal list will be initiated by inserting an empty box
+%of width ^|\parindent|. Then \TeX\ will read `|AB|', since it reads the
+%|\everypar| tokens before getting back to the `|B|' that triggered the
+%new paragraph. Of course, this is not a very useful illustration of
+%|\everypar|; but if you let your imagination run you will think of
+%better applications.
+\ddanger 当 \TeX\ 进入水平模式时，将中断由命令 |\everypar||={|\<token list>|}|~%
+预定义的正常记号读入。%
+例\hbox{如，} 假定已经给出`|\everypar={A}|'。%
+如果在垂直模式输入`|B|', 那么 \TeX\ 将转到水平模式(在把粘连 |\parskip|~%
+放置在当前页面以后), 并且通过插入宽度为 |\parindent| 的空盒子来开始一个水平列。%
+接着， \TeX\ 将读入`|AB|', 因为它在回来得到`|B|'之前读入了记号 |\everypar|,
+而`|B|'引发了一个新段。%
+当然，这不是 |\everypar| 很好的示例；
+但是如果你发挥想像，就能找到更好应用。
+
+%\ddangerexercise Use |\everypar| to define an |\insertbullets| macro: All
+%paragraphs in a group of the form `|{\insertbullets ...\par}|' should have a
+%bullet symbol `$\bullet$' as part of their indentation.
+%^^{bulleted lists}
+%\answer |\def\insertbullets{\everypar={\llap{$\bullet$\enspace}}}|\par
+%\nobreak\smallskip\noindent
+%(A similar device can be used to insert hanging indentation,
+%and/or to number the paragraphs automatically.)
+\ddangerexercise 用 |\everypar| 定义宏 |\insertbullets|：
+对放在 `|{\insertbullets ...\par}|' 中的所有段落，
+它们都把小黑点符号 `$\bullet$' 放在缩进空白中。
+\answer |\def\insertbullets{\everypar={\llap{$\bullet$\enspace}}}|\par
+\nobreak\smallskip\noindent
+（类似的做法也可用于插入悬挂缩进，和/或段落自动编号。）
+
+%\ddanger A paragraph of zero lines is formed if you say `|\noindent\par|'.
+%If\/ |\everypar| is null, such a paragraph contributes nothing except
+%|\parskip| glue to the current vertical list.
+\ddanger 如果给出`|\noindent\par|', 就得到零行的段落。%
+如果 |\everypar| 是空的，这样的段落在当前垂直列中除了 |\parskip|~%
+粘连外什么也没有。
+
+%\ddangerexercise Guess what happens if you say `|\noindent$$...$$ \par|'.
+%\answer First comes |\parskip| glue (but you might not see it on the current
+%page if you say |\showlists|, since glue disappears at the top of each
+%page). Then comes the result of\/ |\everypar|, but let's assume that
+%|\everypar| doesn't add anything to the horizontal list, so that
+%you get an empty horizontal list; then there's no partial paragraph
+%before the display. The displayed equation follows the normal rules
+%(it occupies lines 1--3 of the paragraph, and uses the indentation and
+%length of line~2, if there's a nonstandard shape).  Nothing follows the
+%display, since a blank space is ignored after a closing `|$$|'.\par
+%Incidentally, the behavior is different if you start a paragraph with
+%`|$$|' instead of with |\noindent$$|, ^^{display at beginning of paragraph}
+%since \TeX\ inserts a paragraph indentation that will appear on a line by
+%itself (with |\leftskip| and |\parfillskip| and |\rightskip| glue).
+\ddangerexercise \1猜猜看，如果给出 `|\noindent$$...$$ \par|' 会出现什么？
+\answer 首先是 |\parskip| 粘连%
+（但如果在页面顶部，用 |\showlists| 将看不到它，因为该粘连消失了）。
+然后是 |\everypar| 的结果，
+但我们假定 |\everypar| 不添加任何东西到水平列，这样就得到一个空水平列；
+从而在陈列公式之前没有任何一部分段落。
+陈列公式遵循一般的规则（若段落为非标准形状，
+则它占用段落的第 1--3 行，并使用第 2 行的缩进和长度）。
+在陈列公式后没有任何东西，因为 `|$$|' 结束符后的空格会被忽略。\par
+顺便提一下，如果你用 `|$$|' 而不是 |\noindent$$| 开始新段落，
+结果将会有些不同，^^{display at beginning of paragraph}
+因为此时 \TeX\ 插入的段落缩进将单独出现在一行
+（该行还有 |\leftskip| 及 |\parfillskip| 及 |\rightskip| 粘连）。
+
+%\ddanger Experience has shown that \TeX's line-breaking algorithm can be
+%harnessed to a surprising variety of tasks. Here, for example, is an application
+%that indicates one of the possibilities: Articles that are published in
+%{\sl^{Mathematical Reviews}\/\null} are generally signed with the reviewer's
+%name and address, and this information is typeset flush right, i.e., at
+%the right-hand margin. ^^{flush right}
+%If there is sufficient space to put such a name and address at the right of
+%the final line of the paragraph, the publishers can save space, and at the same
+%time the results look better because there are no strange gaps on the page.
+%\def\signed #1 (#2){{\unskip\nobreak\hfil\penalty50\hskip2em
+%  \hbox{}\nobreak\hfil\sl#1\/ \rm(#2)
+%  \parfillskip=0pt \finalhyphendemerits=0 \endgraf}}
+%\begindisplay
+%\vbox{\hsize 3.0in \parindent0pt
+%  This is a case where the name and address fit in nicely with the review.
+%  \signed A. Reviewer (Ann Arbor, Mich.)
+%  \medskip
+%  But sometimes an extra line must be added. \signed N. Bourbaki (Paris)}
+%\enddisplay
+%^^{Reviewer} ^^{Bourbaki}
+%Let's suppose that a space of at least two ems should separate the reviewer's
+%name from the text of the review, if they occur on the same line. We would
+%like to design a macro so that the examples shown above could be typed
+%as follows in an input file:
+%\begintt
+%... with the review. \signed A. Reviewer (Ann Arbor, Mich.)
+%... an extra line must be added. \signed N. Bourbaki (Paris)
+%\endtt
+%Here is one way to solve the problem:
+%\begintt
+%\def\signed #1 (#2){{\unskip\nobreak\hfil\penalty50
+%  \hskip2em\hbox{}\nobreak\hfil\sl#1\/ \rm(#2)
+%  \parfillskip=0pt \finalhyphendemerits=0 \par}}
+%\endtt
+%If a line break occurs at the |\penalty50|, the |\hskip2em| will disappear
+%and the empty |\hbox| will occur at the beginning of a line, followed by
+%|\hfil| glue. This yields two lines whose badness is zero; the first of these
+%lines is assessed a penalty of~50. But if no line break occurs at the
+%|\penalty50|, there will be glue of $2\em$ plus $2\,{\rm fil}$ between
+%the review and the name; this yields one line of badness zero. \TeX\ will
+%try both alternatives, to see which leads to the fewest total demerits.
+%The one-line solution will usually be preferred if it is feasible.
+\ddanger 经验表明， \TeX\ 的断行算法可以处理的任务类型多得惊人。%
+例如，下面是一种可能的应用示例：
+在{\sl{Mathematical Reviews}\/\null}出版的文章一般要署上作者的名字和地址，
+并且这些内容要居右排版，即在右边界。%
+如果在段落的最后一行的右边有足够的空间来放名字和地址，那么出版社就可以节约空间，
+并且同时因为页面上没有奇怪间隙所以输出结果也好。
+\def\signed #1 (#2){{\unskip\nobreak\hfil\penalty50\hskip2em
+  \hbox{}\nobreak\hfil\sl#1\/ \rm(#2)
+  \parfillskip=0pt \finalhyphendemerits=0 \endgraf}}
+\begindisplay
+\vbox{\hsize 3.0in \parindent0pt
+  This is a case where the name and address fit in nicely with the review.
+  \signed A. Reviewer (Ann Arbor, Mich.)
+  \medskip
+  But sometimes an extra line must be added. \signed N. Bourbaki (Paris)}
+\enddisplay
+假设如果在文章和作者在同一行，那么它们之间至少要有两个 em 的间距。%
+我们将设计一个宏，使得如下排版时得到上面的例子：
+\begintt
+... with the review. \signed A. Reviewer (Ann Arbor, Mich.)
+... an extra line must be added. \signed N. Bourbaki (Paris)
+\endtt
+宏的定义为
+\begintt
+\def\signed #1 (#2){{\unskip\nobreak\hfil\penalty50
+  \hskip2em\hbox{}\nobreak\hfil\sl#1\/ \rm(#2)
+  \parfillskip=0pt \finalhyphendemerits=0 \par}}
+\endtt
+如果断行出现在 |\penalty50|, 那么 |\hskip2em| 就不使用，并且在行的开头出现%
+一个空 |\hbox|, 后面是 |\hfil| 粘连。%
+它得到丑度为零的两个行；
+其中第一个行的惩罚为 50。%
+但是如果断行不出现在 |\penalty50|, 那么就在文章和作者之间出现一个%
+~$2\em$ plus $2\,{\rm fil}$ 的粘连；
+它得到的是丑度为零的一个行。%
+ \TeX\ 将在这二者之间选择总缺陷最少的。%
+如果可以，单行的结果右边最好。
+
+%\ddangerexercise Explain what would happen if `|\hbox{}|' were left out
+%of the ^|\signed| macro.
+%\answer A break at |\penalty50| would cancel |\hskip2em\nobreak\hfil|,
+%so the next line would be forced to start with the reviewer's name flush left.
+%\ (But ^|\vadjust||{}| would actually be better than |\hbox{}|; it
+%uses \TeX\ more efficiently.)
+\ddangerexercise 如果在 |\signed| 宏中把`|\hbox{}|'去掉会出现什么情况？
+\answer 在 |\penalty50| 处断行将取消 |\hskip2em\nobreak\hfil|，
+从而下一行的作者名将被强制从左边开始。%
+（但 ^|\vadjust||{}| 实际上比 |\hbox{}| 更好；它的效率更高。）
+
+%\ddangerexercise Why does the |\signed| macro say
+%`^|\finalhyphendemerits||=0|'\thinspace?
+%\answer Otherwise the line-breaking algorithm might prefer two final lines to
+%one final line, simply in order to move a hyphen from the second-last line up
+%to the third-last line where it doesn't cause demerits. This in fact caused
+%some surprises when the |\signed| macro was being tested; |\tracingparagraphs=1|
+%was used to diagnose the problem.
+\ddangerexercise 在 |\signed| 宏中为什么有`|\finalhyphendemerits||=0|'\thinspace?
+\answer 否则，为了将连字符从倒数第二行移动到不造成缺陷的倒数第三行，
+断行算法将更喜欢将最后的内容分为两行而不是一行。
+在测试 |\signed| 宏时此问题让人很惊讶；
+|\tracingparagraphs=1| 可用于诊断此问题。
+
+%{\hbadness=10000
+%\ddangerexercise In one of the paragraphs earlier in this chapter, the author
+%used ^|\break| to force a line break in a specific place; as a result, the
+%third line of that particular paragraph was really spaced out.\break
+%Explain why all the extra space went into the third line, instead of being
+%distributed impartially among the first three lines.
+%\answer Distributing the extra space evenly would lead to three lines of
+%the maximum badness (10000). It's better to have just one bad line
+%instead of three, since \TeX\ doesn't distinguish degrees of badness when
+%lines are really awful. In this particular case the ^|\tolerance| was 200,
+%so \TeX\ didn't try any line breaks that would stretch the first two lines;
+%but even if the tolerance had been raised to 10000, the optimum setting would
+%have had only one underfull line. If you really want to spread the
+%space evenly you can do so by using ^|\spaceskip| to increase the
+%amount of stretchability between words.
+%
+%}
+{\hbadness=10000
+\ddangerexercise 在本章前面的某个段落中，
+作者在一个特定的地方用 |\break| 强制断行；
+因此，此段的第二行的确散开了。\break
+为什么所有的额外空白都被放在第二行，而不是均匀地放在前两行？
+\answer 将额外空白均匀分配将导致前两行的劣度都达到最大（10000）。
+只有一个糟糕的行比有两个糟糕行更好些，
+因为只要行很糟糕，\TeX\ 并不会区分它们的糟糕程度。
+在这个特殊情形中 ^|\tolerance| 为 200，
+因此 \TeX\ 不会尝试将第一行也伸展开的断行方式；
+但即使容许度增加到 10000，最优的设定方式也只会有一个未满行。
+如果你真的需要均匀地伸展空白，
+你可以用 ^|\spaceskip| 增加单词之间的可伸展性。
+
+}
+%\ddanger If you want to avoid overfull boxes at all costs without
+%trying to fix them manually, you might be tempted to set
+%|\tolerance=10000|; this allows arbitrarily bad lines to be acceptable
+%in tough situations. But infinite tolerance is a bad idea, because
+%\TeX\ doesn't distinguish between terribly bad and preposterously
+%horrible lines. Indeed, a tolerance of 10000 encourages \TeX\ to
+%concentrate all the badness in one place, making one truly unsightly
+%line instead of two moderately bad ones, because a single
+%``write-off'' produces fewest total demerits according to the rules.
+%There's a much better way to get the desired effect: \TeX\ has a
+%parameter called ^|\emergencystretch| that is added to the assumed
+%stretchability of every line when badness and demerits are computed,
+%in cases where overfull boxes are otherwise unavoidable. If
+%|\emergencystretch| is positive, \TeX\ will make a third pass over a
+%paragraph before choosing the line breaks, when the first passes did
+%not find a way to satisfy the ^|\pretolerance| and ^|\tolerance|.
+%The effect of\/ |\emergencystretch| is to scale down the badnesses so
+%that large infinities are distinguishable from smaller ones. By
+%setting |\emergencystretch| high enough (based on |\hsize|) you can be
+%sure that the |\tolerance| is never exceeded; hence overfull boxes
+%will never occur unless the line-breaking task is truly impossible.
+\ddanger \1如果要不惜代价地自动去掉溢出的盒子，
+可以试着设置 |tolerance=10000|;
+在难处理时它容许任意糟糕的行。%
+但是无限大的容许误差是一个坏主意，
+因为 \TeX\ 不再区分糟糕和荒谬的行。%
+的确，容许误差为 10000 时就助长 \TeX\ 把所有的丑度集中在一个地方，
+用一个实在难看的行来代替两个不太难看的行，
+因为按照规则，单个``牺牲''得到的总缺陷最少。%
+还有得到所要求结果的更好方法：
+ \TeX\ 有一个叫 |\emergencystretch| 的参数，如果溢出的盒子用别的方法无法避免，
+那么在计算丑度和总缺陷时就把它加到每行设定的输出能力上。%
+如果 |\emergencystretch| 是正的，当第一种途径无法满足 |\pretolerance|~%
+和 |\tolerance| 时， \TeX\ 就在选择断行前在此段落上产生第三条途径。%
+|\emergencystretch| 的作用是按比例缩小丑度，使得大无限与小无限的区别保留下来。%
+通过把 |\emergencystretch| 设置得足够高(根据 |\hsize|),
+可以确保不超出 |\tolerance|;
+因此，溢出的盒子就再也出现不了，除非实在无法断行。
+
+%\ddangerexercise Devise a ^|\raggedcenter| macro (analogous to ^|\raggedright|)
+%that partitions the words of a paragraph into as few as possible lines
+%of approximately equal size and centers each individual line. Hyphenation
+%should be avoided if possible.
+%\answer |\def\raggedcenter{\leftskip=0pt plus4em \rightskip=\leftskip|%
+%\parbreak|\parfillskip=0pt \spaceskip=.3333em \xspaceskip=.5em|\parbreak
+%        |\pretolerance=9999 \tolerance=9999 \parindent=0pt|\parbreak
+%        |\hyphenpenalty=9999 \exhyphenpenalty=9999 }|
+\ddangerexercise 设计一个宏 |\raggedcenter|（类似于 |\raggedright|)，
+把段落中的单词分为尽可能少的等长的行，并且把行居中。%
+尽可能避免出现连字符。
+\answer |\def\raggedcenter{\leftskip=0pt plus4em \rightskip=\leftskip|%
+\parbreak|\parfillskip=0pt \spaceskip=.3333em \xspaceskip=.5em|\parbreak
+        |\pretolerance=9999 \tolerance=9999 \parindent=0pt|\parbreak
+        |\hyphenpenalty=9999 \exhyphenpenalty=9999 }|
+
+\endchapter
+
+When the author objects to [a hyphenation]\/
+he should be asked to add or cancel or substitute
+a word or words that will prevent the breakage.
+\smallskip
+Authors who insist on even spacing always,
+with sightly divisions always,
+do not clearly understand the rigidity of types.
+\author T. L. ^{DE VINNE}, {\sl Correct Composition\/} (1901) % p138, p206
+
+\bigskip
+
+In reprinting his own works, whenever [William ^{Morris}]\/
+found a line that justified awkwardly, he altered the wording
+solely for the sake of making it look well in print.
+\smallskip
+When a proof has been sent me with two or three
+lines so widely spaced as to make a grey band across the page,
+I have often rewritten the passage so as to fill up the lines better;
+but I am sorry to say that my object has generally been so little
+understood that the compositor has spoilt all the rest
+of the paragraph instead of mending his former bad work.
+\author GEORGE BERNARD ^{SHAW}, in {\sl The Dolphin\/} (1940) % v4.1 p80
+
+\vfill\eject\byebye

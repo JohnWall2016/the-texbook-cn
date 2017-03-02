@@ -1,0 +1,395 @@
+% -*- coding: utf-8 -*-
+
+\input macros
+
+%\beginchapter Chapter 5. Grouping
+\beginchapter Chapter 5. 编组
+
+\origpageno=19
+
+%Every once in a while it is necessary to treat part of a manuscript as a
+%unit, so you need to indicate somehow where that part begins and where it
+%ends. For this purpose \TeX\ gives special interpretation to two
+%``^{grouping characters},'' which (like the escape character) are
+%treated differently from the normal symbols that you type. We assume in
+%this manual that |{| and |}| are the grouping characters, since they
+%are the ones used in plain \TeX. ^^{curly braces, see braces}
+\1不时地需要把文稿的一部分当成一个整体来处理，所以你应该声明此部分的开头和结尾。%
+为此，\TeX\ 给两个``编组字符''赋予了特殊含义，它(象转义符一样)与所键入的正常%
+符号的处理方法不同。%
+在本手册中我们设定 |{| 和 |}| 是编组字符，因为在 plain \TeX\ 中如此。
+
+%We saw examples of grouping in the previous chapter, where it was mentioned
+%that font changes inside a group do not affect the fonts in force outside.
+%The same principle applies to almost anything else that is defined inside
+%a group, as we will see later; for example, if you define a control sequence
+%within some group, that definition will disappear when the group ends.
+%In this way you can conveniently instruct \TeX\ to do something unusual,
+%by changing its normal conventions temporarily inside of a group; since
+%the changes are invisible from outside the group, there is no need to worry
+%about messing up the rest of a manuscript by forgetting to restore the
+%normal conventions when the unusual construction has been finished.
+%Computer scientists have a name for this aspect of grouping, because it's
+%an important aspect of programming languages in general; they call it
+%``^{block structure},'' and definitions that are in force only within
+%a group are said to be ``^{local}'' to that group.
+在前一章，我们已经遇见了编组的例子，那里用到的是在组中的字体变化不影响外面的字\hbox{体。}%
+就象外面后面要学习的一样，同一原理可以应用到定义在组中的几乎所有内容；
+例如，如果你在某些组中定义了一个控制系列，当组结束时，那些定义就消失了。%
+用这种方法，通过在组中临时改变其正常规则，可简便地告诉 \TeX\ 完成特殊的工作；
+因为这种变化在组外部将消失了，所以当特殊工作结束后，不必担心文稿后面的部分怎样%
+才能恢复正常规则。%
+因为编组一般在编程语言方面是很重要的，所以计算机方面上它有一个名字，
+即``模块结构'', 只在组中起作用的定义相对于那个组是``局部的''。
+
+%You might want to use grouping even when you don't care about block
+%structure, just to have better control over spacing. For example, let's
+%consider once more the control sequence ^|\TeX| that produces
+%the logo `\TeX' in this manual: We observed in Chapter~3 that a blank space
+%after this control sequence will be gobbled up unless one types
+%`\hbox{|\TeX\ |}', yet it is a mistake to say `|\TeX\|' when the following
+%character is not a blank space. Well, in {\sl all\/} cases it would be
+%correct to specify the simple group
+%\begintt
+%{\TeX}
+%\endtt
+%whether or not the following character is a ^{space}, because the |}| stops
+%\TeX\ from absorbing an optional space into |\TeX|. This might come in
+%handy when you're using a text editor (e.g., when replacing all occurrences
+%of a particular word by a control sequence). Another thing you could do is
+%type
+%\begintt
+%\TeX{}
+%\endtt
+%using an {\sl empty\/} group for the same purpose: The `|{}|' here is a
+%group of no characters, so it produces no output, but it does have the
+%effect of stopping \TeX\ from skipping blanks.
+%^^{empty group} ^^{lbrace rbrace}
+即使你不关心模块结构，就是为了更好地得到间距，你可能也要利用编组。%
+例如，让外面再讨论本手册中得到标识符`\TeX'的控制系列 |\TeX|:
+在第三章我们看到，如果不键入`\hbox{|\TeX\ |}', 控制系列后面的空格会被吃掉，
+但是当后面跟的是非空格字符时，键入`|\TeX\|'又出现错误。%
+噢，在{\KT{10}所有}情况下，给出一个简单的组：
+\begintt
+{\TeX}
+\endtt
+总是正确的，不管跟着的字符是不是空格，
+因为 |}| 使 \TeX\ 不能把可能的空格吃\hbox{掉。}%
+当你正在使用文本编辑器时这更方便(比如，当用控制下列代替所有出现的特殊单词时)。%
+你也可用另一种方法，就是键入
+\begintt
+\TeX{}
+\endtt
+用{\KT{10}空}组来达到同样的目的：
+这里的`|{}|'是没有字符的组，所有它没有输出结果，但是它的确有阻止 \TeX\ 吃掉空格的%
+效果。
+
+%\exercise Sometimes you run into a rare word like `shelfful' that looks
+%better as `shelf{}ful' without the `ff' ^{ligature}. How can you fool
+%\TeX\ into thinking that there aren't two consecutive f's in such a word?
+%\answer |{shelf}ful| or |shelf{}ful|, etc.; or even |shelf\/ful|, which
+%yields a shelf\/ful instead of a shelf{\kern0pt}ful.
+%In fact, the latter idea---to
+%insert an ^{italic correction}---is preferable because \TeX\ will ^^|\/|
+%reinsert the ff ligature by itself after ^{hyphenating} |shelf{}ful|. \
+%(Appendix~H points out that ligatures are put into a hyphenated word that
+%contains no ``^{explicit kerns},'' and an italic correction is an
+%explicit kern.) \ But the italic correction may be too much (especially in an
+%italic font); |shelf{|^|\kern||0pt}ful| is often best.
+\exercise 有时候，会遇到一个类似 `shelfful' 的罕见单词，不用 `ff' ^{连写}而用%
+`shelf{}ful' 看起来更好。想想怎样愚弄一下 \TeX ，让它认为这样的单词中的两个 f~%
+不是紧接着的。
+\answer |{shelf}ful| 或 |shelf{}ful| 等；甚或是 |shelf\/ful|，
+利用它将得到 shelf\/ful 而不是 shelf{\kern0pt}ful。
+实际上，后者的想法——插入一个^{倾斜校正}——更合适，^^|\/|
+因为 \TeX\ 在对 |shelf{}ful| ^{连字化}后将重新插入 ff 连写。%
+（附录 H 指出连写将被放入不含``^{显式紧排}''的已连字单词中，
+而倾斜校正就是一个显式紧排。）但是倾斜校正也许太多了（尤其在意大利体中）；
+|shelf{|^|\kern||0pt}ful| 通常是最好的。%
+【译注：前面的“连字化”和“已连字”应该分别理解为“尝试连字化”和“已尝试连字化”。
+在给一个段落断行时，\TeX\ 首先尝试不连字的方式，如果失败再尝试带连字的方式。
+在第二轮尝试中每个单词的可能断行点的 |{}| 将被丢弃，因此连写可能会被重新生成。
+不过段落的第一个单词是个例外，因为 \TeX\ 从不尝试对第一个单词连字化。
+另外，在 Lua\TeX 中，这种添加 |{}| 以阻止连写的做法始终是无效的。】
+
+%\dangerexercise Explain how to get three blank spaces in a row without
+%using `|\|\]'.^^{control space}
+%\answer `\]|{|\]|}|\]' or `\]|{}|\]|{}|\]', etc. Plain \TeX\ also has a
+%^|\space| macro, so you can type |\space\space\space|.  \ (These aren't
+%strictly equivalent to `|\|\]|\|\]|\|\]', since they adjust the spaces by
+%the current ``^{space factor},'' as explained later.)
+\dangerexercise 不用`|\|\]', 看看怎样在一排中得到 3 个空格？
+\answer `\]|{|\]|}|\]' 或 `\]|{}|\]|{}|\]' 等。Plain \TeX\ 中还有
+^|\space| 宏，从而你也可以键入 |\space\space\space|。
+（这些并不严格等同于 `|\|\]|\|\]|\|\]'，
+因为它们将根据当前的``^{间距因子}''调整空白的大小，这会在稍后说明。）
+
+%But \TeX\ also uses grouping for another, quite different, purpose, namely
+%to determine how much of your text is to be governed by certain control
+%sequences. For example, if you want to center something on a line you can type
+%\begintt
+%\centerline{This information should be centered.}
+%\endtt
+%using the control sequence ^|\centerline| defined in plain \TeX\ format.
+\1但是 \TeX\ 也在另外非常不同的方面使用编组，即规定特定的控制系列作用在哪些文本上。%
+例如，你要把一行中的内容居中，利用定义在 plain \TeX\ 中的控制系列 |\centerline|,
+你可以键入
+\begintt
+\centerline{This information should be centered.}
+\endtt
+
+%Grouping is used in quite a few of \TeX's more intricate instructions; and
+%it's possible to have groups within groups within groups, as you can see
+%by glancing at Appendix~B\null. Complex grouping is generally unnecessary,
+%however, in ordinary manuscripts, so you needn't worry about it. Just
+%don't forget to finish each group that you've started, because a lost
+%`|}|' might cause trouble.
+编组还出现在 \TeX\ 的很少几个更复杂的指令中；
+当浏览附录 B 时你就会看到，可以组中套组。%
+但是在普通文稿中，一般不需要复杂的编组，所以你不必担心。%
+只是别忘了把每个开始的组要结束掉，因为忘记`|}|'可能会出问题。
+
+%Here's an example of two groups, one ^{nested} inside the other:
+%\begintt
+%\centerline{This information should be {\it centered}.}
+%\endtt
+%As you might expect, \TeX\ will produce a centered line that also contains
+%italics:
+%$$\hbox{This information should be {\it centered}.}$$
+%But let's look at the example more closely: `|\centerline|' appears outside
+%the curly braces, while `|\it|' appears inside. Why are the two cases
+%different? And how can a beginner learn to remember which is which?
+%Answer: |\centerline| is a control sequence that applies only to the very next
+%thing that follows, so you want to put braces around the text that is to
+%be centered (unless that text consists of a single symbol or control sequence).
+%For example, to center the \TeX\ logo on a line, it would suffice to
+%type `|\centerline\TeX|', but to center the phrase `\TeX\ has groups' you
+%need braces: `|\centerline{\TeX\ has groups}|'. On the other hand, |\it| is
+%a control sequence that simply means ``change the current font''; it acts
+%without looking ahead, so it affects {\sl everything\/} that follows, at
+%least potentially. The braces surround |\it| in order to confine the font
+%change to a local region.
+这里有一个两个组的例子，一个嵌套在另一个中间：
+\begintt
+\centerline{This information should be {\it centered}.}
+\endtt
+正如所预期的一样，\TeX\ 产生了一个居中的行，其中包含 italic 字体：
+$$\hbox{This information should be {\it centered}.}$$
+但是，让我们更详细地讨论这个例子：
+`|\centerline|'出现在大括号外面，而`|\it|'出现在里面。%
+为什么这两种情况不同呢？
+初学者怎样才能弄清谁是谁呢？
+答案是：|centerline| 这个控制系列是只作用在其后接下来的内容上，
+所以你要把居中的内容放在括号中(除非其内容仅仅是一个符号或一个控制系列)。%
+例如，要把标识符 \TeX\ 居中，键入 `|\centerline\TeX|' 就可以了，
+但是要居中短语`\TeX\ has groups', 就需要括号：`|\centerline{\TeX\ has groups}|'。%
+另一方面，|\it| 这个控制系列简单表示``改变当前字体'';
+它对前面没有作用，所以它——至少暗中——对其后的{\KT{10}所有}内容起作用。%
+括住 |\it| 的括号是为了把字体改变的作用限制在局部区域。
+
+%In other words, the two sets of braces in this example actually have different
+%functions: One serves to treat several words of the text as if they
+%were a single object, while the other provides local block structure.
+换句话说，本例中的两组括号的作用不同：
+一个是把文本的多个单词看作一个单一对象，而另一个提供了局部模块结构。
+
+%\exercise What do you think happens if you type the following:
+%\begintt
+%\centerline{This information should be {centered}.}
+%\centerline So should this.
+%\endtt
+%\answer In the first case, you get the same result as if the innermost
+%braces had not appeared at all, because you haven't used the grouping to
+%change fonts or to control spacing or anything. \TeX\ doesn't mind if you
+%want to waste your time making groups for no particular reason.
+%But in the second case, the necessary braces were forgotten. You get the
+%letter `S' centered on a line by itself, followed by a paragraph that
+%begins with `o should this.' on the next line.
+\exercise 如果你键入下列内容，会得到什么结果？
+\begintt
+\centerline{This information should be {centered}.}
+\centerline So should this.
+\endtt
+\answer 第一种情形中，你得到的结果与内部花括号不存在时的一样，
+因为你没有利用该编组改变字体或控制间距或做其他事情。
+\TeX\ 不在乎你浪费时间制造没有用处的编组。
+但是在第二种情形中，必需的花括号被遗漏了。
+你将得到在单独一行居中的字母 `S'，
+在下一行跟着一个以 `o should this.' 开始的段落。
+
+%\exercise And how about this one?
+%\begintt
+%\centerline{This information should be \it centered.}
+%\endtt
+%\answer You get the same result as if another pair of braces were present
+%around `|\it centered|', except that the period is typeset from the
+%italic font. \ (Both periods look about the same.) \ The |\it| font
+%will not remain in force after the |\centerline|, but this is
+%something of a coincidence: \TeX\ uses the braces to determine what
+%text is to be centered, but then it removes the braces. The
+%|\centerline| operation, as defined in Appendix~B\null, puts the
+%resulting braceless text inside {\sl another\/} group; and that's why
+%|\it| disappears after |\centerline|. \ (If you don't understand this,
+%just don't risk leaving out braces in tricky situations, and you'll be OK.)
+\exercise 下面这个呢？
+\begintt
+\centerline{This information should be \it centered.}
+\endtt
+\answer 你得到的结果与 `|\it centered|' 被包含在另一对花括号时的一样，
+除了此时句号也用意大利体排版。（这两种句号看起来几乎一样。）
+|\it| 字体在 |\centerline| 之后将不再生效，但这只是一个巧合：
+\TeX\ 用花括号确定要居中显示的文本，而后将删除花括号。
+在附录 B 定义的 |\centerline|操作，
+将不带花括号的结果文本放入{\sl 另一个}编组中；
+这就是 |\it| 在 |\centerline| 之后失效的原因。%
+（如果你不能理解此事，在棘手的情况下就不要冒险去掉花括号，
+这样你就不会有问题。）
+
+%\smallskip
+%\dangerexercise Define a control sequence |\ital| so that a user could type
+%`|\ital{text}|' instead of `|{\it text\/}|'. Discuss the pros and cons of
+%|\ital| versus |\it|.
+%\answer |\def\ital#1{{\it#1\/}}|. \ Pro:~Users might find this easier to
+%learn, because it works more like |\centerline| and they don't have to
+%remember to make the italic correction. \ Con:~To avoid the italic correction
+%just before a {\it comma} or {\it period}, users should probably be taught
+%another control sequence; for example, with
+%\begintt
+%\def\nocorr{\kern0pt }
+%\endtt
+%a user could type `|\ital{comma} or \ital{period\nocorr},|'. The alternative
+%of putting a period or comma in italics, to avoid the italic correction,
+%doesn't look as good. A long sequence of italics would be inefficient for
+%\TeX, since the entire text for the argument to |\ital| must be read into
+%memory only to be scanned again.
+\smallskip
+\dangerexercise 定义一个控制系列 |\ital|, 使得用户用键入`|\ital{text}|'来%
+代替`|{\it text\/}|'。与 |\it| 相比，看看 |\ital| 有什么优缺点。
+\answer |\def\ital#1{{\it#1\/}}|。\
+优点：用户会发现这简单易学，因为它用起来很像 |\centerline|，且无须记得要作倾斜校正。\
+缺点：要避免在{\it 逗号}或{\it 句号}之前的倾斜校正，用户也许需要学会另一个控制系列；
+比如利用
+\begintt
+\def\nocorr{\kern0pt }
+\endtt
+用户可以键入 `|\ital{comma} or \ital{period\nocorr},|'。
+另一种方法是将句号或逗号也放入意大利体文本中，以避免倾斜校正，
+但这看起来不够好。一大段的意大利体文本将降低 \TeX\ 的效率，
+因为 |\ital| 的整个参量文本必须先读入内存才能进行再次扫描 。
+
+%\ddanger Subsequent chapters describe many primitive operations of \TeX\ for
+%which the locality of grouping is important. For example, if one of \TeX's
+%internal parameters is changed within a group, the previous contents of
+%that parameter will be restored when the group ends. Sometimes, however,
+%it's desirable to make a definition that transcends its current group. This
+%effect can be obtained by prefixing `^|\global|' to the definition. For
+%example, \TeX\ keeps the current page number in a register called~|\count0|,
+%and the routine that outputs a page wants to increase the
+%^{page number}. ^{Output routines} are always protected by enclosing them
+%in groups, so that they do not inadvertently mess up the rest of \TeX; but
+%the change to |\count0| would disappear if it were kept local to the
+%output group. The command
+%\begintt
+%\global\advance\count0 by 1
+%\endtt
+%^^|\advance|
+%solves the problem; it increases |\count0| and makes this value stick around
+%at the end of the output routine. In general, |\global| makes the immediately
+%following definition pertain to all existing groups, not just to the
+%innermost one.
+\ddanger \1后面的章节规定了许多 \TeX\ 的原始操作，其中编组的局部性很重要。%
+例如，当 \TeX\ 的一个内部参数在组中变化了，当组结束时，此参数会恢复为原先的内容。%
+但是有时候，希望一个定义能不限在当前组中。%
+这可以通过在定义上加前缀`|\global|'而实现。%
+例如，\TeX\ 把当前的页码放在叫做 |\count0| 的寄存器中，
+并且输出一页的程序要增大页数。%
+总是通过把输出程序放在组中来保护它们，使得它们不会混淆 \TeX\ 的其它内容；
+但是如果对输出组而言 |\count0| 是局部的，那么产生的变化就会被掩盖。%
+命令
+\begintt
+\global\advance\count0 by 1
+\endtt
+就解决了这个问题；它增大 |count0|, 并且使其值在输出程序结束时保留下来。
+一般地，|\global| 使其后紧接的定义适用于所有存在的组，而不仅仅是最内层的组。
+
+%\ddangerexercise If you think you understand local and global definitions,
+%here's a little test to make sure: Suppose |\c| stands for `|\count1=|',
+%|\g| stands for `|\global\count1=|', and |\s| stands for
+%`|\showthe\count1|'. What values will be shown?
+%\begintt
+%{\c1\s\g2{\s\c3\s\g4\s\c5\s}\s\c6\s}\s
+%\endtt
+%\answer |{1 {2 3 4 5} 4 6} 4|.
+\ddangerexercise 如果你认为自己掌握了局部和整体的定义，这里有一个小测验：
+设 |\c| 代表`|\count1=|', |\g| 代表`|\global\count1=|', |\s| 代表%
+`|\showthe\count1|'。下面的结果是什么？
+\begintt
+{\c1\s\g2{\s\c3\s\g4\s\c5\s}\s\c6\s}\s
+\endtt
+\answer |{1 {2 3 4 5} 4 6} 4|.
+
+%\ddanger Another way to obtain block structure with \TeX\ is to use the
+%primitives ^|\begingroup| and ^|\endgroup|. These control sequences make it
+%easy to begin a group within one control sequence and end it within
+%another. The text that \TeX\ actually executes, after control sequences
+%have been expanded, must have properly ^{nested groups}, i.e., groups that
+%don't overlap. For example,
+%\begintt
+%{ \begingroup } \endgroup
+%\endtt
+%is not legitimate.
+\ddanger 利用 \TeX\ 得到模块结构的另一种方法是用原始的 |\begingroup| 和 |\endgroup|。%
+这些控制系列很容易在一个控制系列中开始一个组，并且在另一个控制系列中结束组。%
+在控制系列展开后，\TeX\ 实际执行的文本必须是真正的嵌套组，即，组不能交叉。%
+例如，
+\begintt
+{ \begingroup } \endgroup
+\endtt
+是不合法的。
+
+%\ddangerexercise Define control sequences |\beginthe|\<block name> and
+%|\endthe|\<block name> that provide a ``named'' block structure. In other
+%words,
+%\begintt
+%\beginthe{beguine}\beginthe{waltz}\endthe{waltz}\endthe{beguine}
+%\endtt
+%should be permissible, but not
+%\begintt
+%\beginthe{beguine}\beginthe{waltz}\endthe{beguine}\endthe{waltz}.
+%\endtt
+%\answer |\def\beginthe#1{\begingroup\def\blockname{#1}}|\parbreak
+%|\def\endthe#1{\def\test{#1}%|\parbreak
+%|  \ifx\test\blockname\endgroup|\parbreak
+%|  \else\errmessage{You should have said|\parbreak
+%|    \string\endthe{\blockname}}\fi}|
+\ddangerexercise 定义一个控制系列 |\beginthe|\<block name> 和 %
+|\endthe|\<block name>, 它给出一个``命名''模块结构。
+换句话说，
+\begintt
+\beginthe{beguine}\beginthe{waltz}\endthe{waltz}\endthe{beguine}
+\endtt
+是允许的，但是不允许
+\begintt
+\beginthe{beguine}\beginthe{waltz}\endthe{beguine}\endthe{waltz}.
+\endtt
+\answer |\def\beginthe#1{\begingroup\def\blockname{#1}}|\parbreak
+|\def\endthe#1{\def\test{#1}%|\parbreak
+|  \ifx\test\blockname\endgroup|\parbreak
+|  \else\errmessage{You should have said|\parbreak
+|    \string\endthe{\blockname}}\fi}|
+
+\endchapter
+
+I have had recourse to varieties of type,
+and to braces.
+\author JAMES ^{MUIRHEAD}, {\sl The Institutes of Gaius\/} (1880) % p. xii
+% he actually said braces for what we call brackets
+
+\bigskip
+
+An encounter group is a gathering, for a few hours or a few days,
+of twelve or eighteen personable, responsible, certifiably normal
+and temporarily smelly people.
+\author JANE ^{HOWARD}, {\sl Please Touch\/} (1970)
+
+\vfill\eject\byebye

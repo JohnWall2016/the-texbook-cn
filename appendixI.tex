@@ -1,0 +1,2446 @@
+% -*- coding: utf-8 -*-
+
+\input macros
+
+%\beginchapter Appendix I. Index
+\beginchapter Appendix I. 索引
+
+%\maxdepth=4pt
+%The author has tried to provide as complete an index as possible, so that
+%people will be able to find things that are tucked away in obscure
+%corners of this long book. Therefore the index itself is rather long. A
+%short summary of the simpler aspects of \TeX\ appears at the beginning of
+%Appendix~B; a summary of special symbols appears at the end of Appendix~F;
+%a summary of other special things appears under `tables' below.
+\maxdepth=4pt
+作者试图提供尽可能完整的索引，使读者能够找到藏在这本厚书的隐蔽角落的东西。
+因此这个索引本身相当地长。在附录~B~开头有 \TeX\ 各方面的简短总结；
+在附录~F~末尾有特殊符号的总结；在下面的 `tables` 项有其他特殊东西的总结。
+
+%\medskip\ninepoint
+%Page numbers are \underbar{underlined} in the index when they represent
+%the definition or the main source of information about whatever is being
+%indexed. \ (Underlined entries are the most definitive, but not
+%necessarily the easiest for a beginner to understand.) \ A page number is
+%given in italics (e.g., `{\it123\/}') when that page contains an instructive
+%example of how the concept in question might be used.  Sometimes both
+%underlining and italics are appropriate.  When an index entry refers to a
+%page containing a relevant exercise, the answer to that exercise (in
+%Appendix~A) might divulge further information; an answer page is not
+%indexed here unless it refers to a topic that isn't included in the
+%statement of the relevant exercise.
+\medskip\ninepoint
+加下划线的页码（比如 `\underbar{123}’）表示它给出条目的定义或主信息源。%
+（加下划线的条目是最明确的，但未必是初学者最容易理解的。）%
+意大利体的页码（比如 `{\it123\/}'）表示它包含该概念如何使用的例子。
+有时候同时使用下划线和意大利体更加合适。
+当索引条目指向包含相关练习的页面时，
+该练习的答案（在附录~A~中）可能透露进一步的信息；
+答案页不会在这里索引，除非它提及不包含在对应练习的描述中的话题。
+
+%\smallskip
+%Control sequence names that are preceded by an asterisk (*) in this index are
+%primitives of \TeX; i.e., they are built in. It may be dangerous to
+%redefine them.
+\smallskip
+在这个索引中，名称前面加上星号(*)的控制系列是 \TeX\ 的原始命令；
+即它们是内建命令。重新定义它们将会是危险的。
+
+\smallskip
+{\bf 译注：}在翻译本书时，英文版的原始页码被标示在页边空白中，
+并用方括号包围，比如 `|[123]|'。因此，这个英文索引对读者还是有用的。
+
+\begindoublecolumns
+\eightpoint \baselineskip=9.8pt % shooting for 53 or 54 lines/page
+\parskip=0pt plus .8pt
+\newdimen\sqht \sqht=2.4pt % \square
+\newbox\astbox \setbox\astbox=\hbox to0pt{\hss\lower1pt\hbox{*}}
+\raggedright \tolerance=5000 \hbadness=5000 \parfillskip 0pt plus 3em
+\ttglue=.4em
+\def\<#1>{\leavevmode\hbox{$\mkern-2mu\langle$#1\/$\rangle$}}
+\let\oldcstok=\cstok
+\def\cstok{\leavevmode\kern-2pt\oldcstok}
+\def\vdots{\vbox{\baselineskip 3\p@\kern2\p@\hbox{.}\hbox{.}\hbox{.}}}
+\def\ddots{\mathinner{\mskip1mu\raise5\p@\vbox{\kern2\p@\hbox{.}}\mskip2mu
+    \raise3\p@\hbox{.}\mskip2mu\raise\p@\hbox{.}\mskip1mu}}
+\def\cong{\mathrel{\mathpalette\@v@req\sim}} % congruence sign
+\def\@v@req#1#2{\lower.5\p@\vbox{\baselineskip\z@skip\lineskip-.0\p@
+    \ialign{$\m@th#1\hfil##\hfil$\crcr#2\crcr=\crcr}}}
+\def\see{{\sl see\/}~\ignorespaces}
+\def\also{\hfil\penalty50\hfilneg{\sl see~also\/}~\ignorespaces}
+\let\oldttv=\ttverbatim
+\let\+=\relax
+\def\sub{\penalty100 \vskip -\parskip \quad}
+\def\LaTeX{L\kern -.36em\raise.6ex\hbox{\sixrm A}\kern-.15em\TeX}
+\def\ttverbatim{\oldttv \catcode`\*=\other \catcode`\,=\other
+  \catcode`\.=\other \catcode`\;=\other \catcode`\@=\other \catcode`\+=\other}
+\let\comma=, \let\period=. \let\asterisk=* \let\semicolon=;
+\def\backup{\leavevmode\kern-1pt}\catcode`\-=11
+\catcode`\*=\active \def*{\leavevmode\copy\astbox}
+\catcode`\,=\active \def,{\eightrm\comma}
+\catcode`\;=\active \def;{\/\eightrm\semicolon}
+\catcode`\.=\active \def.{\eightrm\period\par\hangindent 2em }
+\catcode`\+=\active \def+#1{\ifcat0\noexpand#1$\setbox\z@\hbox{#1}\dp\z@=\z@
+   \underline{\box\z@}$\let\next=+%
+  \else\let\next=#1\fi \next}
+\catcode`\@=\active \let@=\eightit
+\parindent=0pt
+\hyphenpenalty=10000 \exhyphenpenalty=10000
+\def\newletter{\medbreak\hangindent 2em}
+\hangindent 2em
+%% ------------------- begin making hyperlinks for index -----------------------
+%% FIXME: 页码的下划线都丢失了，需要修改 + 的定义！
+%% FIXME: 宏 \pdflinkx 不能包含英文句号，因此不能随意选用颜色！
+% modified code
+\def,{\eightrm\comma\digitactive}
+\def.{\eightrm\period\par\hangindent 2em\digitother}
+% added code
+\chardef\other=12 \newcount\mycnt
+\def\myi{1}\def\myii{2}\def\myiii{3}
+\def\myiv{4}\def\myv{5}\def\myvi{6}
+\def\myvii{7}\def\myviii{8}\def\myix{9}
+\def\digitother{%
+  \catcode`\1=\other \catcode`\2=\other \catcode`\3=\other
+  \catcode`\4=\other \catcode`\5=\other \catcode`\6=\other
+  \catcode`\7=\other \catcode`\8=\other \catcode`\9=\other}
+\def\digitactive{%
+  \catcode`\1=\active \catcode`\2=\active \catcode`\3=\active
+  \catcode`\4=\active \catcode`\5=\active \catcode`\6=\active
+  \catcode`\7=\active \catcode`\8=\active \catcode`\9=\active
+  \scantokens{\let1}\readnumi   \scantokens{\let2}\readnumii   \scantokens{\let3}\readnumiii
+  \scantokens{\let4}\readnumiv  \scantokens{\let5}\readnumv    \scantokens{\let6}\readnumvi
+  \scantokens{\let7}\readnumvii \scantokens{\let8}\readnumviii \scantokens{\let9}\readnumix}
+\def\readnumi{\digitother\afterassignment\makelink\mycnt=\myi}
+\def\readnumii{\digitother\afterassignment\makelink\mycnt=\myii}
+\def\readnumiii{\digitother\afterassignment\makelink\mycnt=\myiii}
+\def\readnumiv{\digitother\afterassignment\makelink\mycnt=\myiv}
+\def\readnumv{\digitother\afterassignment\makelink\mycnt=\myv}
+\def\readnumvi{\digitother\afterassignment\makelink\mycnt=\myvi}
+\def\readnumvii{\digitother\afterassignment\makelink\mycnt=\myvii}
+\def\readnumviii{\digitother\afterassignment\makelink\mycnt=\myviii}
+\def\readnumix{\digitother\afterassignment\makelink\mycnt=\myix}
+\def\makelink{\pdflinkx{page\the\mycnt}{\the\mycnt}\digitactive}
+\makexeCJKinactive
+%% ------------------- end making hyperlinks for index -------------------------
+\] (visible space), +3, 420, 429; \also \<space>, spaces.
+*|\|\] (control space), @8, 10, 19, @73, @74, 86--87, 154, @163, @167, 283,
+  +285, +290, 323, 351, @381.
+|#| (hash mark), 38, 51, 113, @200--202, @+203, @204--205, 228, +235, @236--240.
+|\#| ( \#\ ), 38, 51, +356.
+|##|, 203--205, 228, @359--362, @378--379.
+|###|, 88.
+|#{|, 204, @401.
+|$| (dollar sign), 4, 38, 51, 54, 86--88, @92, 127, @134--135, @185--186,
+  +269, 283, +287, +293.
+|\$| ( \$\ ), 38, 51, @202, @309, +356.
+|$$|, 86--89, +185, @186--196, @232, +287, +293, @375--376, @421.
+|%| (percent sign), @26, 38, 39, 43, 48, 51, 113, 124, @249, @337, @340, +343.
+|\%| ( \%\ ), 38, 43--44, 51, +356.
+|%%|, 112--113.
+|&| (ampersand), 38, 51, @175--177, @190--196, @231--248, +282, 385--386.
+\sub for preloaded formats, +25, 26, 344.
+|\&| ( \&\ ), 38, 51, 53, +356.
+|&&|, 241--242, @361, @412.
+|'| (apostrophe or right quote), 3--5, 51, @130, 155, 201, @305, 324,
+  +357, 394--395; \also octal.
+|\'| (acute accent), @7--9, 52--53, @305, @335, +356, @420.
+|''| ( '' ), @3--5, @24, 394--395.
+|`| (reverse apostrophe or left quote), 3--5, 51, 132, 134, @305, 391, 394--395;
+  \also alphabetic constant.
+|\`| (grave accent), 8, 52--53, @305, +356.
+|``| ( `` ), @3--5, @24, 394--395.
+|"| (double quote or ditto mark), 52, 53, 134; \also hexadecimal.
+|\"| (dieresis or umlaut accent), @7, 9, @24, @25, 52--53, 55, +356.
+|(| (left parenthesis), 51, 134, @140, @145--150, 345.
+|\(|, 409.
+|)| (right parenthesis), 51, 134, @140, @145--150, 345.
+|[| (left bracket), 51, 134, @146--148, 171, @408, @437.
+|[]|, +28, @+79, @302.
+|[1]|, 23, +119.
+|]| (right bracket), 51, 134, @146--147, 171, 345, @408, @437.
+|{| (left brace), @13--14, @19--21, 38, 51, @200--202, +203--+204, @205--206,
+  216, +269, 275--276, +283, +286, +291, @330.
+|\{| ( $\{$ ), 134, @146--147, @174--175, +361.
+|{}|, @19, @54, 82, 95, 114, @129, 130, 150, 169, @196, @242, 253, 262,
+  @305, @315, @318, 351, 393.
+|}| (right brace), @13--14, @19--21, 38, 51, @200--202, +203--+204, @205--206,
+  +269, 275--276, +279, 301, @330.
+|\}| ( $\}$ ), 134, @146--147, @174--175, +361.
+\goodbreak
+|+| (plus sign), 51, 132, 268.
+|\+| (begin tabbed line), @231--234, 249, 339, +354.
+|-| (hyphen or minus), @4, 51, 93, 95, @127, 132, 268.
+*|\-| (discretionary hyphen), 95, 283, 287, 292, +455.
+|--|, |---|, \see en-dash, em-dash.
+$\pm$, \see |\pm|.
+$\mp$, \see |\mp|.
+|*| (asterisk), 23, 25, 51, 99, 113, 116, @132--133, 154, @326.
+|\*| (discretionary $\times$), 173, +357.
+|**|, 23, 25, 344.
+|/| (slash), 51, @132, @146--147, @320, 430.
+*|\/| (italic correction), @14, @64, +287, +292, @306, 382, 455.
+\| (vertical line), 52, 53, 132, @146--147, @171, @174, 438.
+|\|\| ( $\Vert$ ), @146--147, @171, +361, 435, 438.
+|\| (backslash), @7, 38, 39, 40, 51, 146--147, +343, @436.
+|\\|, 38, 378, 418.
+|<| (less than sign), 52, 53, @133, 150, 154, 209.
+\leavevmode{\tt\rlap<\char`\_}, 45, 135, 369; \also |\le|.
+|=| (equals sign), 51, @133, 209, 226, 275, @376.
+|\=| (macron accent), 52, @53, +356.
+$\buildrel \rm def \over=$, 181, @437.
+\leavevmode{\tt\rlap/=}, 45, 135, 369; \also |\ne|.
+|>| (greater than sign), 52, 53, @133, 150, 209.
+|\>| (medium space), 167, 171, +357.
+\leavevmode{\tt\rlap>\char`\_}, 45, 135, 369; \also |\ge|.
+\<>, \see angle brackets.
+|,| (comma), 51, @72--73, @134, @161--162, @172--174, @394--395, 430.
+|\,| (thin space), 5, @167--173, 305, +357, @409--410.
+|.| (period), 51, @72--73, 133--134, 149, @161, +345, @394--395, 430.
+\sub space after, @73--75; +76.
+|\.| (dot accent), 52, +356.
+$\ldots\,$, \see |\ldots|, ellipses.
+$\cdots\,$, \see |\cdots|, ellipses.
+\leavevmode\smash{$\vdots\,$}, \see |\vdots|, ellipses.
+|;| (semicolon), 51, @134, 161.
+|\;| (thick space), 167, 171, +357.
+|:| (colon), 51, @133--134, @155, 161, @174, @438.
+$:=$, 133.
+|?|\hbox{ }(question mark), 31, 51, 73, 161.
+|?`|\hbox{ }(open question), 51.
+|!|\hbox{ }(exclamation point), 51, @72, 73, 75, @169.
+|!`|\hbox{ }(open exclamation), 51.
+|\!| (negative thin space), +167, @169, +357.
+|_| (underscore), 38, 51, @128--130, 134.
+|\_| ( \_ ), 38, @165, +356.
+|^| (hat), 38, 51, @128--130, 134, 369, @423.
+|\^| (circumflex accent), 52--53, +356.
+|^^|, 45, +47, @48, +368, 370, 423.
+|^^M| (ASCII \<return>), 45, 249, 331, +343, 345, @348, @352, 380, @390--391,
+  @421, 423.
+|\^^M|, 8, @305, +351.
+|~| (tilde), 38, 51, 343, +353; \also ties.
+|\~| (tilde accent), 52, +356, 387.
+{\tt\char'13\char'14}, 135, 343, 368, 429; \also |\uparrow|, |\downarrow|.
+|@| (at sign), 51, 98--99, 132, 134, @344, @364, @408, 414.
+|@@|, 98--99.
+|\@ne|, +345.
+\newletter
+|\aa| ( \aa\ ), +356.
+|\AA| ( \AA\ ), +356.
+abbreviations, @73--74, @340; \also macros.
+*|\above| (general fraction), @143, 152, +292, 444--445.
+*|\abovedisplayshortskip|, +189, 274, @348, @415.
+*|\abovedisplayskip|, +189, +190, 194, 274, 291, @348, @415.
+*|\abovewithdelims|, 152, +292, 444--445.
+absolute value, @146, @149, @171, @175.
+Acc atom, 158, 289, 443.
+*|\accent| (general accent), 9, 54, 86, 283, +286.
+accents (\'{} \`{} \"{} etc\period), 7, @52--53, @339, +356, 357, 427--429.
+\sub as ligatures, 46, 54.
+\sub in math, @135--137, 141, 164--165, +359, 435, +443.
+\sub on top of accents, 136.
+\sub table, 52, 135, 339.
+|\active| (category 13), @241, +343, @395, @421.
+active character, 37, 40, 209, 241, 307, 377, 380--381, 394--395.
+active math character, 155, +289.
+active spaces, 381, 394, 421.
+|\acute| (math accent: $\acute x$), 135, +359.
+acute accent (\'{}), \see |\'|, |\acute|.
+|\address|, @403--404, +407.
+*|\adjdemerits|, +98, 273, @314, @348.
+*|\advance|, @21, @118--119, @218, @256, +276, @355.
+|\advancepageno|, 256, @257, +362, @416.
+|\ae| ( \ae\ ), vii, 17, 45--46, @52--53, @239, +356.
+|\AE| ( \AE\ ), @52--53, +356.
+*|\afterassignment|, 215, +279, @352, @364, @376, @401.
+*|\aftergroup|, 215, +279, @363, @374, @377, 379.
+`ain, \see reverse apostrophe.
+al-Khw\^arizm\^\i, abu Ja`far Mu\d{h}ammad ibn M\^us\^a, 53.
+|\aleph| ( $\aleph$ ), 9, +358, 435.
+Alice, 4, 387, 394.
+alignment displays, 190, 193, +291.
+\<alignment material>, 282, 285.
+alignments, 231--249, +282, 302--303, 385--386, 392; \also tabbing.
+Alka-Seltzer, 404--405.
+all caps, \see |\uppercase|.
+Allen, Todd Andrew, 377.
+allocation, 121--122, +346, +347.
+|\allocationnumber|, 346.
+|\allowbreak|, @174, +353, @396.
+|\allowhyphens|, @394, +395.
+|\alpha| ( $\alpha$ ), @127, @201, +358, 434.
+|\Alpha|, 434.
+alphabetic constants, @44--46, 215, +269, 270, 309, +367, 385.
+alternatives, \see |\cases|.
+|\amalg| ( $\amalg$ ), +358, 436.
+American Mathematical Society, ii, vii.
+ampersand, +25, 38, 51, @175--177, @190--196, @231--248, +282,
+  344, 385--386, 428.
+\AmSTeX, 164, +420, 434.
+anatomy of \TeX, 38--39, +46, 85, +267, 349, 373, 379, 385, 386, +456.
+|\angle| ( $\angle$ ), +358, 435.
+angle brackets ( $\langle\,\rangle$ ), 59, @146--147, 150, +268, 420,
+  437; \also |\langle|, |\rangle|.
+angstrom unit, \see |\AA|.
+|\annotations|, 403, @404, +407.
+answers to the exercises, 305--337.
+Antisthenes of Athens, 239.
+apostrophe, 3--5, 51, @130, 155, 201, 324; \also octal.
+|\approx| ( $\approx$ ), 128, 436.
+Arabic, 66.
+|\arccos| ( $\arccos$ ), 162, +361.
+Archytas of Taras, 239.
+|\arcsin| ( $\arcsin$ ), 162, 361.
+|\arctan| ( $\arctan$ ), 162, 361.
+Arenski\u\i, Anton Stepanovich, 410.
+|\arg| ( $\arg$ ), 162, 361.
+arguments, 33, 200--205, @263, 268, @375--380.
+Aristippus of Cyrene, 239.
+Aristophanes, 239.
+Aristotle, 35.
+arithmetic, 117--119, \see |\advance|, |\multiply|, |\divide|.
+\<arithmetic>, +276.
+arrays, @176--178, \see matrices.
+arrows, @146--147, @182, @226, +437.
+|\arrowvert| ( $\big\arrowvert$ ), 150, +359.
+|\Arrowvert| ( $\big\Arrowvert$ ), 150, +359.
+{\sl\backup The Art of Computer Programming}, 259--260.
+as is, \see |\obeylines|, |\obeyspaces|, verbatim.
+ASCII, 3, 43--45, 49, 214, 343, +367, 371.
+\<assignment>, +275.
+assignments, 275--278, 373.
+|\ast| ( $\ast$ ), 436.
+asterisk, 23, 25, 51, 99, 113, 116, @132--133, 154, @326.
+|\asymp| ( $\asymp$ ), 436.
+|at|, 16--17, 60, 213, 277, @408, @414, 433.
+\<at clause>, +277.
+at sign, 51, 98--99, 132, 134, @344, @364, @408, 414.
+AT\&T, 247.
+atoms, 157--159, 170--171, 289--290, 441--447.
+\sub table of atomic types, 158.
+*|\atop|, @143, @145, 152, @178, +292, +444.
+*|\atopwithdelims|, @152, +292, @324, @360, +444.
+author, typesetting by, 182, 412--413.
+auxiliary spaces, \see ties.
+axis line, 150--152, 179, 443--447.
+\newletter
+|\b| (bar-under accent), 52, +356.
+Bach, Johann Sebastian, 408.
+Bach, P\period\ D\period\ Q\period, 410--411, 481.
+backslash, @7, 38, 39, 40, 51, 146--147, 343, @436.
+|\backslash| ( \backup$\backslash$ \backup), @38, @146--147, +359, 435, @436.
+backspacing, @66, 82--83, 222, @394--395, @418.
+Backus, John Warner, 268.
+Bacon, Francis, viscount St\period\ Albans, 41.
+Bacon, Leonard, 1.
+bad breaks, avoiding, 27--30, 91--94, 173--174, 197.
+badness, @28--30, 97--99, 111--113, 302.
+*|\badness|, 214, @229, 271.
+\<balanced text>, 275, +276, 385.
+balancing columns, 386--388, @396--397, @417.
+|\bar| (math accent: $\bar x$), 135, @136.
+bar accent (\={}), \see |\=|, |\bar|.
+bar-under accent (\b{\hbox{ }}), \see |\b|.
+Barrett, Percy Reginald, 197.
+Barrough, Philip, 229.
+baseline, 15, +63, 77, 80--81, 150.
+*|\baselineskip| (normal vertical distance between baselines), @78--79, +80,
+  104, 194, 253, @256, 274, 281, 342, 349, @351--352, @409, @414--415.
+*|\batchmode|, +32, +277, 299, @336.
+Batey, Charles, 197.
+beauty, 1.
+Beck, Simone, 233, 236.
+Beethoven, Ludwig van, 408, 410--411.
+Beeton, Barbara Ann Neuhaus Friend Smith, 483.
+|\beginchapter|, 418.
+*|\begingroup|, 21, @249, @262, +279, @380, @407, @419.
+|\beginsection|, @340--341, +355.
+*|\belowdisplayshortskip|, +189, 274, @348, @415.
+*|\belowdisplayskip|, +189, +190, 194, 274, 291, @348, @415.
+Bemer, Robert William, \see TEX, ASCII.
+bent bars, \see angle brackets.
+Bertholle, Louisette, 233, 236.
+|\beta| ( $\beta$ ), @127, 434.
+|\Beta|, 434.
+|\bf| (use {\bf boldface} type), @13--14, @164--165, @328, +351, @409,
+  @414--415.
+|\bffam|, +351, @414--415.
+|\bgroup| (implicit |{|), 269, +351, @363, 382, +385, @407, @421.
+Bibby, Duane Robert, i.
+Biblical references, 303, @311.
+bibliographies, 4, @74, 93, @340--341.
+|\big| (largish delimiter), 147, 171, @320, @359, +360, @414--415.
+|\Big| (between |\big| and |\bigg|), 147, 175, @359, +360.
+big-$O$ notation, 132, @161--162, @169.
+big point, 57, \see |bp|.
+|\bigbreak|, 111, 116, +353, @363.
+|\bigcap| (large $\cap$), 147, 435.
+|\bigcirc| ( $\bigcirc$ ), 436.
+|\bigcup| (large $\cup$), 147, 435.
+|\bigg| (large delimiter), @147, 175, 196, 327, @359, +360.
+|\Bigg| (larger than |\bigg|), 147, 175, @359, +360.
+|\bigggl|, |\bigggr|, 324.
+|\biggl| (|\bigg| left delimiter), 147, @149, +359, 437.
+|\Biggl| (|\Bigg| left delimiter), 147, 149, +359, 437.
+|\biggm| (|\bigg| middle delimiter), 147, +359.
+|\Biggm| (|\Bigg| middle delimiter), 147, +359.
+|\biggr| (|\bigg| right delimiter), 147, @149, +359.
+|\Biggr| (|\Bigg| right delimiter), 147, 149, +359.
+|\bigl| (|\big| left delimiter), @146--147, 149--150, 155, 171, @175, +359, 437.
+|\Bigl| (|\Big| left delimiter), 147, +359, 437.
+|\bigm| (|\big| middle delimiter), 147, +359, 171, @175.
+|\Bigm| (|\Big| middle delimiter), 147, +359.
+|\bigodot| (large $\odot$), 435.
+|\bigoplus| (large $\oplus$), 435.
+|\bigotimes| (large $\otimes$), 435.
+|\bigr| (|\big| right delimiter), @146--147, 149--150, 171, @175, +359.
+|\Bigr| (|\Big| right delimiter), 147, +359.
+|\bigskip|, 70, 109, 111, 115--116, +352, @355, @407, @410--412.
+|\bigskipamount|, 123, +349, @352--353, @363.
+|\bigsqcup| (large $\sqcup$), 435.
+|\bigtriangledown| ( $\bigtriangledown$ ), 436.
+|\bigtriangleup| ( $\bigtriangleup$ ), 436.
+|\bigtype|, 408--409, 411.
+|\biguplus| (large $\uplus$), +358, 435.
+|\bigvee| (large $\vee$), 435.
+|\bigwedge| (large $\wedge$), 435.
+Bill, 387, 394.
+Bin atom, 158, 170--171, 289, 442--444, 446.
+binary operations, @132--133, 154--155, 164, 196, 358, 435, +436;
+  \also Bin atom.
+binary search, 387--388.
+binomial coefficient, 143, \see |\choose|.
+*|\binoppenalty|, 101, 174, 272, 322, @348, +446.
+black box, 64, +221, +222.
+blackboard bold (e\period g\period, $\rm I\!R$), 164, 434.
+blank line in input file, 24, 37, +47, @340--341, 381.
+blank space, \see spaces.
+Blase B\"ohning, Maria Dorothea, 248.
+block structure, \see grouping.
+block style, 405--407.
+|\bmit| (boldface math italic), 156.
+|\bmod| ( $\bmod$ ), @164, 322, +361.
+|\body|, @403--404, +407.
+Boehm, Peter James, 159.
+B\"ohning, Jobst Heinrich, 248.
+B\"ohning, Martin John Henry, 248.
+Bohning Knuth, Louise Marie, 248.
+boldface, 13, 156, 164--165, 386.
+book design, 412.
+book preparation, 303, 425.
+|\bordermatrix|, @177, +361.
+|\bot| ( $\bot$ ), 435.
+*|\botmark|, 213, +258, 259--260, @262--263, 280.
+boundary item, 157, 442, 446.
+Bourbaki, Nicolas, 106.
+|\bowtie| ( $\bowtie$ ), +358, 436.
+\<box>, 120, 222, +278, 282, 285, 290.
+*|\box| (use box register), 120--122, 151, 222, +278, 346, @354, @386, @387.
+|\box255|, 125, 253--258.
+\<box dimension>, +271, 277.
+box displays, 66, 75, 79, 158--159, 302, 455.
+box memory, 300, 394.
+\<box or rule>, +281.
+\<box size assignment>, +277.
+\<box specification>, 222, +278.
+\cstok{boxed} control sequence names, 38.
+boxed material, @223, @420.
+boxes, 63--67, 77--83, 221--229.
+*|\boxmaxdepth|, +81, 113, 249, @255, 274, @348.
+|bp| (big point), +57, 270.
+|\brace| (notation like $n\brace k$), +360.
+|\braceld|, |\bracelu|, |\bracerd|, |\braceru| (pieces of horizontal braces),
+  @+357.
+braces, 51, 216, +269, 275--276, 279, 283, 286, 289--291, 330, 345, 385--386.
+\sub for arguments to macros, @20, @200--202, +203, +204, @205--206, 385--386.
+\sub for grouping, @13--14, @19--21, 232, 248, 253.
+\sub horizontal, @176, 225--226, @339.
+\sub implicit, +269, \see |\bgroup|, |\egroup|.
+\sub in math formulas, @145--147, @174--176.
+|\bracevert| ( $\big\bracevert$ ), 150, +359.
+|\brack| (notation like $n\brack k$), +360.
+brackets, 51, 134, @146--148, 171, @408, @437.
+|\break| (force line or page break), 94, 97, 106, 114, 193, +353.
+breakpoints, +96, 97--100, +110, 111--114, 394.
+\sub avoiding bad, 27--30, 91--94, 109--111, 173--174, 197.
+\sub discretionary, @95--96, 173, +287, +292, @357.
+\sub forcing good, 94, 105, 109--111, 114.
+\sub in displays, 195--197.
+\sub in formulas, 173--174, 446--447.
+|\breve| (math accent: $\breve x$), 135.
+breve accent (\u{}), \see |\u|, |\breve|.
+British pound sign, 54.
+brochures, 251.
+*|\brokenpenalty|, +104, 105, 272, @348.
+Brooks, Frederick Phillips, Jr\period, 365.
+Brown, Peter John, 425.
+|\buildrel|, +361, @437.
+built-up (extensible) characters, 442.
+built-up fractions, \see |\over|.
+|\bull| ( $\bull$ ), +420.
+Bull, John, 239.
+|\bullet| ( $\bullet$ ), @133, 154, @355, 436.
+bulleted lists, 102, 105.
+business correspondence, 200, 403--408.
+|by|, @118, +276.
+|\bye|, 87--88, @340, +357.
+Byron, George Gordon No\"el Byron, baron, vii.
+\newletter
+|\c| (cedilla accent), @24--25, 52, +356.
+|\cal| (calligraphic caps), 164, +351, 431, 434.
+calculus, 168--169, 180--181.
+camera alignment, 416--417.
+|\cap| ( $\cap$ ), 133, 436.
+capacity of \TeX, 100, 300--301, 383.
+caps and small caps, 203.
+captions, 115.
+caret, 369.
+caron, \see h\'a\v cek.
+carriage return, 231, \see \<return>, |\cr|.
+|\cases| ( $\bigl\{{\cdots\atop\cdots}$ ), 175, +362.
+Caswell, Herbert Ernest, 413.
+*|\catcode|, @39, 134, 214, +271, 305, @343, @380--382, @384, @390--391,
+  @421, @424.
+category codes, 37--40, +47, 48, 203--205, 209--210, 214, 381.
+\sub table, 37.
+|cc| (cicero), 57, 270.
+|\cdot| ( $\cdot$ ), @133, @172, 319, 436.
+|\cdotp|, 358, +359, 438.
+|\cdots| ( $\cdots$ ), @172, @176, @180--181, +359, 438.
+cedilla accent (\c{\ }), 25, 52, 54, \see |\c|.
+ceiling brackets ( $\lceil\,\rceil$ ), 146--147, \see |\lceil|, |\rceil|.
+centering, 71, 233, 236.
+|\centering|, +347, 348, 362.
+|\centerline| (make a centered line), @20, @24, 33, 71, 85, 101, @117, 232,
+  311, @340, +353.
+|\cents| ( \hbox{\rm\rlap/c} ), 140, +319.
+Ces\`aro, Ernesto, 53.
+Cha\u\i kovski\u\i, P\"etr Il'ich, 410--411.
+*|\char|, @43--46, 76, 86, 155, 283, +286, 289, @340, @427, 452.
+\<character>, +289.
+character codes, 43--46, 367--370; \also category codes.
+\<character token>, +270.
+*|\chardef|, 44, 121, 155, 210, 214, 215, 272, +277, 336, @343, @345, 452.
+\<chardef token>, +271, 272.
+Charles XII of Sweden, 92.
+Chaundy, Theodore William, 197.
+|\check| (math accent: $\check x$), 135.
+check accent (\v{}), \see |\v|, |\check|.
+chemical typesetting, 179.
+Cherry, Lorinda Landgraf, 159.
+|\chi| ( $\chi$ ), 1, 434.
+Chicago, University of, Press, 125, 293, 418, 439.
+Child, Julia, 233, 236.
+Children's Television Workshop, ii.
+choice, four-way, 157, +292, +442.
+|\choose| (notation like \setbox0=\hbox{$n\choose k$}\dp0=0pt\box0),
+  139, 143, 152, 178, +360.
+Christie Mallowan, Dame Agatha Mary Clarissa (Miller), 249.
+cicero, \see |cc|.
+|\circ| ( $\circ$ ), @133, @323, 436.
+circles, \see |\circ|, |\bigcirc|.
+circular quotation, 101.
+circumflex, 369, \see hat.
+circumflex accent (\^{}), 52, +356, \see |\^|.
+classes of math characters, table, 154.
+*|\cleaders|, +224, 225--226, @357, @374.
+|\cleartabs|, @234, +354.
+Close atom, 158, 170--171, 289, 443--444, 446.
+*|\closein|, 217, 280.
+*|\closeout|, 226--228, 254, +280, @422.
+|\closing|, @403--404, +407.
+closings, 134, 147, 154--155, 359, +437; \also Close atom.
+club lines, 104, 272, 398.
+*|\clubpenalty|, 104, 113, 272, 317, @348, @419.
+|\clubsuit| ( $\clubsuit$ ), 435.
+|cm| (centimeter), @24, +57, 270.
+|cmbx| fonts, 60, 350, 413, 428, 433.
+|cmex| fonts, 157, 225, 350, 432--433.
+|cmmi| fonts, 350--351, 413--414, 430, 433.
+|cmr| fonts, 16--17, 60, 63--64, 76, 350, 413, 427, 433.
+|cmsl| fonts, 63--64, 350, 413, 428, 433.
+|cmsy| fonts, 157, 350--351, 413--414, 431.
+|cmti| fonts, 350, 413, 428, 433.
+|cmtt| fonts, 60, 350, 413--414, 429, 433.
+\<code assignment>, +277.
+\<codename>, +271.
+codes for characters, 43--46, 367--370.
+Coelho, Manuel Rodrigues, 239.
+coerce \<dimen> to \<number>, 270.
+coerce \<glue> to \<dimen>, 270.
+coerce \<number> to \<dimen>, 336.
+\<coerced dimen>, +270.
+\<coerced integer>, +269.
+\<coerced mudimen>, +270.
+collective signs, \see large operators.
+colon, 51, @133--134, @155, 161, @174, @438.
+|\colon| ( $\colon$ ), @134, +359, @438.
+color, 229.
+column vector, 177.
+column width, 29, 231, @257, @387, 417.
+|\columns|, 231, 354.
+comma, 51, @72--73, @134, @161--162, @172--174, @394--395, 430.
+commands, 267--293.
+comments, 26, 47, 337, @340.
+communication between macros, 211, 328--329, 375--376, 407--408.
+commutative diagram, @182.
+composing stick, 64--65.
+compound fraction, @143.
+compound matrix, @181.
+Computer Modern fonts, 16, 350, 427--438.
+computer programs, 38, 165, @234.
+concert programs, 408--412.
+conditionals, 206--208, +209, +210, 211, 240, @308, @384.
+|\cong| ( $\cong$ ), 151, 360, 436.
+constants, +269, 270, 308.
+continued fractions, @142.
+\<control sequence>, +275, 277.
+control sequences, 7--11, +46, 199, 457.
+\sub misspelled, 31--32.
+control space (|\|\]), @8, 10, 19, @73, @74, 86--87, 154, @163, @167, 283,
+  +285, +290, 351, @381.
+control symbols, 7--8, 46--47.
+control words, 7--8, 38, 46--47, 204.
+coordinates, 389.
+|\coprod| (large $\amalg$), 435.
+*|\copy| (copy a box), 120, 151, +222, 278, @329, @374, @386, @407.
+|\copyright| ( \copyright\ ), ii, @308, 339, +356.
+Cornet, Peeter, 239.
+Correa de Arauxo, Francisco, 239.
+correspondence, 200, 403--408.
+|\cos| ( $\cos$ ), 162, 361.
+|\cosh| ( $\cosh$ ), 162, 361.
+cost of a page break, 111--113, 124.
+|\cot| ( $\cot$ ), 162, 361.
+|\coth| ( $\coth$ ), 162, 361.
+*|\count| registers, 118--122, 207--208, +271, +276, @346--347, @379.
+\sub |\count0|, +119, @207, 252--254, +362.
+*|\countdef|, 119, 121, 210, 215, 271, +277, @346--347.
+\<countdef token>, +271.
+Cowper, William, 35.
+*|\cr| (end of aligned row), @175--177, @190--197, @231--238, +245, +248,
+   275, 282, 351, 352, 385--386, @412, @418, @421.
+\sub avoiding, 249.
+cramped styles, 140--141, 445.
+*|\crcr| (force |\cr|), 249, 275, 282, @361--362, 385, @412, @421.
+Crocker, Betty, 425.
+cross, \see |\dag| (~\dag~), |\times| (~$\times$~).
+crotchets, \see brackets.
+|\csc| ( $\csc$ ), 162, 361.
+*|\csname|, 40--41, +213, @348, @375.
+|\csname\endcsname|, 46, 308.
+cube root, @130--131.
+Cummings, Edward Estlin, 49.
+|\cup| ( $\cup$ ), 133, 436.
+curly braces, \see braces.
+current font, 13, 20, 154, 163, 213--214.
+current page, 112, 122--125, 278, 280.
+cyclic preambles, +241, @242, @246, @361, @412.
+Cyrillic characters, 370.
+\newletter
+|\d| (dot-under accent), 52--53, +356.
+|\dag| ( \dag\ ), 53, 117, +356, 438--439.
+|\dagger| ($\dagger$ as binary operator), 436, 439.
+Dale, Robert William, 283.
+|\danger|, 419.
+dangerous bend, v--vi, 5, 15, 44--45, 70, 419.
+Danish characters, 45--46, 52--53, 370.
+|\dash|, 30.
+dashes, 4, @26, @30, 51, 93, 95.
+|\dashv| ( $\dashv$ ), 436.
+date, today's, 406.
+*|\day|, 273, 349, @406.
+|dd| (didot point), +57, 270, 272.
+|\ddag| ( \ddag\ ), 117, +356, 438--439.
+|\ddagger| ($\ddagger$ as binary operator), 436, 439.
+|\ddot| (math accent: $\ddot x$), 135, +359.
+|\ddots| ( \smash{$\ddots$} ), 177, +359.
+|\ddt| (debugging aid), 248.
+De Vinne, Theodore Low, 107.
+*|\deadcycles|, 214, +255, 264, 271, 283, @401.
+debugging, 205, 248, 298--303, 347.
+decent lines, 97, 99.
+\<decimal constant>, +270.
+decimal points, 57, 134, 240.
+\<def>, +275.
+*|\def|, 44, 136, 199--208, 215, 275--276.
+default output routine, 253--255.
+default rule thickness, 443--447.
+default values of parameters, 348--349.
+*|\defaulthyphenchar|, 273, @348.
+*|\defaultskewchar|, 273, @348.
+defining a control sequence, 199--208.
+\<definition>, +275.
+\<definition text>, +275.
+|\deg| ( $\deg$ ), 162, 361.
+degrees ( $^\circ$ ), @180.
+*|\delcode|, +156, 214, 271, +290, @345.
+\<delete> (ASCII code 127), 37, 39, 343, 369.
+deleting tokens, 32, 215, @295--297.
+\<delim>, 289--290.
+delimited arguments and parameters, 203--205, 249, @263, @375--377, @407.
+*|\delimiter|, +156, 289--290, @359.
+*|\delimiterfactor|, 152, 273, @348, +446.
+delimiters, 145--150, 156--157, @171, +290, 437, +442.
+*|\delimitershortfall|, 152, 274, @348, +446.
+|\delta| ( $\delta$ ), @127, 434.
+|\Delta| ( $\Delta$ ), @169, @186, 434.
+demerits, 94, 97--99, 273, @451.
+denominator, 141, 152, 179, 444--445.
+|depth|, 221, 224, +282, 337.
+depth of a box, 63--67, 77, 80--82, 225.
+Derek, Bo, 293.
+descenders, 63, 113, 319, 323.
+design size, 16--17, 213.
+|\det| ( $\det$ ), 162, +361.
+device-independent output, 23; \also |.dvi|.
+Diabelli, Antonio, 408.
+diagnostic form of lists, 66, 75, 79, 158--159, 302, 455.
+dialogs with the user, 217--218.
+|\diamond| ( $\diamond$ ), 436.
+diamond leaders, viii.
+|\diamondsuit| ( $\diamondsuit$ ), 435.
+D\'\i az de la Pe\~na, Maximiliano Antonio Tem\'\i stocles, 384.
+Dick and Jane, 72--74, 76.
+Dictionaries, 259, 449--453.
+Didot, Fran\c cois Ambroise, 57.
+didot point, 57, \see |dd|.
+dieresis (\"{}), +52, 53, 356, \see |\"|.
+diesis ( \ddag\ ), \see |\ddag|.
+Dieter, Ulrich Otto, 14.
+\<digit>, +269.
+\<digit string>, 57.
+digits, 51, 132, 435, 453.
+\sub width of, 60, 241, 427.
+|\dim| ( $\dim$ ), 162, 361.
+\<dimen>, 59, 61, 71, 118, +270, 271.
+\<dimen parameter>, 271, +274, 276.
+*|\dimen| registers, 118--122, +271, +276, @346--347, @349, @360, @363, @395.
+\<dimen variable>, +276.
+*|\dimendef|, 119, 215, +277, @346--347.
+\<dimendef token>, +271.
+dimensions, 57--61.
+\sub as arguments, 204, 362.
+Dionysius I of Syracuse, 239.
+diphthongs, \see |\ae|, |\oe|.
+discardable items, 95, 110--112, 124, @393.
+*|\discretionary|, 95--96, 283, 286, +287, +292.
+discretionary hyphens, 28, 95--96, 453, +455.
+discretionary multiplication signs, 173, +357.
+display math mode, 85--89, 289--293.
+display style, 140--142, 441--447.
+*|\displayindent|, 188, 190, 274, 291, 349.
+*|\displaylimits|, 144, 159, +292, 443.
+|\displaylines|, 194, @196, +362.
+displays, 87, 103, @139--145, @166--167, 185--197, @232, @241, 315.
+\sub at beginning of paragraph, 316.
+\sub non-centered, 186, 326, 375--376, 420--421.
+\sub positioning of, +188--+190.
+*|\displaystyle|, 141--142, +292, @362.
+*|\displaywidowpenalty|, 104, 272, @348.
+*|\displaywidth|, 188, 190, 274, 349.
+Disraeli [Beaconsfield], Benjamin, earl, 219.
+ditto mark, 53, 441.
+|\div| ( $\div$ ), 436.
+*|\divide|, @118--119, @218--219, +276, @391, @397, @398, @417.
+|\do|, 344, 380, 423.
+dollar sign, 4, 38, 51, 54, 86--88, @92, 127, @134--135, @185--186, 283,
+  +287, +293.
+Donnelley, Richard Robert, vii.
+|\dospecials|, +344, 380, 422--423.
+|\dosupereject|, 256, +364.
+|\dot| (math accent: $\dot x$), 135.
+dot accent (\.{}), \see |\.|, |\dot|.
+dot-under accent (\d{\hbox{ }}), \see |\d|.
+|\doteq| ( $\doteq$ ), +361, 436.
+|\dotfill| (\hbox to 4em{\dotfill}), 244, @334, @335, @340--341, +357.
+dotless letters, 52--53, 136, 435.
+|\dots| ( \dots\ ), 173, +356; \also ellipses.
+double-column format, @257, 386--388, @417.
+double dagger, \see |\ddag|, |\ddagger|.
+double dangerous-bend signs, vi, 419.
+double integrals, @169, @180.
+double quote mark, 52, 53, 134; \also hexadecimal.
+*|\doublehyphendemerits|, 98, 273, @348, @451.
+|\downarrow| ( $\downarrow$ ), @146--147, @182, +359, 437.
+|\Downarrow| ( $\Downarrow$ ), @146--147, +359, 437.
+|\downbracefill| (\hbox to 4em{\downbracefill}), 225--226, 331, +357.
+Doyle, Sir Arthur Conan, 401.
+*|\dp|, 120, 271, @316, +388--+389, @417.
+dragon curve, 391.
+Drofnats, Revinu Jitis, 24, 27--28, 73--74, 404--406, 408, 410--412.
+Dudeney, Henry Ernest, 249, 334.
+Dull, Brutus Cyclops, 131, 173, 260.
+|\dummy|, 401.
+*|\dump|, +283, +286, 336, @344.
+Durant, William James, 239.
+|.dvi|, 23, 43, 60, 119, 213, 228, 254, 279, 280, 302, 367, 374.
+Dvo\v r\'ak, Anton\'\i n Leopold, 409.
+$dx$, @168.
+\newletter
+EBCDIC, 43.
+*|\edef|, @215--216, 275, @328, @348, @373--374.
+editing, 34, 139, 197.
+efficiency, 329, 333, 342, 345, 347, 383, 384, 394, 400, 423.
+|\egroup| (implicit |}|), 269, +351, @363, 382, +385, @407, @421.
+Ehlert, Ernst Fred, 248.
+Ehlert Bohning, Pauline Anna Marie, 248.
+|\eightpoint|, +415, @416.
+|\eject| (force page break), @24--25, 105, 109, 189, +353, @418, @419.
+elbows, \see angle brackets.
+|\ell| ( $\ell$ ), 132, 435.
+ellipses ( $\cdots$ ), 73, 172--174, 176--177, 180--182, 245.
+Elphinstone, Mountstuart, 89.
+*|\else|, 207, 210, +213.
+|em|, 60, 154, 166, 214, +270, @352, @414, 433.
+em-dash ( --- ), 4, 302.
+em quad, \see |\quad|.
+embellished letters, \see accents.
+emergency stops, 299--300.
+*|\emergencystretch|, +107, 274.
+Emerson, Ralph Waldo, 41.
+emphatics, \see dot-under.
+\<empty>, +268.
+|\empty|, @263, +351, @378.
+empty discretionary, 95, 286.
+empty group, 19, 253, 305.
+empty line in input file, 24, 37, +47, @340--341, 381.
+\sub at end of file, 217.
+empty line in output, 114, 316.
+empty page, 114.
+|\emptyset| ( $\emptyset$ ), 128, 435.
+en-dash ( -- ), 4, 187, 252, 314.
+en quad, 71, \see |\enspace|.
+*|\end|, 23, 26, @27, 87, +264, +283, 286, 299, @336, @403.
+end of an input file, 206, 214, 217.
+end of file line, \see \<return>, |\cr|.
+end of file page, \see \<formfeed>.
+end of paragraph, 286, \see |\par|.
+|\endchapter|, 418--419.
+*|\endcsname|, 40--41, +213, 283, @348, @375.
+endgame, 87, 264, 283.
+|\endgraf|, @262, 286, @331, +351, @407, @416, @419.
+*|\endgroup|, 21, @249, @262, +279, @380, @407, @419.
+*|\endinput|, 47, +214.
+|\endinsert|, 115--116, +363.
+|\endletter|, @403--404, +407.
+|\endline|, +351.
+*|\endlinechar|, +48, 273, @331, +348, @390--391.
+|\endtemplate|, 240.
+|\enskip|, 71, +352.
+|\enspace|, @202, +352, @419.
+enumerated cases, in formulas, 175.
+\sub in separate paragraphs, @102, @340.
+\sub within a paragraph, 92.
+enunciations, \see |\proclaim|.
+epigraphs, 418--419, 425.
+|\epsilon| ( $\epsilon$ ), 1, 128, 434.
+|\eqalign|, @190--191, 193, 242, 326, +362.
+|\eqalignno|, @192--193, 194, +362.
+\<eqno>, +293.
+*|\eqno|, @186--187, 189--191, 193, +293, 375--376.
+\<equals>, +275, 276--277.
+equals sign, 51, @133, 209, 226, 275, @376.
+equation numbers, 186--196.
+|\equiv| ( $\equiv$ ), @133, 436.
+Erd\H os, P\'al (= Paul), 53.
+*|\errhelp|, 275, +280, @347.
+*|\errmessage|, 216, +279--+280, @347, @418.
+error messages, 30--33, 295--301, 308--309.
+error recovery, 31--32, 46, 215, 295--303, 309.
+*|\errorcontextlines|, +34, 273, @348.
+*|\errorstopmode|, +32, +33, +277, 299.
+es-zet ( \ss\ ), \see |\ss|.
+\<escape> (ASCII code 27), 369.
+escape character, 7, 37, 421.
+*|\escapechar|, 40, 213, +228, 273, @308, +348, @377.
+|\eta| ( $\eta$ ), 434.
+|etc.|, 302.
+Eulerian numbers, 152.
+Evagoras of Salamis, 239.
+even-numbered pages, 252--253, @416.
+*|\everycr|, 275, @362.
+*|\everydisplay|, 179, 275, +287, @326.
+*|\everyhbox|, 275, 279.
+*|\everyjob|, 275.
+*|\everymath|, 179, 275, +287, +293, 326.
+*|\everypar|, @105, 215, 253, @262, 275, +282, +283, @333, @381, @407, @421.
+*|\everyvbox|, 275, 279.
+|ex|, 60, 154, +270, @356, 433.
+exception dictionary, 449, 452--453.
+exclamation point, 51, @72, 73, 75, 161, @169.
+|\exercise|, 10, +422.
+exercises, vii, 1--303.
+*|\exhyphenpenalty|, +96, @262, 272, @348.
+|\exists| ( $\exists$ ), 435.
+|\exp| ( $\exp$ ), 162, 361.
+*|\expandafter|, @40, +213, 215, @260, @308, @330, @348, @374--380.
+expansion of expandable tokens, 212--216, 238, 267, 373--374.
+\sub avoiding, 216, 262--263, 377.
+explicit hyphens, 4, 93, 454.
+explicit kerns, 40, 280, 306, 454--455.
+exponents, \see superscripts.
+extensible characters, 442.
+extension fonts, 157, @351, 432--433, 441, 447.
+extensions to \TeX, 226, 228--229.
+eyestrain, reducing, 59.
+\newletter
+faces, 13, 17, 390.
+\<factor>, 270.
+factorial, @169, @181.
+*|\fam|, 154--159, 273, +289--+290, 346--347, @351, 358, @414--415.
+families, 153--159, 289--290, 346, 431, 442.
+\<family assignment>, +277.
+\<family member>, +271, 277.
+family tree, 248.
+family 0 (math roman fonts), 153--157, @351.
+family 1 (math italic fonts), 155--157, @351.
+family 2 (math symbol fonts), 157, @351, 431, 441, 447.
+family 3 (math extension fonts), 157, @351, 432--433, 441, 447.
+{\tt Fatal format file error}, 299.
+feasible breakpoints, 99, 315.
+fences, \see openings, closings, delimiters.
+ffl, \see ligatures.
+*|\fi|, 207, 210, +213.
+Fibonacci, Leonardo, of Pisa, 166.
+fields of atoms, 158--159, 289--291.
+|fil|, 72, 118--119, +271, @348, @394.
+\<fil dimen>, +271.
+\<fil unit>, +271.
+|\filbreak|, 111, +353.
+\<file name>, 214, 216, 226, 277, +278.
+file names, 25, 214, 216--217, 226, 278.
+file pages, 343.
+file types, \see |.dvi|, |.fmt|, |.tfm|, |.tex|, log file, terminal.
+|fill|, 72, 118--119, +271, @347.
+fill page with blank space, \see |\vfill|.
+\<filler>, +276, 278, 280--282, 289.
+|filll|, 72, 118, +271, @332.
+*|\finalhyphendemerits|, 98, @106, 273, @348, @451.
+*|\firstmark|, 213, +258, 259--260, 280.
+|\fiverm|, 153, +350, @351, @414--415.
+|\flat| ( $\flat$ ), @409, 435.
+floating insertions, 115--116, 125, @363.
+*|\floatingpenalty|, 123--125, 272, 281, @363.
+floor brackets ( $\lfloor\,\rfloor$ ), 146--147, \see |\lfloor|, |\rfloor|.
+flush left, 72, 142, 177, 181, 196.
+flush right, 71--72, 106, 142, 177, 196, 233, 419.
+|.fmt|, 39, 344.
+|\fmtname| and |\fmtversion|, 364.
+|\folio| (typeset page number), 252--253, +362, @406, @416.
+\<font>, +213, 214, 271, 277.
+*|\font|, 16--17, 60, 210, +213, 214--215, 271, +276.
+\<font assignment>, +277.
+font metric files, 46, 433.
+\<font range>, +271.
+\<fontdef token>, +271.
+*|\fontdimen|, 76, 157, @179, 214, +271, +277, @355--356, @375, @390, +433,
+  441, 447.
+*|\fontname|, 213, 214.
+fonts, 13--17; \also Computer Modern fonts.
+|\footins|, 256, +363, 396--399, @416.
+|\footline|, 252, 256, @340--341, +362.
+|\footnote|, 82, 116, 251, 256, 340, +363, 382, 416.
+|\footnoterule|, 256, +364.
+footnotes, 105, @116--117, 121, 125, @173, 416--417.
+\sub short, 395--400.
+|\forall| ( $\forall$ ), 435.
+forbidden control sequence, 206.
+Ford, Patrick Kildea, 293.
+foreign languages, 45--46, 52--54, 370, 387, 449, 451.
+form letters, 200, 207--209.
+format file, 25--26, 39, 283, 344.
+format-independent documents, 194, 203.
+formats, 11, 39, 200, 403--425, 434.
+\<formfeed> (ASCII code 12), 343, 369.
+formulas, 127--199.
+Foss, Sam Walter, 439.
+fractions, 67, 139--143, 152, 170, 179, 186, 332, 444--445.
+\sub huge, 196.
+\sub slashed form, 67, 139--140, 233, 236.
+Fraktur, 164, 434.
+Franklin, Benjamin, 65.
+French, 54, 340--341, 455.
+|\frenchspacing|, 74, @340, +351, 381, 401.
+Frescobaldi, Girolamo, 239.
+front matter, 413.
+|\frown| ( $\frown$ ), 436.
+full stop, \see period.
+|\fullhsize|, 257.
+|\fullline|, 257.
+funny space, 377.
+*|\futurelet|, +207, 215, @262, 277, @363, @375--377, @423.
+|\futurenonspacelet|, 376.
+\newletter
+Galilei, Galileo, 101.
+galley file, 303, 425.
+Gamble, James, 38.
+|\gamma| ( $\gamma$ ), @127, 434.
+|\Gamma| ( $\Gamma$ ), @127, @169, +358, 434.
+|\gcd| ( $\gcd$ ), 162, @192, 361.
+*|\gdef|, +206, 215, 275, @352, @407.
+|\ge| ( $\ge$ ), 9, 45, @175, 318, +361, 438.
+\<general text>, +276, 277, 279, 280, 287, 292.
+generalized fraction, 152, 157, +292, +444--+445.
+generic coding, 194, 203.
+generic matrix, 177, 245.
+|\geq| ( $\geq$ ), 318, 436.
+German, 52, 96, 451.
+German black letters, \see Fraktur.
+|\getfactor|, +375.
+|\gets| ( $\gets$ ), +361, 438.
+|\gg| ( $\gg$ ), 436.
+Gibbon, Edward, 117.
+*|\global|, @21, 119, 206, @218, 232, 256, +275, 301, 307, 320, 346.
+\<global assignment>, 179, +277.
+*|\globaldefs|, 238, 273, +275.
+glue, 63, 69--83, 95, 110, 157, 222--225, 302, 412.
+\sub above and below displays, 189--190, 194.
+\sub at top of page, 113--114, 124, 256.
+\sub between aligned columns, 237--239, 247, 392.
+\sub between lines, \see interline glue.
+\sub between paragraphs, 79, 104--105, 262, 282, 342, 406, 417.
+\sub between words, 74--76, 356, 393--394, 433.
+\<glue>, 71, 118, +271.
+|\glue|, 75, 79, 302.
+\<glue parameter>, 271, +274, 276.
+|glue set|, 79, 302.
+glue set order, 77, 79, 81, 97.
+glue set ratio, 77, 79, 81, 97.
+\<glue variable>, +276.
+goal height, 112--114, 123--125.
+Goethe, Johann Wolfgang von, 183.
+|\goodbreak|, 111, 116, +353.
+Grandmaster, 253.
+|\grave| (math accent: $\grave x$), 135.
+grave accent (\`{}), \see |\`|, |\grave|.
+greater than or equal, \see |\ge|.
+greater than sign, 52, 53, @133, 150, 209.
+Greek, 127--128, 137, 156, 319, 358, 430, 434.
+Green, Walter, 244.
+grouping, 13--14, 19--21, 119--120, 122, 200, 201, 241, 259, +279, 283,
+  286, 291, 301, 375, 378, 385, 453.
+\sub characters for, 39--40, @381--382.
+\sub implicit, 115, 148, 194, 253, +287, +292, +293.
+guide words, 259.
+\newletter
+|\H| (long Hungarian umlaut), 52, @53, +356, @420.
+H\&J, \see hyphenation, line breaking, setting glue.
+h\'a\v{c}ek accent (\v{}), \see |\v|, |\check|.
+halftones, 228.
+*|\halign|, 117, 190, 193, 194, 235--249, +282, 286, +291, 302, @326, 352,
+  @361--362, @386, @392.
+\sub compared to tabbing, 235.
+Halmos, Paul Richard, 183.
+Hamza, \see apostrophe.
+|\hang|, +355, @419.
+*|\hangafter|, +102, 103--104, 273, 348--349, @419.
+*|\hangindent|, +102, @262, 274, 349, @407.
+hanging indentation, 79, 102--103.
+hanging punctuation, 394--395.
+Hardy, Godfrey Harold, 321.
+harpoons, 437.
+hash mark, 38, 51, 113, @200--202, @+203, @204--205, 228, +235, @236--240.
+Hassler, Hans Leo, 239.
+hat, 38, 51, @128--130, 134, 369, @423.
+|\hat| (math accent: $\hat x$), @135--136, 164.
+hat accent (\^{}), \see |\^|, |\hat|, |\widehat|.
+*|\hbadness|, 29, 272, +302, @348, @387--388, 401.
+|\hbar| ( $\hbar$ ), @169, +358, 435.
+hbox (box with horizontal list inside), 64.
+*|\hbox|, 64--67, 77, 86, 93, 151, 159, 163, 175, 179, 185--186, 221, 222,
+  278, 282, 388--389.
+|\headline|, 252--253, 255, +362, @406.
+|\heartsuit| ( $\heartsuit$ ), 435.
+Hebrew, 66.
+|height|, 221, 224, +282, 337.
+height of a box, 63--67, 77, 80--82, 225.
+help messages, 32, 280, 295--296.
+\<hex digit>, +269.
+\<hexadecimal constant>, +269.
+hexadecimal notation, +43, @44, 45, 47--48, @154, 219, 336, 420.
+*|\hfil|, 71--72, 194, 235--237, 283, 285, 290, 397.
+*|\hfill|, 71--72, 142, 177, 194, 233, 283, 285, 290.
+*|\hfilneg|, 72, 100, 233, 283, 285, 290, 397.
+*|\hfuzz|, 30, 274, +302, @348, @387--388.
+|\hglue|, +352.
+|\hideskip|, +347, 348, 354.
+|\hidewidth|, 243, 245, 247, 325, +354.
+higher-level languages for composition, 203.
+Highton, Albert H\period, 481.
+Hilbert, David, 167.
+*|\hoffset|, +251, 274, @342.
+*|\holdinginserts|, +125, 273, 400.
+Holmes, Thomas Sherlock Scott, 401.
+|\hom| ( $\hom$ ), 162, 361.
+Hombert, Humbert, 401.
+Honeywell Information Systems, 1.
+|\hookleftarrow| ( $\hookleftarrow$ ), 358, 437.
+|\hookrightarrow| ( $\hookrightarrow$ ), 358, 430, 437.
+hooks, \see |\subset|, |\supset|.
+horizontal braces, @176, 225--226, @339.
+\<horizontal command>, +283.
+horizontal lists, 64, +94--+95.
+horizontal mode, 85--89, 105, +285--+287.
+\<horizontal mode material>, 278.
+\<horizontal rule>, 281.
+horizontal rules, 24, 64, 221--226, 246, +282.
+\<horizontal skip>, 285.
+Hornschuch, Hieronymus, 483.
+Howard, Jane Temple, 21.
+|\hphantom|, 178, 211, +360.
+*|\hrule|, @24, 64, 85, 221--225, @246, +281--+282, 286, @357, @420, @421.
+|\hrulefill| (\hbox to4em{\hrulefill}), @244, @252, +357, @412.
+*|\hsize|, @26--27, @60, 102, 188, 237, 251, @257, 274, @340--341, @348,
+ @387, @406, @407, 413, 415, @417.
+*|\hskip|, 71, 86, 168, 283, +285, 290, @314.
+*|\hss|, 71, @82--83, 233, 283, 285, 290, 442.
+*|\ht|, 120, 271, +388--+389, 417.
+Hungarian umlaut (\H{}), \see |\H|.
+hyphen, 4, 51, 93, 95, 132, 292.
+|hyphen.tex|, 364, +453.
+hyphenation, 28, 39, 96, 306, 314, 394--395, 414, 424, +449--+455.
+*|\hyphenation|, 277, @419, +452--+453, 455.
+\<hyphenation assignment>, +277.
+*|\hyphenchar|, 95, 214, +271, 273, +277, 286, 351, 395, @414, 454, 455.
+*|\hyphenpenalty|, 96, 101, 272, @348, @451.
+\newletter
+|\i| ( \i\ ), @52--53, +356.
+|I can't go on|, 299.
+|\ialign|, +354.
+IBM Corporation, vii.
+identifiers in programs, 38, 165, @234.
+*|\if|, +209, 210--211, 307, 377, @379.
+*|\ifcase|, +210, @349, @373, @390, @406.
+*|\ifcat|, +209, 210, 307, @377.
+*|\ifdim|, +209, @353, @387, @417.
+*|\ifeof|, +210, 217.
+|\iff| ( $\iff$ ), 163, +361, 438.
+*|\iffalse|, +210, 211, @260--261, @348, @385--386.
+*|\ifhbox|, +210, @392, @399.
+*|\ifhmode|, +209, @363.
+*|\ifinner|, +209.
+*|\ifmmode|, +209, @215, @240, @353, @356, @360, @423.
+*|\ifnum|, @208, +209, @218--219.
+*|\ifodd|, @207, +209, @416, @418--419.
+*|\iftrue|, +210, 211, @260--261, @348.
+|\ifundefined|, 40.
+*|\ifvbox|, +210.
+*|\ifvmode|, +209.
+*|\ifvoid|, +210, @256.
+*|\ifx|, +210, 215, 307, +384, @375--377, @418.
+ignored characters, 37, 390.
+*|\ignorespaces|, +279, @333, @355, @424.
+|! Illegal unit|, 295.
+illustrations, 115--116.
+\sub fitting copy around, 101.
+|\Im| ( $\Im$ ), 435.
+|\imath| ( $\imath$ ), @136, 435.
+*|\immediate|, 226--228, +280, @422, @423.
+implicit braces, +269, \see |\bgroup|, |\egroup|.
+implicit characters, 269, 277, 309, 351, 376--377.
+implicit kerns, 306, +454, 455.
+|in| (inch), @24, +57, 270.
+|\in| ( $\in$ ), @128, @147, 436.
+|\inaccessible|, 297.
+inch, 57--58.
+incomplete conditionals, 206.
+*|\indent|, 86, 94, 101, 263, +282, +286, +291, @355.
+indentation, 86, 222, 282.
+\sub hanging, 79, 102--103.
+indention, \see indentation.
+indexes, 261--263, 392--394, 423--425, 481.
+indices, \see subscripts.
+|\inf| ( $\inf$ ), 162, 361.
+inferiors, \see subscripts.
+infinite badness, 97, 107, 111, 229, 317.
+infinite glue, 71--72, 118--119, 256, 313, 332.
+infinite loop, 299, 301, 383.
+infinite penalty, 97, 111, 254--256, 264, 286, 400.
+|\infty| ( $\infty$ ), 9, 318, 435.
+inhibiting expansion, 216, 262--263, 377.
+|INITEX|, 39, 41, 76, 157, 283, 336, 343--345, 453.
+Inner atom, 158, 170, 289, 443, 445--446.
+*|\input|, 7, 9, @25--27, 47, 199, +214, 217, @380, 382--383, @403, @422.
+input/output commands, \see |\input|, |\read|, |\write|, |\message|, |\dump|.
+input/output streams, 346, \see |\openin|, |\openout|.
+input stack, 300, 374.
+*|\inputlineno|, 214, 271.
+*|\insert|, 95, +122--+125, 259, 280--281, @363, 416, 424, 454.
+inserting text online, 31.
+insertions, 110, 115--117, 122--125, 256, 335.
+*|\insertpenalties|, 111, 114, +123--+125, 214, 254, @256, 271.
+|\int| (large $\smallint$), 144, @168--169, @192, 358, 435.
+\<integer constant>, +269--+270.
+\<integer parameter>, 271, +272--+273, 276.
+\<integer variable>, +276.
+integral signs, \see |\int|, |\smallint|.
+\sub multiple, @169, @180.
+inter-column spacing, 237--239, 247, 392.
+interacting with \TeX, 31--34, 217--218, 228, 295--299.
+\<interaction mode assignment>, +277.
+|\interdisplaylinepenalty|, @193, 349, 362.
+|\interfootnotelinepenalty|, 349, 363.
+interline glue, 78--79, +80, 104, 105, 221, 245, 263, 281--282, 335, 352, 409.
+*|\interlinepenalty|, +104, 272, @363, @406, @419.
+internal box-and-glue representation, 66, 75, 79, 158--159, 302, 455.
+internal character codes, 43--46, 367--370.
+\<internal dimen>, +271.
+\<internal glue>, +271.
+\<internal integer>, +271.
+\<internal muglue>, +271.
+\<internal quantity>, +279.
+Internal Revenue Service, 200, 208--209, 244, 404.
+\<internal unit>, +270.
+internal vertical mode, 85, 87--89, 222, 278--283.
+interrupts, 33, 299, 383.
+interword spacing, +74--+76, @356, @393--394, 433.
+|Interwoven alignment preambles|, 299.
+\<intimate assignment>, +277.
+invalid characters, 37, 45.
+|\iota| ( $\iota$ ), @325, 434.
+Isocrates, 239.
+|\it| (use {\it italic\/} type), 13--14, 165, 231--232, @332, +351, @409,
+  @414--415, @419, 428.
+italic corrections, @14, @64, +287, @306, 441, 455.
+italic letters with descenders, 319.
+italic type, 13--14, 100, 127, 409, 428, 430.
+|\item|, @102--103, 117, @340--342, +355, @416, 419.
+|\itemitem|, @102, 342, +355.
+iteration, \see |\loop|.
+|\itfam|, +351, @414--415.
+\t Iur'ev, Serge\u\i\ Petrovich, 53.
+\newletter
+|\j| ( \j\ ), 52, +356.
+Jevons, William Stanley, 5.
+|\jmath| ( $\jmath$ ), @136, 435.
+*|\jobname|, +213, 214, @336.
+Johnson, Samuel, 89.
+|\joinrel|, +358.
+jokes, vi, 303, 449.
+|\jot|, @194, @242, +349, @362.
+Joyce, James Augustine, 100.
+justification, \see setting glue, line breaking.
+Justus, Paul E\period, 455.
+\newletter
+|\kappa| ( $\kappa$ ), @128, 434.
+|\ker| ( $\ker$ ), 162, 361.
+*|\kern|, 10, 40, @66, 75, 87, 168, @256, @263, +280, @306, @389, @394--395,
+  @416, @424, 454--455.
+Kernighan, Brian Wilson, 159.
+kerns, 4, 66, 75, 95--97, 110, 157, 168, 280, 286, 306, 444, 454--455.
+Key Index, 392--394.
+keyboards, 3, 5, 43--46, 368--370.
+keywords, +61, 71, +268, 337, 370.
+Knuth, Donald Ervin, i, ii, vii, 74, 92, 211, 259, 337, 340--341, 412--413,
+  424--425.
+Knuth, Nancy Jill Carter, iii, 125, 418.
+K\"ochel, Ludwig, Ritter von, 409.
+\newletter
+|l| after |fil|, +271, 337.
+{\it\$}, \see pound sterling.
+|\l| ( \l\ ), @52--53, +356.
+|\L| ( \L\ ), @52--53, +356.
+|\lambda| ( $\lambda$ ), @176, 434.
+|\Lambda| ( $\Lambda$ ), @323, 434.
+Lamport, Leslie B\period, 137.
+|\land| ( $\land$ ), 133, +361, 438.
+|\langle| ( $\langle$ ), @146--147, 150, 156, +359, 437.
+*|\language| (hyphenation method), 273, 346, +455.
+large delimiters, 145--150, 442.
+large operators, @144--145, 154--155, 358, +435; \also Op atom.
+*|\lastbox|, 222, +278, @354, @392, @398, @399.
+*|\lastkern|, 214, 271.
+*|\lastpenalty|, 214, 271.
+*|\lastskip|, 214, @223, 271, @392.
+\LaTeX, 137.
+|\lbrace| ( $\lbrace$ ), @146--147, +359, 437.
+|\lbrack| ( $\lbrack$ ), @146--147, +351, 369, 437.
+*|\lccode|, 41, 214, 271, 345, 452--454.
+|\lceil| ( $\lceil$ ), @146--147, +359, 437.
+|\ldotp|, 358, +359, 438.
+|\ldots| ( $\ldots$ ), @73, @172--174, 177, @180--181, @199--201, +359, 438.
+|\le| ( $\le$ ), 9, 45, @133, @162, 318, +361, 438.
+leaders, 222, 223--226, 228, 280--282, 285, 290, @357, @392--394.
+\<leaders>, +281.
+*|\leaders|, 95, 110, 223, +224, 225, @357, @392--394.
+leading, \see |\baselineskip|, |\vskip|.
+|\leavevmode|, 313, @333, @+356, @408, @420.
+Lee, Marshall, 17.
+*|\left|, @148--150, 155--157, @171, 196, +292, 437.
+left brace, @13--14, @19--21, 38, 51, @200--202, +203--+204, @205--206,
+  216, +269, 275--276, +283, +286, +291, @330.
+\<left brace>, +275.
+left bracket, 51, 134, @146--148, 171, @408, @437.
+left delimiters, \see openings.
+left-hand pages, 252--253, @416.
+left parenthesis, 51, 134, @140, @145--150, 345.
+left quote, 3--5, 132, 134, @305, 394--395; \also alphabetic constant.
+|\leftarrow| ( $\leftarrow$ ), 226, 437.
+|\Leftarrow| ( $\Leftarrow$ ), 226, 437.
+|\leftarrowfill| (\hbox to4em{\leftarrowfill}), +357.
+|\leftharpoondown| ( $\leftharpoondown$ ), 437.
+|\leftharpoonup| ( $\leftharpoonup$ ), 437.
+*|\lefthyphenmin|, 273, @364, +454, 455.
+|\leftline|, 101, @257, @259--260, @326, +353.
+|\leftrightarrow| ( $\leftrightarrow$ ), 437.
+|\Leftrightarrow| ( $\Leftrightarrow$ ), 437.
+*|\leftskip|, 100, 274, @317, @407, @419.
+Legendre symbol, 152.
+Leontief, Wassily Wassily, 265.
+|\leq| ( $\leq$ ), 318, +358, 436.
+|\leqalignno|, 192, 194, +362.
+*|\leqno|, @187, 189, +293, 375--376.
+Lesk, Michael Edward, 247.
+less than or equal, \see |\le|.
+less than sign, 52, 53, @133, 150, 209.
+*|\let|, 206--207, 215, +277, 307, 309, @352, @376.
+\<let assignment>, +277.
+|letterformat.tex|, 403, +406--+408.
+letterheads, 407.
+letters, 7--8, +37, 41, 45--46, 51, 132, 157, 344, 370.
+|\lfloor| ( $\lfloor$ ), @146--147, +359, 437.
+|\lg| ( $\lg$ ), 162, 361.
+|\lgroup|, 150, @176, +359, 437.
+|\lhook|, +358.
+Liang, Franklin Mark, 449.
+library of macros, 199, 382--384, 425.
+lies, vii, 303.
+ligatures, 4, 19, 46, 51, 54, 75, 95, 165, 286, 302, 381, 427, 444, 454.
+|\lim| ( $\lim$ ), 162, @163, 361.
+|\liminf| ( $\liminf$ ), 162, @163, @178, +361.
+*|\limits|, 144, 159, +292, @359, 443.
+limits above and below operators, 144--145, 149, 179.
+|\limsup| ( $\limsup$ ), 162, @163, @178, +361.
+Lincoln, Abraham, 11.
+|\line|, @72, 77, 101, 224, 232, 252, @255--257, +353, @412.
+line breaking, 97--100, 173--174, 392--395, 398--400.
+line breaks, avoiding bad, 27--30, 91--94, 173--174, 197.
+\sub forcing good, 94, 114.
+line rules, \see |\hrule|, |\vrule|.
+\<linefeed> (ASCII code 10), 369.
+*|\linepenalty|, +98, 272, 314, @316, @348.
+lines of input, @24, 46--48, @340.
+*|\lineskip|, 78--80, 104, 194, 274, 281, 349, @351--352.
+*|\lineskiplimit|, 78--80, 104, 194, 274, 281, 349, @351--352, @362.
+list macros, 378--380.
+|\listing|, 380, 391.
+|\ll| ( $\ll$ ), 431, 436.
+Llanfair P\period\ G\period, 451.
+|\llap|, 82--83, @189, @340--341, +353, @355, @381, @416--417, @422.
+|\lmoustache|, 150, +359, 437.
+|\ln| ( $\ln$ ), 162, @186, 361.
+|\lnot| ( $\lnot$ ), +361, 438.
+local, 19--21, \see grouping.
+Locke, John, 303.
+|\log| ( $\log$ ), 162, @169--170, 361.
+log file, 10, 28, 66, 226, 303, 347.
+logical operators, \see |\land|, |\lor|, |\lnot|.
+logo, 1, 8, 412, \see |\TeX|.
+*|\long|, 205--206, 210, 275, 331, @375, @378, @382.
+long formulas, 195--197.
+|\longindentation|, 407.
+|\longleftarrow| ( $\longleftarrow$ ), +358, 437.
+|\Longleftarrow| ( $\Longleftarrow$ ), +358, 437.
+|\longleftrightarrow| ( $\longleftrightarrow$ ), +358, 437.
+|\Longleftrightarrow| ( $\Longleftrightarrow$ ), +358, 437.
+|\longmapsto| ( $\longmapsto$ ), +358, 437.
+|\longrightarrow| ( $\longrightarrow$ ), @325, +358, 437.
+|\Longrightarrow| ( $\Longrightarrow$ ), +358, 437.
+looking ahead, 207, 376--377.
+|\loop|, @217--219, +352, @373--374, @387, @417.
+loose lines, 97, 99, 302.
+*|\looseness|, 103--104, 109, 273, @342, 349.
+|\lor| ( $\lor$ ), 133, +361, 438.
+low-resolution printer, 59.
+*|\lower|, @66, 80, 151, 179, +285, +290.
+*|\lowercase|, 41, 215, +279, 307, 345.
+lowercase letters, 9, 268, 370, 453.
+|\lq| ( \lq\ ), 5, 48, +351, 369, @395.
+Luckombe, Philip, 447.
+lxix, 420.
+\newletter
+|\m@ne|, +347.
+|\m@th|, +353.
+machine-independence, 58; \also |.dvi|.
+Macro, N\ae vius Sertorius, 219.
+macro arguments and parameters, 33, 200--205, 249, @263, @362, @363, @375--380,
+  @407.
+\<macro assignment>, +275.
+macro conventions, 121, 346, 364.
+macron accent (\={}), \see |\=|, |\bar|.
+macros, 199--219, 373--401.
+\sub to save typing in math, 136, 199--200, @324.
+*|\mag|, +60, 270, 273, 348.
+|\magnification|, 17, 59--60, +364, @403--404.
+magnified output, 16--17, 59--60, 403, 433.
+|\magstep|, 17, 59--60, +349, @403--404.
+|\magstephalf|, 17, +349, 403.
+mail, 403--408.
+main vertical list, 85, 110, +112, 125, 253--254, 281.
+|\maintoks|, 262.
+|\makefootline|, 255--257, +364.
+|\makeheadline|, 255, 257, +364.
+|\makelabel|, 403, @404--405, +408.
+|manfnt|, 44, 408, 414.
+|manmac.tex|, 413--425.
+|\manual|, 44, +414, @419--420.
+|\mapsto| ( $\mapsto$ ), 128, +358, 437.
+|\mapstochar| ( $\mapstochar$ ), 358.
+|\margin|, 415, 424.
+marginal hacks, 82, 105, 400, 415, 424.
+margins, \see |\hsize|, |\narrower|.
+*|\mark|, 95, 157, 216, 258--263, +280, 417, 454.
+marks, 95, 110, 157, 213, +258--+263.
+markup commands, \see control sequences.
+math accents, @135--137, 141, 164--165, +359, 435, +443.
+\<math atom>, +291.
+\<math character>, +289.
+math character codes, 154--157.
+\<math field>, +289.
+math fonts, 157, @351, 430--433, 441, 447.
+math formulas, how to type, 127--197.
+math italic, 164--165, 409, 430, 433.
+math lists, 157--159, 441--446.
+math mode, 85--89, 127, 157, +289--+293.
+math spacing table, 170--171.
+\<math symbol>, +289.
+math symbols, 127--128.
+\sub construction of, 151, 178, @358--361.
+\sub table of, 434--438.
+math-off, 95--97, 287, 447.
+math-on, 95, 97, 287, 447.
+*|\mathaccent|, 157, 170, +291, @359, +443.
+*|\mathbin|, 155, 291, @361.
+*|\mathchar|, 155, 289.
+*|\mathchardef|, 155, 199, 214, 215, 272, 277, 289, 336, 394.
+\<mathchardef token>, 271.
+*|\mathchoice|, 151, 157, 292.
+*|\mathclose|, 155, 291, @322, @359.
+*|\mathcode|, 134, +154--+155, 214, 271, 289, 319, 326, @344.
+mathematical expressions, 127--197.
+Mathematical Reviews, 106, 392--394.
+\<mathematical skip>, 290.
+mathematical style, 166--167, 182--183.
+|\mathhexbox|, +356.
+*|\mathinner|, 155, 171, 199, 291, @359.
+*|\mathop|, 155, 178, 291, @324--325, @361.
+*|\mathopen|, 155, 291, @322, @359.
+*|\mathord|, 88--89, 155, 291.
+|\mathpalette|, 151, @+360.
+*|\mathpunct|, 155, 291.
+*|\mathrel|, 155, 291, @359--361.
+|\mathstrut|, 131, 178, +360.
+*|\mathsurround|, 97, @162, 274, 305, 314, 323, @353, 447.
+matrices, 176--178, 181; \also alignments.
+|\matrix|, @176--178, 182, @325, +361.
+|\max| ( $\max$ ), 162--163, @170--171, 361.
+*|\maxdeadcycles|, +255, 273, @348.
+*|\maxdepth|, @112--114, 123--125, @255, @262--263, 274, @348, 400, @415.
+|\maxdimen|, 58, 188, @262--263, +347, 348.
+maximum legal dimension, 58.
+maximum legal integer, 118.
+*|\meaning|, +213--+215, 336, @382.
+measure, \see |\hsize|.
+|\medbreak|, 111, 113, +353, @355, @419, @422.
+*|\medmuskip| (medium math space), 167--168, 274, @349, 446.
+|\medskip| (medium extra vertical space), 70, 79, 102, 109, 111, +352,
+  @410--412.
+|\medskipamount|, +349, @352--353, @355, @407.
+|\medtype|, 408--411.
+membership, \see |\in|, |\ni|, |\notin|.
+memory space, 100, 300--301, 342, 345, 347, 383, 384, 394, 400.
+*|\message|, 216, @217--218, 227--228, +279, @308, 328, @343--344, @355, @418.
+{\manual opqrstuq}, 420, 427, 442, 483. % METAFONT (eight-point type)
+metric units, 57--60.
+|\mid| ( $\mid$ ), @174, 436.
+|\midinsert|, 116, @340--341, +363.
+migration, 105, 117, 259, 280--281, 282, 286, 287.
+|\min| ( $\min$ ), 162--163, @170--171, 361.
+|minus|, 71, 271, 337.
+minus sign, 4, 51, @127, 132, 226, 268.
+|! Missing| something, 296--297, 337.
+|\mit| (math italic family), 164, +351, 430, @434.
+*|\mkern|, 168, +280, +442.
+|mm| (millimeter), +57, 270.
+mod, @164, 322, +361.
+|\models| ( $\models$ ), +358, 436.
+modes, 46, 85--89, 175, 267--293.
+|modes.tex|, 88--89.
+money, 54, 140, @208--209.
+*|\month|, 273, 349, @406.
+Morris, William, 107.
+moustaches, 150.
+mouth, \see anatomy of \TeX.
+*|\moveleft|, 80--81, +282, 287.
+*|\moveright|, 80--81, @221, +282.
+Moxon, Joseph, 287.
+Mozart, Johann Chrysostom Wolfgang\rlap{ Gott-}\break % kludge to save a line
+ lieb (= Theophilus = Amadeus), 409.
+|\mp| ( $\mp$ ), @133, 436.
+*|\mskip|, 168, +290, 442.
+|mu| (math unit), 168, 270, 442.
+|\mu| ( $\mu$ ), @162, 434.
+\<mu unit>, +270.
+\<mudimen>, +270.
+\<muglue>, 118, 167--168, +271.
+\<muglue parameter>, 271, +274, 276.
+\<muglue variable>, +276.
+Muir, Cockburn, 283.
+Muirhead, James, 21.
+multicolumn format, 257, 396--397, 417.
+multiple integrals, @169, @180.
+*|\multiply|, @118--119, @218, +276, 349, @391, @398.
+|\multispan|, 243, 246--247, @334, +354.
+Munster, 55.
+\<mushrink>, +271.
+music, 408--412.
+*|\muskip| registers, 118, 168, +271, +276.
+*|\muskipdef|, 119, 215, +277.
+\<muskipdef token>, +271.
+\<mustretch>, +271.
+\newletter
+|\nabla| ( $\nabla$ ), 435.
+names, 73, 92.
+|\narrower|, 100, @340--341, +355.
+National Science Foundation, vii.
+|\natural| ( $\natural$ ), 435.
+natural width, 69.
+Naur, Peter, 268.
+|\ne| ( $\ne$ ), 9, 45, @133, 318, +361, 438.
+|\nearrow| ( $\nearrow$ ), 437.
+|\neg| ( $\neg$ ), 435.
+negated relations, 436--437.
+negative dimensions, 66, 222.
+|\negthinspace|, 332, +352.
+|\neq| ( $\neq$ ), 318, +358, 438.
+nesting (i\period e\period, groups inside groups), 20--21, 210, 385.
+new symbols, 151, 178, @358--361.
+|\newbox|, 121, 346, +347, @353, @394, @417.
+|\newcount|, 121, @218, 346, +347, @349, @418.
+|\newdimen|, 121, 346, +347, @349, @415.
+|\newfam|, 121, 157, 346, +347, @351.
+|\newhelp|, 346, +347.
+|\newif|, 211, @218, +348, @354, @375, @416, @423.
+|\newinsert|, 121, 122, 346, +347, @363, @415.
+|\newlanguage|, 346, +347.
+*|\newlinechar|, +228, 273, @348.
+|\newmuskip|, 121, 346, +347.
+|\newread|, 121, 216, 346, +347.
+|\newskip|, 121, 346, +347, @349, @394, @414.
+|\newtoks|, 121, 212, @262, 346, +347, @401.
+|\newwrite|, 121, 227, 346, +347, @422--423.
+|\next|, +352.
+|\ni| ( $\ni$ ), 436.
+|\ninepoint|, 15, +414, @419.
+|\ninerm|, 15, 413.
+|\ninesl|, 15, 413.
+|No room|, 347.
+*|\noalign|, 176, 191, @193, +237, @246, 249, +282, +285, 286.
+*|\noboundary|, 283, +286, 290.
+|\nobreak| (inhibit line or page break), 97, 109, @174, @193, 335,
+  +353, @394, @407.
+*|\noexpand|, +209, +213, 215, 216, @348, @377, @424.
+*|\noindent|, 86, 188, @262--263, +283, 286, 291, @340--341, @355, @419.
+|\nointerlineskip|, 79--80, @255, 331, +352, @389.
+*|\nolimits|, 144, 159, +292, @358, @361.
+\<non-macro assignment>, +275.
+nonaligned leaders, 224--226.
+|\nonfrenchspacing|, 74, +351.
+*|\nonscript|, 179, +290, 442, 446.
+*|\nonstopmode|, +32, +277, 299.
+|\nopagenumbers|, 251--252, +362, @406, @409.
+norm symbol, \see absolute value, vertical line.
+\<normal dimen>, +270.
+\<normal integer>, +269.
+\<normal mudimen>, +270.
+|\normalbaselines|, @325, 349, +351, @414--415.
+|\normalbaselineskip|, +349, @414--415.
+|\normalbottom|, +363.
+|\normallineskip|, +349, @351.
+|\normallineskiplimit|, +349, @351, @362.
+Norwegian characters, 45--46, 52--53, 370.
+|\not| ( $\not$ ), @133, +358, @436--437.
+|\notin| ( $\notin$ ), +360, 437.
+$n$th, 323.
+|\nu| ( $\nu$ ), @128, @163, 434.
+nucleus, 158--159, 289--292, 441--446.
+|\null|, 311, @332, +351.
+\<null> (ASCII code 0), 37, 39, 48, 343, 369.
+null control sequence, 46, 308.
+null delimiter, 149--150, 152, 156, 345, @360, @362.
+null set, \see |\emptyset|.
+*|\nulldelimiterspace|, 150, 274, @348, +442.
+*|\nullfont|, 14, 153, 271, 433.
+\<number>, 44, 118, +269--+270, 272, 309, 349.
+*|\number|, 40--41, +213, 214, @252, @406, @424.
+number sign, \see hash mark.
+numbered footnotes, 121, 125.
+numerals, \see digits, roman numerals.
+numerator, 141, 152, 179, 444--445.
+\<numeric variable>, +276.
+numerical tables, 240--241.
+|\nwarrow| ( $\nwarrow$ ), 437.
+\newletter
+|O| versus |0|, 132.
+|\o| ( \o\ ), +356.
+|\O| ( \O\ ), +356.
+|\oalign|, +356.
+obelisk {\sl or\/} obelus, 53.
+|\obeylines|, @94, @249, @262, 342, +352, @380--382, @407, @419.
+|\obeyspaces|, 254, 308, 342, +352, @380--381, @394, @421.
+oblique, \see slanted.
+\<octal constant>, +269.
+\<octal digit>, +269.
+octal notation, +43, @44, 155, 420.
+odd-numbered pages, 252--253, @416.
+|\odot| ( $\odot$ ), 436.
+|\oe| ( \oe\ ), 52, +356.
+|\OE| ( \OE\ ), 52, @53, +356.
+Office of Naval Research, vii.
+|\offinterlineskip|, @245--247, 312, +352, @416.
+|\oint| (large \ooalign{$\smallint$\cr\hidewidth$\circ$\hidewidth}), +358, 435.
+|\oldstyle|, +351.
+oldstyle numerals, 430, 435.
+|\omega| ( $\omega$ ), @323, +358, 434.
+|\Omega| ( $\Omega$ ), +358, 434.
+|\omicron|, 434.
+|\ominus| ( $\ominus$ ), 436.
+*|\omit|, 240, 243--244, @246--247, 282.
+one half, 141, 186.
+\<one optional space>, +269--+270.
+online interaction, \see interacting with \TeX.
+|\ooalign|, +356.
+Op atom, 158--159, 170--171, 289, 442--444.
+Open atom, 158, 170--171, 289, 442--444, 446.
+open intervals, 171.
+openface, \see blackboard bold.
+*|\openin|, +216--217, 280.
+openings, 134, 147, 154--155, 359, +437; \also Open atom.
+*|\openout|, 226--228, 254, +280, @422, @423.
+|\openup|, 194, 237, 242, +362.
+|\oplus| ( $\oplus$ ), 9, 154, 436.
+optimization of macros, 342, 345, 348.
+\<optional assignments>, +286.
+\<optional {\tt by}>, +276.
+\<optional sign>, +57.
+\<optional signs>, +269.
+\<optional spaces>, +268, 269--271.
+\<optional {\tt true}>, +270.
+*|\or|, 210, +213, @406.
+Ord atom, 158, 170--171, 289, 358, 442--446.
+ordinary symbols, 132, \see Ord atom.
+Ore, \O ystein, 53.
+organists, 239.
+organs, 38--39, 46, 85, +267, 373, +456.
+orphan, \see widow word.
+Osbourne, Lloyd, 67.
+|\oslash| ( $\oslash$ ), 436.
+|\other|, 421.
+other character, 37.
+|\otimes| ( $\otimes$ ), 9, 436.
+*|\outer|, +206, 210, 275, @354, @357, @418--419, @422.
+*|\output|, 125, +253, @254--257, 275, @364, 370, @417.
+output routines, 21, 112, 251--264, 417.
+\sub when invoked, 122, 125, 281.
+*|\outputpenalty|, +125, @254--255, 273, 349, 400, @417.
+*|\over|, @139--141, @148, 152, 292, 437, 444--445.
+Over atom, 158, 289, 443.
+|\overbrace|, @176, 225, +359.
+overfull boxes, 27--30, 94, 229, 238, 302--303, 307, 400.
+\sub avoiding, 107.
+*|\overfullrule|, 274, 307, @348.
+overlaps, 82--83, 386.
+|\overleftarrow|, +359.
+*|\overline|, @130--131, @136, 141, 170, 291, 443.
+overloading, 54, 243.
+|\overrightarrow|, 226, +359.
+*|\overwithdelims|, @152, 292, 444--445.
+|\owns| ( $\owns$ ), +361, 438.
+\newletter
+|\P| ( \P\ ), 53, 117, +356, 438--439.
+|\p@|, +347, 348.
+|\p@renwd|, +361.
+page breaks, avoiding bad, 109--111, 189, 193.
+\sub forcing good, 109--111; \also |\eject|.
+page builder, 110--114, 122--125, 281.
+\sub when exercised, 122, 280--283, 286--287.
+page format, modifying, 251--253.
+page make-up, 109, \see output routines.
+page numbers, 21, 23, 119, 207, 251--253.
+|\pagebody|, 255--257, +364.
+|\pagecontents|, 256, +364.
+*|\pagedepth|, +114, 123, 214, 271.
+*|\pagefilllstretch|, +114, 214, 271.
+*|\pagefillstretch|, +114, 214, 271.
+*|\pagefilstretch|, +114, 214, 271.
+*|\pagegoal|, +114, 123, 214, 271.
+|\pageinsert|, 115, +363.
+|\pageno|, @252, @256, @340, +362, @406.
+*|\pageshrink|, +114, 123, 214, 271.
+*|\pagestretch|, +114, 214, 271.
+*|\pagetotal|, +114, 123, 214, 271.
+*|\par|, +47, 86--87, 100, 135, 202, 249, 262, +283, +286, @340, 351, @380--381.
+\sub forbidden in arguments, 205, 207.
+paragraph, implied beginning of, 85--86, +283.
+\sub implied end of, @24, 86, +286.
+\sub last line of, 99--100.
+\sub shape parameters reset, 103.
+paragraph sign, 53.
+|\parallel| ( $\parallel$ ), 436.
+\<parameter text>, 203, 275.
+parameters, \see macro arguments and parameters.
+parameters, numeric, 119, 342; \also |\fontdimen|.
+\sub default values, 348--349.
+\sub table, 272--274.
+parentheses, 51, 129, 134, @140, @145--150, 345, 437.
+\sub roman, in italic text, 409--411.
+*|\parfillskip|, 100, 188, 274, +286, 307, @315, 332, @348, @394, @419.
+*|\parindent|, 86, 100, 101--102, 105, @262, 274, 282, 286, 291, @342, @348,
+  @355, @394, @406, @415.
+*|\parshape|, 101--102, 214, 271, 277, 283, @315, 349, 374.
+*|\parskip|, 79, 104--105, 262, 274, 282, @342, @348, @355, @406, @417.
+|\partial| ( $\partial$ ), @147, 435.
+Pascal, Blaise, 101--102.
+|\path|, 390--391.
+*|\patterns|, 277, +453, 455.
+patterns for hyphenation, 449--453.
+*|\pausing|, 273, +303.
+Paxton, William Hamilton, 425.
+|pc| (pica), +57, 270, @415.
+penalties, 95--100, 110--114, 189.
+\sub infinite, 97, 111, 286, 400.
+\sub negatively infinite, 97, 111--112, 114, 254--256, 264, 400.
+*|\penalty|, 79, 97, 110--111, 174, +280, @353.
+|\penalty-'10000000000|, 264.
+percent sign, @26, 38, 39, 43, 48, 51, 113, 124, @249, @337, @340.
+period, 51, @72--73, 133--134, 149, @161, 345, @394--395, 430.
+\sub space after, @73--75; +76.
+periodic preambles, 241--242, @244, @246, @361, @412.
+Perlis, Alan J\period, 365.
+|\perp| ( $\perp$ ), +358, 436.
+|\phantom|, 131, 178, 211, +360, @412.
+|\phi| ( $\phi$ ), @128, @148, 434.
+|\Phi| ( $\Phi$ ), @323, 434.
+Philips, Peter, 239.
+philosophers, 100, 239.
+\<physical unit>, +270.
+|\pi| ( $\pi$ ), 9, @87, @137, @148--149, 434.
+|\Pi| ( $\Pi$ ), 9, @324, 434, 435.
+piano, 17.
+pica, 57, 413, \see |pc|.
+pictures, 228--229.
+pieces of symbols, 145, 432, 442.
+pilcrow, \see |\P|.
+|plain.tex|, 342--364.
+plain \TeX\ format, 10--11, +343--+364.
+\sub summary, 339--342.
+|\plainoutput|, 255, +364.
+Plass, Michael Frederick, 340--341.
+Plato, 1, 239.
+|plus|, 71, 271, 337.
+\<plus or minus>, +268.
+plus sign, 51, 132, 268.
+|\pm| ( $\pm$ ), @133, +358, 436.
+|\pmatrix|, 176, @323, +362.
+|\pmod| (notation like (mod~$p$)), @164, 322, +361.
+|\pnt|, 395.
+pocket-size, 59.
+poem, 94.
+points (printers' units), 15, 57--58.
+points with arbitrary coordinates, 389.
+Polish characters, 52--53.
+P\'olya, Gy\"orgy (= George), 7.
+poor man's bold, 386.
+*|\postdisplaypenalty|, 189--190, 272.
+poultry, 236--237.
+pound sign, \see hash mark.
+pound sterling, 54, 428.
+powers of ten, 293.
+powers of two, 293.
+|\Pr| ( $\Pr$ ), 162, @323, 361.
+preambles, 206, 235--249.
+|\prec| ( $\prec$ ), 436.
+|\preceq| ( $\preceq$ ), 436.
+*|\predisplaypenalty|, 189--190, 272, @348.
+*|\predisplaysize|, 188, 190, 274, 349.
+\<prefix>, +275.
+|\preloaded|, +350, 413.
+preloaded formats, 25--26, 39, 283, 344.
+Presume, Livingstone Irving, 74.
+*|\pretolerance|, +96, 107, 272, @317, @348, @364, @394, @451.
+pretty-printed programs, 165, 234.
+*|\prevdepth|, 79--80, 89, 271, 281, +282.
+|prevdepth ignored|, 88--89.
+*|\prevgraf|, 103, 188, 190, 214, 271.
+|\prime| ( $\prime$ ), @130, 155, 357, 435.
+prime numbers, 148--149, 218.
+primitive, 9--11, 267, 342, 457.
+private control sequences, 344, 364, 414.
+|\proclaim|, 202--203, 206, @340--341, +355.
+Procter, William Alexander, 38.
+|\prod| (large $\Pi$), @180--181, 435.
+programming with \TeX, 217--219, 387--388.
+programs, for computers, 38, 165, 234.
+\sub for music, 408--412.
+proofreading, 59, 303.
+proper names, 73, 92.
+|\propto| ( $\propto$ ), 436.
+prototype row, 238, 302--303.
+Pr\ae torius [Schultheiss], Michael, 239.
+|\ps|, 403, @404, +407.
+pseudo parameters, 119, +349.
+|\psi| ( $\psi$ ), @325, 434.
+|\Psi| ( $\Psi$ ), 434.
+psychologically bad breaks, @91--93.
+|pt| (printer's point), @24, +57--+58, 268--270.
+Punct atom, 158, 170--171, 289, 442--443, 446.
+punctuation, 14, 51, 72--76, 321, 394--395.
+\sub in formulas, 134, 154--155, 161, 358--359, 438; \also Punct atom.
+\newletter
+|\qquad|, @166, @185, +352.
+quad, 60, 166--168, 177, 433.
+|\quad|, @94, 166--167, @185, @232--233, +352.
+quad left, \see flush left.
+quad middle, \see |\break|.
+quad right, \see flush right.
+quarter circles, 389--391.
+question mark, 51, 73, 161.
+Quick, Jonathan Horatio, 298.
+quotation marks, @3--5, @24, 394--395.
+quotations, 100, 418--419, 425.
+quotes within quotes, 5.
+\newletter
+$\rm I\!R$, \see blackboard bold.
+Rad atom, 158, 289, 443.
+*|\radical|, 157--159, 291, 443.
+ragged bottom margins, 111, 253, 256, 398.
+ragged left margins, 392--394.
+ragged right margins, 29--30, 101, 261--262, 355--356, 392--394.
+|\raggedbottom|, 111, 253, +363, @406.
+|\raggedcenter|, 107.
+|\raggedright|, 29--30, 76, 101, 107, @115, @262, +356, @396, @407.
+*|\raise|, @66--67, 80, 151, 179, @193, +285, +290, @408.
+|\rangle| ( $\rangle$ ), @146--147, 150, +359, 437.
+Raper, Matthew, 61.
+|\rbrace| ( $\rbrace$ ), @146--147, +359, 437.
+|\rbrack| ( $\rbrack$ ), @146--147, +351, 369, 437.
+|\rceil| ( $\rceil$ ), @146--147, +359, 437.
+|\Re| ( $\Re$ ), 435.
+*|\read|, 215, 217--218, 276, 346, 401.
+recent contributions, 112, 125, 281.
+recovery from errors, 30--34, 295--303.
+recursion, 219, 268, 301, 379, 391, 397.
+\sub infinite, 299, 301, 383.
+reduction, 16.
+reference marks, 116--117.
+reference point of a box, 63--64, 77, 80--82, 388--389.
+\<registerdef>, +277.
+registers, 117--122, 212, 214, 346--348.
+registration marks, 416.
+Reid, Brian Keith, 371, 404--406.
+Rel atom, 158, 170--171, 289, 442--444, 446--447.
+\<relation>, +209.
+relations, @133--134, 147, 154--155, 358, +436, +437; \also Rel atom.
+*|\relax|, 23, 25, 71, 240, 276, +279, @307, @353.
+|\relbar| ( $\relbar$ ), +358.
+|\Relbar| ( $\Relbar$ ), +358.
+*|\relpenalty|, 101, 174, 272, 322, @348, +446.
+|\removelastskip|, +353.
+|\repeat|, @217--219, +352.
+repeating commands, \see |\loop|.
+reserved characters, 37--38, 51--52, 134.
+reserved words, +61, 71, +268, 337, 370.
+restricted horizontal mode, 85, 87--89, +285--+287.
+r\'esum\'e, 253.
+\<return> (ASCII code 13), 23, 39, 43, 45, 46, 48, 249, 331, 343, 345, 369, 380.
+|\|\<return>, 8, @305, +351.
+reverse apostrophe, 3--5, 51, 132, 134, 391, 394--395;
+  \also alphabetic constant.
+reverse slash, \see backslash.
+Reviewer, Ann Arbor, 106.
+|\rfloor| ( $\rfloor$ ), @146--147, +359, 437.
+|\rgroup|, 150, @176, +359, 437.
+|\rho| ( $\rho$ ), 128, @325, 434.
+|\rhook|, +358.
+*|\right|, @148--150, 155--157, @171, 196, +292, 437.
+right brace, @13--14, @19--21, 38, 51, @200--202, +203--+204, @205--206,
+  +269, 275--276, +279, 301, @330.
+\<right brace>, +275.
+right bracket, 51, 134, @146--147, 171, 345, @408, @437.
+right delimiters, \see openings.
+right-hand pages, 252--253, @416.
+right justification, 71.
+right parenthesis, 51, 134, @140, @145--150, 345.
+right quote, 3--5, 51, @130, 155, 201, @305, 324, 394--395; \also octal.
+|\rightarrow| ( $\rightarrow$ ), 226, 437.
+|\Rightarrow| ( $\Rightarrow$ ), 226, 437.
+|\rightarrowfill| (\hbox to4em{\rightarrowfill}), 226, +357.
+|\rightharpoondown| ( $\rightharpoondown$ ), 437.
+|\rightharpoonup| ( $\rightharpoonup$ ), 437.
+*|\righthyphenmin|, 273, @364, +454, 455.
+|\rightleftharpoons| ( $\rightleftharpoons$ ), +360--+361, 437.
+|\rightline|, 101, @317, @340--341, +353.
+*|\rightskip|, 100--101, 274, @317, @356, 393, @421.
+|\rlap|, 82--83, @189, @247, @319, +353, @389, @416.
+|\rm| (use roman type), 13--15, 154, @163, @320, +351, @364, @409, @414--415,
+  @419, 427.
+|\rmoustache|, 150, +359.
+roman letters in math, 162--164.
+roman numerals, 40--41, 252, 256.
+\sub uppercase, 374.
+roman parentheses in italic text, 409--411.
+roman type, 13--17, 51--55, 127, 162--165, 427.
+*|\romannumeral|, 40--41, 213, 214, @252.
+Root, Waverley Lewis, 55.
+|\root|, @130--131, @179, @325, +360.
+rounding, 58, 119.
+|\rq| ( \rq\ ), 5, 48, +351, 369, @395.
+rule boxes, 24, 64, 221--225, 281--282, 285, 291.
+\<rule dimension>, +282.
+\<rule specification>, +282.
+rule thickness, 143, 179, 221, 447.
+ruled tables, 245--248, 392.
+rulers, 58.
+runaways, 205--206, 297.
+running headlines, 253, 258--260, 416.
+running the program, 23--35.
+Russian characters, 370.
+\newletter
+|\S| ( \S\ ), 53, 117, +356, 438--439.
+Sally, Baby, 72--76.
+sample line for tabbing, 232--234.
+sample pages for book design, 412--413.
+|save size|, 300--301, 374, 399--400.
+save stack buildup, 301, 346.
+|\sb|, 135, +357, 369.
+|\sc| (use {\sc SMALL CAPS} type), 414--415.
+|scaled|, 16--17, 60, 277, @350, 433.
+scaled points, 57--58, 270.
+Scandinavian letters, 45--46, 52--53.
+Schickele, Prof\period~Peter, 410--411, 481.
+scratch control sequence, 352.
+scratch registers, 122, 346.
+Scribe, 371, 404.
+script letters, 164, 434.
+script size, 140, 153, 442.
+script style, 140--142, 441--447.
+*|\scriptfont|, 153, 168, 213, 271, 321, 351, @414--415, 441--442.
+scriptscript size, 140, 145, 153, 442.
+scriptscript style, 140--142, 441--447.
+*|\scriptscriptfont|, 153, 168, 213, 271, 351, @414--415, 441--442.
+*|\scriptscriptstyle|, 141--142, @179, 292.
+*|\scriptspace|, 274, 348, 445--446.
+*|\scriptstyle|, 141--142, @145, @179, 292.
+*|\scrollmode|, +32, +277.
+|\searrow| ( $\searrow$ ), 437.
+|\sec| ( $\sec$ ), 162, 361.
+section number sign, \see |\S|.
+Selden, John, 11.
+selection, \see |\cases|.
+semicolon, 51, @134, 161.
+sentences, 72--76.
+Sesame Street, 61.
+set macro, 379.
+set notation, @147, @174--175.
+*|\setbox|, 66--67, 77, 81, +120, 276, @386--392.
+*|\setlanguage|, 287, +455.
+|\setminus| ( $\setminus$ ), @436.
+|\settabs|, 231--234, +354, 355.
+setting the glue, 70, 77, 81, 388.
+|\setupverbatim|, 380--381, 391.
+|\sevenrm|, 15, 153, +350, 351, @414--415.
+*|\sfcode|, +76, 214, 271, 286, @321, @345, @351.
+shadow boxes, 66.
+Shakespeare, William, 17, 55, 337.
+\<shape assignment>, +277.
+\<shape dimensions>, +277.
+|\sharp| ( $\sharp$ ), @409, 435.
+sharp S ( \ss\ ), \see |\ss|.
+sharp sign, \see hash mark.
+Shaw, George Bernard, 107, 229.
+Sheridan, Richard Brinsley Butler, 265.
+shifted output, \see |\hoffset|, |\voffset|.
+shilling sign, \see slash.
+*|\shipout|, 227, 253--254, 279, 300, 302.
+shortest paths, 99.
+\<shorthand definition>, +277.
+*|\show|, @10, 215, 279, 299.
+*|\showbox|, @66--67, 121, 234, 279.
+*|\showboxbreadth|, 273, +302, 303, @348.
+*|\showboxdepth|, 79, 273, +302, 303, @348.
+|\showhyphens|, +364, @452.
+*|\showlists|, @88--89, 95, 112, 125, @158--159, 279, 293.
+*|\showthe|, 121, 215, 279.
+shriek, \see exclamation point.
+\<shrink>, +271.
+shrinkability, 69--71, @75, 409.
+side conditions, @166--167, @185--186.
+|\sigma| ( $\sigma$ ), @195--196, 434.
+|\Sigma| ( $\Sigma$ ), @165, 434, 435.
+sigma signs, \see |\sum|.
+|\signed|, 106.
+|\sim| ( $\sim$ ), @133, 436.
+|\simeq| ( $\simeq$ ), @133, 436.
+\<simple assignment>, +276.
+|\sin| ( $\sin$ ), 162, 361.
+|\sinh| ( $\sinh$ ), 162, 361.
+sinkage, 413.
+size switching, 15, 408, 414--415.
+sizes of type for mathematics, 140, 153.
+|\skew|, @136, +359.
+*|\skewchar|, 214, 271, 273, 277, @351, @414, 430, 431, +443.
+*|\skip| registers, 118--122, +271, +276, @346--347, @349, @352, @363, @394.
+*|\skipdef|, 119, 215, +277, @346--347.
+\<skipdef token>, +271.
+skipping space, \see glue.
+|\sl| (use {\sl slanted\/} type), 13--15, 165, +351, @409, @414--415, @419.
+slant of a font, 375, 433.
+slanted type, 13, 63--64, 100.
+slash, 51, @132, 146--147, @320, 430.
+|\slash| (/ with break allowed), @93, +353.
+slashed form of fractions, 139--140.
+Slavic h\'a\v cek accent, \see |\v|.
+|\slfam|, +351, @414--415.
+slides, 59.
+slurs, \see |\smile|, |\frown|.
+small caps, 414.
+|\smallbreak|, 111, +353, 421.
+|\smallint| ( $\smallint$ ), +358, 435.
+|\smallskip|, 70, 78, @100, 109, 111, @181, @340--341, +352, @355, @410--412.
+|\smallskipamount|, +349, @352--353.
+|\smalltype|, 408--411.
+|\smash|, 131, 178, @327, +360.
+|\smile| ( $\smile$ ), 436.
+solidus, \see slash.
+sophisticated spacing, 74.
+|sp| (scaled point), +57, 118--119, 270, 398, 400.
+|\sp| (superscript), 135, +357, 369.
+\<space> (ASCII code 32), 39, 43, 46, 343.
+|\|\<space>, \see |\|\] (near the beginning).
+|\space|, 254, 272, @306, +351, 380, @406.
+space after a constant, 208, 272.
+space factor, 76, 285--287, 306, 380, 395.
+\<space token>, 268, +269, 282, 285, 290, @376--377.
+*|\spacefactor|, 76, 271, 285, @363, 433.
+spaces, 3, 5, 8--9, 19, 37, 40, 47--48, 127, 204, 232, 272, 297, 299, 319, 336.
+\sub as active characters, 254, 380--381.
+*|\spaceskip|, 76, 274, @317, @356, 429.
+spacing, \see glue.
+\sub in formulas, 162, 167--171.
+|\spadesuit| ( $\spadesuit$ ), +358, 435.
+*|\span|, 215, 238, +243, @244, +245, 248, 249, 282, @330, 385.
+Spanish ligatures, 51, 381, 427.
+spanned columns in tables, 243--245.
+spanned rows in tables, 249.
+*|\special|, 216, 226, +228--+229, 280.
+special characters, 37--38, 43--46, 51--52, 134, 367--371.
+\<special dimen>, +271, 277.
+\<special integer>, +271, 277.
+special symbols for math, 128, 434--438.
+Spivak, Michael David, 137.
+|% split|, 124.
+split insertion penalty, 124.
+*|\splitbotmark|, 213, +259, 280.
+*|\splitfirstmark|, 213, +259, 280.
+*|\splitmaxdepth|, 124, 274, 281, @348, @363, @417.
+*|\splittopskip|, 124, 274, 281, @348, @363, @397, @417.
+|spread|, 77, 222, 238, 278.
+springs, 70.
+|\sqcap| ( $\sqcap$ ), @133, 436.
+|\sqcup| ( $\sqcup$ ), @133, 436.
+|\sqrt|, @130--131, @141, @145, 157, @169--170, +360, +443.
+|\sqsubseteq| ( $\sqsubseteq$ ), 436.
+|\sqsupseteq| ( $\sqsupseteq$ ), 436.
+|\square| ( $\vcenter{\hrule
+      \hbox{\vrule height\sqht \kern\sqht \vrule}
+      \hrule}$ ), 151.
+square brackets, \see brackets.
+square bullet ( \bull\ ), +420.
+square root, \see |\sqrt|.
+squeeze routine, 188.
+squiggle accent (\~{}), \see |\~|, |\tilde|, |\widetilde|.
+squint print, 59.
+|\ss| ( \ss\ ), 52, +356.
+stack positions, 300--301, 374, 399--400.
+stacked fractions, \see |\over|.
+|\star| ( $\star$ ), 436; {\sl cf\period}~asterisk.
+states, 46--48.
+sterling, 54, 428.
+Stevenson, Robert Louis Balfour, 67.
+Stirling numbers, \see |\brace|, |\brack|.
+stomach, \see anatomy of \TeX.
+stopping \TeX, \see |\end|.
+|story.tex|, 24, 26, 30--31.
+Stout, Rex Todhunter, 401.
+\<stretch>, +271.
+stretchability, 69--71, @75, 409.
+*|\string|, 40--41, +213--+214, 215, @348, @377.
+|\strut|, 82, @142, 178, 240, @246--247, @316, @329, @333, +353, @396, @400,
+  @421.
+|\strutbox|, @316, +353, @396, @414--415.
+struts, +82, 125, 131, 142, 178, 245--247, 255, 329, 416, 422, 423.
+style change items, 157, 442.
+style-independent documents, 194, 203.
+styles of math formatting, 140--141, 441--447.
+styles of math writing, 166--167, 182--183.
+subformulas, 129, 171, 173.
+\<subscript>, +291.
+subscripts, 15, @128--131, @133, 150, 158--159, @163, 179, +289--+291, 343.
+|\subset| ( $\subset$ ), @133, 436.
+|\subseteq| ( $\subseteq$ ), @133, 436.
+|\succ| ( $\succ$ ), 436.
+|\succeq| ( $\succeq$ ), 436.
+|\sum| (large $\Sigma$), @139, @144--145, @148--149, +358, 432--433, 435.
+|\sum|$'$, 181, @324--325.
+summary of plain \TeX, 339--342.
+summation, \see |\sum|.
+|\sup| ( $\sup$ ), 162, +361.
+|\supereject|, 116, 254, 256, 257, +353, @407.
+superiors, \see superscripts.
+\<superscript>, +291.
+superscripts, @128--131, @133, 150, 158--159, 179, +289--+291, 343.
+suppressed-L, 52--53.
+|\supset| ( $\supset$ ), 436.
+|\supseteq| ( $\supseteq$ ), 436.
+|\surd| ( $\surd$ ), +358, 435.
+surd signs, \see |\radical|, |\sqrt|.
+Swanson, Ellen Esther, 197.
+|\swarrow| ( $\swarrow$ ), 437.
+Swedish characters, 52--53, 370.
+Sweelinck, Jan Pieterszoon, 239.
+\'Swierczkowski, Stanis\l aw S\l awomir, 53.
+Swift, Jonathan, 5.
+symbol fonts, 157, @351, 431, 433, 441, 447.
+symbolic box format, 66, 75, 79, 158--159, 302, 455.
+symbols in math, table, 434--438.
+syntax rules, 268--269.
+System Development Foundation, vii.
+Szeg\H o, G\'abor, 7.
+\newletter
+|\t| (tie-after accent), 52--53, +356.
+\<tab> (ASCII code 9), 8, 45, 343, 369, 391.
+|\|\<tab>, 8, 351.
+|\tabalign|, +354, 355.
+tabbing, 231--234, @339, +354.
+\sub compared to |\halign|, 235.
+tables, \see alignments, tabbing.
+tables of contents, 120, 226.
+tables of \TeX\ trivia:
+\sub accents (non-math), 52, 339.
+\sub atomic types, 158.
+\sub category codes, 37.
+\sub character codes, 367--369.
+\sub default values, 343--345, 348--349.
+\sub |\fontdimen| parameters, 433, 447.
+\sub keywords, 61.
+\sub math accents, 135.
+\sub math classes, 154.
+\sub math spacing, 170--171.
+\sub math symbols, 434--438.
+\sub parameters, 272--275.
+\sub units of measure, 57.
+|\tabs|, 234, +354.
+*|\tabskip|, 215, +237--+239, @244, @247, 274, 282, 285, @354.
+tabskip glue, +237--+239, 245, 302--303, 392.
+Tacitus, Publius Cornelius, 219.
+tags, \see equation numbers.
+tail recursion, 219.
+|\tan| ( $\tan$ ), 162, 361.
+|\tanh| ( $\tanh$ ), 162, +361.
+|\tau| ( $\tau$ ), 1, 434.
+Tchaikovsky, \see Cha\u\i kovski\u\i.
+telephone numbers, 408.
+templates, 235--236, 240--243.
+|\tenex|, +350, @351, @361, @414--415.
+|\tenpoint|, 15, +414, @418.
+|\tenrm|, 15, 27--28, 45, 153, 252, @335, +350, @351, @414.
+|\tensl|, 15, +350, @351, @414.
+tensor notation, @130, @169.
+|\tensy|, @179, +350, @351, @414.
+terminal, input from, 217--218.
+\sub output to, 217--218, 226--228, 279--280.
+TEX, 1.
+\TeX, bad puns on, 1, 11, 63, 153, 161, 225, 229, 262, 305, @340--341, +373.
+\sub pronunciation of, 1.
+|TeX|, 1.
+|\TeX| ( \TeX\ ), 8--10, 19, 66--67, 204, 225, @340--341, +356, +418, +419.
+|.tex|, 25, 217, 226.
+|TeX capacity exceeded|, 300--301.
+\TeX\ Grandmasters, 253.
+\TeX\ Users Group, vii, 408, 483.
+\TeX78, vii.
+|texput|, 23.
+text between aligned displays, 193.
+text size, 140, 153, 442.
+text style, 140--142, 441--447.
+*|\textfont|, 153, 168, 188, 213, 271, +351, @414--415, 441--442.
+|\textindent|, 117, +355.
+*|\textstyle|, 141--142, +292, @326.
+|.tfm| (font metric files), 401, 433, 442.
+*|\the|, +214--+215, @216, @373, @375, @422.
+theorems, 111, 202--203, @340--341, +355.
+|\theta| ( $\theta$ ), 128, @162, @325, 434.
+|\Theta| ( $\Theta$ ), 434.
+*|\thickmuskip| (thick math space), 167--168, 274, @349, 446.
+thin spaces, 161, 167--173, 305, 409.
+*|\thinmuskip| (thin math space), 167--168, 274, @349, 446.
+|\thinspace|, @5, 10, 305, @311, +352, 409.
+|This can't happen|, 299.
+Thor, Arthur Uther, 24, 117, 200, 253.
+three-column output, 257, 396--398.
+three dots, \see ellipses.
+tie-after accent, \see |\t|.
+ties, 25, 73--74, +91--+93, 104, @161, 167, @173, 353, @404.
+tight lines, 97, 99, 302.
+tilde, 38, 51, @91--92, \see ties.
+|\tilde| (math accent: $\tilde x$), 135, 164.
+tilde accent (\~{}), \see |\~|, |\tilde|, |\widetilde|.
+*|\time|, 273, 349.
+|\times| ( $\times$ ), @133, 436.
+Times Tribune, Peninsula, 455.
+Titelouze, Jehan, 239.
+|to|, 77, 217, 222, 238, +276, +278.
+|\to|, @134, +361, 438.
+|\today|, @406.
+token list parameters and registers, 212, 215, 275, 373.
+token lists, as displayed by \TeX, 228, 329, 382.
+\<token parameter>, +275.
+\<token variable>, 212, +276.
+tokens, 38--41, 46--48, 203--207.
+*|\toks|, 212, 215, 262, 276.
+*|\toksdef|, 212, 215, 277, @347, @378.
+\<toksdef token>, +271.
+*|\tolerance|, @29--30, 91, 94, +96, 107, 272, @317, @333, @342,
+  @348, @364, @451.
+|\top| ( $\top$ ), 435.
+|\topglue|, @340, +352.
+|\topins|, 256, +363, @364.
+|\topinsert|, 115--116, 251, +363.
+*|\topmark|, 213, +258, 259--260, 280.
+*|\topskip|, +113--+114, 124, 256, 274, @348.
+Trabb Pardo, Luis Isidoro, 92.
+|\tracingall|, 121, 303, +364.
+*|\tracingcommands|, 88--89, +212, 273, 299.
+*|\tracinglostchars|, 273, +301, @348, @401.
+*|\tracingmacros|, +205, +212, 273, @329.
+*|\tracingonline|, 121, 212, 273, +303.
+*|\tracingoutput|, +254, 273, @301--302.
+*|\tracingpages|, @112--114, 124, 273, +303.
+*|\tracingparagraphs|, @98--99, 273, +303.
+*|\tracingrestores|, 273, +301, +303.
+*|\tracingstats|, 273, +300, +303, @383.
+transcript, \see log file.
+transparencies, 59.
+|\triangle| ( $\triangle$ ), 435.
+|\triangleleft| ( $\triangleleft$ ), 436.
+|\triangleright| ( $\triangleright$ ), 436.
+triangular quotation, 101--102.
+tricky macros, 41, 261--263, 354, 360, 361, 373--401, 421.
+|true|, 59--60, +270, @407--408.
+truth, vi, 267.
+Tschichold, Jan, 83.
+|\tt| (use {\tt typewriter} type), 13, 53, 113, 165, @340--341, +351,
+  @380--382, @414--415, +429.
+|\ttfam|, +351, @414--415.
+|\ttglue|, 414--415, 421.
+|\ttraggedright|, +356.
+{\sl\backup TUGboat}, vii, 425, 483.
+turtle commands, 390--391.
+Twain, Mark (= Clemens, Samuel Langhorne), 83, 451.
+two-column format, @257, 386--388, @417.
+two-line displays, 196.
+type size switching, 15, 408, 414--415.
+typefaces, 13, 17, 427.
+typewriter type, 13, 53, 165, 356, 420--421, 429.
+\newletter
+|\u| (breve accent), 52--53, +356.
+*|\uccode|, 41, 214, 271, 345, @348, @377, @394.
+*|\uchyph|, 273, @348, +454.
+umlaut accent (\"{}), \see |\"|, |\ddot|.
+unbreakable spaces, \see ties.
+|\uncatcodespecials|, 380.
+|\undefined|, 384.
+undelimited parameters, 203--204, 376--377.
+Under atom, 158, 289, 443.
+|\underbar|, @244, @323, +353.
+|\underbrace|, @176, 225--226, +359.
+underfull box, 29, 94, 238, 302--303, 397, 400, 417, 452.
+*|\underline|, @130--131, 141, 291, +443.
+underlined text, 178; \also |\underbar|.
+underscore (the character `|_|'), 38, 51, @128--130, 134, @165.
+*|\unhbox|, 120, 283, +285, @354, @356, @361, @399.
+*|\unhcopy|, 120, 283, +285, @353.
+\<unit of measure>, 268, +270.
+units of measure, 57--61, 270.
+\sub in formulas, 169.
+\sub table, 57.
+*|\unkern|, +280.
+unmatched left brace, 216; \also runaways.
+*|\unpenalty|, +280.
+unset box, 240, 302--303.
+\<unsigned dimen>, +270.
+\<unsigned mudimen>, +270.
+\<unsigned number>, +269.
+*|\unskip|, 222--223, +280, 286, @313, @392, @418--419.
+*|\unvbox|, 120, 254, +282, 286, @354, @361, @363, @364, @392, @399, @417.
+*|\unvcopy|, 120, +282, 286, @361.
+|\up|, 408.
+|\uparrow| ( $\uparrow$ ), @146--147, @182, +359, 437.
+|\Uparrow| ( $\Uparrow$ ), @146--147, +359, 437.
+|\upbracefill| (\hbox to4em{\upbracefill}), 225--226, +357.
+|\updownarrow| ( $\updownarrow$ ), @146--147, +359, 437.
+|\Updownarrow| ( $\Updownarrow$ ), @146--147, +359, 437.
+|\uplus| ( $\uplus$ ), 436.
+*|\uppercase|, 41, 215, 217, +279, 307, 345, @348, @374, @377, @394.
+uppercase letters, 9, 64, 268, 370.
+\sub Greek, 127, 164, 434.
+\sub roman numerals, 374.
+|\upsilon| ( $\upsilon$ ), 434, 483.
+|\Upsilon| ( $\Upsilon$ ), 434.
+Ursa Major, 389.
+User, Ben Lee, 74, 80, 100, 140, 164, 186, 187, 193, 221, 296, 410--411.
+\newletter
+|\v| (check accent), 52, +356.
+*|\vadjust|, 95, 105, 109, 110, 117, 259, +281, @317, 393, 454.
+*|\valign|, 249, 283, +285--+286, 302, @335, @397.
+Vall\'ee Poussin, Charles Louis Xavier Joseph de la, 92.
+van der Waerden, Bartel Leendert, 92.
+van Leunen, Mary-Claire, 425.
+|\varepsilon| ( $\varepsilon$ ), 128, 434.
+\<variable assignment>, +276.
+variable family, 154, 289, @358--359.
+variables in formulas, 132, 358, 434--435; \also Ord atom.
+|\varphi| ( $\varphi$ ), 128, @147, 434.
+|\varpi| ( $\varpi$ ), 434.
+|\varrho| ( $\varrho$ ), 128, 434.
+|\varsigma| ( $\varsigma$ ), 434, 483.
+|\vartheta| ( $\vartheta$ ), 128, 434.
+*|\vbadness|, 272, @348, @397, @417.
+vbox (box with vertical list inside), 65.
+*|\vbox|, 65, 80--82, 103, 151, 193, 222, 278, 388--389.
+Vcent atom, 158, 290, 443.
+*|\vcenter|, 150--151, 159, 170, 193, 222, 242, +290, @361, +443.
+|\vdash| ( $\vdash$ ), 436.
+|\vdots| ( $\vdots$ ), @177, +359.
+|\vec| (math accent: $\vec x\,$), 135; \also |\overrightarrow|.
+vectors, 177, 199--201; \also |\vec|.
+|\vee| ( $\vee$ ), @133, 436.
+verbatim copying, 422--423.
+verbatim listing, 48, 380--382, 391, 420--421.
+|\vert| ( $\vert$ ), @146--147, 150, +359, 438; {\sl cf\period}~|\mid|.
+|\Vert| ( $\Vert$ ), 117, @146--147, 150, +359, 186.
+\<vertical command>, +286.
+vertical line (the character `\|'), 52, 53, 132, @146--147, @171, @174, 438;
+  \also vertical rules.
+vertical lists, 64, +110.
+vertical mode, 85--89, +267--+283.
+\<vertical mode material>, 278.
+\<vertical rule>, +281.
+vertical rules, 64, 151, 221--226, +285, +291, 392.
+\<vertical skip>, +281.
+very loose lines, 97, 99.
+*|\vfil|, 71, +72, 111, 256, 281, 286, 417.
+*|\vfill|, 24, 25, 71, +72, 256--257, 281, 286.
+|\vfilll|, 72.
+*|\vfilneg|, +72, 111, 281, 286.
+|\vfootnote|, 117, +363.
+*|\vfuzz|, 274, @348.
+|\vglue|, +352, @408.
+vinculum, \see |\overline|.
+virgule, \see slash, 51.
+visible space, +3, +420, 429.
+*|\voffset|, +251, 252--253, 274, @342, @406.
+void, 120, 210.
+|\voidb@x|, +347, 348.
+Voltaire, de (= Arouet, \hfil\penalty0\hfilneg Fran\c cois Marie), 447.
+|\vphantom|, @178--179, 211, @321, +360.
+*|\vrule|, 64, 86, 151, 221--222, 224, @245--247, +281--+282, 283, @357, @392,
+  @420.
+*|\vsize|, 113--114, 251, 253, 255, 274, @340--341, @348, 400, @406, 413, @415,
+  @417.
+*|\vskip|, @24, 71, 85, 191, +281, 286.
+*|\vsplit|, +124, 222, 259, 278, @397, @417.
+*|\vss|, 71, +72, @255, 281, 286.
+*|\vtop|, 81--82, 151, 222, 278, @333.
+\newletter
+Walter's worksheet, 244.
+Walton, Izaak, 67.
+Watson, John Hamish, M\period D\period, 401.
+*|\wd|, 120, 271, +388--+389, @391, @417.
+|\wedge| ( $\wedge$ ), @133, 436.
+Weierstrass $p$, \see |\wp|.
+weird error, 298.
+Welsh, 239, 451.
+Westing, Arthur Herbert, 246.
+whatsits, 95, 110, 157, 226--229.
+|\widehat| (math accent: $\widehat x\,$), @136, +359, 433.
+|\widetilde| (math accent: $\widetilde x\,$), @136, +359.
+widow lines, 104, 272, 398.
+widow words, 104.
+*|\widowpenalty|, 104, 113, 272, @348.
+|width|, 221, 224, +282, 337.
+width of a box, 63--67, 77, 80--82, 225.
+wiggle, \see |\sim|.
+Winograd, Terry Allen, 425.
+Wischmeyer Ehlert, Clara Louise, 248.
+|withdelims|, 152, 156.
+|\wlog|, +347.
+Wolfe [Holmes], Nero, 401.
+|\wp| ( $\wp$ ), 435.
+|\wr| ( $\wr$ ), 436.
+wreath product, \see |\wr|.
+*|\write|, 215, 216, 226--228, 254, +280, 346, @377, @422, @424.
+\newletter
+$\times$, \see |\times|, |\*|.
+x-height, 54, 60, 433, 443, 445--447.
+*|\xdef|, @215--216, 275, @373, @418, @424.
+Xenophon, 239.
+|\xi| ( $\xi$ ), 434, 447.
+|\Xi| ( $\Xi$ ), 434.
+*|\xleaders|, +224.
+*|\xspaceskip|, 76, 274, @317, 356, 429, 433.
+|\xyzzy|, 379.
+\newletter
+*|\year|, 41, 273, 349, @406.
+Yellin, Frank Nathan, 401.
+\newletter
+|\z@|, +347, 348.
+|\z@skip|, +347, 348.
+|\zeta| ( $\zeta$ ), 434.
+\newletter
+\frac1/2, 67, 332.
+1/2, in unslashed form, 141, 186.
+\<4-bit number>, +271.
+\<8-bit number>, +271, 276--278.
+\<15-bit number>, +271, 277, 289, 291.
+\<27-bit number>, +271, 289, 291.
+\enddoublecolumns
+\endchapter
+
+Important works such as histories, biographies,
+scientific and technical text-books, etc., should contain indexes.
+Indeed, such works are scarcely to be considered complete without indexes.
+\smallskip
+An index is almost invariably placed at the end of a volume
+and is set in smaller type than the text-matter.
+Its subjects should be thoroughly alphabetized.
+\smallskip
+The compiling of an index is interesting work, though
+some authors are apt to find it tedious and delegate the work to others.
+The proofreader who undertakes it will find that it is splendid mental exercise
+and brings out his latent editorial capability.
+\author ALBERT H. ^{HIGHTON}, {\sl Practical Proofreading\/} (1926)
+
+\bigskip
+
+Important references are given in boldface.
+Italicized numbers indicate fleeting references,
+whereas numbers in parentheses refer to
+mere implications or unwarranted extrapolations.
+Asterisks are used to identify particularly distasteful passages.
+\author PROF.~PETER ^{SCHICKELE}, {\sl The Definitive Biography of %
+   P. D. Q. ^{Bach}\/} (1976)
+
+%\eject
+\eject\byebye

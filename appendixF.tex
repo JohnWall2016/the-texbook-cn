@@ -1,0 +1,797 @@
+% -*- coding: utf-8 -*-
+
+\input macros
+
+%\beginchapter Appendix F. Font Tables
+\beginchapter Appendix F. 字体表
+
+%The purpose of this appendix is to summarize the chief characteristics of
+%the ^{Computer Modern} typefaces.  \TeX\ is able to typeset
+%documents with any fonts, having any arrangement of characters; the
+%fonts and layouts to be described here are the particular ones that
+%correspond to plain~\TeX\ format, i.e., to the macros in Appendix~B\null.
+%\ (Complete information about the Computer Modern family, including the
+%\MF\ programs that draw the characters, can be found in the author's book
+%{\sl Computer Modern Typefaces}.)
+%^^{METAFONT}
+这个附录的目的是总结^{计算机现代}字体族的主要特征。
+\TeX\ 能够用任何字体排版文档，不管字体中的字符怎么排列；
+这里描述的字体和布局对应于 plain~\TeX\ 格式，即对应于附录~B 中的宏。%
+（关于计算机现代字体族的完整信息，包括绘制字符的 \MF\ 程序，
+可以在作者的书籍{\sl Computer Modern Typefaces}中找到。）
+^^{METAFONT}
+
+%The first pages of this appendix show what the fonts contain; the last
+%pages show what the symbols are called when they're used in math formulas.
+%\ (See Appendix~B for the conventions that apply in non-mathematical text.)
+这个附录的前几页显示各字体包含哪些字符；而后几页显示这些符号用于数学公式时的名称。%
+（见附录~B 中用于非数学文本时的方法。）
+
+%There are exactly 128 different characters in each of the Computer
+%Modern fonts, although \TeX\ can work up to~256 characters per font.
+%The text fonts are laid out as shown in the table below, which illustrates
+%font |cmr10| (Computer Modern Roman 10~point). Thus, for example,
+%if you ask for ^|\char||'35| when ^|cmr10| is the current font, you
+%get the symbol \char'35. These text fonts include the ^{ligatures} and
+%^{accents} described in Chapter~9; each symbol that happens to be
+%a visible ASCII character appears in its ASCII position.
+% Some of the ASCII symbols (namely
+%|"|~|<|~|>|~|\|~|_|~|{|~\|~|}|) are not included because
+%they don't occur in normal printer's fonts. If you mistakenly
+%type |"|, you get "; and |<| outside of math mode yields <\thinspace!
+%\ Incidentally, the ten ^{digits} all have width |0.5em|.
+尽管在 \TeX\ 中每个字体最多可以有 256 个字符，
+每个计算机现代字体都只包含 128 个不同字符。
+文本字体的布局如下面表格所示，以 |cmr10| 字体（10~点计算机现代罗马字体）为例。
+因此，在当前字体为 ^|cmr10|时，键入 ^|\char||'35| 将得到符号 \char'35。
+这些文本字体包含第~9~章所描述的^{连写}和^{重音符} ；
+每个 ASCII 可见字符都正好出现在它的 ASCII 位置。
+有些 ASCII 符号（即 |"|~|<|~|>|~|\|~|_|~|{|~\|~|}|）不在其中，
+因为它们并不包含在平常的打印机字体中。
+如果错误地键入 |"|，你将得到~"；而在数学模式外键入 |<| 将得到 <~！
+顺便提一下，十个^{数字}的宽度都为 |0.5em|。
+
+\medskip\vfill
+\noindent {\bf Figure 1.\enspace}Text font layout,
+showing |cmr10| (^|\rm|, |\textfont0|).
+\beginchart\tenrm
+\normalchart
+\endchart
+
+%\noindent Plain \TeX\ makes use of sixteen basic fonts:
+%$$\halign{\indent$\nulldelimiterspace=0pt
+%  \left.\ninepoint\vcenter{#}\,\hfil\right\}$ &#\hfil\cr
+%\halign{\strut\tt cm# \ \hfil&(Computer Modern #)\hfil&\hidebrace{#}\hfil\cr
+%r10&Roman 10 point\cr
+%r7&Roman 7 point\cr
+%r5&Roman 5 point\cr
+%bx10&Bold Extended 10 point\cr
+%bx7&Bold Extended 7 point\cr
+%bx5&Bold Extended 5 point\cr
+%sl10&Slanted Roman 10 point\cr
+%ti10&Text Italic 10 point\cr}&text\cr
+%\halign{\strut\tt cm# \ \hfil&(Computer Modern #)\hfil&\hidebrace{#}\hfil\cr
+%tt10&Typewriter Type 10 point\cr
+%mi10&Math Italic 10 point\cr
+%mi7&Math Italic 7 point\cr
+%mi5&Math Italic 5 point\cr
+%sy10&Math Symbols 10 point\cr
+%sy7&Math Symbols 7 point\cr
+%sy5&Math Symbols 5 point\cr
+%ex10&Math Extension 10 point\cr}&special\cr}$$
+%The first eight of these all have essentially the same layout;
+%but |cmr5| needs no ligatures, and many of the symbols of |cmti10|
+%have different shapes.
+%For example, the ^{ampersand} becomes an `^{E.T.}', and the
+%^{dollar} changes to ^{pound} ^{sterling}:
+\noindent Plain \TeX\ 使用了十六种基本字体：
+$$\halign{\indent$\nulldelimiterspace=0pt
+  \left.\ninepoint\baselineskip=11pt\vcenter{#}\,\hfil\right\}$ &#\hfil\cr
+\halign{\strut\tt cm# \ \hfil&(Computer Modern #)\hfil&\hidebrace{#}\hfil\cr
+r10&Roman 10 point\cr
+r7&Roman 7 point\cr
+r5&Roman 5 point\cr
+bx10&Bold Extended 10 point\cr
+bx7&Bold Extended 7 point\cr
+bx5&Bold Extended 5 point\cr
+sl10&Slanted Roman 10 point\cr
+ti10&Text Italic 10 point\cr}&text\cr
+\halign{\strut\tt cm# \ \hfil&(Computer Modern #)\hfil&\hidebrace{#}\hfil\cr
+tt10&Typewriter Type 10 point\cr
+mi10&Math Italic 10 point\cr
+mi7&Math Italic 7 point\cr
+mi5&Math Italic 5 point\cr
+sy10&Math Symbols 10 point\cr
+sy7&Math Symbols 7 point\cr
+sy5&Math Symbols 5 point\cr
+ex10&Math Extension 10 point\cr}&special\cr}$$
+前面八个字体有着本质上相同的布局；
+只是 |cmr5| 不含连写，且 |cmti10| 的很多符号的形状不同。
+例如，|&| 变成了 `^{E.T.}'，而 ^{美元符}变成^{英镑符}：
+
+\medskip\vfill
+\noindent {\bf Figure 2.\enspace}Text font layout,
+showing |cmti10| (^|\it|).
+\beginchart\tenit
+\normalchart
+\endchart
+
+%\noindent The ^{typewriter font} ^|cmtt10| is almost like the fonts for
+%ordinary text, but it includes all of the visible ASCII characters, in
+%their correct positions. It also has vertical arrows \up\ and
+%\dn, as well as an undirected single quote mark, {\tt\char'15}.
+%Fourteen of the~128 positions are changed from the normal text layout
+%conventions,
+%namely codes \oct{013}--\oct{017}, \oct{040}, \oct{042}, \oct{074},
+%\oct{076}, \oct{134}, \oct{137}, and \oct{173}--\oct{175}. All of the
+%ligatures are absent, except for the Spanish |!`| and |?`|. \ (The
+%characters for Spanish
+%ligatures appear in different positions, but that makes no difference
+%to the user, because each font tells \TeX\ where to locate its own
+%ligatures.) \ The Polish \l, the d\.ot accent, and the
+%long Hung\H arian umlaut have disappeared to make room for new symbols.
+%In a sense, positions \oct{052} and \oct{055} also differ from the normal
+%text conventions: The asterisk is not up as high as usual, and the hyphen is
+%just like a minus sign.
+\noindent ^{打字机字体} ^|cmtt10| 和普通文本字体几乎一样，
+但它在正确位置包含所有可见 ASCII 字符。
+它还包含竖直箭头 \up\ 和 \dn ，以及无向单引号~{\tt\char'15}。
+相比普通文本字体，128 个位置中的其中 14 个被改变了，即编码
+\oct{013}--\oct{017}、\oct{040}、\oct{042}、\oct{074}、
+\oct{076}、\oct{134}、\oct{137} 以及 \oct{173}--\oct{175}。
+除了西班牙语的 |!`| 和 |?`|\thinspace ，所有的连写都不见了。%
+（西班牙语的连写字符出现在不同位置，但是这对用户来说没有区别，
+因为每个字体都会告诉 \TeX\ 如何找到它的连写符。）波兰语 \l 、
+上点重音符（d\.ot）以及匈牙利分音符（Hung\H arian）都被去掉以给新符号留出空间。
+从某种意义上说，位置 \oct{052} 和 \oct{055} 也与普通文本的不同；
+星号没有原来那么高，而连字符很像减号。
+
+%Each character in |cmtt10| has the same width, namely |0.5em|;
+%the spaces between words also have this width, and they will not
+%stretch or shrink. \TeX\ puts two spaces at the end of each sentence
+%when you are typesetting with a typewriter font. \ (These spacing
+%conventions can be changed by assigning nonzero values to
+%^|\spaceskip| and ^|\xspaceskip|; or you can assign new values to the
+%|\fontdimen| parameters, which will be described shortly.)
+在 |cmtt10| 里面每个字符都有相同的宽度，即 |0.5em|；
+单词之间的空格也是这么宽，而且不能伸缩。
+在用打字机字体排版时，\TeX\ 在每个句子之后留下两个空格。%
+（要改变这些空格的大小，你可以给 ^|\spaceskip| 和 ^|\xspaceskip| 指定非零值；
+或者给 |\fontdimen| 参数指定一个新值，这会在稍后说到。）
+
+\medskip\vfill
+\noindent {\bf Figure 3.\enspace}Typewriter text font layout,
+showing |cmtt10| (^|\tt|).
+\beginchart\tentt
+\normalchart
+\endchart
+
+%\noindent You can see at a glance that the math italic font, ^|cmmi10|,
+%is quite different from text italic. It contains lowercase Greek letters
+%as well as uppercase ones; this, of course, is mathematicians' ^{Greek},
+%not a text font that would be suitable for typesetting classical
+%Greek literature. And if you look closely at the non-Greek italic
+%letters, you will find that their proportions and spacing have been
+%changed from |cmti10| to make them work better in \TeX's mathematics mode.
+\noindent 看一眼你便知道数学意大利字体，^|cmmi10|，与文本意大利字体很不相同。
+它除了包含大写希腊字母外，还包含小写希腊字母；
+当然，这是数学家的^{希腊字母}，而不是适合排版古典希腊文的文本希腊字母。
+而如果你仔细观察非希腊意大利体字母，你会发现它们的比例和间距改自 |cmti10|，
+以让它们在 \TeX\ 的数学模式中有更好的效果。
+
+%Some special unslanted characters appear in positions \oct{050}--\oct{077}
+%and \oct{133}--\oct{137}, including ``^{oldstyle numerals}'':
+%`|$\mit1984$|' and `|$\oldstyle1984$|' both yield `$\mit1984$'. Some of the
+%characters are intended to be combined with others; for example, \oct{054}
+%forms the first part of the symbol `$\hookrightarrow$'. \ (See the definition
+%of\/ ^|\hookrightarrow| in Appendix~B\null.) \ This portion of the font doesn't
+%deserve the name math italic; it's really a resting place for characters
+%that don't fit anywhere else. \ (The author didn't want to leave any places
+%unfilled, since that would tempt people to create incompatible
+%ways to fill them.)
+在位置 \oct{050}--\oct{077} 和 \oct{133}--\oct{137} 有一些特殊的非倾斜字符，
+其中包括 ``^{老式数字}''：`|$\mit1984$|' 和 `|$\oldstyle1984$|' 都能得到 `$\mit1984$'。
+有些字符是要和其他字符组合使用的；例如，\oct{054} 组成 `$\hookrightarrow$'
+符号的前面部分。（见附录~B 中 ^|\hookrightarrow| 的定义。）%
+字体这些位置与数学意大利体的名称不符；它们只是给不适合放在别处的字符提供了空间。%
+（作者不想留下任何未填充的位置，因为这将诱使人们用互不兼容的方式填充它们。）
+
+%Plain \TeX\ takes its ^{comma}, ^{period}, and ^{slash} from |cmmi10| in
+%math mode, so that appropriate kerning will be computed in certain
+%formulas that would otherwise be spaced poorly. For the correct
+%positioning of math accents with this font, you should set its
+%^|\skewchar| to \oct{177}.
+在 Plain \TeX\ 中，数学模式的^{逗号}、^{句号}和^{斜线号}都取自 |cmmi10|，
+这样在某些公式中可以计算出适当的紧排，以免它们的间距变得很难看。
+用这个字体时，要得到正确的数学重音符，你应该设定 ^|\skewchar| 为 \oct{177}。
+
+\medskip\vfill
+\noindent {\bf Figure 4.\enspace}Math italic font layout,
+showing |cmmi10| (^|\mit|, |\textfont1|).
+\beginchart\teni
+\normalchart
+\endchart
+
+%\noindent When \TeX\ typesets mathematics it assumes that family~0 contains
+%normal roman fonts and that families 1, 2, and~3 contain math italic,
+%math symbol, and math extension fonts. The special characters in these
+%fonts are usually given symbolic names by a |\mathchardef|
+%instruction, which assigns a hexadecimal code to the symbol.
+%This code has four digits, where the first tells what kind of symbol
+%is involved, the second specifies the family, and the other two give the font
+%position. For example,
+%\begintt
+%\mathchardef\ll="321C
+%\endtt
+%says that ^|\ll| is character \hex{1C} of the math symbol font (family~2),
+%and that it's a ``relation'' (class~3). A complete list of the symbolic names
+%provided by the plain \TeX\ format appears later in this appendix.
+\noindent 在排版数学公式时，\TeX\ 假定第~0~族包含普通罗马字体，
+而第~2、3、4~族分别包含数学意大利字体、数学符号字体和数学扩展字体。
+这些字体中的特殊字符通常会用 |\mathchardef| 命令给出特殊的符号名称。
+该命令给符号指定一个十六进制编码。这个编码有四位，
+其中第一位表示该符号的类型、第二位表示它所属的族，而后两位给出它的字体位置。
+例如：
+\begintt
+\mathchardef\ll="321C
+\endtt
+说明 ^|\ll| 是数学符号字体（第~2~族）的位置 \hex{1C} 的字符，
+它是一个``关系符号''（第~3~类）。
+Plain \TeX\ 格式定义的符号名称的完整列表出现在这个附录的后面部分。
+
+%\smallskip
+%Font ^|cmsy10| is plain \TeX's math symbol font, and it contains 128
+%symbols laid out as shown below. Its ^|\skewchar| should be set to
+%\oct{060} so that math accents will be positioned properly over the
+%^{calligraphic capital letters}.
+\smallskip
+字体 ^|cmsy10| 是 plain \TeX\ 的数学符号字体，它包含 128 个符号，
+字体布局如同按照下表所示。为了将数学重音放在^{手写大写字母}上边的合适位置，
+这个字体的 ^|\skewchar| 应该设定为 \oct{060}。
+
+\medskip\vfill
+\noindent {\bf Figure 5.\enspace}Math symbol font layout,
+showing |cmsy10| (^|\cal|, |\textfont2|).
+\beginchart\tensy
+\normalchart
+\endchart
+
+%The final font of plain \TeX\ is ^|cmex10|, which includes large symbols
+%and pieces that can be used to build even larger ones. For example,
+%arbitrarily large left parentheses can be constructed by putting
+%\oct{060} at the top and \oct{100} at the bottom,
+%and by using as many copies of \oct{102} as necessary in the middle.
+%Large ^{square root signs} are made from \oct{164}, \oct{165}, and
+%\oct{166}; large left braces have four component parts:
+%\oct{070}, \oct{072}, \oct{074}, \oct{076}.
+Plain \TeX\ 的最后一个字体是 ^|cmex10|，它包含大型符号以及用于构造更大符号的组件。
+例如，将 \oct{060} 放在顶部，\oct{100} 放在底部，
+中间接上多个 \oct{102}，可以构造出任意大的左圆括号；
+利用 \oct{164}、\oct{165} 和 \oct{166} 可以构造出大型的^{二次根号}；
+利用 \oct{070}、\oct{072}、\oct{074} 和 \oct{076} 可以构造出大型的左花括号。
+
+\medskip\vfill
+\noindent {\bf Figure 6.\enspace}^{Math extension font} layout,
+showing |cmex10| (|\textfont3|).
+\beginchart\tenex
+\normalchart
+\endchart
+
+\noindent When \TeX\ ``loads'' a font into its memory, it doesn't look at
+the actual shapes of the characters; it only loads the {\sl ^{font metric}\/}
+information (e.g., |cmr10.tfm|), which includes the heights, widths,
+depths, and italic corrections, together with information about ligatures
+and kerning.  Furthermore, the metric information that comes with a font
+like |cmex10| tells \TeX\ that certain characters form a series; for
+example, all of the left parentheses are linked together in order of
+increasing size: \oct{000}, \oct{020}, \oct{022}, and \oct{040}, followed
+by the extensible left parenthesis, which is $\oct{060}+[\oct{102}]^n+
+\oct{100}$. Similarly, the two ^{summation signs} (\oct{120}, \oct{130})
+and the three ^|\widehat| accents (\oct{142}, \oct{143}, \oct{144}) are
+linked together.  Appendix~G explains how \TeX\ goes about choosing
+particular sizes for math delimiters, math operators, and math accents.
+
+\smallskip
+Each font also has at least seven ^|\fontdimen| parameters, which have the
+following significance and typical values (rounded to two decimal places):
+$$\halign to\hsize{#\tabskip0pt plus 10pt&#\hfil&
+$\hfil#\pt$&
+$\hfil#\pt$&
+$\hfil#\pt$&
+$\hfil#\pt$&
+$\hfil#\pt$&
+$\hfil#\pt$\tabskip0pt\cr
+\hidewidth\#\hidewidth&Meaning&
+\omit\hidewidth Value in |cmr10| &
+\omit\hfil|cmbx10| &
+\omit\hfil|cmsl10| &
+\omit\hfil|cmti10| &
+\omit\hfil|cmtt10| &
+\omit\hfil|cmmi10| \cr
+\noalign{\vskip2pt}
+1&slant per pt&0.00&0.00&0.17&0.25&0.00&0.25\cr
+2&^{interword space}&3.33&3.83&3.33&3.58&5.25&0.00\cr
+3&interword stretch&1.67&1.92&1.67&1.53&0.00&0.00\cr
+4&interword shrink&1.11&1.28&1.11&1.02&0.00&0.00\cr
+5&^{x-height}&4.31&4.44&4.31&4.31&4.31&4.31\cr
+6&^{quad} width&10.00&11.50&10.00&10.22&10.50&10.00\cr
+7&extra space&1.11&1.28&1.11&1.02&5.25&0.00\cr}$$
+The ^{slant} parameter is used to position accents;
+the next three parameters define interword spaces when text is being typeset;
+the next two define the font-oriented dimensions |1ex| and |1em|;
+^^|ex| ^^|em|
+and the last is the additional amount that is added to interword spaces
+at the end of sentences
+(i.e., when ^|\spacefactor| is 2000 or~more and ^|\xspaceskip| is zero).
+When a font is ^{magnified} (using `^|at|' or `^|scaled|'), all of the
+parameters except the slant are subject to magnification at the time the
+font is loaded into \TeX's memory.
+
+Notice that |cmmi10| has zero spacing. This is the mark of a font
+that is intended only for mathematical typesetting; ^^{math fonts}
+the rules in Appendix~G state that the italic correction is added
+between adjacent characters from such fonts.
+
+Math symbol fonts (i.e., fonts in family 2) are required to have at least
+22~^|\fontdimen| parameters instead of the usual seven; similarly, math
+extension fonts must have at least~13. The significance of these
+additional parameters is explained in Appendix~G\null. If you want to increase
+the number of parameters past the number that actually appear in a font's
+metric information file, you can assign new values immediately after that font
+has been loaded.  For example, if some font |\ff| with seven parameters
+has just entered \TeX's memory, the command |\fontdimen13\ff=5pt| will set
+parameter number~13 to $5\pt$; the intervening parameters, numbers 8--12,
+will be set to zero. You can even give more than seven parameters to
+^|\nullfont|, provided that you assign the values before any actual fonts
+have been loaded.
+
+\goodbreak
+Now that the font layouts have all been displayed, it's time to
+consider the names of the various mathematical symbols.
+^^{symbols in math, table}
+Plain \TeX\ defines more than 200 control sequences by which you can refer
+to math symbols without having to find their numerical positions in the
+layouts. It's generally best to call a symbol by its name, for then you can
+easily adapt your manuscripts to other fonts, and your manuscript will
+be much more readable.
+
+The symbols divide naturally into groups based on their mathematical
+class (Ord, Op, Bin, Rel, Open, Close, or Punct), so we shall follow
+that order as we discuss them. N.B.: Unless otherwise stated, math symbols
+are available only in math modes. For example, if you say `|\alpha|' in
+horizontal mode, \TeX\ will report an error and try to insert a |$| sign.
+
+\def\beginsymbols{$$\displayindent=16pt
+  \halign\bgroup
+  &\qquad\hbox to10pt{\hss$##$\hss}\enspace&\hbox to80pt{##\hss}\cr}
+\let\endsymbols=\enddisplay
+
+%\subsection Lowercase Greek letters.
+\subsection 小写希腊字母.
+^^|\alpha|^^|\iota|^^|\varrho|
+^^|\beta|^^|\kappa|^^|\sigma|
+^^|\gamma|^^|\lambda|^^|\varsigma|
+^^|\delta|^^|\mu|^^|\tau|
+^^|\epsilon|^^|\nu|^^|\upsilon|
+^^|\varepsilon|^^|\xi|^^|\phi|
+^^|\zeta|^^|\varphi|
+^^|\eta|^^|\pi|^^|\chi|
+^^|\theta|^^|\varpi|^^|\psi|
+^^|\vartheta|^^|\rho|^^|\omega|
+\beginsymbols
+\alpha&|\alpha|&\iota&|\iota|&\varrho&|\varrho|\cr
+\beta&|\beta|&\kappa&|\kappa|&\sigma&|\sigma|\cr
+\gamma&|\gamma|&\lambda&|\lambda|&\varsigma&|\varsigma|\cr
+\delta&|\delta|&\mu&|\mu|&\tau&|\tau|\cr
+\epsilon&|\epsilon|&\nu&|\nu|&\upsilon&|\upsilon|\cr
+\varepsilon&|\varepsilon|&\xi&|\xi|&\phi&|\phi|\cr
+\zeta&|\zeta|&o&|o|&\varphi&|\varphi|\cr
+\eta&|\eta|&\pi&|\pi|&\chi&|\chi|\cr
+\theta&|\theta|&\varpi&|\varpi|&\psi&|\psi|\cr
+\vartheta&|\vartheta|&\rho&|\rho|&\omega&|\omega|\cr
+\endsymbols
+There's no ^|\omicron|, because it would look the same as |o|. Notice
+that the letter |\upsilon|~($\upsilon$) is a bit wider than |v|~($v$); both
+of them should be distinguished from |\nu|~($\nu$). Similarly,
+|\varsigma|~($\varsigma$) should not be confused with |\zeta|~($\zeta$).
+It turns out that |\varsigma| and |\upsilon| are almost never used in
+math formulas; they are included in plain \TeX\ primarily because they are
+sometimes needed in short Greek citations (cf.~Appendix~J).
+
+%\subsection Uppercase Greek letters.
+\subsection 大写希腊字母.
+^^|\Gamma|^^|\Xi|^^|\Phi|
+^^|\Delta|^^|\Pi|^^|\Psi|
+^^|\Theta|^^|\Sigma|^^|\Omega|
+^^|\Lambda|^^|\Upsilon|
+\beginsymbols
+\Gamma&|\Gamma|&\Xi&|\Xi|&\Phi&|\Phi|\cr
+\Delta&|\Delta|&\Pi&|\Pi|&\Psi&|\Psi|\cr
+\Theta&|\Theta|&\Sigma&|\Sigma|&\Omega&|\Omega|\cr
+\Lambda&|\Lambda|&\Upsilon&|\Upsilon|\cr
+\endsymbols
+The other Greek capitals appear in the roman alphabet
+(^|\Alpha|${}\equiv{}$|{\rm A}|, ^|\Beta|${}\equiv{}$|{\rm B}|, etc.).
+It's conventional to use unslanted letters for uppercase Greek, and
+slanted letters for lowercase Greek; but you can obtain
+$(\mit\Gamma,\Delta,\ldots,\Omega)$ by typing
+|$({\mit\Gamma},| |{\mit\Delta},| |\ldots,| |{\mit\Omega})$|. ^^|\mit|
+
+%\subsection Calligraphic capitals. To get the letters ^^{calligraphic letters}
+%$\cal A\ldots Z$ that appear in Figure~5, type |${\cal A}\ldots{\cal Z}$|.
+%Several other alphabets are also used with mathematics (notably ^{Fraktur},
+%^{script}, and ``^{blackboard bold}''); they don't come with plain \TeX,
+%but more elaborate formats like \AmSTeX\ do provide them.
+\subsection 手写大写字母. To get the letters ^^{calligraphic letters}
+$\cal A\ldots Z$ that appear in Figure~5, type |${\cal A}\ldots{\cal Z}$|.
+Several other alphabets are also used with mathematics (notably ^{Fraktur},
+^{script}, and ``^{blackboard bold}''); they don't come with plain \TeX,
+but more elaborate formats like \AmSTeX\ do provide them.
+
+%\subsection Miscellaneous symbols of type Ord.
+\subsection 各种 Ord 类型的符号.
+^^|\aleph|^^|\prime|^^|\forall|
+^^|\hbar|^^|\emptyset|^^|\exists|
+^^|\imath|^^|\nabla|^^|\neg|
+^^|\jmath|^^|\surd|^^|\flat|
+^^|\ell|^^|\top|^^|\natural|
+^^|\wp|^^|\bot|^^|\sharp|
+^^|\Re|^^{escvert}^^|\clubsuit|
+^^|\Im|^^|\angle|^^|\diamondsuit|
+^^|\partial|^^|\triangle|^^|\heartsuit|
+^^|\infty|^^|\backslash|^^|\spadesuit|
+^^{Weierstrass, see wp}
+\beginsymbols
+\aleph&|\aleph|&\prime&|\prime|&\forall&|\forall|\cr
+\hbar&|\hbar|&\emptyset&|\emptyset|&\exists&|\exists|\cr
+\imath&|\imath|&\nabla&|\nabla|&\neg&|\neg|\cr
+\jmath&|\jmath|&\surd&|\surd|&\flat&|\flat|\cr
+\ell&|\ell|&\top&|\top|&\natural&|\natural|\cr
+\wp&|\wp|&\bot&|\bot|&\sharp&|\sharp|\cr
+\Re&|\Re|&\Vert&|\|\|&\clubsuit&|\clubsuit|\cr
+\Im&|\Im|&\angle&|\angle|&\diamondsuit&|\diamondsuit|\cr
+\partial&|\partial|&\triangle&|\triangle|&\heartsuit&|\heartsuit|\cr
+\infty&|\infty|&\backslash&|\backslash|&\spadesuit&|\spadesuit|\cr
+\endsymbols
+The ^{dotless letters} |\imath| and |\jmath| should be used when $i$ and~$j$
+are ^{accent}ed; for example, |$\hat\imath$| yields $\hat\imath$.
+The |\prime| symbol is intended for use in subscripts and superscripts,
+as explained in Chapter~16, so you usually see it in a smaller size.
+On the other hand, the |\angle| symbol has been built up from other pieces;
+it does not get smaller when it appears in a subscript or superscript.
+
+%\subsection Digits. To get italic ^{digits} {\it0123456789}, say
+%|{\it0123456789}|; to get boldface digits {\bf0123456789}, say
+%|{\bf0123456789}|; to get oldstyle digits {\oldstyle0123456789}, say
+%|{\oldstyle0123456789}|. These conventions work also outside of math mode.
+\subsection 数字. To get italic ^{digits} {\it0123456789}, say
+|{\it0123456789}|; to get boldface digits {\bf0123456789}, say
+|{\bf0123456789}|; to get oldstyle digits {\oldstyle0123456789}, say
+|{\oldstyle0123456789}|. These conventions work also outside of math mode.
+
+%\subsection ``Large'' operators. The following symbols come in two sizes,
+%for text and display styles:
+\subsection 巨算符. The following symbols come in two sizes,
+for text and display styles:
+^^|\sum|^^|\bigcap|^^|\bigodot|
+^^|\prod|^^|\bigcup|^^|\bigotimes|
+^^|\coprod|^^|\bigsqcup|^^|\bigoplus|
+^^|\int|^^|\bigvee|^^|\biguplus|
+^^|\oint|^^|\bigwedge|
+$$\displayindent=16pt \openup3pt
+\halign{&\qquad\hbox to10pt{\hss$#$\hss}\enspace&
+  \hbox to10pt{\hss$\displaystyle#$\hss}\enspace&
+  \hbox to60pt{#\hss}\cr
+\sum&\sum&|\sum|&\bigcap&\bigcap&|\bigcap|&
+  \bigodot&\bigodot&|\bigodot|\cr
+\prod&\prod&|\prod|&\bigcup&\bigcup&|\bigcup|&
+  \bigotimes&\bigotimes&|\bigotimes|\cr
+\coprod&\coprod&|\coprod|&\bigsqcup&\bigsqcup&|\bigsqcup|&
+  \bigoplus&\bigoplus&|\bigoplus|\cr
+\int&\int&|\int|&\bigvee&\bigvee&|\bigvee|&
+  \biguplus&\biguplus&|\biguplus|\cr
+\oint&\oint&|\oint|&\bigwedge&\bigwedge&|\bigwedge|\cr
+}$$
+It is important to distinguish these large Op symbols from the similar but
+smaller Bin symbols whose names are the same except for a `|big|' prefix.
+Large operators usually occur at the beginning of a formula or subformula,
+and they usually are subscripted; ^{binary operations} usually occur between
+two symbols or subformulas, and they rarely are subscripted. For example,
+\begindisplay
+|$\bigcup_{n=1}^m(x_n\cup y_n)$|\qquad yields \qquad
+$\bigcup_{n=1}^m(x_n\cup y_n)$
+\enddisplay
+The large operators |\sum|, |\prod|, |\coprod|, and |\int| should also be
+distinguished from smaller symbols called |\Sigma|~($\Sigma$),
+|\Pi|~($\Pi$), |\amalg|~($\amalg$), and |\smallint|~($\smallint$),
+respectively; the ^|\smallint| operator is rarely used.
+
+%\subsection Binary operations. Besides $+$ and $-$, you can type
+\subsection 二元运算符. Besides $+$ and $-$, you can type
+^^|\pm|^^|\cap|^^|\vee|
+^^|\mp|^^|\cup|^^|\wedge|
+^^|\setminus|^^|\uplus|^^|\oplus|
+^^|\cdot|^^|\sqcap|^^|\ominus|
+^^|\times|^^|\sqcup|^^|\otimes|
+^^|\ast|^^|\triangleleft|^^|\oslash|
+^^|\star|^^|\triangleright|^^|\odot|
+^^|\diamond|^^|\wr|^^|\dagger|
+^^|\circ|^^|\bigcirc|^^|\ddagger|
+^^|\bullet|^^|\bigtriangleup|^^|\amalg|
+^^|\div|^^|\bigtriangledown|
+\beginsymbols
+\pm&|\pm|&\cap&|\cap|&\vee&|\vee|\cr
+\mp&|\mp|&\cup&|\cup|&\wedge&|\wedge|\cr
+\setminus&|\setminus|&\uplus&|\uplus|&\oplus&|\oplus|\cr
+\cdot&|\cdot|&\sqcap&|\sqcap|&\ominus&|\ominus|\cr
+\times&|\times|&\sqcup&|\sqcup|&\otimes&|\otimes|\cr
+\ast&|\ast|&\triangleleft&|\triangleleft|&\oslash&|\oslash|\cr
+\star&|\star|&\triangleright&|\triangleright|&\odot&|\odot|\cr
+\diamond&|\diamond|&\wr&|\wr|&\dagger&|\dagger|\cr
+\circ&|\circ|&\bigcirc&|\bigcirc|&\ddagger&|\ddagger|\cr
+\bullet&|\bullet|&\bigtriangleup&|\bigtriangleup|&\amalg&|\amalg|\cr
+\div&|\div|&\bigtriangledown&|\bigtriangledown|\cr
+\endsymbols
+It's customary to say |$G\backslash| |H$| to denote double cosets
+of $G$ by~$H$~($G\backslash H$), and |$p\backslash n$| to mean that
+$p$ divides~$n$~($p\backslash n$); but |$X\setminus Y$| denotes
+the elements of set~$X$ minus those of set~$Y$~($X\setminus Y$).
+Both operations use the same symbol, but |\backslash| is
+type Ord, while |\setminus| is type Bin (so \TeX\ puts
+more space around it).
+
+%\subsection Relations. Besides $<$, $>$, and $=$, you can type
+\subsection 二元关系符. Besides $<$, $>$, and $=$, you can type
+^^|\leq|^^|\geq|^^|\equiv|
+^^|\prec|^^|\succ|^^|\approx|
+^^|\preceq|^^|\succeq|^^|\propto|
+^^|\ll|^^|\gg|^^|\asymp|
+^^|\subset|^^|\supset|^^|\sim|
+^^|\subseteq|^^|\supseteq|^^|\simeq|
+^^|\sqsubseteq|^^|\sqsupseteq|^^|\cong|
+^^|\in|^^|\ni|^^|\bowtie|
+^^|\vdash|^^|\dashv|^^|\models|
+^^|\smile|^^|\mid|^^|\doteq|
+^^|\frown|^^|\parallel|^^|\perp|
+\beginsymbols
+\leq&|\leq|&\geq&|\geq|&\equiv&|\equiv|\cr
+\prec&|\prec|&\succ&|\succ|&\sim&|\sim|\cr
+\preceq&|\preceq|&\succeq&|\succeq|&\simeq&|\simeq|\cr
+\ll&|\ll|&\gg&|\gg|&\asymp&|\asymp|\cr
+\subset&|\subset|&\supset&|\supset|&\approx&|\approx|\cr
+\subseteq&|\subseteq|&\supseteq&|\supseteq|&\cong&|\cong|\cr
+\sqsubseteq&|\sqsubseteq|&\sqsupseteq&|\sqsupseteq|&\bowtie&|\bowtie|\cr
+\in&|\in|&\ni&|\ni|&\propto&|\propto|\cr
+\vdash&|\vdash|&\dashv&|\dashv|&\models&|\models|\cr
+\smile&|\smile|&\mid&|\mid|&\doteq&|\doteq|\cr
+\frown&|\frown|&\parallel&|\parallel|&\perp&|\perp|\cr
+\endsymbols
+The symbols |\mid| and |\parallel| define relations that use the same
+characters as you get from \| and |\|\|; \TeX\ puts space around
+them when they are relations.
+
+%\subsection Negated relations. Many of the relations just listed can be
+%negated or ``crossed out'' by prefixing them with ^|\not|, as follows:
+\subsection 否定关系符. Many of the relations just listed can be
+negated or ``crossed out'' by prefixing them with ^|\not|, as follows:
+\beginsymbols
+\not<&|\not<|&\not>&|\not>|&\not=&|\not=|\cr
+\not\leq&|\not\leq|&\not\geq&|\not\geq|&
+  \not\equiv&|\not\equiv|\cr
+\not\prec&|\not\prec|&\not\succ&|\not\succ|&
+  \not\sim&|\not\sim|\cr
+\not\preceq&|\not\preceq|&\not\succeq&|\not\succeq|&
+  \not\simeq&|\not\simeq|\cr
+\not\subset&|\not\subset|&\not\supset&|\not\supset|&
+  \not\approx&|\not\approx|\cr
+\not\subseteq&|\not\subseteq|&\not\supseteq&|\not\supseteq|&
+  \not\cong&|\not\cong|\cr
+\not\sqsubseteq&|\not\sqsubseteq|&\not\sqsupseteq&|\not\sqsupseteq|&
+  \not\asymp&|\not\asymp|\cr
+\endsymbols
+The symbol |\not| is a relation character of width zero, so it will
+overlap a relation that comes immediately after it. The positioning
+isn't always ideal, because some relation symbols are wider than others;
+for example, |\not\in| gives `$\not\in$', but it is preferable to
+have a steeper cancellation, `$\notin$'. The latter symbol is
+available as a special control sequence called ^|\notin|. The definition
+of\/ |\notin| in Appendix~B indicates how similar symbols can be constructed.
+
+%\subsection Arrows. There's also another big class of relations, namely
+\subsection 箭头. There's also another big class of relations, namely
+^^{arrows}
+^^|\leftarrow| ^^|\longleftarrow| ^^|\uparrow| ^^|\Leftarrow|
+^^|\Longleftarrow| ^^|\Uparrow| ^^|\rightarrow| ^^|\longrightarrow|
+^^|\downarrow| ^^|\Rightarrow| ^^|\Longrightarrow| ^^|\Downarrow|
+^^|\leftrightarrow| ^^|\longleftrightarrow| ^^|\updownarrow|
+^^|\Leftrightarrow| ^^|\Longleftrightarrow| ^^|\Updownarrow| ^^|\mapsto|
+^^|\longmapsto| ^^|\nearrow| ^^|\hookleftarrow| ^^|\hookrightarrow|
+^^|\searrow| ^^|\leftharpoonup| ^^|\rightharpoonup| ^^|\swarrow|
+^^|\leftharpoondown| ^^|\rightharpoondown| ^^|\nwarrow|
+^^|\rightleftharpoons|
+those that point:
+$$\displayindent=16pt
+  \halign\bgroup
+  \qquad\hbox to10pt{\hss$#$\hss}\enspace&\hbox to75pt{#\hss}&
+  \qquad\hbox to10pt{\hss$#$\hss}\enspace&\hbox to85pt{#\hss}&
+  \qquad\hbox to10pt{\hss$#$\hss}\enspace&\hbox to80pt{#\hss}\cr
+\leftarrow&|\leftarrow|&\longleftarrow&|\longleftarrow|&
+  \uparrow&|\uparrow|\cr
+\Leftarrow&|\Leftarrow|&\Longleftarrow&|\Longleftarrow|&
+  \Uparrow&|\Uparrow|\cr
+\rightarrow&|\rightarrow|&\longrightarrow&|\longrightarrow|&
+  \downarrow&|\downarrow|\cr
+\Rightarrow&|\Rightarrow|&\Longrightarrow&|\Longrightarrow|&
+  \Downarrow&|\Downarrow|\cr
+\leftrightarrow&|\leftrightarrow|&\longleftrightarrow&|\longleftrightarrow|&
+  \updownarrow&|\updownarrow|\cr
+\Leftrightarrow&|\Leftrightarrow|&\Longleftrightarrow&|\Longleftrightarrow|&
+  \Updownarrow&|\Updownarrow|\cr
+\mapsto&|\mapsto|&\longmapsto&|\longmapsto|&
+  \nearrow&|\nearrow|\cr
+\hookleftarrow&|\hookleftarrow|&\hookrightarrow&|\hookrightarrow|&
+  \searrow&|\searrow|\cr
+\leftharpoonup&|\leftharpoonup|&\rightharpoonup&|\rightharpoonup|&
+  \swarrow&|\swarrow|\cr
+\leftharpoondown&|\leftharpoondown|&\rightharpoondown&|\rightharpoondown|&
+  \nwarrow&|\nwarrow|\cr
+\rightleftharpoons&|\rightleftharpoons|\cr
+\enddisplay
+Up and down arrows will grow larger, like delimiters (see Chapter~17).
+To put symbols over left and right arrows, plain \TeX\ provides
+a ^|\buildrel| macro: You type |\buildrel|\<superscript>^|\over|\<relation>,
+and the superscript is placed on top of the relation just as limits are
+placed over large operators. For example,
+\begindisplay
+\hbox to 30pt{$\buildrel \alpha\beta \over \longrightarrow$\hfil}%
+|\buildrel \alpha\beta \over \longrightarrow|\cr
+\hbox to 30pt{$\buildrel \rm def \over =$\hfil}%
+|\buildrel \rm def \over =|\cr
+\enddisplay
+\ (In this context, `|\over|' does not define a fraction.)
+
+%\subsection Openings. The following ^{left delimiters} are available,
+%besides `(':
+\subsection 开符号. The following ^{left delimiters} are available,
+besides `(':
+^^|\lbrack| ^^|\lbrace| ^^|\langle| ^^|\lfloor| ^^|\lceil|
+\beginsymbols
+\lbrack&|\lbrack|&\lfloor&|\lfloor|&\lceil&|\lceil|\cr
+\lbrace&|\lbrace|&\langle&|\langle|\cr
+\endsymbols
+You can also type simply `|[|' to get |\lbrack|. All of these will grow if
+you prefix them by ^|\bigl|, ^|\Bigl|, ^|\biggl|, ^|\Biggl|, or ^|\left|.
+Chapter~17 also mentions ^|\lgroup| and ^|\lmoustache|, which are
+available in sizes greater than |\big|. If you need more delimiters,
+the following combinations work reasonably well in the normal text size:
+\beginsymbols
+\lbrack\!\lbrack&|\lbrack\!\lbrack|&
+\langle\!\langle&|\langle\!\langle|&
+(\!(&|(\!(|\cr
+\endsymbols
+
+%\subsection Closings. The corresponding right delimiters are present too:
+\subsection 闭符号. The corresponding right delimiters are present too:
+^^|\rbrack| ^^|\rbrace| ^^|\rangle| ^^|\rfloor| ^^|\rceil|
+\beginsymbols
+\rbrack&|\rbrack|&\rfloor&|\rfloor|&\rceil&|\rceil|\cr
+\rbrace&|\rbrace|&\rangle&|\rangle|\cr
+\endsymbols
+Everything that works for openings works also for closings, but reversed.
+\goodbreak
+
+%\subsection Punctuation. \TeX\ puts a thin space after commas and semicolons
+%that appear in mathematical formulas, and it does the same for a colon
+%that is called ^|\colon|. \ (Otherwise a ^{colon} is considered to be a
+%relation, as in `$x:=y$' and `$a:b::c:d$', which you type by saying
+%`|$x:=y$|' and `|$a:b::c:d$|'.) \ Examples of\/ |\colon| are
+%\begindisplay
+%\hbox to 115pt{$f\colon A\rightarrow B$\hfil}\enspace
+%|$f\colon A\rightarrow B$|\cr
+%\hbox to 115pt{$L(a,b;c\colon x,y;z)$\hfil}\enspace
+%|$L(a,b;c\colon x,y;z)$|\cr
+%\enddisplay
+%Plain \TeX\ also defines ^|\ldotp| and ^|\cdotp| to be `.' and `$\cdot$'
+%with the spacing of commas and semicolons. These symbols don't
+%occur directly in formulas, but they are useful in the definition of\/
+%^|\ldots| and ^|\cdots|.
+\subsection 标点符号. \TeX\ puts a thin space after commas and semicolons
+that appear in mathematical formulas, and it does the same for a colon
+that is called ^|\colon|. \ (Otherwise a ^{colon} is considered to be a
+relation, as in `$x:=y$' and `$a:b::c:d$', which you type by saying
+`|$x:=y$|' and `|$a:b::c:d$|'.) \ Examples of\/ |\colon| are
+\begindisplay
+\hbox to 115pt{$f\colon A\rightarrow B$\hfil}\enspace
+|$f\colon A\rightarrow B$|\cr
+\hbox to 115pt{$L(a,b;c\colon x,y;z)$\hfil}\enspace
+|$L(a,b;c\colon x,y;z)$|\cr
+\enddisplay
+Plain \TeX\ also defines ^|\ldotp| and ^|\cdotp| to be `.' and `$\cdot$'
+with the spacing of commas and semicolons. These symbols don't
+occur directly in formulas, but they are useful in the definition of\/
+^|\ldots| and ^|\cdots|.
+
+%\subsection Alternate names. If you don't like plain \TeX's name for
+%some math symbol---for example, if there's another name that looks
+%better or that you can remember more easily---the remedy is simple:
+%You just say, e.g., `|\let\cupcap=\asymp|'. Then you can type
+%`|f(n)\cupcap n|' instead of `|f(n)\asymp n|'.
+\subsection 别名. If you don't like plain \TeX's name for
+some math symbol---for example, if there's another name that looks
+better or that you can remember more easily---the remedy is simple:
+You just say, e.g., `|\let\cupcap=\asymp|'. Then you can type
+`|f(n)\cupcap n|' instead of `|f(n)\asymp n|'.
+
+Some symbols have alternate names that are so commonly used that plain
+\TeX\ provides two or more equivalent control sequences:
+^^|\ne| ^^|\neq| ^^|\le| ^^|\ge| ^^|\to| ^^|\gets| ^^|\owns| ^^|\land|
+^^|\lor| ^^|\lnot| ^^|\vert|
+$$\halign{\indent$\hfil#\hfil$\enspace&#\hfil\enspace&
+  (same as #)\hfil\cr
+\ne&|\ne| or |\neq|&|\not=|\cr
+\le&|\le|&|\leq|\cr
+\ge&|\ge|&|\geq|\cr
+\{&|\{|&|\lbrace|\cr
+\}&|\}|&|\rbrace|\cr
+\to&|\to|&|\rightarrow|\cr
+\gets&|\gets|&|\leftarrow|\cr
+\owns&|\owns|&|\ni|\cr
+\land&|\land|&|\wedge|\cr
+\lor&|\lor|&|\vee|\cr
+\lnot&|\lnot|&|\neg|\cr
+\vert&|\vert|&\|\cr
+\Vert&|\Vert|&|\|\|\cr
+}$$
+There's also ^|\iff| ($\iff$), which is just like |\Longleftrightarrow|
+except that it puts an extra thick space at each side.
+
+%\subsection Non-math symbols. Plain \TeX\ makes four special symbols
+%available outside of math mode, although the characters themselves
+%are actually typeset from the math symbols font:
+%$$\halign{\indent$\hfil#\hfil$\enspace&#\hfil\enspace\cr
+%\S&|\S|\cr
+%\P&|\P|\cr
+%\dag&|\dag|\cr
+%\ddag&|\ddag|\cr
+%\phantom{\gets}\cr\noalign{\kern-\baselineskip}
+%}$$
+%These control sequences do not act like ordinary math symbols; they don't
+%change their size when they appear in subscripts or superscripts, and you
+%must say, e.g., |$x^{\P}$| instead of |$x^\P$| when you use them in
+%formulas. However, the ^|\dag| and ^|\ddag| symbols are available in
+%math mode under the names ^|\dagger| and ^|\ddagger|. It would be easy
+%to define mathematical equivalents of\/ ^|\S| and ^|\P|, if~these symbols
+%suddenly caught a mathematician's fancy.
+\subsection 非数学符号. Plain \TeX\ makes four special symbols
+available outside of math mode, although the characters themselves
+are actually typeset from the math symbols font:
+$$\halign{\indent$\hfil#\hfil$\enspace&#\hfil\enspace\cr
+\S&|\S|\cr
+\P&|\P|\cr
+\dag&|\dag|\cr
+\ddag&|\ddag|\cr
+\phantom{\gets}\cr\noalign{\kern-\baselineskip}
+}$$
+These control sequences do not act like ordinary math symbols; they don't
+change their size when they appear in subscripts or superscripts, and you
+must say, e.g., |$x^{\P}$| instead of |$x^\P$| when you use them in
+formulas. However, the ^|\dag| and ^|\ddag| symbols are available in
+math mode under the names ^|\dagger| and ^|\ddagger|. It would be easy
+to define mathematical equivalents of\/ ^|\S| and ^|\P|, if~these symbols
+suddenly caught a mathematician's fancy.
+
+\endchapter
+
+Seek not for fresher founts afar,
+Just drop your bucket where you are.
+\author SAM WALTER ^{FOSS}, {\sl Back Country Poems\/} (1892)
+
+\bigskip
+
+No one compositor will have all the signs and symbols available.
+The number of special signs and symbols is almost limitless,
+with new ones being introduced all the time.
+\author UNIVERSITY OF ^{CHICAGO} PRESS, {\sl Manual of Style\/} (1969) % p296
+
+%\eject
+\eject\byebye

@@ -1,0 +1,1685 @@
+% -*- coding: utf-8 -*-
+
+\input macros
+
+%\beginchapter Chapter 12. Glue
+\beginchapter Chapter 12. 粘连
+
+\origpageno=69
+
+%But there's more to the story than just boxes: There's also some magic mortar
+%called {\sl ^{glue}\/} that
+%\TeX\ uses to paste boxes together. For example, there is a little space between
+%the lines of text in this manual; it has been calculated so that the baselines
+%of consecutive lines within a paragraph are exactly 12~points apart. And
+%there is space between words too; such space is not an ``empty'' box, it is
+%part of the glue between boxes. This glue can stretch or shrink so that the
+%right-hand margin of each page comes out looking straight.
+%^^{leading, see baselineskip} ^^{skipping space, see glue}
+\1但是还有比盒子更多的东西：
+称之为{\KT{10}粘连}的魔术泥巴，\TeX\ 就是用它把盒子粘在一起\hbox{的。}%
+例如，本手册的文本行之间有小空隙；
+它正好使得同一段中的相邻行的基线精确地分开 12 points。%
+并且在单词之间也有空隙；
+这样的粘连可以伸缩，使得每页的右边界看起来是对齐的。
+
+%When \TeX\ makes a large box from a horizontal or vertical list of smaller
+%boxes, there often is glue between the smaller boxes. Glue has three
+%attributes, namely its natural {\sl space}, its ability to {\sl ^{stretch}}, and
+%its ability to {\sl ^{shrink}}.
+当 \TeX\ 把更小盒子的水平或垂直列组合成大盒子时，
+通常在小盒子之间都有粘连。%
+粘连有三种属性，即正常{\KT{10}间距}, {\KT{10}伸长}能力和{\KT{10}收缩}能力。
+
+%In order to understand how this works, consider the following example of
+%four boxes in a horizontal list separated by three globs of glue:
+%\begindisplay\eightpoint
+%\vbox{
+%    \hbox{\samplebox{7mm}{8mm}{5\varunit}{width 5}%
+%      \sampleglue{9\varunit}{space 9\cr stretch 3\cr shrink 1}%
+%      \samplebox{3mm}{2mm}{6\varunit}{width 6}%
+%      \sampleglue{9\varunit}{space 9\cr stretch 6\cr shrink 2}%
+%      \samplebox{8mm}{3mm}{3\varunit}{width 3}%
+%      \sampleglue{12\varunit}{space 12\cr stretch 0\cr shrink 0}%
+%      \samplebox{4mm}{7mm}{8\varunit}{width 8}}
+%    \kern6pt
+%    \arrows{52\varunit}{width 52}}
+%\enddisplay
+%The first glue element has 9 units of space, 3 of stretch, and 1 of shrink;
+%the next one also has 9 units of space, but 6 units of stretch and 2 of
+%shrink; the last one has 12 units of space, but it is unable to stretch
+%or to shrink, so it will remain 12 units of space no matter what.
+为了理解其工作原理，看看下面在一个水平列中被三个粘连团分开的四个盒子的例子：
+\begindisplay\eightpoint
+\vbox{
+    \hbox{\samplebox{7mm}{8mm}{5\varunit}{width 5}%
+      \sampleglue{9\varunit}{space 9\cr stretch 3\cr shrink 1}%
+      \samplebox{3mm}{2mm}{6\varunit}{width 6}%
+      \sampleglue{9\varunit}{space 9\cr stretch 6\cr shrink 2}%
+      \samplebox{8mm}{3mm}{3\varunit}{width 3}%
+      \sampleglue{12\varunit}{space 12\cr stretch 0\cr shrink 0}%
+      \samplebox{4mm}{7mm}{8\varunit}{width 8}}
+    \kern6pt
+    \arrows{52\varunit}{width 52}}
+\enddisplay
+第一个粘连单元是 9 个单位空格，伸长 3 个，收缩 1 个；
+下一个也是 9 个单位空格，但是伸长 6 个，收缩 2 个；
+最后一个是 12 个单位空格，但是不能伸缩，所以不管怎样它也要保持 12 个单位空格。
+
+%The total width of boxes and glue in this example, considering only the
+%space components of the glue, is $5+9+6+9+3+12+8=52$ units. This is called
+%the {\sl ^{natural width}\/} of the horizontal list; it's the preferred way to
+%paste the boxes together. Suppose, however, that \TeX\ is told to make the
+%horizontal list into a box that is 58~units wide; then the glue has to
+%stretch by 6~units. Well, there are $3+6+0=9$ units of stretchability present,
+%so \TeX\ multiplies each unit of stretchability by 6/9 in order to obtain the
+%extra 6~units needed. The first glob of glue becomes $9+(6/9)\times3=11$
+%units wide, the next becomes $9+(6/9)\times6=13$ units wide, the last remains
+%12 units wide, and we obtain the desired box looking like this:
+%\begindisplay\eightpoint
+%\vbox{\kern-3pt
+%    \hbox{\samplebox{7mm}{8mm}{5\varunit}{}%
+%      \sampleglue{11\varunit}{$9+2$}%
+%      \samplebox{3mm}{2mm}{6\varunit}{}%
+%      \sampleglue{13\varunit}{$9+4$}%
+%      \samplebox{8mm}{3mm}{3\varunit}{}%
+%      \sampleglue{12\varunit}{$12+0$}%
+%      \samplebox{4mm}{7mm}{8\varunit}{}}
+%    \kern6pt
+%    \arrows{58\varunit}{width 58}}
+%\enddisplay
+不考虑粘连的伸缩时，本例中的盒子和粘连的总宽度是 $5+9+6+9+3+12+8=52$ 个单位。%
+它称为水平列的{\KT{10}自然宽度};
+是把盒子粘在一起的最好结果。%
+但是，假定要求 \TeX\ 把盒子变成宽度为 58 个单位；
+那么粘连必须伸长 6 个单位。%
+好，目前的伸长能力是 $3+6+0=9$ 个单位，
+所以为了得到所需要的 6 个单位，\TeX\ 用 6/9 乘以每个可伸长的单位。%
+第一个粘连团变成 $9+(6/9)\times3=11$ 个单位的宽度，
+第二个变成 $9+(6/9)\times6=13$, 最后一个保持 12 个单位不变，
+我们将得到了如下这样的符合要求的盒子：
+\begindisplay\eightpoint
+\vbox{\kern-3pt
+    \hbox{\samplebox{7mm}{8mm}{5\varunit}{}%
+      \sampleglue{11\varunit}{$9+2$}%
+      \samplebox{3mm}{2mm}{6\varunit}{}%
+      \sampleglue{13\varunit}{$9+4$}%
+      \samplebox{8mm}{3mm}{3\varunit}{}%
+      \sampleglue{12\varunit}{$12+0$}%
+      \samplebox{4mm}{7mm}{8\varunit}{}}
+    \kern6pt
+    \arrows{58\varunit}{width 58}}
+\enddisplay
+
+%On the other hand, if \TeX\ is supposed to make a box 51 units wide from the
+%given list, it is necessary for the glue to shrink by a total of one unit. There
+%are three units of shrinkability present, so the first glob of glue would
+%shrink by 1/3 and the second by 2/3.
+另一方面，如果要求 \TeX\ 使给定列的盒子宽度为 51 个单位，
+就必须使粘连整体收缩 1 个单位。%
+目前的收缩能力是 3 个单位，所以第一个收缩 $1/3$, 第二个收缩 $2/3$。
+
+%\smallbreak
+%The process of determining glue thickness when a box is being made from a
+%horizontal or vertical list is called {\sl ^{setting the glue}}.  Once glue has
+%been set, it becomes rigid; it won't stretch or shrink any more, and the
+%resulting box is essentially indecomposable.
+\smallbreak
+\1当从水平或垂直列制作盒子时，确定粘连的厚度的过程称为{\KT{10}设定粘连}。%
+一旦粘连被设定，它就变成固定的了；
+就不能在伸缩了，并且得到的盒子本质上不能再分解开。
+
+%Glue will never shrink more than its stated shrinkability. For example,
+%the first glob of glue in our illustration will never be allowed to become
+%narrower than 8 units wide, and \TeX\ will never shrink the given
+%horizontal list to make its total width less than 49 units.  But glue is
+%allowed to stretch arbitrarily far, whenever it has a positive stretch
+%component.
+粘连的收缩不得超过其收缩能力。%
+例如，在我们的图示中的第一个粘连团的宽度不允许小于 8 个单位，
+\TeX\ 也不能使给定水平列的总宽度小于 49 个单位。%
+但是粘连允许任意伸长，只要伸长量是正值。
+
+%\exercise How wide would the glue globs be if the horizontal list in the
+%illustration were to be made 100 units wide?
+%\answer $9+16$ units, $9+32$ units, $12+0$ units. \ (But \TeX\ would
+%consider so much stretching to be ``infinitely bad.'')
+\exercise 如果图示中的水平列的盒子的宽度为 100 个单位，粘连团是多宽？
+\answer $9+16$ 单位，$9+32$ 单位，$12+0$ 单位。%
+（但 \TeX\ 将把如此多的伸长视为``无限糟糕的''。）
+
+%Once you understand \TeX's concept of glue, you may well decide that it
+%was misnamed; real glue doesn't stretch or shrink in such ways, nor does it
+%contribute much space between boxes that it welds together. Another word
+%like ``spring'' would be much closer to the essential idea, since ^{springs}
+%have a natural width, and since different springs compress and expand at
+%different rates under tension. But whenever the author has suggested
+%changing \TeX's terminology, numerous people have said that they like the
+%word ``glue'' in spite of its inappropriateness; so the original name has
+%stuck.
+一旦你理解了 \TeX\ 的粘连的概念，就会认为名不符实；
+真正的粘连不能用这样的方法伸缩，也不能在粘接的盒子之间提供很多间隙。%
+象``弹簧''这样的词才能更贴近原意，
+因为弹簧有一个自然宽度，并且在拉压下不同弹簧的伸缩比例不同。%
+但是只要作者提出改变 \TeX\ 的术语，许多人就说它们喜欢词``粘连'',
+尽管有点不合适；
+所以原来的名字还是保留下来了。
+
+%\danger \TeX\ is somewhat reluctant to stretch glue more than the stated
+%stretchability; therefore you can decide how big to make each aspect of the
+%glue by using the following rules: \ (a)~The natural
+%glue space should be the amount of space that looks best. \ (b)~The glue
+%stretch should be the maximum amount of space that can be added to the natural
+%spacing before the layout begins to look bad. \ (c)~The glue shrink should
+%be the maximum amount of space that can be subtracted from the natural spacing
+%before the layout begins to look bad.
+\danger 超出粘连规定的伸长能力的伸长对 \TeX\ 有点多余；
+然而，通过下列规则，你可以确定粘连的各项\hbox{内容：}
+(a) 自然粘连空格应该是看起来最好的空格的量。%
+(b) 粘连的伸长应该是版面变糟之前可以加在自然空格上的最大空格量。%
+(c) 粘连的收缩应该是版面变糟之前可以从自然空格中减去的最大空格量。
+
+%In most cases the designer of a book layout will have specified all the kinds
+%of glue that are to be used, so a typist will not need to decide how big any
+%glue attributes should be. For example, users of the plain \TeX\ format of
+%Appendix~B can type `|\smallskip|' when they want a little extra ^{space
+%between paragraphs}; a ^|\smallskip| turns out to be $3\pt$ worth of
+%vertical glue that can stretch or shrink by an additional~$1\pt$. Here is
+%a |\smallskip|: \smallskip
+在大多数情况下，书籍版面的设计者将给定要用到的各种粘连，
+所以排版者不需要去确定粘连的各项是多大。%
+例如，对附录 B 的 plain \TeX\ 的使用者而言，当要在段之间输入额外的小空白时，
+可以键入`|\smallskip|';
+|\smallskip| 是 $3\pt$ 的垂直粘连，可以伸缩各 $1\pt$。%
+下面就是一个 |\smallskip|:
+\smallskip
+
+%\noindent
+%Instead of sprinkling various amounts of glue throughout a manuscript,
+%expressing each of them explicitly in terms of points, you will find it
+%much better to explain your intentions more clearly by typing something
+%like `|\smallskip|' when you want abnormal spacing. The definition of\/
+%|\smallskip| can readily be changed later, in case you want such spaces to
+%be smaller or larger.  Plain \TeX\ also provides you with `^|\medskip|',
+%which is worth two smallskips, and `^|\bigskip|', which is worth two medskips.
+\noindent
+当要想要非正常的间距，
+又不想让各种粘连散布于整个文稿，
+那么最好是用 point 明确给定它们，通过象`|\smallskip|'这样的命令来表达你的意思。%
+如果你需要更大或更小的间距，那么 |\smallskip| 的定义很容易随之改变。%
+Plain \TeX\ 还给出了`|\medskip|'——它对应于两个 smallskip,
+和`|\bigskip|'——它对应于两个 medskip。
+
+%\danger A plain \TeX\ |\medskip| appears before and after each
+%``^{dangerous bend}'' section of this manual, so you have already seen
+%numerous examples of such spacing before you knew what it was called.
+%Vertical glue is created by writing `|\vskip|\<glue>', where ^\<glue> is
+%any glue specification. The usual way to specify \<glue> to \TeX\ is
+%\begindisplay
+%\<dimen> |plus|\<dimen> |minus|\<dimen>
+%\enddisplay
+%where the `|plus|\<dimen>' and `|minus|^\<dimen>' are optional and assumed
+%to be zero if not present; `^|plus|' introduces the amount of
+%stretchability, `^|minus|' introduces the amount of shrinkability.
+%For example, Appendix~B defines |\medskip| to be an abbreviation for
+%`|\vskip6pt plus2pt minus2pt|'. The normal-space component of glue must
+%always be given as an explicit \<dimen>, even when it is zero.
+\danger 在本手册中，plain \TeX\ 的 |\medskip| 出现在每个``危险''标志段落的前后，
+所以在你知晓之前已经看到了这种间距的很多例子。%
+\1垂直粘连由`|\vskip|\<glue>'生成，其中 \<glue> 是任意粘连类型。%
+给出 \<glue> 的一般方法是
+\begindisplay
+\<dimen> |plus|\<dimen> |minus|\<dimen>
+\enddisplay
+其中，`|plus|\<dimen>'和`|minus|\<dimen>'是两个可选项，
+如果没有就假定为零；
+`|plus|'后面跟可伸长量，`|minus|'后面跟可收缩量。%
+例如，附录 B 定义 |\medskip| 为`|\vskip6pt plus2pt minus2pt|'。%
+粘连的自然间距量必须用 \<dimen> 明确给出，即使是零。
+
+%\danger Horizontal glue is created in the same way, but with ^|\hskip|
+%instead of\/ ^|\vskip|. For example, plain \TeX\ defines ^|\enskip| as an
+%abbreviation for the command `|\hskip.5em\relax|'; this skips horizontally by
+%one ``^{en},'' i.e., by exactly half of an em in the current font. There is no
+%stretching or shrinking in an |\enskip|. The control sequence ^|\relax|
+%after `|.5em|' prevents \TeX\ from thinking that a ^{keyword}
+%is present, in case the text following |\enskip| just happens to begin
+%with `|plus|' or `|minus|'.
+\danger 水平粘连也可以用同样方法得到，
+但是要用 |\hskip| 来代替 |\vskip|。%
+例如，plain \TeX\ 定义 |\enskip| 为`|\hskip.5em\relax|';
+这个水平间距是一个``en'', 即正好是当前字体的半个 em。%
+在 |\enskip| 中没有伸缩量。%
+`|.5em|'后的 |\relax| 的作用是，当 |\enskip| 后面凑巧是`|plus|'%
+或`|minus|'时，防止 \TeX\ 把它当成关键词。
+
+%One of the interesting things that can happen when glue stretches and shrinks
+%at different rates is that there might be glue with {\sl ^{infinite}\/}
+%stretchability. For example, consider again the four boxes we had at the
+%beginning of this chapter, with the same glue as before except that the
+%glue in the middle can stretch infinitely far. Now the total
+%stretchability is infinite; and when the line has to grow, all of the
+%additional space is put into the middle glue. If, for example, a box of
+%width 58 is desired, the middle glue expands from 9 to~15 units, and the
+%other spacing remains unchanged.
+在粘连伸缩不同比例时，出现的一个有意思的事情是，
+可能有{\KT{10}无限}伸长能力的粘连。%
+例如，再看看本章开头的四个盒子，除了中间的粘连可伸长到无限远外，
+其它都一样。%
+现在，总的伸长能力是无限大；
+并且当行要变长时，所有的额外空格都放在中间粘连中。%
+例如，如果要得到 58 的盒子，中间粘连从 9 扩大到 15 个单位，
+并且其它间距保持不变。
+
+%If such infinitely stretchable glue is placed at the left of a row of
+%boxes, the effect is to place them ``flush right,'' i.e., to move them
+%over to the ^^{right justification} ^^{centering} ^^{flush right}
+%rightmost boundary of the constructed box. And if you take {\sl two\/}
+%globs of infinitely stretchable glue, putting one at the left and one
+%at the right, the effect is to {\sl center\/} the list of boxes within
+%a larger box. This in fact is how the ^|\centerline| instruction works
+%in plain \TeX\null: It places infinite glue at both ends, then makes a
+%box whose width is the current value of\/ |\hsize|.
+如果这样可无限伸长的粘连放在一排盒子的左边，
+就是把它们``右对齐'', 即把它们移动到所构造盒子的最右边界。%
+如果你把{\KT{10}两个}可无限伸长的粘连团放在一个盒子的左右两边，
+就是在把盒子列在一个大盒子中{\KT{10}居中}。%
+这就是 |\centerline| 这个命令在 plain \TeX\ 中的工作原理：
+它把可无限伸长的粘连放在两端，因此得到的是宽度为 |\hsize| 当前值的盒子。
+
+%The short story example of Chapter 6 used infinite glue not only for
+%centering, but also in the ^|\vfill| instruction at the end; `|\vfill|'
+%essentially means ``skip vertically by zero, but with infinite stretchability.''
+%In other words, |\vfill| fills up the rest of the current page with
+%blank space.
+第六章的 story 例子不但在居中时使用了无限大粘连，而且在最后的 |\vfill| 指令中也用到了；
+在本质上，`|\vfill|'的意思是``垂直跳过零，但是可无限伸长''。%
+换句话说，|\vfill| 用空白把当前页剩下的部分填满。
+
+%\danger \TeX\ actually recognizes several kinds of infinity, some of which
+%are ``more infinite'' than others. You can say both ^|\vfil| and |\vfill|;
+%the second is stronger than the first. In other words, if no other
+%infinite stretchability is present, |\vfil| will expand to fill the remaining
+%space; but if both |\vfil| and |\vfill| are present simultaneously,
+%the |\vfill| effectively prevents |\vfil| from stretching. You can think
+%of it as if\/ |\vfil| has one mile of stretchability, while |\vfill| has
+%a trillion miles.
+\danger 实际上， \TeX\ 认识几种无限，其中一些比其它的``更无限''。%
+你可以用 |\vfil| 和 |\vfill|;
+第二个比第一个更强。%
+换句话说，如果没有其它的无限出现，|\vfill| 将扩大以充满剩下的空间；
+但是如果 |\vfil| 和 |\vfill| 同时出现，那么 |\vfill| 就抑制了 |\vfil| 的伸长。%
+你可以把 |\vfil| 看作一英里的伸长能力，但是 |\vfill| 的能力是一万亿英里。
+
+%\danger Besides |\vfil| and |\vfill|, \TeX\ has ^|\hfil| and ^|\hfill|,
+%for stretching indefinitely in the horizontal direction. You can also say
+%^|\hss| or ^|\vss|, in order to get glue that is infinitely shrinkable as
+%well as infinitely stretchable.  \ (The name `|\hss|' stands for ``horizontal
+%stretch or shrink''; `|\vss|' is its vertical counterpart.) \ Finally, the
+%primitives ^|\hfilneg| and ^|\vfilneg| will cancel the stretchability of
+%|\hfil| and |\vfil|; we shall discuss applications of these curious glues later.
+\danger 除了 |\vfil| 和 |\vfill|, \TeX\ 还有 |\hfil| 和 |\hfill|,
+它们是水平方向上的无限伸长。%
+为了得到可无限收缩的粘连，可以用 |\hss| 或 |\vss|。%
+(名字`|\hss|'表示``水平伸缩'', `|\vss|'表示``垂直伸缩''。)
+最后，原始控制系列 |\hfilneg| 和 |\vfilneg| 将抵消 |\hfil| 和 |\vfil| 的伸长能力；
+\1后面我们将讨论这些古怪粘连的应用。
+
+%\danger Here are some examples of\/ |\hfil|, using the ^|\line| macro of
+%plain \TeX, which creates an hbox whose width is the current |\hsize|:
+%^^{flush left}
+%\begintt
+%\line{This text will be flush left.\hfil}
+%\line{\hfil This text will be flush right.}
+%\line{\hfil This text will be centered.\hfil}
+%\line{Some text flush left\hfil and some flush right.}
+%\line{Alpha\hfil centered between Alpha and Omega\hfil Omega}
+%\line{Five\hfil words\hfil equally\hfil spaced\hfil out.}
+%\endtt
+\danger 下面是一些 |\hfil| 的例子，得到的是宽度为当前 |\hsize| 的行，
+其中用到了 plain TeX 的宏 |\line|。
+\begintt
+\line{This text will be flush left.\hfil}
+\line{\hfil This text will be flush right.}
+\line{\hfil This text will be centered.\hfil}
+\line{Some text flush left\hfil and some flush right.}
+\line{Alpha\hfil centered between Alpha and Omega\hfil Omega}
+\line{Five\hfil words\hfil equally\hfil spaced\hfil out.}
+\endtt
+
+%\dangerexercise Describe the result of \xdef\linexno{\the\exno}%
+%\begintt
+%\line{\hfil\hfil What happens now?\hfil}
+%\line{\hfill\hfil and now?\hfil}
+%\endtt
+%\answer `What happens now?' is placed in a line of width |\hsize|, with
+%twice as much space at the left as at the right; `and now?' is put flush right
+%on the following line.
+\dangerexercise 看看下面的结果是什么？\xdef\linexno{\the\exno}%
+\begintt
+\line{\hfil\hfil What happens now?\hfil}
+\line{\hfill\hfil and now?\hfil}
+\endtt
+\answer `What happens now?' 放在宽度为 |\hsize| 的一行中，且左边空白是右边空白的两倍；
+而 `and now?' 右对齐放在下一行中。
+
+%\ddangerexercise How do the following three macros behave differently?
+%\begintt
+%\def\centerlinea#1{\line{\hfil#1\hfil}}
+%\def\centerlineb#1{\line{\hfill#1\hfill}}
+%\def\centerlinec#1{\line{\hss#1\hss}}
+%\endtt
+%\answer The first two give an ``overfull box'' if the argument doesn't fit
+%on a line; the third allows the argument to stick out into the margins
+%instead. \ (Plain \TeX's ^|\centerline| is |\centerlinec|; the stickout effect
+%shows up in the narrow-column experiment of Chapter~6.) \ If the argument
+%contains no infinite glue, |\centerlinea| and |\centerlineb| produce the same
+%effect; but |\centerlineb| will center an argument that contains `fil' glue.
+\ddangerexercise 下面三个宏有什么不同？
+\begintt
+\def\centerlinea#1{\line{\hfil#1\hfil}}
+\def\centerlineb#1{\line{\hfill#1\hfill}}
+\def\centerlinec#1{\line{\hss#1\hss}}
+\endtt
+\answer 如果参量在一行放不下，前两个将得到``过满盒子''；而第三个允许参量伸出边缘。%
+（Plain \TeX\ 的 ^|\centerline| 是 |\centerlinec|；第 6 章的窄栏实验显示了其伸出效果。）
+如果参量中不含无限粘连，|\centerlinea| 和 |\centerlineb| 的效果相同；
+但是 |\centerlineb| 还将居中显示包含 `fil' 粘连的参量。
+
+%\danger In order to specify such infinities, you are allowed to use
+%the special units `^|fil|', `^|fill|', and `^|filll|' in the \<dimen>
+%parts of a stretchability or shrinkability component. For example,
+%|\vfil|, |\vfill|, |\vss|, and |\vfilneg| are essentially equivalent
+%to the glue specifications
+%\begintt
+%\vskip 0pt plus 1fil
+%\vskip 0pt plus 1fill
+%\vskip 0pt plus 1fil minus 1fil
+%\vskip 0pt plus -1fil
+%\endtt
+%respectively. It's usually best to stick to the first order infinity
+%(fil) as much as you can, resorting to second order (fill) only when
+%you really need something extremely infinite. Then the ultimate order (filll) is
+%always available as a last resort in emergencies. \ (\TeX\ does not
+%provide a `^|\vfilll|' primitive, since the use of this highest infinity
+%is not encouraged.) \ You can use fractional multiples of infinity like
+%`|3.25fil|', as long as you stick to fewer than 16384 fil units.  \TeX\
+%actually does its calculations with integer multiples of $\rm2^{-16}\,fil$
+%(or fill or filll); so |0.000007filll| turns out to be indistinguishable
+%from |0pt|, but |0.00001filll| is infinitely greater than |16383.99999fill|.
+\danger 为了得到这样的无限，你可以在可伸长和可收缩的 \<dimen> 中%
+使用特殊单位`|fil|', `|fill|'和`|filll|'。%
+例如，|\vfil|, |\vfill|, |\vss| 和 |\vfilneg| 其实分别等价于下面给出的粘连：
+\begintt
+\vskip 0pt plus 1fil
+\vskip 0pt plus 1fill
+\vskip 0pt plus 1fil minus 1fil
+\vskip 0pt plus -1fil
+\endtt
+一般最好尽量坚持用第一阶无限(fil), 只有当要使用非常的无限时再使用第二阶(fill)。%
+因此，最高阶(filll)总是紧急情况下作为最后一招使用。%
+(因为不鼓励使用这个最高无限，所以 \TeX\ 没有给出原始控制系列`|\vfilll|'。)
+你也可以使用无限的小数倍，比如`|3,25fil|', 只要比 16384 fil 单位小就行。%
+实际上， \TeX\ 运算时采用的是 $\rm2^{-16}\,fil$
+(或 fill 或 filll);
+所以，|0.000007filll| 与 |0pt| 无法区分，但是 |0.00001filll| 就比%
+~|16383.99999fill| 更无限大了。
+
+%Now here's something important for all \TeX nical typists to know:
+%Plain \TeX\ puts extra space at the end of a ^{sentence}; furthermore,
+%it automatically increases the stretchability (and decreases
+%the shrinkability) after ^{punctuation} marks.  The reason is that it's
+%usually better to put more space after punctuation than between two ordinary
+%words, when spreading a line out to reach the desired margins. Consider, for
+%example, the following sentences from a classic kindergarten pre-primer:
+%^^{Dick and Jane}
+%\begintt
+%``Oh, oh!'' cried Baby Sally. Dick and Jane laughed.
+%\endtt
+%If \TeX\ sets this at its natural width, all the spaces will be the same,
+%except after the quote and after `Baby Sally.':
+%\begindisplay
+%``Oh, oh!'' cried Baby Sally. Dick and Jane laughed.
+%\enddisplay
+%But if the line needs to be expanded by 5 points, 10 points, 15 points, or more,
+%\TeX\ will set it as
+%\begindisplay
+%\hbox spread 5pt{``Oh, oh!'' cried Baby Sally. Dick and Jane laughed.}\cr
+%\hbox spread 10pt{``Oh, oh!'' cried Baby Sally. Dick and Jane laughed.}\cr
+%\hbox spread 15pt{``Oh, oh!'' cried Baby Sally. Dick and Jane laughed.}\cr
+%\hbox spread 20pt{``Oh, oh!'' cried Baby Sally. Dick and Jane laughed.}\cr
+%\enddisplay
+%The glue after the comma stretches at 1.25 times the rate of the
+%glue between adjacent words; the glue after the period and after the |!''|
+%stretches at 3 times the rate.  There is no glue between adjacent letters,
+%so individual words will always look the same.  If \TeX\ had to shrink
+%this line to its minimum width, the result would be
+%\begindisplay \hfuzz 1000pt
+%\hbox to 0pt{``Oh, oh!'' cried Baby Sally. Dick and Jane laughed.}
+%\enddisplay
+%The glue after a ^{comma} shrinks only 80 percent as much as ordinary
+%inter-word glue, and after a ^{period} or ^{exclamation point} or
+%^{question mark} it shrinks by only one third as much.
+现在，要告诉 \TeX\ 的用户一些重要情况：
+Plain TeX 在每句的结尾加入了额外间距；
+还有，在标点后面它自动增加伸长能力(并且减小收缩能力)。%
+理由是，当要把一行充满到所要求的边界时，
+在标点后面留更多的间距比在两个正常的单词中间留一般更好。%
+例如，看看下面从幼儿园找到的句子：
+\begintt
+``Oh, oh!'' cried Baby Sally. Dick and Jane laughed.
+\endtt
+\1如果 \TeX\ 要让它保持自然宽度，那么所有的间距是一样的，但是引号和`Baby Sally.'后面除外：
+\begindisplay
+``Oh, oh!'' cried Baby Sally. Dick and Jane laughed.
+\enddisplay
+但是如果行宽要扩大 5, 10, 15 points 或更多，\TeX\ 得到的是：
+\begindisplay
+\hbox spread 5pt{``Oh, oh!'' cried Baby Sally. Dick and Jane laughed.}\cr
+\hbox spread 10pt{``Oh, oh!'' cried Baby Sally. Dick and Jane laughed.}\cr
+\hbox spread 15pt{``Oh, oh!'' cried Baby Sally. Dick and Jane laughed.}\cr
+\hbox spread 20pt{``Oh, oh!'' cried Baby Sally. Dick and Jane laughed.}\cr
+\enddisplay
+逗号后面的粘连伸长的量是相邻单词之间粘连伸长量的 1.25 倍；
+句点和 |!''| 后面的伸长量是其 3 倍。%
+相邻的字母之间没有粘连，所以各个单词看起来总是一样的。%
+如果 \TeX\ 必须把此行收缩到最小宽度，结果是
+\begindisplay \hfuzz 1000pt
+\hbox to 0pt{``Oh, oh!'' cried Baby Sally. Dick and Jane laughed.}
+\enddisplay
+在逗号后面的粘连的收缩是普通单词之间的 80\%,
+句点，惊叹号或问号后面的粘连的收缩仅为其 1/3。
+
+%This all makes for nice-looking output, but it unfortunately adds a bit
+%of a burden to your job as a typist, because \TeX's rule for determining
+%the end of a sentence {\sl doesn't always work}. The problem is that
+%a period sometimes comes in the middle of a sentence $\ldots$ like when it
+%is used (as here) to make an ``^{ellipsis}'' of three dots.
+%^^{three dots, see ellipsis} ^^{dot dot dot, see ellipsis}
+所有这些都是为了输出的好看，但还是要为排版者增加一点负担，因为 \TeX\ 的%
+确定句子结束的规则{\KT{10}并不总是起作用}。%
+问题在于，当象 $\ldots$ 用作三个圆点的``省略号''时，句点就在句子中间出现了。
+
+%Moreover, if you try to specify `$\ldots$' by typing three periods in
+%a row, you get `...'---the dots are too close together. One way to
+%handle this is to go into {\sl mathematics\/} mode, using the ^|\ldots|
+%control sequence defined in plain \TeX\ format. For example, if you type
+%\begintt
+%Hmmm $\ldots$ I wonder why?
+%\endtt
+%the result is `Hmmm $\ldots$ I wonder why?'. This works because
+%math formulas are exempt from the normal text spacing rules.
+%Chapter 18 has more to say about |\ldots| and related topics.
+还有，如果要在一行上输入三个圆点来表示`$\ldots$', 得到的就是`...'——%
+圆点挨得太近了。%
+解决之道就是转换到{\KT{10}数学}模式，利用 plain \TeX\ 中定义的 |\ldots|~%
+控制系列。%
+例如，如果输入
+\begintt
+Hmmm $\ldots$ I wonder why?
+\endtt
+得到的就是`Hmmm $\ldots$ I wonder why?'。%
+因为数学公式不遵守了正常的文本间距规则，所以这看起来不错。%
+第十八章详细讨论了 |\ldots| 及其相关内容。
+
+%^{Abbreviations} present problems too. For example, the short story in
+%Chapter~6 referred to `Mr.~^{Drofnats}'; \TeX\ must be told somehow that the
+%period after `Mr.'\ or `Mrs.'\ or `Ms.' or `Prof.'\ or `Dr.' or `Rt.~Hon.',
+%etc., doesn't count as a sentence-ending ^{full stop}.
+缩写也会出现问题。%
+例如，在第六章的 story 说到`Mr.~{Drofnats}';
+必须告诉 \TeX, `Mr.'、\allowbreak`Mrs.'、`Ms.'、`Prof.'、`Dr.'、`Rt.~Hon.'等等后面的%
+句点不能看作一个句子的结束。
+
+%We avoided that embarrassment in Chapter~6 by typing `|Mr.~Drofnats|';
+%the ``^{tie}'' mark |~| ^^{tilde} tells plain \TeX\ to insert a normal
+%space, and to refrain from breaking between lines at that space. Another way
+%to get \TeX\ to put out a normal space is to type `|\|\]' (^{control
+%space}); e.g., `|Mr.\ Drofnats|' would be almost the same as `|Mr.~Drofnats|',
+%except that a line might end after the `Mr.'.
+通过输入`|Mr.~Drofnats|'我们就避免了第六章中出现的问题；
+``带子(tie)''标记 |~| 使得 plain \TeX\ 插入一个正常空格，并且避免在那个空格处%
+断行。%
+让 \TeX\ 产生一个正常空格的另一种方法就是输入`|\|\]'(控制空格);
+比如，`|Mr.\ Drofnats|'与`|Mr.~Drofnats|'几乎是一样的，
+只是在`Mr.'后可能会断行。
+
+%The tie mark is best for abbreviations within a name, and after several
+%other common abbreviations like `Fig.'\ and `cf.'\ and `vs.'\ and `resp.';
+%you will find that it's easy to train yourself to type `|cf.~Fig.~5|'.
+%In fact, it's usually wise to type |~| (instead of a space) just after a common
+%abbreviation that occurs in the middle of a sentence.
+%Manuals of style will tell you that the abbreviations `e.g.'\ and `i.e.'\
+%should always be followed by commas, never by spaces, so those particular
+%cases shouldn't need any special treatment.
+\1带子标记适合于使用在名字缩写中，还有几个其它常用的缩写，象%
+`Fig.'、`cf.'、`vs.和`resp.';
+你会发现自己很容易接受`|cf.~Fig.~5|'这样的训练。%
+实际上，在句中出现的常用缩写后面输入 |~|~(而不是空格)是明智之举。%
+排版手册会告诉你在缩写`e.g.'和`i.e.'后面总是要跟一个逗号，而不是空格，
+所以，这些特殊情况不需要特别对待。
+
+%The only remaining abbreviations that arise with significant frequency
+%occur in bibliographic references; ^{control spaces} are appropriate here.
+%^^{interword spacing}
+%If, for example, you are typing a manuscript that refers to
+%`Proc.\ Amer.\ Math.\ Soc.', you should say
+%\begintt
+%Proc.\ Amer.\ Math.\ Soc.
+%\endtt
+%Granted that this input looks a bit ugly, it makes the output look right.
+%It's one of the things we occasionally must do when dealing with a computer
+%that tries to be smart.
+剩下的唯一经常出现的缩写是在参考文献中；
+那里要使用控制空格。%
+例如，如果要得到`Proc.\ Amer.\ Math.\ Soc.', 要输入的是
+\begintt
+Proc.\ Amer.\ Math.\ Soc.
+\endtt
+当然要承认这个输入有点难看，但是输出结果很好。%
+当对付自以为聪明的计算机时，这是我们经常使用的方法。
+
+%\exercise Explain how to type the following sentence: ``Mr.~\& Mrs.~^{User}
+%were married by Rev.~^{Drofnats}, who preached on
+%Matt.~19\thinspace:\thinspace3--9.''
+%\answer |Mr.~\& Mrs.~User
+%were married by Rev.~Drofnats, who preached on
+%Matt.~19\thinspace:\thinspace3--9.| \ (Such thin spaces are traditional
+%for ^{Biblical references} to chapter and verse, but you weren't really
+%expected to know that. Plain \TeX\ defines ^|\thinspace| to be a kern,
+%not glue; hence no break between lines will occur at a thinspace.)
+\exercise 看看怎样输入下列句子：
+``Mr.~\& Mrs.~{User}
+were married by Rev.~{Drofnats}, who preached on
+Matt.~19\thinspace:\thinspace3--9.''
+\answer |Mr.~\& Mrs.~User were married by Rev.~Drofnats, who preached on
+Matt.~19\thinspace :\thinspace 3--9.|（这种细小空白传统上用于^{引用圣经}的章和节，
+但事实上你多半不会知道这个。Plain \TeX\ 将 ^|\thinspace| 定义为一个 kern,
+从而在 thinspace 处不会断行。）
+
+%\exercise Put the following bibliographic reference into plain \TeX\
+%language: Donald~E. ^{Knuth}, ``Mathematical typography,'' {\sl Bull.\
+%Amer.\ Math.\ Soc.\ \bf1} (1979), 337--372.
+%\answer |Donald~E.\ Knuth, ``Mathematical typography,'' {\sl Bull.\
+%Amer.\ Math.\ Soc.\ \bf1} (1979), 337--372.| \ (But the `|\|' after `|E.|'
+%isn't necessary, because of a rule you will learn if you venture
+%around the next dangerous bend.)
+\exercise 把下列参考文献用 plain \TeX\ 排出来：
+Donald~E. {Knuth}, ``Mathematical typography,'' {\sl Bull.\
+Amer.\ Math.\ Soc.\ \bf1} (1979), 337--372.
+\answer |Donald~E.\ Knuth, ``Mathematical typography,'' {\sl Bull.\
+Amer.\ Math.\ Soc.\ \bf1} (1979), 337--372.|（但 `|E.|' 后面的 `|\|' 不是必要的，
+按照在下一个危险段落中你将学到的一个规则。）
+
+%On the other hand, if you don't care about such refinements of spacing
+%you can tell plain \TeX\ to make all spaces the same, regardless of
+%punctuation marks, by simply typing `^|\frenchspacing|' at the beginning
+%of your manuscript. French spacing looks like this:
+%\begindisplay \frenchspacing
+%``Oh, oh!'' cried Baby Sally. Dick and Jane laughed.
+%\enddisplay
+%You can also shift back and forth between the two styles, either by saying
+%`^|\nonfrenchspacing|' to establish ^{sophisticated spacing}, or by making
+%your use of\/ |\frenchspacing| local to some group. For example, you might
+%want to use French spacing only when typing the bibliography of some document.
+另一方面，如果不需要这样的间距微调，可以让 plain \TeX\ 把所有的空格变成一样的，
+而不管什么标点，只需要在文稿的开头给出`|\frenchspacing|'。%
+法语间距看起来是这样：
+\begindisplay \frenchspacing
+``Oh, oh!'' cried Baby Sally. Dick and Jane laughed.
+\enddisplay
+你还可以在这两种情况下变来变去，规定了`|\nonfrenchspacing|'就得到复杂的间距，
+规定了 |\frenchspacing| 就可以在某些局部编组内部得到同一间距。%
+例如，只有当输入某些文档的文献时，可能要用到法语间距。
+
+%\danger \TeX\ doesn't consider a period or question mark or exclamation point
+%to be the end of a sentence if the preceding character is an uppercase
+%letter, since \TeX\ assumes that such uppercase letters are most likely
+%somebody's initials.  Thus, for example, the `|\|' is unnecessary after
+%the~`|I.|' in `|Dr.~Livingstone~I.\ Presume|'; that particular period is
+%not assumed to be a full stop. ^^{Presume}
+\danger 如果句点，问号或惊叹号前面的字母是大写，那么，\TeX\ 不把这些标点%
+看作句子的结束，因为 \TeX\ 假定这些大写字母大多是某些词的首字母。%
+因此，例如，在`|Dr.~Livingstone~I.\ Presume|'中，`|I.|'后面的`|\|'是不必要的；
+那个特殊的句点不会看作句子结束。
+
+%\dangerexercise What can you do to make \TeX\ recognize the ends of sentences
+%that do end with uppercase letters (e.g., `$\ldots$ launched by NASA.\null' or
+%`Did I?' or `$\ldots$ see Appendix~A.')?
+%\answer There are several ways; perhaps the easiest are to type
+%`|\hbox{NASA}.|'\ or `|NASA\null.|' \ (The ^|\null| macro is an abbreviation
+%for `|\hbox{}|'.)
+\dangerexercise 怎样才能让 \TeX\ 辨认出以大写字母结尾的句子(比如，
+`$\ldots$ launched by NASA.\null' or
+`Did I?' or `$\ldots$ see Appendix~A.')?
+\answer 有几种方式可以做到；也许最简单的方式是键入
+`|\hbox{NASA}.|' 或者 `|NASA\null.|'（^|\null| 宏是 `|\hbox{}|' 的缩写。）
+
+%\danger You can see the glue that \TeX\ puts between words by looking at
+%the contents of hboxes in the internal ^{diagnostic format} that we
+%discussed ^^{internal box-and-glue representation} briefly in Chapter~11.
+%For example, Baby Sally's exclamation begins as follows, after \TeX\ has
+%digested it and put it into a box, assuming |\nonfrenchspacing|:
+%\begintt
+%.\tenrm \ (ligature ``)
+%.\tenrm O
+%.\tenrm h
+%.\tenrm ,
+%.\glue 3.33333 plus 2.08331 minus 0.88889
+%.\tenrm o
+%.\tenrm h
+%.\tenrm !
+%.\tenrm " (ligature '')
+%.\glue 4.44444 plus 4.99997 minus 0.37036
+%.\tenrm c
+%.\tenrm r
+%.\tenrm i
+%.\tenrm e
+%.\tenrm d
+%.\glue 3.33333 plus 1.66666 minus 1.11111
+%.\tenrm B
+%.\tenrm a
+%.\tenrm b
+%.\kern-0.27779
+%.\tenrm y
+%.\glue 3.33333 plus 1.66666 minus 1.11111
+%.\tenrm S
+%.\tenrm a
+%.\tenrm l
+%.\tenrm l
+%.\tenrm y
+%.\kern-0.83334
+%.\tenrm .
+%.\glue 4.44444 plus 4.99997 minus 0.37036
+%\endtt
+%The normal ^{interword glue} in font |\tenrm| is $3.33333\pt$, plus
+%$1.66666\pt$ of stretchability, minus $1.11111\pt$ of shrinkability.
+%Notice that the interword |\glue| in this list stretches more, and shrinks
+%less, after the punctuation marks; and the natural space is in fact larger
+%at the end of each sentence. This example also shows several other things
+%that \TeX\ does while it processes the sample line of text: It converts
+%|``| and |''| into single characters, i.e., ^{ligatures}; and it inserts
+%small ^{kerns} in two places to improve the spacing. A ^|\kern| is similar
+%to glue, but it is not the same, because kerns cannot stretch or shrink;
+%furthermore, \TeX\ will never break a line at a kern, unless that kern is
+%immediately followed by glue.
+\danger \1在第十一章，我们主要讨论过的内部诊断格式中，通过查看 hbox 的内容，
+我们可以得到 \TeX\ 在词之间所给出的粘连。
+例如，假定 |\nonfrenchspacing| 时，
+在 \TeX\ 消化及放在盒子中后，Baby Sally 的嚷嚷的开头如下：
+\begintt
+.\tenrm \ (ligature ``)
+.\tenrm O
+.\tenrm h
+.\tenrm ,
+.\glue 3.33333 plus 2.08331 minus 0.88889
+.\tenrm o
+.\tenrm h
+.\tenrm !
+.\tenrm " (ligature '')
+.\glue 4.44444 plus 4.99997 minus 0.37036
+.\tenrm c
+.\tenrm r
+.\tenrm i
+.\tenrm e
+.\tenrm d
+.\glue 3.33333 plus 1.66666 minus 1.11111
+.\tenrm B
+.\tenrm a
+.\tenrm b
+.\kern-0.27779
+.\tenrm y
+\endtt
+\begintt
+.\glue 3.33333 plus 1.66666 minus 1.11111
+.\tenrm S
+.\tenrm a
+.\tenrm l
+.\tenrm l
+.\tenrm y
+.\kern-0.83334
+.\tenrm .
+.\glue 4.44444 plus 4.99997 minus 0.37036
+\endtt
+在 |\tenrm| 字体中，单词内部的正常粘连是 $3.33333\pt$, 再加上 $1.66666\pt$~%
+的伸长和减去 $1.11111\pt$ 的收\hbox{缩。}%
+注意，在本列表中，标点后面的单词内部 |\glue| 伸长多，收缩少；
+并且在每个句子结束处的自然间距实际上更大。%
+这个例子还提供了处理文本样本时 \TeX\ 所做的几个其它事情：
+它把 |``| 和 |''| 转变成单个字符，即引号；
+并且在这两个地方插入小的紧排以优化间距。%
+|\kern| 与粘连类似但不同，因为紧排不能伸缩；
+还有，\TeX\ 不会在紧排处断行，除非紧排后面紧接着粘连。
+
+%\ddanger You may be wondering what \TeX's rules for interword glue really
+%are, exactly. For example, how did \TeX\ remember the effect of Baby Sally's
+%exclamation point, when quotation marks intervened before the next space?
+%The details are slightly tricky, but not incomprehensible. When \TeX\
+%is processing a horizontal list of boxes and glue, it keeps track of a positive
+%integer called the current ``^{space factor}.'' The space factor is normally
+%1000, which means that the interword glue should not be modified. If the
+%space factor $f$ is different from 1000, the interword glue is computed as
+%follows:  Take the normal space glue for the current font, and add the
+%extra space if $f\ge2000$. \ (Each font specifies a normal space, normal
+%stretch, normal shrink, and extra space; for example, these quantities are
+%$3.33333\pt$, $1.66666\pt$, $1.11111\pt$, and $1.11111\pt$, respectively, in
+%^|cmr10|.  We'll discuss such font parameters in greater detail later.) \
+%^^|\fontdimen|
+%Then the stretch component is multiplied by $f/1000$, while the shrink
+%component is multiplied by $1000/f$.
+\ddanger 你可能想知道 \TeX\ 的单词内部粘连的实际规则到底是什么。
+例如，当引号插入在下一个空格前时，\TeX\ 是怎样得到各种参数的？
+详细的过程有些巧妙，但是不难理解。
+\1当 \TeX\ 处理一个水平盒子和粘连列时，首先有一个叫做当前``间距因子''的正整数。
+间距因子正常情况下是 1000, 表示单词内部粘连毋需改变。
+如果间距因子不是 1000,单词内部粘连按如下规则计算：
+取当前字体的正常间距粘连，并且当 $f\ge 2000$ 加上额外间距。%
+（每个字体给出了一个正常间距，正常伸长，正常收缩和额外间距；
+例如，在 |cmr10| 中，它们分别是
+~$3.33333\pt$, $1.66666\pt$, $1.11111\pt$ 和  $1.11111\pt$。
+后面我们将更详细地讨论这些字体参数。）
+接着，伸长量就乘以 $f/1000$，而收缩量乘以 $1000/f$。
+
+%\ddanger However, \TeX\ has two parameters ^|\spaceskip| and ^|\xspaceskip|
+%that allow you to override the normal spacing of the current font. If
+%$f\ge2000$ and if\/ |\xspaceskip| is nonzero, the |\xspaceskip| glue is
+%used for an ^{interword space}. Otherwise if\/ |\spaceskip| is nonzero,
+%the |\spaceskip| glue is used, with stretch and shrink components
+%multiplied by $f/1000$ and $1000/f$. For example, the ^|\raggedright|
+%macro of plain \TeX\ uses |\spaceskip| and |\xspaceskip| to suppress all
+%stretching and shrinking of interword spaces.
+\ddanger 但是，\TeX\ 还有两个参数 |\spaceskip| 和 |\xspaceskip|,
+它们允许你不使用当前字体的正常间距。
+如果 $f\ge2000$ 并且 |\xspaceskip| 不是零，那么单词内部间距使用 |\xspaceskip|。
+否则，如果 |\spaceskip| 不是零，使用 |\spaceskip| 粘连，
+并且伸长和收缩量分别乘以 ~$f/1000$ 和 $1000/f$。
+例如，plain \TeX\ 中，宏 |\raggedright| 就是用 |\spaceskip| 和 |\xspaceskip|~%
+去掉了所有单词内部的伸缩。
+
+%\ddanger The space factor $f$ is 1000 at the beginning of a horizontal list,
+%and it is set to 1000 just after a non-character box or a math formula
+%has been put onto the current horizontal list. You can say
+%`^|\spacefactor||=|\<number>' to assign any particular value to the space
+%factor; but ordinarily, $f$ gets set to a number other than 1000 only when
+%a simple character box goes on the list. Each character has a ^{space factor
+%code}, and when a character whose space factor code is $g$ enters the current
+%list the normal procedure is simply to assign $g$ as the new space factor.
+%However, if $g$ is zero, $f$ is not changed; and if $f<1000<g$, the
+%space factor is set to~1000. \ (In other words, $f$ doesn't jump from a
+%value less than~1000 to a value greater than~1000 in a single step.) \
+%The maximum space factor is 32767 (which is much higher
+%than anybody would ever want to use).
+\ddanger 在水平列的开头，间距因子为 1000,
+并且在当前水平列上放置了非字符盒子或数学公式后，它也设定为 1000。%
+可以通过`|\spacefactor||=|\<number>'为间距因子赋予任意特殊值；
+但是一般地，只有当列中出现一个简单的字符盒子时，~$f$ 的值才不是 1000。%
+每个字符都有一个间距因子码，当间距因子为 $g$ 的字符出现在当前列时，
+正常情况下，就把 $g$ 直接设置成新的间距因子。%
+但是，如果 $g$ 是零，那么 $f$ 则不变；
+如果 $f<1000<g$, 间距因子设置为 1000。%
+(换句话说，~$f$ 不能一步从小于 1000 的值跳到大于 1000 的\hbox{值。)}
+最大间距因子是 32767~(它比任何人想用的都大)。
+
+%\ddanger When ^|INITEX| creates a brand new \TeX, all characters have
+%a space factor code of~1000, except that the uppercase letters `|A|'
+%through~`|Z|' have code~999. \ (This slight difference is what makes
+%punctuation act differently after an uppercase letter; do you see why?)
+%\ Plain \TeX\ redefines a few of these codes using the ^|\sfcode|
+%primitive, which is similar to |\catcode| (see Appendix~B\null); for
+%example, the instructions
+%\begintt
+%\sfcode`)=0      \sfcode`.=3000
+%\endtt
+%make right parentheses ``transparent'' to the space factor, while tripling
+%the stretchability after periods. The |\frenchspacing| operation resets
+%|\sfcode`.| to 1000.
+\ddanger 当 |INITEX| 创建一种新的 \TeX\ 类型时，所有字符的间距因子码为 1000,
+但是大写字母`|A|'到`|Z|'的代码为 999。%
+(这个微小差别导致了大写字母后面的标点处在不同的情况下；你知道为什么吗？)
+Plain \TeX\ 用原始控制系列 |\sfcode|~(它类似于 |\catcode|, 见附录 B)%
+重新定义了几个这种代码；
+例如，下列指令
+\begintt
+\sfcode`)=0      \sfcode`.=3000
+\endtt
+使得右括号的间距因子``透明化''，而句点后的伸长量变成普通的三倍。
+|\frenchspacing| 的作用是把 |\sfcode`.| 重新设定为 1000。
+
+%\ddanger When ligatures are formed, or when a special character is
+%specified via ^|\char|, the space factor code is computed from the
+%individual characters that generated the ligature. For example,
+%plain \TeX\ sets the space factor code for single-right-quote to zero, so
+%that the effects of punctuation will be propagated.  Two adjacent
+%characters |''| combine to form a ligature that is in character position
+%\oct{042}; but the space factor code of this double-right-quote ligature
+%is never examined by \TeX, so plain \TeX\ does not assign any value to
+%|\sfcode'042|.
+\ddanger 当生成连写时，或者通过 |\char| 给出特殊字符时，
+间距因子数要从组成连写的单个字符计算出来。
+例如，plain \TeX\ 设定右单引号的间距因子为零，所以标点的效应会遗传下去。
+两个相邻的字符 |''| 组成了字符内部代码为 \oct{042} 的连写；
+但是这个双右引号连写的间距因子数在 \TeX\ 中没有设定，
+所以 plain \TeX\ 不给 |\sfcode'042| 赋予任何值。
+
+%\ddangerexercise What are the space factors after each token
+%of the Dick-and-Jane example?
+%\answer 1000, except: 999 after |O|, |B|, |S|, |D|, and |J|; 1250 after the
+%comma; 3000 after the exclamation point, the right-quote marks, and the
+%periods. If a period had come just after the |B| (i.e., if the text had
+%said `|B. Sally|'), the space factor after that period would have
+%been~1000, not~3000.
+\ddangerexercise 在例子 Dick-and-Jane 中，每个记号后面的间距因子是什么？
+\answer 1000，除了在 |O|、|B|、|S|、|D| 和 |J| 后为 999；
+在逗号后为 1250；在感叹号、右引号和句号后为 3000。
+如果句号紧跟在 |B| 后面（即如果文本为 `|B. Sally|'），
+在句号后的间距因子将为 1000，而不是 3000。
+
+%\danger Here's the way \TeX\ goes about ^{setting the glue} when an hbox
+%is being wrapped up: The natural width, $x$, of the box contents is
+%determined by adding up the widths of the boxes and kerns inside, together
+%with the natural widths of all the glue inside. Furthermore the total
+%amount of glue stretchability and shrinkability in the box is computed;
+%let's say that there's a total of $y_0+y_1\,{\rm fil}+y_2\,{\rm
+%fill}+y_3\,{\rm filll}$ available for stretching and $z_0+z_1\,{\rm
+%fil}+z_2\,{\rm fill}+z_3\,{\rm filll}$ available for shrinking. Now the
+%natural width~$x$ is compared to the desired width~$w$.  If $x=w$,
+%all glue gets its natural width.
+%Otherwise the glue will be modified, by computing a ``^{glue set
+%ratio}''~$r$ and a ``^{glue set order}''~$i$ in the following way: \
+%(a)~If $x<w$, \TeX\ attempts to stretch the contents of the box; the glue
+%order is the highest subscript~$i$ such that $y_i$ is nonzero, and the
+%glue ratio is $r=(w-x)/y_i$. (If $y_0=y_1=y_2=y_3=0$, there's no
+%stretchability; both $i$ and $r$ are set to zero.) \ (b)~If $x>w$, \TeX\
+%attempts to shrink the contents of the box in a similar way; the glue
+%order is the highest subscript~$i$ such that $z_i\ne0$, and the glue ratio
+%is normally $r=(x-w)/z_i$. However, $r$ is set to 1.0 in the case $i=0$
+%and $x-w>z_0$, because the maximum shrinkability must not be exceeded. \
+%(c)~Finally, every glob of glue in the horizontal list being boxed is
+%modified. Suppose the glue has natural width~$u$, stretchability~$y$, and
+%shrinkability~$z$, where $y$~is a $j$th order infinity and $z$~is a $k$th
+%order infinity. Then if $x<w$ (stretching), this glue takes the new width
+%$u+ry$ if $j=i$; it keeps its natural width~$u$ if $j\ne i$.  If $x>w$
+%(shrinking), this glue takes the new width $u-rz$ if $k=i$; it keeps
+%its natural width~$u$ if $k\ne i$.  Notice that stretching or shrinking
+%occurs only when the glue has the highest order of infinity that doesn't
+%cancel out.
+\danger \1当封装一个 hbox 时， \TeX\ 如下来设置粘连：
+盒子内容的自然宽度 $x$ 等于内部盒子和紧排的宽度以及内部所有粘连的宽度之和。%
+还要算出盒子中的粘连伸缩总量；
+比如，总伸长量为 $y_0+y_1\,{\rm fil}+y_2\,{\rm fill}+y_3\,{\rm filll}$,
+总收缩量为 $z_0+z_1\,{\rm fil}+z_2\,{\rm fill}+z_3\,{\rm filll}$。%
+现在，把自然宽度 $x$ 与要求的宽度 $w$ 相比较。%
+如果 $x=w$, 那么所有的粘连设置为其自然宽度。%
+否则就要改变粘连，按下面的方法计算出``粘连调整比例''和``粘连调整阶次'':
+(a). 如果 $x<w$, \TeX\ 就要把盒子的内容变长；
+粘连阶次是最大的非零 $y_i$ 的下标 $i$,
+粘连比例是 $r=(w-x)/y_i$。%
+(如果 $y_0=y_1=y_2=y_3=0$, 那么就没有伸长量；~$i$ 和 $r$ 都是零。)
+(b). 如果 $x>w$, \TeX\ 就要类似把盒子的内容缩短；
+粘连阶次是 $z_i\ne0$ 的最大下标 $i$, 正常的粘连比例是 $r=(x-w)/z_i$。%
+但是，如果 $i=0$ 且 $x-w>z_0$, 那么 $r$ 设定为 1.0, 这是因为不能超出最大收缩量。%
+(c). 最后，修改要包装起来的水平列的每个粘连团。%
+假定粘连是自然宽度 $u$, 伸长量为 $y$, 收缩量为 $z$, 其中 $y$ 是第 $j$ 阶无限大，
+~$z$ 是第 $k$ 阶无限大。%
+那么，如果 $x<w$~(要伸长), 那么如果 $j=i$, 这个粘连的新宽度为 $u+ry$;
+如果 $j\ne i$, 它保持自然宽度。%
+如果 $x>w$~(要收缩), 那么如果 $k=i$, 这个粘连的新宽度为 $u-rz$;
+如果 $k\ne i$, 它保持自然宽\hbox{度。}%
+注意，只有当粘连的最高阶无限大不抵消时，才出现伸缩。
+
+%\danger \TeX\ will construct an hbox that has a given width $w$ if you issue
+%the command `\hbox{|\hbox to |\<dimen>|{|\<contents of box>|}|}', where
+%$w$ is the value of the \<dimen>. For example, the ^|\line| macro discussed
+%earlier in this chapter is simply an abbreviation for `|\hbox to\hsize|'.
+%^^|to|^^|\hbox|
+%\TeX\ also allows you to specify the exact amount of stretching or shrinking;
+%the command `\hbox{|\hbox spread|\<dimen>|{|\<contents of box>|}|}'
+%creates a box whose width~$w$ is a given amount more ^^|spread|
+%than the natural width of the contents. For example, one of the boxes
+%displayed earlier in this chapter was generated by
+%\begintt
+%\hbox spread 5pt{``Oh, oh!'' ... laughed.}
+%\endtt
+%In the simplest case, when you just want a box to have its natural width,
+%you don't have to write `|\hbox spread 0pt|'; you can simply say
+%`|\hbox{|\<contents of box>|}|'.
+\danger 如果你给出命令`\hbox{|\hbox to |\<dimen>|{|\<contents of box>|}|}',
+那么 \TeX\ 将构造一个所给定宽度 $w$ 的 hbox, 其中 $w$ 是 \<dimen> 的值。%
+例如，在本张前面讨论的宏 |\line| 的定义就是`|\hbox to\hsize|'。%
+\TeX\ 还允许你给出精确的伸长量或收缩量；
+命令`\hbox{|\hbox spread|\<dimen>|{|\<contents of box>|}|}'%
+得到的盒子的宽度 $w$ 就是盒子内容的自然宽度加上所给定的量。%
+例如，本章前面的展示的一个盒子就是如下方法得到的：
+\begintt
+\hbox spread 5pt{``Oh, oh!'' ... laughed.}
+\endtt
+在简单的情形下，当只要得到自然宽度的盒子时，不必使用`|\hbox spread 0pt|';
+可以直接用 `|\hbox{|\<contents of box>|}|'。
+
+%\danger The ^{baseline} of a constructed hbox is the common baseline of the
+%boxes inside. \ (More precisely, it's the common baseline that they would
+%share if they weren't raised or lowered.) \ The height and depth of a
+%constructed hbox are determined by the maximum distances by which the
+%interior boxes reach above and below the baseline, respectively. The
+%result of\/ |\hbox| never has negative height or negative depth, but the
+%width can be negative.
+\danger 所构建盒子的基线是内部小盒子的公共基线。%
+(更确切地说，如果小盒子没有被升降，那么就是它们共有的公共基线。)
+所构建盒子的高度和深度分别由基线上下的内部小盒子的最大距离确定。%
+所得的 |\hbox| 的高度和深度不能是负值，但是宽度可以是负的。
+
+%\dangerexercise Assume that
+% |\box1| is $1\pt$~high, $1\pt$~deep, and $1\pt$~wide;
+% |\box2| is $2\pt$~high, $2\pt$~deep, and $2\pt$~wide.
+%A third box is formed by saying ^^|\setbox|
+%\begintt
+%\setbox3=\hbox to3pt{\hfil\lower3pt\box1\hskip-3pt plus3fil\box2}
+%\endtt
+%What are the height, depth, and width of\/ |\box3|? Describe the position
+%of the reference points of boxes 1 and~2 with respect to the reference
+%point of box~3.
+%\answer |\box3| is $2\pt$ high, $4\pt$ deep, $3\pt$ wide.
+%Starting at the reference point of\/ |\box3|, go right $.75\pt$ and down
+%$3\pt$ to reach the reference point of\/ |\box1|; or go right $1\pt$
+%to reach the reference point of\/ |\box2|.
+\dangerexercise 假定 |\box1| 的高度为 $1\pt$, 深度为 $1\pt$, 宽度为 $1\pt$;
+|\box2| 的高度为 $2\pt$, 深度为 $2\pt$, 宽度为 $2\pt$。%
+第三个盒子如下得到：
+\begintt
+\setbox3=\hbox to3pt{\hfil\lower3pt\box1\hskip-3pt plus3fil\box2}
+\endtt
+那么，~|\box3| 的高度，深度和宽度各是什么？
+找出 box1 和 box2 相对于 box3 的基准点的位置。
+\answer |\box3| 高度为 $2\pt$，深度为 $4\pt$，宽度为 $3\pt$。
+从 |\box3| 的基准点出发，向右 $.75\pt$ 再向下 $3\pt$ 就是 |\box1| 的基准点；
+或者向右 $1\pt$ 就是 |\box2| 的基准点。
+
+%\danger The process of setting glue for vboxes is similar to that for
+%hboxes; but before we study the |\vbox| operation, we need to discuss how
+%\TeX\ stacks boxes up vertically so that their baselines tend to be
+%a fixed distance apart. The boxes in a horizontal list often touch each
+%other, but it's usually wrong to do this in a vertical list; imagine
+%how awful a page would look if its lines of type were brought closer
+%together whenever they didn't contain tall letters, or whenever they
+%didn't contain any letters that descended below the baseline.
+\danger \1设置 vbox 的粘连的过程类似于 hbox 的；
+但是在讨论 |\vbox| 这个命令之前，需要讨论一下 \TeX\ 怎样把盒子垂直堆砌起来，
+才能使它们的基线的间隔为固定的距离。%
+水平列中的盒子一般互相紧接着，但是对垂直列却不行；
+试想一下，如果不管所输入的行是否包含高的字母，或者包含比基线更低的字母，
+而把它们紧密地放在一起，会有多难看。
+
+%\danger \TeX's solution to this problem involves three primitives called
+%^|\baselineskip|, ^|\lineskip|, and ^|\lineskiplimit|. A format designer
+%chooses values of these three quantities by writing
+%\begindisplay
+%|\baselineskip=|\<glue>\cr
+%|\lineskip=|\<glue>\cr
+%|\lineskiplimit=|\<dimen>\cr
+%\enddisplay
+%and the interpretation is essentially this: Whenever a box is added to a
+%vertical list, \TeX\ inserts ``^{interline glue}'' intended to make
+%the distance between the baseline of the new box and the baseline of
+%the previous box exactly equal to the value of\/ |\baselineskip|.
+%But if the interline glue calculated by this rule would cause the
+%top edge of the new box to be closer than |\lineskiplimit| to the
+%bottom edge of the previous box, then |\lineskip| is used as the
+%interline glue. In other words, the distance between adjacent baselines
+%will be the |\baselineskip| setting, unless that would bring the boxes
+%too close together; the |\lineskip| glue will separate adjacent boxes
+%in the latter case.
+\danger \TeX\ 对此问题的解决方法包括了三个原始控制系列，
+它们叫做 |\baselineskip|、|\lineskip| 和 |\lineskiplimit|。
+格式的设计者如下选择这三个量的值：
+\begindisplay
+|\baselineskip=|\<glue>\cr
+|\lineskip=|\<glue>\cr
+|\lineskiplimit=|\<dimen>\cr
+\enddisplay
+其原理为：
+只要盒子被加入垂直列中，\TeX\ 将插入``行间粘连'', 使得新盒子的基线与前一个盒子%
+的基线之间的距离正好等于 |\baselineskip| 的值。%
+但是，如果这样得到的行间粘连导致新盒子的上边界与前一个盒子的下边界的距离%
+小于 |\lineskiplimit|, 那么，行间粘连就变成了 |\lineskip|。%
+换句话说，只要盒子挨得不太近，相邻基线之间的距离设置为 |\baselineskip|;
+若太近了，就用 |\lineskip| 把相邻的盒子分开。
+
+%\danger The rules for interline glue in the previous paragraph are
+%carried out without regard to other kinds of glue that might be present;
+%all vertical spacing due to explicit appearances of\/ |\vskip| and |\kern|
+%acts independently of the interline glue. Thus, for example, a
+%^|\smallskip| between two lines always makes their baselines further apart
+%than usual, by the amount of a |\smallskip|; it does not
+%affect the decision about whether |\lineskip| glue is used between
+%those lines.
+\danger 前一段的行间粘连法则在执行时不考虑可能出现的其它类型的粘连；
+由 |\vskip| 和 |\kern| 明确给出的所有垂直间距都与行间粘连无关。%
+因此，例如，两行之间的 |\smallskip| 设定其基线之间距离比普通情况大 |\smallskip|~%
+那样大的量；
+不管这些行之间是否使用 |\lineskip|, 它都不受影响。
+
+%\danger For example, let's suppose that |\baselineskip=12pt plus 2pt|,
+%|\lineskip=|\penalty0|3pt minus 1pt|, and |\lineskiplimit=2pt|. \ (These values
+%aren't particularly useful; they have simply been chosen to illustrate
+%the rules.) \ Suppose further that a box whose depth is $3\pt$
+%was most recently added to the current vertical list; we are about to
+%add a new box whose height is~$h$. If $h=5\pt$, the interline glue
+%will be $4\pt$~plus~$2\pt$, since this will make the baselines
+%$12\pt$~plus~$2\pt$ apart when we add $h$ and the previous depth to
+%the interline glue. But if $h=8\pt$, the interline
+%glue will be $3\pt$~minus~$1\pt$, since |\lineskip| will be
+%chosen in order to keep from violating the given |\lineskiplimit|
+%when stretching and shrinking are ignored.
+\danger 例如，假定 |\baselineskip=12pt plus 2pt|,
+|\lineskip=|\penalty0|3pt minus 1pt| 和 |\lineskiplimit=2pt|。
+(这些值不是特别有用；只是选用它们来说明一下规则。)
+再假定深度为 $3\pt$ 的盒子是最后加入到堆砌垂直列中的；
+现在要加入一个高度为 $h$ 的盒子。%
+如果 $h=5\pt$, 行间粘连就是 $4\pt$~ plus ~$2\pt$,
+这是因为把 $h$ 和前面的深度与行间粘连相加时，我们得到基线间隔为 $12\pt$~plus~$2\pt$。%
+但是如果 $h=8\pt$, 行间粘连为 $3\pt$~minus~$1\pt$,
+因为当忽略伸缩时，为了不破坏给定的 |\lineskiplimit|, 所以选择的是 |\lineskip|。
+
+%\danger When you are typesetting a document that spans several pages,
+%it's generally best to define the |\baselineskip| so that it cannot stretch
+%or shrink, because this will give more uniformity to the pages. A small
+%variation in the distance between baselines---say only half a point---can
+%make a substantial difference in the appearance of the type, since it
+%significantly affects the proportion of white to black. On the other hand,
+%if you are preparing a one-page document, you might want to give the
+%baselineskip some stretchability, so that \TeX\ will help you fit the copy
+%on the page.
+\danger 当要排版一个多页的文档时，一般最后把 |\baselineskip| 定义为不可伸缩，
+因为这样得到的页面更一致。%
+基线之间小的间隔变化——比如只有半 point——也可导致排版的页面在差别很大，
+因为它强烈地影响黑白比例。%
+另一方面，如果你要排版单页文档，可能要用到可伸长的 baselineskip,
+使得 \TeX\ 帮着排满页面。
+
+%\dangerexercise What settings of\/ |\baselineskip|, |\lineskip|, and
+%|\lineskiplimit| will cause the interline glue to be a ``continuous''
+%function of the next box height (i.e., the interline glue will never
+%change a lot when the box height changes only a little)?
+%\answer The stretch and shrink components of\/ |\baselineskip| and
+%|\lineskip| should be equal, and the |\lineskiplimit| should
+%equal the normal |\lineskip| spacing, to guarantee continuity.
+\dangerexercise 怎样设置 |\baselineskip|, |\lineskip| 和 %
+|\lineskiplimit| 才能\1使得行间粘连是下面的盒子高度的``连续''函数%
+(即，当盒子高度只有微小变化时，行间粘连不会产生跃变)?
+\answer 要保证连续性，|\baselineskip| 和 |\lineskip| 的伸长度和收缩度应该相等，
+而且 |\lineskiplimit| 应该等于 |\lineskip| 的自然间距。
+
+%\danger A study of \TeX's ^{internal box-and-glue representation} should
+%help to firm up some of these ideas. Here is an excerpt from the vertical
+%list that \TeX\ constructed when it was typesetting this very paragraph:
+%\begintt
+%\glue 6.0 plus 2.0 minus 2.0
+%\glue(\parskip) 0.0 plus 1.0
+%\glue(\baselineskip) 1.25
+%\hbox(7.5+1.93748)x312.0, glue set 0.80154, shifted 36.0 []
+%\penalty 10000
+%\glue(\baselineskip) 2.81252
+%\hbox(6.25+1.93748)x312.0, glue set 0.5816, shifted 36.0 []
+%\penalty 50
+%\glue(\baselineskip) 2.81252
+%\hbox(6.25+1.75)x348.0, glue set 116.70227fil []
+%\penalty 10000
+%\glue(\abovedisplayskip) 6.0 plus 3.0 minus 1.0
+%\glue(\lineskip) 1.0
+%\hbox(149.25+0.74998)x348.0 []
+%\endtt
+%{\showboxdepth0\showboxbreadth9999\batchmode\showlists\errorstopmode}%
+%% The log file now contains lines like these; I copied them
+%% into this MS! But I deleted an `insert' for the index...
+%The first |\glue| in this example is the ^|\medskip| that precedes each
+%dangerous-bend paragraph. Then comes the ^|\parskip| glue, which is
+%automatically supplied before the first line of a new paragraph. Then
+%comes some interline glue of $1.25\pt$; it was calculated to make
+%a total of $11\pt$ when the height of the next box ($7.5\pt$)
+%and the depth of the previous box were added. \ (The previous box is not
+%shown---it's the bottom line of exercise~\chapno.\the\exno---but
+%we can deduce that its depth was $2.25\pt$.) \ The |\hbox| that
+%follows is the first line of this paragraph; it has been shifted right
+%$36\pt$ because of ^{hanging indentation}. The glue set ratio
+%for this hbox is 0.80154; i.e., the glue inside is stretched by 80.154\%\
+%of its stretchability. \ (In the case of shrinking, the ratio following
+%`^|glue set|' would have been preceded by `|- |'; hence we know that
+%stretching is involved here.) \ \TeX\ has put `|[]|' at the end of each
+%hbox line to indicate that there's something in the box that isn't shown.
+%\ (The box contents would have been displayed completely, if
+%^|\showboxdepth| had been set higher.) \ The ^|\penalty| indications are
+%used to discourage bad breaks between pages, as we will see later. The
+%third hbox has a glue ratio of 116.70227, which applies to
+%first-order-infinite stretching (i.e., fil); this results from an |\hfil|
+%that was implicitly inserted just before the displayed material, to fill
+%up the third line of the paragraph. Finally the big hbox whose height is
+%$149.25\pt$ causes |\lineskip| to be the interline glue. This large box
+%contains the individual lines of typewriter type that are displayed; they
+%have been packaged into a single box so that they cannot be split between
+%pages. Careful study of this example will teach you a lot about \TeX's
+%inner workings.
+\danger 讨论一下 \TeX\ 内部的盒子和粘连的表示对巩固这些原理是有益的。%
+下面是排版本段(译注：英文原\hbox{版)}时 \TeX\ 构造的垂直列信息摘录：
+\begintt
+\glue 6.0 plus 2.0 minus 2.0
+\glue(\parskip) 0.0 plus 1.0
+\glue(\baselineskip) 1.25
+\hbox(7.5+1.93748)x312.0, glue set 0.80154, shifted 36.0 []
+\penalty 10000
+\glue(\baselineskip) 2.81252
+\hbox(6.25+1.93748)x312.0, glue set 0.5816, shifted 36.0 []
+\penalty 50
+\glue(\baselineskip) 2.81252
+\hbox(6.25+1.75)x348.0, glue set 116.70227fil []
+\penalty 10000
+\glue(\abovedisplayskip) 6.0 plus 3.0 minus 1.0
+\glue(\lineskip) 1.0
+\hbox(149.25+0.74998)x348.0 []
+\endtt
+%{\showboxdepth0\showboxbreadth9999\batchmode\showlists\errorstopmode}%
+本例的第一个 |\glue| 是每个``危险''标记段前的 |\medskip|。%
+接着是 |\parskip| 粘连，它自动加在新段的第一行前面。%
+接下来是一些 $1.25\pt$ 的行间粘连；
+它等于总数 $11\pt$ 减去下一个盒子的高度 ($7.5\pt$) 和前一个盒子的深度。%
+(前一个盒子没有显示出来——它是 exercise~\chapno.\the\exno 的底线——%
+但是我们可以推出来它的深度是 $2.25\pt$。)
+紧接的 |\hbox| 是本段的第一行；由于悬挂缩进，它向右移动了 $36\pt$。%
+这个 hbox 的粘连调整比例是 0.80154; 即，内部的粘连伸长为其伸长能力的 80.154\%。%
+(在收缩时，`|glue set|'比例的前面有一个`|-|';
+所以我们知道了，这里包括了伸长。)
+如果盒子中的某些东西没有显示， \TeX\ 将在每个 hbox 行后面放上`|[]|'。%
+(如果 |showboxdepth| 设定的值更高，那么盒子的内容将全部显示出来。)
+|\penalty| 命令用来防止不适当的换页，我们在后面将讨论它。%
+第三个 hbox 的粘连比例是 116.70227, 其中单位是一阶无限大伸长(\hbox{即，} fil);
+这来自于在所显示内容前面暗中插入的 |\hfil|, 以充满本段的第三行。%
+最后，对于高度为 $149.25\pt$ 的大盒子，用 |\lineskip| 来设置行间粘连。%
+这个大盒子包含了 typewriter 字体显示的各个行；
+它们被包装在一个大盒子中，在页面中不能被拆开。%
+仔细分析本例，就能得到 \TeX\ 内部运作的很多信息。
+
+%\danger Exception: No interline glue is inserted before or after a rule
+%box. You can also inhibit interline glue by saying ^|\nointerlineskip|
+%between boxes.
+\danger 例外：在标尺盒子前后不插入行间粘连。%
+在盒子之间使用 |\nointerlineskip| 就可以去掉行间粘连。
+
+%\ddanger \TeX's implementation of interline glue involves another primitive
+%quantity called ^|\prevdepth|, which usually contains the depth of the
+%most recent box on the current vertical list. However, |\prevdepth| is set
+%to the sentinel value $-1000\pt$ at the beginning of a vertical list, or
+%just after a rule box; this serves to suppress the next interline glue.
+%The user can change the value of\/ |\prevdepth| at any time when building
+%a vertical list; thus, for example, the |\nointerlineskip| macro of
+%Appendix~B simply expands to `|\prevdepth=-1000pt|'.
+\ddanger \TeX\ 的行间粘连的命令包括另一个原始控制系列 |\prevdepth|,
+它一般包含的是堆砌垂直列上最后一个盒子的深度。%
+但是，|\prevdepth| 在垂直列开头或标尺盒子后面设定为标志值 $-1000\pt$;
+\1这是为了去掉下一个行间粘连。%
+在建立垂直列时，用户可以在任何时候改变 |\prevdepth| 的值；
+因此，例如，附录 B 的宏 |\nointerlineskip| 就是直接定义为`|\prevdepth=-1000pt|'。
+
+%\ddanger Here are the exact rules by which \TeX\ calculates the interline
+%glue between boxes: Assume that a new box of height~$h$ (not a rule box)
+%is about to be appended to the bottom of the current vertical list, and
+%let $\hbox{|\prevdepth|}=p$, $\hbox{|\lineskiplimit|}=l$,
+%\hbox{$\hbox{|\baselineskip|}=(b$ plus~$y$ minus~$z)$}.  If $p\le-1000\pt$,
+%no interline glue is added.  Otherwise if $b-p-h\ge l$, the interline glue
+%`$(b-p-h)$ plus~$y$ minus~$z$' will be appended just above the new box.
+%Otherwise the |\lineskip| glue will be appended. Finally, |\prevdepth| is
+%set to the depth of the new box.
+\ddanger 下面是 \TeX\ 计算盒子间行间粘连的具体方法：
+假设高度为 $h$ 的新盒子(不是标尺盒子)要追加在当前垂直列的底部，
+并且设 $\hbox{|\prevdepth|}=p$, $\hbox{|\lineskiplimit|}=l$,
+\hbox{$\hbox{|\baselineskip|}=(b$}\hbox{ plus~$y$ minus~$z)$}。%
+如果 $p\le-1000\pt$, 那么不插入行间粘连。%
+否则，如果 $b-p-h\ge 1$, 行间粘连`$(b-p-h)$ plus~$y$ minus~$z$'将插入在%
+新盒子上方。%
+或者插入 |\lineskip| 粘连。%
+最后，|\prevdepth| 设置为新盒子的\hbox{深度。}
+
+%\ddangerexercise Mr.~B. L. ^{User} had an application in which he wanted
+%to put a number of boxes together in a vertical list, with no space
+%between them. He didn't want to say |\nointerlineskip| after each box;
+%so he decided to set |\baselineskip|, |\lineskip|, and |\lineskiplimit|
+%all equal to |0pt|. Did this work?
+%\answer Yes it did, but only because none of his boxes had a negative
+%height or depth. He would have been safer if he had set
+%|\baselineskip=-1000pt|, |\lineskip=0pt|, and
+%|\lineskiplimit=16383pt|. \ (Plain \TeX's ^|\offinterlineskip| macro does this.)
+\ddangerexercise 用户 Mr.~B. L. 要把许多盒子放在一个垂直列中，
+并且它们之间不能有间距。%
+他不想在每个盒子后面添加 |\nointerlineskip|, 所以决定把%
+~|\baselineskip|, |\lineskip| 和 |\lineskiplimit| 都设置为 \hbox{|0pt|。}%
+这样\hbox{可以吗？}
+\answer 确实可以，但这只是因为他的盒子的高度和深度都不为负值。
+如果他设定 |\baselineskip=-1000pt|、|\lineskip=0pt| 且 |\lineskiplimit=16383pt|
+将会更可靠些。（Plain \TeX\ 的 ^|\offinterlineskip| 宏就这样做。）
+
+%\danger The vertical analog of\/ |\hbox| is ^|\vbox|, and \TeX\ will obey
+%the commands `|\vbox to|\<dimen>' and `|\vbox spread|\<dimen>' in about
+%the way you would expect, by analogy with the horizontal case. However,
+%there's a slight complication because boxes have both height and depth
+%in the vertical direction, while they have only width in the
+%horizontal direction. The dimension in a |\vbox| command refers to
+%the final height of the vbox, so that, for example, `|\vbox to 50pt{...}|'
+%produces a box that is $50\pt$ high; this is appropriate because everything
+%that can stretch or shrink inside a vbox appears in the part that
+%contributes to the height, while the depth is unaffected by glue setting.
+\danger 在垂直情形下类似于 |\hbox| 的是 |\vbox|,
+类似于水平情形，\TeX\ 按类似方法提供命令`|\vbox to|\<dimen>'%
+ 和 `|\vbox spread|\<dimen>'。%
+但是，因为在水平方向上只有宽度，而在垂直方向上有深度和高度，所以要复杂一些。%
+在 |\vbox| 的命令中的尺寸指的是 vbox 最后的高度，所以，例如，`|\vbox to 50pt{...}|'%
+得到的盒子是 $50\pt$ 高；
+这是因为 vbox 内部可伸缩的各种东西都出现在高度部分，而深度不受粘连调整的影响。
+
+%\danger The depth of a constructed |\vbox| is best thought of as the depth
+%^^{depth of box} ^^{height of box}
+%of the bottom box inside. Thus, a vbox is conceptually built by taking
+%a bunch of boxes and arranging them so that their reference
+%points are lined up vertically; then the reference point of the lowest
+%box is taken as the reference point of the whole, and the glue is set
+%so that the final height has some desired value.
+\danger 所构造的 |\vbox| 的深度最后看作内部底盒子的深度。%
+因此，在概念上，vbox 是这样构建的：取一组盒子，把它们的基准点垂直对齐放好；
+接下来，把最低的盒子的基准点取为整个盒子的基准点，调整粘连使得最后的高度为给定高度。
+
+%\danger However, this description of vboxes glosses over some
+%technicalities that come up when you consider unusual cases. For example,
+%\TeX\ allows you to shift boxes in a vertical list to the right or to
+%the left by saying
+%`^|\moveright|\<dimen>\<box>' or `^|\moveleft|\<dimen>\<box>'; this is
+%like the ability to ^|\raise| or ^|\lower| boxes in a horizontal list, and
+%it implies that the reference points inside a vbox need not always lie in
+%a vertical line.  Furthermore, it is necessary to guard against boxes that
+%have too much depth, lest they extend too far into the bottom margin of a
+%page; and later chapters will point out that vertical lists can contain
+%other things like penalties and marks, in addition to boxes and glue.
+\danger 但是，vbox 的这个陈述掩盖了特殊情形下出现的一些特性。%
+例如，通过`|\moveright|\<dimen>\<box>' 或者 `|\moveleft|\<dimen>\<box>',
+你可以把垂直列中的盒子向左向右移动；
+这类似于水平列中的 |\raise| 或 |\lower| 盒子的功能，
+它还暗示 vbox 中的基准点不总是在一条垂线上。%
+还有，必须防止盒子变得太深，以免它们超出页面边界太多；
+在后面的章将看到，除了盒子和粘连，垂直列还有象惩罚和标记等其它\hbox{属性。}
+
+%\ddanger Therefore, the actual rules for the depth of a constructed vbox
+%are somewhat \TeX nical. Here they are: Given a vertical list that
+%is being wrapped up via |\vbox|, the problem is to determine its
+%natural depth. \ (1)~If the vertical list contains no boxes, the depth
+%is zero. \ (2)~If there's at least one box, but if the final box is
+%followed by kerning or glue, possibly with intervening penalties or
+%other things, the depth is zero. \ (3)~If there's at least
+%one box, and if the final box is not followed by kerning or glue, the
+%depth is the depth of that box. \ (4)~However, if the depth computed
+%by rules (1), (2), or~(3) exceeds ^|\boxmaxdepth|, the depth will be
+%the current value of\/ |\boxmaxdepth|. \ (Plain \TeX\ sets |\boxmaxdepth|
+%to the largest possible dimension; therefore rule~(4) won't apply unless
+%you specify a smaller value. When rule~(4) does decrease the depth,
+%\TeX\ adds the excess depth to the box's natural height, essentially
+%moving the reference point down until the depth has been reduced to the
+%stated maximum.)
+\ddanger 因此，所构造盒子的深度的实际规则稍微 \TeX\ 化了一点。%
+如下：
+给出要通过 |\vbox| 包装起来的垂直列，要确定的是其自然深度。%
+(1). 如果垂直列没有包含盒子，深度为零。%
+(2) 如果至少有一个盒子，但是如果最后一个盒子后面跟着紧排或粘连，可能%
+还插入了惩罚或其它内容，那么深度为零。%
+(3). 如果至少有一个盒子，且最后的盒子没有跟紧排或粘连，
+那么深度为此盒子的深度。%
+\1(4). 但是，如果通过规则 (1), (2), (3) 计算得到的深度超过了 |\boxmaxdepth|,
+那么深度为当前 |\boxmaxdepth| 的值。%
+(Plain \TeX\ 把 |\boxmaxdepth| 设置为可能的最大尺寸；
+因此，规则 (4) 一般用不到，除非你把它变成更小的值。%
+当的确要用规则 (4) 来减小深度时，
+ \TeX\ 把超出的深度变成盒子的自然高度，本质上就是把基准点向下移动，
+直到深度减小到给定的深度。)
+
+%\danger The glue is set in a vbox just as in an hbox, by determining a
+%^{glue set ratio} and a ^{glue set order}, based on the difference between
+%the natural height~$x$ and the desired height~$w$, and based on the amounts
+%of stretchability and shrinkability that happen to be present.
+\danger 在 vbox 中计算粘连与在 hbox 中一样，
+通过自然高度 $x$ 和要求的高度 $w$ 的差和给出的伸缩能力来确定粘连调整比例%
+和粘连调整阶次。
+
+%\danger The width of a computed |\vbox| is the maximum distance by which
+%an enclosed box extends to the right of the reference point, taking
+%possible shifting into account. This width is always nonnegative.
+\danger 所计算的 |\vbox| 的宽度是所包装的盒子延伸到基准点右边的最大距离，
+要算上可能的偏移。%
+这个宽度总是非负的。
+
+%\dangerexercise Assume that |\box1| is $1\pt$ high, $1\pt$ deep, and
+%$1\pt$ wide; |\box2| is $2\pt$ high, $2\pt$ deep, and $2\pt$ wide; the
+%baselineskip, lineskip, and lineskiplimit are all zero; and the |\boxmaxdepth|
+%is very large. A third box is formed by saying
+%\begintt
+%\setbox3=\vbox to3pt{\moveright3pt\box1\vskip-3pt plus3fil\box2}
+%\endtt
+%What are the height, depth, and width of\/ |\box3|? Describe the position
+%of the reference points of boxes 1 and~2 with respect to the reference point
+%of box~3.
+%\answer The interline glue will be zero, and the natural height is
+%$1+1-3+2=1\pt$ (because the depth of\/ |\box2| isn't included in the natural
+%height); so the glue will ultimately become |\vskip-1pt| when it's set.
+%Thus, |\box3| is $3\pt$ high, $2\pt$ deep, $4\pt$ wide. Its reference
+%point coincides with that of\/ |\box2|; to get to the reference point
+%of\/ |\box1| you go up $2\pt$ and right $3\pt$.
+\dangerexercise 假设 |\box1| 的高度为 $1\pt$, 深度为 $1\pt$, 宽度为 $1\pt$;
+|\box2| 的高度为 $2\pt$, 深度为 $2\pt$, 宽度为 $2\pt$;
+baselineskip, lineskip, 和 lineskiplimit 都是零；
+并且 |\boxmaxdepth| 很大。%
+第三个盒子定义为
+\begintt
+\setbox3=\vbox to3pt{\moveright3pt\box1\vskip-3pt plus3fil\box2}
+\endtt
+那么，|\box3| 的高度，深度和宽度各是什么？
+给出相对于 box3 的基准点的 box1 和 box2 的基准点。
+\answer 行间粘连将为零，而自然高度为 $1+1-3+2=1\pt$%
+（因为 |\box2| 的深度不包括在自然高度中）；从而最终的粘连为 |\vskip-1pt|。
+因此，|\box3| 的高度为 $3\pt$，深度为 $2\pt$，宽度为 $4\pt$。
+它的基准点与 |\box2| 的一致；要得到 |\box1| 的基准点，
+你需要往上 $2\pt$ 再往右 $3\pt$。
+
+%\ddangerexercise Under the assumptions of the previous exercise, but
+%with |\baselineskip=9pt minus3fil|, describe |\box4| after
+%\begintt
+%\setbox4=\vbox to4pt{\vss\box1\moveleft4pt\box2\vss}
+%\endtt
+%\answer The interline glue will be $6\pt$ minus $3\,{\rm fil}$; the final
+%depth will be zero, since |\box2| is followed by glue; the natural
+%height is $12\pt$; and the shrinkability is $5\,{\rm fil}$. So |\box4|
+%will be $4\pt$ high, $0\pt$ deep, $1\pt$ wide, and it will contain
+%five items: |\vskip|\penalty0\hbox{|-1.6pt|}, |\box1|, |\vskip1.2pt|,
+%|\moveleft4pt\box2|, |\vskip-1.6pt|. Starting at the reference point of
+%|\box4|, you get to the reference point of\/ |\box1| by going up $4.6\pt$,
+%or to the reference point of\/ |\box2| by going up $.4\pt$ and left $4\pt$.
+%\ (For example, you go up $4\pt$ to get to the upper left corner of
+%|\box4|; then down $-1.6\pt$, i.e., up $1.6\pt$, to get to the upper left
+%corner of\/ |\box1|; then down $1\pt$ to reach its reference point.  This
+%problem is clearly academic, since it's rather ridiculous to include
+%infinite shrinkability in the baselineskip.)
+\ddangerexercise 在前一个练习的假设下，修改 |\baselineskip=9pt minus3fil|,
+并定义 |\box4| 为
+\begintt
+\setbox4=\vbox to4pt{\vss\box1\moveleft4pt\box2\vss}
+\endtt
+回答上面的同样问题。
+\answer 行间粘连将为 $6\pt$ minus $3\,{\rm fil}$；
+由于 |\box2| 后跟着粘连，最终的深度将为零；
+自然高度为 $12\pt$；而收缩能力为 $5\,{\rm fil}$。
+因此 |\box4| 的高度为 $4\pt$，深度为 $0\pt$，宽度为 $1\pt$，
+且包含五个项目：|\vskip|\penalty0\hbox{|-1.6pt|}、|\box1|、|\vskip1.2pt|、
+|\moveleft4pt\box2|、|\vskip-1.6pt|。从 |\box4| 的基准点出发，
+往上 $4.6\pt$ 就到达 |\box1| 的基准点，
+或者往上 $.4\pt$ 再往左 $4\pt$ 就到达 |\box2| 的基准点。%
+（例如，往上 $4\pt$ 就到达 |\box4| 的左上角；
+然后往下 $-1.6\pt$，即往上 $1.6\pt$，就到达 |\box1| 的左上角；
+然后往下 $1\pt$ 就到达它的基准点。这个问题显然只是理论上的，
+因为在 baselineskip 中包含无限收缩能力是相当荒谬的。）
+
+%\ddangerexercise Solve the previous problem but with |\boxmaxdepth=-4pt|.
+%\answer Now |\box4| will be $4\pt$ high, $-4\pt$ deep, $1\pt$ wide, and it
+%will contain |\vskip|\penalty0\hbox{|-2.4pt|}, |\box1|, |\vskip-1.2pt|,
+%|\moveleft4pt\box2|, |\vskip-2.4pt|. From the baseline of\/ |\box4|, go up
+%exactly $5.4\pt$ to reach the baseline of\/ |\box1|, or exactly $3.6\pt$
+%to reach the baseline of\/ |\box2|.
+\ddangerexercise 修改 |\boxmaxdepth=-4pt| 后回答上面的问题。
+\answer 现在 |\box4| 将为 $4\pt$ 高，$-4\pt$ 深，$1\pt$ 宽，
+且它包含 |\vskip|\penalty0\hbox{|-2.4pt|}、|\box1|、|\vskip-1.2pt|、
+|\moveleft4pt\box2| 和 |\vskip-2.4pt|。从 |\box4| 的基线出发，
+往上 $5.4\pt$ 就到达 |\box1| 的基线，或者往上 $3.6\pt$ 就到达 |\box2| 的基线。
+
+%\danger We have observed that |\vbox| combines a bunch of boxes into
+%a larger box that has the same baseline as the bottom box inside.
+%\TeX\ has another operation called ^|\vtop|, which gives you a box like |\vbox|
+%but with the same baseline as the top box inside. For example,
+%\begintt
+%\hbox{Here are \vtop{\hbox{two lines}\hbox{of text.}}}
+%\endtt
+%produces
+%\begindisplay
+%Here are \vtop{\hbox{two lines}\hbox{of text.}}
+%\enddisplay
+\danger 我们看到，|\vbox| 把一组盒子组合成更大的盒子，其基线与内部底盒子的基线一致。%
+\TeX\ 提供了另外一个叫做 |\vtop| 的命令，
+它给出象 |\vbox| 一样的盒子，但是基线与内部顶盒子的基线一致。%
+例如，
+\begintt
+\hbox{Here are \vtop{\hbox{two lines}\hbox{of text.}}}
+\endtt
+得到
+\begindisplay
+Here are \vtop{\hbox{two lines}\hbox{of text.}}
+\enddisplay
+
+%\ddanger You can say `|\vtop to|\<dimen>' and `|\vtop spread|\<dimen>'
+%just as with |\vbox|, but you should realize what such a construction
+%means. \TeX\ implements |\vtop| as follows: \ (1)~First a~vertical box
+%is formed as if\/ |\vtop| had been |\vbox|, using all of the rules for
+%|\vbox| as given above. \ (2)~The final height~$x$ is defined to
+%be zero unless the very first item inside the new vbox is a box;
+%in the latter case, $x$ is the height of that box. \ (3)~Let $h$
+%and~$d$ be the height and depth of the vbox in step~(1). \TeX\ completes
+%the |\vtop| by moving the reference point up or down, if necessary, so
+%that the box has height~$x$ and depth $h+d-x$.
+\ddanger 可以象在 |\vbox| 中那样使用`|\vtop to|\<dimen>'和%
+`|\vtop spread|\<dimen>', 但是你应该知道这样的指令的意思。%
+\TeX\ 如下执行 |\vtop|:
+(1). 首先，把 |\vtop| 看成和 |vbox| 一样生成一个垂直盒子，规则与 |\vbox| 相同。%
+(2). 如果新盒子内部第一个项不是盒子，那么最后的高度 $x$ 为零；
+如果是，~$x$ 就是此盒子的高度。%
+(3). 把 $h$ 和 $d$ 设定为第一步中 vbox 的高度和深度。%
+如果需要，\TeX\ 将上下移动基准点，使得盒子的高度为 $x$, 深度为 $h+d-x$。
+
+%\ddangerexercise Describe the empty boxes that you get from
+%`|\vbox to|\<dimen>|{}|' and
+%`|\vtop to|\<dimen>|{}|'. What are their heights, depths, and widths?
+%\answer |\vbox to| $x$|{}| produces height $x$;
+%|\vtop to| $x$|{}| produces depth $x$; the other dimensions are zero.
+%\ (This holds even when $x$ is negative.)
+\ddangerexercise \1看看从`|\vbox to|\<dimen>|{}|'和`|\vtop to|\<dimen>|{}|'得到%
+的空盒子。其高度，深度和宽度各是\hbox{什么？}
+\answer |\vbox to| $x$|{}| 生成高度 $x$；|\vtop to| $x$|{}| 生成深度 $x$；
+其他尺寸都为零（在 $x$ 为负值时仍然成立。）
+
+%\ddangerexercise Define a macro |\nullbox#1#2#3| that produces a box
+%whose height, depth, and width are given by the three parameters.
+%The box should contain nothing that will show up in print.
+%\answer There are several possibilities:
+%\begintt
+%\def\nullbox#1#2#3{\vbox to#1{\vss\hrule height-#2depth#2width#3}}
+%\endtt
+%works because the rule will be of zero thickness. Less tricky is
+%\begintt
+%\def\nullbox#1#2#3{\vbox to#1{\vss\vtop to#2{\vss\hbox to#3{}}}}
+%\endtt
+%Both of these are valid with negative height and/or depth, but they do
+%not produce negative width. If the width might be negative, but not the
+%height or depth, you can use, e.g.,
+%|\def\nullbox#1#2#3{\hbox to#3{\hss\raise#1\null\lower#2\null}}|.
+%It's impossible for |\hbox| to construct a box
+%whose height or depth is negative; it's impossible for |\vbox| or
+%|\vtop| to construct a box whose width is negative.\par
+%However, there's actually a trivial solution to the general problem, based on
+%features that will be discussed later:
+%\begintt
+%\def\nullbox#1#2#3{\setbox0=\null
+%  \ht0=#1 \dp0=#2 \wd0=#3 \box0 }
+%\endtt
+\ddangerexercise 定义一个宏 |\nullbox#1#2#3|, 它生成高度，深度和宽度分别为%
+这三个参数的盒子。
+在输出时，盒子什么也不显示出来。
+\answer 有多种可能的解答：比如
+\begintt
+\def\nullbox#1#2#3{\vbox to#1{\vss\hrule height-#2depth#2width#3}}
+\endtt
+是可行的，因为标尺的厚度为零。还有不那么技巧性的是
+\begintt
+\def\nullbox#1#2#3{\vbox to#1{\vss\vtop to#2{\vss\hbox to#3{}}}}
+\endtt
+上述两种解答对于负的高度和/或深度都有效，但它们无法生成负的宽度。
+如果宽度也许为负值，但高度和深度都不为负值，你可以像下面这样做
+\begintt
+|\def\nullbox#1#2#3{\hbox to#3{\hss\raise#1\null\lower#2\null}}|
+\endtt
+用 |\hbox| 无法构造高度或深度为负值的盒子；
+而用 |\vbox| 或 |\vtop| 无法构造宽度为负的盒子。\par
+然而，基于后面要讨论的特性，实际上有对一般问题的简单解答：
+\begintt
+\def\nullbox#1#2#3{\setbox0=\null
+  \ht0=#1 \dp0=#2 \wd0=#3 \box0 }
+\endtt
+
+%\danger The |\vbox| operation tends to produce boxes with large height and
+%small depth, while |\vtop| tends to produce small height and large depth.
+%If you're trying to make a vertical list out of big vboxes, however, you
+%may not be satisfied with either |\vbox| or |\vtop|; you might well wish
+%that a box had two reference points simultaneously, one for the top and
+%one for the bottom. If such a dual-reference-point scheme were in use, one
+%could define interline glue based on the distance between the lower
+%reference point of one box and the upper reference point of its successor
+%in a vertical list. But alas, \TeX\ gives you only one reference point per box.
+\danger |\vbox| 倾向于生成大高度小深度的盒子，而 |\vtop| 倾向于生成小高度%
+大深度的盒子。%
+但是，如果要从大盒子制作一个垂直列，可能对 |\vbox| 和 |\vtop| 都不满意；
+可能想要有两个基准点的盒子，一个在顶\hbox{部，} 一个在底部。%
+如果使用双基准点的方法，就可以在垂直列中，把上一个盒子的下基准点和下一个盒子的%
+上基准点定义为行间粘连。%
+但是，唉，\TeX\ 只对每个盒子给出了一个基准点。
+
+%\danger There's a way out of this dilemma, using an important idea
+%called a ``^{strut}.'' Plain \TeX\ defines ^|\strut| to be an invisible
+%box of width zero that extends just enough above and below the baseline
+%so that you would need no interline glue at all if every line contained
+%a strut. \ (Baselines are $12\pt$ apart in plain \TeX; it turns out that
+%|\strut| is a vertical rule, $8.5\pt$ high and $3.5\pt$ deep and
+%$0\pt$ wide.) \ If you contrive to put a strut on the top line and
+%another on the bottom line, inside your large vboxes, then it's possible to
+%obtain the correct spacing in a larger assembly by simply letting the
+%boxes butt together. For example, the ^|\footnote| macro in Appendix~B
+%puts struts at the beginning and end of every footnote, so that the spacing
+%will be right when several footnotes occur together at the bottom
+%of some page. ^^{fitting boxes together}
+\danger 有一个办法来达到此目的，利用称为``strut(支架)''的一个重要原理。%
+Plain \TeX\ 把 |\strut| 定义为宽度为零的不可见盒子，它正好延伸到基线上下，
+这样，如果每行都包含一个 strut, 那么就根本不需要行间粘连。%
+在 plain \TeX\ 中，基线间隔为 $12\pt$;
+其 |\strut| 为高度为 $8.5\pt$, 深度为 $3.5\pt$, 宽度为 $0\pt$ 的垂直标尺。)
+如果要在大 vbox 中的顶行上放一个 strut, 并且在底行上放另一个 strut,
+那么，通过直接把这些大盒子叠在一起就可以在一个更大的集合中得到适当的间距。%
+例如，在附录 B 的宏 |\footnote| 把 strut 放在每个 footnote 的开头和结尾，
+在某些页面底部有几个 footnote 时，就得到正确的间距了。
+
+%\danger If you understand boxes and glue, you're ready to learn
+%the ^|\rlap| and ^|\llap| macros of plain \TeX; these names are abbreviations
+%for ``right ^{overlap}'' and ``left overlap.'' Saying `|\rlap{|\<something>|}|'
+%is like typesetting \<something> and then backing up as if you hadn't
+%typeset anything. More precisely, `|\rlap{|\<something>|}|' creates a box
+%of width zero, with `\<something>' appearing just at the right of that box
+%(but not taking up any space). The |\llap| macro is similar, but it does
+%the ^{backspacing} first; in other words, `|\llap{|\<something>|}|'
+%creates a box of width zero, with `\<something>' extending just to the
+%left of that box. Using typewriter type, for example, you can typeset
+%`{\tt\rlap/=}' by saying either `|\rlap/=|' or `|/\llap=|'. It's possible
+%to put text into the left margin using |\llap|, or into the right margin
+%using |\rlap|, because \TeX\ does not insist that the contents of a box
+%must be strictly confined within that box's boundaries. ^^{marginal notes}
+\danger 如果你理解了盒子和粘连，就可以看懂 plain \TeX\ 的宏 |\rlap| 和 |\llap| 了；
+这些名字是``右重叠''和``左重叠''的缩写。%
+给出`|\rlap{|\<something>|}|'就象排版 \<something>, 接着有退回来，好像还没有%
+排版什么东西一样。%
+更确切地说，`|\rlap{|\<something>|}|'生成一个宽度为零的盒子，而`\<something>'%
+正好出现在盒子的右边(但是不占任何空间)。%
+|\llap| 类似，只是先退格；换句话说，`|\llap{|\<something>|}|'生成一个宽度为零的盒子，
+而`\<something>'就在盒子的左边。%
+例如，利用 typewriter 字体，可以通过`|\rlap/=|'或`|/\llap=|'得到`{\tt\rlap/=}'。%
+可以利用 |\llap| 把文字放在左边界中，或者利用 |\rlap| 放在右边界中，
+因为 \TeX\ 并不把盒子的内容总限制在盒子的边界内。
+
+%\danger The interesting thing about |\rlap| and |\llap| is that they can be
+%done so simply with infinite glue. One way to define |\rlap| would be
+%\begintt
+%\def\rlap#1{{\setbox0=\hbox{#1}\copy0\kern-\wd0}}
+%\endtt
+%but there's no need to do such a lengthy computation. The actual definition
+%in Appendix~B is much more elegant, namely,
+%\begintt
+%\def\rlap#1{\hbox to 0pt{#1\hss}}
+%\endtt
+%and it's worth pondering why this works. Suppose, for example, that you're
+%doing |\rlap{g}| where the letter `g' is $5\pt$ wide. Since |\rlap| makes
+%an hbox of width $0\pt$, the glue represented by ^|\hss| must shrink by
+%$5\pt$.  Well, that glue has $0\pt$ as its natural width, but it has
+%infinite shrinkability, so it can easily shrink to $-5\pt$; and
+%`|\hskip-5pt|' is exactly what |\rlap| wants in this case.
+\danger 有关 |\rlap| 和 |\llap| 有意思的是，它们可以如此简单地通过无限粘连得到。%
+|\rlap| 的一个定义是
+\begintt
+\def\rlap#1{{\setbox0=\hbox{#1}\copy0\kern-\wd0}}
+\endtt
+但是不需要很多长度运算。%
+附录 B 中的实际定义更高超，即，
+\begintt
+\def\rlap#1{\hbox to 0pt{#1\hss}}
+\endtt
+并且它值得好好想一想。%
+\1例如，假设要使用 |\rlap{g}|, 其中字母 g 的宽度为 $5\pt$。%
+因为 |\rlap| 制作的盒子的宽度为 $0\pt$,
+由 |\hss| 表示的粘连必须收缩 $5\pt$,
+好了，粘连把 $0\pt$ 当成其自然宽度，但是它有无限收缩能力，
+所以可以很容易收缩 $-5\pt$;
+并且`|\hskip-5pt|'正好是这种情况下 |\rlap| 想要的。
+
+%\dangerexercise Guess the definition of\/ |\llap|, without peeking at
+%Appendices A or~B.
+%\answer |\def\llap#1{\hbox to 0pt{\hss#1}}|
+\dangerexercise 不偷看附录 A 或 B, 猜一下 |\llap| 的定义。
+\answer |\def\llap#1{\hbox to 0pt{\hss#1}}|
+
+%\dangerexercise (This is a sequel to exercise 12.\linexno,
+%but it's trickier.) \ Describe the result of
+%\begintt
+%\line{\hfil A puzzle.\hfilneg}
+%\endtt
+%\answer You get `A' at the extreme left and `puzzle.\null' at the extreme right,
+%because the space between words has the only stretchability that is finite;
+%the infinite stretchability cancels out. \ (In this case, \TeX's rule
+%about ^{infinite glue} differs from what you would get in the limit if the
+%value of $1\,{\rm fil}$ were finite but getting larger and larger.
+%The true limiting behavior would stretch the text `A~puzzle.\null' in the
+%same way, but it would also move that text infinitely far away beyond the right
+%edge of the page.)
+\dangerexercise （这是练习 12.\linexno 的续集，但更加棘手。）
+描述下面的结果：
+\begintt
+\line{\hfil A puzzle.\hfilneg}
+\endtt
+\answer 结果是 `A' 在最左边，而 `puzzle.\null' 在最右边；
+这是因为单词间距的伸展能力是有限的，而无限的伸展能力抵销了。%
+（在这种情形中，\TeX\ 关于^{无限粘连}的规则与假定 $1\,{\rm fil}$
+为有限值但逐渐越大的极限情形不同。
+真正的极限行为将以同样方式伸展开文本 `A~puzzle.\null'，
+但它还将把该文本移动出页面右边缘直到无限远处。）
+
+\endchapter
+
+There was things which he stretched,
+but mainly he told the truth.
+\author MARK ^{TWAIN}{^^{Clemens}}, {\sl Huckleberry Finn\/} (1884) % chap1
+
+\bigskip
+
+Every shape exists only because of the space around it.
+% Jeder Formwert lebt nur dank seiner Umgebung.
+$\ldots$ Hence there is a `right' position for every shape in every situation.
+% ... Daraus geht hervor, ein bestimmter Formvert in einer bestimmten Situation
+%          einen bestimmten Platz verlangt, der ihm gem\"a\ss\ ist.
+If we succeed in finding that position, we have done our job.
+% Gelingt es uns, diese Pl\"atze zu finden,
+% so nennen wir die Arbeit vollendet.
+\author JAN ^{TSCHICHOLD}, {\sl Typographische Gestaltung\/} (1935) % p64
+% I've borrowed from the free translation in {\sl Asymmetric Typography}
+
+\vfill\eject\byebye

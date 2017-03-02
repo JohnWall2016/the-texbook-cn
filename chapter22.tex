@@ -1,0 +1,2656 @@
+% -*- coding: utf-8 -*-
+
+\input macros
+
+%\beginchapter Chapter 22. Alignment
+\beginchapter Chapter 22. 对齐阵列
+
+\origpageno=231
+
+%Printers charge extra when you ask them to typeset ^{tables}, and they do so
+%for good reason: Each table tends to have its own peculiarities, so it's
+%necessary to give some thought to each one, and to fiddle with alternative
+%approaches until finding something that looks good and communicates well.
+%However, you needn't be too frightened of doing tables with \TeX, since plain
+%\TeX\ has a ``tab'' feature that handles simple situations pretty much like
+%you would do them on a typewriter. Furthermore, \TeX\ has a powerful
+%alignment mechanism that makes it possible to cope with extremely complex
+%tabular arrangements. Simple cases of these ^{alignment} operations will
+%suffice for the vast majority of applications.
+\1当你要求印刷工人排版表格时，他们要进行特殊处理，而且这样做也有充分的理由：
+每个表格都有各自的特点，因此必须对每个都要有些侧重，并且在几种方法中%
+互相比较以得到漂亮而清晰的结果。%
+但是，用 \TeX\ 处理就不需要太担心，因为 plain \TeX\ 有一个``制表''命令，
+即使在打字机上你也可以把简单的表格变成漂亮的格式。%
+还有， \TeX\ 有一个强大的对齐方法，这使得它能够处理非常复杂的列表格式。%
+这些对齐命令的简单运用就足以完成大部分工作了。
+
+%Let's consider ^{tabbing} first. If you say `^|\settabs| $n$ ^|\columns|',
+%plain \TeX\ makes it easy to produce lines that are divided into $n$~equal-size
+%^{columns}. Each line is specified by typing
+%\begindisplay
+%|\+|\<text$_1$>|&|\<text$_2$>|&|$\,\cdots\,$|\cr|
+%\enddisplay
+%where \<text$_1$> will start flush with the left margin,
+%\<text$_2$> will start at the left of the second column, and so on. Notice
+%that `^|\+|' starts the line. The final column is followed by `^|\cr|',
+%which old-timers will recognize as an abbreviation for the ``^{carriage
+%return}'' operation on typewriters that had carriages. For example,
+%consider the following specification:
+%\begintt
+%\settabs 4 \columns
+%\+&&Text that starts in the third column\cr
+%\+&Text that starts in the second column\cr
+%\+\it Text that starts in the first column, and&&&
+%  the fourth, and&beyond!\cr
+%\endtt
+%After `|\settabs|\stretch|4\columns|' each |\+| line is divided into quarters,
+%so the result~is
+%\medskip
+%\settabs 4 \columns
+%\+&&Text that starts in the third column\cr
+%\+&Text that starts in the second column\cr
+%\+\it Text that starts in the first column, and&&&
+%  the fourth, and&beyond!\cr
+%\def\tick{\kern-0.2pt % that's half the rule width
+%  \vbox to 0pt{\kern-36pt\leaders\hbox{\vrule height1pt\vbox to4pt{}}\vfil}}
+%\vskip-\baselineskip
+%\+\tick&\tick&\tick&\tick&\tick\cr
+%\medskip
+我们首先来讨论制表。%
+如果给出`^|\settabs| $n$ ^|\columns|',
+~plain \TeX\ 就生成了等分为 $n$ 栏的行。%
+每行的内容用下列方法输入：
+\begindisplay
+|\+|\<text$_1$>|&|\<text$_2$>|&|$\,\cdots\,$|\cr|
+\enddisplay
+其中 \<text$_1$> 左页边对齐，\<text$_2$> 从第二栏的左边界开始，等等。%
+注意，行开头是`^|\+|'。%
+最后一栏要跟`^|\cr|', 它就是以前的``回车''命令。%
+例如，看看下面的例子：
+\begintt
+\settabs 4 \columns
+\+&&这段文本从第三栏开始\cr
+\+&这段文本从第二栏开始\cr
+\+\sl 这段文本从第一栏开始&&&第四栏&超出页面！\cr
+\endtt
+在`|\settabs|\stretch|4\columns|'之后，每个 |\+| 行被四等分，
+因此得到的结果是
+\medskip
+\settabs 4 \columns
+\+&&这段文本从第三栏开始\cr
+\+&这段文本从第二栏开始\cr
+\+\sl 这段文本从第一栏开始&&&第四栏&超出页面！\cr
+\def\tick{\kern-0.2pt % that's half the rule width
+  \vbox to 0pt{\kern-36pt\leaders\hbox{\vrule height1pt\vbox to4pt{}}\vfil}}
+\vskip-\baselineskip
+\+\tick&\tick&\tick&\tick&\tick\cr
+\medskip
+
+%This example merits careful study because it illustrates several things.
+%(1)~The `|&|' ^^{ampersand} is like the {\sc TAB} key on many typewriters;
+%it tells \TeX\ to advance to the next tab position, where there's a tab at
+%the right edge of each column. In this example, \TeX\ has set up four tabs,
+%indicated by the dashed lines; a dashed line is also shown at the left
+%margin, although there isn't really a tab there. (2)~But `|&|' isn't
+%exactly like a mechanical typewriter {\sc TAB}, because it first backs up
+%to the beginning of the current column before advancing to the next. In
+%this way you can always tell what column you're tabbing to, by counting
+%the number of |&|'s; that's handy, because variable-width type otherwise
+%makes it difficult to know whether you've passed a tab position or not.
+%Thus, on the last line of our example, three |&|'s were typed in order to
+%get to column~4, even though the text had already extended into column~2
+%and perhaps into column~3. (3)~You can say `|\cr|' before you have
+%specified a complete set of columns, if the remaining columns are blank.
+%(4)~The |&|'s are different from tabs in another way, too: \TeX\ ignores
+%^{spaces} after~`|&|', hence you can conveniently finish a column by typing
+%`|&|'~at the end of a line in your input file, without worrying that an
+%extra blank space will be introduced there. \ (The second-last line of the
+%example ends with~`|&|', and there is an implicit blank space following that
+%symbol; if \TeX\ hadn't ignored that space, the words `the fourth'
+%wouldn't have started exactly at the beginning of the fourth column.) \
+%Incidentally, plain \TeX\ also ignores spaces after `|\+|', so that the
+%first column is treated like the others. (5) The `^|\it|' in the last line
+%of the example causes only the first column to be italicized, even though
+%no ^{braces} were used to confine the range of italics, because \TeX\
+%implicitly inserts braces around each individual entry of an alignment.
+要好好研究一下这个例子，因为它说明了好几个问题。%
+(1). `|&|'象许多打字机的{\sc TAB}键一样；
+它指示 \TeX\ 缩进到下一个制表符的位置，在每栏的右边界有一个制表符。%
+本例中， \TeX\ 设置了四个制表符，如图用虚线来表示它们；
+虚线还出现在左页边，其实它不是一个制表符。%
+(2). 但是`|&|'与机械打字机的{\sc TAB}不完全一样，因为在缩进到下一栏前，
+它首先要回退到当前栏的开头。%
+这样，通过计算 |&| 的数目，就可以知道正在制表的是哪一栏；
+这很方便，因为如果宽度会变化，就很难知道你是否超过了制表符的位置。%
+因此，在本例中的最后一行，为了得到第四栏，在前面输入了三个 |&|,
+而不管文本是否已经超出第一栏甚至到了第三栏。%
+(3). 如果本行已经输入完毕，不管是否后面还有空栏，都可以输入`|\cr|'来结束本行。%
+(4). |&| 与制表符还有一个方面不同：
+\1\TeX\ 忽略掉`|&|'后面的空格，因此，在输入完一栏时，可以把`|&|'放在行尾，
+而不会出现额外的空格。%
+(本例中的倒数第二行以`|&|'结尾，而且在此符号后面暗中跟着一个空格；
+如果 \TeX\ 没有忽略掉此空格，那么文本``第四栏''就不会正好出现在第四栏的开头了。)
+顺便说一下，~plain \TeX\ 还忽略掉`|\+|'后面的空格，这样第一栏就与其它栏一样了。%
+(5). 在例子的最后一行中，虽然没有用大括号来界定楷体作用的范围，
+但是`|\KT{10}|'只把第一栏变成楷体，这是因为 \TeX\ 在暗中在各个当前单元外围%
+插入了大括号。
+
+%\danger Once you have issued a |\settabs| command, the tabs remain set until you
+%reset them, even though you go ahead and type ordinary paragraphs as usual.
+%But if you enclose |\settabs| in |{...}|, the tabs defined inside a group
+%don't affect the tabs outside; `^|\global||\settabs|' is not permitted.
+\danger 一旦声明了命令 |\settabs|, 制表符就一直保持到你重新设置为止，
+即使你输入的是象平常那样的普通段落。%
+但是，如果把 |\settabs| 封装在 |{...}| 中，
+定义在组中的制表符不会影响外面的制表符；
+不允许使用`^|\global||\settabs|'。
+
+%\danger Tabbed lines usually are used between paragraphs, in the same
+%places where you would type ^|\line| or ^|\centerline| to get lines with
+%a special format. But it's also useful to put |\+|~lines inside a |\vbox|;
+%this makes it convenient to specify ^{displays} that contain aligned
+%material. For example, if you type
+%\begintt
+%$$\vbox{\settabs 3 \columns
+%  \+This is&a strange&example\cr
+%  \+of displayed&three-column&format.\cr}$$
+%\endtt
+%you get the following display:
+%$$\vbox{\settabs 3 \columns
+%  \+This is&a strange&example\cr
+%  \+of displayed&three-column&format.\cr}$$
+%In this case the first column doesn't appear flush left, because \TeX\
+%centers a box that is being displayed. Columns that end with |\cr| in
+%a |\+|~line are put into a box with their natural width; so the first
+%and second columns here are one-third of the |\hsize|, but the third column
+%is only as wide as the word `example'. We have used |$$| ^^{dollardollar}
+%in this construction even though no mathematics is involved, because |$$|
+%does other useful things; for example, it centers the box, and it inserts
+%space above and below.
+\danger 制表的行通常用在段落之间，与使用 |\line| 或 |\centerline| 的位置一样，%
+它们得到也是特殊形式的行。%
+但是，把 |\+| 的行放在 |\vbox| 也是有用处的；
+用它可以很方便地给出包含对齐内容的陈列公式。
+例如，如果给出
+\begindisplay
+|$$\vbox{\settabs 3 \columns|\cr
+|  \+|这是|&|陈列方程|&|三栏|\cr|\cr
+|  \+|格式的|&|一个奇怪|&|例子。|\cr}$$|\cr
+\enddisplay
+你所得到的是下列陈列公式：
+$$\vbox{\settabs 3 \columns
+  \+这是&陈列方程&三栏\cr
+  \+格式的&一个奇怪&例子。\cr}$$
+在这种情况下，第一栏没有居左，
+这是因为 \TeX\ 把陈列公式的盒子居中了。%
+在 |\+| 的行中，要把以 |\cr| 结尾的栏中内容放在其自然宽度的盒子中；
+因此，这里的第一和第二栏的宽度是 |\hsize| 的三分之一，
+但是第三栏的宽度为文本``例子。''的宽度。%
+在这个构造中，即使没有任何数学内容，我们也用了 |$$|,
+这是因为 |$$| 自有其用处；例如，它把盒子居中，并且在上下插入了间距。
+
+%People don't always want tabs to be equally spaced, so there's another
+%way to set them, by typing `|\+|\<sample line>|\cr|' immediately after
+%`|\settabs|'. In this case tabs are placed at the positions
+%of the |&|'s in the ^{sample line}, and the sample line itself does not appear
+%in the output. For example,
+%\begintt
+%\settabs\+\indent&Horizontal lists\quad&\cr % sample line
+%\+&Horizontal lists&Chapter 14\cr
+%\+&Vertical lists&Chapter 15\cr
+%\+&Math lists&Chapter 17\cr
+%\endtt
+%causes \TeX\ to typeset the following three lines of material:
+%\nobreak\medskip
+%\settabs\+\indent&Horizontal lists\quad&\cr
+%\+&Horizontal lists&Chapter 14\cr
+%\+&Vertical lists&Chapter 15\cr
+%\+&Math lists&Chapter 17\cr
+%\medbreak\noindent
+%The |\settabs| command in this example makes column~1 as wide as a paragraph
+%^^{indention, see indentation}
+%indentation; and column~2 is as wide as `Horizontal lists' plus one quad of
+%space. ^^|\quad| Only two tabs are set in this case, because only two |&|'s
+%appear in the sample line. \ (A sample line might as well end with~|&|,
+%because the text following the last tab isn't used for anything.)
+人们还希望非等分的制表阵列，因此我们提供了另一种方法：
+在 `|\settabs|' 紧接着给出 `|\+|\<sample line>\allowbreak|\cr|'。
+在这种情况下，制表符被放在例句中 |&| 的位置上，
+并且例句自己并不出现在输出中。例如，
+\begintt
+\settabs\+\indent&Horizontal lists\quad&\cr % sample line
+\+&Horizontal lists&Chapter 14\cr
+\+&Vertical lists&Chapter 15\cr
+\+&Math lists&Chapter 17\cr
+\endtt
+排版出下列三行内容：
+\nobreak\medskip
+\settabs\+\indent&Horizontal lists\quad&\cr
+\+&Horizontal lists&Chapter 14\cr
+\+&Vertical lists&Chapter 15\cr
+\+&Math lists&Chapter 17\cr
+\medbreak\noindent
+\1在本例中，命令 |\settabs| 使第一栏宽度与段落的缩进一样宽；
+第二栏与`Horizontal lists'加上一个 quad 间距的宽度一样。%
+在本例中只设定了两个栏的宽度，因为在例句中只出现了两个 |&|。%
+(例句也可以用 |&| 来结尾，因为跟着最后一个制表符的文本没起什么作用。)
+
+%The first line of a table can't always be used as a sample line, because it
+%won't necessarily give the correct tab positions. In a large table you have
+%to look ahead and figure out the biggest entry in each column; the sample
+%line is then constructed by typing the widest first column, the widest
+%second column, etc., omitting the last column. Be sure to include some
+%extra space between columns in the sample line, so that the columns
+%won't touch each other.
+表格的第一行并不能总是作为例句使用，
+因为它有时候不能给出正确的制表符位置。%
+在一个大表格中，你必须浏览一下，找出每个栏中最大的单元；
+这样，例句就由最宽的第一栏，最宽的第二栏，等等，忽略掉最后一栏这样来构造。%
+在例句中要确保有某些额外的间距，这样栏才不会互相紧挨着。
+
+%\def\frac#1/#2{\leavevmode\kern.1em
+%  \raise.5ex\hbox{\the\scriptfont0 #1}\kern-.1em
+%  /\kern-.15em\lower.25ex\hbox{\the\scriptfont0 #2}}
+%\exercise Explain how to typeset the following table [from Beck,
+%Bertholle, and Child, {\sl Mastering the Art of French Cooking\/}
+%(New York: Knopf, 1961)]: % p283
+%^^{Beck, Simone} ^^{Bertholle, Louisette} ^^{Child, Julia}
+%\nobreak\medskip
+%\settabs\+\indent&10\frac1/2 lbs.\qquad&\it Servings\qquad&\cr
+%\+&\negthinspace\it Weight&\it Servings&
+%  {\it Approximate Cooking Time\/}*\cr
+%\smallskip
+%\+&8 lbs.&6&1 hour and 50 to 55 minutes\cr
+%\+&9 lbs.&7 to 8&About 2 hours\cr
+%\+&9\frac1/2 lbs.&8 to 9&2 hours and 10 to 15 minutes\cr
+%\+&10\frac1/2 lbs.&9 to 10&2 hours and 15 to 20 minutes\cr
+%\smallskip
+%\+&* For a stuffed goose,
+%  add 20 to 40 minutes to the times given.\cr
+%\answer Notice the uses of `|\smallskip|' here to separate the table heading
+%and footing from the table itself; such refinements are often worthwhile.
+%\begintt
+%\settabs\+\indent&10\frac1/2 lbs.\qquad&\it Servings\qquad&\cr
+%\+&\negthinspace\it Weight&\it Servings&
+%  {\it Approximate Cooking Time\/}*\cr
+%\smallskip
+%\+&8 lbs.&6&1 hour and 50 to 55 minutes\cr
+%\+&9 lbs.&7 to 8&About 2 hours\cr
+%\+&9\frac1/2 lbs.&8 to 9&2 hours and 10 to 15 minutes\cr
+%\+&10\frac1/2 lbs.&9 to 10&2 hours and 15 to 20 minutes\cr
+%\smallskip
+%\+&* For a stuffed goose,
+%  add 20 to 40 minutes to the times given.\cr
+%\endtt
+%\def\frac#1/#2{\leavevmode\kern.1em
+%  \raise.5ex\hbox{\the\scriptfont0 #1}\kern-.1em
+%  /\kern-.15em\lower.25ex\hbox{\the\scriptfont0 #2}}%
+%The title line specifies `|\it|' three times, because each entry between
+%tabs is treated as a group by \TeX; you would get error messages galore
+%if you tried to say something like \hbox{`|\+&{\it Weight&Servings&...}\cr|'}.
+%The `^|\negthinspace|' in the title line is a small backspace that
+%compensates for the slant in an italic {\it W\/}; the author inserted
+%this somewhat unusual correction after seeing how the table looked
+%without it, on the first proofs. \ (You weren't supposed to think of this,
+%but it has to be mentioned.) \ See exercise 11.\fracexno\ for the `|\frac|'
+%macro; it's better to say `\frac1/2' than `$1\over2$', in a cookbook.\par
+%Another way to treat this table would be to display it in a vbox, instead
+%of including a first column whose sole purpose is to specify indentation.
+\def\frac#1/#2{\leavevmode\kern.1em
+  \raise.5ex\hbox{\the\scriptfont0 #1}\kern-.1em
+  /\kern-.15em\lower.25ex\hbox{\the\scriptfont0 #2}}
+\exercise 看看怎样排版下列表格 [取自 Beck, Bertholle, and Child,
+{\sl Mastering the Art of French Cooking\/}
+(New York: Knopf, 1961)]：% p283
+^^{Beck, Simone} ^^{Bertholle, Louisette} ^^{Child, Julia}
+\nobreak\medskip
+\settabs\+\indent&10\frac1/2 lbs.\qquad&\it Servings\qquad&\cr
+\+&\negthinspace\it Weight&\it Servings&
+  {\it Approximate Cooking Time\/}*\cr
+\smallskip
+\+&8 lbs.&6&1 hour and 50 to 55 minutes\cr
+\+&9 lbs.&7 to 8&About 2 hours\cr
+\+&9\frac1/2 lbs.&8 to 9&2 hours and 10 to 15 minutes\cr
+\+&10\frac1/2 lbs.&9 to 10&2 hours and 15 to 20 minutes\cr
+\smallskip
+\+&* For a stuffed goose,
+  add 20 to 40 minutes to the times given.\cr
+\answer 注意这里用 `|\smallskip|' 将表头和表尾与表格本身分开；
+这种改进通常是值得做的。
+\begintt
+\settabs\+\indent&10\frac1/2 lbs.\qquad&\it Servings\qquad&\cr
+\+&\negthinspace\it Weight&\it Servings&
+  {\it Approximate Cooking Time\/}*\cr
+\smallskip
+\+&8 lbs.&6&1 hour and 50 to 55 minutes\cr
+\+&9 lbs.&7 to 8&About 2 hours\cr
+\+&9\frac1/2 lbs.&8 to 9&2 hours and 10 to 15 minutes\cr
+\+&10\frac1/2 lbs.&9 to 10&2 hours and 15 to 20 minutes\cr
+\smallskip
+\+&* For a stuffed goose,
+  add 20 to 40 minutes to the times given.\cr
+\endtt
+\def\frac#1/#2{\leavevmode\kern.1em
+  \raise.5ex\hbox{\the\scriptfont0 #1}\kern-.1em
+  /\kern-.15em\lower.25ex\hbox{\the\scriptfont0 #2}}%
+标题行三次指定 `|\it|'，是因为每个单元都被 \TeX\ 视为一个编组；
+如果你试图用 \hbox{`|\+&{\it Weight&Servings&...}\cr|'}，会有很多错误信息。
+标题行的 `^|\negthinspace|' 是一个微小的回退空白，
+用于补偿意大利体 {\it W\/} 的倾斜；在首次校对看到当时的表格后，
+作者后插入这个有些不常用的校正。（不指望你会想到这个，但必须提到它。）%
+见练习 11.\fracexno 中的 `|\frac|' 宏；
+在食谱中用 `\frac1/2' 比用 `$1\over2$' 更好。\par
+处理这个表格的另一种方法是在 vbox 中显示它，而不是包含单纯为指定缩进的第一栏。
+
+%\ninepoint % it's all dangerous from here to end of chapter
+%\danger If you want to put something ^{flush right} in its column, just type
+%`^|\hfill|' before it; and be sure to type `|&|' after it, so that
+%\TeX\ will be sure to move the information all the way until it touches
+%the next tab. Similarly, if you want to ^{center} something in its
+%column, type `|\hfill|' before it and `|\hfill&|' after it. For example,
+%\begintt
+%\settabs 2 \columns
+%\+\hfill This material is set flush right&
+%    \hfill This material is centered\hfill&\cr
+%\+\hfill in the first half of the line.&
+%    \hfill in the second half of the line.\hfill&\cr
+%\endtt
+%produces the following little table:\enddanger
+%\nobreak\medskip
+%\settabs 2 \columns
+%\+\hfill This material is set flush right&
+%    \hfill This material is centered\hfill&\cr
+%\+\hfill in the first half of the line.&
+%    \hfill in the second half of the line.\hfill&\cr
+\ninepoint % it's all dangerous from here to end of chapter
+\danger 如果要把某些内容在栏中居右，就在其前面使用`^|\hfill|';
+并且在其后要有`|&|', 这样就确保了 \TeX\ 排版的是下一个制表符前面的所有内容。%
+类似地，要把某些内容在栏中居中，在前面使用`|\hfill|', 在后面使用`|\hfill&|'。%
+例如，
+\begindisplay
+|\settabs 2 \columns|\cr
+|\+\hfill |此内容在前半行|&|\cr
+|    \hfill |此内容在后半行|\hfill&\cr|\cr
+|\+\hfill |居右。|&|\cr
+|    \hfill |居中。|\hfill&\cr|\cr
+\enddisplay
+得到的是下列小表格：\enddanger
+\nobreak\medskip
+\settabs 2 \columns
+\+\hfill 此内容在前半行&
+    \hfill 此内容在后半行\hfill&\cr
+\+\hfill 居右。&
+    \hfill 居中。\hfill&\cr
+
+%\danger The |\+| macro in Appendix~B works
+%by putting the \<text> for each column that's followed by~|&|
+%into an hbox as follows:
+%\begindisplay
+%|\hbox to |\<column width>|{|\<text>|\hss}|
+%\enddisplay
+%The ^|\hss| means that the text is normally flush left, and that it can
+%extend to the right of its box. Since |\hfill| is ``more infinite'' than
+%|\hss| in its ability to stretch, it has the effect of right-justifying or
+%centering as stated above. Note that |\hfill| doesn't shrink, but |\hss|
+%does; if the text doesn't fit in its column, it will stick out at the right.
+%You could avoid this by adding |\hskip| |0pt| |minus-1fil|; then
+%an oversize text would produce an overfull box.
+%You could also center some text by putting `|\hss|' before it and just
+%`|&|' after it; in that case the text would be allowed to extend to the
+%left and right of its column.
+% The last column of a |\+|~line (i.e., the column entry that is
+%followed by |\cr|) is treated differently: The
+%\<text> is simply put into an hbox with its natural~width.\looseness=-1
+\danger 附录 B 中的宏 |\+| 是把跟在 |&| 后每栏的 \<text> 放在如下%
+的一个 hbox 中：
+\begindisplay
+|\hbox to |\<column width>|{|\<text>|\hss}|
+\enddisplay
+|\hss| 就意味着文本在正常情况下是居左的，并且它可以延伸到盒子的右边。%
+因为 |\hfill| 比 |\hss| 的伸缩能力更强，所以可以得到上面的居右或居中的效果。%
+注意，~|\hfill| 不收缩，但是 |\hss| 收缩；
+如果文本在栏中放不下，它将在右边伸出来。%
+通过添加 |\hfilneg| 可以取消 |\hss| 的收缩性；
+这样，超过尺寸的文本得到的就是一个溢出的盒子。%
+你还可以把`|\hss|'放在此内容前面或其后`|&|'紧前面来把它居中；
+在这种情况下，文本允许从左右两边伸出栏。%
+\1|\+| 行的最后一栏(即，跟着 |\cr| 的栏单元)的处理方法不同：
+只把文本放在其自然宽度的 hbox 中。
+
+%\danger ^{Computer programs} present difficulties of a different kind, since
+%some people like to adopt a style in which the tab positions change from
+%line to line. For example, consider the following program fragment:
+%$$\vbox{\+\bf if $n<r$ \cleartabs&\bf then $n:=n+1$\cr
+%  \+&\bf else &{\bf begin} ${\it print\_totals}$; $n:=0$;\cr
+%  \+&&{\bf end};\cr
+%  \+\bf while $p>0$ do\cr
+%  \+\quad\cleartabs&{\bf begin} $q:={\it link}(p)$;
+%    ${\it free\_node}(p)$; $p:=q$;\cr
+%  \+&{\bf end};\cr}$$
+%Special tabs have been set up so that `{\bf then}' and `{\bf else}' appear
+%one above the other, and so do `{\bf begin}' and `{\bf end}'. It's possible
+%to achieve this by setting up a new sample line whenever a new tab position
+%is needed; but that's a tedious job, so plain \TeX\ makes it a little simpler.
+%Whenever you type |&| to the right of all existing tabs, the effect is to
+%set a new tab there, in such a way that the column just completed will have
+%its natural width. Furthermore, there's an operation `^|\cleartabs|' that
+%resets all tab positions to the right of the current column. Therefore the
+%computer program above can be \TeX ified as follows:
+%\begindisplay
+%|$$\vbox{\+\bf if $n<r$ \cleartabs&\bf then $n:=n+1$\cr|\cr
+%|  \+&\bf else &{\bf begin} ${\it print\_totals}$; $n:=0$;\cr|\cr
+%|  \+&&{\bf end};\cr|\cr
+%|  |\<The remaining part is left as an exercise>|}$$|\cr
+%\enddisplay
+\danger 计算机程序出现的是另一种不同的困难，
+因为在一种格式中需要行和行之间的制表符位置不断变化。%
+例如，看看下列程序片段：
+$$\vbox{\+\bf if $n<r$ \cleartabs&\bf then $n:=n+1$\cr
+  \+&\bf else &{\bf begin} ${\it print\_totals}$; $n:=0$;\cr
+  \+&&{\bf end};\cr
+  \+\bf while $p>0$ do\cr
+  \+\quad\cleartabs&{\bf begin} $q:={\it link}(p)$;
+    ${\it free\_node}(p)$; $p:=q$;\cr
+  \+&{\bf end};\cr}$$
+要设置特殊的制表符使得`{\bf then}'出现在`{\bf else}'上面，
+并且`{\bf begin}'出现在`{\bf end}'上面。%
+只要需要新的制表符位置，就可以通过设置新的例句来得到它；
+但是这是一项无聊的工作，因此 plain \TeX\ 给出了一种简单方法。%
+只要在已经有的制表符右边给出 |&|, 就在那里设定了一个新的制表符，
+用这种方法，栏都处在自然宽度的盒子中。%
+还有，用命令`^|\cleartabs|'可以重新设置当前栏右边的所有制表符的位置。%
+因此，上面的计算机程序可以如下用 \TeX\ 排版：
+\begindisplay
+|$$\vbox{\+\bf if $n<r$ \cleartabs&\bf then $n:=n+1$\cr|\cr
+|  \+&\bf else &{\bf begin} ${\it print\_totals}$; $n:=0$;\cr|\cr
+|  \+&&{\bf end};\cr|\cr
+|  |\<剩下的作为练习>|}$$|\cr
+\enddisplay
+
+%\dangerexercise Complete the example computer program by specifying three more
+%|\+|~lines.
+%\answer In such programs it seems best to type |\cleartabs| just before |&|,
+%whenever it is desirable to reset the old tabs. Multiletter identifiers look
+%best when set in ^{text italics} with ^|\it|, as explained in Chapter~18.
+%Thus, the following is recommended:
+%\begintt
+%\+\bf while $p>0$ do\cr
+%  \+\quad\cleartabs&{\bf begin} $q:={\it link}(p)$;
+%    ${\it free\_node}(p)$; $p:=q$;\cr
+%  \+&{\bf end};\cr
+%\endtt
+\dangerexercise 完成上面例子中的计算机程序。
+\answer 在这种程序中，看来最好是在 |&| 之前键入 |\cleartabs|，只要需要重设旧制表符。
+多字母的标识符用 ^|\it| 设为意大利体是最好看，如同在第 18 章中解释的。
+因此，推荐的写法如下：
+\begintt
+\+\bf while $p>0$ do\cr
+  \+\quad\cleartabs&{\bf begin} $q:={\it link}(p)$;
+    ${\it free\_node}(p)$; $p:=q$;\cr
+  \+&{\bf end};\cr
+\endtt
+
+%\danger Although |\+| lines can be used in vertical boxes, you must never
+%use |\+| inside of another |\+| line. The |\+| macro is intended for
+%simple applications only.
+\danger 虽然行 |\+| 可以用在垂直盒子中，但是不要在 |\+| 行中使用另一个 |\+|。%
+宏 |\+| 只能单个使用。
+
+%\ddanger The |\+| and |\settabs| macros of Appendix B keep track of tabs by
+%maintaining register |\box|^|\tabs| as a box full of empty boxes whose
+%widths are the column widths in reverse order. Thus you can examine the
+%tabs that are currently set, by saying `^|\showbox||\tabs|'; this puts
+%the column widths into your log file, from right to left. For example,
+%after `|\settabs\+\hskip100pt&\hskip200pt&\cr\showbox\tabs|', \TeX\
+%will show the lines
+%\begintt
+%\hbox(0.0+0.0)x300.0
+%.\hbox(0.0+0.0)x200.0
+%.\hbox(0.0+0.0)x100.0
+%\endtt
+\ddanger 附录 B 中的宏 |\+| 和 |\settabs| 是这样记录制表符的：
+让盒子寄存器 |\box|^|\tabs| 以逆序包含宽度等于各栏宽度的空盒子。
+因此，用 `^|\showbox||\tabs|' 可以检验当前设置的制表符；
+它把栏宽度按照从右到左的顺序显示在你的日志文件中。例如，在给出
+`|\settabs\+\hskip100pt&|\allowbreak|\hskip200pt&\cr\showbox\tabs|' 后，
+\TeX\ 将显示出下列行：
+\begintt
+\hbox(0.0+0.0)x300.0
+.\hbox(0.0+0.0)x200.0
+.\hbox(0.0+0.0)x100.0
+\endtt
+
+%\ddangerexercise Study the |\+| macro in Appendix B and figure out how to
+%change it so that tabs work as they do on a mechanical typewriter
+%(i.e., so that `|&|' always moves to the next tab that lies strictly
+%to the right of the current position). Assume that the user
+%doesn't backspace past previous tab positions; for example, if the input is
+%\hbox{`|\+&&\hskip-2em&x\cr|'}, do not bother to put `x' in the first or
+%second column, just put it at the beginning of the third column. \
+%(This exercise is a bit difficult.)
+%\answer Here we retain the idea that |&| inserts a new tab, when there
+%are no tabs to the right of the current position. Only one of the macros
+%that are used to process |\+|~lines needs to be changed; but
+%(unfortunately) it's the most complex one:
+%\begintt
+%\def\t@bb@x{\if@cr\egroup % now \box0 holds the column
+%  \else\hss\egroup \dimen@=0\p@
+%    \dimen@ii=\wd0 \advance\dimen@ii by1sp
+%    \loop\ifdim \dimen@<\dimen@ii
+%      \global\setbox\tabsyet=\hbox{\unhbox\tabsyet
+%        \global\setbox1=\lastbox}%
+%      \ifvoid1 \advance\dimen@ii by-\dimen@
+%        \advance\dimen@ii by-1sp \global\setbox1
+%          =\hbox to\dimen@ii{}\dimen@ii=-1pt\fi
+%      \advance\dimen@ by\wd1 \global\setbox\tabsdone
+%        =\hbox{\box1\unhbox\tabsdone}\repeat
+%    \setbox0=\hbox to\dimen@{\unhbox0}\fi
+%  \box0}
+%\endtt
+\ddangerexercise 研究一下附录 B 中的宏 |\+|，
+看看怎样让它像打字机的制表符那样使用%
+（即使得 `|&|' 总是移动到当前位置右边的下一个制表符处）。
+假定用户不能回退到前一个制表符的位置；
+例如，如果输入 \hbox{`|\+&&\hskip-2em&x\cr|'}，
+不用费心将 `x' 放在第一和第二栏，只需把它放在第三栏的开头。（这个练习有点难。）
+\answer 这里我们保留在当前位置右边没有制表符时，用 |&| 插入新制表符的想法。
+用于处理 |\+| 行的宏中只有一个需要修改；但（很不幸）它就是最复杂的那个：
+\begintt
+\def\t@bb@x{\if@cr\egroup % now \box0 holds the column
+  \else\hss\egroup \dimen@=0\p@
+    \dimen@ii=\wd0 \advance\dimen@ii by1sp
+    \loop\ifdim \dimen@<\dimen@ii
+      \global\setbox\tabsyet=\hbox{\unhbox\tabsyet
+        \global\setbox1=\lastbox}%
+      \ifvoid1 \advance\dimen@ii by-\dimen@
+        \advance\dimen@ii by-1sp \global\setbox1
+          =\hbox to\dimen@ii{}\dimen@ii=-1pt\fi
+      \advance\dimen@ by\wd1 \global\setbox\tabsdone
+        =\hbox{\box1\unhbox\tabsdone}\repeat
+    \setbox0=\hbox to\dimen@{\unhbox0}\fi
+  \box0}
+\endtt
+
+%\danger \TeX\ has another important way to make tables, using an operation
+%called ^|\halign| (``horizontal alignment''). In this case the table format
+%is based on the notion of a {\sl^{template}}, not on tabbing; the idea
+%is to specify a separate environment for the text in each column.
+%Individual entries are inserted into their templates, and presto, the
+%table is complete.
+\danger \1\TeX\ 还有制表的另一种重要方法，就是使用命令 |\halign|(``水平对齐'')。%
+在这种情况下，表格的样式建立在{\KT{9}模板}的概念上，而不是制表；
+思路是在每栏中给出一个单独的文本环境。%
+各个单元插入到其模板中，这样很快就制作出表格了。
+
+%\danger For example, let's go back to the Horizontal/Vertical/Math list
+%example that appeared earlier in this chapter; we can specify it with
+%|\halign| instead of with tabs. The new specification is
+%\begintt
+%\halign{\indent#\hfil&\quad#\hfil\cr
+%  Horizontal lists&Chapter 14\cr
+%  Vertical lists&Chapter 15\cr
+%  Math lists&Chapter 17\cr}
+%\endtt
+%and it produces exactly the same result as the old one. This example
+%deserves careful study, because |\halign| is really quite simple once
+%you get the hang of it. The first line contains the {\sl ^{preamble}\/} to
+%the alignment, which is something like the sample line used to set tabs
+%for~|\+|. In this case the preamble contains two templates, namely
+%`|\indent#\hfil|' for the first column and `|\quad#\hfil|' for the
+%second. Each template contains exactly one appearance of `|#|', ^^{sharp}
+%and it means ``stick the text of each column entry in this place.''
+%Thus, the first column of the line that follows the preamble becomes
+%\begintt
+%\indent Horizontal lists\hfil
+%\endtt
+%when `|Horizontal lists|' is stuffed into its template; and the second
+%column, similarly, becomes `|\quad Chapter 14\hfil|'. The question is,
+%why |\hfil|? Ah, now we get to the interesting point of the whole thing:
+%\TeX\ reads an entire |\halign{...}| specification into its memory
+%before typesetting anything, and it keeps track of the maximum width
+%of each column, assuming that each column is set without stretching or
+%shrinking the glue. Then it goes back and puts every entry into a box,
+%setting the glue so that each box has the maximum column width. That's
+%where the |\hfil| comes in; it stretches to fill up the extra space in
+%narrower entries.
+\danger 例如，再回头看看在本章前面出现过的水平/垂直/数学列的例子；
+我们可以不用制表符，而用 |\halign| 来得到它。%
+新方法是
+\begintt
+\halign{\indent#\hfil&\quad#\hfil\cr
+  Horizontal lists&Chapter 14\cr
+  Vertical lists&Chapter 15\cr
+  Math lists&Chapter 17\cr}
+\endtt
+并且它得到的结果与原来的一样。%
+这个例子值得仔细研究，因为一旦你掌握了 |\halign| 的窍门，它实际上就相当简单了。%
+第一行包含了对齐的{\KT{9}导言}, 它有点象设置 |\+| 的制表符例句。%
+在本例中，导言包含两个模板，即第一栏的`|\indent#\hfil|'和%
+第二栏的`|\quad#\hfil|'。%
+每个模板正好出现一次`|#|',
+它的意思是``每个栏单元的文本放在此处''。%
+因此，当用`|Horizontal lists|'来填充其模板时，导言后面的行的第一栏就变成
+\begintt
+\indent Horizontal lists\hfil
+\endtt
+类似地，第二栏变成`|\quad Chapter 14\hfil|'。%
+问题是，为什么要用 |\hfil|?
+噢，现在我们渐入佳境了：
+ \TeX\ 在排版之前首先把整个 |\halign{...}| 的内容读入其内存，
+并且确定每栏的最大宽度，假定每栏都没有设置伸缩的粘连。%
+这时，它才回过头来把每个单元放在一个盒子中，
+并且设定粘连使得每个盒子的栏宽度都是最大的。%
+这就是为什么要用到 |\hfil|;
+它在窄单元中伸长以充满额外的空间。
+
+%\dangerexercise What table would have resulted if the template for the
+%first column in this example had been `|\indent\hfil#|' instead of
+%`|\indent#\hfil|'?
+%\answer \par\nobreak\vskip-\baselineskip
+%\halign{\indent\hfil#&\quad#\hfil\cr
+%Horizontal lists&Chapter 14\cr\noalign{\nobreak}
+%Vertical lists&Chapter 15\cr\noalign{\nobreak}
+%Math lists&Chapter 17\qquad (i.e., the first column would be
+%  right-justified)\cr}
+\dangerexercise 如果在本例第一栏的模板中用 `|\indent\hfil#|'
+代替 `|\indent#\hfil|'，得到的表格是什么样？
+\answer \par\nobreak\vskip-\baselineskip
+\halign{\indent\hfil#&\quad#\hfil\cr
+Horizontal lists&Chapter 14\cr\noalign{\nobreak}
+Vertical lists&Chapter 15\cr\noalign{\nobreak}
+Math lists&Chapter 17\qquad （即第一栏将是右对齐的）\cr}
+
+%\danger Before reading further, please make sure that you understand the
+%idea of templates in the example just presented. There are several
+%important differences between |\halign| and~|\+|: (1)~|\halign| calculates
+%^^{halign compared to tabbing}
+%the maximum column widths automatically; you don't have to guess what the
+%longest entries will be, as you do when you set tabs with a sample line.
+%(2)~Each |\halign| does its own calculation of column widths; you have to
+%do something special if you want two different |\halign| operations to
+%produce identical alignments. By contrast, the |\+| operation remembers tab
+%positions until they are specifically reset; any number of paragraphs and
+%even |\halign| operations can intervene between |\+|'s, without affecting
+%the tabs. (3)~Because |\halign| reads an entire table in order to
+%determine the maximum column widths, it is unsuitable for huge tables
+%that fill several pages of a book. By contrast, the~|\+|~operation deals
+%with one line at a time, so it places no special demands on \TeX's memory.
+%\ (However, if you have a huge table, you should probably define your own
+%special-purpose macro for each line instead of relying on the general
+%|\+|~operation.) (4)~|\halign| takes less computer time than |\+|~does,
+%because |\halign| is a built-in command of \TeX, while |\+|~is a macro
+%that has been coded in terms of\/ |\halign| and various other primitive
+%operations. (5)~Templates are much more versatile than tabs, and they can
+%save you a lot of typing. For example, the Horizontal/Vertical/Math list
+%table could be specified more briefly by noticing that there's common
+%information in the columns:
+%\begintt
+%\halign{\indent# lists\hfil&\quad Chapter #\cr
+%  Horizontal&14\cr Vertical&15\cr Math&17\cr}
+%\endtt
+%You could even save two more keystrokes by noting that the chapter numbers
+%all start with `|1|'\thinspace! \ (Caution: It takes more time to think of
+%optimizations like this than to type things in a straightforward way;
+%do it only if you're bored and need something amusing to keep up
+%your interest.)\ (6)~On the other hand, templates are no substitute for
+%tabs when the tab positions are continually varying, as in the
+%computer program example.
+\danger 在进一步读下去前，一定要理解了刚才例子中模板的思想。%
+在 |\halign| 和 |\+| 之间有结果重要的差别：
+(1). ~|\halign| 自动计算最大栏宽度；
+不必去估计最长的单元是哪个，就象在例句中设置制表符时所做的那样。%
+(2). 每个 |\halign| 要计算自己的栏宽度；
+如果要让两个不同的 |\halign| 命令得到同样的对齐，就必须做特殊处理。%
+相反，命令 |\+| 一直记着制表符的位置，直到它们被重新设定为止；
+在 |\+| 之间插入任意个段落，甚至插入命令 |\halign| 也不影响制表符。%
+(3). 因为 |\halign| 为了计算最大栏宽度要读入整个表格，
+所以它不适宜用在书中横贯几页的大表格。%
+相反，命令 |\+| 一次只处理一行，因此它对 \TeX\ 内存中没有什么特殊要求。%
+(但是，如果要生成一个大表格，可能你要为每行定义特殊的宏而不是只靠一般的%
+~|\+| 命令。)
+(4). \1|\halign| 花的计算机时间比 |\+| 少，
+因为 |\halign| 是 \TeX\ 的内置命令，而 |\+| 是一个宏，它由 |\halign| 和其它%
+原始命令一起构成。%
+(5). 模板比制表符更通用，并且节省很多输入工作量。%
+例如，水平/垂直/数学列的表格中，如果注意到栏中的公共部分，就可以如下%
+更简洁地输入它：
+\begintt
+\halign{\indent# lists\hfil&\quad Chapter #\cr
+  Horizontal&14\cr Vertical&15\cr Math&17\cr}
+\endtt
+甚至于如果注意到了章的编号以`|1|'开头，那么还可以节省两次击键!
+(注意：可能象这样优化比直接输入花费的时间更多；
+只有你无聊或寻乐时再用它。)
+(6). 另一方面，模板不能代替制表符，因为制表符的位置是连续变化的，
+就象在计算机程序的例子中一样。
+
+%\danger Let's do a more interesting table, to get more
+%experience with |\halign|. Here is another example based on the
+%^{Beck}/^{Bertholle}/^{Child} book cited earlier:
+%$$\vbox{\openup2pt
+%\halign{\hfil\bf#&\quad\hfil\it#\hfil&\quad\hfil#\hfil&
+%           \quad\hfil#\hfil&\quad#\hfil\cr
+%\sl American&\sl French&\sl Age&\sl Weight&\sl Cooking\cr
+%\noalign{\vskip-2pt}
+%\sl Chicken&\sl Connection&\sl(months)&\sl(lbs.)&\sl Methods\cr
+%\noalign{\smallskip}
+%Squab&Poussin&2&\frac3/4 to 1&Broil, Grill, Roast\cr
+%Broiler&Poulet Nouveau&2 to 3&1\frac1/2 to 2\frac1/2&Broil, Grill, Roast\cr
+%Fryer&Poulet Reine&3 to 5&2 to 3&Fry, Saut\'e, Roast\cr
+%Roaster&Poularde&5\frac1/2 to 9&Over 3&Roast, Poach, Fricassee\cr
+%Fowl&Poule de l'Ann\'ee&10 to 12&Over 3&Stew, Fricassee\cr
+%Rooster&Coq&Over 12&Over 3&Soup stock, Forcemeat\cr}}$$
+%Note that, except for the title lines, the first column is set right-justified
+%in boldface type; the middle columns are centered; the second column
+%is centered and in italics; the final column is left-justified. We would
+%like to be able to type the rows of the table as simply as possible; hence,
+%for example, it would be nice to be able to specify the bottom row by
+%typing only
+%\begintt
+%Rooster&Coq&Over 12&Over 3&Soup stock, Forcemeat\cr
+%\endtt
+%without worrying about type styles, centering, and so on. This not only
+%cuts down on keystrokes, it also reduces the chances for making typographical
+%errors. Therefore the template for the first column should be
+%`|\hfil\bf#|'; for the second column it should be `|\hfil\it#\hfil|' to
+%get the text centered and italicized; and so on. We also need to allow
+%for space between the columns, say one quad. {\it Voil\`a! La typographie
+%est sur la table:\/}\looseness=-1
+%\begindisplay
+%|\halign{\hfil\bf#&\quad\hfil\it#\hfil&\quad\hfil#\hfil&|\cr
+%|          \quad\hfil#\hfil&\quad#\hfil\cr|\cr
+%\ \<the title lines>\cr
+%| Squab&Poussin&2&\frac3/4 to 1&Broil, Grill, Roast\cr|\cr
+%| ... Forcemeat\cr}|\cr
+%\enddisplay
+%As with the |\+| operation, spaces are ignored after |&|, in the preamble
+%as well as in the individual rows of the table. Thus, it is convenient
+%to end a long row with `|&|' when the~row takes up more than one line
+%in your input file.
+\danger 我们用一个更有意思的表格来进一步熟悉 |\halign|。%
+下面是另一个例子：
+$$\vbox{\openup2pt
+\halign{\hfil\bf#&\quad\hfil\it#\hfil&\quad\hfil#\hfil&
+           \quad\hfil#\hfil&\quad#\hfil\cr
+\sl American&\sl French&\sl Age&\sl Weight&\sl Cooking\cr
+\noalign{\vskip-2pt}
+\sl Chicken&\sl Connection&\sl(months)&\sl(lbs.)&\sl Methods\cr
+\noalign{\smallskip}
+Squab&Poussin&2&\frac3/4 to 1&Broil, Grill, Roast\cr
+Broiler&Poulet Nouveau&2 to 3&1\frac1/2 to 2\frac1/2&Broil, Grill, Roast\cr
+Fryer&Poulet Reine&3 to 5&2 to 3&Fry, Saut\'e, Roast\cr
+Roaster&Poularde&5\frac1/2 to 9&Over 3&Roast, Poach, Fricassee\cr
+Fowl&Poule de l'Ann\'ee&10 to 12&Over 3&Stew, Fricassee\cr
+Rooster&Coq&Over 12&Over 3&Soup stock, Forcemeat\cr}}$$
+注意，除了标题行外，第一栏的设置为居右，使用 bold 字体；
+中间的栏是居中的；
+第二栏居中，使用的是 italic 字体；
+最后一栏是居左。%
+我们希望尽可能简单地输入表格的行；
+因此，例如，最好是只用输入
+\begintt
+Rooster&Coq&Over 12&Over 3&Soup stock, Forcemeat\cr
+\endtt
+就能得到最后一行，而不用管字体，居中与否等等。%
+这不但减小输入工作量，还能减少输入中的错误。%
+因此，第一栏的模板应该是`|\hfil\bf#|';
+第二栏的模板应该是`|\hfil\it#\hfil|', 得到的是居中的 italic 文本；
+等等。%
+我们还要在栏之间插入一定的间距，比如一个 quad。%
+\begindisplay
+|\halign{\hfil\bf#&\quad\hfil\it#\hfil&\quad\hfil#\hfil&|\cr
+|          \quad\hfil#\hfil&\quad#\hfil\cr|\cr
+\ \<the title lines>\cr
+| Squab&Poussin&2&\frac3/4 to 1&Broil, Grill, Roast\cr|\cr
+| ... Forcemeat\cr}|\cr
+\enddisplay
+就象 |\+| 命令一样，在导言研究表格的各个行中，~|&| 后面的空格被忽略掉。%
+因此，当输入文件中表格的行要占多行时，用`|&|'来结束长的行是很方便的。
+
+%\dangerexercise How was the `{\bf Fowl}' line typed? \ (This is too easy.)
+%\answer |Fowl&Poule de l'Ann\'ee&10 to 12&Over 3&Stew, Fricassee\cr|
+\dangerexercise \1怎样输入 `{\bf Fowl}' 这行？（这太简单了。）
+\answer |Fowl&Poule de l'Ann\'ee&10 to 12&Over 3&Stew, Fricassee\cr|
+
+%\danger The only remaining problem in this example is to specify the title
+%lines, which have a different format from the others. In this case the style
+%is different only because the typeface is slanted, so there's no special
+%difficulty; we just type
+%\begintt
+%\sl American&\sl French&\sl Age&\sl Weight&\sl Cooking\cr
+%\sl Chicken&\sl Connection&\sl(months)&\sl(lbs.)&\sl Methods\cr
+%\endtt
+%It is necessary to say `|\sl|' each time, because each individual entry
+%of a table is implicitly enclosed in braces.
+\danger 在本例中，还有一个问题，就是给出标题行，
+它的格式与别的行是不一样的。%
+在这种情况下，格式的差别只在于字体是 slanted, 因此没什么特别难的；
+我们只需要用
+\begintt
+\sl American&\sl French&\sl Age&\sl Weight&\sl Cooking\cr
+\sl Chicken&\sl Connection&\sl(months)&\sl(lbs.)&\sl Methods\cr
+\endtt
+每次必须给出`|\sl|', 因为表格的每个单元都暗中封装在大括号中了。
+
+%\danger The author used `^|\openup||2pt|' to increase the distance between
+%baselines in the ^{poultry} table; a discriminating reader will notice
+%that there's also a bit of extra space between the title line and the
+%other lines.  This extra space was inserted by typing
+%`^|\noalign||{\smallskip}|' just after the title line. In general, you can say
+%\begindisplay
+%|\noalign{|\<vertical mode material>|}|
+%\enddisplay
+%just after any |\cr| in an |\halign|; \TeX\ will simply copy the vertical
+%mode material, without subjecting it to alignment, and it will appear
+%in place when the |\halign| is finished. You can use |\noalign| to
+%insert extra space, as here, or to insert penalties that affect page
+%breaking, or even to insert lines of text (see Chapter~19). Definitions
+%inside the braces of\/ |\noalign{...}| are local to that group.
+\danger 在上面的表格中，作者用`^|\openup||2pt|'来增加基线间的距离；
+眼尖的读者还会发现在标题行和其它行之间也有额外的间距。%
+这个额外的间距是由标题行紧后面的`^|\noalign||{\smallskip}|'插入的。%
+一般地，在 |\halign| 的任意 |\cr| 紧后面都可以使用
+\begindisplay
+|\noalign{|\<vertical mode material>|}|
+\enddisplay
+ \TeX\ 将直接重复这些垂直模式的内容，而不把它进行对齐，
+并且当 |\halign| 结束时它就出现在此处。%
+你可以象这里一样用 |\noalign| 插入额外间距，或者插入控制分页的惩罚，
+或者还可插入文本行(见第十九章)。%
+在 |\noalign| 的大括号中的定义的影响局限在此组内。
+
+%\danger The |\halign| command also makes it possible for you to adjust
+%the spacing between columns so that a table will fill a specified area.
+%You don't have to decide that the ^{inter-column space} is a quad; you can
+%let \TeX\ make the decisions, based on how wide the columns come out,
+%because \TeX\ puts ``^{tabskip glue}'' between columns. This tabskip glue
+%is usually zero, but you can set it to any value you like by saying
+%`^|\tabskip||=|\<glue>'. For example,
+%let's do the poultry table again, but with the beginning of the
+%specification changed as follows:
+%\begintt
+%\tabskip=1em plus2em minus.5em
+%\halign to\hsize{\hfil\bf#&\hfil\it#\hfil&\hfil#\hfil&
+%           \hfil#\hfil&#\hfil\cr
+%\endtt
+%The main body of the table is unchanged, but the |\quad| spaces have been
+%removed from the preamble, and a nonzero |\tabskip| has been specified
+%instead. Furthermore `|\halign|' has been changed to `|\halign
+%to\hsize|'; this means that each line of the table will be put into a
+%box whose width is the current value of\/ ^|\hsize|, i.e., the horizontal
+%line width usually used in paragraphs. The resulting table looks like this:
+%$$\vbox{\openup2pt
+%\tabskip=1em plus2em minus.5em
+%\halign to\hsize{\hfil\bf#&\hfil\it#\hfil&\hfil#\hfil&
+%           \hfil#\hfil&#\hfil\cr
+%\sl American&\sl French&\sl Age&\sl Weight&\sl Cooking\cr
+%\noalign{\vskip-2pt}
+%\sl Chicken&\sl Connection&\sl(months)&\sl(lbs.)&\sl Methods\cr
+%\noalign{\smallskip}
+%Squab&Poussin&2&\frac3/4 to 1&Broil, Grill, Roast\cr
+%Broiler&Poulet Nouveau&2 to 3&1\frac1/2 to 2\frac1/2&Broil, Grill, Roast\cr
+%Fryer&Poulet Reine&3 to 5&2 to 3&Fry, Saut\'e, Roast\cr
+%Roaster&Poularde&5\frac1/2 to 9&Over 3&Roast, Poach, Fricassee\cr
+%Fowl&Poule de l'Ann\'ee&10 to 12&Over 3&Stew, Fricassee\cr
+%Rooster&Coq&Over 12&Over 3&Soup stock, Forcemeat\cr}}$$
+\danger 命令 |\halign| 还可以用来调整栏之间的间距，
+使得表格充满给定的区域。%
+你不需要确定出栏间的间距是一个 quad;
+可以让 \TeX\ 来决定，这是按照栏的宽度确定的，
+因为 \TeX\ 在栏之间放置了``制表粘连''。%
+这个制表粘连一般是零，但是你可以用`^|\tabskip||=|\<glue>'把它设置为任何所要的值。%
+例如，再讨论上面的表格，但是把开头变成如下：
+\begintt
+\tabskip=1em plus2em minus.5em
+\halign to\hsize{\hfil\bf#&\hfil\it#\hfil&\hfil#\hfil&
+           \hfil#\hfil&#\hfil\cr
+\endtt
+表格的主体没有改动，但是从导言中去掉了间距 |\quad|,
+而用一个非零的 |\tabskip| 来代替。%
+还有，`|\halign|'被改为`|\halign to\hsize|';
+这意味着表格的每行都放在宽度为当前 |\hsize| 的值的盒子中，
+即，段落中通常的水平行宽度。%
+所得的结果如下：
+$$\vbox{\openup2pt
+\tabskip=1em plus2em minus.5em
+\halign to\hsize{\hfil\bf#&\hfil\it#\hfil&\hfil#\hfil&
+           \hfil#\hfil&#\hfil\cr
+\sl American&\sl French&\sl Age&\sl Weight&\sl Cooking\cr
+\noalign{\vskip-2pt}
+\sl Chicken&\sl Connection&\sl(months)&\sl(lbs.)&\sl Methods\cr
+\noalign{\smallskip}
+Squab&Poussin&2&\frac3/4 to 1&Broil, Grill, Roast\cr
+Broiler&Poulet Nouveau&2 to 3&1\frac1/2 to 2\frac1/2&Broil, Grill, Roast\cr
+Fryer&Poulet Reine&3 to 5&2 to 3&Fry, Saut\'e, Roast\cr
+Roaster&Poularde&5\frac1/2 to 9&Over 3&Roast, Poach, Fricassee\cr
+Fowl&Poule de l'Ann\'ee&10 to 12&Over 3&Stew, Fricassee\cr
+Rooster&Coq&Over 12&Over 3&Soup stock, Forcemeat\cr}}$$
+
+%\danger In general, \TeX\ puts tabskip glue before the first column, after
+%the last column, and between the columns of an alignment. You can specify
+%the final aligned size by saying `|\halign to|\<dimen>' or
+%`|\halign spread|\<dimen>', ^^|to| ^^|spread|
+%just as you can say `|\hbox to|\<dimen>' and `|\hbox spread|\<dimen>'.
+%This specification governs the setting of the tabskip glue; but it does
+%not affect the setting of the glue within column entries. \ (Those
+%entries have already been packaged into boxes having the maximum
+%natural width for their columns, as described earlier.)
+\danger \1一般地， \TeX\ 把制表粘连放在第一栏之前，最后一栏之后和对齐的各栏之间。%
+用`|\halign to|\<dimen>'或`|\halign spread|\<dimen>'就可以得到最后的对齐尺寸，
+就象使用`|\hbox to|\<dimen>'和`|\hbox spread|\<dimen>'一样。%
+这个命令控制着制表粘连的设置；
+但是它不影响栏单元中粘连的设置。%
+(象以前讨论过的那样，这些单元已经放在宽度为其自然宽度的盒子中了。)
+
+%\ddanger Therefore `|\halign| |to| |\hsize|' will do nothing if the
+%tabskip glue has no stretchability or shrinkability, except that it will
+%cause \TeX\ to report an ^{underfull} or ^{overfull} box. An overfull box
+%occurs if the tabskip glue can't shrink to meet the
+%given specification; in this case you get a warning on the terminal
+%and in your log file, but there is no ``^{overfull rule}'' to mark the
+%oversize table on the printed output. The warning message shows a
+%``^{prototype row}'' (see Chapter~27).
+\ddanger 因此，如果制表粘连不能伸缩，那么`|\halign| |to| |\hsize|'得到的仅仅是%
+松散或溢出的盒子而已。%
+如果制表粘连不能收缩到给定尺寸，就出现了溢出的盒子；
+在这种情况下，就会在终端和 log 文件中出现警告，
+但是在输出结果中不会在超出尺寸的表格上标记黑方块。%
+警告信息显示的是``模板行''(见第二十七章)。
+
+%\danger The poultry example just given used the same tabskip glue
+%everywhere, but you can vary it by resetting ^|\tabskip| within the
+%preamble. The tabskip glue that is in force when \TeX\ reads the
+%`|{|' following |\halign| will be used before the first column;
+%the tabskip glue that is in force when \TeX\ reads the `|&|' after
+%the first template will be used between the first and second
+%columns; and so on. The tabskip glue that is in force when \TeX\
+%reads the |\cr| after the last template will be used after the
+%last column. For example, in
+%\begintt
+%\tabskip=3pt
+%\halign{\hfil#\tabskip=4pt& #\hfil&
+%  \hbox to 10em{\hss\tabskip=5pt # \hss}\cr ...}
+%\endtt
+%the preamble specifies aligned lines that will consist of the following
+%seven parts:
+%\begindisplay
+%tabskip glue $3\pt$;\cr
+%first column, with template `|\hfil#|';\cr
+%tabskip glue $4\pt$;\cr
+%second column, with template `|#\hfil|';\cr
+%tabskip glue $4\pt$;\cr
+%third column, with template `|\hbox to 10em{\hss# \hss}|';\cr
+%tabskip glue $5\pt$.\cr
+%\enddisplay
+\danger 上面给出的例子在所有地方用的都是同样的制表粘连，
+但是可以在导言中重新设置 |\tabskip| 来改变它。%
+ \TeX\ 把在 |\halign| 后面的`|{|'前读入的制表粘连放在第一栏前面，
+把第一个模板后面`|&|'前读入的制表粘连放在第一和第二栏之间；等等。%
+在最后一个模板后面的 |\cr| 前读入的制表粘连放在最后一栏的后面。%
+例如，在
+\begintt
+\tabskip=3pt
+\halign{\hfil#\tabskip=4pt& #\hfil&
+  \hbox to 10em{\hss\tabskip=5pt # \hss}\cr ...}
+\endtt
+中，导言中给出了对齐的行，它包含下列七个部分：
+\begindisplay
+制表粘连 $3\pt$;\cr
+第一栏，模板为`|\hfil#|';\cr
+制表粘连 $4\pt$;\cr
+第二栏，模板为`|#\hfil|';\cr
+制表粘连 $4\pt$;\cr
+第三栏，模板为`|\hbox to 10em{\hss# \hss}|';\cr
+制表粘连 $5\pt$。\cr
+\enddisplay
+
+%\ddanger \TeX\ copies the templates without interpreting them except to
+%remove any |\tabskip| glue specifications. More precisely, the tokens of the
+%preamble are passed directly to the templates without macro expansion;
+%\TeX\ looks only for `|\cr|' commands, `|&|', `|#|', `|\span|', and
+%`|\tabskip|'. The \<glue> following `|\tabskip|' is scanned in~the usual
+%way (with macro expansion), and the corresponding tokens are not included~in
+%the current template.  Notice that, in the example above, the space
+%after `|5pt|' also disappeared. The fact that |\tabskip=5pt| occurred
+%inside an extra level of braces did not make the definition local, since
+%\TeX\ didn't ``see'' those braces; similarly, if\/ |\tabskip| had been
+%preceded by `|\global|', \TeX\ wouldn't have made a global definition, it
+%would just have put `|\global|' into the template.  All assignments to
+%|\tabskip| within the preamble are local to the |\halign| (unless
+%^|\globaldefs| is positive), so the value of\/ |\tabskip| will be $3\pt$ again
+%when this particular |\halign| is completed.
+\ddanger  \TeX\ 把模板复制下来而不解释它们，但是要去掉任何 |\tabskip| 这个粘连。%
+更确切地说，导言的记号被直接送到模板而不进行宏展开；
+ \TeX\ 只寻找命令`|\cr|', `|&|', `|#|', `|\span|'和`|\tabskip|'。%
+跟在`|\tabskip|'后面的 \<glue> 按通常方法读入(进行宏展开),
+并且相应的记号不包括在当前模板中。%
+注意，在上面的例子中，`|5pt|'后面的空格也被去掉了。%
+|\tabskip=5pt| 出现在大括号中间，但是它不能把此定义变成局部的，
+因为 \TeX\ 没有``看到''这些大括号；
+类似地，如果 |\tabskip| 前面有`|\global|',  \TeX\ 也不会生成全局定义，
+它只把`|\global|'放在模板中。%
+导言中所有 |\tabskip| 的赋值对 |\halign| 都是局部的(除非%
+~|\globaldefs| 是正的), 因此当这个特殊的 |\halign| 结束时，
+~|\tabskip| 的值又变成 $3\pt$ 了。
+
+%\ddanger When `^|\span|' appears in a preamble, it causes the next token
+%to be expanded, i.e., ``ex-span-ded,'' before \TeX\ reads on.
+\ddanger 当`^|\span|'出现在导言中时，就引起下一个记号被展开，
+即在 \TeX\ 读入前，``展-开-了''。
+
+%\def\\{{\it c\/}}
+%\dangerexercise Design a preamble for the following table:
+%$$\halign to\hsize{\sl#\hfil\tabskip=.5em plus.5em&
+%   #\hfil\tabskip=0pt plus.5em&
+%   \hfil#\tabskip=1em plus2em&
+%  \sl#\hfil\tabskip=.5em plus.5em&
+%   #\hfil\tabskip=0pt plus.5em&
+%   \hfil#\tabskip=0pt\cr
+%England&P. Philips&1560--1628&
+%  Netherlands&J. P. Sweelinck&1562--1621\cr
+%&J. Bull&\\1563--1628&
+%  &P. Cornet&\\1570--1633\cr
+%Germany&H. L. Hassler&1562--1612&
+%  Italy&G. Frescobaldi&1583--1643\cr
+%&M. Pr\ae torius&1571--1621&
+%  Spain&F. Correa de Arauxo&\\1576--1654\cr
+%France&J. Titelouze&1563--1633&
+%  Portugal&M. R. Coelho&\\1555--\\1635\cr}$$
+%The tabskip glue should be zero at the left and right of each line; it should be
+%$1\em$ plus $2\em$ in the center; and it should be $.5\em$
+%plus $.5\em$ before the names, $0\em$ plus $.5\em$ before
+%the dates. Assume that the lines of the table will be specified by, e.g.,
+%\begintt
+%France&J. Titelouze&1563--1633&
+%  Portugal&M. R. Coelho&\\1555--\\1635\cr
+%\endtt
+%where `|\\|' has been predefined by `|\def\\{{\it c\/}}|'.
+%^^{organists}
+%^^{Cornet, Peeter} ^^{Philips, Peter} ^^{Sweelinck, Jan Pieterszoon}
+%^^{Bull, John} ^^{Titelouze, Jehan} ^^{Hassler, Hans Leo}
+%^^{Pr\ae torius [Schultheiss], Michael} ^^{Frescobaldi, Girolamo}
+%^^{Coelho, Manuel Rodrigues} % so listed in Lisbon & Rio, contrary to Groves!
+%^^{Correa de Arauxo, Francisco}
+%% The idea for this table came from The Organ and its Music, by Peeters and
+%% Vente (Antwerp, 1971); but their data was so flaky, I'm not citing them...
+%\answer |$$\halign to\hsize{\sl#\hfil\tabskip=.5em plus.5em&|\parbreak
+%        |   #\hfil\tabskip=0pt plus.5em&|\parbreak
+%        |   \hfil#\tabskip=1em plus2em&|\parbreak
+%        |  \sl#\hfil\tabskip=.5em plus.5em&|\parbreak
+%        |   #\hfil\tabskip=0pt plus.5em&|\parbreak
+%        |   \hfil#\tabskip=0pt\cr ...}$$|
+\def\\{{\it c\/}}
+\dangerexercise \1为下列表格设计一个导言：
+$$\halign to\hsize{\sl#\hfil\tabskip=.5em plus.5em&
+   #\hfil\tabskip=0pt plus.5em&
+   \hfil#\tabskip=1em plus2em&
+  \sl#\hfil\tabskip=.5em plus.5em&
+   #\hfil\tabskip=0pt plus.5em&
+   \hfil#\tabskip=0pt\cr
+England&P. Philips&1560--1628&
+  Netherlands&J. P. Sweelinck&1562--1621\cr
+&J. Bull&\\1563--1628&
+  &P. Cornet&\\1570--1633\cr
+Germany&H. L. Hassler&1562--1612&
+  Italy&G. Frescobaldi&1583--1643\cr
+&M. Pr\ae torius&1571--1621&
+  Spain&F. Correa de Arauxo&\\1576--1654\cr
+France&J. Titelouze&1563--1633&
+  Portugal&M. R. Coelho&\\1555--\\1635\cr}$$
+在每行的左右两边制表粘连为零；在中间是 $1\em$ plus $2\em$；
+在名字前面是 $.5\em$ plus $.5\em$；在日期前面是 $0\em$ plus $.5\em$。
+假设每行是象这样输入的：
+\begintt
+France&J. Titelouze&1563--1633&
+  Portugal&M. R. Coelho&\\1555--\\1635\cr
+\endtt
+其中已经把 `|\\|' 定义为 `|\def\\{{\it c\/}}|'。
+\answer |$$\halign to\hsize{\sl#\hfil\tabskip=.5em plus.5em&|\parbreak
+        |   #\hfil\tabskip=0pt plus.5em&|\parbreak
+        |   \hfil#\tabskip=1em plus2em&|\parbreak
+        |  \sl#\hfil\tabskip=.5em plus.5em&|\parbreak
+        |   #\hfil\tabskip=0pt plus.5em&|\parbreak
+        |   \hfil#\tabskip=0pt\cr ...}$$|
+
+%\medskip
+%\ddangerexercise Design a preamble so that the table ^^{Welsh conjugation}
+%$$\def\welshverb#1={{\bf#1} = }
+%\halign to\hsize{\welshverb#\hfil\tabskip=1em plus1em&
+%  \welshverb#\hfil&\welshverb#\hfil\tabskip=0pt\cr
+%rydw i=I am&ydw i=am I&roeddwn i=I was\cr
+%rwyt ti=thou art&wyt ti=art thou&roeddet ti=thou wast\cr
+%mae e=he is&ydy e=is he&roedd e=he was\cr
+%mae hi=she is&ydy hi=is she&roedd hi=she was\cr
+%rydyn ni=we are&ydyn ni=are we&roedden ni=we were\cr
+%rydych chi=you are&ydych chi=are you&roeddech chi=you were\cr
+%maen nhw=they are&ydyn nhw=are they&roedden nhw=they were\cr}$$
+%can be specified by typing lines like
+%\begintt
+%mae hi=she is&ydy hi=is she&roedd hi=she was\cr
+%\endtt
+%\answer The trick is to define a new macro for the preamble:
+%\begintt
+%$$\def\welshverb#1={{\bf#1} = }
+%\halign to\hsize{\welshverb#\hfil\tabskip=1em plus1em&
+%  \welshverb#\hfil&\welshverb#\hfil\tabskip=0pt\cr ...}$$
+%\endtt
+\medskip
+\ddangerexercise 设计一个导言，使得下列表格
+$$\def\welshverb#1={{\bf#1} = }
+\halign to\hsize{\welshverb#\hfil\tabskip=1em plus1em&
+  \welshverb#\hfil&\welshverb#\hfil\tabskip=0pt\cr
+rydw i=I am&ydw i=am I&roeddwn i=I was\cr
+rwyt ti=thou art&wyt ti=art thou&roeddet ti=thou wast\cr
+mae e=he is&ydy e=is he&roedd e=he was\cr
+mae hi=she is&ydy hi=is she&roedd hi=she was\cr
+rydyn ni=we are&ydyn ni=are we&roedden ni=we were\cr
+rydych chi=you are&ydych chi=are you&roeddech chi=you were\cr
+maen nhw=they are&ydyn nhw=are they&roedden nhw=they were\cr}$$
+的输入方式象下面这样：
+\begintt
+mae hi=she is&ydy hi=is she&roedd hi=she was\cr
+\endtt
+\answer 所用的技巧是给导言定义一个新的宏：
+\begintt
+$$\def\welshverb#1={{\bf#1} = }
+\halign to\hsize{\welshverb#\hfil\tabskip=1em plus1em&
+  \welshverb#\hfil&\welshverb#\hfil\tabskip=0pt\cr ...}$$
+\endtt
+
+%\setbox0=\vbox{\lineskip0pt
+%\tabskip=0pt plus1fil\halign to\hsize{\tabskip=0pt\strut
+%\hfil#: &\vtop{\parindent=0pt\hsize=16em\hangindent.5em\strut#\strut}\cr
+%\omit\hfil\sevenrm B.C.&\cr
+%397&War between Syracuse and Carthage\cr
+%396&Aristippus of Cyrene and An\-tis\-the\-nes of Athens (philosophers)\cr
+%395&Athens rebuilds the Long Walls\cr
+%394&Battles of Coronea and Cnidus\cr
+%\\393&Plato's
+%  {\sl Apology\/};
+% Xenophon's
+%  {\sl Memorabilia\/};
+% Aristophanes'
+%  {\sl Ecclesiazus\ae\/}\cr
+%391--87&Dionysius subjugates south Italy\cr
+%391&Isocrates opens his school\cr
+%390&Evagoras Hellenizes Cyprus\cr
+%387&``King's Peace''; Plato visits Ar\-chy\-tas of Taras (mathematician)
+%  and Dionysius I\cr
+%386&Plato founds the Academy\cr
+%383&Spartans occupy Cadmeia at Thebes\cr
+%380&Isocrates' {\sl Panegyricus\/}\cr}}
+\setbox0=\vbox{\lineskip0pt
+\tabskip=0pt plus1fil\halign to\hsize{\tabskip=0pt\strut
+\hfil#: &\vtop{\parindent=0pt\hsize=16em\hangindent.5em\strut#\strut}\cr
+\omit\hfil\sevenrm B.C.&\cr
+397&War between Syracuse and Carthage\cr
+396&Aristippus of Cyrene and An\-tis\-the\-nes of Athens (philosophers)\cr
+395&Athens rebuilds the Long Walls\cr
+394&Battles of Coronea and Cnidus\cr
+\\393&Plato's
+  {\sl Apology\/};
+ Xenophon's
+  {\sl Memo\-rabilia\/};
+ Aristophanes'
+  {\sl Ecclesiazus\ae\/}\cr
+391--87&Dionysius subjugates south Italy\cr
+391&Isocrates opens his school\cr
+390&Evagoras Hellenizes Cyprus\cr
+387&``King's Peace''; Plato visits Ar\-chy\-tas of Taras (mathematician)
+  and Dionysius I\cr
+386&Plato founds the Academy\cr
+383&Spartans occupy Cadmeia at Thebes\cr
+380&Isocrates' {\sl Panegyricus\/}\cr}}
+
+%\medskip
+%\ddangerexercise \hsize=13pc
+%The line breaks in the second column of the table at the right were chosen
+%by \TeX\ so that the second column was exactly 16~ems wide. Furthermore,
+%the author specified one of the rows of the table by typing
+%$$\halign{#\hfil\cr
+%|\\393&Plato's {\sl Apology\/};|\cr
+%|  Xenophon's|\cr
+%|   {\sl Memorabilia\/};|\cr
+%|  Aristophanes'|\cr
+%|   {\sl Ecclesiazus\ae\/}\cr|\cr}$$
+%Can you guess what preamble was used in the alignment?  \ [The data comes
+%from Will ^{Durant}'s {\sl The Life of Greece\/} (Simon \& Schuster, 1939).]
+%^^{Aristippus of Cyrene} ^^{Antisthenes of Athens}
+%^^{Plato} ^^{Xenophon} ^^{Aristophanes} ^^{Dionysius I of Syracuse}
+%^^{Isocrates} ^^{Evagoras of Salamis} ^^{Archytas of Taras}
+%\strut\vadjust{\vbox to 0pt{\vss\box0\kern0pt}}% insert the aligned table
+%\answer |\hfil#: &\vtop{\parindent=0pt\hsize=16em|\parbreak
+%        |    \hangindent.5em\strut#\strut}\cr|\par\nobreak\medskip\noindent
+%With such narrow measure and such long words, the ^|\tolerance| should probably
+%also have been increased to, say, 1000 inside the ^|\vtop|; luckily it turned
+%^^|\strut| out that a higher tolerance wasn't needed.\par
+%{\sl Note:\/} The stated preamble solves the problem and demonstrates
+%that \TeX's line-breaking capability can be used within tables. But this
+%particular table is not really a good example of the use of\/ |\halign|,
+%because \TeX\ could typeset it directly, using ^|\everypar| in an
+%appropriate manner to set up the hanging indentation, and using |\par|
+%instead of\/ |\cr|. For example, one could say
+%\begintt
+%\hsize20em \parindent0pt \clubpenalty10000 \widowpenalty10000
+%\def\history#1&{\hangindent4.5em
+%  \hbox to4em{\hss#1: }\ignorespaces}
+%\everypar={\history} \def\\{\leavevmode{\it c\/}}
+%\endtt
+%which spares \TeX\ all the work of\/ |\halign| but yields essentially the
+%same result. ^^|\leavevmode|
+\medskip
+\ddangerexercise \hsize=13pc
+在右边表格中，第二栏的断行是由 \TeX\ 确定的，以使得第二栏正好是 16 em 宽。
+另外，作者像这样输入表格的某行：
+$$\halign{#\hfil\cr
+|\\393&Plato's {\sl Apology\/};|\cr
+|  Xenophon's|\cr
+|   {\sl Memorabilia\/};|\cr
+|  Aristophanes'|\cr
+|   {\sl Ecclesiazus\ae\/}\cr|\cr}$$
+你能否猜到，这个对齐阵列的导言是什么呢？[这些数据来自 %
+Will ^{Durant}'s {\sl The Life of Greece\/} (Simon \& Schuster, 1939).]
+\strut\vadjust{\vbox to 0pt{\vss\box0\kern0pt}}% insert the aligned table
+\answer |\hfil#: &\vtop{\parindent=0pt\hsize=16em|\parbreak
+        |    \hangindent.5em\strut#\strut}\cr|\par\nobreak\medskip\noindent
+对于这么窄的宽度和这么长的单词，^|\vtop| 中的 ^|\tolerance| 也许应该增加到，
+比如 1000；^^|\strut| 结果恰巧不需要更大的容许度。\par
+{\sl 注意：\/} 上述导言解决了这个问题，且证明 \TeX\ 的断行功能可以在表格内使用。
+但这种表格并不是使用 |\halign| 的好例子，因为 \TeX\ 可以直接排版它——
+只要以合适方式用 ^|\everypar| 设置好悬挂缩进，并用 |\par| 代替 |\cr|。
+例如，我们可以这样写
+\begintt
+\hsize20em \parindent0pt \clubpenalty10000 \widowpenalty10000
+\def\history#1&{\hangindent4.5em
+  \hbox to4em{\hss#1: }\ignorespaces}
+\everypar={\history} \def\\{\leavevmode{\it c\/}}
+\endtt
+这将省去 \TeX\ 的所有 |\halign| 工作，但得到本质上相同的结果。^^|\leavevmode|
+
+%\danger Sometimes a template will apply perfectly to all but one or two of
+%the entries in a column. For example, in the exercise just given, the
+%colons in the first column of the alignment were supplied by the
+%template `|\hfil#:|\]'; but the very first entry in that column,
+%`{\sevenrm B.C.}', did not have a colon. \TeX\ allows you to escape from
+%the stated template in the following way: If the very first token
+%of an alignment entry is `^|\omit|' (after macro expansion), then
+%the template of the preamble is omitted; the trivial template `|#|'
+%is used instead. For example, `{\sevenrm B.C.}' was put into the table above
+%by typing `|\omit\hfil\sevenrm B.C.|' immediately after the preamble.
+%You can use |\omit| in any column, but it must come first; otherwise \TeX\
+%will insert the template that was defined in the preamble.
+\danger \1有时候，一个模板还需要对栏中的一到两个单元进行调整。%
+例如，在刚才给出的例子中，第一栏的冒号由模板`|\hfil#:|\]'给出；
+但是在此栏的第一个单元，`{\sevenrm B.C.}', 却没有冒号。%
+ \TeX\ 允许从给定的模板跳出来，方法如下：
+如果对齐单元的第一个记号是`^|\omit|'(在宏展开后),
+那么就忽略掉导言的模板；
+用空模板`|#|'来代替。%
+例如，上面表格中的`{\sevenrm B.C.}'是在导言后面直接输入`|\omit\hfil\sevenrm B.C.|'%
+而得到的。%
+可以在任何栏使用 |\omit|, 但是它必须是第一个；
+否则 \TeX\ 就插入导言中的模板。
+
+%\ddanger If you think about what \TeX\ has to do when it's processing
+%|\halign|, you'll realize that the timing of certain actions is critical.
+%Macros are not expanded when the preamble is being read, except as
+%described earlier; but once the |\cr| at the end of the preamble has been
+%sensed, \TeX\ must look ahead to see if the next token is |\noalign| or
+%|\omit|, and macros are expanded until the next non-space token is found.
+%If the token doesn't turn out to be |\noalign| or |\omit|, it is put
+%back to be read again, and \TeX\ begins to read the template (still
+%expanding macros). The template has two parts, called the $u$ and~$v$ parts,
+%where $u$~precedes the~`|#|' and $v$~follows~it. When \TeX\ has finished
+%the $u$~part, its reading mechanism goes back to the token that was
+%neither |\noalign| nor |\omit|, and continues to read the entry until
+%getting to the |&| or~|\cr| that ends the entry; then the $v$~part of
+%the template is read. A special internal operation called ^|\endtemplate|
+%is always placed at the end of the $v$~part; this causes \TeX\ to put
+%the entry into an ``^{unset box}'' whose glue will be set later when
+%the final column width is known. Then \TeX\ is ready for another entry;
+%it looks ahead for |\omit| (and also for |\noalign|, after~|\cr|) and
+%the process continues in the same way.
+\ddanger 如果你明了了 \TeX\ 在处理 |\halign| 时要做的事情，
+就会认识到使用某些命令的时机是十分重要的。%
+当导言被读入时，不进行宏展开，除了前面讨论过的外；
+但是一旦在导言结尾的 |\cr| 读入了，
+ \TeX\ 就必须向前看看是否后面跟的是 |\noalign| 或者是 |\omit|,
+并且直到读入下一个非空格记号才进行宏展开。%
+如果记号不是 |\noalign| 或 |\omit|,
+它就回来再读入，并且 \TeX\ 开始读入模板(还要展开宏)。%
+模板分两部分，称为 $u$ 和 $v$ 部分，其中 $u$ 是在`|#|'的前面，
+~$v$ 是在它的后面。%
+当 \TeX\ 完成 $u$ 部分时，它就回到既不是 |\noalign| 也不是 |\omit| 的记号%
+进行读入，并且一直读到结束单元的 |&| 或 |\cr| 为止；
+接着读入模板的 $v$ 部分。%
+一个叫 |\endtemplate| 的特殊内部命令总是放在 $v$ 部分的结尾；
+它使 \TeX\ 把此单元放在一个``未设定的盒子''中，此盒子的粘连在栏的最后宽度%
+确定以后才设置。%
+这样， \TeX\ 就为读入下一个单元做好了准备；
+它再次寻找 |\omit|(在 |\cr| 后面还要寻找 |\noalign|),
+并且继续进行着同样的过程。
+
+%\ddanger One consequence of the process just described is that it may be
+%dangerous to begin an entry of an alignment with |\if...|, ^^{conditionals}
+%or with any macro that will expand into a replacement text whose first token
+%is |\if...|; the reason is that the condition will be evaluated before the
+%template has been read. \ (\TeX\ is still looking to see whether an |\omit|
+%will occur, when the |\if| is being expanded.) \ For example, if\/ ^|\strut|
+%has been defined to be an abbreviation for
+%\begindisplay
+%^|\ifmmode|\<text for math modes>|\else|\<text for nonmath modes>|\fi|
+%\enddisplay
+%and if\/ |\strut| appears as the first token in some alignment entry,
+%then \TeX\ will expand it into the \<text for nonmath modes> even though
+%the template might be `|$#$|', because \TeX\ will not yet be in math
+%mode when it is looking for a possible |\omit|. Chaos will
+%probably ensue. Therefore the replacement text for |\strut| in
+%Appendix~B is actually
+%\begintt
+%\relax\ifmmode...
+%\endtt
+%and `|\relax|' has also been put into all other macros that might suffer
+%from such timing problems. Sometimes you do want \TeX\ to expand a
+%conditional before a template is inserted, but careful macro designers
+%watch out for cases where this could cause trouble.
+\ddanger 对于刚刚讨论的这个过程，以 |\if...| 或展开为替换文本时第一个%
+记号为 |\if...| 的任何宏为开头都有危险；
+原因是，在模板被读入后，才进行条件测试。%
+(当 |\if| 被展开时， \TeX\ 还要寻找是否有 |\omit|。)
+例如，如果 |\strut| 被定义为
+\begindisplay
+^|\ifmmode|\<text for math modes>|\else|\<text for nonmath modes>|\fi|
+\enddisplay
+并且如果 |\strut| 出现在对齐单元的开头，
+那么即使在模板为`|$#$|'的时候， \TeX\ 也把它展开为 \<text for nonmath modes>,
+因为当 \TeX\ 正在寻找可能出现的 |\omit| 时还未处在数学模式中。%
+跟着可能出现混乱。%
+因此，附录 B 中 |\strut| 的替换文本实际上是
+\begintt
+\relax\ifmmode...
+\endtt
+并且还把`|\relax|'放在所有会遇到这种时机问题的其它宏中。%
+有时候在模板插入之前，却希望 \TeX\ 展开一个条件语句，
+但是细心的宏编写者要注意什么情况下会出问题。
+
+%\newdimen\digitwidth \setbox0=\hbox{\sixrm0} \digitwidth=\wd0
+%\danger When you're typesetting ^{numerical tables}, it's common practice
+%to line up the ^{decimal points} in a column. For example, if two numbers
+%like `0.2010' and `297.1' both appear in the same column, you're supposed
+%to produce `$\catcode`?=13 \def?{\kern\digitwidth}
+%??0.2010 \atop 297.1???$'. This result isn't especially pleasing to the
+%eye, but that's what people do, so you might have to conform to the practice.
+%One way to handle this is to treat the column as two columns, somewhat as
+%|\eqalign| treats one formula as two formulas; the `.'\ can be placed at
+%the beginning of the second half-column. But the author usually prefers to
+%use another, less sophisticated method, which takes advantage of the fact
+%that the digits 0,~1, \dots,~9 have the same width in most fonts: You can
+%choose a character that's not used elsewhere in the table, say `|?|',
+%and change it to an ^{active character} that produces a blank space exactly
+%equal to the width of a digit. Then it's usually no chore to put such nulls
+%into the table entries so that each column can be regarded as either
+%centered or right-justified or left-justified. For example, `|??0.2010|'
+%and `|297.1???|'\ have the same width, so their decimal points will line
+%up easily. Here is one way to set up `|?|'\ for this purpose:
+%\begintt
+%\newdimen\digitwidth
+%\setbox0=\hbox{\rm0}
+%\digitwidth=\wd0
+%\catcode`?=\active
+%\def?{\kern\digitwidth}
+%\endtt
+%The last two definitions should be local to some ^{group}, e.g., inside a
+%|\vbox|, so that `|?|'\ will resume its normal behavior when the table is
+%finished. ^^|\active|
+\newdimen\digitwidth \setbox0=\hbox{\sixrm0} \digitwidth=\wd0
+\danger 当你要排版的是数字表格时，通常要把栏中的小数点对齐。%
+例如，如果如`0.2010'和`297.1'这两个数字同时出现在一个栏中，
+那么你就希望得到的是%
+`$\catcode`?=13 \def?{\kern\digitwidth}
+??0.2010 \atop 297.1???$'。%
+这个结果看起来不是特别舒服，但是人们就是这样做的，因此你可能也要遵守。%
+\1得到这种结果的一种方法是把此栏看作两栏，
+就象 |\eqalign| 把一个公式看作两个公式一样；
+小数点`.'放在第二个半栏的开头。%
+但是作者要用的是另一个更简单的方法，它利用的是在大多数字体中，
+数字 0, 1, $\ldots$, 9 的宽度都是一样的：
+你可以选定一个在表格中用不到的字符，比如`|?|', 把它变成活动符，
+用它生成与一个数字的宽度相当的空白。%
+接下来，不难把这样的空白字符放在表格单元中，使得每栏可以是居中，居左或居右的。%
+例如，`|??0.2010|'和`|297.1???|'的宽度一样，因此它们的小数点很容易对齐。%
+下面过给出了为此设置`|?|'的一种方法：
+\begintt
+\newdimen\digitwidth
+\setbox0=\hbox{\rm0}
+\digitwidth=\wd0
+\catcode`?=\active
+\def?{\kern\digitwidth}
+\endtt
+最后两个定义对某些组是局部的，比如放在 |\vbox| 中，
+这样当表格结束时`|?|'就恢复了其正常的性质。
+
+%\danger Let's look now at some applications to mathematics. Suppose first
+%that you want to typeset the small table
+%$$\vbox{\halign{$\hfil#$ =&&\ \hfil#\hfil\cr
+%n\phantom)&0&1&2&3&4&5&6&7&8&9&10&11&12&13&14&15&16&17&18&19&20&\dots\cr
+%{\cal G}(n)&1&2&4&3&6&7&8&16&18&25&32&11&64&31&128&10&256&5&512&28&
+%1024&\dots\cr}}$$ % The Grundy function for SYM [cf. Winning Ways p441]
+%as a ^{display}ed equation. A brute force approach using |\eqalign| or
+%|\atop| is cumbersome because ${\cal G}(n)$ and $n$ don't always have the
+%same number of digits. It would be much nicer to type
+%\begindisplay
+%|$$\vbox{\halign{|\<preamble>|\cr|\cr
+%|     n\phantom)&0&1&2&3& ... &20&\dots\cr|\cr
+%|     {\cal G}(n)&1&2&4&3& ... &1024&\dots\cr}}$$|\cr
+%\enddisplay
+%for some \<preamble>. On the other hand, the \<preamble> is sure to be
+%long, since this table has 23 columns; so it looks as though |\settabs|
+%and |\+| will be easier. \TeX\ has a handy feature that helps a lot
+%in cases like this: Preambles often have a periodic structure,
+%^^{periodic preambles} ^^{cyclic preambles} ^^{ampersand ampersand}
+%and if you put an extra `|&|' ^^{ampersand} just before one of the templates,
+%\TeX\ will consider the preamble to be an infinite sequence that begins
+%again at the marked template when the |\cr| is reached. For example,
+%\begindisplay
+%$t_1\,$|&|$\,t_2\,$|&|$\,t_3\,$|&&|$\,t_4\,$|&|$\,t_5\,$|\cr|
+%\ is treated like \
+%$t_1\,$|&|$\,t_2\,$|&|$\,t_3\,$|&|$\,t_4\,$|&|$\,t_5\,$%
+%  |&|$\,t_4\,$|&|$\,t_5\,$|&|$\,t_4\,$|&|$\,\,\cdots\,$\cr
+%\noalign{\hbox{and}}
+%|&|$t_1\,$|&|$\,t_2\,$|&|$\,t_3\,$|&|$\,t_4\,$|&|$\,t_5\,$|\cr|
+%\ is treated like \
+%$t_1\,$|&|$\,t_2\,$|&|$\,t_3\,$|&|$\,t_4\,$|&|$\,t_5\,$%
+%  |&|$\,t_1\,$|&|$\,t_2\,$|&|$\,t_3\,$|&|$\,\,\cdots\,.$\cr
+%\enddisplay
+%The tabskip glue following each template is copied with that template.
+%The preamble will grow as long as needed, based on the number of columns
+%actually used by the subsequent alignment entries. Therefore all it takes is
+%\begintt
+%$\hfil#$ =&&\ \hfil#\hfil\cr
+%\endtt
+%to make a suitable \<preamble> for the ${\cal G}(n)$ problem.
+\danger 我们来看看数学中的一些应用。%
+首先假定你要把一个小表格：
+$$\vbox{\halign{$\hfil#$ =&&\ \hfil#\hfil\cr
+n\phantom)&0&1&2&3&4&5&6&7&8&9&10&11&12&13&14&15&16&17&18&19&20&\dots\cr
+{\cal G}(n)&1&2&4&3&6&7&8&16&18&25&32&11&64&31&128&10&256&5&512&28&
+1024&\dots\cr}}$$ % The Grundy function for SYM [cf. Winning Ways p441]
+排版为陈列方程。%
+利用 |\eqalign| 或 |\atop| 这些笨办法太烦琐，因为 ${\cal G}(n)$ 和 $n$~%
+的数字个数并不总是相同。%
+用导言 \<preamble> 的方式可能跟漂亮：
+\begindisplay
+|$$\vbox{\halign{|\<preamble>|\cr|\cr
+|     n\phantom)&0&1&2&3& ... &20&\dots\cr|\cr
+|     {\cal G}(n)&1&2&4&3& ... &1024&\dots\cr}}$$|\cr
+\enddisplay
+另一方面，导言 \<preamble> 要足够长，因为此表格有 23 栏；
+因此好像 |\settabs| 和 |\+| 个简单。%
+象这种导言通常有周期性结构的情况， \TeX\ 有一个非常有帮助的特性，
+并且如果把一个额外的`|&|'放在一个模板的紧前面，
+那么 \TeX\ 将把此导言看作一个无穷系列，此系列从标记的模板开始一直到 |\cr| 为止。%
+例如，
+\begindisplay
+$t_1\,$|&|$\,t_2\,$|&|$\,t_3\,$|&&|$\,t_4\,$|&|$\,t_5\,$|\cr|
+ 被看作 %
+$t_1\,$|&|$\,t_2\,$|&|$\,t_3\,$|&|$\,t_4\,$|&|$\,t_5\,$%
+  |&|$\,t_4\,$|&|$\,t_5\,$|&|$\,t_4\,$|&|$\,\,\cdots\,$\cr
+\noalign{\hbox{和}}
+|&|$t_1\,$|&|$\,t_2\,$|&|$\,t_3\,$|&|$\,t_4\,$|&|$\,t_5\,$|\cr|
+ 被看作
+$t_1\,$|&|$\,t_2\,$|&|$\,t_3\,$|&|$\,t_4\,$|&|$\,t_5\,$%
+  |&|$\,t_1\,$|&|$\,t_2\,$|&|$\,t_3\,$|&|$\,\,\cdots\,.$\cr
+\enddisplay
+每个模板后面的制表粘连也随着此模板而重复。%
+按照后面对齐单元实际用到的栏的数目，导言延伸到所需要的长度。%
+因此，为了解决 ${\cal G}(n)$ 这个问题，所有要设置的导言为
+\begintt
+$\hfil#$ =&&\ \hfil#\hfil\cr
+\endtt
+
+%\ddanger Now suppose that the task is to typeset three pairs of displayed
+%formulas, with all of the =~signs lined up: % cf. ACP Section 3.3.4
+%$$\vcenter{\openup1\jot \halign{
+%$\hfil#$&&${}#\hfil$&\qquad$\hfil#$\cr
+%V_i&=v_i-q_iv_j,&X_i&=x_i-q_ix_j,&
+%  U_i&=u_i,\qquad\hbox{for $i\ne j$};\cr
+%V_j&=v_j,&X_j&=x_j,&
+%  U_j&=u_j+\sum_{i\ne j}q_iu_i.\cr}}\eqno(23)$$
+%It's not easy to do this with three ^|\eqalign|'s, because the $\sum$ with
+%a subscript `$i\ne j$' makes the right-hand pair of formulas bigger than the
+%others; the baselines won't agree unless ``^{phantoms}'' are put into the
+%other two |\eqalign|'s (see Chapter~19). Instead of using |\eqalign|,
+%which is defined in Appendix~B to be a macro that uses |\halign|, let's
+%try to use |\halign| directly. The natural way to approach this display is
+%^^|\jot| to type
+%\begindisplay
+%|$$\vcenter{\openup1\jot \halign{|\<preamble>|\cr|\cr
+%|   |\<first line>|\cr |\<second line>|\cr}}\eqno(23)$$|\cr
+%\enddisplay
+%because the ^|\vcenter| puts the lines into a box that is properly centered
+%with respect to the equation number `(23)'; the ^|\openup| macro puts a
+%bit of extra space between the lines, as mentioned in Chapter~19.
+\ddanger \1现在假设要排版是三对陈列公式，所有的 = 都要对齐：
+$$\vcenter{\openup1\jot \halign{
+$\hfil#$&&${}#\hfil$&\qquad$\hfil#$\cr
+V_i&=v_i-q_iv_j,&X_i&=x_i-q_ix_j,&
+  U_i&=u_i,\qquad\hbox{for $i\ne j$};\cr
+V_j&=v_j,&X_j&=x_j,&
+  U_j&=u_j+\sum_{i\ne j}q_iu_i.\cr}}\eqno(23)$$
+用三个 |\eqalign| 来做并不是那么简单的，因为带下标`$i\ne j$'的 $\sum$ 把%
+公式右边变得比别的公式要大；
+基线不一致，除非把``幻影''放在其它两个 |\eqalign| 公式中(见第十九章)。%
+|\eqalign| 在附录 B 中是由 |\halign| 定义的宏，我们不用 |\eqalign|,
+而直接用 |\halign|。%
+得到此陈列公式的自然方法是使用
+\begindisplay
+|$$\vcenter{\openup1\jot \halign{|\<preamble>|\cr|\cr
+|   |\<first line>|\cr |\<second line>|\cr}}\eqno(23)$$|\cr
+\enddisplay
+因为 |\vcenter| 把行放在一个盒子中，这个盒子相对于方程编号`(23)'是正确居中的；
+宏 |\openup| 在行之间插入了额外的间距，基线第十九章中讨论的那样。
+
+%\ddanger OK, now let's figure out how to type the \<first line> and \<second
+%line>. The usual convention is to put `|&|' before the symbols that we want
+%to line up, so the obvious solution is to type
+%\begintt
+%V_i&=v_i-q_iv_j,&X_i&=x_i-q_ix_j,&
+%  U_i&=u_i,\qquad\hbox{for $i\ne j$};\cr
+%V_j&=v_j,&X_j&=x_j,&
+%  U_j&=u_j+\sum_{i\ne j}q_iu_i.\cr
+%\endtt
+%Thus the alignment has six columns. We could take common elements into
+%the preamble (e.g., `|V_|' and `|=v_|'), but that would be too error-prone
+%and too tricky.
+\ddanger 好了，现在我们看看怎样输入第一行 \<first line> 和第二行 \<second line>。%
+通常约定把`|&|'放在我们要对齐的符号前面，因此显然解决方法是使用
+\begintt
+V_i&=v_i-q_iv_j,&X_i&=x_i-q_ix_j,&
+  U_i&=u_i,\qquad\hbox{for $i\ne j$};\cr
+V_j&=v_j,&X_j&=x_j,&
+  U_j&=u_j+\sum_{i\ne j}q_iu_i.\cr
+\endtt
+因此，此对齐有六栏。%
+我们可以把公共元素放在导言中(比如`|V_|'和`|=v_|'),
+但是那样做更巧妙但是更容易出错。
+
+%\ddanger The remaining problem is to construct a preamble to
+%support those lines. To the left of the =~signs we want the column to
+%be filled at the left; to the right of the =~signs we want it to be filled
+%at the right. There's a slight complication because we are breaking a math
+%formula into two separate pieces, yet we want the result to have the same
+%spacing as if it were one formula. Since we're putting the `|&|' just before
+%a relation, the solution is to insert `|{}|' ^^{lbrace rbrace}
+%at the beginning of the right-hand formula; \TeX\ will put the proper
+%space before the equals sign in `|${}=...$|', but it puts no space before
+%the equals sign in `|$=...$|'.  Therefore the desired \<preamble> is
+%\begintt
+%$\hfil#$&${}#\hfil$&
+%  \qquad$\hfil#$&${}#\hfil$&
+%  \qquad$\hfil#$&${}#\hfil$
+%\endtt
+%The third and fourth columns are like the first and second, except for
+%the |\qquad| that separates the equations; the fifth and sixth columns
+%are like the third and fourth. Once again we can use the handy `|&&|'
+%shortcut ^^{ampersand ampersand} to reduce the preamble to
+%\begintt
+%$\hfil#$&&${}#\hfil$&\qquad$\hfil#$
+%\endtt
+%With a little practice you'll find that it becomes easy to compose
+%preambles as you are typing a manuscript that needs them. However, most
+%manuscripts don't need them, so it may be a~while before you acquire even
+%a little practice in this regard.
+\ddanger 剩下的只是构造那些行的导言了。
+在 |=| 左边，空白填充在该栏左边，在 |=| 右边，空白填充在该栏右边。
+因为我们把公式分为两个部分了，所以有点复杂，
+但是我们要让结果中所出现的这两个部分看起来象一个公式。
+因为我们把 `|&|' 放在了关系符号紧前面，所以在公式右边紧开头要插入 `|{}|'；
+这样 \TeX\ 就可以在 `|${}=...$|' 的等号前面插入正确的间距了，
+但是在 `|$=...$|' 的等号前面没有插入间距。
+因此，所要的导言为
+\begintt
+$\hfil#$&${}#\hfil$&
+  \qquad$\hfil#$&${}#\hfil$&
+  \qquad$\hfil#$&${}#\hfil$
+\endtt
+第三和第四栏与第一和第二栏基本一样，只是多了一个分开方程的 |\qquad|;
+第五和第六栏与第三和第四栏是一样的。%
+我们可以再次用`|&&|'把此导言简化为
+\begintt
+$\hfil#$&&${}#\hfil$&\qquad$\hfil#$
+\endtt
+只要略微练习一下，你就发现在需要导言时可以顺利地完成它。
+但是，大多数文稿用不到它，因此待会你就会遇见这方面的一些练习。
+
+%\ddangerexercise Explain how to produce the following display:
+%$$\openup1\jot \tabskip=0pt plus1fil
+%\halign to\displaywidth{\tabskip=0pt
+%  $\hfil#$&$\hfil{}#{}$&
+%  $\hfil#$&$\hfil{}#{}$&
+%  $\hfil#$&$\hfil{}#{}$&
+%  $\hfil#$&${}#\hfil$\tabskip=0pt plus1fil&
+%  \llap{#}\tabskip=0pt\cr
+%10w&+&3x&+&3y&+&18z&=1,&(9)\cr
+%6w&-&17x&&&-&5z&=2.&(10)\cr}$$ % cf. ACP Eqs. 4.5.2-17,18
+%\answer The equation is divided into separate parts for terms and
+%plus/minus signs, and tabskip glue is used to center it:
+%\begintt
+%$$\openup1\jot \tabskip=0pt plus1fil
+%\halign to\displaywidth{\tabskip=0pt
+%  $\hfil#$&$\hfil{}#{}$&
+%  $\hfil#$&$\hfil{}#{}$&
+%  $\hfil#$&$\hfil{}#{}$&
+%  $\hfil#$&${}#\hfil$\tabskip=0pt plus1fil&
+%  \llap{#}\tabskip=0pt\cr
+%10w&+&3x&+&3y&+&18z&=1,&(9)\cr
+%6w&-&17x&&&-&5z&=2.&(10)\cr}$$
+%\endtt
+\ddangerexercise \1看看怎样得到下列陈列公式：
+$$\openup1\jot \tabskip=0pt plus1fil
+\halign to\displaywidth{\tabskip=0pt
+  $\hfil#$&$\hfil{}#{}$&
+  $\hfil#$&$\hfil{}#{}$&
+  $\hfil#$&$\hfil{}#{}$&
+  $\hfil#$&${}#\hfil$\tabskip=0pt plus1fil&
+  \llap{#}\tabskip=0pt\cr
+10w&+&3x&+&3y&+&18z&=1,&(9)\cr
+6w&-&17x&&&-&5z&=2.&(10)\cr}$$ % cf. ACP Eqs. 4.5.2-17,18
+\answer 我们将这个方程的各项和加减号都分开，并用 tabskip 粘连将它居中：
+\begintt
+$$\openup1\jot \tabskip=0pt plus1fil
+\halign to\displaywidth{\tabskip=0pt
+  $\hfil#$&$\hfil{}#{}$&
+  $\hfil#$&$\hfil{}#{}$&
+  $\hfil#$&$\hfil{}#{}$&
+  $\hfil#$&${}#\hfil$\tabskip=0pt plus1fil&
+  \llap{#}\tabskip=0pt\cr
+10w&+&3x&+&3y&+&18z&=1,&(9)\cr
+6w&-&17x&&&-&5z&=2.&(10)\cr}$$
+\endtt
+
+%\ddanger The next level of complexity occurs when some entries of a table
+%span two or more columns. \TeX\ provides two ways to handle this. First
+%^^{spanned columns in tables}
+%there's ^|\hidewidth|, which plain \TeX\ defines to be equivalent to
+%\begintt
+%\hskip-1000pt plus 1fill
+%\endtt
+%In other words, |\hidewidth| has an extremely negative ``natural width,''
+%but it will stretch without limit. If you put |\hidewidth| at the right of
+%some entry in an alignment, the effect is to ignore the width of this
+%entry and to let it stick out to the right of its box. \ (Think about it;
+%this entry won't be the widest one, when |\halign| figures the column
+%width.) \ Similarly, if you put |\hidewidth| at the left of an entry, it will
+%stick out to the left; and you can put |\hidewidth| at both left and right,
+%as we'll see later.
+\ddanger 当表格的某些单元要占用两栏以上时，情况就更复杂了。%
+ \TeX\ 提供了两种解决的方法。%
+首先，有一个命令 |\hidewidth|, ~plain \TeX\ 把它定义为
+\begintt
+\hskip-1000pt plus 1fill
+\endtt
+换句话说，|\hidewidth| 有一个很负的``自然宽度'',
+但是可伸长到无限远。%
+如果在对齐中在某些单元右边放上 |\hidewidth|,
+其效果就是，忽略掉此单元的宽度，并且让它可延伸出盒子右边。%
+(回想一下；当 |\halign| 确定栏宽度时，此栏的宽度不是最宽的那个。)
+类似地，如果把 |\hidewidth| 放在单元的左边，就伸出左边界；
+并且你还可以把 |\hidewidth| 放在左右两边，我们下面要讨论它。
+
+%\ddanger The second way to handle table entries that span columns is to use
+%the ^|\span| primitive, which can be used instead of `|&|' in any
+%line of the table. \ (We've already seen that |\span| means ``expand'' in
+%preambles; but outside of preambles its use is
+%completely different.) \ When `|\span|' appears in place of `|&|',
+%the material before and after the |\span| is processed in the ordinary
+%way, but afterward it is placed into a single box instead of two boxes.
+%The width of this combination box is the sum of the individual column
+%widths plus the width of the tabskip glue between them; therefore the
+%spanning box will line up with non-spanning boxes in other rows.
+\ddanger 第二种方法是使用原始命令 |\span|, 它可以在表格的任意行中代替`|&|'来使用。%
+(我们已经知道，|\span| 在导言中表示``展开'';
+但是在导言外面它的用法完全不同。)
+当`|\span|'出现在`|&|'的位置上时，在 |\span| 前后的内容都看作与普通文本一样，
+但是要把它放在一个盒子中而不是两个盒子中。%
+这个组合盒子的宽度是两个盒子各自的宽度加上它们之间的制表粘连；
+因此，合并的盒子与其它行未合并的盒子是对齐的。
+
+%\ddanger For example, suppose that there are three columns, with the
+%respective templates $u_1\,$|#|$\,v_1\,$|&| $u_2\,$|#|$\,v_2\,$|&|
+%$u_3\,$|#|$\,v_3$; suppose that the column widths are $w_1$, $w_2$,~$w_3$;
+%suppose that $g_0$,~$g_1$, $g_2$,~$g_3$ are the tabskip glue widths after
+%the glue has been set; and suppose that the line
+%\begindisplay
+%$a_1$|\span|$\,\,a_2$|\span|$\,\,a_3$|\cr|
+%\enddisplay
+%has appeared in the alignment. Then the material for
+%`$u_1a_1v_1u_2a_2v_2u_3a_3v_3$' (i.e., the result `$u_1a_1v_1$' of
+%column~1 followed by the results of columns 2 and~3) will be placed into
+%an hbox of width $w_1+g_1+ w_2+g_2+w_3$. That hbox will be preceded by
+%glue of width~$g_0$ and it will be followed by glue of width~$g_3$, in the
+%larger hbox that contains the entire aligned line.
+\ddanger 例如，假设有三栏，模板分别是%
+~$u_1\,$|#|$\,v_1\,$|&| $u_2\,$|#|$\,v_2\,$|&|
+$u_3\,$|#|$\,v_3$; 假设栏宽度为 $w_1$, $w_2$,~$w_3$;
+$g_0$,~$g_1$, $g_2$,~$g_3$ 是设定粘连后的制表粘连的宽度；
+出现在对齐中的行是
+\begindisplay
+$a_1$|\span|$\,\,a_2$|\span|$\,\,a_3$|\cr|
+\enddisplay
+这样，`$u_1a_1v_1u_2a_2v_2u_3a_3v_3$'的内容(即，栏 1 后面跟着栏 2 和栏 3 的内容)%
+就被放在一个宽度为 $w_1+g_1+ w_2+g_2+w_3$ 的 hbox 中。%
+此盒子前面是宽度为 $g_0$ 的粘连，后面是宽度为 $g_3$ 的粘连，
+这个更大的盒子就是对齐的行。
+
+%\ddanger You can use ^|\omit| in conjunction with |\span|. For example,
+%if we continue with the notation of the previous paragraph, the line
+%\begindisplay
+%|\omit|$\,a_1\,$|\span|$\,a_2\,$|\span\omit|$\,a_3\,$|\cr|
+%\enddisplay
+%would put the material for `$a_1u_2a_2v_2a_3$' into the hbox just considered.
+\ddanger 可以把 |\omit| 与 |\span| 联合起来使用。%
+例如，如果继续使用上面的例子的记号，那么行
+\begindisplay
+|\omit|$\,a_1\,$|\span|$\,a_2\,$|\span\omit|$\,a_3\,$|\cr|
+\enddisplay
+就把内容`$a_1u_2a_2v_2a_3$'放在刚刚讨论的 hbox 中。
+
+%\ddanger It's fairly common to span several columns and to omit all their
+%templates, so plain \TeX\ provides a ^|\multispan| macro that spans
+%a given number of columns. For example, `|\multispan3|' expands into
+%`|\omit\span\omit\span\omit|'. If the number of spanned columns is
+%greater than~9, you must put it in braces, e.g., `|\multispan{13}|'.
+\ddanger 因为合并几个栏并且忽略掉其模板是经常用到的，所以 plain \TeX\ 提供了%
+一个宏 |\multispan|, 它把给定数目的栏合并起来。%
+例如，`|\multispan3|'展开就是`|\omit\span\omit\span\omit|'。%
+如果要合并的栏的数目大于 9, 就要把它放在大括号中，比如，`|\multispan{13}|'。
+
+%\ddanger The preceding paragraphs are rather abstract, so let's look at
+%an example that shows what |\span| actually does. Suppose you type
+%\begintt
+%$$\tabskip=3em
+%\vbox{\halign{&\hrulefill#\hrulefill\cr
+%    first&second&third\cr
+%    first-and-second\span\omit&\cr
+%    &second-and-third\span\omit\cr
+%    first-second-third\span\omit\span\omit\cr}}$$
+%\endtt
+%The preamble specifies arbitrarily many templates equal to
+%`|\hrulefill#\hrulefill|'; the ^|\hrulefill| macro is like |\hfill|
+%except that the blank space is filled with a horizontal rule. Therefore
+%you can see the filling in the resulting alignment, which shows the
+%spanned columns:
+%$$\tabskip=3em
+%\vbox{\halign{&\hrulefill#\hrulefill\cr
+%    first&second&third\cr
+%    first-and-second\span\omit&\cr
+%    &second-and-third\span\omit\cr
+%    first-second-third\span\omit\span\omit\cr}}$$
+%The rules stop where the tabskip glue separates columns. You don't see
+%rules in the first line, since the entries in that line were the widest
+%in their columns. However, if the tabskip glue had been $1\em$ instead
+%of $3\em$, the table would have looked like this:
+%$$\tabskip=1em
+%\vbox{\halign{&\hrulefill#\hrulefill\cr
+%    first&second&third\cr
+%    first-and-second\span\omit&\cr
+%    &second-and-third\span\omit\cr
+%    first-second-third\span\omit\span\omit\cr}}$$
+\ddanger \1前一段太抽象了，因此我们用一个例子看看 |\span| 实际上怎样用。%
+假设你输入的是
+\begintt
+$$\tabskip=3em
+\vbox{\halign{&\hrulefill#\hrulefill\cr
+    first&second&third\cr
+    first-and-second\span\omit&\cr
+    &second-and-third\span\omit\cr
+    first-second-third\span\omit\span\omit\cr}}$$
+\endtt
+此模板给出了任意多个模板`|\hrulefill#\hrulefill|';
+宏 |\hrulefill| 象 |\hfill| 一样，只是把空白换为水平标尺了。%
+因此，所得到的对齐是被充满的，
+它的输出为合并的栏：
+$$\tabskip=3em
+\vbox{\halign{&\hrulefill#\hrulefill\cr
+    first&second&third\cr
+    first-and-second\span\omit&\cr
+    &second-and-third\span\omit\cr
+    first-second-third\span\omit\span\omit\cr}}$$
+当制表粘连把栏分开时，标尺就断开了。%
+在第一行看不到标尺，因为在此行单元的宽度为栏的宽度。%
+但是，如果制表粘连为 $1\em$ 而不是 $3\em$, 得到的表格是这样的：
+$$\tabskip=1em
+\vbox{\halign{&\hrulefill#\hrulefill\cr
+    first&second&third\cr
+    first-and-second\span\omit&\cr
+    &second-and-third\span\omit\cr
+    first-second-third\span\omit\span\omit\cr}}$$
+
+%\ddangerexercise Consider the following table, which is called
+%^{Walter's worksheet}: ^^{IRS}
+%^^{Green, Walter} % from instructions to form 1040 (1982), p13
+%$$\halign{\indent
+%\hfil# &#\hfil&\quad#&\ \hfil#&\ \hfil#\cr
+%1&Adjusted gross income\dotfill\span\omit\span&\$4,000\cr
+%2&Zero bracket amount for&\cr
+% &a single individual\dotfill\span\omit&\$2,300\cr
+%3&Earned income\dotfill\span\omit&\underbar{ 1,500}\cr
+%4&Subtract line 3 from line 2\dotfill\span\omit\span&\underbar{ 800}\cr
+%5&Add lines 1 and 4. Enter here\span\omit\span\cr
+% &and on Form 1040, line 35\dotfill\span\omit\span&\$4,800\cr}
+%$$
+%Define a preamble so that the following specification will produce
+%Walter's worksheet.
+%$$\halign{\indent#\hfil\cr
+%|\halign{|\<preamble>|\cr|\cr
+%|  1&Adjusted gross income\dotfill\span\omit\span&\$4,000\cr|\cr
+%|  2&Zero bracket amount for&\cr|\cr
+%|   &a single individual\dotfill\span\omit&\$2,300\cr|\cr
+%|  3&Earned income\dotfill\span\omit&\underbar{ 1,500}\cr|\cr
+%|  4&Subtract line 3 from line 2\dotfill|\cr
+%|      \span\omit\span&\underbar{ 800}\cr|\cr
+%|  5&Add lines 1 and 4. Enter here\span\omit\span\cr|\cr
+%|   &and on Form 1040, line 35\dotfill\span\omit\span&\$4,800\cr}|\cr
+%}$$
+%(The macro ^|\dotfill| is like |\hrulefill| but it fills with dots;
+%the macro ^|\underbar| puts its argument into an hbox and underlines it.)
+%\answer |\hfil# &#\hfil&\quad#&\ \hfil#&\ \hfil#\cr|
+\ddangerexercise 看看下列表格，它叫做 Walter 工作表：
+$$\halign{\indent
+\hfil# &#\hfil&\quad#&\ \hfil#&\ \hfil#\cr
+1&Adjusted gross income\dotfill\span\omit\span&\$4,000\cr
+2&Zero bracket amount for&\cr
+ &a single individual\dotfill\span\omit&\$2,300\cr
+3&Earned income\dotfill\span\omit&\underbar{ 1,500}\cr
+4&Subtract line 3 from line 2\dotfill\span\omit\span&\underbar{ 800}\cr
+5&Add lines 1 and 4. Enter here\span\omit\span\cr
+ &and on Form 1040, line 35\dotfill\span\omit\span&\$4,800\cr}
+$$
+定义一个导言，使得下列输入就得到了 Walter 工作表。
+$$\halign{\indent#\hfil\cr
+|\halign{|\<preamble>|\cr|\cr
+|  1&Adjusted gross income\dotfill\span\omit\span&\$4,000\cr|\cr
+|  2&Zero bracket amount for&\cr|\cr
+|   &a single individual\dotfill\span\omit&\$2,300\cr|\cr
+|  3&Earned income\dotfill\span\omit&\underbar{ 1,500}\cr|\cr
+|  4&Subtract line 3 from line 2\dotfill|\cr
+|      \span\omit\span&\underbar{ 800}\cr|\cr
+|  5&Add lines 1 and 4. Enter here\span\omit\span\cr|\cr
+|   &and on Form 1040, line 35\dotfill\span\omit\span&\$4,800\cr}|\cr
+}$$
+（宏 |\dotfill| 与 |\hrulefill| 一样，只是用圆点代替了标尺；
+宏 |\underbar| 把其参量放在 hbox 中并给它加下划线。）
+\answer |\hfil# &#\hfil&\quad#&\ \hfil#&\ \hfil#\cr|
+
+%\ddanger Notice the ``early'' appearance of\/ ^|\cr| in line~2 of the
+%previous exercise. You needn't have the same number of columns in every
+%line of an alignment; `|\cr|' means that there are no more columns
+%in the current line.
+\ddanger \1注意，在上一个练习中，第二行中``过早''出现了 |\cr|。%
+在对齐中，每行的栏数不必相等；`|\cr|'表示当前行没有其它栏了。
+
+%\medskip
+%\ddangerexercise Explain how to typeset the ^{generic matrix}
+%$\smash{\pmatrix{a_{11}&a_{12}&\ldots&a_{1n}\cr
+%             a_{21}&a_{22}&\ldots&a_{2n}\cr
+%             \multispan4\dotfill\cr
+%             a_{m1}&a_{m2}&\ldots&a_{mn}\cr}.}$
+%\answer |\pmatrix{a_{11}&a_{12}&\ldots&a_{1n}\cr|\parbreak
+%        |    a_{21}&a_{22}&\ldots&a_{2n}\cr|\parbreak
+%        |    \multispan4\dotfill\cr|\parbreak
+%        |    a_{m1}&a_{m2}&\ldots&a_{mn}\cr}|
+\medskip
+\ddangerexercise 看看怎样输入下列通用矩阵：
+$\smash{\pmatrix{a_{11}&a_{12}&\ldots&a_{1n}\cr
+             a_{21}&a_{22}&\ldots&a_{2n}\cr
+             \multispan4\dotfill\cr
+             a_{m1}&a_{m2}&\ldots&a_{mn}\cr}.}$
+\answer |\pmatrix{a_{11}&a_{12}&\ldots&a_{1n}\cr|\parbreak
+        |    a_{21}&a_{22}&\ldots&a_{2n}\cr|\parbreak
+        |    \multispan4\dotfill\cr|\parbreak
+        |    a_{m1}&a_{m2}&\ldots&a_{mn}\cr}|
+
+%\bigskip\medskip
+%\ddanger The presence of spanned columns adds a complication to \TeX's
+%rules for calculating column widths; instead of simply choosing the
+%maximum natural width of the column entries, it's also necessary to
+%make sure that the sum of certain widths is big enough to accommodate
+%spanned entries. So here is what \TeX\ actually does: First, if
+%any pair of adjacent columns is always spanned as a unit (i.e., if
+%there's a |\span| between them whenever either one is used), these
+%two columns are effectively merged into one and the tabskip glue between
+%them is set to zero. This reduces the problem to the case that
+%every tab position actually occurs at a boundary. Let there be $n$
+%columns remaining after such reductions, and for $1\le i\le j\le n$ let
+%$w_{ij}$ be the maximum natural width of all entries that span columns $i$
+%through~$j$, inclusive; if there are no such spanned entries, let
+%$w_{ij}=-\infty$. \ (The merging of dependent columns guarantees that, for
+%each~$j$, there exists $i\le j$ such that $w_{ij}>-\infty$.) \ Let $t_k$
+%be the natural width of the tabskip glue between columns $k$ and~$k+1$,
+%for $1\le k<n$. Now the final width $w_j$ of column~$j$ is determined by
+%the formula
+%\begindisplay
+%$\displaystyle w_j=\max_{1\le i\le j}\textstyle\bigl(w_{ij}
+%  -\sum_{i\le k<j}(w_k+t_k)\bigr)$
+%\enddisplay
+%for $j=1$, 2, \dots, $n$ (in this order). It follows that
+%$w_{ij}\le w_i+t_i+\cdots+t_{j-1}+w_j$, for all $i\le j$,
+%as desired.  After the widths~$w_j$ are determined, the tabskip amounts
+%may have to stretch or shrink; if they shrink, $w_{ij}$ might turn out to
+%be more than the final width of a box that spans columns $i$ through~$j$,
+%hence the glue in such a box might shrink.
+\bigskip\medskip
+\ddanger 合并栏的出现使得 \TeX\ 确定栏宽度的方法更复杂；
+它不能直接把栏单元的宽度选定为最大自然宽度，还必须考虑要确保%
+能把足够大的合并栏放下。%
+下面是 \TeX\ 实际要做的事：
+首先，如果任意相邻的一对栏总是合并为一个单元(即，只要用到一个，
+它们之间就用了 |\span|。),
+那么这两个栏就以一个栏而出现，并且把它们之间的制表粘连设置为零。%
+这其实是把问题简化为每个制表符的位置就是一个边界这种情况。%
+我们假定简化后还有 $n$ 个栏，
+并且对 $1\le i\le j\le n$, 设 $w_{ij}$ 是从栏 $i$ 到 $j$ 合并后的所有单元%
+的最大自然宽度；
+如果没有这样的合并单元，就设$w_{ij}=-\infty$。%
+(栏的互相依存的出现保证了对每个 $j$, 存在 $i\le j$ 使得 $w_{ij}>-\infty$。)
+设 $t_k$ 为栏 $k$ 和 $k+1$ 之间制表粘连的自然宽度，其中 $1\le k<n$。%
+现在，栏 $j$ 最后的宽度由下列公式来确定：
+\begindisplay
+$\displaystyle w_j=\max_{1\le i\le j}\textstyle\bigl(w_{ij}
+  -\sum_{i\le k<j}(w_k+t_k)\bigr)$
+\enddisplay
+其中依次 $j=1$, 2, \dots, $n$。%
+因此，如所要求的那样，对所有 $i\le j$ 有 $w_{ij}\le w_i+t_i+\cdots+t_{j-1}+w_j$。%
+在确定了宽度 $w_j$ 后，制表粘连可能要伸缩；
+如果收缩，$w_{ij}$ 可能就要比合并栏 $i$ 到 $j$ 的盒子的最后宽度要大，
+从而在这个盒子中的粘连要收缩。
+
+%\ddanger These formulas usually work fine, but sometimes they produce
+%undesirable effects. For example, suppose that $n=3$, $w_{11}=w_{22}=w_{33}
+%=10$, $w_{12}=w_{23}=-\infty$, and $w_{13}=100$; in other words, the columns
+%by themselves are quite narrow, but there's a big wide entry that's
+%supposed to span all three columns. In this case \TeX's formula makes
+%$w_1=w_2=10$ but $w_3=80-t_1-t_2$, so all the excess width is allocated
+%to the third column. If that's not what you want, the remedy is~to use
+%^|\hidewidth|, or to increase the natural width of the tabskip glue
+%between columns.
+\ddanger 这些公式一般足以胜任，但是有时候会得到意想不到的结果。%
+例如，假定 $n=3$, $w_{11}=w_{22}=w_{33}
+=10$, $w_{12}=w_{23}=-\infty$ 以及 $w_{13}=100$;
+也就是说，栏本身很窄，但是把这三个栏合并后的单元却很宽。%
+在这种情况下， \TeX\ 的公式为 $w_1=w_2=10$, 但是 $w_3=80-t_1-t_2$,
+这样所有剩下的宽度都留给了第三个栏。%
+如果不希望是这样，就要用 |\hidewidth|, 或者增加栏间制表粘连的自然宽度。
+
+%\ddanger The next level of complexity that occurs in tables is the
+%appearance of horizontal and vertical ruled lines. People who know
+%how to make ^{ruled tables} are generally known as \TeX\ Masters.
+%^^{TeX Masters} Are you ready?
+\ddanger 在制表中下一步出现的问题是绘制水平或垂直线。%
+掌握了绘制表格线的人一般称得上是 \TeX\ 大师了。%
+你做好准备了吗？
+
+%\ddanger If you approach vertical rules in the wrong manner, they can be
+%difficult; but there {\sl is\/} a decent way to get them into tables
+%without shedding too many tears. The first step is to say
+%`^|\offinterlineskip|', which means that there will be no blank space
+%between lines; \TeX\ cannot be allowed to insert ^{interline glue} in its
+%normal clever way, because each line is supposed to contain a ^|\vrule|
+%that abuts another ^|\vrule| in the neighboring lines above and/or below.
+%We will put a strut into every line, by including one in the preamble;
+%then each line will have the proper height and depth, and there will be no
+%need for interline glue. \TeX\ puts every column entry of an alignment into an
+%hbox whose height and depth are set equal to the height and depth of the
+%entire line; therefore |\vrule| commands will extend to the top and bottom
+%of the lines even when their height and/or depth are not specified.
+\ddanger 如果用错误的方法来绘制垂直线，就很麻烦；
+但是恰好{\KT{9}有}一种方法可以巧妙地把它们绘制在表格中。%
+第一步是用`|\offinterlineskip|', 它的意思是没有行间粘连；
+在这种巧妙的方法中， \TeX\ 不允许插入行间粘连，
+因为每条线都假定包含一个 |\vrule|, 而它紧挨着上面和/或下面的另一条线的 |\vrule|。%
+我们把一个支架(strut)放在每行中，并把它放在导言中；
+这样，每条线就有了相应的高度和深度了，
+并且不需要用到行间粘连。%
+ \TeX\ 把对齐中的每个栏单元都放在一个 hbox 中，而此盒子的高度和和深度被%
+设置为整个行的高度和深度；
+\1因此，命令 |\vrule| 就伸长到此行的顶部和底部，而不管它们的高度和/或深度%
+是否给定。
+
+%\ddanger A ``column'' should be allocated to every vertical rule, and such
+%a column can be assigned the template `|\vrule#|'.  Then you obtain a
+%vertical rule by simply leaving the column entries blank, in the normal
+%lines of the alignment; or you can say `|\omit|' if you want to omit the
+%rule in some line; or you can say `|height 10pt|' if you want a
+%nonstandard height; and so on.
+\ddanger 一个``栏''要分配给每个垂直线，并且这样的栏可以设定为模板`|\vrule#|'。%
+这样，在对齐的正常行中，通过把此单元直接变成空的就得到了垂直线；
+如果要在某些行要忽略掉此线就用`|\omit|';
+要得到非标准高度的线就用`|height 10pt|', 等等。
+
+%\ddanger Here is a small table that illustrates the points just made.
+%\ [The data appeared in an article by A. H. ^{Westing}, {\sl BioScience\/
+%\bf31} (1981), 523--524.]
+%\def\BC{\hbox to2em{ \sc B.C.\hss}}%
+%\def\AD{\hbox to2em{ \sc A.D.\hss}}%
+%$$\hbox to\hsize{\vbox{\halign{\indent#\hfil\cr
+%|\vbox{\offinterlineskip|\cr
+%|\hrule|\cr
+%|\halign{&\vrule#&|\cr
+%|  \strut\quad\hfil#\quad\cr|\cr
+%|height2pt&\omit&&\omit&\cr|\cr
+%|&Year\hfil&&World Population&\cr|\cr
+%|height2pt&\omit&&\omit&\cr|\cr
+%|\noalign{\hrule}|\cr
+%|height2pt&\omit&&\omit&\cr|\cr
+%|&8000\BC&&5,000,000&\cr|\cr
+%|&50\AD&&200,000,000&\cr|\cr
+%|&1650\AD&&500,000,000&\cr|\cr
+%|&1850\AD&&1,000,000,000&\cr|\cr
+%|&1945\AD&&2,300,000,000&\cr|\cr
+%|&1980\AD&&4,400,000,000&\cr|\cr
+%|height2pt&\omit&&\omit&\cr}|\cr
+%|\hrule}|\cr
+%}}\hfill\vbox{\offinterlineskip
+%\halign{&\vrule#&
+%  \strut\quad\hfil#\quad\cr
+%\multispan5\hrulefill\cr
+%height2pt&\omit&&\omit&\cr
+%&Year\hfil&&World Population&\cr
+%height2pt&\omit&&\omit&\cr
+%\multispan5\hrulefill\cr
+%height2pt&\omit&&\omit&\cr
+%&8000\BC&&5,000,000&\cr
+%&50\AD&&200,000,000&\cr
+%&1650\AD&&500,000,000&\cr
+%&1850\AD&&1,000,000,000&\cr
+%&1945\AD&&2,300,000,000&\cr
+%&1980\AD&&4,400,000,000&\cr
+%height2pt&\omit&&\omit&\cr
+%\multispan5\hrulefill\cr}}}$$
+%In this example the first, third, and fifth columns are reserved for vertical
+%rules. Horizontal rules are obtained by saying `^|\hrule|' outside the
+%|\halign| or `^|\noalign||{\hrule}|' inside it, because the |\halign| appears
+%in a vbox whose width is the full table width. The horizontal
+%rules could also have been specified by saying `^|\multispan||5\hrulefill|'
+%inside the |\halign|, since that would produce a rule that spans all
+%five columns.
+\ddanger 下面的小表格就举例说明了刚才的要点。%
+[数据来自于 A. H. ^{Westing}, {\sl BioScience\/
+\bf31} (1981), 523--524。]
+\def\BC{\hbox to2em{ \sc B.C.\hss}}%
+\def\AD{\hbox to2em{ \sc A.D.\hss}}%
+$$\hbox to\hsize{\vbox{\halign{\indent#\hfil\cr
+|\vbox{\offinterlineskip\hrule|\cr
+|\halign{&\vrule#&|\cr
+|  \strut\quad\hfil#\quad\cr|\cr
+|height2pt&\omit&&\omit&\cr|\cr
+|&Year\hfil&&World Population&\cr|\cr
+|height2pt&\omit&&\omit&\cr|\cr
+|\noalign{\hrule}|\cr
+|height2pt&\omit&&\omit&\cr|\cr
+|&8000\BC&&5,000,000&\cr|\cr
+|&50\AD&&200,000,000&\cr|\cr
+|&1650\AD&&500,000,000&\cr|\cr
+|&1850\AD&&1,000,000,000&\cr|\cr
+|&1945\AD&&2,300,000,000&\cr|\cr
+|&1980\AD&&4,400,000,000&\cr|\cr
+|height2pt&\omit&&\omit&\cr}|\cr
+|\hrule}|\cr
+}}\hfill\vbox{\offinterlineskip
+\halign{&\vrule#&
+  \strut\quad\hfil#\quad\cr
+\multispan5\hrulefill\cr
+height2pt&\omit&&\omit&\cr
+&Year\hfil&&World Population&\cr
+height2pt&\omit&&\omit&\cr
+\multispan5\hrulefill\cr
+height2pt&\omit&&\omit&\cr
+&8000\BC&&5,000,000&\cr
+&50\AD&&200,000,000&\cr
+&1650\AD&&500,000,000&\cr
+&1850\AD&&1,000,000,000&\cr
+&1945\AD&&2,300,000,000&\cr
+&1980\AD&&4,400,000,000&\cr
+height2pt&\omit&&\omit&\cr
+\multispan5\hrulefill\cr}}}$$
+在本例中，第一，三，五栏就是留给垂直线了。%
+水平线由`|\hrule|'生成，方法是在 |\halign| 使用 |\hrule| 或者在对齐中%
+用`|\noalign||{\hrule}|',
+这是因为 |\halign| 是在一个 vbox 中，而此盒子的宽度是整个表格的宽度。%
+水平线也可以在 |\halign| 用`|\multispan||5\hrulefill|'生成，
+因为它得到的线横贯了五个栏。
+
+%\ddanger The only other nonobvious thing about this table is the
+%inclusion of several lines that say
+%`|height2pt&\omit&&\omit&\cr|'; can you see what they do? The |\omit|
+%instructions mean that there's no numerical information, and they
+%also suppress the ^|\strut| from the line; the `|height2pt|' makes the
+%first |\vrule| $2\pt$ high, and the other two rules will follow suit.
+%Thus, the effect is to extend the vertical rules by two points, where
+%they touch the horizontal rules. This is a little touch that improves
+%the appearance of boxed tables; look for it as a mark of quality.
+\ddanger 此表格中唯一没搞清楚的就是那几个`|height2pt&\omit&&\omit&\cr|'的行；
+你知道它们的作用吗？
+命令 |\omit| 的意思是，此处没有数字的信息，并且它还把支架 |\strut| 限制在行外面；
+`|height2pt|'得到了高为 $2\pt$ 的第一个 |\vrule|, 并且其它两个垂直线将遵照此设定。%
+因此，就得到了伸长两个 pt 的垂直线，从而它们就接到水平线上了。%
+这一点点接上就使得盒子化的表格看起来很漂亮；
+这也是高品质的表现。
+
+%\ddangerexercise Explain why the lines of this table say `|&\cr|' instead of
+%just `|\cr|'.
+%\answer `|\cr|' would have omitted the final column, which is a vertical rule.
+\ddangerexercise 看看为什么此表格的每行都以 `|&\cr|' 结束，而不只是`|\cr|'。
+\answer 用 `|\cr|' 将遗漏最后一栏的竖直标尺。
+
+%\ddanger Another way to get vertical rules into tables is to typeset without
+%them, then back up (using negative glue) and insert them.
+\ddanger 在表格中插入垂直线的另一种方法是先把表格排好版，
+再退回来(利用负粘连)插入垂直线。
+
+%\ddanger Here is another table; this one has become a classic, ever since
+%Michael ^{Lesk} published it as one of the first examples in his report
+%on a program to format tables [Bell Laboratories Computing Science
+%Technical Report {\bf 49} (1976)].  It illustrates several typical
+%problems that arise in connection with boxed information. In order to
+%demonstrate \TeX's ability to adapt a table to different circumstances,
+%tabskip glue is used here to adjust the column widths; the table appears
+%twice, once generated by `|\halign|~|to125pt|' and once by
+%`|\halign|~|to200pt|', with nothing else changed. ^^{AT\&T}
+%$$\hbox to\hsize{%
+%\vbox{\tabskip=0pt \offinterlineskip
+%\def\tablerule{\noalign{\hrule}}
+%\halign to125pt{\strut#&\vrule#\tabskip=1em plus2em&
+%  \hfil#&\vrule#&\hfil#\hfil&\vrule#&
+%  \hfil#&\vrule#\tabskip=0pt\cr\tablerule
+%&&\multispan5\hfil AT\&T Common Stock\hfil&\cr\tablerule
+%&&\omit\hidewidth Year\hidewidth&&
+% \omit\hidewidth Price\hidewidth&&
+% \omit\hidewidth Dividend\hidewidth&\cr\tablerule
+%&&1971&&41--54&&\$2.60&\cr\tablerule
+%&&   2&&41--54&&2.70&\cr\tablerule
+%&&   3&&46--55&&2.87&\cr\tablerule
+%&&   4&&40--53&&3.24&\cr\tablerule
+%&&   5&&45--52&&3.40&\cr\tablerule
+%&&   6&&51--59&&.95\rlap*&\cr\tablerule
+%\noalign{\smallskip}
+%&\multispan7* (first quarter only)\hfil\cr
+%}}\hfil
+%\vbox{\tabskip=0pt \offinterlineskip
+%\def\tablerule{\noalign{\hrule}}
+%\halign to200pt{\strut#&\vrule#\tabskip=1em plus2em&
+%  \hfil#&\vrule#&\hfil#\hfil&\vrule#&
+%  \hfil#&\vrule#\tabskip=0pt\cr\tablerule
+%&&\multispan5\hfil AT\&T Common Stock\hfil&\cr\tablerule
+%&&\omit\hidewidth Year\hidewidth&&
+% \omit\hidewidth Price\hidewidth&&
+% \omit\hidewidth Dividend\hidewidth&\cr\tablerule
+%&&1971&&41--54&&\$2.60&\cr\tablerule
+%&&   2&&41--54&&2.70&\cr\tablerule
+%&&   3&&46--55&&2.87&\cr\tablerule
+%&&   4&&40--53&&3.24&\cr\tablerule
+%&&   5&&45--52&&3.40&\cr\tablerule
+%&&   6&&51--59&&.95\rlap*&\cr\tablerule
+%\noalign{\smallskip}
+%&\multispan7* (first quarter only)\hfil\cr}}}$$
+%The following specification did the job:
+%\begindisplay
+%|\vbox{\tabskip=0pt \offinterlineskip|\cr
+%|\def\tablerule{\noalign{\hrule}}|\cr
+%|\halign to|\<dimen>|{\strut#& \vrule#\tabskip=1em plus2em&|\cr
+%|  \hfil#& \vrule#& \hfil#\hfil& \vrule#&|\cr
+%|  \hfil#& \vrule#\tabskip=0pt\cr\tablerule|\cr
+%|&&\multispan5\hfil AT\&T Common Stock\hfil&\cr\tablerule|\cr
+%|&&\omit\hidewidth Year\hidewidth&&|\cr
+%| \omit\hidewidth Price\hidewidth&&|\cr
+%| \omit\hidewidth Dividend\hidewidth&\cr\tablerule|\cr
+%|&&1971&&41--54&&\$2.60&\cr\tablerule|\cr
+%|&&   2&&41--54&&2.70&\cr\tablerule|\cr
+%|&&   3&&46--55&&2.87&\cr\tablerule|\cr
+%|&&   4&&40--53&&3.24&\cr\tablerule|\cr
+%|&&   5&&45--52&&3.40&\cr\tablerule|\cr
+%|&&   6&&51--59&&.95\rlap*&\cr\tablerule \noalign{\smallskip}|\cr
+%|&\multispan7* (first quarter only)\hfil\cr}}|\cr
+%\enddisplay
+%Points of interest are: (1)~The first column contains a strut; otherwise
+%it would have been necessary to put a strut on the lines that say
+%`AT\&T' and `(first quarter only)', since those lines omit the templates
+%of all other columns that might have a built-in strut. (2)~`^|\hidewidth|'
+%is used in the title line so that the width of columns will be affected
+%only by the width of the numeric data. (3)~`^|\rlap|' is used so that
+%the asterisk doesn't affect the alignment of the numbers.  (4)~If the
+%tabskip specification had been `|0em plus3em|' instead of `|1em plus2em|',
+%the alignment wouldn't have come out right, because `AT\&T Common Stock'
+%would have been wider than the natural width of everything it spanned; the
+%excess width would all have gone into the `Dividend' column.
+\ddanger \1下面是另一个表格；
+它已经成为一个经典例子，从 Michael {Lesk} 把它作为其格式化表格的程序的报告%
+中的第一个例子而出现时起 [Bell Laboratories Computing Science
+Technical Report {\bf 49} (1976)]。%
+它举例说明了绘制线时出现的几个典型的问题。%
+为了证明 \TeX\ 能完成不同要求的表格，
+下面用准备粘连来调整栏的宽度；
+此表出现了两次，一次是由`|\halign|~|to125pt|'生成，
+一次是由`|\halign|~|to200pt|'生成，其它的没有什么变化。
+$$\hbox to\hsize{%
+\vbox{\tabskip=0pt \offinterlineskip
+\def\tablerule{\noalign{\hrule}}
+\halign to125pt{\strut#&\vrule#\tabskip=1em plus2em&
+  \hfil#&\vrule#&\hfil#\hfil&\vrule#&
+  \hfil#&\vrule#\tabskip=0pt\cr\tablerule
+&&\multispan5\hfil AT\&T Common Stock\hfil&\cr\tablerule
+&&\omit\hidewidth Year\hidewidth&&
+ \omit\hidewidth Price\hidewidth&&
+ \omit\hidewidth Dividend\hidewidth&\cr\tablerule
+&&1971&&41--54&&\$2.60&\cr\tablerule
+&&   2&&41--54&&2.70&\cr\tablerule
+&&   3&&46--55&&2.87&\cr\tablerule
+&&   4&&40--53&&3.24&\cr\tablerule
+&&   5&&45--52&&3.40&\cr\tablerule
+&&   6&&51--59&&.95\rlap*&\cr\tablerule
+\noalign{\smallskip}
+&\multispan7* (first quarter only)\hfil\cr
+}}\hfil
+\vbox{\tabskip=0pt \offinterlineskip
+\def\tablerule{\noalign{\hrule}}
+\halign to200pt{\strut#&\vrule#\tabskip=1em plus2em&
+  \hfil#&\vrule#&\hfil#\hfil&\vrule#&
+  \hfil#&\vrule#\tabskip=0pt\cr\tablerule
+&&\multispan5\hfil AT\&T Common Stock\hfil&\cr\tablerule
+&&\omit\hidewidth Year\hidewidth&&
+ \omit\hidewidth Price\hidewidth&&
+ \omit\hidewidth Dividend\hidewidth&\cr\tablerule
+&&1971&&41--54&&\$2.60&\cr\tablerule
+&&   2&&41--54&&2.70&\cr\tablerule
+&&   3&&46--55&&2.87&\cr\tablerule
+&&   4&&40--53&&3.24&\cr\tablerule
+&&   5&&45--52&&3.40&\cr\tablerule
+&&   6&&51--59&&.95\rlap*&\cr\tablerule
+\noalign{\smallskip}
+&\multispan7* (first quarter only)\hfil\cr}}}$$
+此表用下列方法得到：
+\begindisplay
+|\vbox{\tabskip=0pt \offinterlineskip|\cr
+|\def\tablerule{\noalign{\hrule}}|\cr
+|\halign to|\<dimen>|{\strut#& \vrule#\tabskip=1em plus2em&|\cr
+|  \hfil#& \vrule#& \hfil#\hfil& \vrule#&|\cr
+|  \hfil#& \vrule#\tabskip=0pt\cr\tablerule|\cr
+|&&\multispan5\hfil AT\&T Common Stock\hfil&\cr\tablerule|\cr
+|&&\omit\hidewidth Year\hidewidth&&|\cr
+| \omit\hidewidth Price\hidewidth&&|\cr
+| \omit\hidewidth Dividend\hidewidth&\cr\tablerule|\cr
+|&&1971&&41--54&&\$2.60&\cr\tablerule|\cr
+|&&   2&&41--54&&2.70&\cr\tablerule|\cr
+|&&   3&&46--55&&2.87&\cr\tablerule|\cr
+|&&   4&&40--53&&3.24&\cr\tablerule|\cr
+|&&   5&&45--52&&3.40&\cr\tablerule|\cr
+|&&   6&&51--59&&.95\rlap*&\cr\tablerule \noalign{\smallskip}|\cr
+|&\multispan7* (first quarter only)\hfil\cr}}|\cr
+\enddisplay
+要讨论的要点是：
+(1). 第一栏包含一个支架(strut);
+否则就要在`AT\&T'和`(first quarter only)'这些行中放支架，
+因为这些行把所有其它栏可能内置的支架的模板给忽略掉了。%
+(2). 在标题栏使用了`|\hidewidth|', 这样栏的宽度只受数字的宽度的影响。%
+(3). 使用`|\rlap|'是为了不让星号影响数字对齐。%
+(4). 如果把制表粘连从`|1em plus2em|'变成`|0em plus3em|',
+对齐也不会伸出右边，因为`AT\&T Common Stock'比所有合并栏的自然宽度都大；
+剩下的宽度都放在`Dividend'的栏中。
+
+%\ddangerexercise Explain how to add $2\pt$ more space above and below
+%`AT\&T Common Stock'.
+%\answer One way is to include two lines just before and after the title
+%line, saying `|\omit&height2pt&\multispan5&\cr|'. Another way is to
+%put |\bigstrut| into some column of the title line, for some appropriate
+%invisible box |\bigstrut| of width zero. Either way makes the table
+%look better.
+\ddangerexercise 看看怎样在 `AT\&T Common Stock' 的上下增加 $2\pt$ 的间距。
+\answer 一种方法是在标题行的前后各加一行 `|\omit&height2pt&\multispan5&\cr|'。
+另一种方法是在标题行的某栏放入适当的 |\bigstrut|，
+其中 |\bigstrut| 是宽度为零的不可见盒子。两种方法都能让标题看起来更美观。
+
+%\ddangerexercise Typeset the following chart, making it exactly 36em wide:
+%^^{family tree}
+%^^{Bohning [Knuth], Louise Marie}
+%^^{Ehlert [Bohning], Pauline Anna Marie}
+%^^{B\"ohning, Martin John Henry}
+%^^{Wischmeyer [Ehlert], Clara Louise}
+%^^{Ehlert, Ernst Fred}
+%^^{Blase [B\"ohning], Maria Dorothea}
+%^^{B\"ohning, Jobst Heinrich}
+%$$\vbox{\tabskip=0pt \offinterlineskip
+%\halign to 36em{\tabskip=0pt plus1em#&
+%  #\hfil&#&#\hfil&#&#\hfil&#\tabskip=0pt\cr
+%&&&&&\strut J. H. B\"ohning, 1838&\cr
+%&&&&\multispan3\hrulefill\cr
+%&&&\strut M. J. H. B\"ohning, 1882&\vrule\cr
+%&&\multispan3\hrulefill\cr
+%&&\vrule&&\vrule&\strut M. D. Blase, 1840&\cr
+%&&\vrule&&\multispan3\hrulefill\cr
+%&\strut L. M. Bohning, 1912&\vrule\cr
+%\multispan3\hrulefill\cr
+%&&\vrule&&&\strut E. F. Ehlert, 1845&\cr
+%&&\vrule&&\multispan3\hrulefill\cr
+%&&\vrule&\strut P. A. M. Ehlert, 1884&\vrule\cr
+%&&\multispan3\hrulefill\cr
+%&&&&\vrule&\strut C. L. Wischmeyer, 1850&\cr
+%&&&&\multispan3\hrulefill\cr
+%}}$$
+%\answer The trick is to have ``empty'' columns at the extreme left and right;
+%then the |\hrulefill|'s are able to span the tabskip glue.
+%\begintt
+%$$\vbox{\tabskip=0pt \offinterlineskip
+%\halign to 36em{\tabskip=0pt plus1em#&
+%  #\hfil&#&#\hfil&#&#\hfil&#\tabskip=0pt\cr
+%&&&&&\strut J. H. B\"ohning, 1838&\cr
+%&&&&\multispan3\hrulefill\cr
+%&&&\strut M. J. H. B\"ohning, 1882&\vrule\cr
+%&&\multispan3\hrulefill\cr
+%&&\vrule&&\vrule&\strut M. D. Blase, 1840&\cr
+%&&\vrule&&\multispan3\hrulefill\cr
+%&\strut L. M. Bohning, 1912&\vrule\cr
+%\multispan3\hrulefill\cr
+%&&\vrule&&&\strut E. F. Ehlert, 1845&\cr
+%&&\vrule&&\multispan3\hrulefill\cr
+%&&\vrule&\strut P. A. M. Ehlert, 1884&\vrule\cr
+%&&\multispan3\hrulefill\cr
+%&&&&\vrule&\strut C. L. Wischmeyer, 1850&\cr
+%&&&&\multispan3\hrulefill\cr}}$$
+%\endtt
+\ddangerexercise \1排版下列图表，使得它的宽度正好是 36em：
+$$\vbox{\tabskip=0pt \offinterlineskip
+\halign to 36em{\tabskip=0pt plus1em#&
+  #\hfil&#&#\hfil&#&#\hfil&#\tabskip=0pt\cr
+&&&&&\strut J. H. B\"ohning, 1838&\cr
+&&&&\multispan3\hrulefill\cr
+&&&\strut M. J. H. B\"ohning, 1882&\vrule\cr
+&&\multispan3\hrulefill\cr
+&&\vrule&&\vrule&\strut M. D. Blase, 1840&\cr
+&&\vrule&&\multispan3\hrulefill\cr
+&\strut L. M. Bohning, 1912&\vrule\cr
+\multispan3\hrulefill\cr
+&&\vrule&&&\strut E. F. Ehlert, 1845&\cr
+&&\vrule&&\multispan3\hrulefill\cr
+&&\vrule&\strut P. A. M. Ehlert, 1884&\vrule\cr
+&&\multispan3\hrulefill\cr
+&&&&\vrule&\strut C. L. Wischmeyer, 1850&\cr
+&&&&\multispan3\hrulefill\cr
+}}$$
+\answer 技巧是在最左边和最右边留下一些``空白''栏；
+而 |\hrulefill| 可以横跨 tabskip 粘连。
+\begintt
+$$\vbox{\tabskip=0pt \offinterlineskip
+\halign to 36em{\tabskip=0pt plus1em#&
+  #\hfil&#&#\hfil&#&#\hfil&#\tabskip=0pt\cr
+&&&&&\strut J. H. B\"ohning, 1838&\cr
+&&&&\multispan3\hrulefill\cr
+&&&\strut M. J. H. B\"ohning, 1882&\vrule\cr
+&&\multispan3\hrulefill\cr
+&&\vrule&&\vrule&\strut M. D. Blase, 1840&\cr
+&&\vrule&&\multispan3\hrulefill\cr
+&\strut L. M. Bohning, 1912&\vrule\cr
+\multispan3\hrulefill\cr
+&&\vrule&&&\strut E. F. Ehlert, 1845&\cr
+&&\vrule&&\multispan3\hrulefill\cr
+&&\vrule&\strut P. A. M. Ehlert, 1884&\vrule\cr
+&&\multispan3\hrulefill\cr
+&&&&\vrule&\strut C. L. Wischmeyer, 1850&\cr
+&&&&\multispan3\hrulefill\cr}}$$
+\endtt
+
+%\ddanger If you're having trouble ^{debugging} an alignment, it sometimes
+%helps to put `^|\ddt|' at the beginning and end of the templates in your
+%preamble. This is an undefined control sequence that causes \TeX\ to stop,
+%displaying the rest of the template. When \TeX\ stops, you can use
+%|\showlists| and other commands to see what the machine thinks it's doing.
+%If \TeX\ doesn't stop, you know that it never reached that part of the
+%template.
+\ddanger 如果在调试对齐时有问题，有时候可以把`|\ddt|'放在导言的模板开头和结尾，
+这样会有帮助。%
+它是一个未定义的控制系列，使 \TeX\ 停下来，
+把模板剩下的内容显示出来。%
+当 \TeX\ 停止时，可以用 |\showlists| 或其它命令来看看计算机是怎样处理的。%
+如果 \TeX\ 不停下来，就是说它从来就没用到模板的这部分。
+
+%\ddanger It's possible to have alignments within alignments. Therefore when
+%\TeX\ sees a `|&|' or `|\span|' or `|\cr|', it needs some way to decide which
+%alignment is involved. The rule is that an entry ends when `|&|' or `|\span|'
+%or `|\cr|' occurs at the same level of braces that was current when the
+%entry began; i.e., there must be an equal number of left and right ^{braces}
+%in every entry. For example, in the line
+%\begintt
+%\matrix{1&1\cr 0&1\cr}&\matrix{0&1\cr 0&0\cr}\cr
+%\endtt
+%\TeX\ will not resume the template for the first column when it is
+%scanning the argument to |\matrix|, because the |&|'s and |\cr|'s in
+%that argument are enclosed in braces. Similarly, |&|'s and |\cr|'s in
+%the preamble do not denote the end of a template unless the resulting
+%template would have an equal number of left and right braces.
+\ddanger 可以在对齐中使用对齐。%
+因此，当 \TeX\ 遇见`|&|', `|\span|'或者`|\cr|'时，需要确定是哪一个对齐。%
+规则是，当`|&|', `|\span|'或`|\cr|'出现在与当前单元开始同样级别的大括号时，
+此单元就结束了；
+即，在每个单元中必须有相同数目的左右大括号。%
+例如，在行
+\begintt
+\matrix{1&1\cr 0&1\cr}&\matrix{0&1\cr 0&0\cr}\cr
+\endtt
+中，当 \TeX\ 扫描到 |\matrix| 的参量时，不会回到第一栏的模板，
+因为在此参量中的 |&| 和 |\cr| 都被封装在大括号中了。%
+类似地，如果所得到的模板没有相同数目的左右大括号，
+那么导言中的 |&| 和 |\cr| 也不表示模板的结束。
+
+%\ddanger You have to be careful with the use of |&| and ^|\span| and ^|\cr|,
+%^^{ampersand}
+%because these tokens are intercepted by \TeX's scanner even when it is
+%not expanding macros. For example, if you say `|\let\x=\span|' in the
+%midst of an alignment entry, \TeX\ will think that the `|\span|' ends
+%the entry, so |\x| will become equal to the first token following the
+%`|#|' in the template. You can hide this |\span| by putting it in
+%braces; e.g., `|{\global\let\x=\span}|'. \ (And Appendix~D explains how to
+%avoid |\global| here.)
+\ddanger 使用 |&|, ~|\span| 和 |\cr| 时要小心，
+因为这些记号会被 \TeX\ 扫描截取，即使它不展开宏。%
+例如，如果在对齐单元的中间使用`|\let\x=\span|',
+那么 \TeX\ 就认为`|\span|'是单元的结束，
+这样 |\x| 就变得与模板中跟在`|#|'后面的第一个记号相同了。%
+可以把它放在大括号中来把它隐藏起来，比如`|{\global\let\x=\span}|'。%
+(附录 D 中讨论了怎样避免在这里使用 |\global|。)
+
+%\ddanger Sometimes people forget the |\cr| on the last line of an
+%alignment. This can cause mysterious effects, because \TeX\ is not
+%clairvoyant. For example, consider the following apparently simple case:
+%\begintt
+%\halign{\centerline{#}\cr
+%  A centered line.\cr
+%  And another?}
+%\endtt
+%(Notice the missing |\cr|.) \ A curious thing happens here when \TeX\
+%processes the erroneous line, so please pay attention. The template
+%begins with `|\centerline{|', so \TeX\ starts to scan the argument to
+%|\centerline|. Since there's no `|\cr|' after the question mark, the `|}|'
+%after the question mark is treated as the end of the argument to
+%|\centerline|, {\sl not\/} as the end of the |\halign|. \TeX\ isn't going
+%to be able to finish the alignment unless the subsequent text has
+%the form `|...{...\cr|'. Indeed, an entry like `|a}b{c|' is legitimate
+%with respect to the template `|\centerline{#}|', since it yields
+%`|\centerline{a}b{c}|'; \TeX\ is correct when it gives no error message in
+%this case. But the computer's idea of the current situation is
+%different from the user's, so a puzzling error message will probably occur
+%a few lines later.
+\ddanger 有时候会把对齐的最后一行的 |\cr| 落掉了。%
+这会出现不可理解的效果，
+因为 \TeX\ 不是千里眼。%
+例如，看看下面这个直白的例子：
+\begintt
+\halign{\centerline{#}\cr
+  A centered line.\cr
+  And another?}
+\endtt
+(注意，落掉了 |\cr|。)
+当态处理这个错误的行时会出现古怪的情况，因此要注意。%
+模板以`|\centerline{|'开头，因此 \TeX\ 开始扫描 |\centerline| 的参量。%
+因为在问号后面没有`|\cr|', 所以问号后面的`|}|'被看作 |\centerline| 的参量结束，
+{\KT{9}而不}是 |\halign| 的结束。%
+ \TeX\ 不会认为此对齐结束了，除非随后的文本中有`|...{...\cr|'这样的格式。%
+的确，象`|a}b{c|'这样的单元对模板`|\centerline{#}|'是合理的，
+因为它得到的是`|\centerline{a}b{c}|';
+\1因此在这种情况下 \TeX\ 不给出错误信息是对的。%
+但是在当前情况下，计算机的思维和用户的想法是不同的，因此几行以后就会出现%
+令人不知所措的错误信息。
+
+%\ddanger To help avoid such situations, there's a primitive command
+%^|\crcr| that acts exactly like |\cr| except that it does nothing
+%when it immediately follows a |\cr| or a |\noalign{...}|. Thus, when
+%you write a macro like |\matrix|, you can safely insert |\crcr|
+%at the end of the user's argument; this will cover up an error if the
+%user forgot the final |\cr|, and it will cause no harm if the final
+%|\cr| was present.
+\ddanger 为了避免这样的情况，有一个原始命令 |\crcr|,
+它象 |\cr| 一样，只是当紧跟在 |\cr| 或 |\noalign{...}| 后面时就不起作用了。%
+这样，当编写象 |\matrix| 这样的宏时，就可以在用户的参量结尾处安全地插入 |\crcr|;
+如果用户落掉最后面的 |\cr|, 就可补救此错误，
+如果用户没落掉，也没有什么影响。
+
+%\ddanger Are you tired of typing |\cr|? ^^{cr, avoiding}
+%You can get plain \TeX\ to insert an automatic |\cr| at the end of
+%each input line in the following way: ^^|\begingroup|
+%\begindisplay
+%|\begingroup \let\par=\cr \obeylines %|\cr
+%|\halign{|\<preamble>\cr
+%\ \ \ \<first line of alignment>\cr
+%\ \ \ \ \dots\cr
+%\ \ \ \<last line of alignment>\cr
+%|  }\endgroup|\cr
+%\enddisplay
+%This works because ^|\obeylines| makes the ASCII ^\<return> into
+%an active character that uses the current meaning of\/ ^|\par|, and
+%plain \TeX\ puts \<return> at the end of an input line (see Chapter~8).
+%If you don't want a~|\cr| at the end of a certain line,
+%just type `|%|' and the corresponding |\cr|
+%will be ``commented out.'' ^^{percent} \ (This special mode doesn't
+%work with ^|\+| lines, since |\+| is a macro whose argument is delimited
+%by the token `|\cr|', not simply by a token that has the same meaning
+%as~|\cr|.  ^^{delimited arguments} But you can redefine |\+| to overcome
+%this hurdle, if you want to. For example, define a macro |\alternateplus|
+%that is just like |\+| except that its argument is delimited by the active
+%character |^^M|; then include the command `|\let\+=\alternateplus|' as
+%part of\/ |\obeylines|.)
+\ddanger 是不是已经对键入 |\cr| 感到厌烦了？
+可以用下列方法让 plain \TeX\ 在每输入行的结尾处自动插入 |\cr|:
+\begindisplay
+|\begingroup \let\par=\cr \obeylines %|\cr
+|\halign{|\<preamble>\cr
+\ \ \ \<first line of alignment>\cr
+\ \ \ \ \dots\cr
+\ \ \ \<last line of alignment>\cr
+|  }\endgroup|\cr
+\enddisplay
+这是因为 |\obeylines| 把 ASCII 的 \<return> 变成了活动符，
+把它当前作为 |\par| 来使用，
+并且 plain \TeX\ 在每个输入行的结尾有一个 \<return>(见第八章)。%
+如果不想要某个行结尾的 |\cr|, 只需要输入`|%|', 相应的 |\cr| 就被``注释''掉了。%
+(这种特殊的方法不能处理行 |\+|, 因为 |\+| 是一个宏，其参量由记号`|\cr|'%
+来作为分界符，不能直接用用同样意思的记号来代替 |\cr|。%
+但是如果需要，也可以通过重新定义 |\+| 来绕过这个障碍。%
+例如，定义宏 |\alternateplus|, 它与 |\+| 一样，只是它的参量把活动符 |^^M| 当做%
+分界符；
+这样，把命令`|\let\+=\alternateplus|'包括为 |\obeylines| 一部分即可。)
+
+%\danger The control sequence ^|\valign| is analogous to |\halign|, but
+%rows and columns change r\^oles. In this case |\cr| marks the bottom of
+%a column, and the aligned columns are vboxes that are put together in
+%horizontal mode. The individual entries of each column are vboxed with
+%depth zero (i.e., as if\/ ^|\boxmaxdepth| were zero, as explained in
+%Chapter~12); the entry heights for each row of a |\valign| are maximized
+%in the same fashion as the entry widths for each column of an~|\halign|
+%are maximized. The ^|\noalign| operation can now be used to insert
+%horizontal mode material between columns; the ^|\span| operation now
+%spans rows. ^^{spanned rows in tables} People usually work with \TeX\
+%at least a year before they find their first application for |\valign|;
+%and then it's usually a one-row `|\valign{\vfil#\vfil\cr...}|'.
+%But the general mechanism is there if you need it.
+\danger 控制系列 |\valign| 与 |\halign| 类似，但是行和栏的规则要改变。%
+在这种情况下，|\cr| 是栏的底部，并且对齐的栏是 vbox, 它们在水平模式下放在一起。%
+每栏的各个单元是深度为零的 vbox(即，就象 |\boxmaxdepth| 是零，在第十二章讨论过);
+|\valign| 的每行的单元高度是同一格式中最大的高度，就象 |\halign| 的每栏单元的%
+宽度是最大宽度一样。%
+命令 |\noalign| 现在用来在栏之间插入水平模式的内容；
+命令 |\span| 合并的是行。%
+一般人们在使用 \TeX\ 至少一年以后才发现要用到 |\valign|;
+并且一般只是单行格式`|\valign{\vfil#\vfil\cr...}|'。%
+但是如果要用到，基本原理已经有了。
+
+\endchapter
+
+%If sixteen pennies are arranged in the form of a square
+%there will be the same number of pennies in every row, every column,
+%and each of the two long diagonals.
+%Can you do the same with twenty pennies?
+%\author HENRY ERNEST ^{DUDENEY}, {\sl The Best Coin Problems\/} (1909)
+%  % Strand Magazine, July 1909, page 83; answer in August 1909, page 240
+%\immediate\write\ans{}
+%\immediate\write\ans{\string\ansno\chapno.$\infty$:}
+%\copytoblankline (Solution to Dudeney's problem.) \
+%Let |\one| and |\two| be macros that produce a vertical list
+%denoting one and two pennies, respectively. The problem can be
+%solved with ^|\valign| as follows:
+%\begintt
+%\valign{\vfil#&\vfil#&\vfil#&\vfil#\cr
+%  \two&\one&\one&\one\cr
+%  \one&\one&\two&\one\cr
+%  \one&\one&\one&\two\cr
+%  \one&\two&\one&\one\cr}
+%\endtt
+%Since |\valign| transposes rows and columns, the result is\quad
+%\setbox0=\hbox{\vbox{
+%    \def\pennytop{\hbox to 24pt{\manual\char'130\hfil}}%
+%      \def\pennyedge{\hbox{\manual\char'133}}%
+%      \def\one{\pennytop\pennyedge}%
+%      \def\two{\one\pennyedge}%
+%      \baselineskip0pt\lineskip0pt\tabskip=14pt
+%    \hbox{\valign{\vfil#&\vfil#&\vfil#&\vfil#\cr
+%        \two&\one&\one&\one\cr
+%        \one&\one&\two&\one\cr
+%        \one&\one&\one&\two\cr
+%        \one&\two&\one&\one\cr}}\kern-11pt}}%
+%\ht0=0pt \dp0=11pt \box0.
+If sixteen pennies are arranged in the form of a square
+there will be the same number of pennies in every row, every column,
+and each of the two long diagonals.
+\pdfdestx{ex-22-$\infty$}\pdflinkx{ans-22-$\infty$}{Can you do the same with twenty pennies?}
+\author HENRY ERNEST ^{DUDENEY}, {\sl The Best Coin Problems\/} (1909)
+  % Strand Magazine, July 1909, page 83; answer in August 1909, page 240
+\immediate\write\ans{}
+\immediate\write\ans{\string\ansno\chapno.$\infty$:}
+\copytoblankline （Dudeney 问题的解答。）%
+假设 |\one| 和 |\two| 宏分别排印代表一个和两个便士的竖直列表。
+这个问题可以用 ^|\valign| 解决，如下：
+\begintt
+\valign{\vfil#&\vfil#&\vfil#&\vfil#\cr
+  \two&\one&\one&\one\cr
+  \one&\one&\two&\one\cr
+  \one&\one&\one&\two\cr
+  \one&\two&\one&\one\cr}
+\endtt
+由于 |\valign| 转置了表格的行和列，结果将为\quad
+\setbox0=\hbox{\vbox{
+    \def\pennytop{\hbox to 24pt{\manual\char'130\hfil}}%
+      \def\pennyedge{\hbox{\manual\char'133}}%
+      \def\one{\pennytop\pennyedge}%
+      \def\two{\one\pennyedge}%
+      \baselineskip0pt\lineskip0pt\tabskip=14pt
+    \hbox{\valign{\vfil#&\vfil#&\vfil#&\vfil#\cr
+        \two&\one&\one&\one\cr
+        \one&\one&\two&\one\cr
+        \one&\one&\one&\two\cr
+        \one&\two&\one&\one\cr}}\kern-11pt}}%
+\ht0=0pt \dp0=11pt \box0。
+
+\bigskip
+
+It was she who controlled the whole of the Fifth Column.
+\author AGATHA ^{CHRISTIE}, {\sl N or M?\/} (1941) % chapter 5, part 1
+
+\vfill\eject\byebye

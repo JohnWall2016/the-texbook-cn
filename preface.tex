@@ -1,0 +1,239 @@
+% -*- coding: utf-8 -*-
+
+\input macros
+
+%% the preface
+%\titlepage
+%\def\rhead{Preface}
+%\vbox to 8pc{
+%\rightline{\titlefont Preface}\vss}
+%{\topskip 9pc % this makes equal sinkage throughout the Preface
+%\vskip-\parskip
+%\tenpoint
+%\noindent\hang\hangafter-2
+%\smash{\lower12pt\hbox to 0pt{\hskip-\hangindent\cmman G\hfill}}\hskip-16pt
+%{\sc ENTLE} R{\sc EADER}: \strut This is a handbook about
+%\TeX, a new typesetting system intended for the creation
+%of beautiful books---and especially for books that contain a lot of
+%mathematics. By preparing a manuscript in \TeX\ format, you will be
+%telling a computer exactly how the manuscript is to be transformed into
+%pages whose typographic quality is comparable to that of the world's
+%finest printers; yet you won't need to do much more work than would be
+%involved if you were simply typing the manuscript on an ordinary
+%typewriter. In fact, your total work will probably be significantly less,
+%if you consider the time it ordinarily takes to revise a typewritten manuscript,
+%since computer text files are so easy to change and to reprocess. \
+%(If such claims sound too good to be true, keep in mind that they were made
+%by \TeX's designer, on a day when \TeX\ happened to
+%be working, so the statements may be biased; but read on anyway.)
+% the preface
+\titlepage
+\def\rhead{前言}
+\vbox to 8pc{
+\rightline{\titlefont 前言}\vss}
+\bookmark{1}{前言}
+{\topskip 9pc % this makes equal sinkage throughout the Preface
+\vskip-\parskip
+\tenpoint
+\noindent\hang\hangafter-2
+\smash{\lower15pt\hbox to 0pt{\hskip-\hangindent\KT{28}致\hfill}}%
+{\KT{10}尊敬的读者}：这是关于 \TeX\ 的工具书。\TeX\ 是为了%
+更好地排版书籍——特别是包含很多数学公式的书籍而设计的一个软件。
+用 \TeX\ 的格式准备好书稿后，你就准确地告诉了计算机怎样把它变成书页，
+而得到的排版质量可以与世界上最好的排版工人的效果相媲美；
+但是你所做的工作仅仅相当于在普通打字机上把书稿直接输入进去。
+实际上，如果你算上通常修改打印稿所花费的时间，那么你的工作量可能非常小，
+这是因为计算机的文本文件修改并重新排版是相当容易的。%
+（如果这样的好话听起来不像真的，那么记住这是 \TeX\ 设计者所声明的，
+如果有一天凑巧要用到 \TeX\ 时，这些承诺可能有点偏差；
+但是总之要看下去。）
+
+%This manual is intended for people who have never used \TeX\ before, as
+%well as for experienced \TeX\ hackers. In other words, it's supposed to
+%be a panacea that satisfies everybody, at the risk of satisfying nobody.
+%Everything you need to know about \TeX\ is explained
+%here somewhere, and so are a lot of things that most users don't care about.
+%If you are preparing a simple manuscript, you won't need to
+%learn much about \TeX\ at all; on the other hand, some
+%things that go into the printing of technical books are inherently
+%difficult, and if you wish to achieve more complex effects you
+%will want to penetrate some of \TeX's darker corners. In order
+%to make it possible for many types of users to read this manual
+%effectively, a special sign is used to designate material that is
+%for wizards only: When the symbol
+%$$\vbox{\hbox{\dbend}\vskip 11pt}$$
+%appears at the beginning of a paragraph, it warns of a ``^{dangerous bend}''
+%in the train of thought; don't read the paragraph unless you need to.
+%Brave and experienced drivers at the controls of \TeX\ will gradually enter
+%more and more of these hazardous areas, but for most applications the
+%details won't matter.
+这个手册是为以前从未使用过 \TeX\ 以及有经验的 \TeX\ 高手所使用的。%
+换句话说，它是想当人人需要的万金油，当然也有可能是无用的垃圾。%
+你需要知道的 \TeX\ 的每个细节都写在本书的某个地方，并且因此许多东西是%
+大多数用户所不关心的。%
+如果你正在写一个简单的草稿，那么就根本不需要知道太多的 \TeX; %
+另一方面，某些排版专业书籍的技术本来就很难，而且如果你想得到更复杂的%
+效果，就应该洞悉 \TeX\ 的某些鲜为人知的知识。%
+为了使不同的用户能高效地阅览本手册，我们用一个特殊的标志来标记那些只面向%
+高手的内容：%
+当在某段的开头出现符号
+$$\vbox{\hbox{\dbend}\vskip 11pt}$$
+\noindent 时，它就是路边上``转弯危险''的警告；%
+如果你不需要，就别去看它。%
+在驾驭 \TeX\ 方面勇敢且有经验的高手可逐渐地进入这些危险的区域，%
+但是对大多数使用者而言，这些细节是无关紧要的。
+
+%All that you really ought to know, before reading on, is how to get a
+%file of text into your computer using a standard editing program. This
+%manual explains what that file ought to look like so that \TeX\ will
+%understand it, but basic computer usage is not explained here.
+%Some previous experience with technical typing will be quite helpful
+%if you plan to do heavily mathematical work with \TeX, although it
+%is not absolutely necessary. \TeX\ will do most of the necessary
+%formatting of equations automatically; but users with more experience
+%will be able to obtain better results, since there are so many ways
+%to deal with formulas.
+在开始阅读之前，所有你真正应该知道的是怎样在计算机上用标准的文本编辑程序%
+得到一个文本文件。%
+这个手册说明了什么样的文件 \TeX\ 才能识别，但是计算机的基本用法这里没有。%
+如果你打算用 \TeX\ 完成繁重的数学排版工作，已有的科技排版经验将会很有帮助，
+尽管这些经验并非必须。
+\TeX\ 将自动完成大部分必要的公式编排；%
+但是经验丰富的用户可得到更好的效果，因为可以用许多种方法来编排公式。
+
+%Some of the paragraphs in this manual are so esoteric that they are rated
+%$$\vcenter{\hbox{\dbend\kern1pt\dbend}\vskip 11pt}\;;$$
+%everything that was said about single dangerous-bend signs goes double
+%for these. You should probably have at least a month's experience with
+%\TeX\ before you attempt to fathom such doubly dangerous depths
+%of the system; in fact, most people will never need to know \TeX\
+%in this much detail, even if they use it every day. After all, it's
+%possible to drive a car without knowing how the engine works.
+%Yet the whole story is here in case you're curious. \ (About \TeX, not cars.)
+本手册中，有些段落深奥到了
+$$\vcenter{\hbox{\dbend\kern1pt\dbend}\vskip 11pt}\;;$$
+对它们，单个危险标记的所有忠告都要加倍。%
+在你试图进入系统的如此双重危险的部分前，大概应该至少使用一个月的 \TeX; %
+实际上，大多数用户从不需要这么详细地了解 \TeX\ ——即使他们每天都用。%
+毕竟，不知道发动机怎样工作也可以开汽车。%
+但是，如果你爱钻研，那么所有东西都在这里。(当然是关于 \TeX\ 的，而不是关于汽车的。)
+
+%The reason for such different levels of complexity is that people change
+%as they grow accustomed to any powerful tool. When you first try to use \TeX,
+%you'll find that some parts of it are very easy, while other things will take
+%some getting used to. A day or so later, after you have successfully typeset a
+%few pages, you'll be a different person; the concepts that used to bother you
+%will now seem natural, and you'll be able to picture the final result in
+%your mind before it comes out of the machine. But you'll probably run into
+%challenges of a different kind. After another week your perspective will
+%change again, and you'll grow in yet another way; and so on. As years go by,
+%you might become involved with many different kinds of typesetting; and
+%you'll find that your usage of \TeX\ will keep changing as your experience
+%builds. That's the way it is with any powerful tool: There's always more
+%to learn, and there are always better ways to do what you've done before.
+%At every stage in the development you'll want a slightly different sort of
+%manual.  You may even want to write one yourself.  By paying attention to
+%the dangerous bend signs in this book you'll be better able to focus on
+%the level that interests you at a particular time.
+设置这样不同的复杂等级的原因在于随着人们不断熟悉这个强大的工具，他们自己也在\hbox{改变。}%
+当你首次使用 \TeX\ 时，会发现它的某些东西非常简单，而其它的东西就得花些功夫。%
+一天以后，当你能排版几页之后，你就进了一步；以前困扰你的概念现在看起来就是简单自然的，%
+并且你能在机器得出结果前在脑海中勾画出最后的结果。%
+但是你可能陷入另一种挑战。%
+再过一个星期，你的看法就又变了，而且进入另外一个方面；等等。%
+数年过去后，你可能掌握了许多不同的排版方式中；%
+并且发现随着经验的丰富，\TeX\ 的用法也在不断变换。%
+这就是工具之所以强大的原因：总有更多的东西需要学习，并且总有更好的方法来处理%
+你以前的工作。%
+在每个发展阶段，你都希望有一个稍微不同的手册，%
+可能甚至希望亲自写一本。%
+只要留意本书的危险标记，你就能在特定的阶段更好地把精力集中在感兴趣的地方。
+
+%Computer system manuals usually make dull reading, but take heart:
+%This one contains {\sc ^{JOKES}} every once in a while, so you might actually
+%enjoy reading it. \ (However, most of the jokes can only be appreciated
+%properly if you understand a technical point that is being made---so
+%read {\sl carefully}.)
+计算机系统手册一般读起来比较乏味，但是振作起来：%
+本手册偶尔给你几个笑话，所以你实际上可能喜欢读一读。%
+(但是，只有你理解了所用的技术要领，大多数笑话才能真正被欣赏——%
+所以要{\KT{10}仔细}点啊。)
+
+%Another noteworthy characteristic of this manual is that it doesn't
+%always tell the ^{truth}. When certain concepts of \TeX\ are introduced
+%informally, general rules will be stated; afterwards you will find that the
+%rules aren't strictly true. In general, the later chapters contain more
+%reliable information than the earlier ones do. The author feels that this
+%technique of deliberate lying will actually make it easier for you to
+%learn the ideas. Once you understand a simple but false rule, it will not
+%be hard to supplement that rule with its exceptions.
+本手册的另一个值得注意的特征是，它并不总是那么确切。%
+当非正式地引入 \TeX\ 的某些概念时，我们给出大致的规则；%
+在后面，你会发现这些规则并不严格正确。%
+一般地，后面的章节比前面的章节所描述的更确切。%
+作者感到，这种善意的谎言实际上使你更容易接受这些概念。%
+一旦你吃透了一个明显错误的规则，那么不难把那个规则的例外情形补充上。
+
+%In order to help you internalize what you're reading,
+%{\sc ^{EXERCISES}} are sprinkled through this manual. It is generally intended
+%that every reader should try every exercise, except for questions that appear
+%in the ``dangerous bend'' areas. If you can't solve a problem, you
+%can always look up the answer.
+%But please, try first to solve it by yourself; then you'll learn more
+%and you'll learn faster. Furthermore, if you think you do know the solution,
+%you should turn to Appendix~A and check it out, just to make sure.
+为了帮助你吸收所学的知识，大量的练习都散布在整个手册中。%
+一般希望每个读者把每个练习都做一下，当然除了出现在``危险''部分的问题。%
+如果你做不出哪个问题，那么可以去查阅\hbox{答案。}%
+但是务必请先自己做一下；那么你会更快地学会更多的知识。%
+还有，如果你认为的确得到了答案，那么应当到附录 A 去对一下答案，仅仅是确认一下。
+
+%The \TeX\ language described in this book is similar to the author's first
+%attempt at a document formatting language, but the new system differs
+%from the old~one in literally thousands of details. Both languages have
+%been called \TeX; but henceforth the old language should be called
+%\TeX78, and its use should rapidly fade away. Let's keep the name \TeX\
+%for the language described here, since it is so much better, and since
+%it is not going to change any more. ^^{TeX78}
+在本书中所用的 \TeX\ 代码类似于作者第一次在文档格式代码的尝试，%
+但是新系统与旧系统在差不多几千个细节上有差别。%
+两种代码都叫做 \TeX; 但是以后旧代码应该称为 \TeX78, 并且将很快淡出。%
+我们把名字 \TeX\ 保留给这里陈述的代码，因为它是如此优秀并且不再改动。
+
+%I wish to thank the hundreds of people who have helped me to formulate
+%this ``definitive edition'' of the \TeX\ language, based on their
+%experiences with preliminary versions of the system. My work at Stanford
+%has been generously supported by the ^{National Science Foundation}, the
+%^{Office of Naval Research}, the ^{IBM Corporation}, and the ^{System
+%Development Foundation}. I also wish to thank the ^{American Mathematical
+%Society} for its encouragement, for establishing the \TeX\ Users Group,
+%and for publishing the {\sl ^{TUGboat}\/} newsletter (see Appendix~J).
+我要感谢帮助我完成这个 \TeX\ 代码``成熟版''的几百个人，因为本版本是以他们的经验以及%
+系统的初版为基础的。%
+我在 Stanford 的工作得到了 National Science Foundation, Office of Naval Research,
+IBM Corporation 和 System Development Foundation 的大力支持。%
+我还要感谢 American Mathematical Society 的鼓励，并谢谢它建立 \TeX\ Users Group~%
+以及出版 TUGboat 快报(见附录 J)。
+
+%\medskip
+%\line{{\sl Stanford, California}\hfil--- D. E. K.}^^{Knuth, Don}
+%\line{\sl June 1983\hfil}
+\medskip
+\line{{\sl Stanford, California}\hfil--- D. E. K.}
+\line{\sl June 1983\hfil}
+
+} % end of the special \topskip
+\endchapter
+
+`Tis pleasant, sure, to see one's name in print;
+A book's a book, although there's nothing in 't.
+\author {BYRON}, {\sl English Bards and Scotch Reviewers\/} (1809)
+
+\bigskip
+
+A question arose as to whether we were covering the field
+that it was intended we should fill with this manual.
+\author RICHARD R. {DONNELLEY}, {\sl Proceedings, United %
+  Typothet{\ae} of America\/} (1897)
+
+\vfill\eject\byebye
