@@ -37,16 +37,15 @@
 \tenpoint
 \noindent\hang\hangafter-2
 \smash{\lower15pt\hbox to 0pt{\hskip-\hangindent\KT{28}致\hfill}}%
-{\KT{10}尊敬的读者}：这是关于 \TeX\ 的工具书。\TeX\ 是为了%
-更好地排版书籍——特别是包含很多数学公式的书籍而设计的一个软件。
+{\KT{10}尊敬的读者}：这是一本关于 \TeX\ 的指南。\TeX\ 是一款为了%
+制作精美的书籍——特别是包含了大量数学内容的书籍——而设计的新的排版系统。
 用 \TeX\ 的格式准备好书稿后，你就准确地告诉了计算机怎样把它变成书页，
-而得到的排版质量可以与世界上最好的排版工人的效果相媲美；
+而得到的排版质量可以与世界上最好的印刷工人相媲美；
 但是你所做的工作仅仅相当于在普通打字机上把书稿直接输入进去。
-实际上，如果你算上通常修改打印稿所花费的时间，那么你的工作量可能非常小，
-这是因为计算机的文本文件修改并重新排版是相当容易的。%
-（如果这样的好话听起来不像真的，那么记住这是 \TeX\ 设计者所声明的，
-如果有一天凑巧要用到 \TeX\ 时，这些承诺可能有点偏差；
-但是总之要看下去。）
+实际上，如果你算上通常校订打印稿所花费的时间，那么你整个的工作量可能更少，
+这是因为计算机的文本文件修改和再处理是相当容易的。%
+（如果这样的好话听起来不像真的，那么记住这是 \TeX\ 设计者在某天 \TeX
+恰巧奏效时所说的，所以这些说法可能有失公允；但是还请继续看下去。）
 
 %This manual is intended for people who have never used \TeX\ before, as
 %well as for experienced \TeX\ hackers. In other words, it's supposed to
@@ -67,21 +66,21 @@
 %Brave and experienced drivers at the controls of \TeX\ will gradually enter
 %more and more of these hazardous areas, but for most applications the
 %details won't matter.
-这个手册是为以前从未使用过 \TeX\ 以及有经验的 \TeX\ 高手所使用的。%
-换句话说，它是想当人人需要的万金油，当然也有可能是无用的垃圾。%
+这个手册是为以前从未使用过 \TeX\ 以及有经验的 \TeX\ 高手所准备的。%
+换句话说，它应该是满足所有人需要的万灵丹，当然也有可能谁都满足不了。%
 你需要知道的 \TeX\ 的每个细节都写在本书的某个地方，并且因此许多东西是%
 大多数用户所不关心的。%
-如果你正在写一个简单的草稿，那么就根本不需要知道太多的 \TeX; %
-另一方面，某些排版专业书籍的技术本来就很难，而且如果你想得到更复杂的%
-效果，就应该洞悉 \TeX\ 的某些鲜为人知的知识。%
-为了使不同的用户能高效地阅览本手册，我们用一个特殊的标志来标记那些只面向%
+如果你正在准备一个简单的手稿，那么就根本不需要知道太多的 \TeX; %
+另一方面，某些排版专业书籍的技术本来就很难，而如果你想得到更复杂的%
+效果，就应该参透 \TeX\ 的某些鲜为人知的知识。%
+为了使不同的用户能高效地阅读本手册，我们用一个特殊的标志来标记那些只面向%
 高手的内容：%
 当在某段的开头出现符号
 $$\vbox{\hbox{\dbend}\vskip 11pt}$$
-\noindent 时，它就是路边上``转弯危险''的警告；%
+\noindent 时，它是思路上``危险转弯''的警告；%
 如果你不需要，就别去看它。%
 在驾驭 \TeX\ 方面勇敢且有经验的高手可逐渐地进入这些危险的区域，%
-但是对大多数使用者而言，这些细节是无关紧要的。
+但是对大多数应用而言，这些细节是无关紧要的。
 
 %All that you really ought to know, before reading on, is how to get a
 %file of text into your computer using a standard editing program. This
@@ -93,7 +92,7 @@ $$\vbox{\hbox{\dbend}\vskip 11pt}$$
 %formatting of equations automatically; but users with more experience
 %will be able to obtain better results, since there are so many ways
 %to deal with formulas.
-在开始阅读之前，所有你真正应该知道的是怎样在计算机上用标准的文本编辑程序%
+在继续阅读之前，所有你真正应该知道的是怎样在计算机上用标准的编辑器%
 得到一个文本文件。%
 这个手册说明了什么样的文件 \TeX\ 才能识别，但是计算机的基本用法这里没有。%
 如果你打算用 \TeX\ 完成繁重的数学排版工作，已有的科技排版经验将会很有帮助，
